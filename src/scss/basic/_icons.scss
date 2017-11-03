@@ -1,0 +1,51 @@
+@font-face {
+  font-family: 'knife-icons';
+  src:  url('fonts/knife-icons.eot?93h5ww');
+  src:  url('fonts/knife-icons.eot?93h5ww#iefix') format('embedded-opentype'),
+    url('fonts/knife-icons.ttf?93h5ww') format('truetype'),
+    url('fonts/knife-icons.woff?93h5ww') format('woff'),
+    url('fonts/knife-icons.svg?93h5ww#knife-icons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.icon {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'knife-icons' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon--search-fat:before {
+  content: "\e900";
+}
+.icon--search:before {
+  content: "\e901";
+}
+.icon--ok:before {
+  content: "\e902";
+}
+.icon--vk:before {
+  content: "\e903";
+}
+.icon--fb:before {
+  content: "\e904";
+}
+.icon--instagram:before {
+  content: "\e905";
+}
+.icon--twitter:before {
+  content: "\e906";
+}
+.icon--telegram:before {
+  content: "\e907";
+}
+

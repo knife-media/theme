@@ -1,0 +1,50 @@
+$color-fg: #fff;
+$color-bg: #222;
+
+$color-primary: #1e488f;
+$color-sheet: #faf9f3;
+$color-accent: #8bb847;
+$color-special: #6aa535;
+$color-feature: #a7397d;
+
+$font-regular: "Formular", "Helvetica Neue Light", "Arial", sans-serif;
+
+
+body {
+  display: block;
+  position: relative;
+
+  color: $color-bg;
+  background-color: $color-bg;
+  line-height: 1.4;
+  font-weight: normal;
+  font-family: $font-regular;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  outline: none;
+  transition: .2s;
+
+  &:hover {
+    color: $color-primary;
+  }
+}
+
+button {
+  background-color: transparent;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+::selection {
+  background-color: silver;
+}
+
+::placeholder {
+  color: silver;
+}
