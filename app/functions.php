@@ -56,6 +56,12 @@ add_action('after_setup_theme', function(){
 });
 
 
+// Add new post formats
+add_action('after_setup_theme', function() {
+	add_theme_support('post-formats', array('aside'));
+});
+
+
 // Add theme menus
 add_action('init', function() {
 	register_nav_menus([
@@ -118,6 +124,38 @@ add_action('after_switch_theme', function() {
 add_filter('use_default_gallery_style', '__return_false');
 
 
+// Change default header menu classes
+add_filter('nav_menu_css_class', function($classes, $item, $args) {
+	if($args->theme_location !== 'main_menu')
+		return $classes;
+
+	return ['menu__item'];
+}, 10, 3);
+
+
+// Add class to menu item link
+add_filter('nav_menu_link_attributes', function($atts, $item, $args) {
+	if($args->theme_location !== 'main_menu')
+		return $atts;
+
+	$atts['class'] = 'menu__link';
+
+    return $atts;
+}, 10, 3);
+
+
+// Rename aside post format
+add_filter('gettext_with_context', function($translation, $text, $context, $domain) {
+	$names = [
+		'Aside'  => __('Без сайдбара', 'knife-theme'),
+		'Standard' => __('Стандартный', 'knife-theme')
+	];
+
+	if($context !== 'Post format')
+		return $translation;
+
+	return str_replace(array_keys($names), array_values($names), $text);
+}, 10, 4);
 
 
 

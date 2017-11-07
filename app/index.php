@@ -7,7 +7,7 @@
  */
 get_header(); ?>
 
-<div class="container px-0">
+<div class="container">
 	<div id="arch_cont" class="grid grid--small-gaps grid--lg-modules">
 		<?php
 			if ( have_posts() ) :
@@ -21,7 +21,7 @@ get_header(); ?>
 
 			else:
 
-				// Include "no posts fount" template
+				// Include "no posts found" template
 				get_template_part('templates-part/content', 'none');
 
 			endif;

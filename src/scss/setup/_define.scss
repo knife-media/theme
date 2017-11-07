@@ -1,5 +1,5 @@
 $color-fg: #fff;
-$color-bg: #222;
+$color-bg: #000;
 
 $color-primary: #1e488f;
 $color-sheet: #faf9f3;
@@ -47,4 +47,8 @@ img {
 
 ::placeholder {
   color: silver;
+}
+
+h1, h2, h3 {
+  font-weight: 600;
 }
