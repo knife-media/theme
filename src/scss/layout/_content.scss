@@ -1,0 +1,12 @@
+.content {
+  display: block;
+
+  width: 100%;
+
+  .content__inner {
+    display: flex;
+    flex-flow: row wrap;
+
+    padding-top: 1rem;
+  }
+}

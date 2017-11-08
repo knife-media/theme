@@ -19,6 +19,8 @@ body {
   line-height: 1.4;
   font-weight: normal;
   font-family: $font-regular;
+
+  -webkit-font-smoothing: antialiased;
 }
 
 a {

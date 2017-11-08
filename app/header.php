@@ -78,5 +78,3 @@
 			</nav>
 		</div>
 	</header>
-
-	<main>
