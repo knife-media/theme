@@ -1,13 +1,16 @@
- <?php
+<?php
+/**
+ * Entry related template
+ *
+ * @package knife-theme
+ * @since 1.1
+ */
 	//$current_author = get_userdata($post->post_author);
 	$cats=get_the_category();
 	$cat_name=$cats[0]->cat_name;
 	$cat_link =  get_category_link( $cats[0]->term_id );
 
 
-
-	?>
-<?php
 
 			$category_id = $cats[0]->cat_ID;
 

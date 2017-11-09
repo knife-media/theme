@@ -1,4 +1,5 @@
- <div class="entry__tags">
+
+<div class="entry__tags">
 			<?php $posttags = get_the_tags();
 
 			if ($posttags) { ?>
