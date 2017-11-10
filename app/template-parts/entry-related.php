@@ -5,40 +5,31 @@
  * @package knife-theme
  * @since 1.1
  */
-	//$current_author = get_userdata($post->post_author);
-	$cats=get_the_category();
-	$cat_name=$cats[0]->cat_name;
-	$cat_link =  get_category_link( $cats[0]->term_id );
+
+$category = get_the_category(); ?>
+
+<?php
+	$related = new WP_Query([
+		'cat' => $category[0]->cat_ID,
+		'post__not_in' => [$post->ID],
+		'posts_per_page' => 6
+	]);
 
 
+	if($related->have_posts()) :
+?>
 
-			$category_id = $cats[0]->cat_ID;
+	<div class="entry__related">
+		<p class="entry__related-title"><?php _e('Читайте также:', 'knife-theme'); ?></p>
 
-			$args=array(
-				'cat' => $category_id,
-				'entry__not_in' => array($post->ID),
-				'posts_per_page'=>6
-			);
+<?php while($related->have_posts()) : $related->the_post(); ?>
 
-			$related = get_posts($args);
+		<div class="entry__related-item">
+			<a class="entry__related-link" href="<?php the_permalink();?>"><?php the_title(); ?></a>
+		</div>
 
-			if($related){
+<?php endwhile; wp_reset_postdata(); ?>
 
-			?>
-			<section class="entry__more-posts more-posts">
-				<div class="entry__block more-posts__item">
-					<h2 class="more-posts__title h3 font-weight-normal">Читайте также:</h2>
-				</div>
-				<?php foreach($related as $post) {
-				setup_postdata($post);
-				?>
-				<div class="entry__block more-posts__item">
-					<h3 class="h3 more-posts__heading">
-						<a href="<?php echo get_permalink();?>" class="brand-link"><?php echo do_shortcode(get_the_title());?></a>
-					</h3>
-				</div>
+	</div>
 
-				<?php } ?>
-   </section>
-			<?php }?>
-			<?php wp_reset_query();?>
+<?php endif; ?>

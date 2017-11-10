@@ -61,4 +61,4 @@ gulp.task('watch', function() {
 })
 
 //gulp.task('default', ['js', 'scss', 'images', 'fonts', 'watch']);
-gulp.task('default', ['scss', 'images', 'fonts']);
+gulp.task('default', ['scss', 'images', 'fonts', 'watch']);

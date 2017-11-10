@@ -2,20 +2,21 @@
   line-height: 1.65;
   letter-spacing: .5px;
 
-  h3{
-    font-size:26px;
-    line-height:1;
-    margin:16px 0;
+  h3 {
+    font-size: 1.625rem;
+    line-height: 1;
+    margin: 1rem 0;
   }
 
   h4{
-    font-size:21px;
-    line-height:26px;
+    font-size: 1.25rem;
+    line-height: 1.25;
   }
+
   .wp-caption-text{
-    font-size:12px;
-    line-height:4;
-    margin:0;
+    font-size: .75rem;
+    line-height: 4;
+    margin: 0;
   }
 
   p {
@@ -27,13 +28,19 @@
     font-weight: 400;
 
     @media screen and (max-width: 767px) {
-      font-weight: .875rem;
+      font-size: .875rem;
     }
   }
 
-  .post-figure {
-    margin-top: 2rem;
-  }
+	hr {
+		display: block;
+
+		margin-top: 1rem;
+		margin-bottom: 1rem;
+
+		border: 0;
+		border-top: 1px solid rgba(0, 0, 0, 0.1);
+	}
 
   strong {
     font-weight: 600;
