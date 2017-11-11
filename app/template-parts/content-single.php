@@ -5,8 +5,8 @@
  * @package knife-theme
  * @since 1.1
  */
-
 ?>
+
 <div class="content__inner container">
 	<article class="post" id="post-<?php the_ID(); ?>">
 		<div class="post__inner entry">
@@ -49,5 +49,5 @@
 		</div>
 	</article>
 
-	<?php get_sidebar('right'); ?>
+	<?php get_sidebar(); ?>
 </div>

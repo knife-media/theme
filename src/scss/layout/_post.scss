@@ -1,10 +1,9 @@
 .post {
   display: block;
   position: relative;
-  flex: 0 0 75%;
 
   width: 100%;
-  max-width: 75%;
+  max-width: calc(100% - 19.75rem);
   padding: 2rem 2rem 2.5rem;
   overflow: hidden;
   background-color: $color-fg;

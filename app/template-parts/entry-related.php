@@ -12,7 +12,8 @@ $category = get_the_category(); ?>
 	$related = new WP_Query([
 		'cat' => $category[0]->cat_ID,
 		'post__not_in' => [$post->ID],
-		'posts_per_page' => 6
+		'posts_per_page' => 6,
+ 		'post_status' => 'publish'
 	]);
 
 

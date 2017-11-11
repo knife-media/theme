@@ -1,0 +1,18 @@
+.container {
+  width: 80rem;
+  max-width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  @media screen and (max-width: 1279px) {
+  }
+
+  @media screen and (max-width: 1023px) {
+  }
+
+  @media screen and (max-width: 767px) {
+  }
+
+  @media screen and (max-width: 479px) {
+  }
+}

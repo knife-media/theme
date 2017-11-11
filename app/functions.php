@@ -52,7 +52,19 @@ add_action('admin_init', function() {
 add_action('after_setup_theme', function(){
 	add_theme_support('post-thumbnails');
 
-	add_image_size('medium-thumb', 480, 99999, false);
+	add_image_size('medium-thumbnail', 480, 99999, false);
+	add_image_size('related-thumbnail', 360, 180, true);
+
+
+	add_image_size( 'cb-100-65', 100, 65, true );
+	add_image_size( 'cb-260-170', 260, 170, true );
+	add_image_size( 'cb-360-490', 360, 490, true );
+	add_image_size( 'cb-360-240', 360, 240, true );
+	add_image_size( 'cb-378-300', 378, 300, true );
+	add_image_size( 'cb-759-300', 759, 300, true );
+	add_image_size( 'cb-759-500', 759, 500, true );
+	add_image_size( 'cb-759-600', 759, 600, true );
+	add_image_size( 'cb-1400-600', 1400, 600, true );
 });
 
 
@@ -157,6 +169,15 @@ add_filter('gettext_with_context', function($translation, $text, $context, $doma
 	return str_replace(array_keys($names), array_values($names), $text);
 }, 10, 4);
 
+
+// Remove useless image attributes
+add_filter('post_thumbnail_html', function($html) {
+	return preg_replace('/(width|height)="\d*"\s/', "", $html);
+}, 10);
+
+add_filter('image_send_to_editor', function($html) {
+	return preg_replace('/(width|height)="\d*"\s/', "", $html);
+}, 10);
 
 
 /*
