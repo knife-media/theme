@@ -1,0 +1,137 @@
+.topline {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+
+  height: 4rem;
+
+  .topline__logo {
+    display: block;
+    position: relative;
+
+    .topline__logo-image {
+      display: block;
+
+      width: 6.25rem;
+      height: auto;
+    }
+  }
+
+  .topline__menu {
+    display: flex;
+    flex-flow: row nowrap;
+    flex-basis: 100%;
+    align-items: center;
+    justify-content: flex-start;
+    z-index: 2;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    .topline__menu-social {
+      margin-right: 1.5rem;
+
+      @media screen and (max-width: 1023px) {
+        width: 100%;
+        padding: .875rem 1rem;
+
+        font-size: 1.25rem;
+        color: $color-fg;
+      }
+    }
+
+    .topline__menu-list {
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+
+      margin-left: auto;
+      margin-right: auto;
+
+      @media screen and (max-width: 1023px) {
+        flex-flow: column nowrap;
+        align-items: flex-start;
+
+        width: 100%;
+      }
+    }
+
+    .topline__menu-item {
+      padding: 0 .75rem;
+
+      @media screen and (max-width: 1279px) {
+        padding: 0 .5rem;
+      }
+
+      @media screen and (max-width: 1023px) {
+        width: 100%;
+        padding: 0 1rem;
+
+        border-bottom: solid 1px $color-fg;
+      }
+    }
+
+    .topline__menu-link {
+      display: block;
+
+      font-size: 1.125rem;
+      line-height: 1.25rem;
+      font-weight: 500;
+      text-decoration: none;
+
+      transition: color .25s;
+
+      @media screen and (max-width: 1279px) {
+        font-size: 1rem;
+      }
+
+      @media screen and (max-width: 1023px) {
+        padding: .875rem 0;
+        color: $color-fg;
+      }
+    }
+
+    @media screen and (max-width: 1023px) {
+      display: none;
+      flex-flow: column nowrap;
+      position: absolute;
+      top: 4rem;
+      left: 0;
+
+      width: 100%;
+      background-color: $color-primary;
+    }
+  }
+
+  .topline__button {
+    position: relative;
+
+    outline: none;
+    cursor: pointer;
+
+    &.topline__button--menu {
+      display: none;
+
+      height: 1.25rem;
+      width: 1.375rem;
+
+      @media screen and (max-width: 1023px) {
+        display: block;
+      }
+    }
+
+    &.topline__button--search {
+      display: block;
+
+      height: 1.5rem;
+      width: 1.5rem;
+      font-size: 1rem;
+      color: $color-bg;
+
+      @media screen and (max-width: 1023px) {
+        font-size: 1.375rem;
+      }
+    }
+  }
+}

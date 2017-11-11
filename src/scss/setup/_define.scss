@@ -19,15 +19,14 @@ body {
   line-height: 1.4;
   font-weight: normal;
   font-family: $font-regular;
-
-  -webkit-font-smoothing: antialiased;
 }
 
 a {
   color: inherit;
   text-decoration: none;
-  outline: none;
   transition: .2s;
+
+  outline: none;
 
   &:hover {
     color: $color-primary;

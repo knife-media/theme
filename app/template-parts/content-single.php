@@ -17,9 +17,7 @@
 				get_template_part('template-parts/entry', 'header');
 			?>
 
-			<h1 class="entry__title">
-				<?php the_title(); ?>
-			</h1>
+			<h1 class="entry__title"><?php the_title(); ?></h1>
 
 			<?php if(!in_category('news')) : ?>
 			<div class="entry__excerpt">
@@ -43,7 +41,7 @@
 				* Share, terms and related
 				*/
 				get_template_part('template-parts/entry', 'share');
-				get_template_part('template-parts/entry', 'terms');
+				get_template_part('template-parts/entry', 'tags');
 				get_template_part('template-parts/entry', 'related');
 			?>
 		</div>

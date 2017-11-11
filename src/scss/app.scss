@@ -1,14 +1,16 @@
 // Import framework on production deployment
-@import "vendor/bootstrap";
+//@import "vendor/bootstrap";
 
 // Import 1.0 version bundle
-@import "vendor/hetmanz";
+//@import "vendor/hetmanz";
 
 @import "setup/reset";
 @import "setup/define";
 
 @import "basic/fonts";
 @import "basic/icons";
+@import "basic/toggle";
+@import "basic/social";
 @import "basic/container";
 
 @import "layout/header";
@@ -18,3 +20,4 @@
 @import "layout/entry";
 @import "layout/custom";
 @import "layout/sidebar";
+@import "layout/topline";

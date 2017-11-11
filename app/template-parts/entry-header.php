@@ -16,11 +16,9 @@ $category = get_the_category(); ?>
 			the_author_posts_link();
 	?>
 
-	<time class="entry__header-meta" datetime="<?php the_time('c'); ?>">
-		<?php the_time('d F Y');?>
-	</time>
+	<time class="entry__header-meta" datetime="<?php the_time('c'); ?>"><?php the_time('d F Y');?></time>
 
-	<a class="entry__header-meta" href="<?php echo get_category_link($category[0]->term_id); ?>">
-		<?php echo $category[0]->cat_name; ?>
-	</a>
+	<?php if(isset($category[0])) : ?>
+	<a class="entry__header-meta" href="<?php echo get_category_link($category[0]->term_id); ?>"><?php echo $category[0]->cat_name; ?></a>
+	<?php endif; ?>
 </header>

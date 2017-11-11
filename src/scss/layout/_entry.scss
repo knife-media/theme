@@ -58,6 +58,7 @@
 
     .entry__share-title {
       display: none;
+      cursor: default;
 
       margin: .5rem 0;
       padding-right: 1rem;
@@ -122,6 +123,7 @@
 
     .entry__share-title {
       display: block;
+      cursor: default
     }
   }
 
@@ -140,6 +142,7 @@
 
     .entry__related-title {
       display: block;
+      cursor: default;
 
       padding: 1rem 2rem;
       font-size: 1.375rem;

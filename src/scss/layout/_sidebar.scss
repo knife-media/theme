@@ -2,27 +2,36 @@
   display: flex;
   flex-flow: column wrap;
   align-items: center;
+  justify-content: space-between;
   position: relative;
 
   width: 100%;
   max-width: 18.75rem;
+  margin-bottom: 1rem;
 
   .sidebar__news {
     display: flex;
-    flex-flow: column wrap;
+    flex-flow: row wrap;
+    justify-content: space-between;
     position: relative;
+
+    width: 100%;
 
     .sidebar__news-item {
       display: block;
 
       width: 100%;
+			margin-bottom: 2px;
       padding: 1rem;
 
       background-color: $color-fg;
-      border-bottom: solid 1px $color-bg;
 
-      &:last-child {
-        border-bottom: none;
+      @media screen and (max-width: 1023px) {
+        width: calc(50% - 0.5rem);
+      }
+
+      @media screen and (max-width: 479px) {
+        width: 100%;
       }
     }
 
@@ -41,12 +50,16 @@
       white-space: nowrap;
       text-transform: uppercase;
 
-      &:first-child:after {
+      &:after {
         content: "•";
         display: inline-block;
 
         margin-left: .5rem;
         margin-right: .5rem;
+      }
+
+      &:last-child:after {
+        display: none;
       }
     }
 
@@ -63,25 +76,17 @@
 
   .sidebar__related {
     display: flex;
-    flex-flow: column wrap;
+    flex-flow: row wrap;
+    justify-content: space-between;
     position: relative;
-
-    .sidebar__related-item {
-      display: block;
-      position: relative;
-
-      width: 100%;
-      margin-top: 1rem;
-			overflow: hidden;
-
-      background-color: $color-fg;
-    }
 
     .sidebar__related-image {
       display: block;
 
       width: 100%;
       height: auto;
+
+			transition: filter .25s;
     }
 
 		.sidebar__related-title {
@@ -91,12 +96,39 @@
 			font-size: 1.25rem;
 			font-weight: 500;
 			line-height: 1.25;
+
+      @media screen and (max-width: 767px) {
+        font-size: 1rem;
+      }
 		}
+
+		.sidebar__related-item {
+      display: block;
+      position: relative;
+
+      width: 100%;
+      margin-top: 1rem;
+			overflow: hidden;
+
+      background-color: $color-fg;
+
+			&:hover {
+				.sidebar__related-image {
+					filter: brightness(115%);
+				}
+			}
+
+      @media screen and (max-width: 1023px) {
+        width: calc(50% - 0.5rem);
+      }
+
+      @media screen and (max-width: 479px) {
+        width: 100%;
+      }
+    }
   }
 
   @media screen and (max-width: 1023px) {
     max-width: 100%;
-
-    background-color: $color-fg;
   }
 }

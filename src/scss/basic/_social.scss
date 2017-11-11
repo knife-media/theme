@@ -1,0 +1,34 @@
+.social {
+  display: flex;
+  flex-flow: row nowrap;
+
+  .social__item {
+    display: block;
+
+    margin: 0 .75rem;
+
+    .social__item-link {
+      display: block;
+
+      font-size: 1.125em;
+      line-height: 1.25rem;
+      color: inherit;
+
+      &.social__item-link--fb:hover {
+        color: #3b5998;
+      }
+
+      &.social__item-link--vk:hover {
+        color: #5186bd;
+      }
+
+      &.social__item-link--telegram:hover {
+        color: #36ade1;
+      }
+
+      &.social__item-link--twitter:hover {
+        color: #55acee;
+      }
+    }
+  }
+}

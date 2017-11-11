@@ -1,5 +1,7 @@
 .content {
-  display: block;
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
 
   width: 100%;
 

@@ -141,7 +141,7 @@ add_filter('nav_menu_css_class', function($classes, $item, $args) {
 	if($args->theme_location !== 'main_menu')
 		return $classes;
 
-	return ['menu__item'];
+	return ['topline__menu-item'];
 }, 10, 3);
 
 
@@ -150,10 +150,14 @@ add_filter('nav_menu_link_attributes', function($atts, $item, $args) {
 	if($args->theme_location !== 'main_menu')
 		return $atts;
 
-	$atts['class'] = 'menu__link';
+	$atts['class'] = 'topline__menu-link';
 
-    return $atts;
+	return $atts;
 }, 10, 3);
+
+
+// Remove menu ids
+add_filter('nav_menu_item_id', '__return_empty_string');
 
 
 // Rename aside post format

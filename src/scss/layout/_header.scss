@@ -1,16 +1,10 @@
 .header {
-  .header__inner {
-    display: flex;
-    align-items: center;
-  }
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
 
-  .header__nav {
-    display: flex;
-    align-items: center;
-  }
+  width: 100%;
 
-  .header__socials {
-    display: flex;
-    align-items: center;
-  }
+  background-color: $color-fg;
 }
