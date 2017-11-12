@@ -24,6 +24,7 @@
 			margin-bottom: 2px;
       padding: 1rem;
 
+      color: $color-black;
       background-color: $color-white;
 
       @media screen and (max-width: 1023px) {
@@ -67,7 +68,6 @@
       display: block;
 
       margin-top: .25rem;
-      color: $color-black;
       font-size: .8125rem;
       font-weight: 500;
       text-decoration: none;
@@ -79,6 +79,8 @@
     flex-flow: row wrap;
     justify-content: space-between;
     position: relative;
+
+    color: $color-black;
 
     .sidebar__related-image {
       display: block;
