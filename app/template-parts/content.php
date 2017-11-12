@@ -1,6 +1,6 @@
 <?php
 /**
- * Single content template
+ * Standart post format content template
  *
  * @package knife-theme
  * @since 1.1

@@ -104,7 +104,7 @@ add_action('init', function() {
 
 // Admin bar
 add_action('init', function() {
-	add_filter('show_admin_bar', '__return_false');
+//	add_filter('show_admin_bar', '__return_false');
 
 	add_action('admin_bar_menu', function($wp_admin_bar) {
 		$wp_admin_bar->remove_menu('customize');

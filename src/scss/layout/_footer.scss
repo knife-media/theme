@@ -114,13 +114,9 @@
     }
 
     .footer__menu-link {
-      font-size: 1.375rem;
+      font-size: 1.125rem;
       font-weight: 500;
       line-height: 1;
-
-      @media screen and (max-width: 767px) {
-        font-size: 1.125rem;
-      }
     }
   }
 
