@@ -1,11 +1,12 @@
-$color-fg: #fff;
-$color-bg: #000;
+$color-black: #000;
+$color-white: #fff;
 
 $color-primary: #1e488f;
 $color-sheet: #faf9f3;
 $color-accent: #8bb847;
 $color-special: #6aa535;
 $color-feature: #a7397d;
+$color-light: #2f72e1;
 
 $font-regular: "Formular", "Helvetica Neue Light", "Arial", sans-serif;
 
@@ -14,8 +15,8 @@ body {
   display: block;
   position: relative;
 
-  color: $color-bg;
-  background-color: $color-bg;
+  color: $color-white;
+  background-color: $color-black;
   line-height: 1.4;
   font-weight: normal;
   font-family: $font-regular;

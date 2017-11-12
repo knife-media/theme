@@ -82,7 +82,7 @@
 			margin-right: .75rem;
 			padding: .375rem .375rem;
 			font-size: .875rem;
-			color: $color-fg;
+			color: $color-white;
 
 			border-radius: 3px;
 
@@ -167,7 +167,7 @@
       font-size: 1.25rem;
       line-height: 1.25;
 
-      border-bottom: solid 1px $color-bg;
+      border-bottom: solid 1px $color-black;
 
       &:hover {
         border-bottom-color: transparent;
@@ -175,7 +175,7 @@
     }
   }
 
-  .entry__terms {
+  .entry__tags {
     display: flex;
     flex-flow: row wrap;
 
@@ -187,14 +187,14 @@
 
     background-color: $color-sheet;
 
-    .entry__terms-link {
+    .entry__tags-link {
       display: inline;
 
       margin: .5rem 1.5rem .5rem 0;
       font-size: 1.25rem;
       line-height: 1.25;
 
-      border-bottom: solid 1px $color-bg;
+      border-bottom: solid 1px $color-black;
 
       &:hover {
         border-bottom-color: transparent;

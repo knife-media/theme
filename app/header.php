@@ -25,7 +25,15 @@
 		</button>
 
 		<a class="topline__logo" href="<?php echo esc_url(home_url('/')); ?>">
-			<img class="topline__logo-image" src="<?php echo esc_url(get_template_directory_uri()); ?>/assets/images/logo.svg" alt="<?php bloginfo('name'); ?>">
+			<svg class="topline__logo-image" fill="#000000" width="100" height="30" x="0" y="0" viewBox="0 0 111 31.8" xml:space="preserve">
+				<g>
+					<path d="M27.4,0.6v30.7h-8V19.1H8v12.2H0V0.6h8v11.4h11.4V0.6H27.4z"/>
+					<path d="M63.4,15.9C63.4,25,58,31.8,48,31.8c-9.9,0-15.4-6.8-15.4-15.9C32.7,6.8,38.1,0,48,0
+						C58,0,63.4,6.8,63.4,15.9z M55.2,15.9c0-5.2-2.4-8.9-7.2-8.9s-7.2,3.7-7.2,8.9c0,5.2,2.4,8.9,7.2,8.9S55.2,21.1,55.2,15.9z"/>
+					<path d="M84.9,0.6h7.7v11.5H98l4.6-11.5h8l-6.1,15.1l6.5,15.6h-8l-4.9-12h-5.4v12h-7.7v-12h-5.4l-4.9,12h-8
+						l6.5-15.6L67,0.6h8l4.6,11.5h5.3V0.6z"/>
+				</g>
+			</svg>
 		</a>
 
 		<nav class="topline__menu">
@@ -49,66 +57,3 @@
 		</button>
 	</div>
 </header>
-
-<?php /*
-	<header class="header" id="header">
-		<div class="container header__inner navbar navbar-expand-lg">
-			<div class="header__mobile-group">
-				<div id="menuBurger" class="burger header__burger">
-					<div class="burger__stick"></div>
-					<div class="burger__stick"></div>
-					<div class="burger__stick"></div>
-				</div>
-
-
-
-				<a href="#" class="header__mobile-search-btn search-btn">
-					<span class="icon icon--search"></span>
-				</a>
-			</div>
-
-			<nav class="header__nav">
-				<?php
-					wp_nav_menu([
-						'theme_location' => 'main_menu',
-						'depth' => 1,
-						'echo' => true,
-						'items_wrap' => '<ul class="header__menu menu">%3$s</ul>',
-						'container' => false
-					]);
-				?>
-
-				<div class="socials header__socials">
-					<ul class="socials__list">
-						<li class="socials__item">
-							<a href="https://www.facebook.com/theknifemedia" class="socials__link">
-								<span class="icon icon--fb"></span>
-							</a>
-						</li>
-						<li class="socials__item">
-							<a href="https://vk.com/knife.media" class="socials__link">
- 								<span class="icon icon--vk"></span>
-							</a>
-						</li>
-						<li class="socials__item">
-							<a href="http://telegram.me/knifemedia" class="socials__link">
- 								<span class="icon icon--telegram"></span>
-							</a>
-						</li>
-						<li class="socials__item">
-							<a href="https://twitter.com/knife_media" class="socials__link">
-  								<span class="icon icon--twitter"></span>
-							</a>
-						</li>
-						<li class="socials__item">
-							<a id="searchBtn" href="#" class="socials__link brand-link header__socials-link header__search-btn search-btn">
-								<i class="icon icon--search-fat" aria-hidden="true"></i>
-								<i class="fa fa-times search-btn__close-icon" aria-hidden="true"></i>
-							</a>
-						</li>
-					</ul>
-				</div>
-			</nav>
-		</div>
-	</header>
- */?>

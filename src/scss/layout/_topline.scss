@@ -9,13 +9,6 @@
   .topline__logo {
     display: block;
     position: relative;
-
-    .topline__logo-image {
-      display: block;
-
-      width: 6.25rem;
-      height: auto;
-    }
   }
 
   .topline__menu {
@@ -37,7 +30,7 @@
         padding: .875rem 1rem;
 
         font-size: 1.25rem;
-        color: $color-fg;
+        color: $color-white;
       }
     }
 
@@ -68,7 +61,7 @@
         width: 100%;
         padding: 0 1rem;
 
-        border-bottom: solid 1px $color-fg;
+        border-bottom: solid 1px $color-white;
       }
     }
 
@@ -88,7 +81,7 @@
 
       @media screen and (max-width: 1023px) {
         padding: .875rem 0;
-        color: $color-fg;
+        color: $color-white;
       }
     }
 
@@ -127,7 +120,7 @@
       height: 1.5rem;
       width: 1.5rem;
       font-size: 1rem;
-      color: $color-bg;
+      color: $color-black;
 
       @media screen and (max-width: 1023px) {
         font-size: 1.375rem;

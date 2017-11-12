@@ -138,19 +138,23 @@ add_filter('use_default_gallery_style', '__return_false');
 
 // Change default header menu classes
 add_filter('nav_menu_css_class', function($classes, $item, $args) {
-	if($args->theme_location !== 'main_menu')
-		return $classes;
+	if($args->theme_location === 'main_menu')
+		return ['topline__menu-item'];
 
-	return ['topline__menu-item'];
+	if($args->theme_location === 'footer_menu')
+		return ['footer__menu-item'];
+
+	return $classes;
 }, 10, 3);
 
 
 // Add class to menu item link
 add_filter('nav_menu_link_attributes', function($atts, $item, $args) {
-	if($args->theme_location !== 'main_menu')
-		return $atts;
+	if($args->theme_location === 'main_menu')
+	 	$atts['class'] = 'topline__menu-link';
 
-	$atts['class'] = 'topline__menu-link';
+ 	if($args->theme_location === 'footer_menu')
+	 	$atts['class'] = 'footer__menu-link';
 
 	return $atts;
 }, 10, 3);
@@ -183,6 +187,26 @@ add_filter('image_send_to_editor', function($html) {
 	return preg_replace('/(width|height)="\d*"\s/', "", $html);
 }, 10);
 
+
+// Register widget area.
+add_action('widgets_init', function(){
+	register_sidebar([
+		'name'          => __( 'Копирайт в футере', 'knife-theme' ),
+		'id'            => 'footer-copy',
+		'description'   => __( 'Добавленные виджеты появятся справа в футере', 'knife-theme' ),
+		'before_widget' => null,
+		'after_widget'  => null,
+		'before_title'  => '<p class="widget__title">',
+		'after_title'   => '</p>',
+	]);
+});
+
+
+// Hide title on custom html widgets
+add_filter('widget_title', function($title, $instance, $base) {
+	if($base === 'custom_html')
+		return "";
+}, 10, 3);
 
 /*
 
