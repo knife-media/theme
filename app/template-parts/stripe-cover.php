@@ -1,6 +1,6 @@
 <?php
 /**
- * Stripe template with image
+ * Stripe template with cover
  *
  * Stripe is a single content item using in any loop.
  * Can be 1/3, 1/2 or full screen width
@@ -10,7 +10,7 @@
  */
 $category = get_the_category(); ?>
 
-<article class="stripe__item stripe__item">
+<article class="stripe__item stripe__item--cover">
 	<?php if(isset($category[0])) : ?>
 	<a class="stripe__item-head" href="<?php echo get_category_link($category[0]->term_id); ?>"><?php echo $category[0]->cat_name; ?></a>
 	<?php endif; ?>

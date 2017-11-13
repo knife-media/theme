@@ -43,13 +43,14 @@
       color: $color-primary;
       font-size: .625rem;
       font-weight: 500;
+      letter-spacing: .75px;
+      text-transform: uppercase;
     }
 
     .sidebar__news-meta {
       display: inline-block;
 
       white-space: nowrap;
-      text-transform: uppercase;
 
       &:after {
         content: "•";

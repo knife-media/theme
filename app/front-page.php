@@ -23,7 +23,8 @@ get_header();
 	$sidebar_related = new WP_Query([
 		'category__not_in' => [$news->term_id],
 		'post__not_in' => [$post->ID],
-		'posts_per_page' => 4,
+		'posts_per_page' => 8,
+		'offset' => 0,
 		'ignore_sticky_posts' => 1,
 		'post_status' => 'publish'
 	]);
@@ -31,13 +32,13 @@ get_header();
 	if($sidebar_related->have_posts()) :
 ?>
 
-	<section class="stripe stripe--triple">
+  <section class="stripe stripe--mindmap">
 
 <?php
 		while($sidebar_related->have_posts()) :
 			$sidebar_related->the_post();
 
-			get_template_part('template-parts/stripe');
+			get_template_part('template-parts/stripe', 'mindmap');
 		endwhile;
 
 		wp_reset_postdata();

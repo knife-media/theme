@@ -3,6 +3,8 @@
   flex-flow: row wrap;
   justify-content: space-between;
 
+  width: 100%;
+
   .stripe__item {
     display: flex;
     flex-flow: column wrap;
@@ -83,6 +85,7 @@
       color: $color-primary;
       font-size: .625rem;
       font-weight: 500;
+      letter-spacing: .75px;
 		}
 
 		.stripe__item-meta {
@@ -125,6 +128,28 @@
       }
 		}
 
+    .stripe__item-head {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 2;
+
+      padding: .75rem 1rem;
+      font-size: .625rem;
+      font-weight: 500;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: .75px;
+
+      color: $color-white;
+      background-color: $color-primary;
+
+      &:hover {
+        filter: brightness(125%);
+      }
+    }
+
     &.stripe__item--cover {
       color: $color-white;
       background-color: $color-black;
@@ -147,42 +172,18 @@
         color: $color-white;
 
         .stripe__item-thumbnail {
-          filter: brightness(60%);
+          filter: brightness(55%);
         }
 
         &:hover {
           .stripe__item-thumbnail {
- 				    filter: brightness(85%);
+ 				    filter: brightness(80%);
           }
         }
 
         @media screen and (max-width: 479px) {
           padding-top: 25%;
         }
-      }
-    }
-  }
-
-  &.stripe--double {
-    .stripe__item {
-      width: calc(50% - .5rem);
-
-      @media screen and (max-width: 479px) {
-        width: 100%;
-      }
-    }
-  }
-
-  &.stripe--triple {
-    .stripe__item {
-      width: calc(100% / 3 - .625rem);
-
-      @media screen and (max-width: 767px) {
-        width: calc(50% - .5rem);
-      }
-
-      @media screen and (max-width: 479px) {
-        width: 100%;
       }
     }
   }

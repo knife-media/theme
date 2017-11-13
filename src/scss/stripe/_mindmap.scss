@@ -1,0 +1,49 @@
+.stripe.stripe--mindmap {
+  flex-flow: row wrap;
+  justify-content: flex-start;
+
+  .stripe__item {
+    width: auto;
+    margin-bottom: 2px;
+    margin-right: 2px;
+
+    .stripe__item-link {
+      height: auto;
+      padding: .75rem 1rem;
+
+      &:hover {
+        background: $color-primary;
+        color: $color-white;
+      }
+    }
+
+    .stripe__item-title {
+      position: relative;
+
+      padding-left: 2rem;
+      line-height: 1;
+
+      &:before {
+        content: "•";
+        display: inline-block;
+        position: absolute;
+        top: 50%;
+        left: .25rem;
+
+        width: 1rem;
+        font-size: 1.5rem;
+        transform: translateY(-50%);
+      }
+    }
+
+    &:last-child {
+      margin-bottom: 1rem;
+    }
+
+    &:nth-child(-n+2) {
+      .stripe__item-title {
+        font-size: 1.875rem;
+      }
+    }
+  }
+}
