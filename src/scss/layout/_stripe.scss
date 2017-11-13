@@ -6,8 +6,7 @@
   width: 100%;
 
   .stripe__item {
-    display: flex;
-    flex-flow: column wrap;
+    display: block;
 		position: relative;
 
     width: 100%;
@@ -67,6 +66,7 @@
       font-size: 1.375rem;
 			font-weight: 500;
 			line-height: 1.25;
+      letter-spacing: .25px;
 
       @media screen and (max-width: 1023px) {
         font-size: 1.25rem;
@@ -86,13 +86,13 @@
       font-size: .625rem;
       font-weight: 500;
       letter-spacing: .75px;
+      text-transform: uppercase;
 		}
 
 		.stripe__item-meta {
  			display: inline-block;
 
       white-space: nowrap;
-      text-transform: uppercase;
 
       &:after {
         content: "•";
@@ -108,8 +108,7 @@
 		}
 
     .stripe__item-link {
-			display: flex;
-			align-items: flex-end;
+			display: block;
 			position: relative;
 			cursor: pointer;
 

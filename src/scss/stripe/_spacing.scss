@@ -1,0 +1,146 @@
+.stripe.stripe--spacing {
+  flex-flow: column wrap;
+  justify-content: flex-start;
+  align-content: space-between;
+
+  margin-bottom: 2rem;
+
+  border-top: solid 1px $color-white;
+
+  .stripe__item {
+    width: calc(50% - .5rem);
+
+    margin-bottom: 0;
+
+    color: $color-white;
+    background-color: transparent;
+
+    .stripe__item-link {
+      display: flex;
+
+      height: auto;
+      padding: 0;
+    }
+
+    .stripe__item-sticker {
+      display: flex;
+      align-self: flex-end;
+
+      width: 5rem;
+      min-width: 5rem;
+      height: auto;
+      margin-right: 1rem;
+      margin-bottom: 1rem;
+
+      @media screen and (max-width: 1024px) {
+        width: 4rem;
+        min-width: 4rem;
+      }
+
+      @media screen and (max-width: 767px) {
+        width: 3rem;
+        min-width: 3rem;
+        margin-bottom: 1.5rem;
+      }
+
+      @media screen and (max-width: 479px) {
+        margin-left: .5rem;
+        margin-right: .5rem;
+      }
+    }
+
+    .stripe__item-footer {
+      padding: 0;
+      background-color: transparent;
+
+      border-bottom: solid 1px $color-white;
+    }
+
+    .stripe__item-title {
+      margin-bottom: 1.5rem;
+    }
+
+    .stripe__item-info {
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+
+      color: $color-white;
+    }
+
+    .stripe__item-head {
+      display: none;
+    }
+
+    &:last-child {
+      .stripe__item-footer {
+        border-bottom: none;
+      }
+    }
+
+    &:first-child {
+      height: 100%;
+
+      .stripe__item-head {
+        display: block;
+      }
+
+      .stripe__item-sticker {
+        display: none;
+
+        @media screen and (max-width: 767px) {
+          display: block;
+        }
+      }
+
+      .stripe__item-link {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+
+        padding-right: 2rem;
+
+        @media screen and (max-width: 767px) {
+          position: relative;
+
+          padding-right: 0;
+        }
+      }
+
+      .stripe__item-footer {
+        border-bottom: none;
+
+        @media screen and (max-width: 767px) {
+          border-bottom: solid 1px $color-white;
+        }
+      }
+
+      .stripe__item-title {
+        font-size: 2.5rem;
+        line-height: 1;
+
+        @media screen and (max-width: 1279px) {
+          font-size: 2rem;
+          line-height: 1.125;
+        }
+
+        @media screen and (max-width: 1023px) {
+          font-size: 1.375rem;
+          line-height: 1.25;
+        }
+
+        @media screen and (max-width: 767px) {
+          font-size: 1.125rem;
+        }
+      }
+
+      @media screen and (max-width: 767px) {
+        height: auto;
+        padding-top: 2rem;
+      }
+    }
+
+    @media screen and (max-width: 767px) {
+      width: 100%;
+    }
+  }
+}
