@@ -4,6 +4,7 @@
   align-items: center;
 
   width: 100%;
+  background-color: $color-black;
 
   .content__inner {
     display: flex;
@@ -11,5 +12,16 @@
     justify-content: space-between;
 
     padding-top: 1rem;
+    padding-bottom: 0;
+
+    @media screen and (max-width: 479px) {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+
+  &.content--fullscreen {
+    background-attachment: fixed;
+    background-position: center top;
   }
 }

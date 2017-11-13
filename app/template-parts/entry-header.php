@@ -9,12 +9,7 @@
 $category = get_the_category(); ?>
 
 <header class="entry__header">
-	<?php
-		if(function_exists('coauthors_posts_links'))
-			coauthors_posts_links();
-		else
-			the_author_posts_link();
-	?>
+	<?php knife_theme_authors_links(); ?>
 
 	<time class="entry__header-meta" datetime="<?php the_time('c'); ?>"><?php the_time('d F Y');?></time>
 

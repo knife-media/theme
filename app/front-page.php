@@ -10,9 +10,43 @@
  * @since 1.1
  */
 
-get_header(); ?>
+get_header();
 
-<main class="content">
+?>
+
+<main <?php knife_theme_cover("content", $post->ID); ?>>
+	<div class="content__inner container">
+
+<?php
+	$news = get_category_by_slug('news');
+
+	$sidebar_related = new WP_Query([
+		'category__not_in' => [$news->term_id],
+		'post__not_in' => [$post->ID],
+		'posts_per_page' => 4,
+		'ignore_sticky_posts' => 1,
+		'post_status' => 'publish'
+	]);
+
+	if($sidebar_related->have_posts()) :
+?>
+
+	<section class="stripe stripe--triple">
+
+<?php
+		while($sidebar_related->have_posts()) :
+			$sidebar_related->the_post();
+
+			get_template_part('template-parts/stripe');
+		endwhile;
+
+		wp_reset_postdata();
+?>
+
+	</section>
+
+<?php endif; ?>
+
 </main>
 
 <?php

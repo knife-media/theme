@@ -4,7 +4,6 @@
   justify-content: center;
 
   width: 100%;
-  margin: 1rem 0;
   padding: 2rem 0;
 
   .footer__inner {
@@ -30,7 +29,7 @@
       }
 
       @media screen and (max-width:767px) {
-        padding: 0 1rem;
+        padding: 0;
       }
     }
 
@@ -55,7 +54,7 @@
 
       @media screen and (max-width: 767px) {
         width: 100%;
-        padding: 0 1rem 1rem;
+        padding-bottom: 1rem;
       }
     }
   }
@@ -121,6 +120,6 @@
   }
 
   @media screen and (max-width: 767px) {
-    padding: 0;
+    padding: 1rem 0;
   }
 }

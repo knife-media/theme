@@ -54,6 +54,7 @@ add_action('after_setup_theme', function(){
 
 	add_image_size('medium-thumbnail', 480, 99999, false);
 	add_image_size('related-thumbnail', 360, 180, true);
+	add_image_size('fullscreen-thumbnail', 1920, 1080, true);
 
 
 	add_image_size( 'cb-100-65', 100, 65, true );
@@ -104,7 +105,7 @@ add_action('init', function() {
 
 // Admin bar
 add_action('init', function() {
-//	add_filter('show_admin_bar', '__return_false');
+	add_filter('show_admin_bar', '__return_false');
 
 	add_action('admin_bar_menu', function($wp_admin_bar) {
 		$wp_admin_bar->remove_menu('customize');
@@ -207,6 +208,10 @@ add_filter('widget_title', function($title, $instance, $base) {
 	if($base === 'custom_html')
 		return "";
 }, 10, 3);
+
+
+//Custom template tags for this theme.
+require get_template_directory() . '/inc/template-tags.php';
 
 /*
 

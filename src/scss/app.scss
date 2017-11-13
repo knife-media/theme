@@ -4,8 +4,8 @@
 // Import 1.0 version bundle
 //@import "vendor/hetmanz";
 
-@import "setup/reset";
-@import "setup/define";
+@import "define/reset";
+@import "define/setup";
 
 @import "basic/fonts";
 @import "basic/icons";
@@ -22,3 +22,4 @@
 @import "layout/sidebar";
 @import "layout/topline";
 @import "layout/footer";
+@import "layout/stripe";
