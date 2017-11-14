@@ -16,7 +16,7 @@ if(!function_exists('knife_theme_cover')) :
  */
 
 function knife_theme_cover($class, $post_id = null) {
-	$thumbnail = get_the_post_thumbnail_url($post->ID, 'fullscreen-thumbnail');
+	$thumbnail = get_the_post_thumbnail_url($post_id, 'fullscreen-thumbnail');
 
 	if($thumbnail === false)
 		return printf('class="%1$s"', $class);

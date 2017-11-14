@@ -26,6 +26,7 @@ a {
   text-decoration: none;
   transition: .2s;
 
+  cursor: pointer;
   outline: none;
 
   &:hover {
@@ -35,6 +36,12 @@ a {
 
 button {
   background-color: transparent;
+
+  outline: none;
+}
+
+time {
+  cursor: default;
 }
 
 img {

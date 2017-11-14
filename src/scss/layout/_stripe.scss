@@ -51,7 +51,7 @@
 
 			width: 100%;
 			height: 100%;
-			padding: 1.25rem 1.5rem 1.5rem;
+			padding: 1rem 1.25rem 1.25rem;
 
       background-color: $color-white;
 
@@ -67,6 +67,7 @@
 			font-weight: 500;
 			line-height: 1.25;
       letter-spacing: .25px;
+      word-wrap: break-word;
 
       @media screen and (max-width: 1023px) {
         font-size: 1.25rem;

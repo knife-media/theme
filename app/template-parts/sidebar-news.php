@@ -6,8 +6,7 @@
  * @since 1.1
  */
 
-$news = get_category_by_slug('news');
-$tags = get_the_tags(); ?>
+$news = get_category_by_slug('news'); ?>
 
 <?php
 	$sidebar_news = new WP_Query([
@@ -29,6 +28,8 @@ $tags = get_the_tags(); ?>
 
 			<div class="sidebar__news-header">
 				<time class="sidebar__news-meta" datetime="<?php the_time('c'); ?>"><?php the_time('d F Y');?></time>
+
+				<?php $tags = get_the_tags(); ?>
 
 				<?php if(isset($tags[0])) : ?>
 				<a class="sidebar__news-meta" href="<?php echo get_tag_link($tags[0]->term_id); ?>"><?php echo $tags[0]->name; ?></a>

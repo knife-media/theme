@@ -17,7 +17,10 @@ $category = get_the_category(); ?>
 
 	<a class="stripe__item-link" href="<?php the_permalink(); ?>">
 
-		<img class="stripe__item-sticker" src="<?php echo get_post_meta($post->ID, 'post_icon', true); ?>"/>
+		<?php // TODO: rework ?>
+		<?php if(!empty(get_post_meta($post->ID, 'post_icon', true))) : ?>
+		<img class="stripe__item-sticker" src="<?php echo esc_url(get_post_meta($post->ID, 'post_icon', true)); ?>"/>
+		<?php endif; ?>
 
 		<footer class="stripe__item-footer">
 			<div class="stripe__item-info">

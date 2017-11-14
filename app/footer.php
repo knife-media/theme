@@ -26,15 +26,15 @@
 		</div>
 
  		<div class="footer__item footer__item--menu">
-			<?php
-				wp_nav_menu([
-					'theme_location' => 'footer_menu',
-					'depth' => 1,
-					'echo' => true,
-					'items_wrap' => '<ul class="footer__menu">%3$s</ul>',
-					'container' => false
-				]);
-			?>
+<?php
+			wp_nav_menu([
+				'theme_location' => 'footer_menu',
+				'depth' => 1,
+				'echo' => true,
+				'items_wrap' => '<ul class="footer__menu">%3$s</ul>',
+				'container' => false
+			]);
+?>
 
  			<div class="footer__item-social">
 				<?php get_template_part('template-parts/meta', 'social'); ?>
@@ -42,11 +42,13 @@
 		</div>
 
  		<div class="footer__item footer__item--copy">
-<?php if(is_active_sidebar('footer-copy')) : ?>
+
+<?php if(is_active_sidebar('knife-footer')) : ?>
 			<aside class="footer__item-copy">
-				<?php dynamic_sidebar( 'footer-copy' ); ?>
+				<?php dynamic_sidebar( 'knife-footer' ); ?>
 			</aside>
 <?php endif; ?>
+
 		</div>
 	</div>
 </footer>

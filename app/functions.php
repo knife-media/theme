@@ -192,8 +192,18 @@ add_filter('image_send_to_editor', function($html) {
 // Register widget area.
 add_action('widgets_init', function(){
 	register_sidebar([
-		'name'          => __( 'Копирайт в футере', 'knife-theme' ),
-		'id'            => 'footer-copy',
+		'name'          => __( 'Главная страница', 'knife-theme' ),
+		'id'            => 'knife-front',
+		'description'   => __( 'Виджеты появятся на главной странице', 'knife-theme' ),
+		'before_widget' => null,
+		'after_widget'  => null,
+		'before_title'  => '<p class="widget__title">',
+		'after_title'   => '</p>',
+	]);
+
+	register_sidebar([
+		'name'          => __( 'Подвал сайта', 'knife-theme' ),
+		'id'            => 'knife-footer',
 		'description'   => __( 'Добавленные виджеты появятся справа в футере', 'knife-theme' ),
 		'before_widget' => null,
 		'after_widget'  => null,
@@ -204,14 +214,36 @@ add_action('widgets_init', function(){
 
 
 // Hide title on custom html widgets
-add_filter('widget_title', function($title, $instance, $base) {
+add_filter('widget_title', function($title = '', $instance = '', $base = '') {
 	if($base === 'custom_html')
 		return "";
+
+	return $title;
 }, 10, 3);
 
 
-//Custom template tags for this theme.
+// Remove default widgets to prevent printing unready styles on production
+add_action('widgets_init', function() {
+	unregister_widget('WP_Widget_Pages');
+	unregister_widget('WP_Widget_Calendar');
+	unregister_widget('WP_Widget_Archives');
+	unregister_widget('WP_Widget_Links');
+	unregister_widget('WP_Widget_Meta');
+	unregister_widget('WP_Widget_Search');
+	unregister_widget('WP_Widget_Categories');
+	unregister_widget('WP_Widget_Recent_Posts');
+	unregister_widget('WP_Widget_Recent_Comments');
+	unregister_widget('WP_Widget_RSS');
+	unregister_widget('WP_Widget_Tag_Cloud');
+	unregister_widget('WP_Nav_Menu_Widget');
+}, 11);
+
+
+// Custom template tags for this theme.
 require get_template_directory() . '/inc/template-tags.php';
+
+// Add custom widgets defenition
+require get_template_directory() . '/inc/widgets.php';
 
 /*
 
@@ -434,5 +466,3 @@ function escapeJsonString($value) {
     return $result;
 }
 */
-
-

@@ -47,5 +47,5 @@
 		</div>
 	</article>
 
-	<?php get_sidebar(); ?>
+	<?php get_sidebar('single'); ?>
 </div>
