@@ -10,16 +10,19 @@
 <div class="content__inner container">
 	<article class="post" id="post-<?php the_ID(); ?>">
 		<div class="post__inner entry">
-			<?php
-				/**
-				* Show entry author, category and date
-				*/
-				get_template_part('template-parts/entry', 'header');
-			?>
 
-			<h1 class="entry__title"><?php the_title(); ?></h1>
+			<header class="entry__header">
+				<?php
+					/**
+					* Prints entry author, category and date
+					*/
+					knife_theme_entry_header();
+				?>
+			</header>
 
-			<?php if(!in_category('news')) : ?>
+			<?php the_title('<h1 class="entry__title">', '</h1>'); ?>
+
+			<?php if(has_excerpt() && !in_category('news')) : ?>
 			<div class="entry__excerpt">
 			  <?php the_excerpt(); ?>
 			</div>
@@ -27,9 +30,9 @@
 
 			<?php
 				/**
-				* Show sharing buttons
-				*/
-				get_template_part('template-parts/entry', 'share');
+				 * Print share buttons
+				 */
+				knife_theme_entry_share();
 			?>
 
 			<div class="entry__content custom">
@@ -38,11 +41,13 @@
 
 			<?php
 				/**
-				* Share, terms and related
-				*/
-				get_template_part('template-parts/entry', 'share');
-				get_template_part('template-parts/entry', 'tags');
-				get_template_part('template-parts/entry', 'related');
+				 * Print share buttons, terms and related posts
+				 */
+				knife_theme_entry_share();
+
+				knife_theme_entry_tags();
+
+				knife_theme_entry_related();
 			?>
 		</div>
 	</article>

@@ -37,7 +37,7 @@
 ?>
 
  			<div class="footer__item-social">
-				<?php get_template_part('template-parts/meta', 'social'); ?>
+				<?php knife_theme_social(); ?>
 			</div>
 		</div>
 

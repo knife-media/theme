@@ -23,12 +23,6 @@ add_action('wp_print_styles', function() {
 });
 
 
-// Insert fonts
-add_action('wp_enqueue_scripts', function() {
-
-});
-
-
 // Change mail from fields
 add_filter('wp_mail_from_name', function($name) {
 	return __('knife.media webmaster', 'knife-theme');
@@ -168,8 +162,10 @@ add_filter('nav_menu_item_id', '__return_empty_string');
 // Rename aside post format
 add_filter('gettext_with_context', function($translation, $text, $context, $domain) {
 	$names = [
+		'Standard' => __('Стандартный', 'knife-theme'),
 		'Aside'  => __('Без сайдбара', 'knife-theme'),
-		'Standard' => __('Стандартный', 'knife-theme')
+		'Video' => __('Видео', 'knife-theme'),
+ 		'Audio' => __('Аудио', 'knife-theme')
 	];
 
 	if($context !== 'Post format')
@@ -178,6 +174,11 @@ add_filter('gettext_with_context', function($translation, $text, $context, $doma
 	return str_replace(array_keys($names), array_values($names), $text);
 }, 10, 4);
 
+
+// Remove annoying [...] in excerpts
+add_filter('excerpt_more', function($more) {
+	return '&hellip;';
+});
 
 // Remove useless image attributes
 add_filter('post_thumbnail_html', function($html) {
