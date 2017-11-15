@@ -11,15 +11,20 @@
  */
 
 
+// We have to install this value
+if(!isset($content_width)) {
+	$content_width = 650;
+}
+
 // Insert required js files
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_script('knife-scripts', get_bloginfo('template_url') . '/assets/scripts.min.js', [], '0.1', true);
+	wp_enqueue_script('knife-scripts', get_template_directory_uri() . '/assets/scripts.min.js', [], '0.1', true);
 });
 
 
 // Insert styles
 add_action('wp_print_styles', function() {
-   	wp_enqueue_style('knife-styles', get_bloginfo('template_url') . '/assets/styles.min.css', [], '0.1');
+   	wp_enqueue_style('knife-styles', get_template_directory_uri() . '/assets/styles.min.css', [], '0.1');
 });
 
 
@@ -63,9 +68,11 @@ add_action('after_setup_theme', function(){
 });
 
 
-// Add new post formats
+// Add required theme support tags
 add_action('after_setup_theme', function() {
 	add_theme_support('post-formats', array('aside'));
+
+	add_theme_support('title-tag');
 });
 
 

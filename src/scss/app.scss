@@ -1,8 +1,6 @@
-// Import framework on production deployment
-//@import "vendor/bootstrap";
-
-// Import 1.0 version bundle
-//@import "vendor/hetmanz";
+// Import wordpress generated styles
+// https://codex.wordpress.org/CSS
+@import "vendor/wordpress";
 
 @import "define/reset";
 @import "define/setup";
