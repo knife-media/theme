@@ -16,20 +16,20 @@ get_header(); ?>
 	</header>
 
 	<section class="content__archive block">
-
-		<div class="stripe stripe--triple">
 <?php
 	if ( have_posts() ) :
 
 		while (have_posts()) : the_post();
 
-			get_template_part('template-parts/stripe', '');
+			if($wp_query->current_post % 5 === 3 || $wp_query->current_post % 5 === 4)
+				knife_theme_unit('double');
+			else
+ 				knife_theme_unit('triple');
 
 		endwhile;
 
 	endif;
 ?>
-		</div>
 	</section>
 </main>
 

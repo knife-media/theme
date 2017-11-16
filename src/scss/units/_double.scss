@@ -1,0 +1,7 @@
+.unit--double {
+  width: calc(50% - .5rem);
+
+  @media screen and (max-width: 479px) {
+    width: 100%;
+  }
+}

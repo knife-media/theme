@@ -20,7 +20,9 @@
   }
 
   .content__archive {
-    display: block;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
 
     padding-top: 1rem;
     padding-bottom: 0;

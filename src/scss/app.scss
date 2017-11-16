@@ -12,18 +12,19 @@
 @import "basic/block";
 
 @import "layout/header";
+@import "layout/content";
+@import "layout/sidebar";
+@import "layout/footer";
+@import "layout/topline";
 @import "layout/menu";
 @import "layout/post";
-@import "layout/content";
+@import "layout/unit";
 @import "layout/entry";
 @import "layout/custom";
-@import "layout/sidebar";
-@import "layout/topline";
-@import "layout/footer";
-@import "layout/stripe";
+@import "layout/mindmap";
+@import "layout/spacing";
 
-@import "stripe/single";
-@import "stripe/double";
-@import "stripe/triple";
-@import "stripe/mindmap";
-@import "stripe/spacing";
+
+@import "units/double";
+@import "units/triple";
+@import "units/single";

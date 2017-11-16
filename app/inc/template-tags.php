@@ -38,7 +38,7 @@ if(!function_exists('knife_theme_authors')) :
  */
 
 function knife_theme_authors() {
-	if(function_exists('coauthors'))
+	if(function_exists('get_coauthors'))
 		return coauthors();
 
 	return the_author();
@@ -245,6 +245,74 @@ function knife_theme_social() {
 		</a>
 	</li>
 </ul>
+
+<?php
+}
+
+endif;
+
+
+if(!function_exists('knife_theme_category_link')) :
+/**
+ * Single category link with arg class
+ *
+ * @since 1.1
+ */
+function knife_theme_category_link($link_class = '') {
+	$category = get_the_category();
+
+	if(!isset($category[0]))
+		return '';
+
+	return sprintf(
+		'<a class="%1$s" href="%2$s">%3$s</a>',
+		esc_attr($link_class),
+		esc_url(get_category_link($category[0]->term_id)),
+		sanitize_text_field($category[0]->cat_name)
+	);
+}
+
+endif;
+
+
+
+if(!function_exists('knife_theme_unit')) :
+/**
+ * Unit template variable width with cover or not
+ *
+ * Unit is a single content item using in any loop.
+ * Can be 1/3, 1/2 or full screen width
+ *
+ * @since 1.1
+ */
+
+function knife_theme_unit() {
+	$format = 'unit';
+
+	foreach(func_get_args() as $arg) {
+		$format .= ' unit--' . $arg;
+	}
+?>
+
+<article class="<?php echo $format; ?>">
+	<?php echo knife_theme_category_link('unit__head') ?>
+
+	<a class="unit__link" href="<?php the_permalink(); ?>">
+		<div class="unit__image">
+			<?php the_post_thumbnail('', ['class' => 'unit__image-thumbnail']); ?>
+		</div>
+
+		<footer class="unit__footer">
+			<?php the_title('<p class="unit__title">', '</p>'); ?>
+
+			<div class="unit__meta">
+				<span class="unit__meta-item"><?php knife_theme_authors(); ?></span>
+
+				<time class="unit__meta-item" datetime="<?php the_time(DATE_W3C); ?>"><?php echo  get_the_date(); ?></time>
+			</div>
+		</footer>
+	</a>
+</article>
 
 <?php
 }

@@ -17,9 +17,60 @@ get_header();
 <main <?php knife_theme_cover("content", $post->ID); ?>>
 	<div class="content__archive block">
 
-<?php if(is_active_sidebar('knife-front')) : ?>
-		<?php dynamic_sidebar( 'knife-front' ); ?>
-<?php endif; ?>
+<?php
+	$q = new WP_Query(['posts_per_page' => 3, 'ignore_sticky_posts' => 1, 'post_status' => 'publish']);
+
+
+	if ( $q->have_posts() ) :
+
+		while ($q->have_posts()) : $q->the_post();
+			knife_theme_unit('triple');
+		endwhile;
+
+		wp_reset_query();
+
+	endif;
+?>
+
+ <?php
+	$q = new WP_Query(['posts_per_page' => 1, 'ignore_sticky_posts' => 1, 'post_status' => 'publish', 'offset' => 3]);
+
+
+	if ( $q->have_posts() ) :
+
+		while ($q->have_posts()) : $q->the_post();
+			knife_theme_unit('single');
+		endwhile;
+
+		wp_reset_query();
+
+	endif;
+?>
+
+<section class="mindmap">
+<?php
+	$q = new WP_Query(['posts_per_page' => 8, 'ignore_sticky_posts' => 1, 'post_status' => 'publish', 'offset' => 9]);
+
+
+	if ( $q->have_posts() ) :
+
+		while ($q->have_posts()) : $q->the_post();
+?>
+ <article class="stripe__item">
+	<a class="stripe__item-link" href="<?php the_permalink(); ?>">
+		<p class="stripe__item-title"><?php the_title(); ?></p>
+	</a>
+</article>
+
+
+<?php
+		endwhile;
+
+		wp_reset_query();
+
+	endif;
+?>
+</section>
 
 	</div>
 </main>

@@ -4,12 +4,13 @@
   .entry__title {
     display: block;
 
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     font-size: 2.5rem;
     line-height: 1.075;
     letter-spacing: .25px;
 
     @media screen and (max-width: 767px) {
+      margin-bottom: .75rem;
       font-size: 1.5rem;
     }
   }
