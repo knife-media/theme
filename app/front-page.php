@@ -55,16 +55,8 @@ get_header();
 	if ( $q->have_posts() ) :
 
 		while ($q->have_posts()) : $q->the_post();
-?>
- <article class="stripe__item">
-	<a class="stripe__item-link" href="<?php the_permalink(); ?>">
-		<p class="stripe__item-title"><?php the_title(); ?></p>
-	</a>
-</article>
-
-
-<?php
-		endwhile;
+			get_template_part('template-parts/mindmap');
+   	endwhile;
 
 		wp_reset_query();
 
