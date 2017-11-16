@@ -22,7 +22,7 @@ function knife_theme_cover($class, $post_id = null) {
 	if($thumbnail === false)
 		return printf('class="%1$s"', $class);
 
-	printf('class="%1$s %1$s--fullscreen" style="background-image:url(%2$s)"', $class, esc_url($thumbnail));
+	printf('class="%1$s %1$s--background" style="background-image:url(%2$s)"', $class, esc_url($thumbnail));
 }
 
 endif;

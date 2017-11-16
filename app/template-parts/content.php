@@ -7,8 +7,8 @@
  */
 ?>
 
-<div class="content__inner container">
-	<article class="post" id="post-<?php the_ID(); ?>">
+<section class="content__single block">
+	<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 		<div class="post__inner entry">
 
 			<header class="entry__header">
@@ -53,4 +53,4 @@
 	</article>
 
 	<?php get_sidebar('single'); ?>
-</div>
+</section>

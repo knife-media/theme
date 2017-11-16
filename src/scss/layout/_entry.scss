@@ -6,7 +6,7 @@
 
     margin-bottom: 1.5rem;
     font-size: 2.5rem;
-    line-height: 1;
+    line-height: 1.075;
     letter-spacing: .25px;
 
     @media screen and (max-width: 767px) {
@@ -118,7 +118,10 @@
 
     .entry__share-action {
 			margin-left: .75rem;
+      padding-bottom: .075rem;
 		  font-size: .875rem;
+      font-weight: 300;
+      letter-spacing: .25px;
 
       @media screen and (max-width: 767px) {
         display: none;

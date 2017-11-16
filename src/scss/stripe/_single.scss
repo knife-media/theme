@@ -7,14 +7,16 @@
     }
 
     .stripe__item-footer {
+      display: flex;
       position: absolute;
-      left: 0;
-      bottom: 0;
+      left: 1rem;
+      bottom: 1rem;
 
       height: auto;
-      max-width: 60%;
+      width: auto;
+      padding: 1rem;
 
-      background-color: transparent;
+      background-color: $color-white;
 
       @media screen and (max-width: 767px) {
         max-width: 100%;
@@ -36,6 +38,17 @@
 
       @media screen and (max-width: 767px) {
         font-size: 1.125rem;
+      }
+    }
+
+    &.stripe__item--cover {
+      .stripe__item-footer {
+        left: 0;
+        bottom: 0;
+
+        max-width: 60%;
+
+        background-color: transparent;
       }
     }
   }

@@ -39,7 +39,7 @@ class Knife_Stripe_Widget extends WP_Widget {
 		$template = isset($instance['template']) ? esc_attr($instance['template']) : '';
 
 		if($template === 'television') :
-			$q = new WP_Query(['ignore_sticky_posts' => 1, 'post_status' => 'publish', 'posts_per_page' => 1]);
+			$q = new WP_Query(['ignore_sticky_posts' => 1, 'post_status' => 'publish', 'posts_per_page' => 1, 'offset' => 3]);
 
 			echo '<div style="width: 100%; max-width: calc(100% - 19.75rem)">';
 			echo '<section class="stripe stripe--single">';
@@ -60,7 +60,7 @@ class Knife_Stripe_Widget extends WP_Widget {
 			echo '<section class="stripe stripe--triple">';
 
 			while($q->have_posts()) : $q->the_post();
-				get_template_part('template-parts/stripe', 'cover');
+				get_template_part('template-parts/stripe');
 			endwhile;
 
 			wp_reset_postdata();

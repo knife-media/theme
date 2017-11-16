@@ -8,7 +8,7 @@
 ?>
 
 <footer class="footer">
-	<div class="footer__inner container">
+	<div class="footer__inner block">
 		<div class="footer__item footer__item--brand">
 			<a class="footer__item-logo" href="<?php echo esc_url(home_url('/')); ?>">
 				<svg class="footer__item-image" fill="#ffffff" width="100" height="30" x="0" y="0" viewBox="0 0 111 31.8" xml:space="preserve">

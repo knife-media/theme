@@ -3,10 +3,9 @@
   flex-flow: column wrap;
   align-items: center;
 
-  width: 100%;
   background-color: $color-black;
 
-  .content__inner {
+  .content__single {
     display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
@@ -20,7 +19,42 @@
     }
   }
 
-  &.content--fullscreen {
+  .content__archive {
+    display: block;
+
+    padding-top: 1rem;
+    padding-bottom: 0;
+
+    @media screen and (max-width: 479px) {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+
+  .content__header {
+    display: block;
+
+    padding-top: 1rem;
+
+    .content__header-title {
+      display: inline-block;
+      cursor: default;
+
+      font-size: 3rem;
+      line-height: 1.25;
+      color: transparent;
+
+      background: linear-gradient(90deg, $color-title-start, $color-title-finish);
+      background-clip: text;
+      -webkit-background-clip: text;
+
+      &:first-letter {
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  &.content--background {
     background-attachment: fixed;
     background-position: center;
     background-repeat: no-repeat;

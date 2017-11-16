@@ -187,6 +187,16 @@ add_filter('excerpt_more', function($more) {
 	return '&hellip;';
 });
 
+
+// Archive title fix
+add_filter('get_the_archive_title', function($title) {
+	if(is_category() || is_tag() || is_tax())
+		return single_term_title('', false);
+
+	return $title;
+});
+
+
 // Remove useless image attributes
 add_filter('post_thumbnail_html', function($html) {
 	return preg_replace('/(width|height)="\d*"\s/', "", $html);

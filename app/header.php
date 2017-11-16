@@ -17,7 +17,7 @@
 <body <?php body_class(); ?>>
 
 <header class="header">
-	<div class="header__topline topline container">
+	<div class="header__topline topline block">
  		<button class="topline__button topline__button--menu toggle" role="button">
 			<span class="toggle__line"></span>
 			<span class="toggle__line"></span>

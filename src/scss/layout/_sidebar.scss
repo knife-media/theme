@@ -9,6 +9,8 @@
   max-width: 18.75rem;
   margin-bottom: 1rem;
 
+  color: $color-text;
+
   .sidebar__news {
     display: flex;
     flex-flow: row wrap;
@@ -17,6 +19,7 @@
 
     width: 100%;
 
+
     .sidebar__news-item {
       display: block;
 
@@ -24,7 +27,6 @@
 			margin-bottom: 2px;
       padding: 1rem;
 
-      color: $color-black;
       background-color: $color-white;
 
       @media screen and (max-width: 1023px) {
@@ -80,8 +82,6 @@
     flex-flow: row wrap;
     justify-content: space-between;
     position: relative;
-
-    color: $color-black;
 
     .sidebar__related-image {
       display: block;
