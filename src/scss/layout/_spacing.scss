@@ -1,13 +1,14 @@
-.stripe.stripe--spacing {
+.spacing {
   flex-flow: column wrap;
   justify-content: flex-start;
   align-content: space-between;
 
+  width: 100%;
   margin-bottom: 2rem;
 
   border-top: solid 1px $color-white;
 
-  .stripe__item {
+  .spacing__item {
     width: calc(50% - .5rem);
 
     margin-bottom: 0;
@@ -15,14 +16,14 @@
     color: $color-white;
     background-color: transparent;
 
-    .stripe__item-link {
+    .spacing__item-link {
       display: flex;
 
       height: auto;
       padding: 0;
     }
 
-    .stripe__item-sticker {
+    .spacing__item-sticker {
       display: flex;
       align-self: flex-end;
 
@@ -49,30 +50,30 @@
       }
     }
 
-    .stripe__item-footer {
+    .spacing__item-footer {
       padding: 0;
       background-color: transparent;
 
       border-bottom: solid 1px $color-white;
     }
 
-    .stripe__item-title {
+    .spacing__item-title {
       margin-bottom: 1.5rem;
     }
 
-    .stripe__item-info {
+    .spacing__item-info {
       margin-top: 1.5rem;
       margin-bottom: 1rem;
 
       color: $color-white;
     }
 
-    .stripe__item-head {
+    .spacing__item-head {
       display: none;
     }
 
     &:last-child {
-      .stripe__item-footer {
+      .spacing__item-footer {
         border-bottom: none;
       }
     }
@@ -80,11 +81,11 @@
     &:first-child {
       height: 100%;
 
-      .stripe__item-head {
+      .spacing__item-head {
         display: block;
       }
 
-      .stripe__item-sticker {
+      .spacing__item-sticker {
         display: none;
 
         @media screen and (max-width: 767px) {
@@ -92,8 +93,8 @@
         }
       }
 
-      .stripe__item-link {
-        position: absolute;
+      .spacing__item-link {
+        position: relative;
         left: 0;
         bottom: 0;
 
@@ -106,7 +107,7 @@
         }
       }
 
-      .stripe__item-footer {
+      .spacing__item-footer {
         border-bottom: none;
 
         @media screen and (max-width: 767px) {
@@ -114,7 +115,7 @@
         }
       }
 
-      .stripe__item-title {
+      .spacing__item-title {
         font-size: 2.5rem;
         line-height: 1;
 
