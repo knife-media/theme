@@ -17,6 +17,10 @@ get_header();
 <main <?php knife_theme_cover("content", $post->ID); ?>>
 	<div class="content__archive block">
 
+ <?php if(is_active_sidebar('knife-front')) : ?>
+		<?php dynamic_sidebar( 'knife-front' ); ?>
+<?php endif; ?>
+
 <?php
 	$q = new WP_Query(['posts_per_page' => 3, 'ignore_sticky_posts' => 1, 'post_status' => 'publish']);
 

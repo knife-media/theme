@@ -53,6 +53,13 @@ class Knife_Stripe_Widget extends WP_Widget {
 			echo '</section>';
 
 
+ 		printf(
+			'<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
+			esc_attr($this->get_field_id('title')),
+			esc_attr($this->get_field_name('title')),
+			__('Заголовок:', 'knife-theme'),
+			esc_attr($instance['title'])
+		);
 
 
  			$q = new WP_Query(['ignore_sticky_posts' => 1, 'post_status' => 'publish', 'posts_per_page' => 3, 'offset' => 1]);

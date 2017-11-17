@@ -23,11 +23,25 @@
 
       .mindmap__link {
         font-size: 1.875rem;
+
+        @media screen and (max-width: 1023px) {
+          font-size: 1.5rem;
+        }
+
+        @media screen and (max-width: 767px) {
+          font-size: 1.25rem;
+        }
       }
+    }
+
+    @media screen and (max-width: 767px) {
+      width: 100%;
+      margin-right: 0;
     }
   }
 
   .mindmap__link {
+    display: block;
     position: relative;
 
     height: auto;
@@ -54,6 +68,16 @@
     &:hover {
       background: $color-primary;
       color: $color-white;
+    }
+
+    @media screen and (max-width: 1023px) {
+      font-size: 1.375rem;
+      line-height: 1.25;
+    }
+
+    @media screen and (max-width: 767px) {
+      width: 100%;
+      font-size: 1.125rem;
     }
   }
 }

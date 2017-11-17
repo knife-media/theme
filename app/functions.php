@@ -268,5 +268,5 @@ add_action('widgets_init', function() {
 // Custom template tags for this theme.
 require get_template_directory() . '/inc/template-tags.php';
 
-// Add custom widgets defenition
-require get_template_directory() . '/inc/widgets.php';
+// Add custom widgets defenitions
+require get_template_directory() . '/inc/widget-mindmap.php';

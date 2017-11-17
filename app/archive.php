@@ -10,9 +10,7 @@ get_header(); ?>
 
 <main class="content">
 	<header class="content__header block">
-		<?php
-			the_archive_title('<h1 class="content__header-title">', '</h1>');
-		?>
+		<?php the_archive_title('<h1 class="content__header-title">', '</h1>'); ?>
 	</header>
 
 	<section class="content__archive block">
