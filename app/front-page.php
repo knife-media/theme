@@ -66,46 +66,17 @@ get_header();
 
 
 <section class="spacing">
+
 <?php
-	$q = new WP_Query(['posts_per_page' => 4, 'ignore_sticky_posts' => 1, 'post_status' => 'publish', 'offset' => 10]);
+	$q = new WP_Query(['posts_per_page' => 4, 'ignore_sticky_posts' => 1, 'post_status' => 'publish', 'offset' => 0, 'category__in' => 14]);
 
+	while ($q->have_posts()) : $q->the_post();
+		get_template_part('template-parts/spacing');
+	endwhile;
 
-	if ( $q->have_posts() ) :
-
-		while ($q->have_posts()) : $q->the_post();
-?>
-	<article class="spacing__item">
-<?php
-	if($q->current_post === 0)
-		echo knife_theme_category_link('spacing__item-head');
+	wp_reset_query();
 ?>
 
-	<a class="spacing__item-link" href="<?php the_permalink(); ?>">
-
-		<?php // TODO: rework ?>
-		<?php if(!empty(get_post_meta($post->ID, 'post_icon', true))) : ?>
-		<img class="spacing__item-sticker" src="<?php echo esc_url(get_post_meta($post->ID, 'post_icon', true)); ?>"/>
-		<?php endif; ?>
-
-		<footer class="spacing__item-footer">
-			<div class="spacing__item-info">
-				<span class="spacing__item-meta"><?php knife_theme_authors() ?></span>
-
-				<time class="spacing__item-meta" datetime="<?php the_time('c'); ?>"><?php the_time('d F');?></time>
-			</div>
-
-			<p class="spacing__item-title"><?php the_title(); ?></p>
-		</footer>
-
-	</a>
-</article>
-<?php
-   	endwhile;
-
-		wp_reset_query();
-
-	endif;
-?>
 </section>
 
 	</div>

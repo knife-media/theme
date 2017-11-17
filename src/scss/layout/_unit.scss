@@ -84,6 +84,7 @@
 
     .unit__meta-item {
       display: inline-block;
+      cursor: pointer;
 
       &:after {
         content: "•";

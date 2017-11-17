@@ -1,4 +1,5 @@
 .spacing {
+  display: flex;
   flex-flow: column wrap;
   justify-content: flex-start;
   align-content: space-between;
@@ -8,84 +9,116 @@
 
   border-top: solid 1px $color-white;
 
-  .spacing__item {
-    width: calc(50% - .5rem);
+  .spacing__link {
+    display: flex;
 
+    height: auto;
+  }
+
+  .spacing__sticker {
+    display: flex;
+    align-self: flex-end;
+
+    width: 5rem;
+    min-width: 5rem;
+    height: auto;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+
+    @media screen and (max-width: 1024px) {
+      width: 4rem;
+      min-width: 4rem;
+    }
+
+    @media screen and (max-width: 767px) {
+      width: 3rem;
+      min-width: 3rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media screen and (max-width: 479px) {
+      margin-left: .5rem;
+      margin-right: .5rem;
+    }
+  }
+
+  .spacing__footer {
+    width: 100%;
+    padding: 0;
+
+    border-bottom: solid 1px $color-white;
+  }
+
+  .spacing__title {
+    display: block;
+
+    margin-bottom: 1.5rem;
+
+    font-size: 1.375rem;
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: .25px;
+    word-wrap: break-word;
+  }
+
+  .spacing__meta {
+    display: block;
+
+    width: 100%;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    color: $color-white;
+    font-size: .625rem;
+    font-weight: 500;
+    letter-spacing: .75px;
+    text-transform: uppercase;
+
+    .spacing__meta-item {
+      display: inline-block;
+      cursor: pointer;
+
+      &:after {
+        content: "•";
+        display: inline-block;
+
+        margin-left: .5rem;
+        margin-right: .5rem;
+      }
+
+      &:last-child:after {
+        display: none;
+      }
+    }
+  }
+
+  .spacing__item {
+    display: block;
+    position: relative;
+
+    width: calc(50% - .5rem);
     margin-bottom: 0;
+    overflow: hidden;
 
     color: $color-white;
     background-color: transparent;
 
-    .spacing__item-link {
-      display: flex;
-
-      height: auto;
-      padding: 0;
-    }
-
-    .spacing__item-sticker {
-      display: flex;
-      align-self: flex-end;
-
-      width: 5rem;
-      min-width: 5rem;
-      height: auto;
-      margin-right: 1rem;
-      margin-bottom: 1rem;
-
-      @media screen and (max-width: 1024px) {
-        width: 4rem;
-        min-width: 4rem;
-      }
-
-      @media screen and (max-width: 767px) {
-        width: 3rem;
-        min-width: 3rem;
-        margin-bottom: 1.5rem;
-      }
-
-      @media screen and (max-width: 479px) {
-        margin-left: .5rem;
-        margin-right: .5rem;
-      }
-    }
-
-    .spacing__item-footer {
-      padding: 0;
-      background-color: transparent;
-
-      border-bottom: solid 1px $color-white;
-    }
-
-    .spacing__item-title {
-      margin-bottom: 1.5rem;
-    }
-
-    .spacing__item-info {
-      margin-top: 1.5rem;
-      margin-bottom: 1rem;
-
-      color: $color-white;
-    }
-
-    .spacing__item-head {
-      display: none;
-    }
-
-    &:last-child {
-      .spacing__item-footer {
-        border-bottom: none;
-      }
-    }
 
     &:first-child {
       height: 100%;
 
-      .spacing__item-head {
-        display: block;
+      .spacing__link {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+
+        margin-right: 2rem;
+
+        @media screen and (max-width: 767px) {
+          position: relative;
+        }
       }
 
-      .spacing__item-sticker {
+      .stripe__sticker {
         display: none;
 
         @media screen and (max-width: 767px) {
@@ -93,21 +126,7 @@
         }
       }
 
-      .spacing__item-link {
-        position: relative;
-        left: 0;
-        bottom: 0;
-
-        padding-right: 2rem;
-
-        @media screen and (max-width: 767px) {
-          position: relative;
-
-          padding-right: 0;
-        }
-      }
-
-      .spacing__item-footer {
+      .spacing__footer {
         border-bottom: none;
 
         @media screen and (max-width: 767px) {
@@ -115,7 +134,7 @@
         }
       }
 
-      .spacing__item-title {
+      .spacing__title {
         font-size: 2.5rem;
         line-height: 1;
 
@@ -136,7 +155,6 @@
 
       @media screen and (max-width: 767px) {
         height: auto;
-        padding-top: 2rem;
       }
     }
 
