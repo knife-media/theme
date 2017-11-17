@@ -276,6 +276,30 @@ endif;
 
 
 
+if(!function_exists('knife_theme_tags')) :
+/**
+ * Current post tag list without links
+ *
+ * @since 1.1
+ */
+function knife_theme_tags($count = 3, $echo = true) {
+	$tags = array_slice(get_the_tags(), 0, $count);
+
+	if(count($tags) === 0)
+		return $list;
+
+	$list = implode(', ', wp_list_pluck($tags, 'name'));
+
+	if($echo === false)
+		return $list;
+
+	echo $list;
+}
+
+endif;
+
+
+
 if(!function_exists('knife_theme_unit')) :
 /**
  * Unit template variable width with cover or not
@@ -306,9 +330,11 @@ function knife_theme_unit() {
 			<?php the_title('<p class="unit__title">', '</p>'); ?>
 
 			<div class="unit__meta">
-				<span class="unit__meta-item"><?php knife_theme_authors(); ?></span>
+				<time class="unit__meta-item unit__meta-item--date" data-time="<?php the_time(); ?>" datetime="<?php the_time(DATE_W3C); ?>"><?php echo get_the_date(); ?></time>
 
-				<time class="unit__meta-item" datetime="<?php the_time(DATE_W3C); ?>"><?php echo  get_the_date(); ?></time>
+ 				<span class="unit__meta-item unit__meta-item--author"><?php knife_theme_authors(); ?></span>
+
+				<span class="unit__meta-item unit__meta-item--tags"><?php knife_theme_tags(); ?></span>
 			</div>
 		</footer>
 	</a>

@@ -72,7 +72,9 @@
   }
 
   .unit__meta {
-    display: block;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
 
     width: 100%;
     margin-top: 1.5rem;
@@ -86,7 +88,11 @@
       display: inline-block;
       cursor: pointer;
 
-      &:after {
+      &.unit__meta-item--tags {
+        display: none;
+      }
+
+      &:before {
         content: "•";
         display: inline-block;
 
@@ -94,7 +100,7 @@
         margin-right: .5rem;
       }
 
-      &:last-child:after {
+      &:first-child:before {
         display: none;
       }
     }

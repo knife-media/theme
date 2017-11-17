@@ -23,6 +23,7 @@
 
       .mindmap__link {
         font-size: 1.875rem;
+        line-height: 1.075;
 
         @media screen and (max-width: 1023px) {
           font-size: 1.5rem;
@@ -45,11 +46,11 @@
     position: relative;
 
     height: auto;
-    padding: .75rem 1rem .75rem 2rem;
+    padding: .625rem 1rem .625rem 2.5rem;
 
     font-size: 1.375rem;
     font-weight: 500;
-    line-height: 1;
+    line-height: 1.25;
 
     background: $color-white;
 
@@ -58,7 +59,7 @@
       display: inline-block;
       position: absolute;
       top: 50%;
-      left: .75rem;
+      left: .875rem;
 
       width: 1rem;
       font-size: 1.5rem;
