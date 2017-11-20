@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'knife-icons';
-  src:  url('fonts/knife-icons/knife-icons.eot?93h5ww');
-  src:  url('fonts/knife-icons/knife-icons.eot?93h5ww#iefix') format('embedded-opentype'),
-    url('fonts/knife-icons/knife-icons.ttf?93h5ww') format('truetype'),
-    url('fonts/knife-icons/knife-icons.woff?93h5ww') format('woff'),
-    url('fonts/knife-icons/knife-icons.svg?93h5ww#knife-icons') format('svg');
+  src:  url('fonts/knife-icons/knife-icons.eot?cel9i6');
+  src:  url('fonts/knife-icons/knife-icons.eot?cel9i6#iefix') format('embedded-opentype'),
+    url('fonts/knife-icons/knife-icons.ttf?cel9i6') format('truetype'),
+    url('fonts/knife-icons/knife-icons.woff?cel9i6') format('woff'),
+    url('fonts/knife-icons/knife-icons.svg?cel9i6#knife-icons') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -24,19 +24,16 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon--search-fat:before {
+.icon--search:before {
   content: "\e900";
 }
-.icon--search:before {
-  content: "\e901";
-}
-.icon--ok:before {
+.icon--odnoklassniki:before {
   content: "\e902";
 }
-.icon--vk:before {
+.icon--vkontakte:before {
   content: "\e903";
 }
-.icon--fb:before {
+.icon--facebook:before {
   content: "\e904";
 }
 .icon--instagram:before {
@@ -48,4 +45,3 @@
 .icon--telegram:before {
   content: "\e907";
 }
-

@@ -28,18 +28,26 @@
 
  		<div class="footer__menu">
 			<?php
-				wp_nav_menu([
-					'theme_location' => 'footer_menu',
-					'depth' => 1,
-					'echo' => true,
-					'items_wrap' => '<ul class="footer__menu-list">%3$s</ul>',
-					'container' => false
-				]);
-			?>
+				if(has_nav_menu('footer')) :
+					wp_nav_menu([
+						'theme_location' => 'footer',
+						'depth' => 1,
+						'echo' => true,
+						'items_wrap' => '<ul class="footer__menu-list">%3$s</ul>',
+						'container' => false
+					]);
+				endif;
 
- 			<div class="footer__menu-social">
-				<?php knife_theme_social(); ?>
-			</div>
+    		if(has_nav_menu('social')) :
+					wp_nav_menu([
+						'theme_location' => 'social',
+						'depth' => 1,
+						'echo' => true,
+						'items_wrap' => '<ul class="social">%3$s</ul>',
+						'container_class' => 'footer__menu-social'
+					]);
+				endif;
+			?>
 		</div>
 
  		<div class="footer__copy">

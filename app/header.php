@@ -40,22 +40,30 @@
 
 		<nav class="topline__menu">
 			<?php
-				wp_nav_menu([
-					'theme_location' => 'main_menu',
-					'depth' => 1,
-					'echo' => true,
-					'items_wrap' => '<ul class="topline__menu-list">%3$s</ul>',
-					'container' => false
-				]);
-			?>
+				if(has_nav_menu('main')) :
+					wp_nav_menu([
+						'theme_location' => 'main',
+						'depth' => 1,
+						'echo' => true,
+						'items_wrap' => '<ul class="topline__menu-list">%3$s</ul>',
+						'container' => false
+					]);
+				endif;
 
-			<div class="topline__menu-social">
-				<?php knife_theme_social(); ?>
-			</div>
+   				if(has_nav_menu('social')) :
+					wp_nav_menu([
+						'theme_location' => 'social',
+						'depth' => 1,
+						'echo' => true,
+						'items_wrap' => '<ul class="social">%3$s</ul>',
+						'container_class' => 'topline__menu-social'
+					]);
+				endif;
+			?>
 		</nav>
 
 		<button class="topline__button topline__button--search" role="button">
-			<span class="icon icon--search-fat"></span>
+			<span class="icon icon--search"></span>
 		</button>
 	</div>
 </header>

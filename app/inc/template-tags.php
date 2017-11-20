@@ -70,6 +70,8 @@ if(!function_exists('knife_theme_entry_share')) :
 /**
  * Prints share buttons
  *
+ * TODO: don't forget to rework this
+ *
  * @since 1.1
  */
 
@@ -179,49 +181,6 @@ function knife_theme_entry_related() {
 
 endif;
 
-
-if(!function_exists('knife_theme_social')) :
-/**
- * Prints links to social community
- *
- * TODO: We have to rework this behaviour using menu or something better
- *
- * @since 1.1
- */
-
-function knife_theme_social() {
-?>
-
-<ul class="social">
-	<li class="social__item">
-		<a class="social__item-link social__item-link--fb" href="https://www.facebook.com/theknifemedia">
-			<span class="icon icon--fb"></span>
-		</a>
-	</li>
-
-	<li class="social__item">
-		<a class="social__item-link social__item-link--vk" href="https://vk.com/knife.media">
-			<span class="icon icon--vk"></span>
-		</a>
-	</li>
-
-	<li class="social__item">
-		<a class="social__item-link social__item-link--telegram" href="http://telegram.me/knifemedia">
-			<span class="icon icon--telegram"></span>
-		</a>
-	</li>
-
-	<li class="social__item">
-		<a class="social__item-link social__item-link--twitter" href="https://twitter.com/knife_media">
-			<span class="icon icon--twitter"></span>
-		</a>
-	</li>
-</ul>
-
-<?php
-}
-
-endif;
 
 
 if(!function_exists('knife_theme_category_link')) :

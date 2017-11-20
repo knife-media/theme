@@ -22,42 +22,13 @@
       "properties": {
         "order": 2,
         "id": 6,
-        "name": "search-fat",
+        "name": "search",
         "prevSize": 32,
         "code": 59648
       },
       "setIdx": 0,
       "setId": 0,
       "iconIdx": 0
-    },
-    {
-      "icon": {
-        "paths": [
-          "M1024 961.867l-302.133-302.4c55.467-69.333 88.8-157.6 88.8-253.6 0-224.267-181.6-405.867-405.333-405.867-224 0-405.333 181.867-405.333 405.867s181.6 405.867 405.333 405.867c96.533 0 185.067-33.867 254.667-90.133l301.867 302.4 62.133-62.133zM148.8 662.933c-68.533-68.533-106.133-159.733-106.133-256.8s37.867-188.267 106.133-256.8 159.733-106.667 256.533-106.667 188 37.867 256.533 106.4 106.133 159.733 106.133 256.8-37.867 188.267-106.133 256.8c-68.533 68.533-159.733 106.4-256.533 106.4-96.8 0.267-188-37.6-256.533-106.133z"
-        ],
-        "attrs": [
-          {}
-        ],
-        "isMulticolor": false,
-        "isMulticolor2": false,
-        "grid": 0,
-        "tags": [
-          "search"
-        ]
-      },
-      "attrs": [
-        {}
-      ],
-      "properties": {
-        "order": 3,
-        "id": 5,
-        "name": "search",
-        "prevSize": 32,
-        "code": 59649
-      },
-      "setIdx": 0,
-      "setId": 0,
-      "iconIdx": 1
     },
     {
       "icon": {
@@ -80,13 +51,13 @@
       "properties": {
         "order": 4,
         "id": 4,
-        "name": "ok",
+        "name": "odnoklassniki",
         "prevSize": 32,
         "code": 59650
       },
       "setIdx": 0,
       "setId": 0,
-      "iconIdx": 2
+      "iconIdx": 1
     },
     {
       "icon": {
@@ -109,13 +80,13 @@
       "properties": {
         "order": 5,
         "id": 3,
-        "name": "vk",
+        "name": "vkontakte",
         "prevSize": 32,
         "code": 59651
       },
       "setIdx": 0,
       "setId": 0,
-      "iconIdx": 3
+      "iconIdx": 2
     },
     {
       "icon": {
@@ -138,13 +109,13 @@
       "properties": {
         "order": 6,
         "id": 2,
-        "name": "fb",
+        "name": "facebook",
         "prevSize": 32,
         "code": 59652
       },
       "setIdx": 0,
       "setId": 0,
-      "iconIdx": 4
+      "iconIdx": 3
     },
     {
       "icon": {
@@ -173,7 +144,7 @@
       },
       "setIdx": 0,
       "setId": 0,
-      "iconIdx": 5
+      "iconIdx": 4
     },
     {
       "icon": {
@@ -202,7 +173,7 @@
       },
       "setIdx": 0,
       "setId": 0,
-      "iconIdx": 6
+      "iconIdx": 5
     },
     {
       "icon": {
@@ -231,7 +202,7 @@
       },
       "setIdx": 0,
       "setId": 0,
-      "iconIdx": 7
+      "iconIdx": 6
     }
   ],
   "height": 1024,

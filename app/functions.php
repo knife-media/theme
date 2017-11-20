@@ -70,17 +70,23 @@ add_action('after_setup_theme', function(){
 
 // Add required theme support tags
 add_action('after_setup_theme', function() {
-	add_theme_support('post-formats', array('aside'));
+	// Post formats
+	add_theme_support('post-formats', ['aside']);
 
+	// Something useful
+	add_theme_support('html5', ['caption']);
+
+	// Let wordpress generate page title
 	add_theme_support('title-tag');
 });
 
 
 // Add theme menus
-add_action('init', function() {
+add_action('after_setup_theme', function() {
 	register_nav_menus([
-		'main_menu' => 'Верхнее меню',
-		'footer_menu' => 'Нижнее меню'
+		'main' => __('Верхнее меню', 'knife-theme'),
+		'footer' => __('Нижнее меню', 'knife-theme'),
+		'social' => __('Меню социальных ссылок', 'knife-theme')
 	]);
 });
 
@@ -138,13 +144,16 @@ add_action('after_switch_theme', function() {
 add_filter('use_default_gallery_style', '__return_false');
 
 
-// Change default header menu classes
+// Change default menu items class
 add_filter('nav_menu_css_class', function($classes, $item, $args) {
-	if($args->theme_location === 'main_menu')
+	if($args->theme_location === 'main')
 		return ['topline__menu-item'];
 
-	if($args->theme_location === 'footer_menu')
+	if($args->theme_location === 'footer')
 		return ['footer__menu-item'];
+
+	if($args->theme_location === 'social')
+		return ['social__item'];
 
 	return $classes;
 }, 10, 3);
@@ -152,13 +161,25 @@ add_filter('nav_menu_css_class', function($classes, $item, $args) {
 
 // Add class to menu item link
 add_filter('nav_menu_link_attributes', function($atts, $item, $args) {
-	if($args->theme_location === 'main_menu')
+	if($args->theme_location === 'main')
 	 	$atts['class'] = 'topline__menu-link';
 
- 	if($args->theme_location === 'footer_menu')
+ 	if($args->theme_location === 'footer')
 	 	$atts['class'] = 'footer__menu-link';
 
+	if($args->theme_location === 'social')
+		$atts['class'] = 'social__item-link';
+
 	return $atts;
+}, 10, 3);
+
+
+// We have to change titles to icons in social menu
+add_filter('nav_menu_item_title', function($title, $item, $args) {
+	if($args->theme_location === 'social')
+		return sprintf('<span class="icon icon--%1$s" title="%1$s"></span>', strtolower($title));
+
+	return $title;
 }, 10, 3);
 
 

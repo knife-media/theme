@@ -11,24 +11,28 @@
       display: block;
 
       font-size: 1.125em;
-      line-height: 1.25rem;
+      line-height: 1;
       color: inherit;
 
-      &.social__item-link--fb:hover {
-        color: #3b5998;
-      }
+			.icon {
+				display: block;
 
-      &.social__item-link--vk:hover {
-        color: #5186bd;
-      }
+				&.icon--facebook:hover {
+        	color: #3b5998;
+				}
 
-      &.social__item-link--telegram:hover {
-        color: #36ade1;
-      }
+				&.icon--vkontakte:hover {
+        	color: #5186bd;
+				}
 
-      &.social__item-link--twitter:hover {
-        color: #55acee;
-      }
+				&.icon--twitter:hover {
+        	color: #36ade1;
+				}
+
+				&.icon--telegram:hover {
+        	color: #0088cc;
+				}
+			}
     }
   }
 }
