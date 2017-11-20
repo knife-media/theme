@@ -15,6 +15,7 @@ get_header();
 ?>
 
 <main <?php knife_theme_cover("content", $post->ID); ?>>
+
 	<div class="content__archive block">
 
  <?php if(is_active_sidebar('knife-front')) : ?>

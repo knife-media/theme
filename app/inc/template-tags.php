@@ -150,15 +150,17 @@ function knife_theme_entry_related() {
 
 	$cats = get_the_category();
 
-	$entry_related = new WP_Query([
+	$base = [
 		'post__not_in' => [$post->ID],
 		'posts_per_page' => 6,
  		'ignore_sticky_posts' => 1,
  		'post_status' => 'publish'
-	]);
+	];
 
 	if(isset($cats[0]))
-		$entry_related['category__in'] = $cats[0]->cat_ID;
+		$base['category__in'] = $cats[0]->cat_ID;
+
+	$entry_related = new WP_Query($base);
 
 	if($entry_related->have_posts()) {
 		printf(

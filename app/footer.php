@@ -8,6 +8,7 @@
 ?>
 
 <footer class="footer">
+
 	<div class="footer__inner block">
 
 		<div class="footer__logo">
@@ -38,7 +39,7 @@
 					]);
 				endif;
 
-    		if(has_nav_menu('social')) :
+				if(has_nav_menu('social')) :
 					wp_nav_menu([
 						'theme_location' => 'social',
 						'depth' => 1,
@@ -52,15 +53,16 @@
 
  		<div class="footer__copy">
 
-<?php if(is_active_sidebar('knife-footer')) : ?>
-			<aside class="footer__copy-widget">
-				<?php dynamic_sidebar('knife-footer'); ?>
-			</aside>
-<?php endif; ?>
+			<?php if(is_active_sidebar('knife-footer')) : ?>
+				<aside class="footer__copy-widget">
+					<?php dynamic_sidebar('knife-footer'); ?>
+				</aside>
+			<?php endif; ?>
 
 		</div>
 
 	</div>
+
 </footer>
 
 <?php wp_footer(); ?>

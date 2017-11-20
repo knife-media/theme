@@ -1,6 +1,6 @@
 <?php
 /**
- * Template for display single post
+ * Page template
  *
  * @package knife-theme
  * @since 1.1
