@@ -56,6 +56,8 @@
   .unit__title {
     display: block;
 
+    width: 100%;
+
     font-size: 1.375rem;
     font-weight: 500;
     line-height: 1.25;
@@ -87,10 +89,6 @@
     .unit__meta-item {
       display: inline-block;
       cursor: pointer;
-
-      &.unit__meta-item--tags {
-        display: none;
-      }
 
       &:before {
         content: "•";

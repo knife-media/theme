@@ -44,28 +44,6 @@
     }
   }
 
-  .unit__meta {
-    margin-top: 1rem;
-
-    .unit__meta-item {
-      &.unit__meta-item--date {
-        &:before {
-          content: attr(data-time);
-
-          margin-left: 0;
-        }
-      }
-
-      &.unit__meta-item--author {
-        display: none;
-      }
-
-      &.unit__meta-item--tags {
-        display: inline-block;
-      }
-    }
-  }
-
   &.unit--cover {
     .unit__image {
       position: absolute;

@@ -39,9 +39,9 @@ gulp.task('scss', function() {
 })
 
 gulp.task('js', function() {
-	gulp.src([path.source + '/js/app.js'])
+	gulp.src([path.source + '/js/**/*.js'])
     .pipe(plumber())
-	.pipe(uglify())
+		.pipe(uglify())
     .pipe(concat('scripts.min.js'))
     .pipe(gulp.dest(path.assets))
 })
@@ -60,5 +60,4 @@ gulp.task('watch', function() {
   gulp.watch(path.source + '/**/*', ['scss', 'js', 'images']);
 })
 
-//gulp.task('default', ['js', 'scss', 'images', 'fonts', 'watch']);
-gulp.task('default', ['scss', 'images', 'fonts', 'watch']);
+gulp.task('default', ['scss', 'js', 'images', 'fonts', 'watch']);

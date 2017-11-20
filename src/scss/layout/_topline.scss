@@ -3,12 +3,46 @@
   flex-flow: row nowrap;
   align-items: center;
   justify-content: space-between;
+	position: relative;
 
   height: 4rem;
 
+  transition: height .25s;
+
   .topline__logo {
-    display: block;
+    display: flex;
     position: relative;
+		flex-flow: row nowrap;
+		align-items: center;
+		justify-content: center;
+
+		background-color: $color-white;
+
+		.topline__logo-link {
+			display: block;
+		}
+
+    .topline__logo-image {
+      display: block;
+
+      width: 6.25rem;
+      height: 1.875rem;
+
+      @media screen and (max-width: 1023px) {
+        width: 5rem;
+        height: 1.5rem;
+      }
+    }
+
+		@media screen and (max-width: 1023px) {
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 13;
+
+			width: 100%;
+			height: 100%;
+		}
   }
 
   .topline__menu {
@@ -17,7 +51,7 @@
     flex-basis: 100%;
     align-items: center;
     justify-content: flex-start;
-    z-index: 2;
+    z-index: 12;
 
     margin-left: auto;
     margin-right: auto;
@@ -86,19 +120,27 @@
     }
 
     @media screen and (max-width: 1023px) {
-      display: none;
+      display: flex;
       flex-flow: column nowrap;
       position: absolute;
-      top: 4rem;
+      top: 100%;
       left: 0;
 
       width: 100%;
       background-color: $color-primary;
+
+			transform: translateY(-100%);
+
+			&.topline__menu--expand {
+				transform: translateY(0);
+				transition: transform .25s;
+			}
     }
   }
 
   .topline__button {
     position: relative;
+		z-index: 15;
 
     outline: none;
     cursor: pointer;
@@ -112,6 +154,11 @@
       @media screen and (max-width: 1023px) {
         display: block;
       }
+
+      @media screen and (max-width: 767px) {
+        height: 1.125rem;
+        width: 1.25rem;
+      }
     }
 
     &.topline__button--search {
@@ -120,11 +167,20 @@
       height: 1.5rem;
       width: 1.5rem;
       font-size: 1rem;
+      line-height: 1;
       color: $color-black;
 
       @media screen and (max-width: 1023px) {
         font-size: 1.375rem;
       }
+
+      @media screen and (max-width: 767px) {
+        font-size: 1.125rem;
+      }
     }
+  }
+
+  @media screen and (max-width: 1023px) {
+    height: 3.25rem;
   }
 }

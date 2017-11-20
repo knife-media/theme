@@ -42,10 +42,9 @@ class Knife_Mindmap_Widget extends WP_Widget {
  			while($q->have_posts()) : $q->the_post();
 
  				printf(
-					'<article class="mindmap__item"><a class="mindmap__link" href="%1$s" title="%3$s">%2$s</a></article>',
+					'<article class="mindmap__item"><a class="mindmap__link" href="%1$s" title="">%2$s</a></article>',
 					get_the_permalink(),
-					get_the_title(),
-					__('Читать статью', 'knife-theme')
+					get_the_title()
 				);
 
  			endwhile;

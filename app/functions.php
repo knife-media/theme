@@ -106,7 +106,7 @@ add_action('init', function() {
 
 // Admin bar
 add_action('init', function() {
-	add_filter('show_admin_bar', '__return_false');
+//	add_filter('show_admin_bar', '__return_false');
 
 	add_action('admin_bar_menu', function($wp_admin_bar) {
 		$wp_admin_bar->remove_menu('customize');
@@ -197,10 +197,10 @@ add_filter('get_the_archive_title', function($title) {
 });
 
 
-// Remove private posts from archives.
+// Remove private posts from archives and home page.
 // Note: Knife editors use private posts as drafts. So we don't want to see drafts in templates even if we have logged in
 add_action('pre_get_posts', function($query) {
-	if($query->is_main_query() && $query->is_archive())
+	if($query->is_main_query() && ($query->is_archive() || $query->is_home()))
 		$query->set('post_status', 'publish');
 });
 
@@ -239,13 +239,8 @@ add_action('widgets_init', function(){
 });
 
 
-// Hide title on custom html widgets
-add_filter('widget_title', function($title = '', $instance = '', $base = '') {
-	if($base === 'custom_html')
-		return "";
-
-	return $title;
-}, 10, 3);
+// Hide default widgets title
+add_filter('widget_title', '__return_empty_string');
 
 
 // Remove default widgets to prevent printing unready styles on production

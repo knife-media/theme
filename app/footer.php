@@ -9,9 +9,10 @@
 
 <footer class="footer">
 	<div class="footer__inner block">
-		<div class="footer__item footer__item--brand">
-			<a class="footer__item-logo" href="<?php echo esc_url(home_url('/')); ?>">
-				<svg class="footer__item-image" fill="#ffffff" width="100" height="30" x="0" y="0" viewBox="0 0 111 31.8" xml:space="preserve">
+
+		<div class="footer__logo">
+			<a class="footer__logo-link" href="<?php echo esc_url(home_url('/')); ?>">
+				<svg class="footer__logo-image" fill="#ffffff" x="0" y="0" viewBox="0 0 111 31.8" xml:space="preserve">
 					<g>
 						<path d="M27.4,0.6v30.7h-8V19.1H8v12.2H0V0.6h8v11.4h11.4V0.6H27.4z"/>
 						<path d="M63.4,15.9C63.4,25,58,31.8,48,31.8c-9.9,0-15.4-6.8-15.4-15.9C32.7,6.8,38.1,0,48,0
@@ -22,34 +23,35 @@
 				</svg>
 			</a>
 
-			<p class="footer__item-desc"><?php bloginfo('description'); ?></p>
+			<p class="footer__logo-desc"><?php bloginfo('description'); ?></p>
 		</div>
 
- 		<div class="footer__item footer__item--menu">
-<?php
-			wp_nav_menu([
-				'theme_location' => 'footer_menu',
-				'depth' => 1,
-				'echo' => true,
-				'items_wrap' => '<ul class="footer__menu">%3$s</ul>',
-				'container' => false
-			]);
-?>
+ 		<div class="footer__menu">
+			<?php
+				wp_nav_menu([
+					'theme_location' => 'footer_menu',
+					'depth' => 1,
+					'echo' => true,
+					'items_wrap' => '<ul class="footer__menu-list">%3$s</ul>',
+					'container' => false
+				]);
+			?>
 
- 			<div class="footer__item-social">
+ 			<div class="footer__menu-social">
 				<?php knife_theme_social(); ?>
 			</div>
 		</div>
 
- 		<div class="footer__item footer__item--copy">
+ 		<div class="footer__copy">
 
 <?php if(is_active_sidebar('knife-footer')) : ?>
-			<aside class="footer__item-copy">
+			<aside class="footer__copy-widget">
 				<?php dynamic_sidebar( 'knife-footer' ); ?>
 			</aside>
 <?php endif; ?>
 
 		</div>
+
 	</div>
 </footer>
 

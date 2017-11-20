@@ -1,13 +1,11 @@
 <?php
 /**
- * The main template file
- *
- * Most likely this template will never be shown.
- * It is used to display a page when nothing more specific matches a query.
+ * The template for displaying 404 pages (not found)
  *
  * @package knife-theme
  * @since 1.1
  */
+
 get_header(); ?>
 
 <main class="content">

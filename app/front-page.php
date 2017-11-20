@@ -28,7 +28,7 @@ get_header();
 	if ( $q->have_posts() ) :
 
 		while ($q->have_posts()) : $q->the_post();
-			knife_theme_unit('triple');
+			get_template_part('template-parts/loop/unit', 'triple');
 		endwhile;
 
 		wp_reset_query();
@@ -43,7 +43,7 @@ get_header();
 	if ( $q->have_posts() ) :
 
 		while ($q->have_posts()) : $q->the_post();
-			knife_theme_unit('single');
+			get_template_part('template-parts/loop/unit', 'single');
 		endwhile;
 
 		wp_reset_query();
@@ -51,31 +51,13 @@ get_header();
 	endif;
 ?>
 
-<section class="mindmap">
-<?php
-	$q = new WP_Query(['posts_per_page' => 8, 'ignore_sticky_posts' => 1, 'post_status' => 'publish', 'offset' => 9]);
-
-
-	if ( $q->have_posts() ) :
-
-		while ($q->have_posts()) : $q->the_post();
-			get_template_part('template-parts/mindmap');
-   	endwhile;
-
-		wp_reset_query();
-
-	endif;
-?>
-</section>
-
-
 <section class="spacing">
 
 <?php
 	$q = new WP_Query(['posts_per_page' => 4, 'ignore_sticky_posts' => 1, 'post_status' => 'publish', 'offset' => 0, 'category__in' => 14]);
 
 	while ($q->have_posts()) : $q->the_post();
-		get_template_part('template-parts/spacing');
+		get_template_part('template-parts/loop/unit', 'space');
 	endwhile;
 
 	wp_reset_query();

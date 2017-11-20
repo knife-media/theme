@@ -70,6 +70,10 @@
     line-height: 1.25;
     letter-spacing: .25px;
     word-wrap: break-word;
+
+    @media screen and (max-width: 767px) {
+      font-size: 1.125rem;
+    }
   }
 
   .spacing__meta {

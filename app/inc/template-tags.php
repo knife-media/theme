@@ -104,34 +104,6 @@ function knife_theme_entry_share() {
 endif;
 
 
-if(!function_exists('knife_theme_entry_tags')) :
-/**
- * Prints entry tags
- *
- * @since 1.1
- */
-
-function knife_theme_entry_tags() {
-	$tags = get_the_tags();
-
-	if($tags) {
-		print('<div class="entry__tags">');
-
-		foreach($tags as $tag) {
-			printf(
-				'<a class="entry__tags-link" href="%1$s">%2$s</a>',
-				esc_url(get_tag_link($tag->term_id)),
-				sanitize_text_field($tag->name)
-			);
-		}
-
-		print('</div>');
-	}
-}
-
-endif;
-
-
 if(!function_exists('knife_theme_entry_header')) :
 /**
  * Prints entry author, category and date
@@ -283,64 +255,44 @@ if(!function_exists('knife_theme_tags')) :
  * @since 1.1
  */
 function knife_theme_tags($count = 3, $echo = true) {
-	$tags = array_slice(get_the_tags(), 0, $count);
+	if($tags = get_the_tags()) {
 
-	if(count($tags) === 0)
-		return $list;
+		$list = implode(', ', wp_list_pluck(array_slice($tags, 0, $count), 'name'));
 
-	$list = implode(', ', wp_list_pluck($tags, 'name'));
+		if($echo === false)
+			return $list;
 
-	if($echo === false)
-		return $list;
-
-	echo $list;
+		echo $list;
+	}
 }
 
 endif;
 
 
 
-if(!function_exists('knife_theme_unit')) :
+if(!function_exists('knife_theme_entry_tags')) :
 /**
- * Unit template variable width with cover or not
- *
- * Unit is a single content item using in any loop.
- * Can be 1/3, 1/2 or full screen width
+ * Prints entry tags
  *
  * @since 1.1
  */
 
-function knife_theme_unit() {
-	$format = 'unit';
+function knife_theme_entry_tags() {
+	$tags = get_the_tags();
 
-	foreach(func_get_args() as $arg) {
-		$format .= ' unit--' . $arg;
+	if($tags) {
+		print('<div class="entry__tags">');
+
+		foreach($tags as $tag) {
+			printf(
+				'<a class="entry__tags-link" href="%1$s">%2$s</a>',
+				esc_url(get_tag_link($tag->term_id)),
+				sanitize_text_field($tag->name)
+			);
+		}
+
+		print('</div>');
 	}
-?>
-
-<article class="<?php echo $format; ?>">
-	<?php echo knife_theme_category_link('unit__head') ?>
-
-	<a class="unit__link" href="<?php the_permalink(); ?>">
-		<div class="unit__image">
-			<?php the_post_thumbnail('', ['class' => 'unit__image-thumbnail']); ?>
-		</div>
-
-		<footer class="unit__footer">
-			<?php the_title('<p class="unit__title">', '</p>'); ?>
-
-			<div class="unit__meta">
-				<time class="unit__meta-item unit__meta-item--date" data-time="<?php the_time(); ?>" datetime="<?php the_time(DATE_W3C); ?>"><?php echo get_the_date(); ?></time>
-
- 				<span class="unit__meta-item unit__meta-item--author"><?php knife_theme_authors(); ?></span>
-
-				<span class="unit__meta-item unit__meta-item--tags"><?php knife_theme_tags(); ?></span>
-			</div>
-		</footer>
-	</a>
-</article>
-
-<?php
 }
 
 endif;

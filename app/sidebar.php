@@ -10,7 +10,7 @@
 ?>
 
 <aside class="sidebar">
-	<?php get_template_part('template-parts/sidebar', 'news'); ?>
+	<?php get_template_part('template-parts/sidebar/sidebar', 'news'); ?>
 
- 	<?php get_template_part('template-parts/sidebar', 'related'); ?>
+ 	<?php get_template_part('template-parts/sidebar/sidebar', 'related'); ?>
 </aside>

@@ -1,5 +1,5 @@
 .post {
-  display: block;
+  display: flex;
   position: relative;
 
   width: 100%;
@@ -20,6 +20,24 @@
 
   &.post--aside {
     max-width: 100%;
+  }
+
+  &.post--info {
+    display: flex;
+    justify-content: center;
+    flex-flow: column wrap;
+
+    max-width: 100%;
+    min-height: 60vh;
+    padding: 2rem 0;
+
+    color: $color-white;
+    background-color: $color-black;
+
+    @media screen and (max-width: 479px) {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
   }
 
   @media screen and (max-width: 1023px) {
