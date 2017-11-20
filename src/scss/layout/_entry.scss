@@ -89,6 +89,7 @@
       margin-right: .75rem;
 			padding: .375rem .375rem;
 			color: $color-white;
+      background: $color-black;
 
 			border-radius: 3px;
 
@@ -96,20 +97,20 @@
 				font-size: 1.25rem;
 			}
 
-			&.entry__share-item--vk {
+			&.entry__share-item--vkontakte {
 				background-color: #5186bd;
 			}
 
- 			&.entry__share-item--fb {
+ 			&.entry__share-item--facebook {
 				background-color: #3b5998;
 			}
 
  			&.entry__share-item--twitter {
-				background-color: #55acee;
+				background-color: #1da1f2;
 			}
 
  			&.entry__share-item--telegram {
-				background-color: #36ade1;
+				background-color: #0088cc;
 			}
 
       &:last-child {

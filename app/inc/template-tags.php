@@ -81,13 +81,13 @@ function knife_theme_entry_share() {
 	<p class="entry__share-title"><?php _e('Поделиться в соцсетях:', 'knife-theme'); ?></p>
 
 	<div class="entry__share-list">
-		<a class="entry__share-item entry__share-item--fb" href="http://www.facebook.com/sharer/sharer.php?p[url]=<?php the_permalink(); ?>&p[title]=<?php the_title(); ?>" target="_blank">
-			<span class="icon icon--fb"></span>
+		<a class="entry__share-item entry__share-item--facebook" href="http://www.facebook.com/sharer/sharer.php?p[url]=<?php the_permalink(); ?>&p[title]=<?php the_title(); ?>" target="_blank">
+			<span class="icon icon--facebook"></span>
 			<span class="entry__share-action"><?php _e('Пошерить', 'knife-theme'); ?></span>
 		</a>
 
-		<a class="entry__share-item entry__share-item--vk" href="http://vk.com/share.php?url=<?php the_permalink(); ?>" target="_blank">
-			<span class="icon icon--vk"></span>
+		<a class="entry__share-item entry__share-item--vkontakte" href="http://vk.com/share.php?url=<?php the_permalink(); ?>" target="_blank">
+			<span class="icon icon--vkontakte"></span>
 			<span class="entry__share-action"><?php _e('Поделиться', 'knife-theme'); ?></span>
 		</a>
 
@@ -140,6 +140,8 @@ if(!function_exists('knife_theme_entry_related')) :
 /**
  * Prints related posts by category
  *
+ * TODO: Rework this
+ *
  * @since 1.1
  */
 
@@ -149,12 +151,14 @@ function knife_theme_entry_related() {
 	$cats = get_the_category();
 
 	$entry_related = new WP_Query([
-		'category__in' => $cats[0]->cat_ID,
 		'post__not_in' => [$post->ID],
 		'posts_per_page' => 6,
  		'ignore_sticky_posts' => 1,
  		'post_status' => 'publish'
 	]);
+
+	if(isset($cats[0]))
+		$entry_related['category__in'] = $cats[0]->cat_ID;
 
 	if($entry_related->have_posts()) {
 		printf(
