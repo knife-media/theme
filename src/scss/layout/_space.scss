@@ -1,4 +1,4 @@
-.spacing {
+.space {
   display: flex;
   flex-flow: column wrap;
   justify-content: flex-start;
@@ -9,7 +9,7 @@
 
   border-top: solid 1px $color-white;
 
-  .spacing__link {
+  .space__link {
     display: flex;
 
     height: auto;
@@ -19,7 +19,7 @@
     }
   }
 
-  .spacing__sticker {
+  .space__sticker {
     display: flex;
     align-self: flex-end;
 
@@ -46,7 +46,7 @@
     }
   }
 
-  .spacing__footer {
+  .space__footer {
     width: 100%;
     padding: 0;
 
@@ -60,7 +60,7 @@
     }
   }
 
-  .spacing__title {
+  .space__title {
     display: block;
 
     margin-bottom: 1.5rem;
@@ -68,7 +68,7 @@
     font-size: 1.375rem;
     font-weight: 500;
     line-height: 1.25;
-    letter-spacing: .25px;
+    letter-space: .25px;
     word-wrap: break-word;
 
     @media screen and (max-width: 767px) {
@@ -76,7 +76,7 @@
     }
   }
 
-  .spacing__meta {
+  .space__meta {
     display: block;
 
     width: 100%;
@@ -85,10 +85,10 @@
     color: $color-white;
     font-size: .625rem;
     font-weight: 500;
-    letter-spacing: .75px;
+    letter-space: .75px;
     text-transform: uppercase;
 
-    .spacing__meta-item {
+    .space__meta-item {
       display: inline-block;
       cursor: pointer;
 
@@ -106,7 +106,7 @@
     }
   }
 
-  .spacing__item {
+  .space__item {
     display: block;
     position: relative;
 
@@ -119,7 +119,7 @@
 
 
     &:last-child {
-      .spacing__footer {
+      .space__footer {
         border-bottom: none;
       }
     }
@@ -127,7 +127,7 @@
     &:first-child {
       height: 100%;
 
-      .spacing__link {
+      .space__link {
         position: absolute;
         left: 0;
         bottom: 0;
@@ -143,7 +143,7 @@
         }
       }
 
-      .stripe__sticker {
+      .space__sticker {
         display: none;
 
         @media screen and (max-width: 767px) {
@@ -151,11 +151,11 @@
         }
       }
 
-      .spacing__footer {
+      .space__footer {
         border-bottom: none;
       }
 
-      .spacing__title {
+      .space__title {
         font-size: 2.5rem;
         line-height: 1;
 

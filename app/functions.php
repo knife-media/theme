@@ -221,8 +221,8 @@ add_action('widgets_init', function(){
 		'name'          => __( 'Главная страница', 'knife-theme' ),
 		'id'            => 'knife-front',
 		'description'   => __( 'Виджеты появятся на главной странице', 'knife-theme' ),
-		'before_widget' => null,
-		'after_widget'  => null,
+		'before_widget' => '<section class="%2$s">',
+		'after_widget'  => '</section>',
 		'before_title'  => '<p class="widget__title">',
 		'after_title'   => '</p>',
 	]);
@@ -265,3 +265,5 @@ require get_template_directory() . '/inc/template-tags.php';
 
 // Add custom widgets defenitions
 require get_template_directory() . '/inc/widget-mindmap.php';
+require get_template_directory() . '/inc/widget-space.php';
+require get_template_directory() . '/inc/widget-recent.php';

@@ -1,23 +1,22 @@
 <?php
 /**
- * Mindmap widget
+ * Space widget
  *
- * It uses just predefined query args for now.
- * Later it will be represent WP_Query builder
+ * Transparent recent posts with optional stickers
  *
  * @package knife-theme
  * @since 1.1
  */
 
 
-class Knife_Mindmap_Widget extends WP_Widget {
+class Knife_Space_Widget extends WP_Widget {
     public function __construct() {
         $widget_ops = [
-            'classname' => 'knife-mindmap',
-            'description' => __('Выводит список контрастных ссылок на посты по критерию.', 'knife-theme'),
+            'classname' => 'space',
+            'description' => __('Выводит список из четырех прозрачных постов со стикерами.', 'knife-theme'),
         ];
 
-        parent::__construct('knife_theme_mindmap', __('Список ярких ссылок', 'knife-theme'), $widget_ops);
+        parent::__construct('knife_theme_space', __('Прозрачный со стикерами', 'knife-theme'), $widget_ops);
     }
 
 
@@ -25,34 +24,40 @@ class Knife_Mindmap_Widget extends WP_Widget {
      * Outputs the content of the widget
      */
     public function widget($args, $instance) {
-		// We don't want to show title or before/after content for this widget now
 		extract($instance);
 
- 		$q = new WP_Query([
+		$base = [
 			'cat' => $cat,
-			'posts_per_page' => $posts_per_page,
+			'posts_per_page' => 4,
 			'post_status' => 'publish',
-			'ignore_sticky_posts' => 1,
-		]);
+			'ignore_sticky_posts' => 1
+		];
+
+		$meta = [[
+			'key' => 'post_icon',
+			'value' => '',
+			'compare' => '!='
+		]];
+
+		// If user selected option to show posts only with stickers
+		if($sticker === 1) $base['meta_query'] = $meta;
+
+		$q = new WP_Query($base);
 
 		if($q->have_posts()) :
 
-			print('<section class="mindmap">');
+			echo $args['before_widget'];
 
  			while($q->have_posts()) : $q->the_post();
 
- 				printf(
-					'<article class="mindmap__item"><a class="mindmap__link" href="%1$s" title="%3$s">%2$s</a></article>',
-					get_the_permalink(),
-					get_the_title(),
-					__('Читать статью', 'knife-theme')
-				);
+				get_template_part('template-parts/loop/widget', 'space');
 
  			endwhile;
 
-			print('</section>');
-
 			wp_reset_query();
+
+			echo $args['after_widget'];
+
 		endif;
     }
 
@@ -61,7 +66,7 @@ class Knife_Mindmap_Widget extends WP_Widget {
      * Outputs the options form on admin
      */
     function form($instance) {
-		$defaults = ['title' => '', 'posts_per_page' => 10, 'cat' => 620];
+		$defaults = ['title' => '', 'sticker' => 1, 'cat' => 0];
 		$instance = wp_parse_args((array) $instance, $defaults);
 
 		$dropdown = wp_dropdown_categories([
@@ -69,6 +74,7 @@ class Knife_Mindmap_Widget extends WP_Widget {
 			'name' => esc_attr($this->get_field_name('cat')),
 			'selected' => esc_attr($instance['cat']),
 			'class' => 'widefat',
+			'show_option_all' => __('Все рубрики', 'knife-theme'),
 			'echo' => false,
 		]);
 
@@ -80,20 +86,22 @@ class Knife_Mindmap_Widget extends WP_Widget {
 			esc_attr($instance['title'])
 		);
 
- 		printf(
-			'<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
-			esc_attr($this->get_field_id('posts_per_page')),
-			esc_attr($this->get_field_name('posts_per_page')),
-			__('Количество постов:', 'knife-theme'),
-			esc_attr($instance['posts_per_page'])
-		);
-
 		printf(
 			'<p><label for="%1$s">%2$s</label>%3$s</p>',
 			esc_attr($this->get_field_id('cat')),
 			__('Рубрика записей:', 'knife-theme'),
 			$dropdown
 		);
+
+ 		printf(
+			'<p><input type="checkbox" id="%1$s" name="%2$s" class="checkbox"%4$s><label for="%1$s">%3$s</label></p>',
+			esc_attr($this->get_field_id('sticker')),
+			esc_attr($this->get_field_name('sticker')),
+			__('Только со стикерами:', 'knife-theme'),
+			checked($instance['sticker'], 1, false)
+		);
+?>
+<?php
 	}
 
 
@@ -104,8 +112,8 @@ class Knife_Mindmap_Widget extends WP_Widget {
 		$instance = $old_instance;
 
  		$instance['cat'] = (int) $new_instance['cat'];
-		$instance['posts_per_page'] = (int) $new_instance['posts_per_page'];
 		$instance['title'] = sanitize_text_field($new_instance['title']);
+		$instance['sticker'] = $new_instance['sticker'] ? 1 : 0;
 
         return $instance;
     }
@@ -116,5 +124,5 @@ class Knife_Mindmap_Widget extends WP_Widget {
  * It is time to register widget
  */
 add_action('widgets_init', function() {
-	register_widget('Knife_Mindmap_Widget');
+	register_widget('Knife_Space_Widget');
 });

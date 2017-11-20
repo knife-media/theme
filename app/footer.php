@@ -46,7 +46,7 @@
 
 <?php if(is_active_sidebar('knife-footer')) : ?>
 			<aside class="footer__copy-widget">
-				<?php dynamic_sidebar( 'knife-footer' ); ?>
+				<?php dynamic_sidebar('knife-footer'); ?>
 			</aside>
 <?php endif; ?>
 

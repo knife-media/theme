@@ -2,8 +2,7 @@
 /**
  * Mindmap widget
  *
- * It uses just predefined query args for now.
- * Later it will be represent WP_Query builder
+ * Recent posts widget
  *
  * @package knife-theme
  * @since 1.1
@@ -13,7 +12,7 @@
 class Knife_Mindmap_Widget extends WP_Widget {
     public function __construct() {
         $widget_ops = [
-            'classname' => 'knife-mindmap',
+            'classname' => 'mindmap',
             'description' => __('Выводит список контрастных ссылок на посты по критерию.', 'knife-theme'),
         ];
 
@@ -25,7 +24,6 @@ class Knife_Mindmap_Widget extends WP_Widget {
      * Outputs the content of the widget
      */
     public function widget($args, $instance) {
-		// We don't want to show title or before/after content for this widget now
 		extract($instance);
 
  		$q = new WP_Query([
@@ -37,21 +35,18 @@ class Knife_Mindmap_Widget extends WP_Widget {
 
 		if($q->have_posts()) :
 
-			print('<section class="mindmap">');
+			echo $args['before_widget'];
 
  			while($q->have_posts()) : $q->the_post();
 
- 				printf(
-					'<article class="mindmap__item"><a class="mindmap__link" href="%1$s" title="">%2$s</a></article>',
-					get_the_permalink(),
-					get_the_title()
-				);
+				get_template_part('template-parts/loop/widget', 'mindmap');
 
  			endwhile;
 
-			print('</section>');
-
 			wp_reset_query();
+
+			echo $args['after_widget'];
+
 		endif;
     }
 
