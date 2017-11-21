@@ -1,27 +1,23 @@
-.mindmap {
+.widget.widget--mindmap {
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
+  flex: 1 1 auto;
 
-  width: 100%;
   color: $color-text;
   background: transparent;
 
-  .mindmap__item {
+  .widget__item {
     display: flex;
 
     width: auto;
     margin-bottom: 2px;
     margin-right: 2px;
 
-    &:last-child {
-      margin-bottom: 1rem;
-    }
-
     &:nth-child(-n+2) {
       width: 100%;
 
-      .mindmap__link {
+      .widget__link {
         font-size: 1.875rem;
         line-height: 1.075;
 
@@ -41,7 +37,7 @@
     }
   }
 
-  .mindmap__link {
+  .widget__link {
     display: block;
     position: relative;
 

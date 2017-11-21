@@ -1,6 +1,6 @@
 <?php
 /**
- * Space widget
+ * Transparent widget
  *
  * Transparent recent posts with optional stickers
  *
@@ -9,14 +9,14 @@
  */
 
 
-class Knife_Space_Widget extends WP_Widget {
+class Knife_Transparent_Widget extends WP_Widget {
     public function __construct() {
         $widget_ops = [
-            'classname' => 'space',
+            'classname' => 'transparent',
             'description' => __('Выводит список из четырех прозрачных постов со стикерами.', 'knife-theme'),
         ];
 
-        parent::__construct('knife_theme_space', __('Прозрачный со стикерами', 'knife-theme'), $widget_ops);
+        parent::__construct('knife_theme_transparent', __('[НОЖ] Прозрачный', 'knife-theme'), $widget_ops);
     }
 
 
@@ -50,7 +50,7 @@ class Knife_Space_Widget extends WP_Widget {
 
  			while($q->have_posts()) : $q->the_post();
 
-				get_template_part('template-parts/loop/widget', 'space');
+				get_template_part('template-parts/widgets/transparent');
 
  			endwhile;
 
@@ -124,5 +124,5 @@ class Knife_Space_Widget extends WP_Widget {
  * It is time to register widget
  */
 add_action('widgets_init', function() {
-	register_widget('Knife_Space_Widget');
+	register_widget('Knife_Transparent_Widget');
 });

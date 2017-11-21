@@ -18,13 +18,17 @@ if(!isset($content_width)) {
 
 // Insert required js files
 add_action('wp_enqueue_scripts', function() {
-	wp_enqueue_script('knife-scripts', get_template_directory_uri() . '/assets/scripts.min.js', [], '0.1', true);
+ 	$version = wp_get_theme()->get('Version');
+
+	wp_enqueue_script('knife-scripts', get_template_directory_uri() . '/assets/scripts.min.js', [], $version, true);
 });
 
 
 // Insert styles
 add_action('wp_print_styles', function() {
-   	wp_enqueue_style('knife-styles', get_template_directory_uri() . '/assets/styles.min.css', [], '0.1');
+	$version = wp_get_theme()->get('Version');
+
+   	wp_enqueue_style('knife-styles', get_template_directory_uri() . '/assets/styles.min.css', [], $version);
 });
 
 
@@ -40,7 +44,7 @@ add_filter('wp_mail_from', function($email) {
 });
 
 
-// Remove useless widgets from wp-admin section
+// Remove useless widgets from wp-admin
 add_action('admin_init', function() {
 	remove_meta_box('dashboard_incoming_links', 'dashboard', 'normal');
 	remove_meta_box('dashboard_primary', 'dashboard', 'normal');
@@ -261,21 +265,51 @@ add_filter('image_send_to_editor', function($html) {
 // Register widget area.
 add_action('widgets_init', function(){
 	register_sidebar([
-		'name'          => __( 'Главная страница', 'knife-theme' ),
-		'id'            => 'knife-front',
-		'description'   => __( 'Виджеты появятся на главной странице', 'knife-theme' ),
-		'before_widget' => '<section class="%2$s">',
-		'after_widget'  => '</section>',
+		'name'          => __('Главная страница', 'knife-theme'),
+		'id'            => 'knife-frontal',
+		'description'   => __('Добавленные виджеты появятся на главной странице под телевизором, если он не пуст.', 'knife-theme'),
+		'before_widget' => '<div class="widget widget--%2$s">',
+		'after_widget'  => '</div>',
 		'before_title'  => '<p class="widget__title">',
 		'after_title'   => '</p>',
 	]);
 
 	register_sidebar([
-		'name'          => __( 'Подвал сайта', 'knife-theme' ),
+		'name'          => __('Телевизор на главной', 'knife-theme'),
+		'id'            => 'knife-feature',
+		'description'   => __('Добавленные виджеты появятся в телевизоре на главной странице.', 'knife-theme'),
+		'before_widget' => '<div class="widget widget--%2$s">',
+		'after_widget'  => '</div>',
+		'before_title'  => '<p class="widget__title">',
+		'after_title'   => '</p>',
+	]);
+
+	register_sidebar([
+		'name'          => __('Подвал сайта', 'knife-theme'),
 		'id'            => 'knife-footer',
-		'description'   => __( 'Добавленные виджеты появятся справа в футере', 'knife-theme' ),
-		'before_widget' => null,
-		'after_widget'  => null,
+		'description'   => __('Добавленные виджеты появятся справа в футере.', 'knife-theme'),
+		'before_widget' => '<aside class="widget widget--text">',
+		'after_widget'  => '</aside>',
+		'before_title'  => '<p class="widget__title">',
+		'after_title'   => '</p>',
+	]);
+
+ 	register_sidebar([
+		'name'          => __('Сайдбар на главной', 'knife-theme'),
+		'id'            => 'knife-feature-sidebar',
+		'description'   => __('Добавленные виджеты появятся справа от телевизона.', 'knife-theme'),
+		'before_widget' => '<div class="widget widget--%2$s">',
+		'after_widget'  => '</div>',
+		'before_title'  => '<p class="widget__title">',
+		'after_title'   => '</p>',
+	]);
+
+ 	register_sidebar([
+		'name'          => __('Сайдбар на внутренних', 'knife-theme'),
+		'id'            => 'knife-inner-sidebar',
+		'description'   => __('Добавленные виджеты появятся в сайдбаре внутри постов.', 'knife-theme'),
+		'before_widget' => '<div class="widget widget--%2$s">',
+		'after_widget'  => '</div>',
 		'before_title'  => '<p class="widget__title">',
 		'after_title'   => '</p>',
 	]);
@@ -304,9 +338,10 @@ add_action('widgets_init', function() {
 
 
 // Custom template tags for this theme.
-require get_template_directory() . '/inc/template-tags.php';
+require get_template_directory() . '/inc/helpers/template-tags.php';
 
 // Add custom widgets defenitions
-require get_template_directory() . '/inc/widget-mindmap.php';
-require get_template_directory() . '/inc/widget-space.php';
-require get_template_directory() . '/inc/widget-recent.php';
+require get_template_directory() . '/inc/widgets/recent.php';
+require get_template_directory() . '/inc/widgets/stripe.php';
+require get_template_directory() . '/inc/widgets/mindmap.php';
+require get_template_directory() . '/inc/widgets/transparent.php';

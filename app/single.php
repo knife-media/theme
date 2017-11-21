@@ -8,27 +8,27 @@
 
 get_header(); ?>
 
-<main class="content">
+<main class="wrap">
 
-	<section class="content__single block">
+	<div class="content block">
 <?php
 	if (have_posts()) :
 
 		while (have_posts()) : the_post();
 
 			// Include specific content template
-			get_template_part('template-parts/post/content', get_post_format());
+			get_template_part('template-parts/content/post', get_post_format());
 
 		endwhile;
 
 	else:
 
 		// Include "no posts found" template
-		get_template_part('template-parts/post/content', 'none');
+		get_template_part('template-parts/content/post', 'none');
 
 	endif;
 ?>
-	</section>
+	</div>
 
 </main>
 

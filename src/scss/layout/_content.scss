@@ -1,72 +1,17 @@
 .content {
   display: flex;
-  flex-flow: column wrap;
-  align-items: center;
+  flex-flow: row wrap;
+  justify-content: space-between;
 
-  background-color: $color-black;
+  padding-top: 1rem;
+  padding-bottom: 0;
 
-  .content__single {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
-
-    padding-top: 1rem;
-    padding-bottom: 0;
-
-    @media screen and (max-width: 479px) {
-      padding-left: 0;
-      padding-right: 0;
-    }
+  &.content--feature {
+    flex-flow: row nowrap;
   }
 
-  .content__archive {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
-
-    padding-top: 1rem;
-    padding-bottom: 0;
-
-    @media screen and (max-width: 479px) {
-      padding-left: 0;
-      padding-right: 0;
-    }
-  }
-
-  .content__header {
-    display: block;
-
-    padding-top: 1rem;
-
-    .content__header-title {
-      display: inline-block;
-      cursor: default;
-
-      font-size: 3rem;
-      line-height: 1.25;
-      color: transparent;
-
-      background: linear-gradient(90deg, $color-title-start, $color-title-finish);
-      background-clip: text;
-      -webkit-background-clip: text;
-
-      &:first-letter {
-        text-transform: uppercase;
-      }
-
-      @media screen and (max-width: 1023px) {
-        font-size: 2.5rem;
-      }
-
-      @media screen and (max-width: 767px) {
-        font-size: 1.5rem;
-      }
-    }
-  }
-
-  &.content--background {
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
+  @media screen and (max-width: 479px) {
+    padding-left: 0;
+    padding-right: 0;
   }
 }

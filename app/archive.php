@@ -8,16 +8,17 @@
 
 get_header(); ?>
 
-<main class="content">
+<main class="wrap">
 
 	<?php if(have_posts()) : ?>
-		<header class="content__header block">
-			<?php the_archive_title('<h1 class="content__header-title">', '</h1>'); ?>
-		</header>
+
+		<div class="caption block">
+			<?php the_archive_title('<h1 class="caption__title">', '</h1>'); ?>
+		</div>
 
 	<?php endif; ?>
 
-	<section class="content__archive block">
+	<div class="content block">
 
 	<?php
 		if(have_posts()) :
@@ -25,21 +26,21 @@ get_header(); ?>
 			while (have_posts()) : the_post();
 
 				if($wp_query->current_post % 5 === 3 || $wp_query->current_post % 5 === 4)
-					get_template_part('template-parts/loop/unit', 'double');
+					get_template_part('template-parts/units/double');
 				else
-					get_template_part('template-parts/loop/unit', 'triple');
+					get_template_part('template-parts/units/triple');
 
 			endwhile;
 
 		else:
 
 			// Include "no posts found" template
-			get_template_part('template-parts/post/content', 'none');
+			get_template_part('template-parts/content/post', 'none');
 
 		endif;
 	?>
 
-	</section>
+	</div>
 
 </main>
 

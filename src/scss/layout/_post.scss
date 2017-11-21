@@ -1,9 +1,8 @@
 .post {
   display: flex;
+  flex: 1 1 auto;
   position: relative;
 
-  width: 100%;
-  max-width: calc(100% - 19.75rem);
   margin-bottom: 1rem;
   padding: 2rem 2rem 2.5rem;
   overflow: hidden;
@@ -16,10 +15,6 @@
     max-width: 40.625rem;
     margin-left: auto;
     margin-right: auto;
-  }
-
-  &.post--wide {
-    max-width: 100%;
   }
 
   &.post--info {

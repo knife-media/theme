@@ -1,15 +1,15 @@
-.space {
+.widget.widget--transparent {
   display: flex;
   flex-flow: column wrap;
   justify-content: flex-start;
-  align-content: space-between;
+  align-content: transparent-between;
 
   width: 100%;
   margin-bottom: 2rem;
 
   border-top: solid 1px $color-white;
 
-  .space__link {
+  .widget__link {
     display: flex;
 
     height: auto;
@@ -19,7 +19,7 @@
     }
   }
 
-  .space__sticker {
+  .widget__sticker {
     display: flex;
     align-self: flex-end;
 
@@ -46,7 +46,7 @@
     }
   }
 
-  .space__footer {
+  .widget__footer {
     width: 100%;
     padding: 0;
 
@@ -60,7 +60,7 @@
     }
   }
 
-  .space__title {
+  .widget__title {
     display: block;
 
     margin-bottom: 1.5rem;
@@ -68,7 +68,7 @@
     font-size: 1.375rem;
     font-weight: 500;
     line-height: 1.25;
-    letter-space: .25px;
+    letter-transparent: .25px;
     word-wrap: break-word;
 
     @media screen and (max-width: 767px) {
@@ -76,7 +76,7 @@
     }
   }
 
-  .space__meta {
+  .widget__meta {
     display: block;
 
     width: 100%;
@@ -85,10 +85,10 @@
     color: $color-white;
     font-size: .625rem;
     font-weight: 500;
-    letter-space: .75px;
+    letter-spacing: .75px;
     text-transform: uppercase;
 
-    .space__meta-item {
+    .widget__meta-item {
       display: inline-block;
       cursor: pointer;
 
@@ -106,7 +106,7 @@
     }
   }
 
-  .space__item {
+  .widget__item {
     display: block;
     position: relative;
 
@@ -119,7 +119,7 @@
 
 
     &:last-child {
-      .space__footer {
+      .widget__footer {
         border-bottom: none;
       }
     }
@@ -127,7 +127,7 @@
     &:first-child {
       height: 100%;
 
-      .space__link {
+      .widget__link {
         position: absolute;
         left: 0;
         bottom: 0;
@@ -143,7 +143,7 @@
         }
       }
 
-      .space__sticker {
+      .widget__sticker {
         display: none;
 
         @media screen and (max-width: 767px) {
@@ -151,11 +151,11 @@
         }
       }
 
-      .space__footer {
+      .widget__footer {
         border-bottom: none;
       }
 
-      .space__title {
+      .widget__title {
         font-size: 2.5rem;
         line-height: 1;
 

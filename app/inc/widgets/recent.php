@@ -1,22 +1,22 @@
 <?php
 /**
- * Mindmap widget
+ * Recent widget
  *
- * Recent posts widget
+ * Recent posts widget showing as narrow column
  *
  * @package knife-theme
  * @since 1.1
  */
 
 
-class Knife_Mindmap_Widget extends WP_Widget {
+class Knife_Recent_Widget extends WP_Widget {
     public function __construct() {
         $widget_ops = [
-            'classname' => 'mindmap',
-            'description' => __('Выводит список контрастных ссылок на посты по критерию.', 'knife-theme'),
+            'classname' => 'recent',
+            'description' => __('Выводит последние посты c датой и тегом по выбранной категории.', 'knife-theme'),
         ];
 
-        parent::__construct('knife_theme_mindmap', __('Список ярких ссылок', 'knife-theme'), $widget_ops);
+        parent::__construct('knife_theme_recent', __('[НОЖ] Последниe новости', 'knife-theme'), $widget_ops);
     }
 
 
@@ -39,7 +39,7 @@ class Knife_Mindmap_Widget extends WP_Widget {
 
  			while($q->have_posts()) : $q->the_post();
 
-				get_template_part('template-parts/loop/widget', 'mindmap');
+				get_template_part('template-parts/widgets/recent');
 
  			endwhile;
 
@@ -110,5 +110,5 @@ class Knife_Mindmap_Widget extends WP_Widget {
  * It is time to register widget
  */
 add_action('widgets_init', function() {
-	register_widget('Knife_Mindmap_Widget');
+	register_widget('Knife_Recent_Widget');
 });

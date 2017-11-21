@@ -10,9 +10,12 @@
 @import "basic/toggle";
 @import "basic/social";
 @import "basic/block";
+@import "basic/wrap";
 
 @import "layout/header";
 @import "layout/content";
+@import "layout/feature";
+@import "layout/caption";
 @import "layout/sidebar";
 @import "layout/footer";
 @import "layout/topline";
@@ -20,10 +23,14 @@
 @import "layout/unit";
 @import "layout/entry";
 @import "layout/custom";
-@import "layout/mindmap";
-@import "layout/space";
+@import "layout/widget";
 
+@import "units/row";
 @import "units/double";
 @import "units/triple";
 @import "units/single";
-@import "units/row";
+
+@import "widgets/mindmap";
+@import "widgets/recent";
+@import "widgets/text";
+@import "widgets/transparent";

@@ -1,81 +1,13 @@
 .sidebar {
   display: flex;
+  flex: 0 0 18.75rem;
   flex-flow: column wrap;
   align-items: center;
   justify-content: space-between;
   position: relative;
 
-  width: 100%;
-  max-width: 18.75rem;
-  margin-bottom: 1rem;
-
+  margin-left: 1rem;
   color: $color-text;
-
-  .sidebar__news {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
-    position: relative;
-
-    width: 100%;
-
-
-    .sidebar__news-item {
-      display: block;
-
-      width: 100%;
-			margin-bottom: 2px;
-      padding: 1rem;
-
-      background-color: $color-white;
-
-      @media screen and (max-width: 1023px) {
-        width: calc(50% - 0.5rem);
-      }
-
-      @media screen and (max-width: 479px) {
-        width: 100%;
-      }
-    }
-
-    .sidebar__news-header {
-      display: block;
-
-      width: 100%;
-      color: $color-primary;
-      font-size: .625rem;
-      font-weight: 500;
-      letter-spacing: .75px;
-      text-transform: uppercase;
-    }
-
-    .sidebar__news-meta {
-      display: inline-block;
-
-      white-space: nowrap;
-
-      &:after {
-        content: "•";
-        display: inline-block;
-
-        margin-left: .5rem;
-        margin-right: .5rem;
-      }
-
-      &:last-child:after {
-        display: none;
-      }
-    }
-
-    .sidebar__news-link {
-      display: block;
-
-      margin-top: .25rem;
-      font-size: .8125rem;
-      font-weight: 500;
-      text-decoration: none;
-    }
-  }
 
   .sidebar__related {
     display: flex;

@@ -14,59 +14,32 @@ get_header();
 
 ?>
 
-<main <?php knife_theme_cover("content", $post->ID); ?>>
+<main <?php knife_theme_cover("wrap", $post->ID); ?>>
 
-	<div class="content__archive block">
+	<?php if(is_active_sidebar('knife-feature')) : ?>
 
- <?php if(is_active_sidebar('knife-front')) : ?>
-		<?php dynamic_sidebar( 'knife-front' ); ?>
-<?php endif; ?>
+		<div class="content content--feature block">
+			<div class="feature">
+				<?php dynamic_sidebar('knife-feature'); ?>
+			</div>
 
-<?php
-	$q = new WP_Query(['posts_per_page' => 3, 'ignore_sticky_posts' => 1, 'post_status' => 'publish']);
+			<?php if(is_active_sidebar('knife-feature-sidebar')) : ?>
+			<aside class="sidebar">
+				<?php dynamic_sidebar('knife-feature-sidebar'); ?>
+			</aside>
+			<?php endif; ?>
+		</div>
 
+	<?php endif; ?>
 
-	if ( $q->have_posts() ) :
+	<?php if(is_active_sidebar('knife-frontal')) : ?>
 
-		while ($q->have_posts()) : $q->the_post();
-			get_template_part('template-parts/loop/unit', 'triple');
-		endwhile;
+		<div class="content block">
+			<?php dynamic_sidebar('knife-frontal'); ?>
+		</div>
 
-		wp_reset_query();
+	<?php endif; ?>
 
-	endif;
-?>
-
- <?php
-	$q = new WP_Query(['posts_per_page' => 1, 'ignore_sticky_posts' => 1, 'post_status' => 'publish', 'offset' => 3]);
-
-
-	if ( $q->have_posts() ) :
-
-		while ($q->have_posts()) : $q->the_post();
-			get_template_part('template-parts/loop/unit', 'single');
-		endwhile;
-
-		wp_reset_query();
-
-	endif;
-?>
-
-<section class="spacing">
-
-<?php
-	$q = new WP_Query(['posts_per_page' => 4, 'ignore_sticky_posts' => 1, 'post_status' => 'publish', 'offset' => 0, 'category__in' => 14]);
-
-	while ($q->have_posts()) : $q->the_post();
-		get_template_part('template-parts/loop/unit', 'space');
-	endwhile;
-
-	wp_reset_query();
-?>
-
-</section>
-
-	</div>
 </main>
 
 <?php

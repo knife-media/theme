@@ -1,0 +1,31 @@
+.caption {
+  display: block;
+
+  padding-top: 1rem;
+  padding-bottom: 0;
+
+  .caption__title {
+    display: inline-block;
+    cursor: default;
+
+    font-size: 3rem;
+    line-height: 1.25;
+    color: transparent;
+
+    background: linear-gradient(90deg, $color-title-start, $color-title-finish);
+    background-clip: text;
+    -webkit-background-clip: text;
+
+    &:first-letter {
+      text-transform: uppercase;
+    }
+
+    @media screen and (max-width: 1023px) {
+      font-size: 2.5rem;
+    }
+
+    @media screen and (max-width: 767px) {
+      font-size: 1.875rem;
+    }
+  }
+}

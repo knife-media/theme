@@ -93,7 +93,7 @@
 
       @media screen and (max-width: 1023px) {
         width: 100%;
-        padding: 0 1rem;
+        padding: 0;
 
         border-bottom: solid 1px $color-white;
       }
@@ -114,7 +114,7 @@
       }
 
       @media screen and (max-width: 1023px) {
-        padding: .875rem 0;
+        padding: .875rem 1rem;
         color: $color-white;
       }
     }

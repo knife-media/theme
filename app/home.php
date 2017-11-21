@@ -10,16 +10,18 @@
 
 get_header(); ?>
 
-<main class="content">
+<main class="wrap">
 
 	<?php if(have_posts()) : ?>
-		<header class="content__header block">
-			<h1 class="content__header-title"><?php _e('Последние статьи', 'knife-theme'); ?></h1>
-		</header>
+
+		<div class="caption block">
+			<h1 class="caption__title"><?php _e('Последние статьи', 'knife-theme'); ?></h1>
+		</div>
 
 	<?php endif; ?>
 
-	<section class="content__archive block">
+	<div class="content block">
+
 <?php
 	if(have_posts()) :
 
@@ -33,11 +35,12 @@ get_header(); ?>
 	else:
 
 		// Include "no posts found" template
-		get_template_part('template-parts/post/content', 'none');
+		get_template_part('template-parts/content/post', 'none');
 
 	endif;
 ?>
-	</section>
+
+	</div>
 
 </main>
 

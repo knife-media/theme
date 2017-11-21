@@ -15,31 +15,6 @@
     width: 50%;
     padding-right: 0;
 
-    .footer__copy-widget {
-      display: block;
-
-      line-height: 1.4;
-      font-size: .8125rem;
-      font-weight: 400;
-      letter-spacing: .5px;
-
-      p {
-        margin-bottom: .5rem;
-
-        &:last-child {
-          margin-bottom: 0;
-        }
-      }
-
-      a {
-        color: $color-light;
-
-        &:hover {
-          color: $color-primary;
-        }
-      }
-    }
-
     @media screen and (max-width:1023px) {
       width: 100%;
       padding-top: 1rem;

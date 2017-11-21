@@ -10,16 +10,16 @@
  */
 get_header(); ?>
 
-<main class="content">
+<main class="wrap">
 
-	<section class="content__archive block">
+	<div class="content block">
 
 	<?php
 		// Include "no posts found" template
-		get_template_part('template-parts/post/content', 'none');
+		get_template_part('template-parts/content/post', 'none');
 	?>
 
-	</section>
+	</div>
 
 </main>
 

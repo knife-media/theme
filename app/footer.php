@@ -52,13 +52,11 @@
 		</div>
 
  		<div class="footer__copy">
-
-			<?php if(is_active_sidebar('knife-footer')) : ?>
-				<aside class="footer__copy-widget">
-					<?php dynamic_sidebar('knife-footer'); ?>
-				</aside>
-			<?php endif; ?>
-
+			<?php
+				if(is_active_sidebar('knife-footer')) :
+					dynamic_sidebar('knife-footer');
+				endif;
+			?>
 		</div>
 
 	</div>
