@@ -27,6 +27,9 @@ class Knife_Related_Widget extends WP_Widget {
     public function widget($args, $instance) {
 		global $post;
 
+ 		$defaults = ['title' => '', 'posts_per_page' => 4, 'category__not_in' => 620];
+		$instance = wp_parse_args((array) $instance, $defaults);
+
 		extract($instance);
 
  		$q = new WP_Query([

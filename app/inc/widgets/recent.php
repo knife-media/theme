@@ -25,6 +25,9 @@ class Knife_Recent_Widget extends WP_Widget {
      * Outputs the content of the widget
      */
     public function widget($args, $instance) {
+ 		$defaults = ['title' => '', 'posts_per_page' => 10, 'cat' => 620];
+		$instance = wp_parse_args((array) $instance, $defaults);
+
 		extract($instance);
 
  		$q = new WP_Query([

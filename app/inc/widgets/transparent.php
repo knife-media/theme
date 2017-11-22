@@ -25,6 +25,9 @@ class Knife_Transparent_Widget extends WP_Widget {
      * Outputs the content of the widget
      */
     public function widget($args, $instance) {
+ 		$defaults = ['title' => '', 'sticker' => 1, 'cat' => 0];
+		$instance = wp_parse_args((array) $instance, $defaults);
+
 		extract($instance);
 
 		$base = [

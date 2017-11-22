@@ -144,6 +144,18 @@ add_filter('use_default_gallery_style', '__return_false');
 add_filter('feed_links_show_comments_feed', '__return_false');
 
 
+// Update authors contact info
+add_filter('user_contactmethods', function($contact) {
+	$contact['vkontakte'] = __('Ссылка на ВКонтакте', 'knife-theme');
+	$contact['facebook'] = __('Ссылка на Facebook', 'knife-theme');
+ 	$contact['telegram'] = __('Профиль Telegram', 'knife-theme');
+ 	$contact['instagram'] = __('Профиль Instagram', 'knife-theme');
+ 	$contact['twitter'] = __('Профиль Twitter', 'knife-theme');
+
+	return $contact;
+});
+
+
 // Change default menu items class
 add_filter('nav_menu_css_class', function($classes, $item, $args) {
 	if($args->theme_location === 'main')
