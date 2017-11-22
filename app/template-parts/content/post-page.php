@@ -7,12 +7,12 @@
  */
 ?>
 
-<article class="post post--wide" id="post-<?php the_ID(); ?>">
-	<div class="post__inner entry">
+<div class="entry">
+	<article class="post" id="post-<?php the_ID(); ?>">
 
 		<div class="entry__content custom">
 			<?php the_content(); ?>
 		</div>
 
-	</div>
-</article>
+	</article>
+</div>

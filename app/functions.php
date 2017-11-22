@@ -51,27 +51,6 @@ add_action('admin_init', function() {
 });
 
 
-// Custom image sizes
-add_action('after_setup_theme', function(){
-	add_theme_support('post-thumbnails');
-
-	add_image_size('medium-thumbnail', 480, 99999, false);
-	add_image_size('related-thumbnail', 360, 180, true);
-	add_image_size('fullscreen-thumbnail', 1920, 1080, true);
-
-
-	add_image_size( 'cb-100-65', 100, 65, true );
-	add_image_size( 'cb-260-170', 260, 170, true );
-	add_image_size( 'cb-360-490', 360, 490, true );
-	add_image_size( 'cb-360-240', 360, 240, true );
-	add_image_size( 'cb-378-300', 378, 300, true );
-	add_image_size( 'cb-759-300', 759, 300, true );
-	add_image_size( 'cb-759-500', 759, 500, true );
-	add_image_size( 'cb-759-600', 759, 600, true );
-	add_image_size( 'cb-1400-600', 1400, 600, true );
-});
-
-
 // Add required theme support tags
 add_action('after_setup_theme', function() {
 	// Post formats
@@ -82,6 +61,29 @@ add_action('after_setup_theme', function() {
 
 	// Let wordpress generate page title
 	add_theme_support('title-tag');
+
+	// Add links to feeds in header
+	add_theme_support('automatic-feed-links');
+});
+
+
+// Custom image sizes
+add_action('after_setup_theme', function(){
+	add_theme_support('post-thumbnails');
+
+	add_image_size('medium-thumbnail', 480, 99999, false);
+	add_image_size('related-thumbnail', 360, 180, true);
+	add_image_size('fullscreen-thumbnail', 1920, 1080, true);
+
+	add_image_size( 'cb-100-65', 100, 65, true );
+	add_image_size( 'cb-260-170', 260, 170, true );
+	add_image_size( 'cb-360-490', 360, 490, true );
+	add_image_size( 'cb-360-240', 360, 240, true );
+	add_image_size( 'cb-378-300', 378, 300, true );
+	add_image_size( 'cb-759-300', 759, 300, true );
+	add_image_size( 'cb-759-500', 759, 500, true );
+	add_image_size( 'cb-759-600', 759, 600, true );
+	add_image_size( 'cb-1400-600', 1400, 600, true );
 });
 
 
@@ -136,6 +138,10 @@ add_action('after_switch_theme', function() {
 
 // We don't want to use default gallery styles anymore
 add_filter('use_default_gallery_style', '__return_false');
+
+
+// For the reason that we don't use comments in this theme we have to remove comments feed link from header
+add_filter('feed_links_show_comments_feed', '__return_false');
 
 
 // Change default menu items class
@@ -332,6 +338,7 @@ require get_template_directory() . '/inc/helpers/template-tags.php';
 
 // Add custom widgets defenitions
 require get_template_directory() . '/inc/widgets/recent.php';
+require get_template_directory() . '/inc/widgets/related.php';
 require get_template_directory() . '/inc/widgets/stripe.php';
 require get_template_directory() . '/inc/widgets/mindmap.php';
 require get_template_directory() . '/inc/widgets/transparent.php';

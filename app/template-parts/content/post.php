@@ -7,8 +7,8 @@
  */
 ?>
 
-<article class="post" id="post-<?php the_ID(); ?>">
-	<div class="post__inner entry">
+<div class="entry">
+	<article <?php post_class(); ?> id="post-<?php the_ID(); ?>">
 
 		<header class="entry__header">
 			<?php
@@ -39,6 +39,8 @@
 		</div>
 
 		<?php
+			wp_link_pages(['before' => '<div class="entry__navigation">', 'after' => '</div>', 'next_or_number' => 'next']);
+
 			/**
 			 * Print share buttons, terms and related posts
 			 */
@@ -49,7 +51,7 @@
 
 			knife_theme_entry_related();
 		?>
-	</div>
-</article>
+	</article>
+</div>
 
 <?php get_sidebar(); ?>

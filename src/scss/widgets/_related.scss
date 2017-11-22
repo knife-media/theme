@@ -1,0 +1,54 @@
+.widget.widget--related {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
+	align-self: flex-end;
+	position: relative;
+
+	.widget__image {
+		display: block;
+
+		width: 100%;
+		height: auto;
+
+		transition: filter .25s;
+	}
+
+	.widget__title {
+		display: block;
+
+		padding: 1rem;
+		font-size: 1.25rem;
+		font-weight: 500;
+		line-height: 1.25;
+
+		@media screen and (max-width: 767px) {
+			font-size: 1rem;
+		}
+	}
+
+	.widget__item {
+		display: block;
+		position: relative;
+
+		width: 100%;
+		margin-top: 1rem;
+		overflow: hidden;
+
+		background-color: $color-white;
+
+		&:hover {
+			.widget__image {
+				filter: brightness(115%);
+			}
+		}
+
+		@media screen and (max-width: 1023px) {
+			width: calc(50% - 0.5rem);
+		}
+
+		@media screen and (max-width: 479px) {
+			width: 100%;
+		}
+	}
+}

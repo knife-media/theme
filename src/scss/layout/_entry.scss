@@ -1,5 +1,15 @@
 .entry {
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  flex: 1 1 auto;
   position: relative;
+
+  margin-bottom: 1rem;
+  padding: 2rem 2rem 2.5rem;
+  overflow: hidden;
+  color: $color-text;
+  background-color: $color-white;
 
   .entry__title {
     display: block;
@@ -131,7 +141,7 @@
     }
 	}
 
-  .entry__content + .entry__share {
+  .entry__content ~ .entry__share {
     margin-top: 1.5rem;
     background-color: $color-sheet;
 
@@ -199,6 +209,37 @@
     }
   }
 
+  .entry__navigation {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+
+    min-width: 100%;
+    margin-top: 1.5rem;
+    margin-left: -2rem;
+    margin-right: -2rem;
+    padding: .5rem 2rem;
+
+    background-color: $color-sheet;
+
+    & > a {
+      margin: .5rem 0;
+      font-size: 1.25rem;
+      line-height: 1.25;
+      letter-spacing: .25px;
+
+      border-bottom: solid 1px $color-black;
+
+      &:first-child {
+        margin-right: auto;
+      }
+
+      &:hover {
+        border-bottom-color: transparent;
+      }
+    }
+  }
+
   .entry__tags {
     display: flex;
     flex-flow: row wrap;
@@ -229,5 +270,29 @@
         font-size: 1rem;
       }
     }
+  }
+
+  &.entry--message {
+    align-items: flex-start;
+    justify-content: center;
+
+    min-height: 54vh;
+    padding: 2rem 0;
+
+    color: $color-white;
+    background-color: $color-black;
+
+    @media screen and (max-width: 479px) {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+
+  @media screen and (max-width: 1023px) {
+    flex: 0 0 100%;
+  }
+
+  @media screen and (max-width: 767px) {
+    padding: 1rem 1rem 1.5rem;
   }
 }

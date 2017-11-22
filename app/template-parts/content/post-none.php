@@ -7,7 +7,7 @@
  */
 ?>
 
-<div class="post post--info entry">
+<div class="entry entry--message">
 	<h1 class="entry__title"><?php _e('Ничего не найдено', 'knife-theme'); ?></h1>
 
 	<div class="entry__content">

@@ -2,6 +2,7 @@
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
+  align-self: flex-start;
   position: relative;
 
   .widget__item {
