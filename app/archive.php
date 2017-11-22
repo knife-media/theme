@@ -32,6 +32,7 @@ get_header(); ?>
 
 			endwhile;
 
+
 		else:
 
 			// Include "no posts found" template
@@ -40,6 +41,10 @@ get_header(); ?>
 		endif;
 	?>
 
+	</div>
+
+	<div class="nav block">
+		<?php posts_nav_link('&bull;', '<span class="icon icon--left"></span>', '<span class="icon icon--right"></span>'); ?>
 	</div>
 
 </main>

@@ -144,6 +144,16 @@ add_filter('use_default_gallery_style', '__return_false');
 add_filter('feed_links_show_comments_feed', '__return_false');
 
 
+// Navigation links classes
+add_filter('next_posts_link_attributes', function($atts) {
+	return 'class="nav__link nav__link--next"';
+});
+
+add_filter('previous_posts_link_attributes', function($atts) {
+	return 'class="nav__link nav__link--prev"';
+});
+
+
 // Update authors contact info
 add_filter('user_contactmethods', function($contact) {
 	$contact['vkontakte'] = __('Ссылка на ВКонтакте', 'knife-theme');

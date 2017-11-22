@@ -42,6 +42,10 @@ get_header(); ?>
 
 	</div>
 
+	<div class="nav block">
+		<?php posts_nav_link('&bull;', '<span class="icon icon--left"></span>', '<span class="icon icon--right"></span>'); ?>
+	</div>
+
 </main>
 
 

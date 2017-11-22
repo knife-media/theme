@@ -1,0 +1,39 @@
+.nav {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  cursor: default;
+
+  margin: 1rem 0;
+  font-size: 1.5rem;
+  line-height: 2rem;
+
+  .nav__link {
+    display: block;
+    cursot: pointer;
+
+    font-size: 2rem;
+
+    &.nav__link--next {
+      margin-left: auto;
+
+      &:hover .icon {
+        transform: translateX(10px);
+      }
+    }
+
+    &.nav__link--prev {
+      margin-right: auto;
+
+      &:hover .icon {
+        transform: translateX(-10px);
+      }
+    }
+
+    .icon {
+      display: block;
+
+      transition: transform .25s;
+    }
+  }
+}

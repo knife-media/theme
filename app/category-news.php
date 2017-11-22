@@ -21,7 +21,7 @@ get_header(); ?>
 			while (have_posts()) : the_post();
 
 				// Include unit template for news
-				get_template_part('template-parts/loop/unit', 'row');
+				get_template_part('template-parts/units/row');
 
 			endwhile;
 
@@ -33,6 +33,10 @@ get_header(); ?>
 		endif;
 	?>
 
+	</div>
+
+	<div class="nav block">
+		<?php posts_nav_link('&bull;', '<span class="icon icon--left"></span>', '<span class="icon icon--right"></span>'); ?>
 	</div>
 
 </main>
