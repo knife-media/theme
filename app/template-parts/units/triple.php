@@ -7,7 +7,7 @@
  */
 ?>
 
-<article class="unit unit--triple">
+<article class="unit unit--triple unit--cover">
 	<?php echo knife_theme_category_link('unit__head') ?>
 
 	<a class="unit__link" href="<?php the_permalink(); ?>">

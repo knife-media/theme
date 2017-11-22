@@ -14,6 +14,7 @@ class Knife_Recent_Widget extends WP_Widget {
         $widget_ops = [
             'classname' => 'recent',
             'description' => __('Выводит последние посты c датой и тегом по выбранной категории.', 'knife-theme'),
+ 			'customize_selective_refresh' => true
         ];
 
         parent::__construct('knife_theme_recent', __('[НОЖ] Последниe новости', 'knife-theme'), $widget_ops);
@@ -58,7 +59,7 @@ class Knife_Recent_Widget extends WP_Widget {
 		$defaults = ['title' => '', 'posts_per_page' => 10, 'cat' => 620];
 		$instance = wp_parse_args((array) $instance, $defaults);
 
-		$dropdown = wp_dropdown_categories([
+		$category = wp_dropdown_categories([
  			'id' => esc_attr($this->get_field_id('cat')),
 			'name' => esc_attr($this->get_field_name('cat')),
 			'selected' => esc_attr($instance['cat']),
@@ -86,7 +87,7 @@ class Knife_Recent_Widget extends WP_Widget {
 			'<p><label for="%1$s">%2$s</label>%3$s</p>',
 			esc_attr($this->get_field_id('cat')),
 			__('Рубрика записей:', 'knife-theme'),
-			$dropdown
+			$category
 		);
 	}
 

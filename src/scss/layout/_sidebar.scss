@@ -1,8 +1,7 @@
 .sidebar {
   display: flex;
   flex: 0 0 18.75rem;
-  flex-flow: column wrap;
-  align-items: center;
+  flex-flow: row wrap;
   justify-content: space-between;
   position: relative;
 
@@ -64,6 +63,8 @@
   }
 
   @media screen and (max-width: 1023px) {
-    max-width: 100%;
+    flex: 1 1 auto;
+
+    margin-left: 0;
   }
 }

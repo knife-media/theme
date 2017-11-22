@@ -8,6 +8,10 @@
 
   &.content--feature {
     flex-flow: row nowrap;
+
+    @media screen and (max-width: 1023px) {
+      flex-flow: row wrap;
+    }
   }
 
   @media screen and (max-width: 479px) {

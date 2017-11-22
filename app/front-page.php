@@ -10,9 +10,7 @@
  * @since 1.1
  */
 
-get_header();
-
-?>
+get_header(); ?>
 
 <main <?php knife_theme_cover("wrap", $post->ID); ?>>
 

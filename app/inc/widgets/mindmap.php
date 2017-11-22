@@ -14,6 +14,7 @@ class Knife_Mindmap_Widget extends WP_Widget {
         $widget_ops = [
             'classname' => 'mindmap',
             'description' => __('Выводит список контрастных ссылок на посты по критерию.', 'knife-theme'),
+			'customize_selective_refresh' => true
         ];
 
         parent::__construct('knife_theme_mindmap', __('[НОЖ] Яркие ссылки', 'knife-theme'), $widget_ops);

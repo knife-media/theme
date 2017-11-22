@@ -114,16 +114,6 @@ add_action('init', function() {
 });
 
 
-// Admin bar
-add_action('init', function() {
-//	add_filter('show_admin_bar', '__return_false');
-
-	add_action('admin_bar_menu', function($wp_admin_bar) {
-		$wp_admin_bar->remove_menu('customize');
-	}, 999);
-});
-
-
 // Disable embeds
 add_action('wp_enqueue_scripts', function() {
 	wp_deregister_script('wp-embed');
@@ -132,7 +122,7 @@ add_action('wp_enqueue_scripts', function() {
 
 // Disable jquery
 add_action('wp_enqueue_scripts', function() {
-	if(!is_admin()) {
+	if(!is_user_logged_in()) {
 		wp_deregister_script('jquery');
 	}
 });
