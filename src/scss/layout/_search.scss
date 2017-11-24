@@ -1,0 +1,36 @@
+.search {
+  display: none;
+  flex-flow: row nowrap;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+
+  width: 100%;
+  overflow: auto;
+
+  background-color: rgba(0, 0, 0, .85);
+
+  .search__layer {
+    padding: 10rem 1rem 1rem;
+    width: 40.625rem;
+    min-height: 100%;
+    margin: 0 auto;
+  }
+
+  .search__form {
+
+  }
+}
+
+body {
+  /*
+
+  overflow: hidden;
+
+  .wrap {
+    filter: blur(2px);
+  }
+  */
+}
