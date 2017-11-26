@@ -38,7 +38,7 @@ class Knife_Transparent_Widget extends WP_Widget {
 		];
 
 		$meta = [[
-			'key' => 'post_icon',
+			'key' => 'post-sticker',
 			'value' => '',
 			'compare' => '!='
 		]];
@@ -48,7 +48,7 @@ class Knife_Transparent_Widget extends WP_Widget {
 
 		$q = new WP_Query($base);
 
-		if($q->have_posts()) :
+		if($q->have_posts() && $q->post_count > 2) :
 
 			echo $args['before_widget'];
 

@@ -358,6 +358,9 @@ add_action('widgets_init', function() {
 // Custom template tags for this theme.
 require get_template_directory() . '/inc/helpers/template-tags.php';
 
+// Add post settings rules and admin metaboxes
+require get_template_directory() . '/inc/helpers/post-settings.php';
+
 // Add custom widgets defenitions
 require get_template_directory() . '/inc/widgets/recent.php';
 require get_template_directory() . '/inc/widgets/related.php';

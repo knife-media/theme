@@ -13,8 +13,8 @@
 	<a class="widget__link" href="<?php the_permalink(); ?>">
 
 <?php // TODO: rework ?>
-		<?php if(!empty(get_post_meta($post->ID, 'post_icon', true))) : ?>
-		<img class="widget__sticker" src="<?php echo esc_url(get_post_meta($post->ID, 'post_icon', true)); ?>"/>
+		<?php if(!empty(get_post_meta($post->ID, 'post-sticker', true))) : ?>
+		<img class="widget__sticker" src="<?php echo esc_url(get_post_meta($post->ID, 'post-sticker', true)); ?>"/>
 		<?php endif; ?>
 
 		<footer class="widget__footer">
