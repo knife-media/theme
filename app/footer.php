@@ -63,37 +63,6 @@
 
 </footer>
 
-
-<div class="search">
-	<div class="search__layer">
-
-		<div class="search__input">
-
-<div id="test"></div>
-<gcse:searchbox enableHistory="true" autoCompleteMaxCompletions="5" autoCompleteMatchType='any'>
-		</div>
-
-		<div class="search__results">
-
-<gcse:searchresults refinementStyle="link">
-		</div>
-	</div>
-
-
-
-<script>
-
-(function() {
-  var cx = '009571386059139339715:mqsuxgtrwyo'; // Insert your own Custom Search engine ID here
-  var gcse = document.createElement('script'); gcse.type = 'text/javascript';
-  gcse.async = true;
-  gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
-  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(gcse, s);
-})();
-</script>
-
-</div>
-
 <?php wp_footer(); ?>
 </body>
 </html>

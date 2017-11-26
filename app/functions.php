@@ -20,7 +20,7 @@ if(!isset($content_width)) {
 add_action('wp_enqueue_scripts', function() {
  	$version = wp_get_theme()->get('Version');
 
-	wp_enqueue_script('knife-scripts', get_template_directory_uri() . '/assets/scripts.min.js', [], $version, true);
+	wp_enqueue_script('knife-theme', get_template_directory_uri() . '/assets/scripts.min.js', [], $version, true);
 });
 
 
@@ -28,7 +28,7 @@ add_action('wp_enqueue_scripts', function() {
 add_action('wp_print_styles', function() {
 	$version = wp_get_theme()->get('Version');
 
-   	wp_enqueue_style('knife-styles', get_template_directory_uri() . '/assets/styles.min.css', [], $version);
+   	wp_enqueue_style('knife-theme', get_template_directory_uri() . '/assets/styles.min.css', [], $version);
 });
 
 
@@ -124,10 +124,16 @@ add_action('wp_enqueue_scripts', function() {
 
 // Disable jquery
 add_action('wp_enqueue_scripts', function() {
-	if(!is_user_logged_in()) {
+	if(!is_user_logged_in())
 		wp_deregister_script('jquery');
-	}
 });
+
+
+// Add search popover to footer
+add_action('wp_footer', function() {
+	get_search_form();
+});
+
 
 
 // Rewrite urls after switch theme just in case
