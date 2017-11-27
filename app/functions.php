@@ -32,15 +32,10 @@ add_action('wp_print_styles', function() {
 });
 
 
-// Change mail from fields
-add_filter('wp_mail_from_name', function($name) {
-	return __('knife.media webmaster', 'knife-theme');
-});
 
-add_filter('wp_mail_from', function($email) {
-	$hostname = parse_url(site_url("/"), PHP_URL_HOST);
-
-	return "no-reply@{$hostname}";
+// Rewrite urls after switch theme just in case
+add_action('after_switch_theme', function() {
+     flush_rewrite_rules();
 });
 
 
@@ -64,6 +59,9 @@ add_action('after_setup_theme', function() {
 
 	// Add links to feeds in header
 	add_theme_support('automatic-feed-links');
+
+	// Let wordpress manage cutsom background
+	add_theme_support('custom-background', ['wp-head-callback' => 'knife_custom_background']);
 });
 
 
@@ -71,19 +69,14 @@ add_action('after_setup_theme', function() {
 add_action('after_setup_theme', function(){
 	add_theme_support('post-thumbnails');
 
-	add_image_size('medium-thumbnail', 480, 99999, false);
-	add_image_size('related-thumbnail', 360, 180, true);
 	add_image_size('fullscreen-thumbnail', 1920, 1080, true);
 
-	add_image_size( 'cb-100-65', 100, 65, true );
-	add_image_size( 'cb-260-170', 260, 170, true );
-	add_image_size( 'cb-360-490', 360, 490, true );
-	add_image_size( 'cb-360-240', 360, 240, true );
-	add_image_size( 'cb-378-300', 378, 300, true );
-	add_image_size( 'cb-759-300', 759, 300, true );
-	add_image_size( 'cb-759-500', 759, 500, true );
-	add_image_size( 'cb-759-600', 759, 600, true );
-	add_image_size( 'cb-1400-600', 1400, 600, true );
+ 	add_image_size('recent-thumbnail', 300, 200, true);
+	add_image_size('square-thumbnail', 160, 160, true);
+
+	add_image_size('triple-thumbnail', 460, 345, true);
+ 	add_image_size('double-thumbnail', 800, 600, true);
+  	add_image_size('single-thumbnail', 1280, 400, true);
 });
 
 
@@ -135,10 +128,22 @@ add_action('wp_footer', function() {
 });
 
 
+// Remove annoying body classes
+// It will be better to use body-- class prefix if we need it later
+add_filter('body_class', function($wp, $extra) {
+	return [];
+}, 10, 2);
 
-// Rewrite urls after switch theme just in case
-add_action('after_switch_theme', function() {
-     flush_rewrite_rules();
+
+// Change mail from fields
+add_filter('wp_mail_from_name', function($name) {
+	return __('knife.media webmaster', 'knife-theme');
+});
+
+add_filter('wp_mail_from', function($email) {
+	$hostname = parse_url(site_url("/"), PHP_URL_HOST);
+
+	return "no-reply@{$hostname}";
 });
 
 

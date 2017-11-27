@@ -9,20 +9,22 @@
  */
 
 
-if(!function_exists('knife_theme_cover')) :
+if(!function_exists('knife_custom_background')) :
 /**
- * Prints class with thumnail url in background-image style
+ * Prints class with thumbnail url in background-image style
  *
  * @since 1.1
  */
 
-function knife_theme_cover($class, $post_id = null) {
-	$thumbnail = get_the_post_thumbnail_url($post_id, 'fullscreen-thumbnail');
+function knife_custom_background() {
+	ob_start();
 
-	if($thumbnail === false)
-		return printf('class="%1$s"', $class);
+	_custom_background_cb();
 
-	printf('class="%1$s %1$s--background" style="background-image:url(%2$s)"', $class, esc_url($thumbnail));
+	$style = ob_get_clean();
+	$style = str_replace( 'body.custom-background', '.custom-background .wrap', $style );
+
+	echo $style;
 }
 
 endif;

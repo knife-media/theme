@@ -1,4 +1,5 @@
 (function(){
+	return;
 
  window.__gcse = {
 		parsetags: 'explicit',

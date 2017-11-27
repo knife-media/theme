@@ -12,7 +12,7 @@
 
 get_header(); ?>
 
-<main <?php knife_theme_cover("wrap", $post->ID); ?>>
+<main class="wrap">
 
 	<?php if(is_active_sidebar('knife-feature')) : ?>
 

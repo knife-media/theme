@@ -18,10 +18,10 @@
 
 <header class="header">
 	<div class="header__topline topline block">
- 		<button class="topline__button topline__button--menu toggle" role="button">
+ 		<button class="topline__button topline__button--menu toggle toggle--menu" role="button">
 			<span class="toggle__line"></span>
-			<span class="toggle__line"></span>
-			<span class="toggle__line"></span>
+ 			<span class="toggle__line"></span>
+ 			<span class="toggle__line"></span>
 		</button>
 
 		<div class="topline__logo">
@@ -62,8 +62,10 @@
 			?>
 		</nav>
 
-		<button class="topline__button topline__button--search" role="button">
-			<span class="icon icon--search"></span>
+		<button class="topline__button topline__button--search toggle toggle--search" role="button">
+ 			<span class="toggle__line"></span>
+ 			<span class="toggle__line"></span>
+			<span class="toggle__icon icon icon--search"></span>
 		</button>
 	</div>
 </header>

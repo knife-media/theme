@@ -25,6 +25,18 @@ body {
   line-height: 1.4;
   font-weight: normal;
   font-family: $font-regular;
+
+  &.body--search {
+    overflow: hidden;
+
+    .wrap {
+      filter: blur(1.5px);
+    }
+
+    .footer {
+      filter: blur(1.5px);
+    }
+  }
 }
 
 a {
@@ -46,6 +58,12 @@ button {
   outline: none;
 }
 
+input {
+  background-color: transparent;
+
+  outline: none;
+}
+
 time {
   cursor: default;
 }
@@ -60,7 +78,7 @@ img {
 }
 
 ::placeholder {
-  color: silver;
+  color: grey;
 }
 
 h1, h2, h3 {

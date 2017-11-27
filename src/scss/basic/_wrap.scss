@@ -3,11 +3,5 @@
   flex-flow: column wrap;
   align-items: center;
 
-  background-color: $color-black;
-
-  &.wrap--background {
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
-  }
+  background-color: transparent;
 }

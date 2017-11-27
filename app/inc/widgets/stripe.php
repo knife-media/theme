@@ -40,6 +40,17 @@ class Knife_Stripe_Widget extends WP_Widget {
 		if($q->have_posts()) :
 
  			while($q->have_posts()) : $q->the_post();
+// TODO: Rework
+				$cover = get_post_meta(get_the_ID(), '_knife-theme-cover', true);
+		$class = ['unit'];
+
+				if($cover)
+					$class[] = 'unit--cover';
+
+				$class[] = 'unit--' . $template;
+
+				set_query_var('unit_class', $class);
+
 
 				get_template_part('template-parts/units/' . $template);
 
@@ -62,6 +73,12 @@ class Knife_Stripe_Widget extends WP_Widget {
 			'triple' => __('Три в ряд', 'knife-theme'),
 			'double' => __('Два в ряд', 'knife-theme'),
 			'single' => __('На всю ширину', 'knife-theme')
+		];
+
+		$cover = [
+			'defalut' => __('По умолчанию', 'knife-theme'),
+			'cover' => __('Использовать подложку', 'knife-theme'),
+			'nocover' => __('Убрать подложку', 'knife-theme')
 		];
 
 		$category = wp_dropdown_categories([
@@ -103,11 +120,28 @@ class Knife_Stripe_Widget extends WP_Widget {
 		echo '</select>';
 
 		printf(
+			'<p><label for="%1$s">%3$s</label><select class="widefat" id="%1$s" name="%2$s">',
+			esc_attr($this->get_field_id('cover')),
+ 			esc_attr($this->get_field_name('cover')),
+			__('Подложка карточек:', 'knife-theme')
+		);
+
+		foreach($cover as $name => $title) {
+			printf('<option value="%1$s"%3$s>%2$s</option>', $name, $title, selected($instance['cover'], $name, false));
+		}
+
+		echo '</select>';
+
+		printf(
 			'<p><label for="%1$s">%2$s</label>%3$s</p>',
 			esc_attr($this->get_field_id('cat')),
 			__('Рубрика записей:', 'knife-theme'),
 			$category
 		);
+
+		echo '<ul>';
+		wp_category_checklist();
+		echo '</ul>';
 	}
 
 
@@ -121,6 +155,7 @@ class Knife_Stripe_Widget extends WP_Widget {
 		$instance['posts_per_page'] = (int) $new_instance['posts_per_page'];
 		$instance['title'] = sanitize_text_field($new_instance['title']);
  		$instance['template'] = sanitize_text_field($new_instance['template']);
+  		$instance['cover'] = sanitize_text_field($new_instance['cover']);
 
         return $instance;
     }

@@ -7,12 +7,12 @@
  */
 ?>
 
-<article class="unit unit--triple unit--cover">
+<article class="<?php echo implode(" ", $unit_class); ?>">
 	<?php echo knife_theme_category_link('unit__head') ?>
 
 	<a class="unit__link" href="<?php the_permalink(); ?>">
 		<div class="unit__image">
-			<?php the_post_thumbnail('', ['class' => 'unit__image-thumbnail']); ?>
+			<?php the_post_thumbnail('triple-thumbnail', ['class' => 'unit__image-thumbnail']); ?>
 		</div>
 
 		<footer class="unit__footer">

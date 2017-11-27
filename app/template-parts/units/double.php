@@ -12,7 +12,7 @@
 
 	<a class="unit__link" href="<?php the_permalink(); ?>">
 		<div class="unit__image">
-			<?php the_post_thumbnail('', ['class' => 'unit__image-thumbnail']); ?>
+			<?php the_post_thumbnail('double-thumbnail', ['class' => 'unit__image-thumbnail']); ?>
 		</div>
 
 		<footer class="unit__footer">
