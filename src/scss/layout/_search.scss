@@ -23,6 +23,11 @@
     padding-top: 8.75rem;
     padding-bottom: 2rem;
     max-width: 100%;
+
+    @media screen and (max-width: 767px) {
+      padding-top: 7rem;
+      padding-bottom: 1rem;
+    }
   }
 
   .search__field {
@@ -35,21 +40,25 @@
       display: block;
 
       width: 100%;
-      padding: .75rem 0;
-      line-height: 1;
+      padding: 0;
+      line-height: 1.75;
       font-size: 2rem;
       font-weight: 500;
 
       color: $color-white;
 
       border-bottom: solid 1px $color-white;
+
+      @media screen and (max-width: 767px) {
+        font-size: 1.5rem;
+      }
     }
   }
 
 	.search__results {
     display: block;
 
-    margin-top: 2rem;
+    margin-top: 1rem;
 
 		.search__results-item {
  			display: block;
@@ -62,6 +71,10 @@
       &:first-child {
         border-top: none;
       }
+
+      @media screen and (max-width: 767px) {
+        padding: 1rem 0;
+      }
 		}
 
     .search__results-head {
@@ -70,6 +83,10 @@
 			font-size: 1.375rem;
 			font-weight: 500;
 			line-height: 1.25;
+
+      @media screen and (max-width: 767px) {
+        font-size: 1.25rem;
+      }
     }
 
     .search__results-text {
@@ -82,16 +99,7 @@
     }
 
 		.search__results-link {
-			position: absolute;
-			top: 2rem;
-			bottom: 2rem;
-      left: 0;
-
-			width: 100%;
-
-			&:hover {
-				background-color: rgba(0, 0, 0, .375);
-			}
+		  display: block;
 		}
 	}
 
