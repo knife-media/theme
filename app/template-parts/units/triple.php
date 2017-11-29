@@ -7,7 +7,7 @@
  */
 ?>
 
-<article class="<?php echo implode(" ", $unit_class); ?>">
+<article class="unit unit--triple">
 	<?php echo knife_theme_category_link('unit__head') ?>
 
 	<a class="unit__link" href="<?php the_permalink(); ?>">

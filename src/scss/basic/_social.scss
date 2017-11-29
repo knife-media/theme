@@ -17,6 +17,8 @@
 			.icon {
 				display: block;
 
+        transition: .25s;
+
 				&.icon--facebook:hover {
         	color: #3b5998;
 				}

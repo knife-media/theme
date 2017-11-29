@@ -1,7 +1,7 @@
 .unit--triple {
   width: calc(100% / 3 - .625rem);
 
-  @media screen and (max-width: 1023px) {
+  @media screen and (max-width: 899px) {
     width: calc(50% - .5rem);
   }
 

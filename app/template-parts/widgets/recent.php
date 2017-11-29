@@ -16,6 +16,7 @@
 
 		<?php $tags = get_the_tags(); ?>
 
+		<?php // TODO: use 247 line ?>
 		<?php if(isset($tags[0])) : ?>
 		<a class="widget__meta" href="<?php echo get_tag_link($tags[0]->term_id); ?>"><?php echo $tags[0]->name; ?></a>
 		<?php endif; ?>

@@ -22,7 +22,7 @@ function knife_custom_background() {
 	_custom_background_cb();
 
 	$style = ob_get_clean();
-	$style = str_replace( 'body.custom-background', '.custom-background .wrap', $style );
+	$style = str_replace( 'body.custom-background', '.wrap', $style );
 
 	echo $style;
 }
@@ -116,13 +116,7 @@ if(!function_exists('knife_theme_entry_header')) :
  */
 
 function knife_theme_entry_header() {
-    knife_theme_authors_links();
 
-	printf(
-		'<time class="entry__header-meta" datetime="%1$s">%2$s</time>',
-		get_the_time('c'),
-		get_the_time('d F Y')
-	);
 
 	$category = get_the_category();
 

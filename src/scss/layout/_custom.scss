@@ -19,16 +19,20 @@
     margin: 0;
   }
 
+  .size-outer-thumbnail {
+
+  }
+
   p {
     margin-top: 1rem;
 
     margin-bottom: 1rem;
     line-height: 1.65;
-    font-size: .9375rem;
+    font-size: 1rem;
     font-weight: 400;
 
     @media screen and (max-width: 767px) {
-      font-size: .875rem;
+      font-size: .9375rem;
     }
   }
 
@@ -49,5 +53,4 @@
   b {
     font-weight: 600;
   }
-
 }

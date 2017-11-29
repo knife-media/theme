@@ -13,7 +13,7 @@
 
 // We have to install this value
 if(!isset($content_width)) {
-	$content_width = 650;
+	$content_width = 700;
 }
 
 // Insert required js files
@@ -51,9 +51,6 @@ add_action('after_setup_theme', function() {
 	// Post formats
 	add_theme_support('post-formats', ['aside']);
 
-	// Something useful
-	add_theme_support('html5', ['caption']);
-
 	// Let wordpress generate page title
 	add_theme_support('title-tag');
 
@@ -68,16 +65,63 @@ add_action('after_setup_theme', function() {
 // Custom image sizes
 add_action('after_setup_theme', function(){
 	add_theme_support('post-thumbnails');
+	set_post_thumbnail_size(300, 300, true);
 
-	add_image_size('fullscreen-thumbnail', 1920, 1080, true);
+	add_image_size('outer-thumbnail', 1024, 9999, false);
+ 	add_image_size('inner-thumbnail', 700, 9999, false);
 
- 	add_image_size('recent-thumbnail', 300, 200, true);
-	add_image_size('square-thumbnail', 160, 160, true);
-
-	add_image_size('triple-thumbnail', 460, 345, true);
- 	add_image_size('double-thumbnail', 800, 600, true);
-  	add_image_size('single-thumbnail', 1280, 400, true);
+	add_image_size('triple-thumbnail', 480, 360, true);
+	add_image_size('double-thumbnail', 800, 600, true);
+	add_image_size('single-thumbnail', 1200, 360, true);
 });
+
+
+// We want to use own image sizes in post
+add_filter('image_size_names_choose', function($size_names) {
+	global $_wp_additional_image_sizes;
+
+	$size_names = array(
+		'outer-thumbnail' => __('На всю ширину', 'knife-theme'),
+ 		'inner-thumbnail' => __('По ширине текста', 'knife-theme')
+	);
+
+	return $size_names;
+});
+
+
+// Remove default useless large and medium sizes
+add_filter('intermediate_image_sizes', function($def_sizes) {
+	unset($def_sizes['medium']);
+	unset($def_sizes['large']);
+
+	return $def_sizes;
+});
+
+add_filter('get_image_tag_class', function($class, $id, $align, $size) {
+	  return 'align' . esc_attr($align) .' size-' . esc_attr($size);
+}, 0, 4);
+
+
+// Remove useless image attributes
+add_filter('post_thumbnail_html', function($html) {
+	return preg_replace('/(width|height)="\d*"\s/', "", $html);
+}, 10);
+
+add_filter('disable_captions', '__return_true');
+
+add_filter('image_send_to_editor', function($html, $id, $caption, $title, $align, $url, $size, $alt) {
+	 $image_tag = get_image_tag($id, '', $title, $align, $size);
+ $url = wp_get_attachment_url($id);
+ $html5 = "<figure class='align-$align size-$size'>";
+  $html5 .= $image_tag;
+  if ($caption) {
+    $html5 .= "<figcaption>$caption</figcaption>";
+  }
+  $html5 .= "</figure>";
+  return $html5;
+}, 10, 9);
+
+
 
 
 // Add theme menus
@@ -132,6 +176,13 @@ add_action('wp_footer', function() {
 // It will be better to use body-- class prefix if we need it later
 add_filter('body_class', function($wp, $extra) {
 	return [];
+}, 10, 2);
+
+
+// Remove annoying post classes
+// We can use entry-- clas prefix better
+add_filter('post_class', function($classes, $class) {
+	return $class;
 }, 10, 2);
 
 
@@ -281,14 +332,6 @@ add_action('pre_get_posts', function($query) {
 });
 
 
-// Remove useless image attributes
-add_filter('post_thumbnail_html', function($html) {
-	return preg_replace('/(width|height)="\d*"\s/', "", $html);
-}, 10);
-
-add_filter('image_send_to_editor', function($html) {
-	return preg_replace('/(width|height)="\d*"\s/', "", $html);
-}, 10);
 
 
 // Register widget area.

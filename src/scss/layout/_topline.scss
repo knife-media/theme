@@ -125,6 +125,7 @@
       position: absolute;
       top: 100%;
       left: 0;
+      opacity: 0;
 
       width: 100%;
       background-color: $color-primary;
@@ -132,6 +133,7 @@
 			transform: translateY(-100%);
 
 			&.topline__menu--expand {
+        opacity: 1;
 				transform: translateY(0);
 				transition: transform .25s;
 			}
@@ -148,11 +150,11 @@
     &.topline__button--menu {
       display: none;
 
+      height: 1.25rem;
+      width: 1.375rem;
+
       @media screen and (max-width: 1023px) {
         display: block;
-
-        height: 1.25rem;
-        width: 1.375rem;
       }
 
       @media screen and (max-width: 767px) {
@@ -164,20 +166,14 @@
     &.topline__button--search {
       display: block;
 
-      height: 1.5rem;
-      width: 1.5rem;
+      height: 1.25rem;
+      width: 1.375rem;
       font-size: 1rem;
       line-height: 1;
       color: $color-black;
 
-      &:hover {
-        color: $color-primary;
-      }
-
       @media screen and (max-width: 1023px) {
-        height: 1.25rem;
-        width: 1.375rem;
-
+        height: 1.375rem;
         font-size: 1.375rem;
       }
 

@@ -8,61 +8,7 @@
   margin-left: 1rem;
   color: $color-text;
 
-  .sidebar__related {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
-    position: relative;
-
-    .sidebar__related-image {
-      display: block;
-
-      width: 100%;
-      height: auto;
-
-			transition: filter .25s;
-    }
-
-		.sidebar__related-title {
-			display: block;
-
-			padding: 1rem;
-			font-size: 1.25rem;
-			font-weight: 500;
-			line-height: 1.25;
-
-      @media screen and (max-width: 767px) {
-        font-size: 1rem;
-      }
-		}
-
-		.sidebar__related-item {
-      display: block;
-      position: relative;
-
-      width: 100%;
-      margin-top: 1rem;
-			overflow: hidden;
-
-      background-color: $color-white;
-
-			&:hover {
-				.sidebar__related-image {
-					filter: brightness(115%);
-				}
-			}
-
-      @media screen and (max-width: 1023px) {
-        width: calc(50% - 0.5rem);
-      }
-
-      @media screen and (max-width: 479px) {
-        width: 100%;
-      }
-    }
-  }
-
-  @media screen and (max-width: 1023px) {
+  @media screen and (max-width: 1061px) {
     flex: 1 1 auto;
 
     margin-left: 0;
