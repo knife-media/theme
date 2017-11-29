@@ -1,0 +1,54 @@
+.refers {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+
+  margin-top: 1.5rem;
+  margin-left: -2rem;
+  margin-right: -2rem;
+  padding: .5rem 2rem;
+
+  background-color: $color-sheet;
+
+  .refers__link {
+    margin: .5rem 0;
+    font-size: 1.25rem;
+    line-height: 1.25;
+    letter-spacing: .25px;
+
+    border-bottom: solid 1px $color-black;
+
+    &:hover {
+      border-bottom-color: transparent;
+    }
+
+    @media screen and (max-width: 479px) {
+      font-size: 1rem;
+    }
+  }
+
+  .refers__title {
+    display: block;
+    cursor: default;
+
+    width: 100%;
+    padding: 1rem 0;
+
+    font-size: 1.375rem;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: .25px;
+
+    background-color: $color-sheet;
+
+    @media screen and (max-width: 479px) {
+      font-size: 1.125rem;
+    }
+  }
+
+  .refers__item {
+    display: block;
+
+    margin-top: 2px;
+  }
+}

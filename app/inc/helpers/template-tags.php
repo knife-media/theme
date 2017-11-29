@@ -9,60 +9,205 @@
  */
 
 
-if(!function_exists('knife_custom_background')) :
+function knife_custom_background() {}
+
+
+if(!function_exists('knife_theme_meta')) :
 /**
- * Prints class with thumbnail url in background-image style
+ * Prints post meta info
+ *
+ * Shows post date, authors, category and optional tags
  *
  * @since 1.1
  */
 
-function knife_custom_background() {
-	ob_start();
+function knife_theme_meta($args, $meta = '') {
+	$defaults = [
+		'items' => ['author', 'date', 'category'],
+		'before' => '',
+		'after' => '',
+		'echo' => true
+	];
 
-	_custom_background_cb();
+	$args = wp_parse_args($args, $defaults);
 
-	$style = ob_get_clean();
-	$style = str_replace( 'body.custom-background', '.wrap', $style );
+	foreach($args['items'] as $item) {
+		switch($item) {
+			case 'author':
 
-	echo $style;
+				if(function_exists('coauthors_posts_links'))
+					$meta .= coauthors_posts_links('', '', null, null, false);
+				else
+					$meta .= get_the_author_posts_link();
+
+				break;
+
+			case 'category':
+
+				$cats = get_the_category();
+
+				if(!isset($cats[0]))
+					break;
+
+				$meta .= sprintf(
+					'<a class="meta__item" href="%1$s">%2$s</a>',
+					esc_url(get_category_link($cats[0]->term_id)),
+					sanitize_text_field($cats[0]->cat_name)
+				);
+
+				break;
+
+			case 'date':
+ 				$meta .= sprintf(
+					'<time class="meta__item" datetime="%1$s">%2$s</time>',
+					get_the_time('c'),
+					get_the_time('d F Y')
+				);
+
+				break;
+		}
+	}
+
+	$meta = $args['before'] . $meta . $args['after'];
+
+	$html = apply_filters('knife_theme_meta', $meta, $args);
+
+	if($args['echo'] === false)
+		return $html;
+
+	echo $html;
 }
 
 endif;
 
 
-if(!function_exists('knife_theme_authors')) :
+if(!function_exists('knife_theme_excerpt')) :
 /**
- * Returns list of authors or co-autors without link
+ * Displays the optional excerpt
  *
- * Since we use co-authors plugin we have to use own fallback
+ * Wraps the excerpt in a div element
  *
  * @since 1.1
  */
 
-function knife_theme_authors() {
-	if(function_exists('get_coauthors'))
-		return coauthors();
+function knife_theme_excerpt($args) {
+  	$defaults = [
+		'before' => '',
+		'after' => '',
+		'echo' => true
+	];
 
-	return the_author();
+	$args = wp_parse_args($args, $defaults);
+
+	if(!has_excerpt())
+		return false;
+
+	$html = $args['before'] . apply_filters('the_excerpt', get_the_excerpt()) . $args['after'];
+
+	if($args['echo'] === false)
+		return $html;
+
+	echo $html;
 }
 
 endif;
 
 
-if(!function_exists('knife_theme_authors_links')) :
+if(!function_exists('knife_theme_tags')) :
 /**
- * Returns list of authors or co-autors with posts links
+ * Prints current post tags list
  *
- * Since we use co-authors plugin we have to use own fallback
+ * @since 1.1
+ */
+function knife_theme_tags($args, $list = '') {
+ 	$defaults = [
+		'before' => '',
+		'after' => '',
+		'item' => '%1$s',
+		'between' => ', ',
+		'count' => 99,
+		'echo' => true
+	];
+
+	$args = wp_parse_args($args, $defaults);
+	$tags = get_the_tags();
+
+	if($tags === false)
+		return false;
+
+	foreach($tags as $i => $tag) {
+		if($args['count'] <= $i)
+			continue;
+
+		$list .= sprintf($args['item'], sanitize_text_field($tag->name), get_tag_link($tag->term_id));
+
+		if(count($tags) > $i + 1)
+			$list .= $args['between'];
+	}
+
+
+	$list = $args['before'] . $list . $args['after'];
+
+	$html = apply_filters('knife_theme_tags', $list, $args);
+
+	if($args['echo'] === false)
+		return $html;
+
+	echo $html;
+}
+
+endif;
+
+
+if(!function_exists('knife_theme_related')) :
+/**
+ * Prints related posts by category
  *
  * @since 1.1
  */
 
-function knife_theme_authors_links() {
-	if(function_exists('coauthors_posts_links'))
-		return coauthors_posts_links();
+function knife_theme_related($args, $list = '') {
+	$defaults = [
+		'before' => '',
+		'after' => '',
+		'title' => '',
+		'item' => '<p>< href="%1$s">%2$s</p>',
+		'echo' => true
+	];
 
-	return the_author_posts_link();
+	$args = wp_parse_args($args, $defaults);
+	$cats = get_the_category();
+
+	if(!isset($cats[0]))
+		return false;
+
+	global $post;
+
+	$title = sprintf($args['title'], __('Читайте также:', 'knife-theme'));
+
+	$items = get_posts([
+ 		'post__not_in' => [$post->ID],
+		'posts_per_page' => 6,
+ 		'ignore_sticky_posts' => 1,
+ 		'post_status' => 'publish',
+		'category__in' => $cats[0]->cat_ID
+	]);
+
+	if(count($items) < 1)
+		return false;
+
+	foreach($items as $item) {
+		$list .= sprintf($args['item'], get_the_permalink($item->ID), get_the_title($item->ID));
+	}
+
+	$list = $args['before'] . $title . $list . $args['after'];
+
+ 	$html = apply_filters('knife_theme_related', $list, $args);
+
+	if($args['echo'] === false)
+		return $html;
+
+	echo $html;
 }
 
 endif;
@@ -108,152 +253,5 @@ function knife_theme_entry_share() {
 endif;
 
 
-if(!function_exists('knife_theme_entry_header')) :
-/**
- * Prints entry author, category and date
- *
- * @since 1.1
- */
-
-function knife_theme_entry_header() {
 
 
-	$category = get_the_category();
-
-	if(isset($category[0])) {
-		printf(
-			'<a class="entry__header-meta" href="%1$s">%2$s</a>',
-			esc_url(get_category_link($category[0]->term_id)),
-			sanitize_text_field($category[0]->cat_name)
-		);
-	}
-}
-
-endif;
-
-
-if(!function_exists('knife_theme_entry_related')) :
-/**
- * Prints related posts by category
- *
- * TODO: Rework this
- *
- * @since 1.1
- */
-
-function knife_theme_entry_related() {
-	global $post;
-
-	$cats = get_the_category();
-
-	$base = [
-		'post__not_in' => [$post->ID],
-		'posts_per_page' => 6,
- 		'ignore_sticky_posts' => 1,
- 		'post_status' => 'publish'
-	];
-
-	if(isset($cats[0]))
-		$base['category__in'] = $cats[0]->cat_ID;
-
-	$entry_related = new WP_Query($base);
-
-	if($entry_related->have_posts()) {
-		printf(
-			'<div class="entry__related"><p class="entry__related-title">%s</p>',
-			__('Читайте также:', 'knife-theme')
-		);
-
-		while($entry_related->have_posts()) {
-
-			$entry_related->the_post();
-
-			printf(
-				'<div class="entry__related-item"><a class="entry__related-link" href="%1$s">%2$s</a></div>',
-				get_the_permalink(),
-				get_the_title()
-			);
-		}
-
-		wp_reset_postdata();
-
-		print('</div>');
-	}
-}
-
-endif;
-
-
-
-if(!function_exists('knife_theme_category_link')) :
-/**
- * Single category link with arg class
- *
- * @since 1.1
- */
-function knife_theme_category_link($link_class = '') {
-	$category = get_the_category();
-
-	if(!isset($category[0]))
-		return '';
-
-	return sprintf(
-		'<a class="%1$s" href="%2$s">%3$s</a>',
-		esc_attr($link_class),
-		esc_url(get_category_link($category[0]->term_id)),
-		sanitize_text_field($category[0]->cat_name)
-	);
-}
-
-endif;
-
-
-
-if(!function_exists('knife_theme_tags')) :
-/**
- * Current post tag list without links
- *
- * @since 1.1
- */
-function knife_theme_tags($count = 3, $echo = true) {
-	if($tags = get_the_tags()) {
-
-		$list = implode(', ', wp_list_pluck(array_slice($tags, 0, $count), 'name'));
-
-		if($echo === false)
-			return $list;
-
-		echo $list;
-	}
-}
-
-endif;
-
-
-
-if(!function_exists('knife_theme_entry_tags')) :
-/**
- * Prints entry tags
- *
- * @since 1.1
- */
-
-function knife_theme_entry_tags() {
-	$tags = get_the_tags();
-
-	if($tags) {
-		print('<div class="entry__tags">');
-
-		foreach($tags as $tag) {
-			printf(
-				'<a class="entry__tags-link" href="%1$s">%2$s</a>',
-				esc_url(get_tag_link($tag->term_id)),
-				sanitize_text_field($tag->name)
-			);
-		}
-
-		print('</div>');
-	}
-}
-
-endif;

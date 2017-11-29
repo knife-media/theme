@@ -216,6 +216,18 @@ add_filter('previous_posts_link_attributes', function($atts) {
 });
 
 
+// Post author link class
+add_filter('the_author_posts_link', function($link) {
+	return str_replace('rel="author"', 'class="meta__item" rel="author"', $link);
+});
+
+
+// Single post nav links
+add_filter('wp_link_pages_link', function($link) {
+	return str_replace('href="', 'class="refers__link" href="', $link);
+}, 10, 2);
+
+
 // Update authors contact info
 add_filter('user_contactmethods', function($contact) {
 	$contact['vkontakte'] = __('Ссылка на ВКонтакте', 'knife-theme');
@@ -414,6 +426,9 @@ require get_template_directory() . '/inc/helpers/template-tags.php';
 
 // Add post settings rules and admin metaboxes
 require get_template_directory() . '/inc/helpers/post-settings.php';
+
+// Add plugins snippets
+require get_template_directory() . '/inc/helpers/plugin-snippets.php';
 
 // Add custom widgets defenitions
 require get_template_directory() . '/inc/widgets/recent.php';

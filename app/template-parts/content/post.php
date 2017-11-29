@@ -8,46 +8,52 @@
 ?>
 
 
-<article <?php post_class('entry'); ?> id="post-<?php the_ID(); ?>">
-	<header class="entry__header entry__block">
-		<div class="entry__header-meta meta">
-			<?php
-				if(function_exists('coauthors_posts_links')) :
-					coauthors_posts_links();
-				else :
-					the_author_posts_link();
-				endif;
-			?>
+<article <?php post_class('post'); ?> id="post-<?php the_ID(); ?>">
 
-			<time class="meta__item" datetime="<?php the_time('c'); ?>"><?php echo get_the_time('d F Y'); ?></time>
-		</div>
+	<header class="post__header">
+		<?php
+			knife_theme_meta([
+				'before' => '<div class="post__header-meta meta">',
+				'after' => '</div>',
+			]);
 
-		<?php the_title('<h1 class="entry__header-title">', '</h1>'); ?>
+			the_title(
+				'<h1 class="post__header-title">',
+				'</h1>'
+			);
 
-		<?php if(has_excerpt() && !in_category('news')) : ?>
-			<div class="entry__header-excerpt">
-				<?php the_excerpt(); ?>
-			</div>
-		<?php endif; ?>
+			knife_theme_excerpt([
+				'before' => '<div class="post__header-excerpt">',
+				'after' => '</div>'
+			]);
+		?>
 	</header>
 
-	<div class="entry__content custom">
+	<div class="post__content custom">
 		<?php the_content(); ?>
 	</div>
 
-	<footer class="entry__footer">
+	<footer class="post__footer">
 		<?php
-			wp_link_pages(['before' => '<div class="entry__navigation">', 'after' => '</div>', 'next_or_number' => 'next']);
+			wp_link_pages([
+				'before' => '<div class="post__footer-nav refers">',
+				'after' => '</div>',
+				'next_or_number' => 'next'
+			]);
 
-			/**
-			 * Print share buttons, terms and related posts
-			 */
-//			knife_theme_entry_share();
+			knife_theme_tags([
+				'before' => '<div class="post__footer-tags refers">',
+				'after' => '</div>',
+				'item' => '<a class="refers__link" href="%2$s">%1$s</a>',
+				'between' => ''
+			]);
 
-			// TODO: rework with knife_theme_tags
-//			knife_theme_entry_tags();
-
-//			knife_theme_entry_related();
+ 			knife_theme_related([
+				'before' => '<div class="post__footer-related refers">',
+				'after' => '</div>',
+				'title' =>  '<div class="refers__title">%s</div>',
+				'item' => '<div class="refers__item"><a class="refers__item-link" href="%1$s">%2$s</a></div>'
+			]);
 		?>
 	</footer>
 </article>

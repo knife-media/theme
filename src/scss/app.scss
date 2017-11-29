@@ -12,6 +12,7 @@
 @import "basic/block";
 @import "basic/wrap";
 @import "basic/meta";
+@import "basic/refers";
 
 @import "layout/header";
 @import "layout/content";
@@ -22,7 +23,7 @@
 @import "layout/footer";
 @import "layout/topline";
 @import "layout/unit";
-@import "layout/entry";
+@import "layout/post";
 @import "layout/custom";
 @import "layout/widget";
 @import "layout/search";
