@@ -26,17 +26,22 @@ function knife_theme_meta($args, $meta = '') {
 		'items' => ['author', 'date', 'category'],
 		'before' => '',
 		'after' => '',
+		'item_before' => '<span class="meta__item">',
+		'item_after' => '</span>',
+		'link_class' => 'meta__link',
 		'echo' => true
 	];
 
 	$args = wp_parse_args($args, $defaults);
 
 	foreach($args['items'] as $item) {
+		$meta .= $args['item_before'];
+
 		switch($item) {
 			case 'author':
 
 				if(function_exists('coauthors_posts_links'))
-					$meta .= coauthors_posts_links('', '', null, null, false);
+					$meta .= coauthors_posts_links(null, null, null, null, false);
 				else
 					$meta .= get_the_author_posts_link();
 
@@ -50,22 +55,26 @@ function knife_theme_meta($args, $meta = '') {
 					break;
 
 				$meta .= sprintf(
-					'<a class="meta__item" href="%1$s">%2$s</a>',
+					'<a class="%2$s" href="%1$s">%3$s</a>',
 					esc_url(get_category_link($cats[0]->term_id)),
+					esc_attr($args['link_class']),
 					sanitize_text_field($cats[0]->cat_name)
 				);
 
 				break;
 
 			case 'date':
+
  				$meta .= sprintf(
-					'<time class="meta__item" datetime="%1$s">%2$s</time>',
+					'<time datetime="%1$s">%2$s</time>',
 					get_the_time('c'),
 					get_the_time('d F Y')
 				);
 
 				break;
 		}
+
+		$meta .= $args['item_after'];
 	}
 
 	$meta = $args['before'] . $meta . $args['after'];
@@ -125,7 +134,7 @@ function knife_theme_tags($args, $list = '') {
 		'after' => '',
 		'item' => '%1$s',
 		'between' => ', ',
-		'count' => 99,
+		'count' => 100,
 		'echo' => true
 	];
 
@@ -171,7 +180,7 @@ function knife_theme_related($args, $list = '') {
 		'before' => '',
 		'after' => '',
 		'title' => '',
-		'item' => '<p>< href="%1$s">%2$s</p>',
+		'item' => '<p><a href="%1$s">%2$s</p>',
 		'echo' => true
 	];
 
@@ -197,7 +206,7 @@ function knife_theme_related($args, $list = '') {
 		return false;
 
 	foreach($items as $item) {
-		$list .= sprintf($args['item'], get_the_permalink($item->ID), get_the_title($item->ID));
+		$list .= sprintf($args['item'], get_the_title($item->ID), get_the_permalink($item->ID));
 	}
 
 	$list = $args['before'] . $title . $list . $args['after'];
@@ -213,41 +222,76 @@ function knife_theme_related($args, $list = '') {
 endif;
 
 
-if(!function_exists('knife_theme_entry_share')) :
+if(!function_exists('knife_theme_share')) :
 /**
- * Prints share buttons
- *
- * TODO: don't forget to rework this
+ * Prints social share buttons template
  *
  * @since 1.1
  */
 
-function knife_theme_entry_share() {
-?>
-<div class="entry__share">
-	<p class="entry__share-title"><?php _e('Поделиться в соцсетях:', 'knife-theme'); ?></p>
+function knife_theme_share($args, $list = '') {
+	$defaults = [
+		'before' => '',
+		'after' => '',
+		'title' => '<div class="share__title">%s</div>',
+		'text' => '<span class="share__text">%s</span>',
+		'item' => '<a class="share__link share__link--%3$s" href="%1$s" target="_blank">%2$s</a>',
+		'icon' => '<span class="icon icon--%s"></span>',
+		'echo' => true
+	];
 
-	<div class="entry__share-list">
-		<a class="entry__share-item entry__share-item--facebook" href="http://www.facebook.com/sharer/sharer.php?p[url]=<?php the_permalink(); ?>&p[title]=<?php the_title(); ?>" target="_blank">
-			<span class="icon icon--facebook"></span>
-			<span class="entry__share-action"><?php _e('Пошерить', 'knife-theme'); ?></span>
-		</a>
+	$args = wp_parse_args($args, $defaults);
 
-		<a class="entry__share-item entry__share-item--vkontakte" href="http://vk.com/share.php?url=<?php the_permalink(); ?>" target="_blank">
-			<span class="icon icon--vkontakte"></span>
-			<span class="entry__share-action"><?php _e('Поделиться', 'knife-theme'); ?></span>
-		</a>
+	$title = sprintf($args['title'], __('Поделиться в соцсетях: '));
 
-		<a class="entry__share-item entry__share-item--telegram" href="https://t.me/share/url?url=<?php the_permalink(); ?>&text=<?php the_title(); ?>" target="_blank">
-			<span class="icon icon--telegram">
-		</a>
+	$share_links = [
+		'facebook' => [
+			'link' => 'http://www.facebook.com/sharer/sharer.php?p[url]=%1$s&p[title]=%2$s',
+			'text' => __('Пошерить', 'knife-theme')
+		],
 
-		<a class="entry__share-item entry__share-item--twitter" href="https://twitter.com/intent/tweet?text=<?php the_title();?>&url=<?php the_permalink(); ?>" target="_blank">
-			<span class="icon icon--twitter">
-		</a>
-	</div>
-</div>
-<?php
+		'vkontakte' => [
+			'link' => 'http://vk.com/share.php?url=%1$s&text=%2$s',
+			'text' => __('Поделиться', 'knife-theme')
+		],
+
+		'telegram' => [
+			'link' => 'https://t.me/share/url?url=%1$s&text=%2$s',
+			'text' => null
+		],
+
+		'twitter' => [
+			'link' => 'https://twitter.com/intent/tweet?text=%2$s&url=%1$s',
+			'text' => null
+		]
+	];
+
+	$share_links = apply_filters('knife_theme_share_links', $share_links);
+
+	foreach($share_links as $network => $data) {
+		$item_text = !empty($data['text']) ? sprintf($args['text'], $data['text']) : '';
+		$item_icon = sprintf($args['icon'], $network);
+
+		$item_link = sprintf($data['text'],
+			get_permalink(),
+			get_the_title()
+		);
+
+		$list .= sprintf($args['item'],
+			esc_url($item_link),
+			$item_icon . $item_text,
+			esc_attr($network)
+		);
+	}
+
+	$list = $args['before'] . $title . $list . $args['after'];
+
+	$html = apply_filters('knife_theme_share', $list, $args);
+
+	if($args['echo'] === false)
+		return $html;
+
+	echo $html;
 }
 
 endif;

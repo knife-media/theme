@@ -16,7 +16,7 @@
  */
 
 add_filter('coauthors_posts_link', function($args) {
-	$args['class'] = 'meta__item';
+	$args['class'] = 'meta__link';
 
 	return $args;
 });

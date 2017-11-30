@@ -14,7 +14,7 @@
 		<?php
 			knife_theme_meta([
 				'before' => '<div class="post__header-meta meta">',
-				'after' => '</div>',
+				'after' => '</div>'
 			]);
 
 			the_title(
@@ -25,6 +25,12 @@
 			knife_theme_excerpt([
 				'before' => '<div class="post__header-excerpt">',
 				'after' => '</div>'
+			]);
+
+			knife_theme_share([
+				'before' => '<div class="post__header-share share">',
+				'after' => '</div>',
+				'title' => ''
 			]);
 		?>
 	</header>
@@ -38,7 +44,14 @@
 			wp_link_pages([
 				'before' => '<div class="post__footer-nav refers">',
 				'after' => '</div>',
-				'next_or_number' => 'next'
+				'next_or_number' => 'next',
+				'nextpagelink' => __('Следующая страница', 'knife-theme'),
+				'previouspagelink' => __('Назад', 'knife-theme')
+			]);
+
+			knife_theme_share([
+				'before' => '<div class="post__footer-share share">',
+				'after' => '</div>'
 			]);
 
 			knife_theme_tags([
@@ -52,7 +65,7 @@
 				'before' => '<div class="post__footer-related refers">',
 				'after' => '</div>',
 				'title' =>  '<div class="refers__title">%s</div>',
-				'item' => '<div class="refers__item"><a class="refers__item-link" href="%1$s">%2$s</a></div>'
+				'item' => '<div class="refers__item"><a class="refers__link" href="%2$s">%1$s</a></div>'
 			]);
 		?>
 	</footer>

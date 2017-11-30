@@ -1,0 +1,76 @@
+.share {
+		display: flex;
+		flex-flow: row wrap;
+		align-items: center;
+    justify-content: flex-start;
+
+    min-width: 100%;
+    margin-left: -2rem;
+    margin-right: -2rem;
+    padding: .5rem 2rem;
+
+    .share__title {
+      display: block;
+      cursor: default;
+
+      margin: .5rem 0;
+      padding-right: 1rem;
+
+      font-size: 1.375rem;
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: .25px;
+
+      @media screen and (max-width: 479px) {
+        font-size: 1.125rem;
+      }
+    }
+
+		.share__link {
+			display: flex;
+			align-items: center;
+
+      margin-right: .75rem;
+			padding: .375rem .375rem;
+			color: $color-white;
+      background: $color-black;
+
+			border-radius: 3px;
+
+			.icon {
+				font-size: 1.25rem;
+			}
+
+			&.share__link--vkontakte {
+				background-color: #5186bd;
+			}
+
+ 			&.share__link--facebook {
+				background-color: #3b5998;
+			}
+
+ 			&.share__link--twitter {
+				background-color: #1da1f2;
+			}
+
+ 			&.share__link--telegram {
+				background-color: #0088cc;
+			}
+
+      &:last-child {
+        margin-right: 0;
+      }
+		}
+
+    .share__text {
+			margin-left: .75rem;
+      padding-bottom: .075rem;
+		  font-size: .875rem;
+      font-weight: 300;
+      letter-spacing: .25px;
+
+      @media screen and (max-width: 767px) {
+        display: none;
+      }
+    }
+	}

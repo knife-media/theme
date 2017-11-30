@@ -11,9 +11,11 @@
   background-color: $color-sheet;
 
   .refers__link {
+    display: inline;
+
     margin: .5rem 0;
     font-size: 1.25rem;
-    line-height: 1.25;
+    line-height: 1.375;
     letter-spacing: .25px;
 
     border-bottom: solid 1px $color-black;
@@ -32,7 +34,7 @@
     cursor: default;
 
     width: 100%;
-    padding: 1rem 0;
+    padding: 1rem 2rem;
 
     font-size: 1.375rem;
     font-weight: 600;
@@ -49,6 +51,10 @@
   .refers__item {
     display: block;
 
+    width: 100%;
     margin-top: 2px;
+    padding: 1rem 2rem;
+
+    background-color: $color-sheet;
   }
 }
