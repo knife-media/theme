@@ -1,11 +1,11 @@
 .post {
   display: flex;
   flex-flow: column wrap;
-  flex: 1 1 0;
+  flex: 1 1 42.25rem;
   position: relative;
 
   margin-bottom: 1rem;
-  padding: 2rem;
+  padding: 2rem 1rem;
   overflow: hidden;
   color: $color-text;
   background-color: $color-white;
@@ -15,7 +15,7 @@
     position: relative;
 
     width: 100%;
-    max-width: 43.75rem;
+    max-width: $content-width;
     margin: 0 auto 1rem;
 
     .post__header-meta {
@@ -37,7 +37,7 @@
 
       @media screen and (max-width: 767px) {
         margin-bottom: .75rem;
-        font-size: 1.5rem;
+        font-size: 1.625rem;
         line-height: 1.125;
       }
     }
@@ -52,14 +52,20 @@
       font-size: 1.125rem;
       font-weight: 500;
     }
+
+    .post__header-share {
+      @media screen and (max-width: 767px) {
+        display: none;
+      }
+    }
   }
 
   .post__footer {
     display: block;
 
     width: 100%;
-    max-width: 43.75rem;
-    margin: 2rem auto 1rem;
+    max-width: $content-width;
+    margin: 1rem auto;
 
     .post__footer-nav {
       .refers__link:first-child {
@@ -70,6 +76,10 @@
     .post__footer-tags {
       .refers__link {
         margin-right: 2.5rem;
+
+        @media screen and (max-width: 479px) {
+          margin-right: 1.5rem;
+        }
       }
     }
 
@@ -84,6 +94,14 @@
 
       background-color: $color-sheet;
     }
+  }
+
+  .post__content {
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+
+    width: 100%;
   }
 
 

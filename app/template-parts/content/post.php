@@ -57,15 +57,12 @@
 			knife_theme_tags([
 				'before' => '<div class="post__footer-tags refers">',
 				'after' => '</div>',
-				'item' => '<a class="refers__link" href="%2$s">%1$s</a>',
-				'between' => ''
+				'item' => '<a class="refers__link" href="%2$s">%1$s</a>'
 			]);
 
  			knife_theme_related([
 				'before' => '<div class="post__footer-related refers">',
-				'after' => '</div>',
-				'title' =>  '<div class="refers__title">%s</div>',
-				'item' => '<div class="refers__item"><a class="refers__link" href="%2$s">%1$s</a></div>'
+				'after' => '</div>'
 			]);
 		?>
 	</footer>

@@ -6,14 +6,6 @@
   padding-top: 1rem;
   padding-bottom: 0;
 
-  &.content--feature {
-    flex-flow: row nowrap;
-
-    @media screen and (max-width: 1079px) {
-      flex-flow: row wrap;
-    }
-  }
-
   @media screen and (max-width: 479px) {
     padding-left: 0;
     padding-right: 0;

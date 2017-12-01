@@ -8,21 +8,29 @@
 ?>
 
 <article class="unit unit--triple">
-	<?php echo knife_theme_category_link('unit__head') ?>
+	<?php
+		knife_theme_meta([
+			'items' => ['category'],
+			'link_class' => 'unit__head'
+		]);
+	?>
 
 	<a class="unit__link" href="<?php the_permalink(); ?>">
 		<div class="unit__image">
-			<?php the_post_thumbnail('triple-thumbnail', ['class' => 'unit__image-thumbnail']); ?>
+			<?php the_post_thumbnail('triple', ['class' => 'unit__image-thumbnail']); ?>
 		</div>
 
 		<footer class="unit__footer">
-			<?php the_title('<p class="unit__title">', '</p>'); ?>
+			<?php
+				the_title('<p class="unit__title">', '</p>');
 
-			<div class="unit__meta">
-				<time class="unit__meta-item" datetime="<?php the_time(DATE_W3C); ?>"><?php echo get_the_date(); ?></time>
-
- 				<span class="unit__meta-item"><?php knife_theme_authors(); ?></span>
-			</div>
+				knife_theme_meta([
+					'items' => ['author', 'date'],
+					'before' => '<div class="unit__meta meta">',
+					'after' => '</div>',
+					'is_link' => false
+				]);
+			?>
 		</footer>
 	</a>
 </article>

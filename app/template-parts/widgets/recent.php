@@ -10,17 +10,17 @@
 ?>
 
 <article class="widget__item">
+	<?php
+		knife_theme_meta([
+			'items' => ['date', 'tag'],
+			'before' => '<div class="widget__header meta">',
+			'after' => '</div>'
+		]);
 
-	<div class="widget__header">
-		<time class="widget__meta" datetime="<?php the_time('c'); ?>"><?php the_time('d F Y');?></time>
-
-		<?php $tags = get_the_tags(); ?>
-
-		<?php // TODO: use 247 line ?>
-		<?php if(isset($tags[0])) : ?>
-		<a class="widget__meta" href="<?php echo get_tag_link($tags[0]->term_id); ?>"><?php echo $tags[0]->name; ?></a>
-		<?php endif; ?>
-	</div>
-
-	<a class="widget__link" href="<?php the_permalink();?>"><?php the_title(); ?></a>
+		printf(
+			'<a class="widget__link" href="%1$s">%2$s</a>',
+			get_permalink(),
+			get_the_title()
+		)
+	?>
 </article>

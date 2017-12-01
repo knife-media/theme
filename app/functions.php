@@ -7,13 +7,13 @@
  * hooks in WordPress to change core functionality.
  *
  * @package knife-theme
- * @since 1.1
+ * @since 1.01
  */
 
 
 // We have to install this value
 if(!isset($content_width)) {
-	$content_width = 700;
+	$content_width = 1024;
 }
 
 // Insert required js files
@@ -28,9 +28,8 @@ add_action('wp_enqueue_scripts', function() {
 add_action('wp_print_styles', function() {
 	$version = wp_get_theme()->get('Version');
 
-   	wp_enqueue_style('knife-theme', get_template_directory_uri() . '/assets/styles.min.css', [], $version);
+	wp_enqueue_style('knife-theme', get_template_directory_uri() . '/assets/styles.min.css', [], $version);
 });
-
 
 
 // Rewrite urls after switch theme just in case
@@ -67,12 +66,12 @@ add_action('after_setup_theme', function(){
 	add_theme_support('post-thumbnails');
 	set_post_thumbnail_size(300, 300, true);
 
-	add_image_size('outer-thumbnail', 1024, 9999, false);
- 	add_image_size('inner-thumbnail', 700, 9999, false);
+	add_image_size('outer', 1024, 9999, false);
+ 	add_image_size('inner', 640, 9999, false);
 
-	add_image_size('triple-thumbnail', 480, 360, true);
-	add_image_size('double-thumbnail', 800, 600, true);
-	add_image_size('single-thumbnail', 1200, 360, true);
+	add_image_size('triple', 480, 360, true);
+	add_image_size('double', 800, 600, true);
+	add_image_size('single', 1200, 360, true);
 });
 
 
@@ -81,8 +80,8 @@ add_filter('image_size_names_choose', function($size_names) {
 	global $_wp_additional_image_sizes;
 
 	$size_names = array(
-		'outer-thumbnail' => __('На всю ширину', 'knife-theme'),
- 		'inner-thumbnail' => __('По ширине текста', 'knife-theme')
+		'outer' => __('На всю ширину', 'knife-theme'),
+ 		'inner' => __('По ширине текста', 'knife-theme')
 	);
 
 	return $size_names;
@@ -97,9 +96,9 @@ add_filter('intermediate_image_sizes', function($def_sizes) {
 	return $def_sizes;
 });
 
-add_filter('get_image_tag_class', function($class, $id, $align, $size) {
-	  return 'align' . esc_attr($align) .' size-' . esc_attr($size);
-}, 0, 4);
+
+// Disable wordpress captions to replace them by own
+add_filter('disable_captions', '__return_true');
 
 
 // Remove useless image attributes
@@ -107,21 +106,42 @@ add_filter('post_thumbnail_html', function($html) {
 	return preg_replace('/(width|height)="\d*"\s/', "", $html);
 }, 10);
 
-add_filter('disable_captions', '__return_true');
+add_filter('get_image_tag', function($html) {
+	return preg_replace('/(width|height)="\d*"\s/', "", $html);
+}, 10);
 
+add_filter('get_image_tag_class', function($class, $id, $align, $size) {
+	  return 'figure__image';
+}, 0, 4);
+
+
+// Wrap all images in editor with figure
 add_filter('image_send_to_editor', function($html, $id, $caption, $title, $align, $url, $size, $alt) {
-	 $image_tag = get_image_tag($id, '', $title, $align, $size);
- $url = wp_get_attachment_url($id);
- $html5 = "<figure class='align-$align size-$size'>";
-  $html5 .= $image_tag;
-  if ($caption) {
-    $html5 .= "<figcaption>$caption</figcaption>";
-  }
-  $html5 .= "</figure>";
-  return $html5;
+  $html = get_image_tag($id, $alt, '', $align, $size);
+
+	if($url)
+		$html = '<a href="' . esc_attr( $url ) . '">' . $html . '</a>';
+
+	if($caption)
+		$html = $html . '<figcaption class="figure__caption">' . $caption . '</figcaption>';
+
+	$html = '<figure class="figure figure--' . $size . ' figure--' . $align . '">' . $html . '</figure>';
+
+  return $html;
 }, 10, 9);
 
 
+// Default embed width
+add_filter('embed_defaults', function() {
+	return ['width' => 640, 'height' => 525];
+});
+
+
+add_filter('embed_oembed_html', function($html, $url, $attr) {
+	$html = '<figure class="figure figure--embed">' . $html . '</figure>';
+
+	return $html;
+}, 10, 3);
 
 
 // Add theme menus

@@ -1,0 +1,187 @@
+.custom {
+  line-height: 1.65;
+  letter-spacing: .25px;
+
+	& > * {
+		max-width: $content-width;
+		width: 100%;
+	}
+
+  p {
+    margin-top: 1rem;
+
+    line-height: 1.65;
+    font-size: 1rem;
+    font-weight: 400;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    @media screen and (max-width: 767px) {
+      font-size: .9375rem;
+    }
+  }
+
+	a {
+		color: $color-primary;
+
+		&:hover {
+			color: $color-light;
+		}
+	}
+
+	img {
+		display: block;
+	}
+
+	h1 {
+    margin: 2.25rem 0 0;
+    font-size: 2.25rem;
+ 		line-height: 1.125;
+		letter-spacing: .5px;
+
+		@media screen and (max-width: 767px) {
+  		margin-top: 1.625rem;
+			font-size: 1.625rem;
+		}
+  }
+
+  h2 {
+    margin: 1.875rem 0 0;
+    font-size: 1.875rem;
+    line-height: 1.125;
+		letter-spacing: .5px;
+
+ 		@media screen and (max-width: 767px) {
+ 			margin-top: 1.5rem;
+			font-size: 1.5rem;
+		}
+  }
+
+  h3 {
+    margin: 1.625rem 0 0;
+    font-size: 1.625rem;
+    line-height: 1.125;
+		letter-spacing: .5px;
+
+  	@media screen and (max-width: 767px) {
+			margin-top: 1.375rem;
+			font-size: 1.375rem;
+		}
+  }
+
+	h4, h5, h6 {
+		font-weight: bold;
+		line-height: 1.25;
+		letter-spacing: .25px;
+	}
+
+  h4 {
+		margin: 1.5rem 0 0;
+    font-size: 1.5rem;
+
+		@media screen and (max-width: 767px) {
+			margin-top: 1.25rem;
+			font-size: 1.25rem;
+		}
+  }
+
+ 	h5 {
+		margin: 1.375rem 0 0;
+    font-size: 1.375rem;
+
+ 		@media screen and (max-width: 767px) {
+			margin-top: 1rem;
+			font-size: 1rem;
+		}
+  }
+
+  h6 {
+		margin: 1.25rem 0 0;
+    font-size: 1.25rem;
+
+  	@media screen and (max-width: 767px) {
+			margin-top: 1.125rem;
+			font-size: 1.125rem;
+		}
+  }
+
+	hr {
+		display: block;
+
+		width: 100%;
+		margin-top: 1rem;
+		margin-bottom: 1rem;
+
+		border: 0;
+		border-top: 1px solid rgba(0, 0, 0, 0.2);
+	}
+
+	ul {
+		margin: 0;
+		padding-left: 2.5rem;
+
+		list-style-type: disc;
+
+		li {
+			margin: .125rem .375rem;
+		}
+	}
+
+	ol {
+		margin: 0;
+		padding-left: 2.5rem;
+
+		list-style-type: decimal;
+
+		li {
+			margin: .125rem .375rem;
+		}
+	}
+
+  strong {
+    font-weight: 600;
+  }
+
+  b {
+    font-weight: 600;
+  }
+
+	em {
+		font-style: italic;
+	}
+
+	i {
+		font-style: italic;
+	}
+
+  pre {
+		display: block;
+
+		padding: .5rem 1rem;
+
+		font-family: monospace;
+		font-size: 1rem;
+		background-color: $color-sheet;
+		white-space: pre;
+		overflow-x: auto;
+
+		border-left: solid 3px $color-primary;
+  }
+
+	table {
+		overflow-x: auto;
+	}
+
+	figcaption {
+		display: block;
+
+		color: rgba(0, 0, 0, 0.5);
+		font-size: .875rem;
+		font-weight: 300;
+		line-height: 1.25;
+		font-style: italic;
+		text-align: right;
+	}
+}

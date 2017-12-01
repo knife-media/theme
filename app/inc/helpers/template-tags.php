@@ -16,12 +16,11 @@ if(!function_exists('knife_theme_meta')) :
 /**
  * Prints post meta info
  *
- * Shows post date, authors, category and optional tags
+ * Post date, authors, category and optional tags
  *
  * @since 1.1
  */
-
-function knife_theme_meta($args, $meta = '') {
+function knife_theme_meta($args, $html = '') {
 	$defaults = [
 		'items' => ['author', 'date', 'category'],
 		'before' => '',
@@ -29,21 +28,33 @@ function knife_theme_meta($args, $meta = '') {
 		'item_before' => '<span class="meta__item">',
 		'item_after' => '</span>',
 		'link_class' => 'meta__link',
+		'is_link' => true,
 		'echo' => true
 	];
 
 	$args = wp_parse_args($args, $defaults);
 
 	foreach($args['items'] as $item) {
-		$meta .= $args['item_before'];
+		$html .= $args['item_before'];
 
 		switch($item) {
 			case 'author':
 
-				if(function_exists('coauthors_posts_links'))
-					$meta .= coauthors_posts_links(null, null, null, null, false);
-				else
-					$meta .= get_the_author_posts_link();
+				if($args['is_link'] === true) :
+
+					if(function_exists('coauthors_posts_links'))
+						$html .= coauthors_posts_links(null, null, null, null, false);
+					else
+						$html .= get_the_author_posts_link();
+
+				else :
+
+ 					if(function_exists('coauthors'))
+						$html .= coauthors(null, null, null, null, false);
+					else
+						$html .= get_the_author();
+
+				endif;
 
 				break;
 
@@ -54,32 +65,63 @@ function knife_theme_meta($args, $meta = '') {
 				if(!isset($cats[0]))
 					break;
 
-				$meta .= sprintf(
-					'<a class="%2$s" href="%1$s">%3$s</a>',
-					esc_url(get_category_link($cats[0]->term_id)),
-					esc_attr($args['link_class']),
-					sanitize_text_field($cats[0]->cat_name)
-				);
+				if($args['is_link'] === true) :
+
+					$html .= sprintf(
+						'<a class="%2$s" href="%1$s">%3$s</a>',
+						esc_url(get_category_link($cats[0]->term_id)),
+						esc_attr($args['link_class']),
+						sanitize_text_field($cats[0]->cat_name)
+					);
+
+				else :
+
+					$html .= sanitize_text_field($cats[0]->cat_name);
+
+				endif;
 
 				break;
 
 			case 'date':
 
- 				$meta .= sprintf(
+ 				$html .= sprintf(
 					'<time datetime="%1$s">%2$s</time>',
 					get_the_time('c'),
-					get_the_time('d F Y')
+					get_the_time('j F Y')
 				);
+
+				break;
+
+			case 'tag' :
+
+				if($args['is_link'] === true) :
+
+					$html .= knife_theme_tags([
+						'item' => '<a class="' . esc_attr($args['link_class']) . '" href="%2$s">%1$s</a>',
+						'count' => 1,
+						'echo' => false
+					]);
+
+				else:
+
+					$html .= knife_theme_tags([
+						'item' => '%1$s',
+						'count' => 1,
+						'echo' => false
+					]);
+
+				endif;
 
 				break;
 		}
 
-		$meta .= $args['item_after'];
+		$html .= $args['item_after'];
 	}
 
-	$meta = $args['before'] . $meta . $args['after'];
+	$html = $args['before'] . $html . $args['after'];
 
-	$html = apply_filters('knife_theme_meta', $meta, $args);
+  	// Filter result html before return
+	$html = apply_filters('knife_theme_meta', $html, $args);
 
 	if($args['echo'] === false)
 		return $html;
@@ -98,7 +140,6 @@ if(!function_exists('knife_theme_excerpt')) :
  *
  * @since 1.1
  */
-
 function knife_theme_excerpt($args) {
   	$defaults = [
 		'before' => '',
@@ -111,6 +152,7 @@ function knife_theme_excerpt($args) {
 	if(!has_excerpt())
 		return false;
 
+  	// Filter result html before return
 	$html = $args['before'] . apply_filters('the_excerpt', get_the_excerpt()) . $args['after'];
 
 	if($args['echo'] === false)
@@ -128,12 +170,12 @@ if(!function_exists('knife_theme_tags')) :
  *
  * @since 1.1
  */
-function knife_theme_tags($args, $list = '') {
+function knife_theme_tags($args, $html = '') {
  	$defaults = [
 		'before' => '',
 		'after' => '',
 		'item' => '%1$s',
-		'between' => ', ',
+		'between' => '',
 		'count' => 100,
 		'echo' => true
 	];
@@ -148,16 +190,17 @@ function knife_theme_tags($args, $list = '') {
 		if($args['count'] <= $i)
 			continue;
 
-		$list .= sprintf($args['item'], sanitize_text_field($tag->name), get_tag_link($tag->term_id));
+		if($i > 0)
+			$html .= $args['between'];
 
-		if(count($tags) > $i + 1)
-			$list .= $args['between'];
+		$html .= sprintf($args['item'], sanitize_text_field($tag->name), get_tag_link($tag->term_id));
 	}
 
 
-	$list = $args['before'] . $list . $args['after'];
+	$html = $args['before'] . $html . $args['after'];
 
-	$html = apply_filters('knife_theme_tags', $list, $args);
+ 	// Filter result html before return
+	$html = apply_filters('knife_theme_tags', $html, $args);
 
 	if($args['echo'] === false)
 		return $html;
@@ -174,13 +217,12 @@ if(!function_exists('knife_theme_related')) :
  *
  * @since 1.1
  */
-
-function knife_theme_related($args, $list = '') {
+function knife_theme_related($args, $html = '') {
 	$defaults = [
 		'before' => '',
 		'after' => '',
-		'title' => '',
-		'item' => '<p><a href="%1$s">%2$s</p>',
+		'title' => '<div class="refers__title">%s</div>',
+		'item' => '<div class="refers__item"><a class="refers__link" href="%2$s">%1$s</a></div>',
 		'echo' => true
 	];
 
@@ -206,12 +248,13 @@ function knife_theme_related($args, $list = '') {
 		return false;
 
 	foreach($items as $item) {
-		$list .= sprintf($args['item'], get_the_title($item->ID), get_the_permalink($item->ID));
+		$html .= sprintf($args['item'], get_the_title($item->ID), get_the_permalink($item->ID));
 	}
 
-	$list = $args['before'] . $title . $list . $args['after'];
+	$html = $args['before'] . $title . $html . $args['after'];
 
- 	$html = apply_filters('knife_theme_related', $list, $args);
+	// Filter result html before return
+ 	$html = apply_filters('knife_theme_related', $html, $args);
 
 	if($args['echo'] === false)
 		return $html;
@@ -228,8 +271,7 @@ if(!function_exists('knife_theme_share')) :
  *
  * @since 1.1
  */
-
-function knife_theme_share($args, $list = '') {
+function knife_theme_share($args, $html = '') {
 	$defaults = [
 		'before' => '',
 		'after' => '',
@@ -242,7 +284,7 @@ function knife_theme_share($args, $list = '') {
 
 	$args = wp_parse_args($args, $defaults);
 
-	$title = sprintf($args['title'], __('Поделиться в соцсетях: '));
+	$title = sprintf($args['title'], __('Поделиться в соцсетях:'));
 
 	$share_links = [
 		'facebook' => [
@@ -272,21 +314,22 @@ function knife_theme_share($args, $list = '') {
 		$item_text = !empty($data['text']) ? sprintf($args['text'], $data['text']) : '';
 		$item_icon = sprintf($args['icon'], $network);
 
-		$item_link = sprintf($data['text'],
+		$item_link = sprintf($data['link'],
 			get_permalink(),
 			get_the_title()
 		);
 
-		$list .= sprintf($args['item'],
+		$html .= sprintf($args['item'],
 			esc_url($item_link),
 			$item_icon . $item_text,
 			esc_attr($network)
 		);
 	}
 
-	$list = $args['before'] . $title . $list . $args['after'];
+	$html = $args['before'] . $title . $html . $args['after'];
 
-	$html = apply_filters('knife_theme_share', $list, $args);
+  	// Filter result html before return
+	$html = apply_filters('knife_theme_share', $html, $args);
 
 	if($args['echo'] === false)
 		return $html;
@@ -297,5 +340,42 @@ function knife_theme_share($args, $list = '') {
 endif;
 
 
+if(!function_exists('knife_theme_post_meta')) :
+/**
+ * Prints single post meta by post ID
+ *
+ * @since 1.1
+ */
+function knife_theme_post_meta($args) {
+	global $post;
 
+	$defaults = [
+		'before' => '',
+		'after' => '',
+		'meta' => '',
+		'item' => '%s',
+		'post_id' => $post->ID,
+		'echo' => true
+	];
 
+	$args = wp_parse_args($args, $defaults);
+
+	$meta = get_post_meta($args['post_id'], $args['meta'], true);
+
+	if(empty($meta))
+		return false;
+
+	$item = sprintf($args['item'], $meta);
+
+	$html = $args['before'] . $item . $args['after'];
+
+  	// Filter result html before return
+	$html = apply_filters('knife_theme_post_meta', $html, $args);
+
+	if($args['echo'] === false)
+		return $html;
+
+	echo $html;
+}
+
+endif;

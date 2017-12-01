@@ -10,5 +10,11 @@
 ?>
 
 <article class="widget__item">
-	<a class="widget__link" href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+	<?php
+		printf(
+			'<a class="widget__link" href="%1$s">%2$s</a>',
+			get_permalink(),
+			get_the_title()
+		)
+	?>
 </article>

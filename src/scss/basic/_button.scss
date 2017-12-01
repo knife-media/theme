@@ -1,0 +1,20 @@
+.button {
+  display: inline-block;
+
+  margin: 1rem 0;
+  padding: 1rem 3rem;
+  font-size: 1rem;
+  line-height: 1.375;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+
+  color: $color-white !important;
+  background-color: $color-primary;
+
+  border: solid 1px $color-primary;
+  border-radius: 5px;
+
+  &:hover {
+    filter: brightness(125%);
+  }
+}

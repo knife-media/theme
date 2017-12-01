@@ -16,6 +16,8 @@ $color-author-finish: #67e3d6;
 
 $font-regular: "Formular", "Helvetica Neue Light", "Arial", sans-serif;
 
+$content-width: 40rem;
+
 
 body {
   display: block;
@@ -46,6 +48,10 @@ a {
 
   cursor: pointer;
   outline: none;
+
+  time {
+    cursor: pointer;
+  }
 
   &:hover {
     color: $color-primary;
@@ -81,6 +87,6 @@ img {
   color: grey;
 }
 
-h1, h2, h3 {
+h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
 }

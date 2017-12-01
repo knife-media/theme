@@ -16,13 +16,13 @@ get_header(); ?>
 
 	<?php if(is_active_sidebar('knife-feature')) : ?>
 
-		<div class="content content--feature block">
+		<div class="content block">
 			<div class="feature">
 				<?php dynamic_sidebar('knife-feature'); ?>
 			</div>
 
 			<?php if(is_active_sidebar('knife-feature-sidebar')) : ?>
-			<aside class="sidebar">
+			<aside class="sidebar sidebar--feature">
 				<?php dynamic_sidebar('knife-feature-sidebar'); ?>
 			</aside>
 			<?php endif; ?>
