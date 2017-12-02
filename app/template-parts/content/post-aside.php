@@ -7,49 +7,62 @@
  */
 ?>
 
-<div class="entry">
-	<article <?php post_class(); ?> id="post-<?php the_ID(); ?>">
+<article <?php post_class('post'); ?> id="post-<?php the_ID(); ?>">
 
-		<header class="entry__header">
-			<?php
-				/**
-				* Prints entry author, category and date
-				*/
-				knife_theme_entry_header();
-			?>
-		</header>
-
-		<?php the_title('<h1 class="entry__title">', '</h1>'); ?>
-
-		<?php if(has_excerpt() && !in_category('news')) : ?>
-		<div class="entry__excerpt">
-		  <?php the_excerpt(); ?>
-		</div>
-		<?php endif; ?>
-
+	<header class="post__header">
 		<?php
-			/**
-			 * Print share buttons
-			 */
-			knife_theme_entry_share();
+			knife_theme_meta([
+				'before' => '<div class="post__header-meta meta">',
+				'after' => '</div>'
+			]);
+
+			the_title(
+				'<h1 class="post__header-title">',
+				'</h1>'
+			);
+
+			knife_theme_excerpt([
+				'before' => '<div class="post__header-excerpt">',
+				'after' => '</div>'
+			]);
+
+			knife_theme_share([
+				'before' => '<div class="post__header-share share">',
+				'after' => '</div>',
+				'title' => ''
+			]);
 		?>
+	</header>
 
-		<div class="entry__content custom">
-			<?php the_content(); ?>
-		</div>
+	<div class="post__content custom">
+		<?php the_content(); ?>
+	</div>
 
+	<footer class="post__footer">
 		<?php
-			 wp_link_pages(['before' => '<div class="entry__navigation">', 'after' => '</div>', 'next_or_number' => 'next']);
+			wp_link_pages([
+				'before' => '<div class="post__footer-nav refers">',
+				'after' => '</div>',
+				'next_or_number' => 'next',
+				'nextpagelink' => __('Следующая страница', 'knife-theme'),
+				'previouspagelink' => __('Назад', 'knife-theme')
+			]);
 
-			/**
-			 * Print share buttons, terms and related posts
-			 */
-			knife_theme_entry_share();
+			knife_theme_share([
+				'before' => '<div class="post__footer-share share">',
+				'after' => '</div>'
+			]);
 
-			// TODO: rework with knife_theme_tags
-			knife_theme_entry_tags();
+			knife_theme_tags([
+				'before' => '<div class="post__footer-tags refers">',
+				'after' => '</div>',
+				'item' => '<a class="refers__link" href="%2$s">%1$s</a>'
+			]);
 
-			knife_theme_entry_related();
+ 			knife_theme_related([
+				'before' => '<div class="post__footer-related refers">',
+				'after' => '</div>'
+			]);
 		?>
-	</article>
-</div>
+	</footer>
+</article>

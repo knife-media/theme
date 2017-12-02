@@ -7,7 +7,7 @@
  */
 ?>
 
-<article class="unit unit--single">
+<article class="unit unit--single unit--cover">
 	<?php
 		knife_theme_meta([
 			'items' => ['category'],

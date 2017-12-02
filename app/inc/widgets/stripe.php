@@ -10,21 +10,21 @@
 
 
 class Knife_Stripe_Widget extends WP_Widget {
-    public function __construct() {
-        $widget_ops = [
-            'classname' => 'stripe',
-            'description' => __('Выводит полосу постов по заданному критерию в виде карточек.', 'knife-theme'),
+	public function __construct() {
+		$widget_ops = [
+			'classname' => 'stripe',
+			'description' => __('Выводит полосу постов по заданному критерию в виде карточек.', 'knife-theme'),
 			'customize_selective_refresh' => true
-        ];
+		];
 
-        parent::__construct('knife_theme_stripe', __('[НОЖ] Карточки постов', 'knife-theme'), $widget_ops);
-    }
+		parent::__construct('knife_theme_stripe', __('[НОЖ] Карточки постов', 'knife-theme'), $widget_ops);
+	}
 
 
-    /**
-     * Outputs the content of the widget
-     */
-    public function widget($args, $instance) {
+	/**
+	 * Outputs the content of the widget
+	 */
+	public function widget($args, $instance) {
  		$defaults = ['title' => '', 'posts_per_page' => 10, 'cat' => 0, 'template' => 'triple'];
 		$instance = wp_parse_args((array) $instance, $defaults);
 
@@ -59,14 +59,14 @@ class Knife_Stripe_Widget extends WP_Widget {
 			wp_reset_query();
 
 		endif;
-    }
+  }
 
 
-    /**
-     * Outputs the options form on admin
-     */
-    function form($instance) {
-		$defaults = ['title' => '', 'posts_per_page' => 10, 'cat' => 0, 'template' => 'triple'];
+	/**
+	 * Outputs the options form on admin
+	 */
+	function form($instance) {
+		$defaults = ['title' => '', 'posts_per_page' => 10, 'cat' => 0, 'template' => 'triple', 'cover' => 0];
 		$instance = wp_parse_args((array) $instance, $defaults);
 
 		$template = [
@@ -145,20 +145,20 @@ class Knife_Stripe_Widget extends WP_Widget {
 	}
 
 
-    /**
-     * Processing widget options on save
-     */
-    public function update($new_instance, $old_instance) {
+	/**
+	 * Processing widget options on save
+	 */
+  public function update($new_instance, $old_instance) {
 		$instance = $old_instance;
 
- 		$instance['cat'] = (int) $new_instance['cat'];
+		$instance['cat'] = (int) $new_instance['cat'];
 		$instance['posts_per_page'] = (int) $new_instance['posts_per_page'];
 		$instance['title'] = sanitize_text_field($new_instance['title']);
- 		$instance['template'] = sanitize_text_field($new_instance['template']);
-  		$instance['cover'] = sanitize_text_field($new_instance['cover']);
+		$instance['template'] = sanitize_text_field($new_instance['template']);
+		$instance['cover'] = sanitize_text_field($new_instance['cover']);
 
-        return $instance;
-    }
+		return $instance;
+	}
 }
 
 
