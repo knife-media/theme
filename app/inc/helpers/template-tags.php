@@ -92,6 +92,12 @@ function knife_theme_meta($args, $html = '') {
 
 				break;
 
+			case 'time':
+
+ 				$html .= get_the_time();
+
+				break;
+
 			case 'tag' :
 
 				if($args['is_link'] === true) :
@@ -108,6 +114,30 @@ function knife_theme_meta($args, $html = '') {
 						'item' => '%1$s',
 						'count' => 1,
 						'echo' => false
+					]);
+
+				endif;
+
+				break;
+
+			case 'tags' :
+
+				if($args['is_link'] === true) :
+
+					$html .= knife_theme_tags([
+						'item' => '<a class="' . esc_attr($args['link_class']) . '" href="%2$s">%1$s</a>',
+						'count' => 3,
+						'echo' => false,
+						'between' => ', '
+					]);
+
+				else:
+
+					$html .= knife_theme_tags([
+						'item' => '%1$s',
+						'count' => 3,
+						'echo' => false,
+ 						'between' => ', '
 					]);
 
 				endif;

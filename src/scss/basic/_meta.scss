@@ -8,7 +8,9 @@
   .meta__item {
     display: inline-block;
 
+    overflow: hidden;
     white-space: nowrap;
+    text-overflow: ellipsis;
 
     &:before {
       content: "•";
@@ -16,6 +18,10 @@
 
       margin-left: .5rem;
       margin-right: .5rem;
+    }
+
+    &:last-child {
+      flex: 1;
     }
 
     &:first-child:before {
