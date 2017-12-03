@@ -380,7 +380,7 @@ add_action('widgets_init', function(){
 
 	register_sidebar([
 		'name'          => __('Телевизор на главной', 'knife-theme'),
-		'id'            => 'knife-feature',
+		'id'            => 'knife-feature-units',
 		'description'   => __('Добавленные виджеты появятся в телевизоре на главной странице.', 'knife-theme'),
 		'before_widget' => '<div class="widget widget--%2$s">',
 		'after_widget'  => '</div>',
@@ -402,7 +402,7 @@ add_action('widgets_init', function(){
 		'name'          => __('Сайдбар на главной', 'knife-theme'),
 		'id'            => 'knife-feature-sidebar',
 		'description'   => __('Добавленные виджеты появятся справа от телевизона.', 'knife-theme'),
-		'before_widget' => '<div class="widget widget--%2$s">',
+		'before_widget' => '<div class="widget widget--feature widget--%2$s">',
 		'after_widget'  => '</div>',
 		'before_title'  => '<p class="widget__title">',
 		'after_title'   => '</p>',

@@ -14,15 +14,15 @@ get_header(); ?>
 
 <main class="wrap">
 
-	<?php if(is_active_sidebar('knife-feature')) : ?>
+	<?php if(is_active_sidebar('knife-feature-units')) : ?>
 
 		<div class="content block">
-			<div class="feature">
-				<?php dynamic_sidebar('knife-feature'); ?>
+			<div class="feature feature--units">
+				<?php dynamic_sidebar('knife-feature-units'); ?>
 			</div>
 
 			<?php if(is_active_sidebar('knife-feature-sidebar')) : ?>
-			<aside class="sidebar sidebar--feature">
+			<aside class="feature feature--sidebar">
 				<?php dynamic_sidebar('knife-feature-sidebar'); ?>
 			</aside>
 			<?php endif; ?>

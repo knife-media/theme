@@ -72,6 +72,8 @@
       background-color: transparent;
 
       @media screen and (max-width: 1023px) {
+        justify-content: space-between;
+
         max-width: 100%;
       }
     }

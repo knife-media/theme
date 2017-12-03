@@ -8,29 +8,6 @@
   padding-left: 1rem;
   color: $color-text;
 
-  &.sidebar--feature {
-    .widget {
-      .widget__item {
-        @media screen and (max-width: 1199px) {
-          width: calc(100% / 3 - .625rem);
-        }
-
-        @media screen and (max-width: 1023px) {
-          width: calc(50% - .5rem);
-        }
-
-        @media screen and (max-width: 479px) {
-          width: 100%;
-        }
-      }
-    }
-
-    @media screen and (max-width: 1199px) {
-      flex: 1 1 auto;
-      padding-left: 0;
-    }
-  }
-
   @media screen and (max-width: 1023px) {
     flex: 1 1 auto;
     padding-left: 0;
