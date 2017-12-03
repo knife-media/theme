@@ -2,7 +2,7 @@
 /**
  * Stripe widget
  *
- * Include different size units
+ * Include different size stripes
  *
  * @package knife-theme
  * @since 1.1
@@ -37,22 +37,21 @@ class Knife_Stripe_Widget extends WP_Widget {
 			'ignore_sticky_posts' => 1,
 		]);
 
+
 		if($q->have_posts()) :
 
  			while($q->have_posts()) : $q->the_post();
-// TODO: Rework
-				$cover = get_post_meta(get_the_ID(), '_knife-theme-cover', true);
-		$class = ['unit'];
+				$settings = ['widget--stripe'];
 
-				if($cover)
-					$class[] = 'unit--cover';
+				if(isset($args['widget_class']))
+					$settings[] = $args['widget_class'];
 
-				$class[] = 'unit--' . $template;
+				$settings[] = 'widget--' . $template;
 
-				set_query_var('unit_class', $class);
+				set_query_var('widget_settings', $settings);
+ 				set_query_var('widget_thumbnail', $template);
 
-
-				get_template_part('template-parts/units/' . $template);
+				get_template_part('template-parts/widgets/stripe');
 
  			endwhile;
 

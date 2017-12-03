@@ -14,11 +14,11 @@ get_header(); ?>
 
 <main class="wrap">
 
-	<?php if(is_active_sidebar('knife-feature-units')) : ?>
+	<?php if(is_active_sidebar('knife-feature-stripe')) : ?>
 
 		<div class="content block">
-			<div class="feature feature--units">
-				<?php dynamic_sidebar('knife-feature-units'); ?>
+			<div class="feature feature--stripe">
+				<?php dynamic_sidebar('knife-feature-stripe'); ?>
 			</div>
 
 			<?php if(is_active_sidebar('knife-feature-sidebar')) : ?>

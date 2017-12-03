@@ -16,28 +16,7 @@
     }
   }
 
-  &.feature--units {
+  &.feature--stripe {
     flex: 1 1 53.25rem;
-
-    .unit.unit--single {
-      .unit__title {
-        font-size: 1.75rem;
-        line-height: 1.25;
-
-        @media screen and (max-width: 1023px) {
-          font-size: 1.375rem;
-        }
-
-        @media screen and (max-width: 767px) {
-          font-size: 1.125rem;
-        }
-      }
-    }
-
-    .unit.unit--triple {
-      .unit__title {
-        font-size: 1.25rem;
-      }
-    }
   }
 }

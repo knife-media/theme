@@ -1,4 +1,4 @@
-.unit {
+.widget.widget--stripe {
   display: block;
   position: relative;
 
@@ -9,7 +9,7 @@
   color: $color-text;
   background-color: $color-white;
 
-  .unit__image {
+  .widget__image {
     display: block;
     position: absolute;
     top: 0;
@@ -19,7 +19,7 @@
     padding-top: 75%;
     overflow: hidden;
 
-    .unit__image-thumbnail {
+    .widget__image-thumbnail {
       display: block;
       position: absolute;
       top: 0;
@@ -35,7 +35,7 @@
     }
   }
 
-  .unit__footer {
+  .widget__footer {
     display: flex;
     flex-flow: column wrap;
     justify-content: space-between;
@@ -53,7 +53,7 @@
     }
   }
 
-  .unit__title {
+  .widget__title {
     display: block;
 
     width: 100%;
@@ -73,7 +73,7 @@
     }
   }
 
-  .unit__meta {
+  .widget__meta {
     display: flex;
     flex-flow: row wrap;
     justify-content: flex-start;
@@ -86,7 +86,7 @@
     letter-spacing: .75px;
     text-transform: uppercase;
 
-    .unit__meta-item {
+    .widget__meta-item {
       display: inline-block;
       cursor: pointer;
 
@@ -104,7 +104,7 @@
     }
   }
 
-  .unit__link {
+  .widget__link {
     display: block;
     cursor: pointer;
 
@@ -113,7 +113,7 @@
     padding-top: 75%;
 
     &:hover {
-      .unit__image-thumbnail {
+      .widget__image-thumbnail {
         filter: brightness(115%);
       }
     }
@@ -123,7 +123,7 @@
     }
   }
 
-  .unit__head {
+  .widget__head {
     display: block;
     position: absolute;
     top: 0;
@@ -145,33 +145,33 @@
     }
   }
 
-  &.unit--cover {
+  &.widget--cover {
     color: $color-white;
     background-color: $color-black;
 
-    .unit__footer {
+    .widget__footer {
       background-color: transparent;
     }
 
-    .unit__image {
+    .widget__image {
       height: 100%;
       padding-top: 0;
     }
 
-    .unit__meta {
+    .widget__meta {
       color: $color-white;
     }
 
-    .unit__link {
+    .widget__link {
       height: 100%;
       color: $color-white;
 
-      .unit__image-thumbnail {
+      .widget__image-thumbnail {
         filter: brightness(55%);
       }
 
       &:hover {
-        .unit__image-thumbnail {
+        .widget__image-thumbnail {
           filter: brightness(80%);
         }
       }

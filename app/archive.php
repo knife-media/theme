@@ -26,9 +26,11 @@ get_header(); ?>
 			while (have_posts()) : the_post();
 
 				if($wp_query->current_post % 5 === 3 || $wp_query->current_post % 5 === 4)
-					get_template_part('template-parts/units/double');
+					set_query_var('widget_settings', ['widget--double']);
 				else
-					get_template_part('template-parts/units/triple');
+ 					set_query_var('widget_settings', ['widget--triple']);
+
+				get_template_part('template-parts/widgets/stripe');
 
 			endwhile;
 

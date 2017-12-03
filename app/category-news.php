@@ -21,7 +21,7 @@ get_header(); ?>
 			while (have_posts()) : the_post();
 
 				// Include unit template for news
-				get_template_part('template-parts/units/row');
+				get_template_part('template-parts/widgets/logbook');
 
 			endwhile;
 

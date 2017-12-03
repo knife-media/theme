@@ -379,3 +379,22 @@ function knife_theme_post_meta($args) {
 }
 
 endif;
+
+
+if(!function_exists('knife_theme_widget_args')) :
+/**
+ * Merge and prints wideget classes
+ *
+ * @since 1.1
+ */
+function knife_theme_widget_args($html = 'widget', $settings = [], $post_id = null) {
+	if(is_array($settings) && count($settings) > 0)
+		$html .= ' ' . join(' ', $settings);
+
+	// Filter result html before return
+	$html = apply_filters('knife_theme_widget_args', $html);
+
+	echo $html;
+}
+
+endif;

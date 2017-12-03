@@ -1,0 +1,77 @@
+.widget.widget--logbook {
+  display: block;
+  position: relative;
+
+  width: 100%;
+  margin-bottom: 1rem;
+  overflow: hidden;
+
+  color: $color-text;
+  background-color: $color-white;
+
+  width: calc(50% - .5rem);
+
+  .widget__image {
+    position: relative;
+    flex: 0 0 10rem;
+
+    padding: 0;
+
+    @media screen and (max-width: 767px) {
+      flex-basis: 7.5rem;
+    }
+
+    @media screen and (max-width: 479px) {
+      display: none;
+    }
+  }
+
+  .widget__title {
+    display: block;
+
+    width: 100%;
+
+    font-size: 1.5rem;
+    line-height: 1.25;
+    letter-spacing: .25px;
+    word-wrap: break-word;
+
+    @media screen and (max-width: 1023px) {
+      font-size: 1.75rem;
+    }
+
+    @media screen and (max-width: 767px) {
+      font-size: 1.25rem;
+    }
+
+    @media screen and (max-width: 479px) {
+      font-size: 1.125rem;
+    }
+  }
+
+  .widget__link {
+    display: flex;
+    flex-flow: row-reverse nowrap;
+    cursor: pointer;
+
+    width: 100%;
+    height: 100%;
+    padding-top: 0;
+
+    &:hover {
+      .widget__image-thumbnail {
+        filter: brightness(115%);
+      }
+    }
+  }
+
+  &.widget--cover {
+    .widget__image {
+      position: absolute;
+    }
+  }
+
+  @media screen and (max-width: 1023px) {
+    width: 100%;
+  }
+}

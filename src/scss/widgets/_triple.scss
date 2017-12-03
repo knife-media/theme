@@ -1,5 +1,11 @@
-.unit--triple {
+.widget.widget--triple {
   width: calc(100% / 3 - .625rem);
+
+  &.widget--feature {
+    .unit__title {
+      font-size: 1.25rem;
+    }
+  }
 
   @media screen and (max-width: 1023px) {
     width: calc(50% - .5rem);

@@ -1,0 +1,13 @@
+.widget.widget--double {
+  width: calc(50% - .5rem);
+
+  &.widget--feature {
+    .unit__title {
+      font-size: 1.25rem;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    width: 100%;
+  }
+}
