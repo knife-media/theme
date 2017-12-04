@@ -41,17 +41,14 @@ class Knife_Stripe_Widget extends WP_Widget {
 		if($q->have_posts()) :
 
  			while($q->have_posts()) : $q->the_post();
-				$settings = ['widget--stripe'];
 
-				if(isset($args['widget_class']))
-					$settings[] = $args['widget_class'];
+				echo str_replace('widget--stripe', 'widget--stripe widget--' . $template, $args['before_widget']);
 
-				$settings[] = 'widget--' . $template;
-
-				set_query_var('widget_settings', $settings);
  				set_query_var('widget_thumbnail', $template);
 
 				get_template_part('template-parts/widgets/stripe');
+
+				echo $args['after_widget'];
 
  			endwhile;
 

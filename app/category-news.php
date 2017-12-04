@@ -20,8 +20,11 @@ get_header(); ?>
 
 			while (have_posts()) : the_post();
 
-				// Include unit template for news
-				get_template_part('template-parts/widgets/logbook');
+				knife_theme_widget_template([
+					'template' => 'template-parts/widgets/logbook',
+					'before' => '<div class="widget widget--logbook">',
+					'after' => '</div>'
+				]);
 
 			endwhile;
 

@@ -2,15 +2,13 @@
 /**
  * Stripe widget template
  *
- * Can be 1/3, 1/2 or full screen width
- *
  * @package knife-theme
  * @since 1.1
  */
 ?>
 
 
-<article class="<?php knife_theme_widget_args('widget widget--stripe', $widget_settings ?? []); ?>">
+<article class="<?php knife_theme_widget_options('widget__item'); ?>">
 	<?php
 		knife_theme_meta([
 			'items' => ['category'],

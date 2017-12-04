@@ -1,7 +1,7 @@
 (function() {
 	var parent = '.topline__menu';
 
-	if(document.querySelector(parent).length < 1)
+	if(document.querySelector(parent) === null)
 		return false;
 
 	document.querySelector('.topline .toggle--menu').addEventListener('click', function(e) {

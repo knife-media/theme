@@ -63,24 +63,26 @@
     }
   }
 
-  &.widget--cover {
-    .widget__footer {
-      left: 0;
-      bottom: 0;
+  .widget__item {
+    &.widget__item--cover {
+      .widget__footer {
+        left: 0;
+        bottom: 0;
 
-      max-width: 60%;
-      background-color: transparent;
+        max-width: 60%;
+        background-color: transparent;
 
-      @media screen and (max-width: 1023px) {
-        justify-content: space-between;
+        @media screen and (max-width: 1023px) {
+          justify-content: space-between;
 
-        max-width: 100%;
+          max-width: 100%;
+        }
       }
     }
   }
 
   &.widget--feature {
-    .unit__title {
+    .widget__title {
       font-size: 1.75rem;
       line-height: 1.25;
 

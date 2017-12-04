@@ -15,7 +15,7 @@ class Knife_Post_Settings {
 
 	public function __construct() {
 		add_filter('admin_post_thumbnail_html', [$this, 'cover_checkbox'], 10, 3);
-		add_action('save_post', [$this, 'cover_save']);
+		add_action('save_post_post', [$this, 'cover_save']);
 		add_action('admin_print_styles-post.php', [$this, 'tinymce_styles']);
 	}
 
@@ -41,11 +41,14 @@ class Knife_Post_Settings {
 	/**
 	 * Save post options
 	 */
-	public function cover_save($post_id, $post) {
+	public function cover_save($post_id) {
 		if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
 			return;
 
 		if(!current_user_can('edit_post', $post_id))
+			return;
+
+		if(!isset($_REQUEST[$this->cover]))
 			return;
 
 		$cover = $_REQUEST[$this->cover] ? 1 : 0;

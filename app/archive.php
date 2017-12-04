@@ -25,15 +25,12 @@ get_header(); ?>
 
 			while (have_posts()) : the_post();
 
-				if($wp_query->current_post % 5 === 3 || $wp_query->current_post % 5 === 4)
-					set_query_var('widget_settings', ['widget--double']);
-				else
- 					set_query_var('widget_settings', ['widget--triple']);
-
-				get_template_part('template-parts/widgets/stripe');
+				knife_theme_widget_template([
+					'before' => '<div class="widget widget--stripe widget--%1$s">',
+					'after' => '</div>'
+				]);
 
 			endwhile;
-
 
 		else:
 

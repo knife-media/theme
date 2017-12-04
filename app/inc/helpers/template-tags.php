@@ -307,7 +307,7 @@ function knife_theme_share($args, $html = '') {
 		'after' => '',
 		'title' => '<div class="share__title">%s</div>',
 		'text' => '<span class="share__text">%s</span>',
-		'item' => '<a class="share__link share__link--%3$s" href="%1$s" target="_blank">%2$s</a>',
+		'item' => '<a class="share__link share__link--%3$s" href="%1$s" target="_blank" data-id="%3$s">%2$s</a>',
 		'icon' => '<span class="icon icon--%s"></span>',
 		'echo' => true
 	];
@@ -376,7 +376,7 @@ if(!function_exists('knife_theme_post_meta')) :
  *
  * @since 1.1
  */
-function knife_theme_post_meta($args) {
+function knife_theme_post_meta($args, $post_id = null) {
 	global $post;
 
 	$defaults = [
@@ -384,7 +384,7 @@ function knife_theme_post_meta($args) {
 		'after' => '',
 		'meta' => '',
 		'item' => '%s',
-		'post_id' => $post->ID,
+		'post_id' => $post_id ?? $post->ID,
 		'echo' => true
 	];
 
@@ -411,20 +411,58 @@ function knife_theme_post_meta($args) {
 endif;
 
 
-if(!function_exists('knife_theme_widget_args')) :
+if(!function_exists('knife_theme_widget_options')) :
 /**
- * Merge and prints wideget classes
+ * Merge and prints widget options as classes
  *
  * @since 1.1
  */
-function knife_theme_widget_args($html = 'widget', $settings = [], $post_id = null) {
-	if(is_array($settings) && count($settings) > 0)
-		$html .= ' ' . join(' ', $settings);
+function knife_theme_widget_options($base = 'widget__item', $post_id = null) {
+	global $post;
+
+	$post_id = $post_id ?? $post->ID;
+	$options = [$base];
+
+	if($post_id > 1 && $cover = get_post_meta($post_id, '_knife-theme-cover', true))
+		$options[] = $base . '--cover';
+
+	$html = join(' ', $options);
 
 	// Filter result html before return
-	$html = apply_filters('knife_theme_widget_args', $html);
+	$html = apply_filters('knife_theme_widget_options', $html);
 
 	echo $html;
+}
+
+endif;
+
+
+if(!function_exists('knife_theme_widget_template')) :
+/**
+ * Helper function to wrap stripe template part with custom parent tag
+ *
+ * @since 1.1
+ */
+function knife_theme_widget_template($args) {
+	global $wp_query;
+
+	$defaults = [
+		'template' => 'template-parts/widgets/stripe',
+		'before' => '<div class="widget">',
+		'after' => '</div>',
+		'class' => 'triple'
+	];
+
+	$args = wp_parse_args($args, $defaults);
+
+	if($wp_query->current_post % 5 === 3 || $wp_query->current_post % 5 === 4)
+		$args['class'] = 'double';
+
+	printf($args['before'], esc_attr($args['class']));
+
+	get_template_part($args['template']);
+
+	echo $args['after'];
 }
 
 endif;

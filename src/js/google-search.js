@@ -3,7 +3,7 @@
 	var holder = 'search-gcse';
 	var detect = 'gsc-results';
 
-	if(document.querySelector(parent).length < 1)
+	if(document.querySelector(parent) === null)
 		return false;
 
 	var view = null;

@@ -356,14 +356,23 @@ add_filter('attachment_link', function() {
 });
 
 
+// Disable wordpress based search to reduce CPU load and prevent DDOS attacks
+add_action('parse_query', function($query) {
+	if(!$query->is_search || is_admin())
+		return false;
+
+	$query->set('s', '');
+	$query->is_search = false;
+	$query->is_404 = true;
+}, 9);
+
+
 // Remove private posts from archives and home page.
 // Note: Knife editors use private posts as drafts. So we don't want to see drafts in templates even if we have logged in
 add_action('pre_get_posts', function($query) {
 	if($query->is_main_query() && ($query->is_archive() || $query->is_home()))
 		$query->set('post_status', 'publish');
 });
-
-
 
 
 // Register widget area.
@@ -382,9 +391,10 @@ add_action('widgets_init', function(){
 		'name'          => __('Телевизор на главной', 'knife-theme'),
 		'id'            => 'knife-feature-stripe',
 		'description'   => __('Добавленные виджеты появятся в телевизоре на главной странице.', 'knife-theme'),
+		'before_widget' => '<div class="widget widget--%2$s widget--feature">',
+		'after_widget'  => '</div>',
 		'before_title'  => '<p class="widget__title">',
-		'after_title'	=> '</p>',
-		'widget_class'	=> 'widget--feature'
+		'after_title'	=> '</p>'
 	]);
 
 	register_sidebar([
@@ -401,11 +411,10 @@ add_action('widgets_init', function(){
 		'name'          => __('Сайдбар на главной', 'knife-theme'),
 		'id'            => 'knife-feature-sidebar',
 		'description'   => __('Добавленные виджеты появятся справа от телевизона.', 'knife-theme'),
-		'before_widget' => '<div class="widget widget--%2$s">',
+		'before_widget' => '<div class="widget widget--feature widget--%2$s">',
 		'after_widget'  => '</div>',
 		'before_title'  => '<p class="widget__title">',
-		'after_title'   => '</p>',
-		'widget_class'	=> 'widget--feature'
+		'after_title'   => '</p>'
 	]);
 
  	register_sidebar([

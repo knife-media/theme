@@ -49,6 +49,13 @@ class Knife_Recent_Widget extends WP_Widget {
 
 			wp_reset_query();
 
+			// Show load more button
+			printf(
+				'<a class="widget__more" href="%2$s">%1$s</a>',
+				__('Все новости', 'knife-theme'),
+				esc_url(get_category_link($cat))
+			);
+
 			echo $args['after_widget'];
 
 		endif;

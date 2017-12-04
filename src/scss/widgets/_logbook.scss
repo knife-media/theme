@@ -12,10 +12,13 @@
   width: calc(50% - .5rem);
 
   .widget__image {
+    display: block;
     position: relative;
     flex: 0 0 10rem;
 
     padding: 0;
+
+    overflow: hidden;
 
     .widget__image-thumbnail {
       display: block;
@@ -23,7 +26,8 @@
       top: 0;
       left: 0;
 
-      width: 100%;
+      width: calc(100% + .5px);
+      max-width: calc(100% + .5px);
       height: 100%;
 
       object-fit: cover;
@@ -106,6 +110,16 @@
         filter: brightness(115%);
       }
     }
+  }
+
+  .widget__item {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    color: $color-text;
+    background-color: $color-white;
   }
 
   @media screen and (max-width: 1023px) {
