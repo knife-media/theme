@@ -494,6 +494,7 @@ function knife_theme_widget_options($base = 'widget__item', $post_id = null) {
 	$post_id = $post_id ?? $post->ID;
 	$options = [$base];
 
+	// TODO: rework
     if(get_query_var('widget_cover', 'default') === 'cover')
 		$options[] = $base . '--cover';
 
@@ -525,7 +526,7 @@ function knife_theme_widget_template($args) {
 	$defaults = [
 		'template' => 'template-parts/widgets/stripe',
 		'size' => 'triple',
-		'before' => '<div class="widget">',
+		'before' => '<div class="widget widget-stripe">',
 		'after' => '</div>'
 	];
 

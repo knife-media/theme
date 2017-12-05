@@ -18,6 +18,10 @@ class Knife_Stripe_Widget extends WP_Widget {
 		];
 
 		parent::__construct('knife_theme_stripe', __('[НОЖ] Карточки постов', 'knife-theme'), $widget_ops);
+
+		add_action('save_post', [$this, 'remove_cache']);
+		add_action('deleted_post', [$this, 'remove_cache']);
+		add_action('switch_theme', [$this, 'remove_cache']);
 	}
 
 
@@ -30,13 +34,18 @@ class Knife_Stripe_Widget extends WP_Widget {
 
 		extract($instance);
 
- 		$q = new WP_Query([
-			'cat' => $cat,
-			'posts_per_page' => $posts_per_page,
-			'post_status' => 'publish',
-			'ignore_sticky_posts' => 1,
-		]);
+ 		$q = get_transient($this->id);
 
+		if($q === false) :
+			$q = new WP_Query([
+				'cat' => $cat,
+				'posts_per_page' => $posts_per_page,
+				'post_status' => 'publish',
+				'ignore_sticky_posts' => 1,
+			]);
+
+			set_transient($this->id, $q, 24 * HOUR_IN_SECONDS);
+		endif;
 
 		if($q->have_posts()) :
 
@@ -156,7 +165,17 @@ class Knife_Stripe_Widget extends WP_Widget {
 		$instance['size'] = sanitize_text_field($new_instance['size']);
 		$instance['cover'] = sanitize_text_field($new_instance['cover']);
 
+		$this->remove_cache();
+
 		return $instance;
+	}
+
+
+	/**
+	 * Remove cache on save and delete post
+	 */
+	public function remove_cache() {
+		delete_transient($this->id);
 	}
 }
 

@@ -7,7 +7,7 @@
  * hooks in WordPress to change core functionality.
  *
  * @package knife-theme
- * @since 1.01
+ * @since 1.02
  */
 
 

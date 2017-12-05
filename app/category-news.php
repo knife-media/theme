@@ -22,7 +22,7 @@ get_header(); ?>
 
 				knife_theme_widget_template([
 					'template' => 'template-parts/widgets/logbook',
-					'before' => '<div class="widget widget--logbook">',
+					'before' => '<div class="widget widget-logbook">',
 					'after' => '</div>'
 				]);
 

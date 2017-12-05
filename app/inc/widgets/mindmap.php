@@ -30,15 +30,15 @@ class Knife_Mindmap_Widget extends WP_Widget {
 
 		extract($instance);
 
- 		$q = new WP_Query([
+		$q = new WP_Query([
 			'cat' => $cat,
 			'posts_per_page' => $posts_per_page,
 			'post_status' => 'publish',
 			'ignore_sticky_posts' => 1,
 		]);
 
-		if($q->have_posts()) :
 
+		if($q->have_posts()) :
 			echo $args['before_widget'];
 
  			while($q->have_posts()) : $q->the_post();
@@ -50,7 +50,6 @@ class Knife_Mindmap_Widget extends WP_Widget {
 			wp_reset_query();
 
 			echo $args['after_widget'];
-
 		endif;
     }
 

@@ -38,7 +38,6 @@ class Knife_Recent_Widget extends WP_Widget {
 		]);
 
 		if($q->have_posts()) :
-
 			echo $args['before_widget'];
 
  			while($q->have_posts()) : $q->the_post();
@@ -57,7 +56,6 @@ class Knife_Recent_Widget extends WP_Widget {
 			);
 
 			echo $args['after_widget'];
-
 		endif;
     }
 

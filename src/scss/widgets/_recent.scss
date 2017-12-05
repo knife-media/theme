@@ -10,7 +10,7 @@
     flex-flow: column wrap;
     justify-content: center;
 
-    width: 100%;
+    width: calc(100% / 3 - .625rem);
     margin-bottom: 2px;
     padding: 1rem;
 
@@ -18,7 +18,7 @@
     background-color: $color-white;
 
     @media screen and (max-width: 1023px) {
-      width: calc(50% - 0.5rem);
+      width: calc(50% - .5rem);
     }
 
     @media screen and (max-width: 479px) {
@@ -58,8 +58,9 @@
   .widget__link {
     display: inline-block;
 
-    margin-top: .25rem;
+    margin-top: .375rem;
     font-size: .8125rem;
+    line-height: 1.5;
     font-weight: 500;
     text-decoration: none;
   }
@@ -94,9 +95,25 @@
     flex: 1 1 auto;
 
     .widget__item {
+      width: 100%;
+
       @media screen and (max-width: 1199px) {
         width: calc(100% / 3 - .625rem);
       }
+
+      @media screen and (max-width: 1023px) {
+        width: calc(50% - .5rem);
+      }
+
+      @media screen and (max-width: 479px) {
+        width: 100%;
+      }
+    }
+  }
+
+  &.widget--sidebar {
+    .widget__item {
+      width: 100%;
 
       @media screen and (max-width: 1023px) {
         width: calc(50% - .5rem);
