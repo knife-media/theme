@@ -218,6 +218,16 @@ add_filter('wp_mail_from', function($email) {
 });
 
 
+// It is good to remove auto suggestings for SEO
+// https://core.trac.wordpress.org/ticket/16557
+add_filter('redirect_canonical', function($url) {
+	if(is_404() && !isset($_GET['p']))
+		return false;
+
+	return $url;
+});
+
+
 // We don't want to use default gallery styles anymore
 add_filter('use_default_gallery_style', '__return_false');
 
