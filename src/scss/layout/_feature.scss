@@ -5,6 +5,7 @@
   position: relative;
 
   &.feature--sidebar {
+    flex-flow: column wrap;
     flex: 0 0 19.75rem;
 
     padding-left: 1rem;

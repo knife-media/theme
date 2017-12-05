@@ -1,15 +1,17 @@
 .sidebar {
   display: flex;
   flex: 0 0 19.75rem;
-  flex-flow: row wrap;
-  justify-content: space-between;
+  flex-flow: column wrap;
+  justify-content: flex-start;
   position: relative;
 
   padding-left: 1rem;
   color: $color-text;
 
   @media screen and (max-width: 1023px) {
+    flex-flow: row wrap;
     flex: 1 1 auto;
+    justify-content: space-between;
     padding-left: 0;
   }
 }

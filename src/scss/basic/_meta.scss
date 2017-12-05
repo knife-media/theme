@@ -5,6 +5,12 @@
   text-transform: uppercase;
   letter-spacing: .75px;
 
+  .meta__link {
+    &:hover {
+      color: $color-light;
+    }
+  }
+
   .meta__item {
     display: inline-block;
 

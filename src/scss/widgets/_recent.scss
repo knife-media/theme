@@ -1,4 +1,4 @@
-.widget.widget--recent {
+.widget-recent {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
@@ -91,8 +91,7 @@
   }
 
   &.widget--feature {
-    height: 100%;
-    padding-bottom: 1rem;
+    flex: 1 1 auto;
 
     .widget__item {
       @media screen and (max-width: 1199px) {
@@ -106,10 +105,6 @@
       @media screen and (max-width: 479px) {
         width: 100%;
       }
-    }
-
-    @media screen and (max-width: 1199px) {
-      padding-bottom: 0;
     }
   }
 }

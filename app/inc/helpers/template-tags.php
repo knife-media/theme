@@ -9,7 +9,78 @@
  */
 
 
-function knife_custom_background() {}
+if(!function_exists('knife_custom_background')) :
+/**
+ * Prints post meta info
+ *
+ * Post date, authors, category and optional tags
+ *
+ * @since 1.1
+ */
+function knife_custom_background() {
+	if(!is_front_page())
+		return;
+
+    $background = set_url_scheme(get_background_image());
+
+    $color = get_background_color();
+
+    if($color === get_theme_support('custom-background', 'default-color'))
+        $color = false;
+
+    if (!$background && !$color) {
+        if(!is_customize_preview())
+			return;
+
+        $html = '<style type="text/css" id="custom-background-css"></style>';
+    }
+
+    $style = $color ? "background-color: #$color;" : '';
+
+    if ($background) :
+        $image = ' background-image: url("' . esc_url_raw( $background ) . '");';
+
+        $position_x = get_theme_mod('background_position_x', get_theme_support('custom-background', 'default-position-x'));
+        $position_y = get_theme_mod('background_position_y', get_theme_support('custom-background', 'default-position-y'));
+
+        if(!in_array($position_x, ['left', 'center', 'right'], true))
+            $position_x = 'left';
+
+        if(!in_array($position_y, ['top', 'center', 'bottom'], true))
+            $position_y = 'top';
+
+        $position = " background-position: $position_x $position_y;";
+
+        $size = get_theme_mod('background_size', get_theme_support('custom-background', 'default-size'));
+
+        if(!in_array($size, ['auto', 'contain', 'cover'], true))
+            $size = 'auto';
+
+        $size = " background-size: $size;";
+
+        $repeat = get_theme_mod('background_repeat', get_theme_support('custom-background', 'default-repeat'));
+
+        if(!in_array($repeat, ['repeat-x', 'repeat-y', 'repeat', 'no-repeat'], true))
+            $repeat = 'repeat';
+
+        $repeat = " background-repeat: $repeat;";
+
+        $attachment = get_theme_mod('background_attachment', get_theme_support('custom-background', 'default-attachment'));
+
+        if('fixed' !== $attachment)
+            $attachment = 'scroll';
+
+        $attachment = " background-attachment: $attachment;";
+
+        $html = $style . $image . $position . $size . $repeat . $attachment;
+	endif;
+
+	$html = apply_filters('knife_custom_background', $html);
+
+	echo '<style type="text/css" id="custom-background-css">.wrap{' . $html . '}</style>';
+}
+
+endif;
 
 
 if(!function_exists('knife_theme_meta')) :
@@ -423,7 +494,12 @@ function knife_theme_widget_options($base = 'widget__item', $post_id = null) {
 	$post_id = $post_id ?? $post->ID;
 	$options = [$base];
 
-	if($post_id > 1 && $cover = get_post_meta($post_id, '_knife-theme-cover', true))
+    if(get_query_var('widget_cover', 'default') === 'cover')
+		$options[] = $base . '--cover';
+
+    elseif(get_query_var('widget_cover', 'default') === 'nocover')
+		$tt = '';
+	elseif($post_id > 1 && $cover = get_post_meta($post_id, '_knife-theme-cover', true))
 		$options[] = $base . '--cover';
 
 	$html = join(' ', $options);
@@ -448,18 +524,19 @@ function knife_theme_widget_template($args) {
 
 	$defaults = [
 		'template' => 'template-parts/widgets/stripe',
+		'size' => 'triple',
 		'before' => '<div class="widget">',
-		'after' => '</div>',
-		'class' => 'triple'
+		'after' => '</div>'
 	];
 
 	$args = wp_parse_args($args, $defaults);
 
 	if($wp_query->current_post % 5 === 3 || $wp_query->current_post % 5 === 4)
-		$args['class'] = 'double';
+		$args['size'] = 'double';
 
-	printf($args['before'], esc_attr($args['class']));
+	printf($args['before'], esc_attr($args['size']));
 
+	set_query_var('widget_image', $args['size']);
 	get_template_part($args['template']);
 
 	echo $args['after'];

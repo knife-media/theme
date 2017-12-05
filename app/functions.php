@@ -381,7 +381,7 @@ add_action('widgets_init', function(){
 		'name'          => __('Главная страница', 'knife-theme'),
 		'id'            => 'knife-frontal',
 		'description'   => __('Добавленные виджеты появятся на главной странице под телевизором, если он не пуст.', 'knife-theme'),
-		'before_widget' => '<div class="widget widget--%2$s">',
+		'before_widget' => '<div class="widget widget-%2$s">',
 		'after_widget'  => '</div>',
 		'before_title'  => '<p class="widget__title">',
 		'after_title'   => '</p>'
@@ -391,7 +391,7 @@ add_action('widgets_init', function(){
 		'name'          => __('Телевизор на главной', 'knife-theme'),
 		'id'            => 'knife-feature-stripe',
 		'description'   => __('Добавленные виджеты появятся в телевизоре на главной странице.', 'knife-theme'),
-		'before_widget' => '<div class="widget widget--%2$s widget--feature">',
+		'before_widget' => '<div class="widget widget-%2$s widget--feature">',
 		'after_widget'  => '</div>',
 		'before_title'  => '<p class="widget__title">',
 		'after_title'	=> '</p>'
@@ -401,7 +401,7 @@ add_action('widgets_init', function(){
 		'name'          => __('Подвал сайта', 'knife-theme'),
 		'id'            => 'knife-footer',
 		'description'   => __('Добавленные виджеты появятся справа в футере.', 'knife-theme'),
-		'before_widget' => '<aside class="widget widget--text">',
+		'before_widget' => '<aside class="widget widget-text">',
 		'after_widget'  => '</aside>',
 		'before_title'  => '<p class="widget__title">',
 		'after_title'   => '</p>'
@@ -411,7 +411,7 @@ add_action('widgets_init', function(){
 		'name'          => __('Сайдбар на главной', 'knife-theme'),
 		'id'            => 'knife-feature-sidebar',
 		'description'   => __('Добавленные виджеты появятся справа от телевизона.', 'knife-theme'),
-		'before_widget' => '<div class="widget widget--feature widget--%2$s">',
+		'before_widget' => '<div class="widget widget-%2$s widget--feature">',
 		'after_widget'  => '</div>',
 		'before_title'  => '<p class="widget__title">',
 		'after_title'   => '</p>'
@@ -421,7 +421,7 @@ add_action('widgets_init', function(){
 		'name'          => __('Сайдбар на внутренних', 'knife-theme'),
 		'id'            => 'knife-inner-sidebar',
 		'description'   => __('Добавленные виджеты появятся в сайдбаре внутри постов.', 'knife-theme'),
-		'before_widget' => '<div class="widget widget--%2$s">',
+		'before_widget' => '<div class="widget widget-%2$s widget--sidebar">',
 		'after_widget'  => '</div>',
 		'before_title'  => '<p class="widget__title">',
 		'after_title'   => '</p>'
@@ -461,7 +461,6 @@ require get_template_directory() . '/inc/helpers/plugin-snippets.php';
 
 // Add custom widgets defenitions
 require get_template_directory() . '/inc/widgets/recent.php';
-require get_template_directory() . '/inc/widgets/related.php';
 require get_template_directory() . '/inc/widgets/stripe.php';
 require get_template_directory() . '/inc/widgets/mindmap.php';
 require get_template_directory() . '/inc/widgets/transparent.php';

@@ -48,10 +48,7 @@ class Knife_Post_Settings {
 		if(!current_user_can('edit_post', $post_id))
 			return;
 
-		if(!isset($_REQUEST[$this->cover]))
-			return;
-
-		$cover = $_REQUEST[$this->cover] ? 1 : 0;
+		$cover = empty($_REQUEST[$this->cover]) ? 0 : 1;
 
 		return update_post_meta($post_id, $this->cover, $cover);
 	}

@@ -21,7 +21,7 @@
 	<a class="widget__link" href="<?php the_permalink(); ?>">
 		<div class="widget__image">
 			<?php
-				the_post_thumbnail($widget_thumbnail ?? 'triple', ['class' => 'widget__image-thumbnail']);
+				the_post_thumbnail(get_query_var('widget_image', 'triple'), ['class' => 'widget__image-thumbnail']);
 			?>
 		</div>
 

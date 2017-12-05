@@ -25,7 +25,7 @@ class Knife_Stripe_Widget extends WP_Widget {
 	 * Outputs the content of the widget
 	 */
 	public function widget($args, $instance) {
- 		$defaults = ['title' => '', 'posts_per_page' => 10, 'cat' => 0, 'template' => 'triple'];
+ 		$defaults = ['title' => '', 'posts_per_page' => 10, 'cat' => 0, 'size' => 'triple', 'cover' => 'default'];
 		$instance = wp_parse_args((array) $instance, $defaults);
 
 		extract($instance);
@@ -42,9 +42,10 @@ class Knife_Stripe_Widget extends WP_Widget {
 
  			while($q->have_posts()) : $q->the_post();
 
-				echo str_replace('widget--stripe', 'widget--stripe widget--' . $template, $args['before_widget']);
+				echo str_replace('widget-stripe', 'widget-stripe widget--' . $size, $args['before_widget']);
 
- 				set_query_var('widget_thumbnail', $template);
+				set_query_var('widget_cover', $cover);
+				set_query_var('widget_image', $size);
 
 				get_template_part('template-parts/widgets/stripe');
 
@@ -55,17 +56,17 @@ class Knife_Stripe_Widget extends WP_Widget {
 			wp_reset_query();
 
 		endif;
-  }
+	}
 
 
 	/**
 	 * Outputs the options form on admin
 	 */
 	function form($instance) {
-		$defaults = ['title' => '', 'posts_per_page' => 10, 'cat' => 0, 'template' => 'triple', 'cover' => 0];
+		$defaults = ['title' => '', 'posts_per_page' => 10, 'cat' => 0, 'size' => 'triple', 'cover' => 'default'];
 		$instance = wp_parse_args((array) $instance, $defaults);
 
-		$template = [
+		$size = [
 			'triple' => __('Три в ряд', 'knife-theme'),
 			'double' => __('Два в ряд', 'knife-theme'),
 			'single' => __('На всю ширину', 'knife-theme')
@@ -104,13 +105,13 @@ class Knife_Stripe_Widget extends WP_Widget {
 
 		printf(
 			'<p><label for="%1$s">%3$s</label><select class="widefat" id="%1$s" name="%2$s">',
-			esc_attr($this->get_field_id('template')),
- 			esc_attr($this->get_field_name('template')),
+			esc_attr($this->get_field_id('size')),
+ 			esc_attr($this->get_field_name('size')),
 			__('Шаблон виджета:', 'knife-theme')
 		);
 
-		foreach($template as $name => $title) {
-			printf('<option value="%1$s"%3$s>%2$s</option>', $name, $title, selected($instance['template'], $name, false));
+		foreach($size as $name => $title) {
+			printf('<option value="%1$s"%3$s>%2$s</option>', $name, $title, selected($instance['size'], $name, false));
 		}
 
 		echo '</select>';
@@ -128,29 +129,31 @@ class Knife_Stripe_Widget extends WP_Widget {
 
 		echo '</select>';
 
+
 		printf(
 			'<p><label for="%1$s">%2$s</label>%3$s</p>',
 			esc_attr($this->get_field_id('cat')),
 			__('Рубрика записей:', 'knife-theme'),
 			$category
 		);
-
+       /*
 		echo '<ul>';
 		wp_category_checklist();
 		echo '</ul>';
+		 */
 	}
 
 
 	/**
 	 * Processing widget options on save
 	 */
-  public function update($new_instance, $old_instance) {
+	public function update($new_instance, $old_instance) {
 		$instance = $old_instance;
 
 		$instance['cat'] = (int) $new_instance['cat'];
 		$instance['posts_per_page'] = (int) $new_instance['posts_per_page'];
 		$instance['title'] = sanitize_text_field($new_instance['title']);
-		$instance['template'] = sanitize_text_field($new_instance['template']);
+		$instance['size'] = sanitize_text_field($new_instance['size']);
 		$instance['cover'] = sanitize_text_field($new_instance['cover']);
 
 		return $instance;
