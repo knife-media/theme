@@ -68,7 +68,7 @@
     font-size: 1.375rem;
     font-weight: 500;
     line-height: 1.25;
-    letter-transparent: .25px;
+    letter-spacing: .25px;
     word-wrap: break-word;
 
     @media screen and (max-width: 767px) {
@@ -181,6 +181,37 @@
 
     @media screen and (max-width: 767px) {
       width: 100%;
+    }
+  }
+
+  &.widget--sidebar {
+    .widget__item {
+      width: 100%;
+    }
+
+    .widget__title {
+      font-size: 1.125rem;
+    }
+
+    .widget__sticker {
+      display: none;
+    }
+
+    &:first-child {
+      .widget__link {
+        position: relative;
+
+        margin-right: 0;
+      }
+
+      .widget__title {
+        font-size: 1.125rem;
+        line-height: 1.25;
+      }
+
+      .widget__footer {
+        border-bottom: solid 1px #fff;
+      }
     }
   }
 }
