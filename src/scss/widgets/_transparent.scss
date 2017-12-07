@@ -77,16 +77,15 @@
   }
 
   .widget__meta {
-    display: block;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
 
     width: 100%;
     margin-top: 1.5rem;
     margin-bottom: 1rem;
+
     color: $color-white;
-    font-size: .625rem;
-    font-weight: 500;
-    letter-spacing: .75px;
-    text-transform: uppercase;
 
     .widget__meta-item {
       display: inline-block;
@@ -135,11 +134,13 @@
         margin-right: 2rem;
 
         @media screen and (max-width: 1023px) {
-          margin-right: 0;
+          margin-right: .75rem;
         }
 
         @media screen and (max-width: 767px) {
           position: relative;
+
+          margin-right: 0;
         }
       }
 
@@ -165,7 +166,7 @@
         }
 
         @media screen and (max-width: 1023px) {
-          font-size: 1.375rem;
+          font-size: 1.75rem;
           line-height: 1.25;
         }
 

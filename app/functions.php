@@ -7,7 +7,7 @@
  * hooks in WordPress to change core functionality.
  *
  * @package knife-theme
- * @since 1.02
+ * @since 1.012
  */
 
 
@@ -70,8 +70,8 @@ add_action('after_setup_theme', function(){
  	add_image_size('inner', 640, 9999, false);
 
 	add_image_size('triple', 480, 360, true);
-	add_image_size('double', 800, 600, true);
-	add_image_size('single', 1200, 360, true);
+	add_image_size('double', 640, 480, true);
+	add_image_size('single', 1280, 360, true);
 });
 
 
@@ -183,7 +183,7 @@ add_action('wp_enqueue_scripts', function() {
 add_action('wp_enqueue_scripts', function() {
 	if(!is_user_logged_in())
 		wp_deregister_script('jquery');
-});
+}, 11);
 
 
 // Add search popover to footer
@@ -474,3 +474,4 @@ require get_template_directory() . '/inc/widgets/recent.php';
 require get_template_directory() . '/inc/widgets/stripe.php';
 require get_template_directory() . '/inc/widgets/mindmap.php';
 require get_template_directory() . '/inc/widgets/transparent.php';
+#add_filter( 'wp_calculate_image_srcset_meta', '__return_empty_array' );
