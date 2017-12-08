@@ -298,6 +298,10 @@
   &.widget--sidebar {
     width: 100%;
 
+    .widget__head {
+      display: none;
+    }
+
     &.widget--single {
       .widget__link  {
         @media screen and (max-width: 1023px) {

@@ -194,7 +194,7 @@ add_action('wp_footer', function() {
 
 // Remove annoying body classes
 // It will be better to use body-- class prefix if we need it later
-add_filter('body_class', function($wp, $extra) {
+add_filter('body_class', function($wp_classes, $extra_classes) {
 	return [];
 }, 10, 2);
 
@@ -474,4 +474,3 @@ require get_template_directory() . '/inc/widgets/recent.php';
 require get_template_directory() . '/inc/widgets/stripe.php';
 require get_template_directory() . '/inc/widgets/mindmap.php';
 require get_template_directory() . '/inc/widgets/transparent.php';
-#add_filter( 'wp_calculate_image_srcset_meta', '__return_empty_array' );

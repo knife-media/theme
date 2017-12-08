@@ -459,7 +459,14 @@ function knife_theme_widget_template($args) {
 
 	$args = wp_parse_args($args, $defaults);
 
-	if($wp_query->current_post % 5 === 3 || $wp_query->current_post % 5 === 4)
+	// TODO: Rework
+	if((int) $wp_query->found_posts === 1)
+		$args['size'] = 'single';
+
+ 	if((int) $wp_query->found_posts === 2)
+		$args['size'] = 'double';
+
+	if((int) $wp_query->current_post % 5 === 3 || $wp_query->current_post % 5 === 4)
 		$args['size'] = 'double';
 
 	printf($args['before'], esc_attr($args['size']));
@@ -497,7 +504,7 @@ function knife_custom_background($html = '') {
         if(!is_customize_preview())
 			return;
 
-        $html = '<style type="text/css" id="custom-background-css"></style>';
+        $html = '<style type="text/css" id="custom-background-css"></style>' . "\n";
 	endif;
 
     $style = $color ? "background-color: #$color;" : '';
@@ -542,7 +549,7 @@ function knife_custom_background($html = '') {
 
 	$html = apply_filters('knife_custom_background', $html);
 
-	echo '<style type="text/css" id="custom-background-css">body{' . $html . '}</style>';
+	echo '<style type="text/css" id="custom-background-css">body{' . $html . '}</style>' . "\n";
 }
 
 endif;
