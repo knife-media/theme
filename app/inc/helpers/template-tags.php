@@ -421,14 +421,21 @@ function knife_theme_widget_options($base = 'widget__item', $post_id = null) {
 	$post_id = $post_id ?? $post->ID;
 	$options = [$base];
 
-	// TODO: rework
-    if(get_query_var('widget_cover', 'default') === 'cover')
-		$options[] = $base . '--cover';
+	switch(get_query_var('widget_cover', 'default')) {
+		case 'cover':
+			$options[] = $base . '--cover';
 
-    elseif(get_query_var('widget_cover', 'default') === 'nocover')
-		$tt = '';
-	elseif($post_id > 1 && $cover = get_post_meta($post_id, '_knife-theme-cover', true))
-		$options[] = $base . '--cover';
+			break;
+
+		case 'nocover':
+			break;
+
+		default:
+			if(!get_post_meta($post_id, '_knife-theme-cover', true))
+				break;
+
+			$options[] = $base . '--cover';
+	}
 
 	$html = join(' ', $options);
 
@@ -459,17 +466,19 @@ function knife_theme_widget_template($args) {
 
 	$args = wp_parse_args($args, $defaults);
 
-	// TODO: Rework
-	if((int) $wp_query->found_posts === 1)
-		$args['size'] = 'single';
+	$opts = function($current, $found) use (&$args) {
+ 		if($found - 3 < $current && $found % 3 === 2)
+			return 'double';
 
- 	if((int) $wp_query->found_posts === 2)
-		$args['size'] = 'double';
+		if($current % 5 === 3 || $current % 5 === 4)
+			return 'double';
 
-	if((int) $wp_query->current_post % 5 === 3 || $wp_query->current_post % 5 === 4)
-		$args['size'] = 'double';
+		return $args['size'];
+	};
 
-	printf($args['before'], esc_attr($args['size']));
+	$size = $opts($wp_query->current_post, (int) $wp_query->found_posts);
+
+	printf($args['before'], esc_attr($size));
 
 	set_query_var('widget_image', $args['size']);
 	get_template_part($args['template']);
