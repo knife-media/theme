@@ -7,7 +7,7 @@
  * hooks in WordPress to change core functionality.
  *
  * @package knife-theme
- * @since 1.012
+ * @since 1.1
  */
 
 
@@ -111,23 +111,23 @@ add_filter('get_image_tag', function($html) {
 }, 10);
 
 add_filter('get_image_tag_class', function($class, $id, $align, $size) {
-	  return 'figure__image';
+	return 'figure__image';
 }, 0, 4);
 
 
 // Wrap all images in editor with figure
 add_filter('image_send_to_editor', function($html, $id, $caption, $title, $align, $url, $size, $alt) {
-  $html = get_image_tag($id, $alt, '', $align, $size);
+	$html = get_image_tag($id, $alt, '', $align, $size);
 
 	if($url)
-		$html = '<a href="' . esc_attr( $url ) . '">' . $html . '</a>';
+		$html = '<a href="' . esc_attr($url) . '">' . $html . '</a>';
 
 	if($caption)
 		$html = $html . '<figcaption class="figure__caption">' . $caption . '</figcaption>';
 
 	$html = '<figure class="figure figure--' . $size . ' figure--' . $align . '">' . $html . '</figure>';
 
-  return $html;
+	return $html;
 }, 10, 9);
 
 
@@ -468,6 +468,9 @@ require get_template_directory() . '/inc/helpers/post-settings.php';
 
 // Add plugins snippets
 require get_template_directory() . '/inc/helpers/plugin-snippets.php';
+
+// Login screen custom styles
+require get_template_directory() . '/inc/helpers/login-screen.php';
 
 // Add custom widgets defenitions
 require get_template_directory() . '/inc/widgets/recent.php';
