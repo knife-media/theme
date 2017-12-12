@@ -319,7 +319,8 @@ add_filter('gettext_with_context', function($translation, $text, $context, $doma
 		'Standard' => __('Стандартный', 'knife-theme'),
 		'Aside'  => __('Без сайдбара', 'knife-theme'),
 		'Video' => __('Видео', 'knife-theme'),
- 		'Audio' => __('Аудио', 'knife-theme')
+ 		'Audio' => __('Аудио', 'knife-theme'),
+  		'Gallery' => __('Галерея', 'knife-theme')
 	];
 
 	if($context !== 'Post format')
@@ -477,3 +478,6 @@ require get_template_directory() . '/inc/widgets/recent.php';
 require get_template_directory() . '/inc/widgets/stripe.php';
 require get_template_directory() . '/inc/widgets/mindmap.php';
 require get_template_directory() . '/inc/widgets/transparent.php';
+
+// TODO: Merge it with stripe widget and remove
+require get_template_directory() . '/inc/widgets/stripe-custom.php';
