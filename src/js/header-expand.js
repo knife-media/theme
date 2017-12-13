@@ -9,6 +9,9 @@
 
 		document.querySelector(parent).classList.toggle('topline__menu--expand');
 
+		if(document.querySelector('.search').classList.contains('search--expand'))
+			document.querySelector('.topline .toggle--search').click();
+
 		return this.classList.toggle('toggle--expand');
 	});
 })();

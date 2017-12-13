@@ -478,6 +478,3 @@ require get_template_directory() . '/inc/widgets/recent.php';
 require get_template_directory() . '/inc/widgets/stripe.php';
 require get_template_directory() . '/inc/widgets/mindmap.php';
 require get_template_directory() . '/inc/widgets/transparent.php';
-
-// TODO: Merge it with stripe widget and remove
-require get_template_directory() . '/inc/widgets/stripe-custom.php';
