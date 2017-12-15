@@ -1,9 +1,8 @@
 .meta {
   color: $color-primary;
-  font-size: .625rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: .75px;
+  font-size: .8125rem;
+  font-weight: 400;
+  letter-spacing: .5px;
 
   .meta__link {
     &:hover {
@@ -16,6 +15,7 @@
 
     overflow: hidden;
     white-space: nowrap;
+    text-transform: none;
     text-overflow: ellipsis;
 
     &:before {
@@ -24,6 +24,8 @@
 
       margin-left: .5rem;
       margin-right: .5rem;
+
+      font-size: .625rem;
     }
 
     &:last-child {

@@ -13,7 +13,7 @@
 	<?php
 		knife_theme_meta([
 			'items' => ['date', 'tag'],
-			'before' => '<div class="widget__header meta">',
+			'before' => '<div class="widget__meta meta">',
 			'after' => '</div>'
 		]);
 

@@ -27,6 +27,7 @@ add_action('wp_enqueue_scripts', function() {
 // Insert styles
 add_action('wp_print_styles', function() {
 	$version = wp_get_theme()->get('Version');
+	$version = time();
 
 	wp_enqueue_style('knife-theme', get_template_directory_uri() . '/assets/styles.min.css', [], $version);
 });

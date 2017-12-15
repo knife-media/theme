@@ -105,7 +105,7 @@
     left: 0;
     z-index: 2;
 
-    padding: .75rem 1rem;
+    padding: .8125rem 1.25rem;
     font-size: .625rem;
     font-weight: 500;
     line-height: 1;
@@ -189,7 +189,7 @@
 
   &.widget--single {
     width: 100%;
-    min-height: 15rem;
+    min-height: 15.625rem;
 
     .widget__link  {
       padding-top: 2rem;
@@ -236,7 +236,6 @@
       height: auto;
       width: auto;
       max-width: calc(100% - 2rem);
-      padding: 1rem;
 
       background-color: $color-white;
 

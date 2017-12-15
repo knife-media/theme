@@ -4,7 +4,7 @@
   justify-content: flex-start;
   flex: 1 1 auto;
 
-  color: $color-text;
+  color: $color-white;
   background: transparent;
 
   .widget__item {
@@ -21,6 +21,8 @@
         font-size: 1.875rem;
         line-height: 1.075;
 
+        background: $color-special;
+
         @media screen and (max-width: 1023px) {
           font-size: 1.5rem;
           line-height: 1.125;
@@ -29,6 +31,11 @@
         @media screen and (max-width: 767px) {
           font-size: 1.25rem;
           line-height: 1.25;
+        }
+
+        &:hover {
+          background: $color-primary;
+          color: $color-white;
         }
       }
     }
@@ -51,7 +58,7 @@
     font-weight: 500;
     line-height: 1.25;
 
-    background: $color-white;
+    background: $color-accent;
 
     &:before {
       content: "•";
