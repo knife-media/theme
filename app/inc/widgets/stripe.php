@@ -28,10 +28,6 @@ class Knife_Stripe_Widget extends WP_Widget {
 
 		parent::__construct('knife_theme_stripe', __('[НОЖ] Список записей', 'knife-theme'), $widget_ops);
 
-		add_action('save_post', [$this, 'remove_cache']);
-		add_action('deleted_post', [$this, 'remove_cache']);
-		add_action('switch_theme', [$this, 'remove_cache']);
-
 		add_action('wp_ajax_knife-widget-terms', [$this, 'widget_terms']);
 	}
 
@@ -306,14 +302,6 @@ class Knife_Stripe_Widget extends WP_Widget {
 			});
 		</script>
 <?php
-	}
-
-
-	/**
-	 * Remove cache on save and delete post
-	 */
-	public function remove_cache() {
-		delete_transient($this->id);
 	}
 
 

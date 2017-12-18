@@ -61,6 +61,10 @@
     letter-spacing: .25px;
     word-wrap: break-word;
 
+    strong {
+      color: $color-primary;
+    }
+
     @media screen and (max-width: 767px) {
       font-size: 1.125rem;
     }
