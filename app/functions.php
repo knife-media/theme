@@ -403,7 +403,7 @@ add_action('widgets_init', function(){
 		'name'          => __('Телевизор на главной', 'knife-theme'),
 		'id'            => 'knife-feature-stripe',
 		'description'   => __('Добавленные виджеты появятся в телевизоре на главной странице.', 'knife-theme'),
-		'before_widget' => '<div class="widget widget-%2$s widget--feature">',
+		'before_widget' => '<div class="widget widget-%2$s widget--splitter">',
 		'after_widget'  => '</div>',
 		'before_title'  => '<p class="widget__title">',
 		'after_title'	=> '</p>'
@@ -423,7 +423,7 @@ add_action('widgets_init', function(){
 		'name'          => __('Сайдбар на главной', 'knife-theme'),
 		'id'            => 'knife-feature-sidebar',
 		'description'   => __('Добавленные виджеты появятся справа от телевизона.', 'knife-theme'),
-		'before_widget' => '<div class="widget widget-%2$s widget--feature">',
+		'before_widget' => '<div class="widget widget-%2$s widget--sidebar">',
 		'after_widget'  => '</div>',
 		'before_title'  => '<p class="widget__title">',
 		'after_title'   => '</p>'
@@ -433,6 +433,16 @@ add_action('widgets_init', function(){
 		'name'          => __('Сайдбар на внутренних', 'knife-theme'),
 		'id'            => 'knife-inner-sidebar',
 		'description'   => __('Добавленные виджеты появятся в сайдбаре внутри постов.', 'knife-theme'),
+		'before_widget' => '<div class="widget widget-%2$s widget--sidebar">',
+		'after_widget'  => '</div>',
+		'before_title'  => '<p class="widget__title">',
+		'after_title'   => '</p>'
+	]);
+
+	register_sidebar([
+		'name'          => __('Сайдбар в новостях', 'knife-theme'),
+		'id'            => 'knife-logbook-sidebar',
+		'description'   => __('Добавленные виджеты появятся на странице новостей.', 'knife-theme'),
 		'before_widget' => '<div class="widget widget-%2$s widget--sidebar">',
 		'after_widget'  => '</div>',
 		'before_title'  => '<p class="widget__title">',

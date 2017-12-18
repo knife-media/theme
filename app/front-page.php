@@ -17,14 +17,16 @@ get_header(); ?>
 	<?php if(is_active_sidebar('knife-feature-stripe')) : ?>
 
 		<div class="content block">
-			<div class="feature feature--stripe">
+			<div class="splitter splitter--content">
 				<?php dynamic_sidebar('knife-feature-stripe'); ?>
 			</div>
 
 			<?php if(is_active_sidebar('knife-feature-sidebar')) : ?>
-			<aside class="feature feature--sidebar">
+
+			<aside class="splitter splitter--sidebar">
 				<?php dynamic_sidebar('knife-feature-sidebar'); ?>
 			</aside>
+
 			<?php endif; ?>
 		</div>
 

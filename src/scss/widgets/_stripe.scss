@@ -61,10 +61,6 @@
     letter-spacing: .25px;
     word-wrap: break-word;
 
-    @media screen and (max-width: 1023px) {
-      font-size: 1.25rem;
-    }
-
     @media screen and (max-width: 767px) {
       font-size: 1.125rem;
     }
@@ -182,6 +178,20 @@
   &.widget--double {
     width: calc(50% - .5rem);
 
+    .widget__title {
+      font-size: 1.75rem;
+      line-height: 1.25;
+
+      @media screen and (max-width: 1023px) {
+        font-size: 1.375rem;
+        line-height: 1.125;
+      }
+
+      @media screen and (max-width: 767px) {
+        font-size: 1.125rem;
+      }
+    }
+
     @media screen and (max-width: 479px) {
       width: 100%;
     }
@@ -218,10 +228,10 @@
       }
 
       @media screen and (max-width: 1023px) {
-        font-size: 1.25rem;
+        font-size: 1.375rem;
       }
 
-      @media screen and (max-width: 1023px) {
+      @media screen and (max-width: 767px) {
         font-size: 1.125rem;
       }
     }
@@ -281,9 +291,17 @@
     }
   }
 
-  &.widget--feature {
+  &.widget--splitter {
     .widget__title {
       font-size: 1.25rem;
+
+      @media screen and (max-width: 1023px) {
+        font-size: 1.375rem;
+      }
+
+      @media screen and (max-width: 767px) {
+        font-size: 1.125rem;
+      }
     }
 
     &.widget--single {
@@ -292,7 +310,11 @@
         line-height: 1.25;
 
         @media screen and (max-width: 1023px) {
-          font-size: 1.25rem;
+          font-size: 1.375rem;
+        }
+
+        @media screen and (max-width: 767px) {
+          font-size: 1.125rem;
         }
       }
     }

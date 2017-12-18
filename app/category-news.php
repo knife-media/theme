@@ -15,19 +15,31 @@ get_header(); ?>
 
 	<div class="content block">
 
+	<?php if(have_posts()) : ?>
+
+			<div class="splitter splitter--content">
+			<?php
+				while (have_posts()) : the_post();
+
+					knife_theme_widget_template([
+						'template' => 'template-parts/widgets/logbook',
+						'before' => '<div class="widget widget-logbook">',
+						'after' => '</div>'
+					]);
+
+				endwhile;
+			?>
+			</div>
+
+			<?php if(is_active_sidebar('knife-logbook-sidebar')) : ?>
+
+			<aside class="splitter splitter--sidebar">
+				<?php dynamic_sidebar('knife-logbook-sidebar'); ?>
+			</aside>
+
+			<?php endif; ?>
+
 	<?php
-		if(have_posts()) :
-
-			while (have_posts()) : the_post();
-
-				knife_theme_widget_template([
-					'template' => 'template-parts/widgets/logbook',
-					'before' => '<div class="widget widget-logbook">',
-					'after' => '</div>'
-				]);
-
-			endwhile;
-
 		else:
 
 			// Include "no posts found" template
@@ -38,9 +50,11 @@ get_header(); ?>
 
 	</div>
 
-	<div class="nav block">
-		<?php posts_nav_link('&bull;', '<span class="icon icon--left"></span>', '<span class="icon icon--right"></span>'); ?>
-	</div>
+  	<?php if(have_posts()) : ?>
+		<div class="nav block">
+			<?php posts_nav_link('&bull;', '<span class="icon icon--left"></span>', '<span class="icon icon--right"></span>'); ?>
+		</div>
+	<?php endif; ?>
 
 </main>
 
