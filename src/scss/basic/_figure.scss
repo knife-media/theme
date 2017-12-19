@@ -89,6 +89,40 @@
     }
   }
 
+  &.figure--quote {
+    align-items: flex-start;
+
+    max-width: calc(#{$content-width} + 4rem);
+    margin-left: -2rem;
+    margin-right: -2rem;
+
+    padding: 1.25rem 2rem;
+
+    background-color: $color-sheet;
+
+    .figure__author {
+      margin-bottom: 1rem;
+
+      font-size: 1rem;
+      font-weight: 500;
+      font-style: normal;
+      color: $color-text;
+      text-align: left;
+
+      strong {
+        display: block;
+
+        line-height: 1.5;
+        font-size: 1.25rem;
+      }
+    }
+
+    @media screen and (max-width: 767px) {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+
   &:first-child {
     margin-top: 0;
   }
