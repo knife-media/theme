@@ -51,7 +51,7 @@ class Knife_Post_Settings {
 	public function tagline_site_title($title) {
 		global $post;
 
-		$tagline = trim(get_post_meta($post->ID, $this->tagline, true));
+		$tagline = trim(get_post_meta($post->ID ?? 0, $this->tagline, true));
 
 		if(empty($tagline))
 			return $title;
@@ -71,7 +71,7 @@ class Knife_Post_Settings {
 		if (get_post_type($post->ID) !== 'post')
 			return false;
 
-		$tagline = get_post_meta($post->ID, $this->tagline, true);
+		$tagline = get_post_meta($post->ID ?? 0, $this->tagline, true);
 
 		printf(
 			'<input id="knife-theme-tagline" type="text" class="large-text" value="%1$s" name="%2$s" placeholder="%3$s">',

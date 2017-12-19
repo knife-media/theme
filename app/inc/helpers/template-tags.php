@@ -254,13 +254,13 @@ function knife_theme_related($args, $html = '') {
 		'echo' => true
 	];
 
+	global $post;
+
 	$args = wp_parse_args($args, $defaults);
 	$cats = get_the_category();
 
-	if(!isset($cats[0]))
+	if(!isset($cats[0]) || !isset($post->ID))
 		return false;
-
-	global $post;
 
 	$title = sprintf($args['title'], __('Читайте также:', 'knife-theme'));
 
