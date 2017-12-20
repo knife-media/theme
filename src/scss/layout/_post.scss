@@ -54,6 +54,9 @@
     }
 
     .post__header-share {
+      margin-top: 1rem;
+      margin-bottom: .75rem;
+
       @media screen and (max-width: 767px) {
         display: none;
       }

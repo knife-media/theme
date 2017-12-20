@@ -12,7 +12,7 @@
 <article class="widget__item">
 	<?php
 		knife_theme_meta([
-			'items' => ['date', 'tag'],
+			'items' => ['time', 'tag'],
 			'before' => '<div class="widget__meta meta">',
 			'after' => '</div>'
 		]);
