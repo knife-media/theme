@@ -92,11 +92,13 @@
   &.figure--quote {
     align-items: flex-start;
 
+    width: calc(100% + 4rem);
     max-width: calc(#{$content-width} + 4rem);
     margin-left: -2rem;
     margin-right: -2rem;
-
     padding: 1.25rem 2rem;
+
+    font-size: 1rem;
 
     background-color: $color-sheet;
 
@@ -115,6 +117,70 @@
         line-height: 1.5;
         font-size: 1.25rem;
       }
+    }
+
+    @media screen and (max-width: 767px) {
+      font-size: .9375rem;
+    }
+  }
+
+  &.figure--fact {
+    align-items: flex-start;
+
+    width: calc(100% + 4rem);
+    max-width: calc(#{$content-width} + 4rem);
+    margin-left: -2rem;
+    margin-right: -2rem;
+    padding: 1.25rem 2rem;
+
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.5;
+    background-color: $color-sheet;
+
+    .figure__info {
+      display: block;
+
+      margin-bottom: .5rem;
+      font-size: 7.5rem;
+      line-height: 1;
+
+      @media screen and (max-width: 767px) {
+        font-size: 5rem;
+      }
+    }
+
+    .figure__source {
+      display: block;
+
+      width: calc(#{$content-width} + 4rem);
+      margin: 1.25rem -2rem 0 -2rem;
+      padding: 1.25rem 2rem 0;
+
+      font-size: .8125rem;
+      font-weight: 500;
+      font-style: normal;
+      color: $color-text;
+      text-align: left;
+
+      border-top: solid 2px $color-white;
+
+      a {
+        color: $color-text;
+
+        border-bottom: solid 1px $color-text;
+
+        &:hover {
+          color: $color-primary;
+
+          border-bottom-color: transparent;
+        }
+      }
+    }
+
+    @media screen and (max-width: 767px) {
+      font-size: 1.125rem;
+      line-height: 1.5;
     }
   }
 
