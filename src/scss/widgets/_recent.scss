@@ -71,7 +71,7 @@
     }
   }
 
-  &.widget--splitter {
+  &.widget--split {
     flex: 1 1 auto;
 
     .widget__item {
@@ -100,6 +100,8 @@
   }
 
   &.widget--sidebar {
+    margin-bottom: auto;
+
     .widget__item {
       width: 100%;
 

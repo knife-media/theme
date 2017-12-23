@@ -1,6 +1,6 @@
 <?php
 /**
- * Mindmap widget
+ * Feature widget
  *
  * Recent posts widget showing as bright links
  *
@@ -9,15 +9,15 @@
  */
 
 
-class Knife_Mindmap_Widget extends WP_Widget {
+class Knife_Feature_Widget extends WP_Widget {
     public function __construct() {
         $widget_ops = [
-            'classname' => 'mindmap',
+            'classname' => 'feature',
             'description' => __('Выводит список контрастных ссылок на посты по критерию.', 'knife-theme'),
 			'customize_selective_refresh' => true
         ];
 
-        parent::__construct('knife_theme_mindmap', __('[НОЖ] Яркие ссылки', 'knife-theme'), $widget_ops);
+        parent::__construct('knife_theme_feature', __('[НОЖ] Яркие ссылки', 'knife-theme'), $widget_ops);
     }
 
 
@@ -43,7 +43,7 @@ class Knife_Mindmap_Widget extends WP_Widget {
 
  			while($q->have_posts()) : $q->the_post();
 
-				get_template_part('template-parts/widgets/mindmap');
+				get_template_part('template-parts/widgets/feature');
 
  			endwhile;
 
@@ -113,5 +113,5 @@ class Knife_Mindmap_Widget extends WP_Widget {
  * It is time to register widget
  */
 add_action('widgets_init', function() {
-	register_widget('Knife_Mindmap_Widget');
+	register_widget('Knife_Feature_Widget');
 });

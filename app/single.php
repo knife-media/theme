@@ -10,6 +10,13 @@ get_header(); ?>
 
 <main class="wrap">
 
+<?php if(is_active_sidebar('knife-header')) : ?>
+	<div class="content">
+		<?php dynamic_sidebar('knife-header'); ?>
+	</div>
+<?php endif; ?>
+
+
 	<div class="content block">
 <?php
 	if (have_posts()) :

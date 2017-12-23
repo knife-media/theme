@@ -5,7 +5,7 @@
   align-content: space-between;
 
   width: 100%;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 
   border-top: solid 1px $color-white;
 
@@ -70,7 +70,7 @@
 
   .widget__footer {
     width: 100%;
-    padding: 1.5rem 0 0;
+    padding: 1.5rem 0;
 
     border-bottom: solid 1px $color-white;
 
@@ -83,8 +83,6 @@
 
   .widget__title {
     display: block;
-
-    margin-bottom: 1.5rem;
 
     font-size: 1.375rem;
     font-weight: 500;
@@ -103,7 +101,7 @@
     justify-content: flex-start;
 
     width: 100%;
-    margin-top: 1.5rem;
+    margin-top: 0;
     margin-bottom: 1rem;
 
     color: $color-white;

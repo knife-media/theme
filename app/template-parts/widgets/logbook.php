@@ -20,7 +20,7 @@
 				the_title('<p class="widget__title">', '</p>');
 
 				knife_theme_meta([
-					'items' => ['time', 'date', 'tags'],
+					'items' => ['time', 'tags'],
 					'before' => '<div class="widget__meta meta">',
 					'after' => '</div>',
 					'is_link' => false

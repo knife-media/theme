@@ -14,31 +14,33 @@ get_header(); ?>
 
 <main class="wrap">
 
-	<?php if(is_active_sidebar('knife-feature-stripe')) : ?>
+<?php if(is_active_sidebar('knife-header')) : ?>
+	<div class="content expand">
+		<?php dynamic_sidebar('knife-header'); ?>
+	</div>
+<?php endif; ?>
 
-		<div class="content block">
-			<div class="splitter splitter--content">
-				<?php dynamic_sidebar('knife-feature-stripe'); ?>
-			</div>
 
-			<?php if(is_active_sidebar('knife-feature-sidebar')) : ?>
-
-			<aside class="splitter splitter--sidebar">
-				<?php dynamic_sidebar('knife-feature-sidebar'); ?>
-			</aside>
-
-			<?php endif; ?>
+<?php if(is_active_sidebar('knife-feature-stripe')) : ?>
+	<div class="content block">
+		<div class="split split--content">
+			<?php dynamic_sidebar('knife-feature-stripe'); ?>
 		</div>
 
+	<?php if(is_active_sidebar('knife-feature-sidebar')) : ?>
+		<aside class="split split--sidebar">
+			<?php dynamic_sidebar('knife-feature-sidebar'); ?>
+		</aside>
 	<?php endif; ?>
+	</div>
+<?php endif; ?>
 
-	<?php if(is_active_sidebar('knife-frontal')) : ?>
 
-		<div class="content block">
-			<?php dynamic_sidebar('knife-frontal'); ?>
-		</div>
-
-	<?php endif; ?>
+<?php if(is_active_sidebar('knife-frontal')) : ?>
+	<div class="content block">
+		<?php dynamic_sidebar('knife-frontal'); ?>
+	</div>
+<?php endif; ?>
 
 </main>
 

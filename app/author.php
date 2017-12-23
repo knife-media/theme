@@ -10,45 +10,45 @@ get_header(); ?>
 
 <main class="wrap">
 
-	<?php if(have_posts()) : ?>
+<?php if(have_posts()) : ?>
+	<div class="caption block">
+		<h1 class="caption__title caption__title--author"><?php the_author(); ?></h1>
 
-		<div class="caption block">
-			<h1 class="caption__title caption__title--author"><?php the_author(); ?></h1>
-
-			<div class="caption__text">
-				<?php the_author_meta('description'); ?>
-			</div>
+		<div class="caption__text">
+			<?php the_author_meta('description'); ?>
 		</div>
+	</div>
+<?php endif; ?>
 
-	<?php endif; ?>
 
 	<div class="content block">
+<?php
+	if(have_posts()) :
 
-	<?php
-		if(have_posts()) :
+		while (have_posts()) : the_post();
 
-			while (have_posts()) : the_post();
+			knife_theme_widget_template([
+				'before' => '<div class="widget widget-stripe widget--%1$s">',
+				'after' => '</div>'
+			]);
 
-				knife_theme_widget_template([
-					'before' => '<div class="widget widget-stripe widget--%1$s">',
-					'after' => '</div>'
-				]);
+		endwhile;
 
-			endwhile;
+	else:
 
-		else:
+		// Include "no posts found" template
+		get_template_part('template-parts/content/post', 'none');
 
-			// Include "no posts found" template
-			get_template_part('template-parts/content/post', 'none');
-
-		endif;
-	?>
-
+	endif;
+?>
 	</div>
 
+
+<?php if(have_posts()) : ?>
 	<div class="nav block">
 		<?php posts_nav_link('&bull;', '<span class="icon icon--left"></span>', '<span class="icon icon--right"></span>'); ?>
 	</div>
+<?php endif; ?>
 
 </main>
 

@@ -17,7 +17,7 @@ get_header(); ?>
 
 	<?php if(have_posts()) : ?>
 
-			<div class="splitter splitter--content">
+			<div class="split split--content">
 			<?php
 				while (have_posts()) : the_post();
 
@@ -33,7 +33,7 @@ get_header(); ?>
 
 			<?php if(is_active_sidebar('knife-logbook-sidebar')) : ?>
 
-			<aside class="splitter splitter--sidebar">
+			<aside class="split split--sidebar">
 				<?php dynamic_sidebar('knife-logbook-sidebar'); ?>
 			</aside>
 

@@ -1,14 +1,14 @@
-.splitter {
+.split {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
   position: relative;
 
-  &.splitter--content {
+  &.split--content {
     flex: 1 1 53.25rem;
   }
 
-  &.splitter--sidebar {
+  &.split--sidebar {
     flex-flow: column wrap;
     flex: 0 0 19.75rem;
     justify-content: flex-start;

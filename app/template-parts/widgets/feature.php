@@ -1,8 +1,8 @@
 <?php
 /**
- * Mindmap widget template
+ * Feature widget template
  *
- * Mindmap is a recent posts template using bright colors
+ * Featulre is a recent posts template using bright colors
  *
  * @package knife-theme
  * @since 1.1

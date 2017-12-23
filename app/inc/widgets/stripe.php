@@ -10,13 +10,13 @@
 
 
 class Knife_Stripe_Widget extends WP_Widget {
-     /**
-     * Unique nonce for widget ajax requests
-     *
-     * @since	1.1
-     * @access  private
-     * @var     string
-     */
+	/**
+	* Unique nonce for widget ajax requests
+	*
+	* @since	1.1
+	* @access	private
+	* @var		string
+	*/
 	private $nonce = 'knife-widget-nonce';
 
 	public function __construct() {
@@ -147,7 +147,6 @@ class Knife_Stripe_Widget extends WP_Widget {
 		return $instance;
 	}
 
-
     /**
 	 * Back-end widget form.
 	 *
@@ -155,7 +154,7 @@ class Knife_Stripe_Widget extends WP_Widget {
 	 *
 	 * @param array $instance Previously saved values from database.
 	 */
-	function form($instance) {
+	public function form($instance) {
 		$defaults = [
 			'title' => '',
 			'posts_per_page' => 3,
@@ -316,6 +315,14 @@ class Knife_Stripe_Widget extends WP_Widget {
 		]);
 
 		wp_die();
+	}
+
+
+ 	/**
+	 * Remove transient on widget update
+	 */
+ 	private function remove_cache() {
+		delete_transient($this->id);
 	}
 }
 
