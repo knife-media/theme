@@ -51,7 +51,10 @@ class Knife_Post_Settings {
 	public function tagline_site_title($title) {
 		global $post;
 
-		$tagline = trim(get_post_meta($post->ID ?? 0, $this->tagline, true));
+		if(!is_singular() || !isset($post->ID))
+			return $title;
+
+		$tagline = trim(get_post_meta($post->ID, $this->tagline, true));
 
 		if(empty($tagline))
 			return $title;
