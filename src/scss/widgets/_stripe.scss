@@ -6,11 +6,34 @@
   margin-bottom: 1rem;
   overflow: hidden;
 
+  .widget__head {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+
+    padding: .8125rem 1.25rem;
+    font-size: .625rem;
+    font-weight: 500;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: .75px;
+
+    color: $color-white;
+    background-color: $color-primary;
+
+    &:hover {
+      filter: brightness(120%);
+    }
+  }
+
   .widget__image {
     display: block;
     position: absolute;
     top: 0;
     left: 0;
+    z-index: -1;
 
     width: calc(100% + .5px);
     padding-top: 75%;
@@ -30,14 +53,16 @@
 
       transition: filter .25s;
     }
+
+    @media screen and (max-width: 767px) {
+      padding-top: 50%;
+    }
   }
 
   .widget__footer {
     display: flex;
     flex-flow: column wrap;
     justify-content: space-between;
-    position: relative;
-    z-index: 1;
 
     width: 100%;
     height: 100%;
@@ -52,6 +77,7 @@
 
   .widget__title {
     display: block;
+    position: relative;
 
     width: 100%;
 
@@ -77,46 +103,24 @@
 
     width: 100%;
     margin-top: 1.5rem;
+
+    .meta__link {
+      position: relative;
+    }
   }
 
   .widget__link {
     display: block;
-    cursor: pointer;
 
-    width: 100%;
-    height: 100%;
-    padding-top: 75%;
+    &:after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      cursor: pointer;
 
-    &:hover {
-      .widget__image-thumbnail {
-        filter: brightness(115%);
-      }
-    }
-
-    @media screen and (max-width: 767px) {
-      padding-top: 50%;
-    }
-  }
-
-  .widget__head {
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 2;
-
-    padding: .8125rem 1.25rem;
-    font-size: .625rem;
-    font-weight: 500;
-    line-height: 1;
-    text-transform: uppercase;
-    letter-spacing: .75px;
-
-    color: $color-white;
-    background-color: $color-primary;
-
-    &:hover {
-      filter: brightness(125%);
+      width: 100%;
+      height: 100%;
     }
   }
 
@@ -125,13 +129,13 @@
 
     width: 100%;
     height: 100%;
+    padding-top: 75%;
 
     color: $color-text;
-    background-color: $color-white;
 
     &.widget__item--cover {
+
       color: $color-white;
-      background-color: $color-black;
 
       .widget__footer {
         background-color: transparent;
@@ -146,17 +150,26 @@
         color: $color-white;
       }
 
-      .widget__link {
+      .widget__title {
+        color: $color-white;
+        text-shadow: 1px 1px rgba(0, 0, 0, .65);
+
+        strong {
+          color: $color-white;
+        }
+      }
+
+      &.widget__item {
         height: 100%;
         color: $color-white;
 
         .widget__image-thumbnail {
-          filter: brightness(55%);
+          filter: brightness(70%);
         }
 
         &:hover {
           .widget__image-thumbnail {
-            filter: brightness(80%);
+            filter: brightness(90%);
           }
         }
 
@@ -164,6 +177,16 @@
           padding-top: 25%;
         }
       }
+    }
+
+    &:hover {
+      .widget__image-thumbnail {
+        filter: brightness(120%);
+      }
+    }
+
+    @media screen and (max-width: 767px) {
+      padding-top: 50%;
     }
   }
 
@@ -205,21 +228,18 @@
     width: 100%;
     min-height: 15.625rem;
 
-    .widget__link  {
-      padding-top: 2rem;
+    .widget__footer {
+      width: 60%;
+      height: auto;
+      margin: 1rem;
+
+      background-color: $color-white;
 
       @media screen and (max-width: 1023px) {
-        padding-top: 75%;
+        width: 100%;
+        height: 100%;
+        margin: 0;
       }
-
-      @media screen and (max-width: 767px) {
-        padding-top: 50%;
-      }
-    }
-
-    .widget__image {
-      height: 100%;
-      padding-top: 0;
     }
 
     .widget__title {
@@ -240,54 +260,29 @@
       }
     }
 
-    .widget__footer {
-      display: flex;
-      justify-content: flex-end;
-      position: absolute;
-      left: 1rem;
-      bottom: 1rem;
-
-      height: auto;
-      width: auto;
-      max-width: calc(100% - 2rem);
-
-      background-color: $color-white;
-
-      @media screen and (max-width: 1023px) {
-        justify-content: flex-start;
-        position: relative;
-        left: 0;
-        bottom: 0;
-
-        height: 100%;
-        width: 100%;
-        max-width: 100%;
-      }
-    }
-
     .widget__item {
-      display: block;
+      display: flex;
+      align-items: flex-end;
+
+      padding-top: 2rem;
 
       &.widget__item--cover {
         .widget__footer {
-          left: 0;
-          bottom: 0;
-
-          max-width: 60%;
-          background-color: transparent;
-
-          @media screen and (max-width: 1023px) {
-            justify-content: space-between;
-
-            max-width: 100%;
-          }
+          margin: 0;
         }
+      }
+
+      @media screen and (max-width: 1023px) {
+        padding-top: 75%;
+      }
+
+      @media screen and (max-width: 767px) {
+        padding-top: 50%;
       }
     }
 
     @media screen and (max-width: 1023px) {
       width: calc(50% - .5rem);
-      min-height: 0;
     }
 
     @media screen and (max-width: 479px) {
@@ -310,8 +305,13 @@
 
     &.widget--single {
       .widget__title {
-        font-size: 1.75rem;
-        line-height: 1.25;
+        font-size: 2rem;
+        line-height: 1.125;
+
+        @media screen and (max-width: 1279px) {
+          font-size: 1.75rem;
+          line-height: 1.25;
+        }
 
         @media screen and (max-width: 1023px) {
           font-size: 1.375rem;
@@ -319,6 +319,12 @@
 
         @media screen and (max-width: 767px) {
           font-size: 1.125rem;
+        }
+      }
+
+      .widget__item--cover {
+        .widget__footer {
+          width: 100%;
         }
       }
     }
@@ -329,49 +335,6 @@
 
     .widget__head {
       display: none;
-    }
-
-    &.widget--single {
-      .widget__link  {
-        @media screen and (max-width: 1023px) {
-          padding-top: 5rem;
-        }
-      }
-
-      .widget__title {
-        font-size: 1.25rem;
-        line-height: 1.25;
-
-        @media screen and (max-width: 1023px) {
-          font-size: 1.25rem;
-        }
-
-        @media screen and (max-width: 767px) {
-          font-size: 1.125rem;
-        }
-      }
-
-      .widget__item {
-        display: block;
-
-        &.widget__item--cover {
-          .widget__footer {
-            max-width: 100%;
-          }
-        }
-      }
-
-      @media screen and (max-width: 1023px) {
-        width: 100%;
-      }
-    }
-
-    @media screen and (max-width: 1023px) {
-      width: calc(50% - .5rem);
-    }
-
-    @media screen and (max-width: 479px) {
-      width: 100%;
     }
   }
 }
