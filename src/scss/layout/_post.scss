@@ -54,7 +54,7 @@
     }
 
     .post__header-share {
-      margin-top: 1rem;
+      margin-top: 1.5rem;
       margin-bottom: .75rem;
 
       @media screen and (max-width: 767px) {
@@ -78,7 +78,7 @@
 
     .post__footer-tags {
       .refers__link {
-        margin-right: 2.5rem;
+        margin-right: 2rem;
 
         @media screen and (max-width: 479px) {
           margin-right: 1.5rem;
@@ -94,6 +94,8 @@
 
     .post__footer-share {
       margin-top: 1.5rem;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
 
       background-color: $color-sheet;
     }
