@@ -2,19 +2,28 @@
 /**
  * Feature widget template
  *
- * Featulre is a recent posts template using bright colors
+ * Feature is an important single post with feature meta
  *
  * @package knife-theme
  * @since 1.1
  */
 ?>
 
-<article class="widget__item">
-	<?php
-		printf(
-			'<a class="widget__link" href="%1$s">%2$s</a>',
-			get_permalink(),
-			get_the_title()
-		)
-	?>
-</article>
+<a class="widget__link" href="<?php echo get_query_var('widget_link', get_permalink()); ?>">
+	<div class="widget__item block">
+		<?php
+			printf(
+				'<p class="widget__title">%s</p>',
+				get_query_var('widget_head', get_the_title())
+			);
+
+			knife_theme_post_meta([
+				'item' => '<img class="widget__sticker" src="%s">',
+				'meta' => 'post-sticker',
+				'post_id' => get_query_var('widget_base', get_the_ID())
+			]);
+		?>
+
+		<span class="icon icon--right"></span>
+	</div>
+</a>

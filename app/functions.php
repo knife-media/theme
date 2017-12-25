@@ -498,4 +498,5 @@ require get_template_directory() . '/inc/helpers/login-screen.php';
 require get_template_directory() . '/inc/widgets/recent.php';
 require get_template_directory() . '/inc/widgets/stripe.php';
 require get_template_directory() . '/inc/widgets/feature.php';
+require get_template_directory() . '/inc/widgets/details.php';
 require get_template_directory() . '/inc/widgets/transparent.php';

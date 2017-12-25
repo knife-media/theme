@@ -44,11 +44,12 @@ class Knife_Transparent_Widget extends WP_Widget {
 		]];
 
 		// If user selected option to show posts only with stickers
-		if($sticker === 1) $base['meta_query'] = $meta;
+		if($sticker === 1)
+			$base['meta_query'] = $meta;
 
 		$q = new WP_Query($base);
 
-		if($q->have_posts() && $q->post_count > 2) :
+		if($q->have_posts() && $q->post_count > 3) :
 
 			echo $args['before_widget'];
 
@@ -101,7 +102,7 @@ class Knife_Transparent_Widget extends WP_Widget {
 			'<p><input type="checkbox" id="%1$s" name="%2$s" class="checkbox"%4$s><label for="%1$s">%3$s</label></p>',
 			esc_attr($this->get_field_id('sticker')),
 			esc_attr($this->get_field_name('sticker')),
-			__('Только со стикерами:', 'knife-theme'),
+			__('Только со стикерами', 'knife-theme'),
 			checked($instance['sticker'], 1, false)
 		);
 	}

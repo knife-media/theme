@@ -4,13 +4,14 @@
   justify-content: space-around;
   cursor: default;
 
+  width: 100%;
   margin: 1rem 0;
   font-size: 1.5rem;
   line-height: 2rem;
 
   .nav__link {
     display: block;
-    cursot: pointer;
+    cursor: pointer;
 
     font-size: 2rem;
 

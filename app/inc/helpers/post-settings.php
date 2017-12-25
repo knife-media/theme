@@ -11,29 +11,31 @@
 new Knife_Post_Settings;
 
 class Knife_Post_Settings {
-	private $cover = '_knife-theme-cover';
+	private $cover   = '_knife-theme-cover';
 	private $tagline = '_knife-theme-tagline';
+	private $feature = '_knife-theme-feature';
 
 	public function __construct() {
-		add_action('admin_print_styles-post.php', [$this, 'post_styles']);
-		add_action('save_post_post', [$this, 'save_meta']);
+		add_action('admin_print_styles-post.php', [$this, 'print_admin_styles']);
+		add_action('save_post_post', [$this, 'save_post_meta']);
 
-		add_action('save_post', [$this, 'widget_cache']);
- 		add_action('deleted_post', [$this, 'widget_cache']);
+		add_action('save_post', [$this, 'clear_widget_cache']);
+ 		add_action('deleted_post', [$this, 'clear_widget_cache']);
 
-		add_filter('admin_post_thumbnail_html', [$this, 'cover_checkbox'], 10, 3);
-		add_action('edit_form_after_title', [$this, 'tagline_input']);
+		add_filter('admin_post_thumbnail_html', [$this, 'print_cover_checkbox'], 10, 3);
+		add_action('post_submitbox_misc_actions', [$this, 'print_feature_checkbox']);
+		add_action('edit_form_after_title', [$this, 'print_tagline_input']);
 
-		add_filter('the_title', [$this, 'tagline_post_title'], 10, 2);
- 		add_filter('document_title_parts', [$this, 'tagline_site_title'], 10, 1);
+		add_filter('the_title', [$this, 'add_post_tagline'], 10, 2);
+ 		add_filter('document_title_parts', [$this, 'add_site_tagline'], 10, 1);
 	}
 
 
  	/**
 	 * Filter the post title on the Posts screen, and on the front-end
 	 */
-	public function tagline_post_title($title, $post_id) {
-		$tagline = trim(get_post_meta($post_id, $this->tagline, true));
+	public function add_post_tagline($title, $post_id) {
+		$tagline = get_post_meta($post_id, $this->tagline, true);
 
 		if(empty($tagline))
 			return $title;
@@ -48,13 +50,14 @@ class Knife_Post_Settings {
 	/**
 	 * Filter the document title in the head.
 	 */
-	public function tagline_site_title($title) {
+	public function add_site_tagline($title) {
 		global $post;
 
 		if(!is_singular() || !isset($post->ID))
 			return $title;
 
-		$tagline = trim(get_post_meta($post->ID, $this->tagline, true));
+		$tagline = get_post_meta($post->ID, $this->tagline, true);
+		$tagline = sanitize_text_field($tagline);
 
 		if(empty($tagline))
 			return $title;
@@ -68,13 +71,14 @@ class Knife_Post_Settings {
 	/**
 	 * Shows tagline input right after post title form on admin page
 	 */
-	public function tagline_input() {
-		global $post;
+	public function print_tagline_input() {
+		$post_id = get_the_ID();
 
-		if (get_post_type($post->ID) !== 'post')
-			return false;
+		if (get_post_type($post_id) !== 'post')
+			return;
 
-		$tagline = get_post_meta($post->ID ?? 0, $this->tagline, true);
+		$tagline = get_post_meta($post_id, $this->tagline, true);
+ 		$tagline = sanitize_text_field($tagline);
 
 		printf(
 			'<input id="knife-theme-tagline" type="text" class="large-text" value="%1$s" name="%2$s" placeholder="%3$s">',
@@ -85,30 +89,52 @@ class Knife_Post_Settings {
 	}
 
 
+ 	/**
+	 * Prints checkbox in post publish action section
+	 *
+	 * We using feature post meta for feature widget
+	 */
+	public function print_feature_checkbox() {
+		$post_id = get_the_ID();
+
+		if(get_post_type($post_id) !== 'post')
+			return;
+
+ 		$feature = get_post_meta($post_id, $this->feature, true);
+
+		printf(
+			'<div class="misc-pub-section misc-pub-section-last"><label><input type="checkbox" name="%1$s" class="checkbox"%3$s> %2$s</label></div>',
+			esc_attr($this->feature),
+			__('Добавить запись в фичер', 'knife-theme'),
+			checked($feature, 1, false)
+		);
+	}
+
+
 	/**
 	 * Prints checkbox in post thumbnail editor metabox
 	 */
-	public function cover_checkbox($content, $post_id, $thumbnail_id = '')  {
-		if (get_post_type($post_id) !== 'post' || empty($thumbnail_id))
+	public function print_cover_checkbox($content, $post_id, $thumbnail_id = '')  {
+		if(get_post_type($post_id) !== 'post' || empty($thumbnail_id))
 			return $content;
 
 		$cover = get_post_meta($post_id, $this->cover, true);
 
-		$check = sprintf(
-			'<p><input type="checkbox" id="knife-theme-cover" name="%1$s" class="checkbox"%3$s><label for="knife-theme-cover"> %2$s</label></p>',
+		$checkbox = sprintf(
+			'<p><label><input type="checkbox" name="%1$s" class="checkbox"%3$s> %2$s</label></p>',
 			esc_attr($this->cover),
 			__('Использовать подложку в списках', 'knife-theme'),
 			checked($cover, 1, false)
 		);
 
-		return $check . $content;
+		return $checkbox . $content;
 	}
 
 
 	/**
 	 * Save post options
 	 */
-	public function save_meta($post_id) {
+	public function save_post_meta($post_id) {
 		if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
 			return;
 
@@ -117,7 +143,7 @@ class Knife_Post_Settings {
 
 		// Save tagline meta
 		if(!empty($_REQUEST[$this->tagline]))
-			update_post_meta($post_id, $this->tagline, $_REQUEST[$this->tagline]);
+			update_post_meta($post_id, $this->tagline, trim($_REQUEST[$this->tagline]));
 		else
 			delete_post_meta($post_id, $this->tagline);
 
@@ -127,13 +153,19 @@ class Knife_Post_Settings {
 			update_post_meta($post_id, $this->cover, 1);
 		else
 			delete_post_meta($post_id, $this->cover);
+
+ 		// Save feature meta
+		if(!empty($_REQUEST[$this->feature]))
+			update_post_meta($post_id, $this->feature, 1);
+		else
+			delete_post_meta($post_id, $this->feature);
 	}
 
 
 	/**
 	 * Remove widgets cache on save or delete post
 	 */
-	public function widget_cache() {
+	public function clear_widget_cache() {
 		$sidebars = get_option('sidebars_widgets');
 
 		foreach($sidebars as $sidebar) {
@@ -149,7 +181,7 @@ class Knife_Post_Settings {
 	/**
 	 * Remove useless tinymce toolbars and fix tagline admin style
 	 */
-	public function post_styles() {
+	public function print_admin_styles() {
 	?>
 		<style type="text/css">
 			.wp-admin .mce-inline-toolbar-grp {

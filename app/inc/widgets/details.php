@@ -1,23 +1,23 @@
 <?php
 /**
- * Recent widget
+ * Details widget
  *
- * Recent posts widget showing as narrow column
+ * Recent posts widget showing as bright links
  *
  * @package knife-theme
  * @since 1.1
  */
 
 
-class Knife_Recent_Widget extends WP_Widget {
+class Knife_Details_Widget extends WP_Widget {
     public function __construct() {
         $widget_ops = [
-            'classname' => 'recent',
-            'description' => __('Выводит последние посты c датой и тегом по выбранной категории.', 'knife-theme'),
- 			'customize_selective_refresh' => true
+            'classname' => 'details',
+            'description' => __('Выводит список контрастных ссылок на посты по критерию.', 'knife-theme'),
+			'customize_selective_refresh' => true
         ];
 
-        parent::__construct('knife_theme_recent', __('[НОЖ] Новости', 'knife-theme'), $widget_ops);
+        parent::__construct('knife_theme_details', __('[НОЖ] Микроформаты', 'knife-theme'), $widget_ops);
     }
 
 
@@ -25,35 +25,29 @@ class Knife_Recent_Widget extends WP_Widget {
      * Outputs the content of the widget
      */
     public function widget($args, $instance) {
- 		$defaults = ['title' => '', 'posts_per_page' => 10, 'cat' => 620];
+		$defaults = ['title' => '', 'posts_per_page' => 10, 'cat' => 0];
 		$instance = wp_parse_args((array) $instance, $defaults);
 
 		extract($instance);
 
- 		$q = new WP_Query([
+		$q = new WP_Query([
 			'cat' => $cat,
 			'posts_per_page' => $posts_per_page,
 			'post_status' => 'publish',
 			'ignore_sticky_posts' => 1,
 		]);
 
+
 		if($q->have_posts()) :
 			echo $args['before_widget'];
 
  			while($q->have_posts()) : $q->the_post();
 
-				get_template_part('template-parts/widgets/recent');
+				get_template_part('template-parts/widgets/details');
 
  			endwhile;
 
 			wp_reset_query();
-
-			// Show load more button
-			printf(
-				'<a class="widget__more" href="%2$s">%1$s</a>',
-				__('Все новости', 'knife-theme'),
-				esc_url(get_category_link($cat))
-			);
 
 			echo $args['after_widget'];
 		endif;
@@ -64,10 +58,10 @@ class Knife_Recent_Widget extends WP_Widget {
      * Outputs the options form on admin
      */
     function form($instance) {
-		$defaults = ['title' => '', 'posts_per_page' => 10, 'cat' => 620];
+		$defaults = ['title' => '', 'posts_per_page' => 10, 'cat' => 0];
 		$instance = wp_parse_args((array) $instance, $defaults);
 
-		$category = wp_dropdown_categories([
+		$dropdown = wp_dropdown_categories([
  			'id' => esc_attr($this->get_field_id('cat')),
 			'name' => esc_attr($this->get_field_name('cat')),
 			'selected' => esc_attr($instance['cat']),
@@ -95,7 +89,7 @@ class Knife_Recent_Widget extends WP_Widget {
 			'<p><label for="%1$s">%2$s</label>%3$s</p>',
 			esc_attr($this->get_field_id('cat')),
 			__('Рубрика записей:', 'knife-theme'),
-			$category
+			$dropdown
 		);
 	}
 
@@ -119,5 +113,5 @@ class Knife_Recent_Widget extends WP_Widget {
  * It is time to register widget
  */
 add_action('widgets_init', function() {
-	register_widget('Knife_Recent_Widget');
+	register_widget('Knife_Details_Widget');
 });

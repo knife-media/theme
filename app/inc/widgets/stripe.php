@@ -26,7 +26,7 @@ class Knife_Stripe_Widget extends WP_Widget {
 			'customize_selective_refresh' => true
 		];
 
-		parent::__construct('knife_theme_stripe', __('[НОЖ] Список записей', 'knife-theme'), $widget_ops);
+		parent::__construct('knife_theme_stripe', __('[НОЖ] Модули', 'knife-theme'), $widget_ops);
 
 		add_action('wp_ajax_knife-widget-terms', [$this, 'widget_terms']);
 	}
