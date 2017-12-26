@@ -17,7 +17,7 @@ class Knife_Stripe_Widget extends WP_Widget {
 	* @access	private
 	* @var		string
 	*/
-	private $nonce = 'knife-widget-nonce';
+	private $nonce = 'knife-stripe-nonce';
 
 	public function __construct() {
 		$widget_ops = [
@@ -28,7 +28,7 @@ class Knife_Stripe_Widget extends WP_Widget {
 
 		parent::__construct('knife_theme_stripe', __('[НОЖ] Модули', 'knife-theme'), $widget_ops);
 
-		add_action('wp_ajax_knife-widget-terms', [$this, 'widget_terms']);
+		add_action('wp_ajax_knife-stripe-terms', [$this, 'widget_terms']);
 	}
 
 
@@ -54,6 +54,7 @@ class Knife_Stripe_Widget extends WP_Widget {
 		$instance = wp_parse_args((array) $instance, $defaults);
 
 		extract($instance);
+
 
 		// Check cache before creating WP_Query object
 		$q = get_transient($this->id);
@@ -285,7 +286,7 @@ class Knife_Stripe_Widget extends WP_Widget {
 					var filter = jQuery(this).val();
 
 					var data = {
-						action: 'knife-widget-terms',
+						action: 'knife-stripe-terms',
 						filter: filter,
 						nonce: '<?php echo wp_create_nonce($this->nonce); ?>'
 					}

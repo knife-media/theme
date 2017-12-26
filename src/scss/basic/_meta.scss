@@ -9,7 +9,7 @@
     cursor: pointer;
 
     &:hover {
-      color: $color-light;
+      filter: brightness(150%);
     }
   }
 

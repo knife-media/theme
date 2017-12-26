@@ -182,6 +182,10 @@ class Knife_Post_Settings {
 	 * Remove useless tinymce toolbars and fix tagline admin style
 	 */
 	public function print_admin_styles() {
+		$post_id = get_the_ID();
+
+		if (get_post_type($post_id) !== 'post')
+			return;
 	?>
 		<style type="text/css">
 			.wp-admin .mce-inline-toolbar-grp {

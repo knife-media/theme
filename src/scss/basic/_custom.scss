@@ -27,7 +27,7 @@
 		color: $color-primary;
 
 		&:hover {
-			color: $color-light;
+		  filter: brightness(150%);
 		}
 	}
 

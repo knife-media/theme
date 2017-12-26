@@ -10,22 +10,24 @@
 ?>
 
 <article class="widget__item">
-	<a class="widget__link" href="<?php the_permalink(); ?>">
-		<div class="widget__image">
-			<?php the_post_thumbnail('thumbnail', ['class' => 'widget__image-thumbnail']); ?>
-		</div>
+	<div class="widget__image">
+		<?php the_post_thumbnail('thumbnail', ['class' => 'widget__image-thumbnail']); ?>
+	</div>
 
-		<footer class="widget__footer">
-			<?php
-				the_title('<p class="widget__title">', '</p>');
+	<footer class="widget__footer">
+		<?php
+			printf(
+				'<a class="widget__link" href="%2$s">%1$s</a>',
+				the_title('<p class="widget__title">', '</p>', false),
+				get_permalink()
+			);
 
-				knife_theme_meta([
-					'items' => ['time', 'tags'],
-					'before' => '<div class="widget__meta meta">',
-					'after' => '</div>',
-					'is_link' => false
-				]);
-			?>
-		</footer>
-	</a>
+			knife_theme_meta([
+				'items' => ['time', 'tags'],
+				'before' => '<div class="widget__meta meta">',
+				'after' => '</div>',
+				'is_link' => false
+			]);
+		?>
+	</footer>
 </article>

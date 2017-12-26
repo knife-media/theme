@@ -19,7 +19,7 @@
 		]);
 	?>
 
-	<a class="widget__link" href="<?php the_permalink(); ?>">
+	<div class="widget__parent">
 		<?php
 			knife_theme_post_meta([
 				'item' => '<img class="widget__sticker" src="%s">',
@@ -32,12 +32,15 @@
 				knife_theme_meta([
 					'items' => ['author', 'date'],
 					'before' => '<div class="widget__meta meta">',
-					'after' => '</div>',
-					'is_link' => false
+					'after' => '</div>'
 				]);
 
-				the_title('<p class="widget__title">', '</p>');
+				printf(
+					'<a class="widget__link" href="%2$s">%1$s</a>',
+					the_title('<p class="widget__title">', '</p>', false),
+					get_permalink()
+				);
 			?>
 		</footer>
-	</a>
+	</div>
 </article>

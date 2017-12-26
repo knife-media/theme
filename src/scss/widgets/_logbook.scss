@@ -94,7 +94,7 @@
     margin-top: 1.5rem;
   }
 
-  .widget__link {
+  .widget__item {
     display: flex;
     flex-flow: row-reverse nowrap;
     cursor: pointer;
@@ -103,21 +103,14 @@
     height: 100%;
     padding-top: 0;
 
+    color: $color-text;
+    background-color: $color-white;
+
     &:hover {
       .widget__image-thumbnail {
         filter: brightness(115%);
       }
     }
-  }
-
-  .widget__item {
-    display: block;
-
-    width: 100%;
-    height: 100%;
-
-    color: $color-text;
-    background-color: $color-white;
   }
 
   @media screen and (max-width: 1023px) {

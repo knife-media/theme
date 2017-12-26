@@ -17,13 +17,20 @@
     color: $color-text;
     background-color: $color-white;
 
-
     @media screen and (max-width: 1023px) {
       width: calc(50% - .5rem);
+
+      &:nth-child(n+7) {
+        display: none;
+      }
     }
 
     @media screen and (max-width: 479px) {
       width: 100%;
+
+      &:nth-child(n+7) {
+        display: flex;
+      }
     }
   }
 
@@ -101,6 +108,7 @@
 
   &.widget--sidebar {
     margin-bottom: auto;
+    padding-bottom: 1rem;
 
     .widget__item {
       width: 100%;

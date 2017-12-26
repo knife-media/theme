@@ -108,7 +108,9 @@
       font-weight: 500;
       text-decoration: none;
 
-      transition: color .25s;
+      &:hover {
+        color: $color-primary;
+      }
 
       @media screen and (max-width: 1279px) {
         font-size: 1rem;

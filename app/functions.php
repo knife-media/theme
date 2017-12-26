@@ -19,6 +19,7 @@ if(!isset($content_width)) {
 // Insert required js files
 add_action('wp_enqueue_scripts', function() {
  	$version = wp_get_theme()->get('Version');
+ 	$version = time();
 
 	wp_enqueue_script('knife-theme', get_template_directory_uri() . '/assets/scripts.min.js', [], $version, true);
 });
@@ -321,7 +322,8 @@ add_filter('gettext_with_context', function($translation, $text, $context, $doma
 		'Aside'  => __('Без сайдбара', 'knife-theme'),
 		'Video' => __('Видео', 'knife-theme'),
  		'Audio' => __('Аудио', 'knife-theme'),
-  		'Gallery' => __('Галерея', 'knife-theme')
+		'Gallery' => __('Галерея', 'knife-theme'),
+		'Chat' => __('Карточки', 'knife-theme')
 	];
 
 	if($context !== 'Post format')
@@ -465,6 +467,35 @@ add_action('widgets_init', function(){
 add_filter('widget_title', '__return_empty_string');
 
 
+// Register special post taxonomy
+add_action('init', function() {
+	register_taxonomy('special', 'post', [
+		'labels' => [
+				'name'                       => __('Спецпроекты', 'knife-theme'),
+				'singular_name'              => __('Спецпроект', 'knife-theme'),
+				'search_items'               => __('Поиск', 'knife-theme'),
+				'popular_items'              => __('Популярные спецпроекты', 'knife-theme'),
+				'all_items'                  => __('Все', 'knife-theme'),
+				'edit_item'                  => __('Редактировать', 'knife-theme'),
+				'update_item'                => __('Обновить', 'knife-theme'),
+				'add_new_item'               => __('Добавить новый', 'knife-theme'),
+				'new_item_name'              => __('Новый спецпроект', 'knife-theme'),
+				'separate_items_with_commas' => __('Разделить записи запятыми', 'knife-theme'),
+				'add_or_remove_items'        => __('Добавить или удалить тип', 'knife-theme'),
+				'choose_from_most_used'      => __('Наиболее используемые', 'knife-theme'),
+				'not_found'                  => __('Не найдено', 'knife-theme'),
+				'menu_name'                  => __('Спецпроекты', 'knife-theme'),
+		],
+		'public'                => true,
+		'hierarchical'          => true,
+		'show_ui'               => true,
+		'show_admin_column'     => true,
+		'show_in_nav_menus'     => true,
+		'query_var'             => true,
+		'rewrite'               => array('slug' => 'special'),
+	]);
+});
+
 // Remove default widgets to prevent printing unready styles on production
 add_action('widgets_init', function() {
 	unregister_widget('WP_Widget_Pages');
@@ -487,6 +518,9 @@ require get_template_directory() . '/inc/helpers/template-tags.php';
 
 // Add post settings rules and admin metaboxes
 require get_template_directory() . '/inc/helpers/post-settings.php';
+
+// Custom theme shortcodes
+require get_template_directory() . '/inc/helpers/theme-shortcodes.php';
 
 // Add plugins snippets
 require get_template_directory() . '/inc/helpers/plugin-snippets.php';

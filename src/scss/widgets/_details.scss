@@ -15,7 +15,7 @@
 
     height: auto;
     max-width: 100%;
-    padding: .625rem 1rem .625rem 2.5rem;
+    padding: .625rem 1rem;
 
     font-size: 1.375rem;
     font-weight: 500;
@@ -23,18 +23,6 @@
 
     color: $color-white;
     background: $color-details-inner;
-
-    &:before {
-      content: "•";
-      display: inline-block;
-      position: absolute;
-      top: 50%;
-      left: .875rem;
-
-      width: 1rem;
-      font-size: 1.5rem;
-      transform: translateY(-50%);
-    }
 
     &:hover {
       filter: brightness(115%);

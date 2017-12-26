@@ -7,12 +7,12 @@
     var counters = {facebook: false, vkontakte: false};
 
     var make_url = function(network) {
-		var link = document.querySelector('link[rel="canonical"]').href;
+		var link = document.querySelector('link[rel="canonical"]');
 
-		if(!link)
-			link = window.location.href.replace(window.location.hash, '');
-
-		link = encodeURIComponent(link);
+		if(link && link.href)
+ 			link = encodeURIComponent(link.href);
+		else
+			link = encodeURIComponent(window.location.href.replace(window.location.hash, ''));
 
 		if(network === 'vkontakte')
 			return 'https://vk.com/share.php?act=count&index=0&url=' + link;
