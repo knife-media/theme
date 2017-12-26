@@ -5,6 +5,10 @@
   align-self: flex-start;
   position: relative;
 
+  overflow: hidden;
+
+  border-radius: 2px;
+
   .widget__item {
     display: flex;
     flex-flow: column wrap;
@@ -76,6 +80,7 @@
     background-color: $color-primary;
 
     border: solid 1px $color-primary;
+    border-radius: 2px;
 
     &:hover {
       filter: brightness(125%);

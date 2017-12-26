@@ -24,6 +24,8 @@
     color: $color-white;
     background: $color-details-inner;
 
+    border-radius: 2px;
+
     &:hover {
       filter: brightness(115%);
     }
