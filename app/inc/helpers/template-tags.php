@@ -92,7 +92,7 @@ function knife_theme_meta($args, $html = '') {
 
 			case 'time':
 
- 				$html .= human_time_diff(get_the_time('U'), current_time('timestamp')) . __(' назад', 'knife-theme');
+ 				$html .= get_the_time('H:i');
 
 				break;
 

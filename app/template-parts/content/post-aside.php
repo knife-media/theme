@@ -7,7 +7,7 @@
  */
 ?>
 
-<article <?php post_class('post'); ?> id="post-<?php the_ID(); ?>">
+<article <?php post_class('post post--aside'); ?> id="post-<?php the_ID(); ?>">
 
 	<header class="post__header">
 		<?php

@@ -450,16 +450,6 @@ add_action('widgets_init', function(){
 		'before_title'  => '<p class="widget__title">',
 		'after_title'   => '</p>'
 	]);
-
-	register_sidebar([
-		'name'          => __('Сайдбар в новостях', 'knife-theme'),
-		'id'            => 'knife-logbook-sidebar',
-		'description'   => __('Добавленные виджеты появятся на странице новостей.', 'knife-theme'),
-		'before_widget' => '<div class="widget widget-%2$s widget--sidebar">',
-		'after_widget'  => '</div>',
-		'before_title'  => '<p class="widget__title">',
-		'after_title'   => '</p>'
-	]);
 });
 
 

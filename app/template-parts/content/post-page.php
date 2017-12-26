@@ -7,7 +7,7 @@
  */
 ?>
 
-<article <?php post_class('post'); ?> id="post-<?php the_ID(); ?>">
+<article <?php post_class('post post--page'); ?> id="post-<?php the_ID(); ?>">
 
 	<div class="post__content custom">
 		<?php the_content(); ?>

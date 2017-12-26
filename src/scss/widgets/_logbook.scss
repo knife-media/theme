@@ -3,7 +3,10 @@
   position: relative;
 
   width: 100%;
+  max-width: 44rem;
   margin-bottom: 1rem;
+  margin-left: auto;
+  margin-right: auto;
   overflow: hidden;
 
   color: $color-text;

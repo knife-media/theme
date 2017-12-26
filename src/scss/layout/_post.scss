@@ -138,15 +138,13 @@
 
   .post__card {
 		width: 100%;
-		max-width: 44rem;
+		max-width: 100%;
 		margin: 0 0 1rem;
 		padding: 1.5rem 2rem;
 
-		box-shadow: 1px 1px 2px grey;
 		background-color: $color-white;
 
-		border: 1px solid rgba(0, 0, 0, .15);
-		border-radius: 3px;
+    border-radius: 2px;
 
 		.post__header-share {
 			margin-bottom: 0;
@@ -179,7 +177,11 @@
   }
 
   &.post--chat {
+    flex: 0 0 44rem;
   	align-items: center;
+
+    margin-left: auto;
+    margin-right: auto;
     padding: 0;
 
     background-color: transparent;

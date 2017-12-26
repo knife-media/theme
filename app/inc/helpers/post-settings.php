@@ -22,6 +22,10 @@ class Knife_Post_Settings {
 		add_action('save_post', [$this, 'clear_widget_cache']);
  		add_action('deleted_post', [$this, 'clear_widget_cache']);
 
+ 		add_action('added_post_meta', [$this, 'clear_widget_cache']);
+  		add_action('deleted_post_meta', [$this, 'clear_widget_cache']);
+   		add_action('updated_post_meta', [$this, 'clear_widget_cache']);
+
 		add_filter('admin_post_thumbnail_html', [$this, 'print_cover_checkbox'], 10, 3);
 		add_action('post_submitbox_misc_actions', [$this, 'print_feature_checkbox']);
 		add_action('edit_form_after_title', [$this, 'print_tagline_input']);

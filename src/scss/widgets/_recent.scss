@@ -50,6 +50,10 @@
     font-weight: 400;
     letter-spacing: .5px;
     text-decoration: none;
+
+    &:hover {
+      color: $color-primary;
+    }
   }
 
   .widget__more {
