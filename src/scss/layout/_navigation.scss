@@ -37,4 +37,8 @@
       transition: transform .25s;
     }
   }
+
+  &.nav--logbook {
+    max-width: 46rem;
+  }
 }

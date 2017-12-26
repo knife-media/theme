@@ -9,7 +9,7 @@
  */
 ?>
 
-<article class="widget__item">
+<article class="<?php knife_theme_widget_options('widget__item'); ?>">
 	<div class="widget__image">
 		<?php the_post_thumbnail('thumbnail', ['class' => 'widget__image-thumbnail']); ?>
 	</div>
@@ -23,10 +23,9 @@
 			);
 
 			knife_theme_meta([
-				'items' => ['time', 'tags'],
+				'items' => ['time', 'date', 'tags'],
 				'before' => '<div class="widget__meta meta">',
-				'after' => '</div>',
-				'is_link' => false
+				'after' => '</div>'
 			]);
 		?>
 	</footer>

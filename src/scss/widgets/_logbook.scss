@@ -15,10 +15,11 @@
   border-radius: 2px;
 
   .widget__image {
-    display: block;
+    display: none;
     position: relative;
-    flex: 0 0 10rem;
+    flex: 0 0 15rem;
 
+    min-height: 10rem;
     padding: 0;
 
     overflow: hidden;
@@ -39,10 +40,6 @@
       transition: filter .25s;
     }
 
-    @media screen and (max-width: 767px) {
-      flex-basis: 7.5rem;
-    }
-
     @media screen and (max-width: 479px) {
       display: none;
     }
@@ -52,7 +49,6 @@
     display: flex;
     flex-flow: column wrap;
     justify-content: space-between;
-    position: relative;
     z-index: 1;
 
     width: 100%;
@@ -77,8 +73,12 @@
     letter-spacing: .25px;
     word-wrap: break-word;
 
+    strong {
+      color: $color-primary;
+    }
+
     @media screen and (max-width: 1023px) {
-      font-size: 1.75rem;
+      font-size: 1.5rem;
     }
 
     @media screen and (max-width: 767px) {
@@ -97,6 +97,18 @@
 
     width: 100%;
     margin-top: 1.5rem;
+
+    .meta__link {
+      position: relative;
+    }
+
+    .meta__item {
+      @media screen and (max-width: 767px) {
+        &:nth-child(n+3) {
+          display: none;
+        }
+      }
+    }
   }
 
   .widget__item {
@@ -111,14 +123,58 @@
     color: $color-text;
     background-color: $color-white;
 
+    &.widget__item--cover {
+      .widget__title {
+        font-size: 2.25rem;
+        line-height: 1.125;
+
+        @media screen and (max-width: 1023px) {
+          font-size: 1.75rem;
+          line-height: 1.25;
+        }
+
+        @media screen and (max-width: 767px) {
+          font-size: 1.5rem;
+        }
+      }
+
+      .widget__image {
+        display: block;
+
+        @media screen and (max-width: 479px) {
+          display: none;
+        }
+      }
+    }
+
     &:hover {
       .widget__image-thumbnail {
-        filter: brightness(115%);
+        filter: brightness(120%);
       }
     }
   }
 
-  @media screen and (max-width: 1023px) {
-    width: 100%;
+  .widget__link {
+    display: block;
+
+    &:after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      cursor: pointer;
+
+      width: 100%;
+      height: 100%;
+    }
+
+    &:hover {
+      color: $color-primary;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    margin-bottom: .5rem;
+    border-radius: 0;
   }
 }

@@ -38,7 +38,7 @@ get_header(); ?>
 
 
 <?php if(have_posts()) : ?>
-	<div class="nav block block--column">
+	<div class="nav nav--logbook block">
 		<?php posts_nav_link('&bull;', '<span class="icon icon--left"></span>', '<span class="icon icon--right"></span>'); ?>
 	</div>
 <?php endif; ?>
