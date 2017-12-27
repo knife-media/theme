@@ -22,9 +22,10 @@
 				'</h1>'
 			);
 
-			knife_theme_excerpt([
+			knife_theme_post_meta([
 				'before' => '<div class="post__header-excerpt">',
-				'after' => '</div>'
+				'after' => '</div>',
+				'meta' => 'lead-text'
 			]);
 
 			knife_theme_share([

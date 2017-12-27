@@ -11,6 +11,7 @@
 new Knife_Post_Settings;
 
 class Knife_Post_Settings {
+	private $lead    = 'lead-text'; // Backward compatibility
 	private $cover   = '_knife-theme-cover';
 	private $tagline = '_knife-theme-tagline';
 	private $feature = '_knife-theme-feature';
@@ -32,6 +33,33 @@ class Knife_Post_Settings {
 
 		add_filter('the_title', [$this, 'add_post_tagline'], 10, 2);
  		add_filter('document_title_parts', [$this, 'add_site_tagline'], 10, 1);
+
+		add_action('add_meta_boxes', [$this, 'add_lead_metabox']);
+	}
+
+
+	/**
+	 * Add lead-text metabox
+	 */
+	public function add_lead_metabox() {
+		add_meta_box('knife-metabox-lead', __('Лид текст'), [$this, 'print_lead_metabox'], 'post', 'normal', 'low');
+	}
+
+
+	/**
+	 * Print wp-editor based metabox for lead-text meta
+	 */
+	public function print_lead_metabox($post, $box) {
+		$lead = get_post_meta($post->ID, $this->lead, true);
+
+		wp_editor($lead, 'knife-lead-editor', [
+				'media_buttons' => false,
+				'textarea_name' =>
+				'lead-text',
+				'teeny' => true,
+				'tinymce' => true,
+				'editor_height' => 100
+		]);
 	}
 
 
@@ -158,11 +186,19 @@ class Knife_Post_Settings {
 		else
 			delete_post_meta($post_id, $this->cover);
 
+
  		// Save feature meta
 		if(!empty($_REQUEST[$this->feature]))
 			update_post_meta($post_id, $this->feature, 1);
 		else
 			delete_post_meta($post_id, $this->feature);
+
+
+		// Save lead-text meta
+		if(!empty($_REQUEST[$this->lead]))
+			update_post_meta($post_id, $this->lead, $_REQUEST[$this->lead]);
+		else
+			delete_post_meta($post_id, $this->lead);
 	}
 
 

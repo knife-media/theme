@@ -30,12 +30,21 @@ class Knife_Details_Widget extends WP_Widget {
 
 		extract($instance);
 
-		$q = new WP_Query([
-			'cat' => $cat,
-			'posts_per_page' => $posts_per_page,
-			'post_status' => 'publish',
-			'ignore_sticky_posts' => 1,
-		]);
+		// Check cache before creating WP_Query object
+		$q = get_transient($this->id);
+
+		if($q === false) :
+
+			$q = new WP_Query([
+				'cat' => $cat,
+				'posts_per_page' => $posts_per_page,
+				'post_status' => 'publish',
+				'ignore_sticky_posts' => 1,
+			]);
+
+			set_transient($this->id, $q, 24 * HOUR_IN_SECONDS);
+
+		endif;
 
 
 		if($q->have_posts()) :
@@ -104,8 +113,18 @@ class Knife_Details_Widget extends WP_Widget {
 		$instance['posts_per_page'] = (int) $new_instance['posts_per_page'];
 		$instance['title'] = sanitize_text_field($new_instance['title']);
 
+ 		$this->remove_cache();
+
         return $instance;
     }
+
+
+	/**
+	 * Remove transient on widget update
+	 */
+ 	private function remove_cache() {
+		delete_transient($this->id);
+	}
 }
 
 

@@ -85,7 +85,7 @@ function knife_theme_meta($args, $html = '') {
  				$html .= sprintf(
 					'<time datetime="%1$s">%2$s</time>',
 					get_the_time('c'),
-					get_the_time('j F Y')
+					get_the_date('Y') === date('Y') ? get_the_time('j F') : get_the_time('j F Y')
 				);
 
 				break;
@@ -150,38 +150,6 @@ function knife_theme_meta($args, $html = '') {
 
   	// Filter result html before return
 	$html = apply_filters('knife_theme_meta', $html, $args);
-
-	if($args['echo'] === false)
-		return $html;
-
-	echo $html;
-}
-
-endif;
-
-
-if(!function_exists('knife_theme_excerpt')) :
-/**
- * Displays the optional excerpt
- *
- * Wraps the excerpt in a div element
- *
- * @since 1.1
- */
-function knife_theme_excerpt($args) {
-  	$defaults = [
-		'before' => '',
-		'after' => '',
-		'echo' => true
-	];
-
-	$args = wp_parse_args($args, $defaults);
-
-	if(!has_excerpt())
-		return false;
-
-  	// Filter result html before return
-	$html = $args['before'] . apply_filters('the_excerpt', get_the_excerpt()) . $args['after'];
 
 	if($args['echo'] === false)
 		return $html;

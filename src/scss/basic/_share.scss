@@ -1,6 +1,6 @@
 .share {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap;
   align-items: center;
   justify-content: flex-start;
 
@@ -14,11 +14,11 @@
     cursor: default;
 
     width: 100%;
-    margin: 0 auto 1rem 0;
+    margin: 0 auto 0 0;
     padding-right: .5rem;
 
-    font-size: 1.375rem;
-    font-weight: 600;
+    font-size: 1.25rem;
+    font-weight: 400;
     line-height: 1.25;
     letter-spacing: .25px;
 
@@ -36,7 +36,7 @@
     display: flex;
     align-items: center;
 
-    margin-right: .625rem;
+    margin-right: .5rem;
     padding: .375rem .375rem;
     color: $color-white;
     background: $color-black;
@@ -77,7 +77,8 @@
     padding-left: .5rem;
 
     font-size: 1rem;
-    font-weight: 300;
+    font-weight: 400;
+    line-height: 1rem;
 
     border-left: 1px solid rgba(255, 255, 255, .5);
 
@@ -88,11 +89,11 @@
   }
 
   .share__text {
-    margin-left: .75rem;
-    padding-bottom: .075rem;
+    margin-left: .5rem;
     font-size: .875rem;
     font-weight: 300;
     letter-spacing: .5px;
+    line-height: 1rem;
 
     @media screen and (max-width: 479px) {
       display: none;

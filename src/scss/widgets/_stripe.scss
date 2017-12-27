@@ -15,12 +15,12 @@
     left: 0;
     z-index: 2;
 
-    padding: .8125rem 1.25rem;
-    font-size: .625rem;
+    padding: .725rem 1.25rem;
+    font-size: .5625rem;
     font-weight: 500;
     line-height: 1;
     text-transform: uppercase;
-    letter-spacing: .75px;
+    letter-spacing: 1px;
 
     color: $color-white;
     background-color: $color-primary;
@@ -37,7 +37,7 @@
     left: 0;
     z-index: -1;
 
-    width: calc(100% + .5px);
+    width: 100%;
     padding-top: 75%;
     overflow: hidden;
 
@@ -47,8 +47,8 @@
       top: 0;
       left: 0;
 
-      width: 100%;
-      height: 100%;
+      width: calc(100% + .5px);
+      height: calc(100% + .5px);
 
       object-fit: cover;
       object-position: center;
@@ -83,14 +83,19 @@
 
     width: 100%;
 
-    font-size: 1.375rem;
+    font-size: 1.5rem;
     font-weight: 500;
-    line-height: 1.25;
+    line-height: 1.125;
     letter-spacing: .25px;
     word-wrap: break-word;
 
     strong {
       color: $color-primary;
+    }
+
+    @media screen and (max-width: 1023px) {
+      font-size: 1.375rem;
+      line-height: 1.25;
     }
 
     @media screen and (max-width: 767px) {
@@ -221,12 +226,12 @@
     width: calc(50% - .5rem);
 
     .widget__title {
-      font-size: 1.75rem;
-      line-height: 1.25;
+      font-size: 1.875rem;
+      line-height: 1.125;
 
       @media screen and (max-width: 1023px) {
         font-size: 1.375rem;
-        line-height: 1.125;
+        line-height: 1.25;
       }
 
       @media screen and (max-width: 767px) {
@@ -261,7 +266,7 @@
       font-size: 2rem;
       line-height: 1.125;
 
-      @media screen and (max-width: 1279px) {
+      @media screen and (max-width: 1199px) {
         font-size: 1.75rem;
         line-height: 1.25;
       }
@@ -307,10 +312,15 @@
 
   &.widget--split {
     .widget__title {
-      font-size: 1.25rem;
+      font-size: 1.375rem;
+
+      @media screen and (max-width: 1199px) {
+        font-size: 1.5rem;
+      }
 
       @media screen and (max-width: 1023px) {
         font-size: 1.375rem;
+        line-height: 1.25;
       }
 
       @media screen and (max-width: 767px) {
@@ -323,7 +333,7 @@
         font-size: 2rem;
         line-height: 1.125;
 
-        @media screen and (max-width: 1279px) {
+        @media screen and (max-width: 1199px) {
           font-size: 1.75rem;
           line-height: 1.25;
         }

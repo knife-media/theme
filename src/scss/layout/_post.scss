@@ -36,10 +36,15 @@
       line-height: 1.075;
       letter-spacing: .5px;
 
-      @media screen and (max-width: 767px) {
+      @media screen and (max-width: 1023px) {
         margin-bottom: .75rem;
-        font-size: 1.625rem;
+        font-size: 2rem;
         line-height: 1.125;
+      }
+
+      @media screen and (max-width: 767px) {
+        font-size: 1.625rem;
+        line-height: 1.25;
       }
     }
 
@@ -52,6 +57,11 @@
       line-height: 1.6;
       font-size: 1.125rem;
       font-weight: 500;
+      letter-spacing: .25px;
+
+      @media screen and (max-width: 767px) {
+        font-size: 1rem;
+      }
     }
 
     .post__header-share {

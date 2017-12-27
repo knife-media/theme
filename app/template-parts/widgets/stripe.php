@@ -11,7 +11,7 @@
 <article class="<?php knife_theme_widget_options('widget__item'); ?>">
 	<?php
 		knife_theme_meta([
-			'items' => ['category'],
+			'items' => ['tag'],
 			'item_before' => '',
 			'item_after' => '',
 			'link_class' => 'widget__head'
