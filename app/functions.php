@@ -188,6 +188,21 @@ add_action('wp_enqueue_scripts', function() {
 }, 11);
 
 
+// Remove background controls from admin customizer
+add_action("customize_register", function($wp_customize) {
+	$wp_customize->remove_control('background_preset');
+ 	$wp_customize->remove_control('background_position');
+ 	$wp_customize->remove_control('background_size');
+ 	$wp_customize->remove_control('background_repeat');
+	$wp_customize->remove_control('background_attachment');
+});
+
+// Print fixed element with custom background
+add_action('wp_footer', function() {
+	knife_custom_background(true);
+});
+
+
 // Add search popover to footer
 add_action('wp_footer', function() {
 	get_search_form();

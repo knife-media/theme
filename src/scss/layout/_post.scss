@@ -10,6 +10,8 @@
   color: $color-text;
   background-color: $color-white;
 
+  border-radius: 2px;
+
   .post__header {
     display: flex;
 		flex-flow: column wrap;
@@ -199,5 +201,9 @@
 
   @media screen and (max-width: 767px) {
     padding: 1rem;
+  }
+
+  @media screen and (max-width: 479px) {
+    border-radius: 0;
   }
 }
