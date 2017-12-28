@@ -12,10 +12,11 @@
 <article class="widget__item">
 	<?php
 		knife_theme_meta([
-			'items' => ['category'],
-			'item_before' => '',
-			'item_after' => '',
-			'link_class' => 'widget__head'
+			'opts' => ['head'],
+			'before' => '<div class="widget__head">',
+			'after' => '</div>',
+			'item' => '<span class="widget__head-item">%s</span>',
+			'link' => '<a class="widget__head-link" href="%2$s">%1$s</a>'
 		]);
 	?>
 
@@ -30,7 +31,7 @@
 		<footer class="widget__footer">
 			<?php
 				knife_theme_meta([
-					'items' => ['author', 'date'],
+					'opts' => ['author', 'date'],
 					'before' => '<div class="widget__meta meta">',
 					'after' => '</div>'
 				]);

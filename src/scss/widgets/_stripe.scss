@@ -15,18 +15,32 @@
     left: 0;
     z-index: 2;
 
-    padding: .725rem 1.25rem;
     font-size: .5625rem;
     font-weight: 500;
     line-height: 1;
     text-transform: uppercase;
     letter-spacing: 1px;
 
-    color: $color-white;
-    background-color: $color-primary;
+    .widget__head-item {
+      display: block;
+      cursor: default;
 
-    &:hover {
-      filter: brightness(120%);
+      padding: .725rem 1.25rem;
+      color: $color-primary;
+      background-color: $color-white;
+    }
+
+    .widget__head-link {
+      display: block;
+      cursor: pointer;
+
+      padding: .725rem 1.25rem;
+      color: $color-white;
+      background-color: $color-primary;
+
+      &:hover {
+        filter: brightness(120%);
+      }
     }
   }
 

@@ -8,6 +8,29 @@
     display: inline-block;
     cursor: pointer;
 
+    overflow: hidden;
+    white-space: nowrap;
+    text-transform: none;
+    text-overflow: ellipsis;
+
+    &:before {
+      content: "•";
+      display: inline-block;
+
+      margin-left: .5rem;
+      margin-right: .5rem;
+
+      font-size: .625rem;
+    }
+
+    &:last-child {
+      flex: 1;
+    }
+
+    &:first-child:before {
+      display: none;
+    }
+
     &:hover {
       filter: brightness(150%);
     }

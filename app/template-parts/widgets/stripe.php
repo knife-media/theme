@@ -11,10 +11,11 @@
 <article class="<?php knife_theme_widget_options('widget__item'); ?>">
 	<?php
 		knife_theme_meta([
-			'items' => ['tag'],
-			'item_before' => '',
-			'item_after' => '',
-			'link_class' => 'widget__head'
+			'opts' => ['tag'],
+			'before' => '<div class="widget__head">',
+			'after' => '</div>',
+			'item' => '<span class="widget__head-item">%s</span>',
+			'link' => '<a class="widget__head-link" href="%2$s">%1$s</a>'
 		]);
 	?>
 
@@ -33,7 +34,7 @@
 			);
 
 			knife_theme_meta([
-				'items' => ['author', 'date'],
+				'opts' => ['author', 'date'],
 				'before' => '<div class="widget__meta meta">',
 				'after' => '</div>'
 			]);

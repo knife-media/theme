@@ -265,7 +265,7 @@ add_filter('previous_posts_link_attributes', function($atts) {
 
 // Post author link class
 add_filter('the_author_posts_link', function($link) {
-	return str_replace('rel="author"', 'class="meta__item" rel="author"', $link);
+	return str_replace('rel="author"', 'class="meta__link" rel="author"', $link);
 });
 
 

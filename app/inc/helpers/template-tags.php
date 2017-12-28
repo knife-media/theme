@@ -20,130 +20,100 @@ if(!function_exists('knife_theme_meta')) :
  */
 function knife_theme_meta($args, $html = '') {
 	$defaults = [
-		'items' => ['author', 'date', 'category'],
+		'opts' => ['author', 'date', 'category'],
 		'before' => '',
 		'after' => '',
-		'item_before' => '<span class="meta__item">',
-		'item_after' => '</span>',
-		'link_class' => 'meta__link',
+		'item' => '<span class="meta__item">%s</span>',
+		'link' => '<a class="meta__link" href="%2$s">%1$s</a>',
 		'is_link' => true,
 		'echo' => true
 	];
 
 	$args = wp_parse_args($args, $defaults);
 
-	foreach($args['items'] as $item) {
-		$html .= $args['item_before'];
-
+	foreach($args['opts'] as $item) {
 		switch($item) {
+
+			// Prints post author
 			case 'author':
-
-				if($args['is_link'] === true) :
-
+				if($args['is_link'] === false) :
+					if(function_exists('coauthors'))
+						$html .= sprintf($args['item'], coauthors(null, null, null, null, false));
+					else
+						$html .= sprintf($args['item'], get_the_author());
+				else :
 					if(function_exists('coauthors_posts_links'))
 						$html .= coauthors_posts_links(null, null, null, null, false);
 					else
 						$html .= get_the_author_posts_link();
-
-				else :
-
-					if(function_exists('coauthors'))
-						$html .= coauthors(null, null, null, null, false);
-					else
-						$html .= get_the_author();
-
 				endif;
+			break;
 
-				break;
-
+			// Prints post category
 			case 'category':
-
 				$cats = get_the_category();
 
 				if(!isset($cats[0]))
 					break;
 
-				if($args['is_link'] === true) :
-
-					$html .= sprintf(
-						'<a class="%2$s" href="%1$s">%3$s</a>',
-						esc_url(get_category_link($cats[0]->term_id)),
-						esc_attr($args['link_class']),
-						sanitize_text_field($cats[0]->cat_name)
-					);
-
+				if($args['is_link'] === false) :
+					$html .= sprintf($args['item'], sanitize_text_field($cats[0]->cat_name));
 				else :
-
-					$html .= sanitize_text_field($cats[0]->cat_name);
-
+					$html .= sprintf($args['link'],
+						sanitize_text_field($cats[0]->cat_name),
+						esc_url(get_category_link($cats[0]->term_id))
+					);
 				endif;
+			break;
 
-				break;
-
+			// Prints post publish date. Exclude current year
 			case 'date':
-
- 				$html .= sprintf(
-					'<time datetime="%1$s">%2$s</time>',
+				$date = sprintf('<time datetime="%1$s">%2$s</time>',
 					get_the_time('c'),
 					get_the_date('Y') === date('Y') ? get_the_time('j F') : get_the_time('j F Y')
 				);
 
-				break;
+ 				$html .= sprintf($args['item'], $date);
+			break;
 
+			// Prints only post publish time. Useful for news
 			case 'time':
+ 				$html .= sprintf($args['item'], get_the_time('H:i'));
+			break;
 
- 				$html .= get_the_time('H:i');
-
-				break;
-
+			//  Prints post single tag
 			case 'tag' :
-
-				if($args['is_link'] === true) :
-
-					$html .= knife_theme_tags([
-						'item' => '<a class="' . esc_attr($args['link_class']) . '" href="%2$s">%1$s</a>',
-						'count' => 1,
-						'echo' => false
-					]);
-
-				else:
-
-					$html .= knife_theme_tags([
-						'item' => '%1$s',
-						'count' => 1,
-						'echo' => false
-					]);
-
+				if($args['is_link'] === false) :
+					$html .= knife_theme_tags(['item' => '%1$s', 'count' => 1, 'echo' => false]);
+				else :
+					$html .= knife_theme_tags(['item' => $args['link'], 'count' => 1, 'echo' => false]);
 				endif;
+			break;
 
-				break;
-
+			// Same as above but for 3 tags
 			case 'tags' :
-
-				if($args['is_link'] === true) :
-
-					$html .= knife_theme_tags([
-						'item' => '<a class="' . esc_attr($args['link_class']) . '" href="%2$s">%1$s</a>',
-						'count' => 3,
-						'echo' => false,
-						'between' => ', '
-					]);
-
-				else:
-
-					$html .= knife_theme_tags([
-						'item' => '%1$s',
-						'count' => 3,
-						'echo' => false,
- 						'between' => ', '
-					]);
-
+				if($args['is_link'] === false) :
+					$html .= knife_theme_tags(['item' => '%1$s', 'count' => 3, 'echo' => false, 'between' => ', ']);
+				else :
+					$html .= knife_theme_tags(['item' => $args['link'], 'count' => 3, 'echo' => false, 'between' => ', ']);
 				endif;
+			break;
 
-				break;
+			// Show widget head using widget query vars
+			case 'head' :
+				$title = get_query_var('widget_title', '');
+ 				$link = get_query_var('widget_link', '');
+
+				if(empty($title))
+					break;
+
+				if(empty($link)) :
+					$html .= sprintf($args['item'], sanitize_text_field($title));
+				else:
+					$html .= sprintf($args['link'], sanitize_text_field($title), esc_url($link));
+				endif;
+			break;
 		}
-
-		$html .= $args['item_after'];
 	}
 
 	$html = $args['before'] . $html . $args['after'];

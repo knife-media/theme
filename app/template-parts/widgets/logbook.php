@@ -23,7 +23,7 @@
 			);
 
 			knife_theme_meta([
-				'items' => ['time', 'date', 'tags'],
+				'opts' => ['time', 'date', 'tags'],
 				'before' => '<div class="widget__meta meta">',
 				'after' => '</div>'
 			]);

@@ -14,7 +14,7 @@
 		<?php
 			printf(
 				'<p class="widget__title">%s</p>',
-				get_query_var('widget_head', get_the_title())
+				get_query_var('widget_item', get_the_title())
 			);
 
 			knife_theme_post_meta([

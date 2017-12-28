@@ -38,6 +38,7 @@ class Knife_Transparent_Widget extends WP_Widget {
     public function widget($args, $instance) {
 		$defaults = [
 			'title' => '',
+			'link' => '',
 			'offset' => 0,
 			'sticker' => 0,
 			'taxonomy' => 'category',
@@ -90,6 +91,9 @@ class Knife_Transparent_Widget extends WP_Widget {
 
  			while($q->have_posts()) : $q->the_post();
 
+				set_query_var('widget_title', $title);
+ 				set_query_var('widget_link', $link);
+
 				get_template_part('template-parts/widgets/transparent');
 
  			endwhile;
@@ -137,6 +141,7 @@ class Knife_Transparent_Widget extends WP_Widget {
 
 		$instance['offset'] = absint($new_instance['offset']);
 		$instance['title'] = sanitize_text_field($new_instance['title']);
+ 		$instance['link'] = sanitize_text_field($new_instance['link']);
  		$instance['taxonomy'] = sanitize_text_field($new_instance['taxonomy']);
 		$instance['termlist'] = $terms;
 		$instance['sticker'] = $new_instance['sticker'] ? 1 : 0;
@@ -158,6 +163,7 @@ class Knife_Transparent_Widget extends WP_Widget {
 	public function form($instance) {
 		$defaults = [
 			'title' => '',
+			'link' => '',
 			'offset' => 0,
 			'sticker' => 0,
 			'taxonomy' => 'category',
@@ -184,7 +190,18 @@ class Knife_Transparent_Widget extends WP_Widget {
 			esc_attr($this->get_field_name('title')),
 			__('Заголовок:', 'knife-theme'),
 			esc_attr($instance['title']),
-			__('Не будет отображаться на странице', 'knife-theme')
+			__('Отобразится на странице в лейбле', 'knife-theme')
+		);
+
+
+ 		// Widget title link
+		printf(
+			'<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"><small>%5$s</small></p>',
+			esc_attr($this->get_field_id('link')),
+			esc_attr($this->get_field_name('link')),
+			__('Ссылка с лейбла:', 'knife-theme'),
+			esc_attr($instance['link']),
+			__('Можно оставить поле пустым', 'knife-theme')
 		);
 
 

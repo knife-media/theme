@@ -25,7 +25,7 @@ class Knife_Feature_Widget extends WP_Widget {
      * Outputs the content of the widget
      */
     public function widget($args, $instance) {
-		$defaults = ['title' => '', 'feature' => 1, 'head' => '', 'link' => '', 'base' => 0];
+		$defaults = ['title' => '', 'feature' => 1, 'item' => '', 'link' => '', 'base' => 0];
 		$instance = wp_parse_args((array) $instance, $defaults);
 
 		extract($instance);
@@ -50,7 +50,7 @@ class Knife_Feature_Widget extends WP_Widget {
 			$posts = get_transient($this->id) ?: get_posts($q);
 
 			foreach($posts as $post) {
-				$head = get_the_title($post->ID);
+				$item = get_the_title($post->ID);
 				$link = get_permalink($post->ID);
 				$base = $post->ID;
 
@@ -62,12 +62,12 @@ class Knife_Feature_Widget extends WP_Widget {
 		endif;
 
 		// Don't show empty link
-		if(empty($head) || empty($link))
+		if(empty($item) || empty($link))
 			return;
 
 		echo $args['before_widget'];
 
-		set_query_var('widget_head', $head);
+		set_query_var('widget_item', $item);
 		set_query_var('widget_link', $link);
  		set_query_var('widget_base', $base);
 
@@ -81,7 +81,7 @@ class Knife_Feature_Widget extends WP_Widget {
      * Outputs the options form on admin
      */
     function form($instance) {
-		$defaults = ['title' => '', 'feature' => 1, 'head' => '', 'link' => ''];
+		$defaults = ['title' => '', 'feature' => 1, 'item' => '', 'link' => ''];
 		$instance = wp_parse_args((array) $instance, $defaults);
 
 		printf(
@@ -103,10 +103,10 @@ class Knife_Feature_Widget extends WP_Widget {
 
 		printf(
 			'<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
-			esc_attr($this->get_field_id('head')),
-			esc_attr($this->get_field_name('head')),
+			esc_attr($this->get_field_id('item')),
+			esc_attr($this->get_field_name('item')),
 			__('Заголовок статьи', 'knife-theme'),
-			esc_attr($instance['head'])
+			esc_attr($instance['item'])
 		);
 
  		printf(
@@ -144,7 +144,7 @@ class Knife_Feature_Widget extends WP_Widget {
 		$instance = $old_instance;
 
 		$instance['title'] = sanitize_text_field($new_instance['title']);
- 		$instance['head'] = sanitize_text_field($new_instance['head']);
+ 		$instance['item'] = sanitize_text_field($new_instance['item']);
   		$instance['link'] = esc_url($new_instance['link']);
 		$instance['feature'] = $new_instance['feature'] ? 1 : 0;
 
