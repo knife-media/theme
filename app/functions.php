@@ -146,7 +146,7 @@ add_filter('embed_defaults', function() {
 
 
 add_filter('embed_oembed_html', function($html, $url, $attr) {
-	$html = '<figure class="figure figure--embed">' . $html . '</figure>';
+	$html = '<figure class="figure figure--inner">' . $html . '</figure>';
 
 	return $html;
 }, 10, 3);
@@ -354,9 +354,32 @@ add_filter('gettext_with_context', function($translation, $text, $context, $doma
 }, 10, 4);
 
 
+// We need to wrap the content with card tag if it in chat post format
+add_filter('the_content', function($content) {
+	if(get_post_format() !== 'chat')
+		return $content;
+
+	if(has_shortcode($content, 'card'))
+		return $content;
+
+	return '<div class="post__card">' . $content . '</div>';
+});
+
+
 // Remove annoying [...] in excerpts
 add_filter('excerpt_more', function($more) {
 	return '&hellip;';
+});
+
+
+add_filter('the_content', function($content) {
+	$array = [
+		'<p>[' => '[',
+		']</p>' => ']',
+		']<br />' => ']'
+	];
+
+	return strtr($content, $array);
 });
 
 

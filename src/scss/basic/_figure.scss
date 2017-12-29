@@ -7,20 +7,18 @@
   width: auto;
   max-width: none;
   margin-top: 1rem;
-  margin-left: -1rem;
-  margin-right: -1rem;
 
   .figure__caption {
     width: 100%;
     margin: 0 auto;
-	  padding: 1rem 0 0;
+	  padding: .75rem 0;
     text-align: left;
     max-width: $content-width;
-    padding-left: 0;
-    padding-right: 0;
 
     @media screen and (max-width: 767px) {
-      padding: .5rem 0 0;
+      padding-top: .5rem;
+      padding-bottom: .5rem;
+      text-align: center;
     }
   }
 
@@ -36,33 +34,20 @@
 
   &.figure--inner {
     width: $content-width;
+    max-width: 100%;
 
-    .figure__image {
+    & > * {
       width: 100%;
-    }
-
-    @media screen and (max-width: 767px) {
-      width: calc(100% + 2rem);
     }
   }
 
   &.figure--outer {
     width: calc(100% + 2rem);
-
-    .figure__image {
-      width: 100%;
-    }
-  }
-
-  &.figure--embed {
-    max-width: $content-width;
+    margin-left: -1rem;
+    margin-right: -1rem;
 
     & > * {
-      max-width: 100%;
-    }
-
-    @media screen and (max-width: 767px) {
-      max-width: 100%;
+      width: 100%;
     }
   }
 

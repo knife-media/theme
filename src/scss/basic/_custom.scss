@@ -5,6 +5,10 @@
 	& > * {
 		max-width: $content-width;
 		width: 100%;
+
+    &:first-child {
+      margin-top: 0;
+    }
 	}
 
   p {
@@ -13,10 +17,6 @@
     line-height: 1.65;
     font-size: 1rem;
     font-weight: 400;
-
-    &:first-child {
-      margin-top: 0;
-    }
 
     @media screen and (max-width: 767px) {
       font-size: .9375rem;

@@ -21,7 +21,7 @@ class Knife_Theme_Shortcodes {
 
 		$html = sprintf(
 			'<div class="post__card">%s</div>',
-			do_shortcode($content)
+			do_shortcode(force_balance_tags($content))
 		);
 
 		return apply_filters('knife_theme_shortcode_card', $html, $atts);
