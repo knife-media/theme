@@ -93,9 +93,9 @@ function knife_theme_meta($args, $html = '') {
 			// Same as above but for 3 tags
 			case 'tags' :
 				if($args['is_link'] === false) :
-					$html .= knife_theme_tags(['item' => '%1$s', 'count' => 3, 'echo' => false, 'between' => ', ']);
+					$html .= knife_theme_tags(['item' => '%1$s', 'count' => 3, 'echo' => false, 'between' => '']);
 				else :
-					$html .= knife_theme_tags(['item' => $args['link'], 'count' => 3, 'echo' => false, 'between' => ', ']);
+					$html .= knife_theme_tags(['item' => $args['link'], 'count' => 3, 'echo' => false, 'between' => '']);
 				endif;
 			break;
 

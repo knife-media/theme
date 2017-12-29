@@ -1,7 +1,7 @@
 .meta {
   color: $color-primary;
   font-size: .8125rem;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: .25px;
 
   .meta__link {
@@ -10,7 +10,6 @@
 
     overflow: hidden;
     white-space: nowrap;
-    text-transform: none;
     text-overflow: ellipsis;
 
     &:before {
@@ -20,7 +19,7 @@
       margin-left: .5rem;
       margin-right: .5rem;
 
-      font-size: .625rem;
+      font-size: .5625rem;
     }
 
     &:last-child {
@@ -42,7 +41,6 @@
 
     overflow: hidden;
     white-space: nowrap;
-    text-transform: none;
     text-overflow: ellipsis;
 
     &:before {
@@ -52,7 +50,7 @@
       margin-left: .5rem;
       margin-right: .5rem;
 
-      font-size: .625rem;
+      font-size: .5625rem;
     }
 
     &:last-child {

@@ -98,13 +98,19 @@
     width: 100%;
     margin-top: 1.5rem;
 
+    font-size: .5625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+
     .meta__link {
       position: relative;
-    }
 
-    .meta__item {
       @media screen and (max-width: 767px) {
-        &:nth-child(n+3) {
+        &:nth-child(3) {
+          flex: 1;
+        }
+
+        &:nth-child(n+4) {
           display: none;
         }
       }
