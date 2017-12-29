@@ -13,21 +13,36 @@
   .figure__caption {
     width: 100%;
     margin: 0 auto;
-	  padding: .5rem 1rem;
+	  padding: 1rem 0 0;
     text-align: left;
+    max-width: $content-width;
+    padding-left: 0;
+    padding-right: 0;
 
     @media screen and (max-width: 767px) {
-      padding-left: 0;
-      padding-right: 0;
+      padding: .5rem 0 0;
     }
   }
 
-  &.figure--inner {
-    max-width: $content-width;
+  &.figure--full {
+    width: auto;
+    max-width: 100%;
 
     @media screen and (max-width: 767px) {
       margin-left: 0;
       margin-right: 0;
+    }
+  }
+
+  &.figure--inner {
+    width: $content-width;
+
+    .figure__image {
+      width: 100%;
+    }
+
+    @media screen and (max-width: 767px) {
+      width: calc(100% + 2rem);
     }
   }
 
@@ -36,44 +51,6 @@
 
     .figure__image {
       width: 100%;
-    }
-  }
-
-  &.figure--right {
-    align-items: flex-end;
-    align-self: flex-end;
-
-    .figure__caption {
-      text-align: right;
-    }
-  }
-
-  &.figure--left {
-    align-items: flex-start;
-    align-self: flex-start;
-
-    .figure__caption {
-      text-align: left;
-    }
-  }
-
-  &.figure--center {
-    .figure__caption {
-      text-align: center;
-    }
-  }
-
-  &.figure--none {
-    .figure__caption {
-      max-width: $content-width;
-      padding-left: 0;
-      padding-right: 0;
-
-      @media screen and (max-width: 767px) {
-        padding-left: 1rem;
-        padding-right: 1rem;
-        text-align: center;
-      }
     }
   }
 

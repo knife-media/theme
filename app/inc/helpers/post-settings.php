@@ -17,7 +17,7 @@ class Knife_Post_Settings {
 	private $feature = '_knife-theme-feature';
 
 	public function __construct() {
-		add_action('admin_print_styles-post.php', [$this, 'print_admin_styles']);
+		add_action('admin_print_styles', [$this, 'print_admin_styles']);
 		add_action('save_post_post', [$this, 'save_post_meta']);
 
 		add_action('save_post', [$this, 'clear_widget_cache']);
@@ -224,14 +224,10 @@ class Knife_Post_Settings {
 	public function print_admin_styles() {
 		$post_id = get_the_ID();
 
-		if (get_post_type($post_id) !== 'post')
+		if(get_post_type($post_id) !== 'post')
 			return;
 	?>
 		<style type="text/css">
-			.wp-admin .mce-inline-toolbar-grp {
-				display: none;
-			}
-
 			.wp-admin #post-body-content {
 				position: relative;
 			}

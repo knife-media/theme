@@ -50,7 +50,7 @@ add_action('admin_init', function() {
 // Add required theme support tags
 add_action('after_setup_theme', function() {
 	// Post formats
-	add_theme_support('post-formats', ['aside']);
+	add_theme_support('post-formats', ['aside', 'chat']);
 
 	// Let wordpress generate page title
 	add_theme_support('title-tag');
@@ -83,7 +83,8 @@ add_filter('image_size_names_choose', function($size_names) {
 
 	$size_names = array(
 		'outer' => __('На всю ширину', 'knife-theme'),
- 		'inner' => __('По ширине текста', 'knife-theme')
+		'inner' => __('По ширине текста', 'knife-theme'),
+		'full'  => __('Исходный размер', 'knife-theme')
 	);
 
 	return $size_names;
@@ -113,7 +114,12 @@ add_filter('get_image_tag', function($html) {
 }, 10);
 
 add_filter('get_image_tag_class', function($class, $id, $align, $size) {
-	return 'figure__image';
+	$class = 'figure__image';
+
+	if(!empty($align))
+		$class = "$class align{$align}";
+
+ 	return $class;
 }, 0, 4);
 
 
@@ -127,7 +133,7 @@ add_filter('image_send_to_editor', function($html, $id, $caption, $title, $align
 	if($caption)
 		$html = $html . '<figcaption class="figure__caption">' . $caption . '</figcaption>';
 
-	$html = '<figure class="figure figure--' . $size . ' figure--' . $align . '">' . $html . '</figure>';
+	$html = '<figure class="figure figure--' . esc_attr($size) . '">' . $html . '</figure>';
 
 	return $html;
 }, 10, 9);
