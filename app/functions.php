@@ -59,7 +59,7 @@ add_action('after_setup_theme', function() {
 	add_theme_support('automatic-feed-links');
 
 	// Let wordpress manage cutsom background
-	add_theme_support('custom-background', ['wp-head-callback' => 'knife_custom_background']);
+	add_theme_support('custom-background', []);
 });
 
 

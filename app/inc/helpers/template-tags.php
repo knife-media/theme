@@ -437,10 +437,7 @@ if(!function_exists('knife_custom_background')) :
  * @since 1.1
  */
 function knife_custom_background($echo = false, $style = []) {
-    if($echo === false && is_customize_preview())
-		return '<style type="text/css" id="custom-background-css"></style>' . "\n";
-
-	if($echo === false || !is_front_page())
+	if(!is_front_page())
 		return;
 
     $image = set_url_scheme(get_background_image());
