@@ -39,6 +39,8 @@ get_header(); ?>
 <?php if(is_active_sidebar('knife-frontal')) : ?>
 	<div class="content block">
 		<?php dynamic_sidebar('knife-frontal'); ?>
+
+		<a class="button" href="<?php echo home_url('/recent/'); ?>"><?php _e('Больше статей', 'knife-media'); ?></a>
 	</div>
 <?php endif; ?>
 

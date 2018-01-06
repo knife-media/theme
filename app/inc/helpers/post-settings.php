@@ -73,9 +73,9 @@ class Knife_Post_Settings {
 			return $title;
 
 		if(is_admin())
-			return "{$tagline} {$title}";
+			return "{$title} {$tagline}";
 
-		return "<strong>{$tagline}</strong> {$title}";
+		return "{$title} <em>{$tagline}</em>";
 
 	}
 
@@ -94,7 +94,7 @@ class Knife_Post_Settings {
 		if(empty($tagline))
 			return $title;
 
-		$title['title'] = "{$tagline} {$title['title']}";
+		$title['title'] = "{$title['title']} {$tagline}";
 
 		return $title;
 	}
@@ -233,18 +233,18 @@ class Knife_Post_Settings {
 			}
 
 			.wp-admin #poststuff #titlewrap {
-				padding-left: 205px;
+				padding-right: 51%;
 			}
 
 			.wp-admin #knife-theme-tagline {
 				position: absolute;
 				top: 0;
-				left: 0;
+				right: 0;
 				padding: 3px 8px;
 				font-size: 1.7em;
 				line-height: 100%;
 				height: 1.7em;
-				width: 200px;
+				width: 50%;
 				outline: 0;
 				margin: 0 0 .5em;
 			}

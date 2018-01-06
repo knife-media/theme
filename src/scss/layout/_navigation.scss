@@ -5,40 +5,13 @@
   cursor: default;
 
   width: 100%;
-  margin: 1rem 0;
-  font-size: 1.5rem;
-  line-height: 2rem;
 
   .nav__link {
     display: block;
-    cursor: pointer;
-
-    font-size: 2rem;
-
-    &.nav__link--next {
-      margin-left: auto;
-
-      &:hover .icon {
-        transform: translateX(10px);
-      }
-    }
-
-    &.nav__link--prev {
-      margin-right: auto;
-
-      &:hover .icon {
-        transform: translateX(-10px);
-      }
-    }
-
-    .icon {
-      display: block;
-
-      transition: transform .25s;
-    }
   }
 
   &.nav--logbook {
     max-width: 46rem;
+    margin-bottom: 3rem;
   }
 }

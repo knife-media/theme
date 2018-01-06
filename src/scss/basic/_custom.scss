@@ -141,11 +141,11 @@
 	}
 
   strong {
-    font-weight: 600;
+    font-weight: 700;
   }
 
   b {
-    font-weight: 600;
+    font-weight: 700;
   }
 
 	em {
@@ -184,4 +184,12 @@
 		line-height: 1.25;
 		text-align: right;
 	}
+
+  .button {
+    display: inline-block;
+
+    width: auto;
+
+    color: $color-white;
+  }
 }

@@ -71,25 +71,7 @@
     justify-content: center;
     align-self: flex-end;
 
-    width: 100%;
     margin-top: .5rem;
-    padding: 1rem 0;
-
-    font-size: .75rem;
-    font-weight: 500;
-
-    text-transform: uppercase;
-    letter-spacing: 1px;
-
-    color: $color-white;
-    background-color: $color-primary;
-
-    border: solid 1px $color-primary;
-    border-radius: 2px;
-
-    &:hover {
-      filter: brightness(125%);
-    }
   }
 
   &.widget--split {

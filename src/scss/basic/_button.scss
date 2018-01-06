@@ -1,18 +1,21 @@
 .button {
   display: inline-block;
 
-  margin: 1rem 0;
+  width: 100%;
   padding: 1rem 3rem;
-  font-size: 1rem;
+
+  font-size: .75rem;
+  font-weight: 500;
   line-height: 1.375;
   letter-spacing: 1px;
   text-transform: uppercase;
+  text-align: center;
 
-  color: $color-white !important;
+  color: $color-white;
   background-color: $color-primary;
 
   border: solid 1px $color-primary;
-  border-radius: 5px;
+  border-radius: 2px;
 
   &:hover {
     filter: brightness(125%);

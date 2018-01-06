@@ -105,6 +105,11 @@
     letter-spacing: .25px;
     word-wrap: break-word;
 
+    em {
+      font-family: $font-serif;
+      font-weight: 400;
+    }
+
     @media screen and (max-width: 1023px) {
       font-size: 1.375rem;
       line-height: 1.25;
