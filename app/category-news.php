@@ -39,7 +39,7 @@ get_header(); ?>
 
 <?php if(have_posts()) : ?>
 	<div class="nav nav--logbook block">
-		<?php next_posts_link('Больше статей'); ?>
+		<?php next_posts_link('Больше новостей'); ?>
 	</div>
 <?php endif; ?>
 

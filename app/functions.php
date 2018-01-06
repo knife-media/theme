@@ -372,6 +372,7 @@ add_filter('excerpt_more', function($more) {
 });
 
 
+// Remove extra p from shortcodes
 add_filter('the_content', function($content) {
 	$array = [
 		'<p>[' => '[',

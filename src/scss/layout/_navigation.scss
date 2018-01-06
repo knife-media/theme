@@ -11,7 +11,15 @@
   }
 
   &.nav--logbook {
-    max-width: 46rem;
     margin-bottom: 3rem;
+
+    .nav__link {
+      max-width: 58.25rem;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    padding-left: 0;
+    padding-right: 0;
   }
 }
