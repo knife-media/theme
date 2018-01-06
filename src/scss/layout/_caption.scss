@@ -21,18 +21,39 @@
       text-transform: uppercase;
     }
 
+    &.caption__title--author {
+      background: linear-gradient(90deg, $color-author-start, $color-author-finish);
+      background-clip: text;
+      -webkit-background-clip: text;
+    }
+
+    &.caption__title--category {
+      font-size: 10rem;
+      line-height: 1;
+
+      @media screen and (max-width: 1299px) {
+        font-size: 7.5rem;
+      }
+
+      @media screen and (max-width: 1023px) {
+        font-size: 6rem;
+      }
+
+      @media screen and (max-width: 767px) {
+        font-size: 3.75rem;
+      }
+
+      @media screen and (max-width: 479px) {
+        font-size: 2.5rem;
+      }
+    }
+
     @media screen and (max-width: 1023px) {
       font-size: 2.5rem;
     }
 
     @media screen and (max-width: 767px) {
       font-size: 1.875rem;
-    }
-
-    &.caption__title--author {
-      background: linear-gradient(90deg, $color-author-start, $color-author-finish);
-      background-clip: text;
-      -webkit-background-clip: text;
     }
   }
 

@@ -146,7 +146,7 @@ add_filter('embed_defaults', function() {
 
 
 add_filter('embed_oembed_html', function($html, $url, $attr) {
-	$html = '<figure class="figure figure--inner">' . $html . '</figure>';
+	$html = '<figure class="figure figure--embed">' . $html . '</figure>';
 
 	return $html;
 }, 10, 3);

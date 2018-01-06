@@ -32,6 +32,17 @@
     }
   }
 
+  &.figure--embed {
+    align-items: flex-start;
+
+    width: $content-width;
+    max-width: 100%;
+
+    & > * {
+      width: 100%;
+    }
+  }
+
   &.figure--inner {
     width: $content-width;
     max-width: 100%;

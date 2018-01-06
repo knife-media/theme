@@ -29,6 +29,7 @@ class Knife_Transparent_Widget extends WP_Widget {
         parent::__construct('knife_theme_transparent', __('[НОЖ] Прозрачный', 'knife-theme'), $widget_ops);
 
 		add_action('wp_ajax_knife-transparent-terms', [$this, 'widget_terms']);
+ 		add_action('in_admin_footer', [$this, 'widget_script']);
     }
 
 
@@ -207,7 +208,7 @@ class Knife_Transparent_Widget extends WP_Widget {
 
 		// Taxonomies filter
 		printf(
-			'<p><label for="%1$s">%3$s</label><select class="widefat" id="%1$s" name="%2$s">',
+			'<p><label for="%1$s">%3$s</label><select class="widefat knife-transparent-taxonomy" id="%1$s" name="%2$s">',
 			esc_attr($this->get_field_id('taxonomy')),
  			esc_attr($this->get_field_name('taxonomy')),
 			__('Фильтр записей:', 'knife-theme')
@@ -222,7 +223,7 @@ class Knife_Transparent_Widget extends WP_Widget {
 
 		// Terms filter
 		printf(
-			'<ul class="cat-checklist categorychecklist" id="%1$s">%2$s</ul>',
+			'<ul class="cat-checklist categorychecklist knife-transparent-termlist" id="%1$s">%2$s</ul>',
 			esc_attr($this->get_field_id('termlist')),
 			$terms
 		);
@@ -246,33 +247,34 @@ class Knife_Transparent_Widget extends WP_Widget {
 			__('Пропустить записей:', 'knife-theme'),
 			esc_attr($instance['offset'])
 		);
+	}
 
 
-		// Some js for ajax loading
+ 	/**
+	 * Ajax handler for terms load
+	 */
+	public function widget_script() {
 ?>
 		<script type="text/javascript">
-			jQuery(document).ready(function() {
-				var taxonomy = '#' + '<?php echo $this->get_field_id('taxonomy'); ?>';
-				var termlist = '#' + '<?php echo $this->get_field_id('termlist'); ?>';
-
-				jQuery(document).on('change', taxonomy, function() {
-					var filter = jQuery(this).val();
+			(function() {
+				jQuery(document).on('change', '.knife-transparent-taxonomy', function() {
+					var list = jQuery(this).closest('.widget-content').find('.knife-stripe-termlist');
 
 					var data = {
 						action: 'knife-transparent-terms',
-						filter: filter,
+						filter: jQuery(this).val(),
 						nonce: '<?php echo wp_create_nonce($this->nonce); ?>'
 					}
 
-					jQuery(termlist).hide();
-
 					jQuery.post(ajaxurl, data, function(response) {
-						jQuery(termlist).html(response);
+						list.html(response);
 
-						return jQuery(termlist).show();
+						return list.show();
 					});
+
+					return list.hide();
 				});
-			});
+			})();
 		</script>
 <?php
 	}
