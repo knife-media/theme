@@ -174,7 +174,6 @@
 
       .widget__meta {
         color: $color-white;
-        text-shadow: 1px 1px rgba(0, 0, 0, .65);
 
         .meta__link {
           color: $color-white;
@@ -187,20 +186,15 @@
 
       .widget__title {
         color: $color-white;
-        text-shadow: 1px 1px rgba(0, 0, 0, .65);
       }
 
       &.widget__item {
         height: 100%;
         color: $color-white;
 
-        .widget__image-thumbnail {
-          filter: brightness(70%);
-        }
-
         &:hover {
           .widget__image-thumbnail {
-            filter: brightness(90%);
+            filter: brightness(120%);
           }
         }
 

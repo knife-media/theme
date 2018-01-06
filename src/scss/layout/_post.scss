@@ -98,6 +98,14 @@
       .refers__link {
         margin-right: 2rem;
 
+        &:before {
+          content: "#";
+
+          padding-right: .125rem;
+          font-size: 1rem;
+          color: rgba(0, 0, 0, .9);
+        }
+
         @media screen and (max-width: 479px) {
           margin-right: 1.5rem;
         }

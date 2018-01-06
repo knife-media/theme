@@ -19,9 +19,9 @@
     line-height: 1.25;
     letter-spacing: .25px;
 
-    strong {
-      color: $color-primary;
-      font-weight: 500;
+    em {
+      font-family: $font-serif;
+      font-weight: 400;
     }
 
     &:hover {
@@ -34,14 +34,13 @@
   }
 
   .refers__title {
-    display: none;
     cursor: default;
 
     width: 100%;
     padding: 1rem 2rem;
 
     font-size: 1.25rem;
-    font-weight: 400;
+    font-weight: 700;
     line-height: 1.25;
     letter-spacing: .25px;
 
