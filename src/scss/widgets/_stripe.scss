@@ -69,10 +69,6 @@
 
       transition: filter .25s;
     }
-
-    @media screen and (max-width: 767px) {
-      padding-top: 50%;
-    }
   }
 
   .widget__footer {
@@ -209,10 +205,6 @@
         filter: brightness(120%);
       }
     }
-
-    @media screen and (max-width: 767px) {
-      padding-top: 50%;
-    }
   }
 
   &.widget--triple {
@@ -254,7 +246,7 @@
     min-height: 15.625rem;
 
     .widget__footer {
-      width: 60%;
+      width: 50%;
       height: auto;
       margin: 1rem;
 
@@ -265,6 +257,11 @@
         height: 100%;
         margin: 0;
       }
+    }
+
+    .widget__image {
+      height: 100%;
+      padding-top: 0;
     }
 
     .widget__title {
@@ -299,10 +296,6 @@
 
       @media screen and (max-width: 1023px) {
         padding-top: 75%;
-      }
-
-      @media screen and (max-width: 767px) {
-        padding-top: 50%;
       }
     }
 

@@ -11,6 +11,11 @@
     }
 	}
 
+  blockquote {
+    max-width: $content-width;
+    width: 100%;
+  }
+
   p {
     margin-top: 1rem;
 

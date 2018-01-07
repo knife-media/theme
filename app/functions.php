@@ -77,6 +77,11 @@ add_action('after_setup_theme', function(){
 });
 
 
+add_filter('max_srcset_image_width', function($width) {
+	return 640;
+});
+
+
 // We want to use own image sizes in post
 add_filter('image_size_names_choose', function($size_names) {
 	global $_wp_additional_image_sizes;
@@ -188,7 +193,10 @@ add_action('wp_enqueue_scripts', function() {
 
 
 // Disable jquery
+// TODO: only wp-quiz plugin requires jquery
 add_action('wp_enqueue_scripts', function() {
+	return false;
+
 	if(!is_user_logged_in())
 		wp_deregister_script('jquery');
 }, 11);
@@ -205,7 +213,7 @@ add_action("customize_register", function($wp_customize) {
 
 // Print fixed element with custom background
 add_action('wp_footer', function() {
-	knife_custom_background(true);
+	knife_custom_background();
 });
 
 
@@ -417,13 +425,20 @@ add_filter('attachment_link', function() {
 
 // Disable wordpress based search to reduce CPU load and prevent DDOS attacks
 add_action('parse_query', function($query) {
-	if(!$query->is_search || is_admin())
+	if(!$query->is_search() || is_admin())
 		return false;
 
 	$query->set('s', '');
 	$query->is_search = false;
 	$query->is_404 = true;
 }, 9);
+
+
+// Change posts_per_page for news category archive template
+add_action('pre_get_posts', function($query) {
+	if($query->is_main_query() && $query->is_category('news'))
+		$query->set('posts_per_page', 20);
+});
 
 
 // Remove private posts from archives and home page.
@@ -543,6 +558,7 @@ add_action('widgets_init', function() {
 	unregister_widget('WP_Widget_Recent_Posts');
 	unregister_widget('WP_Widget_Recent_Comments');
 	unregister_widget('WP_Widget_RSS');
+ 	unregister_widget('WP_Widget_Media_Video');
 	unregister_widget('WP_Widget_Tag_Cloud');
 	unregister_widget('WP_Nav_Menu_Widget');
 }, 11);

@@ -52,7 +52,7 @@
     flex: 1 1 70%;
     z-index: 1;
 
-    padding: 1.25rem 1.25rem 1.5rem;
+    padding: 1.25rem;
 
     background-color: $color-white;
 
@@ -91,9 +91,7 @@
   }
 
   .widget__meta {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: flex-start;
+    display: block;
 
     width: 100%;
     margin-top: 1rem;

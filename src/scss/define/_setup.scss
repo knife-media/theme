@@ -30,6 +30,9 @@ body {
   font-weight: normal;
   font-family: $font-regular;
 
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
   &.body--search {
     overflow: hidden;
 

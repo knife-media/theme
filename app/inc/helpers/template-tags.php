@@ -38,12 +38,12 @@ function knife_theme_meta($args, $html = '') {
 			case 'author':
 				if($args['is_link'] === false) :
 					if(function_exists('coauthors'))
-						$html .= sprintf($args['item'], coauthors(null, null, null, null, false));
+						$html .= sprintf($args['item'], coauthors('', '', null, null, false));
 					else
 						$html .= sprintf($args['item'], get_the_author());
 				else :
 					if(function_exists('coauthors_posts_links'))
-						$html .= coauthors_posts_links(null, null, null, null, false);
+						$html .= coauthors_posts_links('', '', null, null, false);
 					else
 						$html .= get_the_author_posts_link();
 				endif;
@@ -436,21 +436,21 @@ if(!function_exists('knife_custom_background')) :
  * @link https://developer.wordpress.org/reference/functions/_custom_background_cb/
  * @since 1.1
  */
-function knife_custom_background($echo = false, $style = []) {
+function knife_custom_background($style = []) {
 	if(!is_front_page())
 		return;
 
-    $image = set_url_scheme(get_background_image());
-    $color = get_background_color();
+	$image = set_url_scheme(get_background_image());
+	$color = get_background_color();
 
-    if($color === get_theme_support('custom-background', 'default-color'))
-        $color = false;
+	if($color === get_theme_support('custom-background', 'default-color'))
+		$color = false;
 
 	if($color)
 		$style[] = "background-color: #" . $color . ";";
 
 	if($image)
-        $style[] = "background-image: url(" . esc_url_raw($image) . ");";
+		$style[] = "background-image: url(" . esc_url_raw($image) . ");";
 
 	$html = sprintf(
 		'<div class="%1$s" style="%2$s"></div>',
@@ -459,9 +459,6 @@ function knife_custom_background($echo = false, $style = []) {
 	);
 
 	$html = apply_filters('knife_custom_background', $html);
-
-	if($echo === false)
-		return $html;
 
 	echo $html;
 }

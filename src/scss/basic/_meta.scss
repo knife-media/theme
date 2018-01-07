@@ -1,7 +1,7 @@
 .meta {
   color: $color-primary;
   font-size: .8125rem;
-  font-weight: 400;
+  font-weight: 500;
   letter-spacing: .25px;
 
   .meta__link {
@@ -12,7 +12,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
 
-    &:before {
+    &:after {
       content: "•";
       display: inline-block;
 
@@ -26,7 +26,7 @@
       flex: 1;
     }
 
-    &:first-child:before {
+    &:last-child:after {
       display: none;
     }
 
@@ -43,7 +43,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
 
-    &:before {
+    &:after {
       content: "•";
       display: inline-block;
 
@@ -57,7 +57,7 @@
       flex: 1;
     }
 
-    &:first-child:before {
+    &:last-child:after {
       display: none;
     }
   }
