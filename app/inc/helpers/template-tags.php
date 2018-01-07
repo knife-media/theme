@@ -437,7 +437,7 @@ if(!function_exists('knife_custom_background')) :
  * @since 1.1
  */
 function knife_custom_background($style = []) {
-	if(!is_front_page())
+	if(is_admin() || is_404())
 		return;
 
 	$image = set_url_scheme(get_background_image());
