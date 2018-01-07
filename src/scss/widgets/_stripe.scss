@@ -94,7 +94,7 @@
     width: 100%;
 
     font-size: 1.5rem;
-    font-weight: 500;
+    font-weight: 700;
     line-height: 1.125;
     letter-spacing: .25px;
     word-wrap: break-word;
@@ -224,7 +224,7 @@
 
     .widget__title {
       font-size: 1.875rem;
-      line-height: 1.125;
+      line-height: 1.075;
 
       @media screen and (max-width: 1023px) {
         font-size: 1.375rem;
@@ -265,8 +265,8 @@
     }
 
     .widget__title {
-      font-size: 2rem;
-      line-height: 1.125;
+      font-size: 1.875rem;
+      line-height: 1.075;
 
       @media screen and (max-width: 1199px) {
         font-size: 1.75rem;
@@ -336,16 +336,12 @@
       }
 
       .widget__title {
-        font-size: 2rem;
-        line-height: 1.125;
-
-        @media screen and (max-width: 1199px) {
-          font-size: 1.75rem;
-          line-height: 1.25;
-        }
+        font-size: 1.875rem;
+        line-height: 1.075;
 
         @media screen and (max-width: 1023px) {
           font-size: 1.375rem;
+          line-height: 1.25;
         }
 
         @media screen and (max-width: 767px) {
