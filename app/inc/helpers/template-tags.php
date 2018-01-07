@@ -405,10 +405,7 @@ function knife_theme_widget_template($args) {
 	$args = wp_parse_args($args, $defaults);
 
 	$opts = function($current, $found) use (&$args) {
- 		if($found - 3 < $current && $found % 3 === 2)
-			return 'double';
-
-		if($current % 5 === 3 || $current % 5 === 4)
+		if($found < 3 || $current % 5 === 3 || $current % 5 === 4)
 			return 'double';
 
 		return $args['size'];

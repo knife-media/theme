@@ -246,7 +246,7 @@
     min-height: 15.625rem;
 
     .widget__footer {
-      width: 50%;
+      width: 60%;
       height: auto;
       margin: 1rem;
 
@@ -327,6 +327,14 @@
     }
 
     &.widget--single {
+      .widget__footer {
+        width: 70%;
+
+        @media screen and (max-width: 1023px) {
+          width: 100%;
+        }
+      }
+
       .widget__title {
         font-size: 2rem;
         line-height: 1.125;

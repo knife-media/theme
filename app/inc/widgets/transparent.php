@@ -258,7 +258,7 @@ class Knife_Transparent_Widget extends WP_Widget {
 		<script type="text/javascript">
 			(function() {
 				jQuery(document).on('change', '.knife-transparent-taxonomy', function() {
-					var list = jQuery(this).closest('.widget-content').find('.knife-stripe-termlist');
+					var list = jQuery(this).closest('.widget-content').find('.knife-transparent-termlist');
 
 					var data = {
 						action: 'knife-transparent-terms',
