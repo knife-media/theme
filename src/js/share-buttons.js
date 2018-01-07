@@ -67,7 +67,7 @@
 			count: function (id, count) {
 				document.getElementById('share-vkontakte').outerHTML = '';
 
-				if(!count)
+				if(typeof count === 'undefined' || !count)
 					return;
 
 				var links = document.querySelectorAll('.share .share__link--vkontakte');
@@ -87,7 +87,7 @@
 		Share: function (data) {
 			document.getElementById('share-facebook').outerHTML = '';
 
-			if(!data.share.share_count)
+			if(typeof data.share === 'undefined' || !data.share.share_count)
 				return;
 
 			var links = document.querySelectorAll('.share .share__link--facebook');

@@ -142,7 +142,7 @@ class Knife_Transparent_Widget extends WP_Widget {
 
 		$instance['offset'] = absint($new_instance['offset']);
 		$instance['title'] = sanitize_text_field($new_instance['title']);
- 		$instance['link'] = sanitize_text_field($new_instance['link']);
+ 		$instance['link'] = esc_url($new_instance['link']);
  		$instance['taxonomy'] = sanitize_text_field($new_instance['taxonomy']);
 		$instance['termlist'] = $terms;
 		$instance['sticker'] = $new_instance['sticker'] ? 1 : 0;

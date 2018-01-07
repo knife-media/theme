@@ -211,6 +211,7 @@ add_action("customize_register", function($wp_customize) {
 	$wp_customize->remove_control('background_attachment');
 });
 
+
 // Print fixed element with custom background
 add_action('wp_footer', function() {
 	knife_custom_background();
@@ -578,6 +579,9 @@ require get_template_directory() . '/inc/helpers/plugin-snippets.php';
 
 // Login screen custom styles
 require get_template_directory() . '/inc/helpers/login-screen.php';
+
+// Add external scripts in a proper way
+require get_template_directory() . '/inc/helpers/custom-scripts.php';
 
 // Add custom widgets defenitions
 require get_template_directory() . '/inc/widgets/recent.php';

@@ -52,7 +52,7 @@
 					]);
 				endif;
 
-   				if(has_nav_menu('social')) :
+				if(has_nav_menu('social')) :
 					wp_nav_menu([
 						'theme_location' => 'social',
 						'depth' => 1,
