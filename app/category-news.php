@@ -20,8 +20,8 @@ get_header(); ?>
 		while (have_posts()) : the_post();
 
 			knife_theme_widget_template([
-				'template' => 'template-parts/widgets/logbook',
-				'before' => '<div class="widget widget-logbook">',
+				'size' => 'logbook',
+				'before' => '<div class="widget widget-%s">',
 				'after' => '</div>'
 			]);
 

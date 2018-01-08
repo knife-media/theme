@@ -392,12 +392,12 @@ if(!function_exists('knife_theme_widget_template')) :
  *
  * @since 1.1
  */
-function knife_theme_widget_template($args) {
+function knife_theme_widget_template($args = []) {
 	global $wp_query;
 
 	$defaults = [
-		'size' => 'triple',
-		'before' => '<div class="widget widget-%1$s">',
+		'size' => null,
+		'before' => '<div class="widget widget-%s">',
 		'after' => '</div>'
 	];
 
@@ -407,15 +407,17 @@ function knife_theme_widget_template($args) {
 		if($found < 3 || $current % 5 === 3 || $current % 5 === 4)
 			return 'double';
 
-		return $args['size'];
+		return 'triple';
 	};
 
-	$size = $opts($wp_query->current_post, (int) $wp_query->found_posts);
-	$path = 'template-parts/widgets/' . $size;
 
-	printf($args['before'], esc_attr($size));
+	if($args['size'] === null)
+		$args['size'] = $opts($wp_query->current_post, (int) $wp_query->found_posts);
 
-	get_template_part($path);
+
+	printf($args['before'], esc_attr($args['size']));
+
+	get_template_part('template-parts/widgets/' . $args['size']);
 
 	echo $args['after'];
 }

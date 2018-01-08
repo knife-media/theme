@@ -145,15 +145,20 @@
 
     width: 100%;
     height: 100%;
-    padding-top: 75%;
+    padding-top: 50%;
 
     color: $color-text;
 
     &.widget__item--cover {
       height: 100%;
+      padding-top: 75%;
       color: $color-white;
 
       .widget__footer {
+        justify-content: flex-end;
+        position: absolute;
+        bottom: 0;
+
         background-color: transparent;
       }
 
@@ -177,16 +182,16 @@
       .widget__title {
         color: $color-white;
       }
-
-      @media screen and (max-width: 479px) {
-        padding-top: 50%;
-      }
     }
 
     &:hover {
       .widget__image-thumbnail {
         filter: brightness(120%);
       }
+    }
+
+    @media screen and (max-width: 1023px) {
+      padding-top: 75%;
     }
   }
 
@@ -228,6 +233,10 @@
 				font-size: 1.125rem;
 			}
 		}
+
+    .widget__item {
+      padding-top: 75%;
+    }
 
     @media screen and (max-width: 1023px) {
       width: calc(50% - .5rem);

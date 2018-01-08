@@ -457,8 +457,16 @@ add_action('pre_get_posts', function($query) {
 });
 
 
+//
+add_action('widget_init', function() {
+	global $knife_widgets_exclude;
+
+	$knife_widgets_exclude = [];
+});
+
+
 // Register widget area.
-add_action('widgets_init', function(){
+add_action('widgets_init', function() {
 	register_sidebar([
 		'name'          => __('Главная страница', 'knife-theme'),
 		'id'            => 'knife-frontal',
@@ -589,6 +597,9 @@ require get_template_directory() . '/inc/helpers/login-screen.php';
 
 // Add external scripts in a proper way
 require get_template_directory() . '/inc/helpers/custom-scripts.php';
+
+// Common widgets handler
+require get_template_directory() . '/inc/helpers/widgets-handler.php';
 
 // Add custom widgets defenitions
 require get_template_directory() . '/inc/widgets/recent.php';

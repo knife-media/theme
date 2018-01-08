@@ -28,7 +28,7 @@ get_header(); ?>
 		while (have_posts()) : the_post();
 
 			knife_theme_widget_template([
-				'before' => '<div class="widget widget-%1$s">',
+				'before' => '<div class="widget widget-%s">',
 				'after' => '</div>'
 			]);
 

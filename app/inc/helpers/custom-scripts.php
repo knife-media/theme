@@ -3,7 +3,7 @@
 * Custom scripts
 *
 * Add external scripts in a proper way
-* We have to remake it later
+* TODO: We have to remake it later
 *
 * @package knife-theme
 * @since 1.1

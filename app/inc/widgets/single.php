@@ -10,14 +10,6 @@
 
 
 class Knife_Single_Widget extends WP_Widget {
-	/**
-	* Unique nonce for widget ajax requests
-	*
-	* @since	1.1
-	* @access	private
-	* @var		string
-	*/
-	private $nonce = 'knife-single-nonce';
 
 	public function __construct() {
 		$widget_ops = [
@@ -27,9 +19,6 @@ class Knife_Single_Widget extends WP_Widget {
 		];
 
 		parent::__construct('knife_theme_single', __('[НОЖ] На всю ширину', 'knife-theme'), $widget_ops);
-
-		add_action('wp_ajax_knife-single-terms', [$this, 'widget_terms']);
-		add_action('in_admin_footer', [$this, 'widget_script']);
 	}
 
 
@@ -44,38 +33,30 @@ class Knife_Single_Widget extends WP_Widget {
 	public function widget($args, $instance) {
 		$defaults = [
 			'title' => '',
-			'posts_per_page' => 1,
-			'offset' => 0,
 			'cover' => 'default',
-			'taxonomy' => 'category',
-			'termlist' => []
+			'link' => '',
 		];
 
 		$instance = wp_parse_args((array) $instance, $defaults);
 
 		extract($instance);
 
-
 		// Check cache before creating WP_Query object
 		$q = get_transient($this->id);
 
 		if($q === false) :
 
+			$exclude = get_query_var('widget_exclude', []);
+
 			$q = new WP_Query([
 				'post_status' => 'publish',
+				'posts_per_page' => 1,
 				'ignore_sticky_posts' => 1,
-				'offset' => $offset,
-				'posts_per_page' => $posts_per_page,
-				'tax_query' => [
-					[
-						'field' => 'id',
-						'taxonomy' => $taxonomy,
-						'terms' => $termlist
-					],
-				]
+				'post__in' => [url_to_postid($link)]
 			]);
 
 			set_transient($this->id, $q, 24 * HOUR_IN_SECONDS);
+			set_query_var('widget_exclude', array_merge($exclude, wp_list_pluck($q->posts, 'ID')));
 
 		endif;
 
@@ -111,37 +92,11 @@ class Knife_Single_Widget extends WP_Widget {
 	 * @return array Updated safe values to be saved.
 	 */
 	public function update($new_instance, $old_instance) {
-
-		if(taxonomy_exists($new_instance['taxonomy'])) {
-			$taxonomy = $new_instance['taxonomy'];
-
-			if(isset($_REQUEST['widget-id']) && $_REQUEST['widget-id'] == $this->id) {
-				$posted_terms = [];
-
-				if(isset($_POST['post_category']))
-					$posted_terms = $_POST['post_category'];
-
-				if(isset($_POST['tax_input'][$taxonomy]))
-					$posted_terms = $_POST['tax_input'][$taxonomy];
-
-				foreach($posted_terms as $term) {
-					if(term_exists(absint($term), $taxonomy))
-						$terms[] = absint($term);
-				}
-			}
-		}
-
  		$instance = $old_instance;
 
-		$instance['posts_per_page'] = absint($new_instance['posts_per_page']);
-		$instance['offset'] = absint($new_instance['offset']);
+		$instance['link'] = esc_url($new_instance['link']);
 		$instance['title'] = sanitize_text_field($new_instance['title']);
 		$instance['cover'] = sanitize_text_field($new_instance['cover']);
- 		$instance['taxonomy'] = sanitize_text_field($new_instance['taxonomy']);
-		$instance['termlist'] = $terms;
-
-
-		$this->remove_cache();
 
 		return $instance;
 	}
@@ -156,11 +111,8 @@ class Knife_Single_Widget extends WP_Widget {
 	public function form($instance) {
 		$defaults = [
 			'title' => '',
-			'posts_per_page' => 1,
-			'offset' => 0,
-			'cover' => 'default',
-			'taxonomy' => 'category',
-			'termlist' => []
+			'link' => '',
+			'cover' => 'default'
 		];
 
 		$instance = wp_parse_args((array) $instance, $defaults);
@@ -170,16 +122,6 @@ class Knife_Single_Widget extends WP_Widget {
 			'cover' => __('Использовать подложку', 'knife-theme'),
 			'nocover' => __('Убрать подложку', 'knife-theme')
 		];
-
-		$taxes = get_taxonomies([
-			'public' => true
-		], 'object');
-
-		$terms = wp_terms_checklist(0, [
-			'taxonomy' => $instance['taxonomy'],
-			'selected_cats' => $instance['termlist'],
-			'echo' => false
-		]);
 
 
 		// Widget title
@@ -198,7 +140,7 @@ class Knife_Single_Widget extends WP_Widget {
 			'<p><label for="%1$s">%3$s</label><select class="widefat" id="%1$s" name="%2$s">',
 			esc_attr($this->get_field_id('cover')),
  			esc_attr($this->get_field_name('cover')),
-			__('Подложка карточек:', 'knife-theme')
+			__('Подложка карточки:', 'knife-theme')
 		);
 
 		foreach($cover as $name => $title) {
@@ -208,99 +150,15 @@ class Knife_Single_Widget extends WP_Widget {
 		echo '</select>';
 
 
-		// Taxonomies filter
+		// Post url
 		printf(
-			'<p><label for="%1$s">%3$s</label><select class="widefat knife-single-taxonomy" id="%1$s" name="%2$s">',
-			esc_attr($this->get_field_id('taxonomy')),
- 			esc_attr($this->get_field_name('taxonomy')),
-			__('Фильтр записей:', 'knife-theme')
+			'<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"><small>%5$s</small></p>',
+			esc_attr($this->get_field_id('link')),
+			esc_attr($this->get_field_name('link')),
+			__('Ссылка на запись:', 'knife-theme'),
+			esc_attr($instance['link']),
+			__('Абсолютная ссылка с этого сайта', 'knife-theme')
 		);
-
-		foreach($taxes as $name => $object) {
-			printf('<option value="%1$s"%3$s>%2$s</option>', $name, $object->label, selected($instance['taxonomy'], $name, false));
-		}
-
-		echo '</select>';
-
-
-		// Terms filter
-		printf(
-			'<ul class="cat-checklist categorychecklist knife-single-termlist" id="%1$s">%2$s</ul>',
-			esc_attr($this->get_field_id('termlist')),
-			$terms
-		);
-
-
-		// Posts count
-		printf(
-			'<p><label for="%1$s">%3$s</label> <input class="tiny-text" id="%1$s" name="%2$s" type="number" value="%4$s"></p>',
-			esc_attr($this->get_field_id('posts_per_page')),
-			esc_attr($this->get_field_name('posts_per_page')),
-			__('Количество записей:', 'knife-theme'),
-			esc_attr($instance['posts_per_page'])
-		);
-
-
-		// Posts offset
-		printf(
-			'<p><label for="%1$s">%3$s</label> <input class="tiny-text" id="%1$s" name="%2$s" type="number" value="%4$s"></p>',
-			esc_attr($this->get_field_id('offset')),
-			esc_attr($this->get_field_name('offset')),
-			__('Пропустить записей:', 'knife-theme'),
-			esc_attr($instance['offset'])
-		);
-
-	}
-
-	/**
-	 * Ajax handler for terms load
-	 */
-	public function widget_script() {
-?>
-		<script type="text/javascript">
-			(function() {
-				jQuery(document).on('change', '.knife-single-taxonomy', function() {
-					var list = jQuery(this).closest('.widget-content').find('.knife-single-termlist');
-
-					var data = {
-						action: 'knife-single-terms',
-						filter: jQuery(this).val(),
-						nonce: '<?php echo wp_create_nonce($this->nonce); ?>'
-					}
-
-					jQuery.post(ajaxurl, data, function(response) {
-						list.html(response);
-
-						return list.show();
-					});
-
-					return list.hide();
-				});
-			})();
-		</script>
-<?php
-	}
-
-
-	/**
-	 * Custom terms form by taxonomy name
-	 */
-	public function widget_terms() {
-		check_ajax_referer($this->nonce, 'nonce');
-
-		wp_terms_checklist(0, [
-			'taxonomy' => esc_attr($_POST['filter'])
-		]);
-
-		wp_die();
-	}
-
-
- 	/**
-	 * Remove transient on widget update
-	 */
- 	private function remove_cache() {
-		delete_transient($this->id);
 	}
 }
 
