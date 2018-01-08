@@ -388,7 +388,7 @@ endif;
 
 if(!function_exists('knife_theme_widget_template')) :
 /**
- * Helper function to wrap stripe template part with custom parent tag
+ * Helper function to wrap template part with custom parent tag
  *
  * @since 1.1
  */
@@ -396,9 +396,8 @@ function knife_theme_widget_template($args) {
 	global $wp_query;
 
 	$defaults = [
-		'template' => 'template-parts/widgets/stripe',
 		'size' => 'triple',
-		'before' => '<div class="widget widget-stripe">',
+		'before' => '<div class="widget widget-%1$s">',
 		'after' => '</div>'
 	];
 
@@ -412,11 +411,11 @@ function knife_theme_widget_template($args) {
 	};
 
 	$size = $opts($wp_query->current_post, (int) $wp_query->found_posts);
+	$path = 'template-parts/widgets/' . $size;
 
 	printf($args['before'], esc_attr($size));
 
-	set_query_var('widget_image', $args['size']);
-	get_template_part($args['template']);
+	get_template_part($path);
 
 	echo $args['after'];
 }

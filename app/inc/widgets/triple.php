@@ -1,15 +1,15 @@
 <?php
 /**
- * Stripe widget
+ * Triple widget
  *
- * Include different size stripes
+ * 3 posts in a row
  *
  * @package knife-theme
  * @since 1.1
  */
 
 
-class Knife_Stripe_Widget extends WP_Widget {
+class Knife_Triple_Widget extends WP_Widget {
 	/**
 	* Unique nonce for widget ajax requests
 	*
@@ -17,18 +17,18 @@ class Knife_Stripe_Widget extends WP_Widget {
 	* @access	private
 	* @var		string
 	*/
-	private $nonce = 'knife-stripe-nonce';
+	private $nonce = 'knife-triple-nonce';
 
 	public function __construct() {
 		$widget_ops = [
-			'classname' => 'stripe',
-			'description' => __('Выводит полосу постов по заданному критерию в виде карточек.', 'knife-theme'),
+			'classname' => 'triple',
+			'description' => __('Выводит полосу из трех постов по заданному критерию в виде карточек.', 'knife-theme'),
 			'customize_selective_refresh' => true
 		];
 
-		parent::__construct('knife_theme_stripe', __('[НОЖ] Модули', 'knife-theme'), $widget_ops);
+		parent::__construct('knife_theme_triple', __('[НОЖ] Три в ряд', 'knife-theme'), $widget_ops);
 
-		add_action('wp_ajax_knife-stripe-terms', [$this, 'widget_terms']);
+		add_action('wp_ajax_knife-triple-terms', [$this, 'widget_terms']);
 		add_action('in_admin_footer', [$this, 'widget_script']);
 	}
 
@@ -46,7 +46,6 @@ class Knife_Stripe_Widget extends WP_Widget {
 			'title' => '',
 			'posts_per_page' => 3,
 			'offset' => 0,
-			'size' => 'triple',
 			'cover' => 'default',
 			'taxonomy' => 'category',
 			'termlist' => []
@@ -85,12 +84,11 @@ class Knife_Stripe_Widget extends WP_Widget {
 
  			while($q->have_posts()) : $q->the_post();
 
-				echo str_replace('widget-stripe', 'widget-stripe widget--' . $size, $args['before_widget']);
+				echo $args['before_widget'];
 
 				set_query_var('widget_cover', $cover);
-				set_query_var('widget_image', $size);
 
-				get_template_part('template-parts/widgets/stripe');
+				get_template_part('template-parts/widgets/triple');
 
 				echo $args['after_widget'];
 
@@ -137,7 +135,6 @@ class Knife_Stripe_Widget extends WP_Widget {
 
 		$instance['posts_per_page'] = absint($new_instance['posts_per_page']);
 		$instance['offset'] = absint($new_instance['offset']);
-		$instance['size'] = sanitize_text_field($new_instance['size']);
 		$instance['title'] = sanitize_text_field($new_instance['title']);
 		$instance['cover'] = sanitize_text_field($new_instance['cover']);
  		$instance['taxonomy'] = sanitize_text_field($new_instance['taxonomy']);
@@ -161,19 +158,12 @@ class Knife_Stripe_Widget extends WP_Widget {
 			'title' => '',
 			'posts_per_page' => 3,
 			'offset' => 0,
-			'size' => 'triple',
 			'cover' => 'default',
 			'taxonomy' => 'category',
 			'termlist' => []
 		];
 
 		$instance = wp_parse_args((array) $instance, $defaults);
-
-		$size = [
-			'triple' => __('Три в ряд', 'knife-theme'),
-			'double' => __('Два в ряд', 'knife-theme'),
-			'single' => __('На всю ширину', 'knife-theme')
-		];
 
 		$cover = [
 			'defalut' => __('По умолчанию', 'knife-theme'),
@@ -203,21 +193,6 @@ class Knife_Stripe_Widget extends WP_Widget {
 		);
 
 
-		// Template manage
-		printf(
-			'<p><label for="%1$s">%3$s</label><select class="widefat" id="%1$s" name="%2$s">',
-			esc_attr($this->get_field_id('size')),
- 			esc_attr($this->get_field_name('size')),
-			__('Шаблон виджета:', 'knife-theme')
-		);
-
-		foreach($size as $name => $title) {
-			printf('<option value="%1$s"%3$s>%2$s</option>', $name, $title, selected($instance['size'], $name, false));
-		}
-
-		echo '</select>';
-
-
 		// Cover manage
 		printf(
 			'<p><label for="%1$s">%3$s</label><select class="widefat" id="%1$s" name="%2$s">',
@@ -235,7 +210,7 @@ class Knife_Stripe_Widget extends WP_Widget {
 
 		// Taxonomies filter
 		printf(
-			'<p><label for="%1$s">%3$s</label><select class="widefat knife-stripe-taxonomy" id="%1$s" name="%2$s">',
+			'<p><label for="%1$s">%3$s</label><select class="widefat knife-triple-taxonomy" id="%1$s" name="%2$s">',
 			esc_attr($this->get_field_id('taxonomy')),
  			esc_attr($this->get_field_name('taxonomy')),
 			__('Фильтр записей:', 'knife-theme')
@@ -250,7 +225,7 @@ class Knife_Stripe_Widget extends WP_Widget {
 
 		// Terms filter
 		printf(
-			'<ul class="cat-checklist categorychecklist knife-stripe-termlist" id="%1$s">%2$s</ul>',
+			'<ul class="cat-checklist categorychecklist knife-triple-termlist" id="%1$s">%2$s</ul>',
 			esc_attr($this->get_field_id('termlist')),
 			$terms
 		);
@@ -284,11 +259,11 @@ class Knife_Stripe_Widget extends WP_Widget {
 ?>
 		<script type="text/javascript">
 			(function() {
-				jQuery(document).on('change', '.knife-stripe-taxonomy', function() {
-					var list = jQuery(this).closest('.widget-content').find('.knife-stripe-termlist');
+				jQuery(document).on('change', '.knife-triple-taxonomy', function() {
+					var list = jQuery(this).closest('.widget-content').find('.knife-triple-termlist');
 
 					var data = {
-						action: 'knife-stripe-terms',
+						action: 'knife-triple-terms',
 						filter: jQuery(this).val(),
 						nonce: '<?php echo wp_create_nonce($this->nonce); ?>'
 					}
@@ -334,5 +309,5 @@ class Knife_Stripe_Widget extends WP_Widget {
  * It is time to register widget
  */
 add_action('widgets_init', function() {
-	register_widget('Knife_Stripe_Widget');
+	register_widget('Knife_Triple_Widget');
 });

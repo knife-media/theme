@@ -2,7 +2,7 @@
 /**
  * Transparent widget template
  *
- * Transparent is a transparent stripe with optional sticker
+ * Transparent block with optional stickers in posts
  *
  * @package knife-theme
  * @since 1.1

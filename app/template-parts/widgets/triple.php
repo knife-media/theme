@@ -1,6 +1,6 @@
 <?php
 /**
- * Stripe widget template
+ * Triple widget template
  *
  * @package knife-theme
  * @since 1.1
@@ -21,7 +21,7 @@
 
 	<div class="widget__image">
 		<?php
-			the_post_thumbnail(get_query_var('widget_image', 'triple'), ['class' => 'widget__image-thumbnail']);
+			the_post_thumbnail('triple', ['class' => 'widget__image-thumbnail']);
 		?>
 	</div>
 

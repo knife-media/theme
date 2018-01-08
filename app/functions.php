@@ -592,7 +592,9 @@ require get_template_directory() . '/inc/helpers/custom-scripts.php';
 
 // Add custom widgets defenitions
 require get_template_directory() . '/inc/widgets/recent.php';
-require get_template_directory() . '/inc/widgets/stripe.php';
+require get_template_directory() . '/inc/widgets/triple.php';
+require get_template_directory() . '/inc/widgets/double.php';
+require get_template_directory() . '/inc/widgets/single.php';
 require get_template_directory() . '/inc/widgets/feature.php';
 require get_template_directory() . '/inc/widgets/details.php';
 require get_template_directory() . '/inc/widgets/transparent.php';
