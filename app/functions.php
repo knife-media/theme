@@ -442,6 +442,13 @@ add_action('pre_get_posts', function($query) {
 });
 
 
+// Remove news from home page
+add_action('pre_get_posts', function($query) {
+	if($query->is_main_query() && $query->is_home())
+		$query->set('category__not_in', [620]);
+});
+
+
 // Remove private posts from archives and home page.
 // Note: Knife editors use private posts as drafts. So we don't want to see drafts in templates even if we have logged in
 add_action('pre_get_posts', function($query) {

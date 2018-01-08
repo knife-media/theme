@@ -10,8 +10,6 @@
   color: $color-text;
   background-color: $color-white;
 
-  border-radius: 2px;
-
   .post__header {
     display: flex;
 		flex-flow: column wrap;
@@ -98,6 +96,7 @@
     .post__footer-tags {
       .refers__link {
         margin-right: 2rem;
+        line-height: 2rem;
 
         &:before {
           content: "#";
@@ -121,8 +120,8 @@
 
     .post__footer-share {
       margin-top: 1.5rem;
-      padding-top: 1rem;
-      padding-bottom: 1rem;
+      padding-top: .75rem;
+      padding-bottom: .75rem;
 
       background-color: $color-sheet;
     }
@@ -170,8 +169,6 @@
 
 		background-color: $color-white;
 
-    border-radius: 2px;
-
     & > *:first-child {
       margin-top: 0;
     }
@@ -192,10 +189,6 @@
 
     @media screen and (max-width: 767px) {
       padding: 1rem;
-    }
-
-    @media screen and (max-width: 479px) {
-      border-radius: 0;
     }
   }
 
@@ -225,9 +218,5 @@
 
   @media screen and (max-width: 767px) {
     padding: 1rem;
-  }
-
-  @media screen and (max-width: 479px) {
-    border-radius: 0;
   }
 }

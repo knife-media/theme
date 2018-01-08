@@ -12,13 +12,6 @@ get_header(); ?>
 
 <main class="wrap">
 
-<?php if(have_posts()) : ?>
-	<div class="caption block">
-		<h1 class="caption__title"><?php _e('Последние статьи', 'knife-theme'); ?></h1>
-	</div>
-<?php endif; ?>
-
-
 	<div class="content block">
 <?php
 	if(have_posts()) :

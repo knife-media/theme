@@ -12,8 +12,6 @@
   color: $color-text;
   background-color: $color-white;
 
-  border-radius: 2px;
-
   .widget__image {
     display: none;
     position: relative;
@@ -180,6 +178,5 @@
 
   @media screen and (max-width: 479px) {
     margin-bottom: .5rem;
-    border-radius: 0;
   }
 }

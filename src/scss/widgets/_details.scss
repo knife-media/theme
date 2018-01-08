@@ -24,8 +24,6 @@
     color: $color-white;
     background: $color-details-inner;
 
-    border-radius: 2px;
-
     &:hover {
       filter: brightness(115%);
     }
@@ -37,8 +35,6 @@
     @media screen and (max-width: 767px) {
       width: 100%;
       font-size: 1.125rem;
-
-      border-radius: 0;
     }
   }
 
