@@ -159,7 +159,7 @@ function knife_theme_tags($args, $html = '') {
 		if($i > 0)
 			$html .= $args['between'];
 
-		$html .= sprintf($args['item'], mb_convert_case($tag->name, MB_CASE_TITLE), get_tag_link($tag->term_id));
+		$html .= sprintf($args['item'], $tag->name, get_tag_link($tag->term_id));
 	}
 
 

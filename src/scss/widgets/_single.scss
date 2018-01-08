@@ -55,19 +55,23 @@
     padding-top: 0;
     overflow: hidden;
 
+    background-color: $color-white;
+
     .widget__image-thumbnail {
       display: block;
       position: absolute;
       top: 0;
       left: 0;
 
-      width: calc(100% + .5px);
-      height: calc(100% + .5px);
+      width: 100%;
+      height: 100%;
 
       object-fit: cover;
       object-position: center;
 
-      transition: filter .25s;
+      transition: opacity .25s;
+
+      -webkit-backface-visibility: hidden;
     }
   }
 
@@ -132,6 +136,7 @@
 
     .meta__link {
       position: relative;
+      z-index: 2;
     }
   }
 
@@ -190,12 +195,6 @@
         color: $color-white;
       }
 
-      &:hover {
-        .widget__image-thumbnail {
-          filter: brightness(120%);
-        }
-      }
-
       @media screen and (max-width: 479px) {
         padding-top: 25%;
       }
@@ -203,7 +202,7 @@
 
     &:hover {
       .widget__image-thumbnail {
-        filter: brightness(120%);
+        opacity: .9;
       }
     }
   }
