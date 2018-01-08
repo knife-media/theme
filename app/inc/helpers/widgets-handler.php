@@ -22,7 +22,7 @@ class Knife_Widgets_Handler {
 
 	public function __construct() {
 		add_action('widget_update_callback', [$this, 'clear_widget_cache']);
-		add_action('in_admin_footer', [$this, 'widget_script']);
+		add_action('admin_print_footer_scripts', [$this, 'widget_script']);
 		add_action('wp_ajax_knife-widget-terms', [$this, 'widget_terms']);
 	}
 
@@ -82,6 +82,17 @@ class Knife_Widgets_Handler {
 
 					return list.hide();
 				});
+
+				jQuery(document).on('change', '.knife-widget-feature', function() {
+					var filter = jQuery(this).closest('.widget-content').find('p:nth-child(n+3)');
+
+					if(jQuery(this).prop('checked') === true)
+						return filter.hide();
+
+					return filter.show();
+				});
+
+				jQuery('.knife-widget-feature').trigger('change');
 			})();
 		</script>
 <?php

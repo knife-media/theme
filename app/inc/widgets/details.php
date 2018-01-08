@@ -10,14 +10,6 @@
 
 
 class Knife_Details_Widget extends WP_Widget {
- 	/**
-	* Unique nonce for widget ajax requests
-	*
-	* @since	1.1
-	* @access	private
-	* @var		string
-	*/
-	private $nonce = 'knife-details-nonce';
 
     public function __construct() {
         $widget_ops = [
@@ -27,9 +19,6 @@ class Knife_Details_Widget extends WP_Widget {
         ];
 
         parent::__construct('knife_theme_details', __('[НОЖ] Микроформаты', 'knife-theme'), $widget_ops);
-
- 		add_action('wp_ajax_knife-details-terms', [$this, 'widget_terms']);
-		add_action('in_admin_footer', [$this, 'widget_script']);
     }
 
 
@@ -131,7 +120,7 @@ class Knife_Details_Widget extends WP_Widget {
 
 		// Taxonomies filter
 		printf(
-			'<p><label for="%1$s">%3$s</label><select class="widefat knife-details-taxonomy" id="%1$s" name="%2$s">',
+			'<p><label for="%1$s">%3$s</label><select class="widefat knife-widget-taxonomy" id="%1$s" name="%2$s">',
 			esc_attr($this->get_field_id('taxonomy')),
  			esc_attr($this->get_field_name('taxonomy')),
 			__('Фильтр записей:', 'knife-theme')
@@ -145,7 +134,7 @@ class Knife_Details_Widget extends WP_Widget {
 
 		// Terms filter
 		printf(
-			'<ul class="cat-checklist categorychecklist knife-details-termlist" id="%1$s">%2$s</ul>',
+			'<ul class="cat-checklist categorychecklist knife-widget-termlist" id="%1$s">%2$s</ul>',
 			esc_attr($this->get_field_id('termlist')),
 			$terms
 		);
@@ -198,63 +187,8 @@ class Knife_Details_Widget extends WP_Widget {
  		$instance['taxonomy'] = sanitize_text_field($new_instance['taxonomy']);
 		$instance['termlist'] = $terms;
 
-
-		$this->remove_cache();
-
 		return $instance;
     }
-
-
-	/**
-	 * Ajax handler for terms load
-	 */
-	public function widget_script() {
-?>
-		<script type="text/javascript">
-			(function() {
-				jQuery(document).on('change', '.knife-details-taxonomy', function() {
-					var list = jQuery(this).closest('.widget-content').find('.knife-details-termlist');
-
-					var data = {
-						action: 'knife-details-terms',
-						filter: jQuery(this).val(),
-						nonce: '<?php echo wp_create_nonce($this->nonce); ?>'
-					}
-
-					jQuery.post(ajaxurl, data, function(response) {
-						list.html(response);
-
-						return list.show();
-					});
-
-					return list.hide();
-				});
-			})();
-		</script>
-<?php
-	}
-
-
-	/**
-	 * Custom terms form by taxonomy name
-	 */
-	public function widget_terms() {
-		check_ajax_referer($this->nonce, 'nonce');
-
-		wp_terms_checklist(0, [
-			'taxonomy' => esc_attr($_POST['filter'])
-		]);
-
-		wp_die();
-	}
-
-
-	/**
-	 * Remove transient on widget update
-	 */
- 	private function remove_cache() {
-		delete_transient($this->id);
-	}
 }
 
 

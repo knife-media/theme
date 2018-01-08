@@ -94,7 +94,7 @@ class Knife_Feature_Widget extends WP_Widget {
 		);
 
  		printf(
-			'<p><input type="checkbox" id="%1$s" name="%2$s" class="checkbox"%4$s><label for="%1$s">%3$s</label></p>',
+			'<p><input type="checkbox" id="%1$s" name="%2$s" class="checkbox knife-widget-feature"%4$s><label for="%1$s">%3$s</label></p>',
 			esc_attr($this->get_field_id('feature')),
 			esc_attr($this->get_field_name('feature')),
 			__('Вывести последний фичер пост', 'knife-theme'),
@@ -116,24 +116,6 @@ class Knife_Feature_Widget extends WP_Widget {
 			__('Ссылка с фичера', 'knife-theme'),
 			esc_attr($instance['link'])
 		);
-?>
-		<script type="text/javascript">
-			jQuery(document).ready(function() {
-				var feature = '#' + '<?php echo $this->get_field_id('feature'); ?>';
-
-				jQuery(document).on('change', feature, function() {
-					var filter = jQuery(this).closest('.widget-content').find('p:nth-child(n+3)');
-
-					if(jQuery(this).prop('checked') === true)
-						return filter.hide();
-
-					return filter.show();
-				});
-
-				return jQuery(feature).trigger('change');
-			});
-		</script>
-<?php
 	}
 
 
