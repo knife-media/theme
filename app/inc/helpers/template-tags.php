@@ -434,8 +434,8 @@ if(!function_exists('knife_custom_background')) :
  * @link https://developer.wordpress.org/reference/functions/_custom_background_cb/
  * @since 1.1
  */
-function knife_custom_background($style = []) {
-	if(is_admin() || is_404())
+function knife_custom_background($echo = false, $style = []) {
+	if($echo === false || is_404())
 		return;
 
 	$image = set_url_scheme(get_background_image());
