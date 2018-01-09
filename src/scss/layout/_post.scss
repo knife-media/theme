@@ -141,7 +141,7 @@
     align-items: flex-start;
     justify-content: center;
 
-    min-height: 50vh;
+    min-height: 40vh;
 
     .post__message-title {
       display: block;
@@ -150,6 +150,7 @@
       margin-bottom: 1.5rem;
 
       font-size: 2.5rem;
+      font-weight: 700;
       line-height: 1.075;
       letter-spacing: .5px;
 
