@@ -35,6 +35,56 @@ class Knife_Post_Settings {
  		add_filter('document_title_parts', [$this, 'add_site_tagline'], 10, 1);
 
 		add_action('add_meta_boxes', [$this, 'add_lead_metabox']);
+
+		add_filter('disable_categories_dropdown', '__return_true', 'post');
+		add_action('restrict_manage_posts', [$this, 'print_posts_filter'], 'post');
+		add_filter('parse_query', [$this, 'parse_manage_filter']);
+	}
+
+
+	/**
+	 * Change default categories filter on post list screen
+	 */
+	public function print_posts_filter() {
+        $values = [
+			__('Все записи', 'knife-theme') => 0,
+			__('Только новости', 'knife-theme') => 'news',
+			__('Без новостей', 'knife-theme') => 'other'
+        ];
+
+        $current = $_GET['cat'] ?? '';
+
+		print' <select name="cat">';
+
+		foreach($values as $label => $value) {
+			printf('<option value="%s"%s>%s</option>', $value, $value == $current ? ' selected="selected"' : '', $label);
+		}
+
+		print '</select>';
+	}
+
+
+ 	/**
+	 * Change default categories filter process query
+	 */
+	public function parse_manage_filter($query) {
+		global $pagenow;
+
+		if(!is_admin() || $pagenow !== 'edit.php' || empty($_GET['cat']))
+			return false;
+
+		if(isset($_GET['post_type']) && $_GET['post_type'] !== 'post')
+			return false;
+
+		// Categories ids
+		$cat_news = 620;
+		$cat_classics = 613;
+
+		if($_GET['cat'] === 'news')
+			$query->query_vars['cat'] = $cat_news;
+
+		if($_GET['cat'] === 'other')
+			$query->query_vars['category__not_in'] = [$cat_news, $cat_classics];
 	}
 
 
@@ -53,12 +103,12 @@ class Knife_Post_Settings {
 		$lead = get_post_meta($post->ID, $this->lead, true);
 
 		wp_editor($lead, 'knife-lead-editor', [
-				'media_buttons' => false,
-				'textarea_name' =>
-				'lead-text',
-				'teeny' => true,
-				'tinymce' => true,
-				'editor_height' => 100
+			'media_buttons' => false,
+			'textarea_name' =>
+			'lead-text',
+			'teeny' => true,
+			'tinymce' => true,
+			'editor_height' => 100
 		]);
 	}
 
