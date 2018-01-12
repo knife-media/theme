@@ -18,7 +18,10 @@ if(!isset($content_width)) {
 
 // Insert required js files
 add_action('wp_enqueue_scripts', function() {
- 	$version = wp_get_theme()->get('Version');
+	$version = wp_get_theme()->get('Version');
+
+	if(defined('WP_DEBUG') && true === WP_DEBUG)
+		$version = date('U');
 
 	wp_enqueue_script('knife-theme', get_template_directory_uri() . '/assets/scripts.min.js', [], $version, true);
 });
@@ -27,6 +30,9 @@ add_action('wp_enqueue_scripts', function() {
 // Insert styles
 add_action('wp_print_styles', function() {
 	$version = wp_get_theme()->get('Version');
+
+	if(defined('WP_DEBUG') && true === WP_DEBUG)
+		$version = date('U');
 
 	wp_enqueue_style('knife-theme', get_template_directory_uri() . '/assets/styles.min.css', [], $version);
 });

@@ -214,7 +214,10 @@ function knife_theme_related($args, $html = '') {
 		return false;
 
 	foreach($items as $item) {
-		$html .= sprintf($args['item'], get_the_title($item->ID), get_the_permalink($item->ID));
+		$html .= sprintf($args['item'],
+			get_the_title($item->ID),
+			get_the_permalink($item->ID)
+		);
 	}
 
 	$html = $args['before'] . $title . $html . $args['after'];
@@ -243,7 +246,7 @@ function knife_theme_share($args, $html = '') {
 		'after' => '',
 		'title' => '<div class="share__title">%s</div>',
 		'text' => '<span class="share__text">%s</span>',
-		'item' => '<a class="share__link share__link--%3$s" href="%1$s" target="_blank" data-id="%3$s">%2$s</a>',
+		'item' => '<a class="share__link share__link--%3$s" href="%2$s" target="_blank" data-id="%3$s">%1$s</a>',
 		'icon' => '<span class="icon icon--%s"></span>',
 		'echo' => true
 	];
@@ -282,12 +285,12 @@ function knife_theme_share($args, $html = '') {
 
 		$item_link = sprintf($data['link'],
 			get_permalink(),
-			get_the_title()
+			strip_tags(get_the_title())
 		);
 
 		$html .= sprintf($args['item'],
-			esc_url($item_link),
 			$item_icon . $item_text,
+			esc_url($item_link),
 			esc_attr($network)
 		);
 	}
