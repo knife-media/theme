@@ -102,6 +102,8 @@
   }
 
   @media screen and (max-width: 767px) {
+    flex-flow: row wrap;
+
     padding: 1rem 2rem;
   }
 }
