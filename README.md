@@ -13,7 +13,9 @@ However the code is under MIT License, we will truly appreciate your feedback ab
 ## Limitations ##
 
 This theme uses awesome commercial font [Formular](https://brownfox.org/fonts/formular/). 
-According its license we can't share it in public access. You should buy it or change for something else.
+According font license we can't share it in public access. 
+
+You should buy it or change for something else.
 
 ## Help ##
 
