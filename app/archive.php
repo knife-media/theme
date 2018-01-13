@@ -42,7 +42,7 @@ get_header(); ?>
 
 <?php if(have_posts()) : ?>
 	<div class="nav block">
-		<?php next_posts_link('Больше статей'); ?>
+		<?php next_posts_link(__('Больше статей', 'knife-theme')); ?>
 	</div>
 <?php endif; ?>
 
