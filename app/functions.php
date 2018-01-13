@@ -63,7 +63,7 @@ add_action('after_setup_theme', function() {
 	add_theme_support('automatic-feed-links');
 
 	// Let wordpress manage cutsom background
-	add_theme_support('custom-background', ['wp-head-callback' => 'knife_custom_background']);
+	add_theme_support('custom-background', ['wp-head-callback' => '__return_false']);
 });
 
 
@@ -218,7 +218,7 @@ add_action("customize_register", function($wp_customize) {
 
 // Print fixed element with custom background
 add_action('wp_footer', function() {
-	knife_custom_background(true);
+	knife_custom_background();
 });
 
 

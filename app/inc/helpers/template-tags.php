@@ -437,10 +437,7 @@ if(!function_exists('knife_custom_background')) :
  * @link https://developer.wordpress.org/reference/functions/_custom_background_cb/
  * @since 1.1
  */
-function knife_custom_background($echo = false, $style = []) {
-	if($echo === false || is_404())
-		return;
-
+function knife_custom_background($style = []) {
 	$image = set_url_scheme(get_background_image());
 	$color = get_background_color();
 
@@ -451,14 +448,14 @@ function knife_custom_background($echo = false, $style = []) {
 		$style[] = "background-color: #" . $color . ";";
 
 	if($image)
-		$style[] = "background-image: url(" . esc_url_raw($image) . ");";
+		$style[] = "background-image: url(" . esc_url($image) . ");";
 
 	$html = sprintf(
-		'<div class="%1$s" style="%2$s"></div>',
-		'backdrop',
+		'<div class="backdrop" style="%s"></div>',
 		implode(' ', $style)
 	);
 
+ 	// Filter result html before return
 	$html = apply_filters('knife_custom_background', $html);
 
 	echo $html;
