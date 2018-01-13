@@ -10,6 +10,12 @@ You can use it as starting point for your theme but don't forget to remove all s
 Note that all strings are localization ready but lang files not included.
 However the code is under MIT License, we will truly appreciate your feedback about using this theme in your project.
 
+## Limitations ##
+
+This theme uses awesome commercial font [Formular](https://brownfox.org/fonts/formular/). 
+According font license we can't share it in public access. 
+
+You should buy it or change with something else.
 
 ## Help ##
 
