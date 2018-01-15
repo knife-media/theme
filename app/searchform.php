@@ -1,3 +1,14 @@
+<?php
+/**
+ * Display search results
+ *
+ * Uses google custom search engine results
+ *
+ * @package knife-theme
+ * @since 1.1
+ */
+?>
+
 <div class="search">
 	<div class="search__layer block">
 

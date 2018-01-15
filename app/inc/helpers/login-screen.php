@@ -23,7 +23,6 @@ class Knife_Login_Screen {
 	 */
 	public function login_styles() {
 		$logo = get_template_directory_uri() . '/assets/images/logo-white.svg';
-
 	?>
 		<style type="text/css">
 			.login {

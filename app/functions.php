@@ -599,9 +599,6 @@ require get_template_directory() . '/inc/helpers/plugin-snippets.php';
 // Login screen custom styles
 require get_template_directory() . '/inc/helpers/login-screen.php';
 
-// Add external scripts in a proper way
-require get_template_directory() . '/inc/helpers/custom-scripts.php';
-
 // Common widgets handler
 require get_template_directory() . '/inc/helpers/widgets-handler.php';
 
