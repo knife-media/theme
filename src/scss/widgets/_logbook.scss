@@ -105,8 +105,8 @@
       position: relative;
 
       @media screen and (max-width: 767px) {
-        &:nth-child(3) {
-          flex: 1;
+        &:nth-child(3):after {
+          display: none;
         }
 
         &:nth-child(n+4) {

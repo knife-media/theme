@@ -8,10 +8,6 @@
     display: inline-block;
     cursor: pointer;
 
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-
     &:after {
       content: "•";
       display: inline-block;
@@ -39,10 +35,6 @@
     display: inline-block;
     cursor: default;
 
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-
     &:after {
       content: "•";
       display: inline-block;
@@ -51,10 +43,6 @@
       margin-right: .5rem;
 
       font-size: .5625rem;
-    }
-
-    &:last-child {
-      flex: 1;
     }
 
     &:last-child:after {
