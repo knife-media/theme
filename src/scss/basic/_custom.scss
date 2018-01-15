@@ -123,25 +123,45 @@
 	}
 
 	ul {
-		margin: 0;
+    margin-bottom: 1rem;
 		padding-left: 2.5rem;
 
 		list-style-type: disc;
 
+    line-height: 1.65;
+    font-size: 1rem;
+    font-weight: 400;
+
 		li {
 			margin: .125rem .375rem;
 		}
+
+    @media screen and (max-width: 767px) {
+      padding-left: 1.5rem;
+
+      font-size: .9375rem;
+    }
 	}
 
 	ol {
-		margin: 0;
+    margin-bottom: 1rem;
 		padding-left: 2.5rem;
 
 		list-style-type: decimal;
 
+    line-height: 1.65;
+    font-size: 1rem;
+    font-weight: 400;
+
 		li {
 			margin: .125rem .375rem;
 		}
+
+    @media screen and (max-width: 767px) {
+      padding-left: 1.5rem;
+
+      font-size: .9375rem;
+    }
 	}
 
   strong {
