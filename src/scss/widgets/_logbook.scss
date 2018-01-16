@@ -129,6 +129,8 @@
     background-color: $color-white;
 
     &.widget__item--cover {
+      min-height: 12.75rem;
+
       .widget__title {
         font-size: 2.5rem;
         line-height: 1.0625;
