@@ -269,7 +269,7 @@ class Knife_Post_Settings {
 
 
 	/**
-	 * Remove useless tinymce toolbars and fix tagline admin style
+	 * Fix tagline admin style
 	 */
 	public function print_admin_styles() {
 		$post_id = get_the_ID();

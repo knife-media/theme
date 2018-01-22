@@ -1,7 +1,7 @@
-$color-black: #000;
-$color-white: #fff;
+$color-black: #000000;
+$color-white: #ffffff;
 
-$color-text: #111;
+$color-text: #111111;
 $color-primary: #1e488f;
 $color-sheet: #faf9f3;
 $color-light: #2f72e1;
@@ -14,6 +14,8 @@ $color-title-start: #fbcb34;
 $color-title-finish: #ed4f71;
 $color-author-start: #7ce568;
 $color-author-finish: #67e3d6;
+
+$color-selection: #ffff00;
 
 $font-regular: "Formular", "Helvetica Neue Light", "Arial", sans-serif;
 $font-serif: "PT Serif", serif;
@@ -81,7 +83,7 @@ img {
 }
 
 ::selection {
-  background-color: silver;
+  background-color: $color-selection;
 }
 
 ::placeholder {
