@@ -36,7 +36,7 @@ class Knife_Feature_Widget extends WP_Widget {
 			'posts_per_page' => 1,
 			'meta_query' => [
 				[
-					'key' => '_knife-theme-feature',
+					'key' => '_knife-feature',
 					'value' => 1,
 					'compare' => '='
 				]

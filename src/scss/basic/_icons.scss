@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'knife-icons';
-  src:  url('fonts/knife-icons/knife-icons.eot');
+  src:  url('fonts/knife-icons/knife-icons.eot?2');
   src:  url('fonts/knife-icons/knife-icons.eot#iefix') format('embedded-opentype'),
-    url('fonts/knife-icons/knife-icons.ttf') format('truetype'),
-    url('fonts/knife-icons/knife-icons.woff') format('woff'),
-    url('fonts/knife-icons/knife-icons.svg#knife-icons') format('svg');
+    url('fonts/knife-icons/knife-icons.ttf?2') format('truetype'),
+    url('fonts/knife-icons/knife-icons.woff?2') format('woff'),
+    url('fonts/knife-icons/knife-icons.svg?2#knife-icons') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -24,6 +24,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon--notify:before {
+  content: "\e909";
+}
 .icon--search:before {
   content: "\e900";
 }

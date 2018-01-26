@@ -1,0 +1,127 @@
+.push {
+	display: flex;
+  flex-flow: row-reverse nowrap;
+	align-items: center;
+  justify-content: space-between;
+
+	position: fixed;
+  right: 0;
+  left: 0;
+	bottom: 0;
+	z-index: 3;
+
+  width: 25rem;
+	max-width: calc(100% - 2rem);
+  margin-right: auto;
+  margin-left: auto;
+	padding: 1rem;
+
+	background: $color-white;
+
+  transform: translateY(-30%);
+	transition: transform .5s 5s;
+
+	box-shadow: 0 0 1px 0 $color-text;
+
+  .push__button {
+    display: flex;
+    align-items: center;
+    outline: none;
+    cursor: pointer;
+
+    padding: .625rem 1rem;
+
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .75px;
+    text-transform: uppercase;
+
+    color: $color-white;
+    background: $color-primary;
+
+    transition: filter .25s;
+
+    border-radius: 2px;
+
+    .icon {
+      font-size: 1.25rem;
+      margin-right: .5rem;
+    }
+
+    &:hover {
+      filter: brightness(125%);
+    }
+  }
+
+  .push__promo {
+    display: block;
+    user-select: none;
+
+    width: 50%;
+    margin: 0;
+    padding: 0;
+
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.25;
+    color: $color-text;
+
+    @media screen and (max-width: 479px) {
+      width: 12rem;
+      max-width: 100%;
+      margin-bottom: .75rem;
+
+      text-align: center;
+    }
+  }
+
+  .push__close {
+    position: absolute;
+    top: .5rem;
+    right: .5rem;
+    cursor: pointer;
+
+    width: .75rem;
+    height: .75rem;
+
+    text-indent: -9999rem;
+
+    transition: filter .25s;
+
+    &:after,
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+
+      height: 100%;
+      width: 1px;
+
+      background-color: $color-primary;
+    }
+
+    &:after {
+	    transform: rotate(-45deg);
+    }
+
+    &:before {
+      transform: rotate(45deg);
+    }
+
+    &:hover {
+       filter: brightness(125%);
+    }
+  }
+
+  &.push--hide {
+    transform: translateY(100%);
+  }
+
+  @media screen and (max-width: 479px) {
+		flex-flow: column;
+    padding: .75rem;
+
+    transform: translateY(-10%);
+  }
+}

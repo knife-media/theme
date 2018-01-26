@@ -62,7 +62,7 @@ class Knife_Transparent_Widget extends WP_Widget {
 			// If user selected option to show posts only with stickers
 			if($sticker === 1) {
 				$base['meta_query'] = [[
-					'key' => 'post-sticker',
+					'key' => '_knife-sticker',
 					'value' => '',
 					'compare' => '!='
 				]];

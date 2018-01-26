@@ -4,6 +4,35 @@
     {
       "icon": {
         "paths": [
+          "M512 938c-48 0-86-38-86-84h170c0 49.675-37.225 84-84 84zM768 470v212l86 86v42h-684v-42l86-86v-212c0-132 70-240 192-270v-30c0-36 28-64 64-64s64 28 64 64v30c122 30 192 140 192 270zM852 448c-6-114-64-212-150-274l60-60c102 78 170 198 176 334h-86zM324 174c-88 62-146 160-152 274h-86c6-136 74-256 176-334z"
+        ],
+        "attrs": [
+          {}
+        ],
+        "isMulticolor": false,
+        "isMulticolor2": false,
+        "grid": 0,
+        "tags": [
+          "notify"
+        ]
+      },
+      "attrs": [
+        {}
+      ],
+      "properties": {
+        "order": 23,
+        "id": 10,
+        "name": "notify",
+        "prevSize": 32,
+        "code": 59657
+      },
+      "setIdx": 0,
+      "setId": 0,
+      "iconIdx": 0
+    },
+    {
+      "icon": {
+        "paths": [
           "M725.333 123.733c-166.4-166.4-435.2-166.4-601.6 0s-166.4 435.2 0 601.6c149.333 149.333 379.733 162.133 546.133 46.933l256 256 98.133-98.133-256-256c119.467-170.667 102.4-401.067-42.667-550.4v0zM226.133 622.933c-110.933-110.933-110.933-290.133 0-401.067s290.133-110.933 401.067 0c110.933 110.933 110.933 290.133 0 401.067-115.2 110.933-294.4 110.933-401.067 0v0z"
         ],
         "attrs": [
@@ -20,7 +49,7 @@
         {}
       ],
       "properties": {
-        "order": 13,
+        "order": 32,
         "id": 6,
         "name": "search",
         "prevSize": 32,
@@ -28,7 +57,7 @@
       },
       "setIdx": 0,
       "setId": 0,
-      "iconIdx": 0
+      "iconIdx": 1
     },
     {
       "icon": {
@@ -49,7 +78,7 @@
         {}
       ],
       "properties": {
-        "order": 21,
+        "order": 31,
         "id": 4,
         "name": "odnoklassniki",
         "prevSize": 32,
@@ -57,7 +86,7 @@
       },
       "setIdx": 0,
       "setId": 0,
-      "iconIdx": 1
+      "iconIdx": 2
     },
     {
       "icon": {
@@ -78,7 +107,7 @@
         {}
       ],
       "properties": {
-        "order": 20,
+        "order": 30,
         "id": 3,
         "name": "vkontakte",
         "prevSize": 32,
@@ -86,7 +115,7 @@
       },
       "setIdx": 0,
       "setId": 0,
-      "iconIdx": 2
+      "iconIdx": 3
     },
     {
       "icon": {
@@ -107,7 +136,7 @@
         {}
       ],
       "properties": {
-        "order": 19,
+        "order": 29,
         "id": 2,
         "name": "facebook",
         "prevSize": 32,
@@ -115,7 +144,7 @@
       },
       "setIdx": 0,
       "setId": 0,
-      "iconIdx": 3
+      "iconIdx": 4
     },
     {
       "icon": {
@@ -136,7 +165,7 @@
         {}
       ],
       "properties": {
-        "order": 18,
+        "order": 28,
         "id": 1,
         "name": "instagram",
         "prevSize": 32,
@@ -144,7 +173,7 @@
       },
       "setIdx": 0,
       "setId": 0,
-      "iconIdx": 4
+      "iconIdx": 5
     },
     {
       "icon": {
@@ -165,7 +194,7 @@
         {}
       ],
       "properties": {
-        "order": 17,
+        "order": 27,
         "id": 0,
         "name": "twitter",
         "prevSize": 32,
@@ -173,7 +202,7 @@
       },
       "setIdx": 0,
       "setId": 0,
-      "iconIdx": 5
+      "iconIdx": 6
     },
     {
       "icon": {
@@ -194,7 +223,7 @@
         {}
       ],
       "properties": {
-        "order": 16,
+        "order": 26,
         "id": 7,
         "name": "telegram",
         "prevSize": 32,
@@ -202,7 +231,7 @@
       },
       "setIdx": 0,
       "setId": 0,
-      "iconIdx": 6
+      "iconIdx": 7
     },
     {
       "icon": {
@@ -225,7 +254,7 @@
         {}
       ],
       "properties": {
-        "order": 15,
+        "order": 25,
         "id": 8,
         "prevSize": 32,
         "code": 59649,
@@ -233,7 +262,7 @@
       },
       "setIdx": 0,
       "setId": 0,
-      "iconIdx": 7
+      "iconIdx": 8
     },
     {
       "icon": {
@@ -256,7 +285,7 @@
         {}
       ],
       "properties": {
-        "order": 14,
+        "order": 24,
         "id": 9,
         "name": "right",
         "prevSize": 32,
@@ -264,7 +293,7 @@
       },
       "setIdx": 0,
       "setId": 0,
-      "iconIdx": 8
+      "iconIdx": 9
     }
   ],
   "height": 1024,

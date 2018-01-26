@@ -60,31 +60,16 @@
 
     margin-top: 1rem;
 
-		.search__results-item {
- 			display: block;
-			position: relative;
-
-      padding: 2rem 0;
-
-      border-top: solid 1px rgba(255, 255, 255, .4);
-
-      &:first-child {
-        border-top: none;
-      }
-
-      @media screen and (max-width: 767px) {
-        padding: 1rem 0;
-      }
-		}
-
     .search__results-head {
       display: block;
 
+      margin-top: 2rem;
 			font-size: 1.375rem;
 			font-weight: 500;
 			line-height: 1.25;
 
       @media screen and (max-width: 767px) {
+        margin-top: 1rem;
         font-size: 1.25rem;
       }
     }
@@ -100,6 +85,19 @@
 
 		.search__results-link {
 		  display: block;
+      position: relative;
+
+      margin-top: 2rem;
+
+      border-top: solid 1px rgba(255, 255, 255, .4);
+
+      &:first-child {
+        border-top: none;
+      }
+
+      @media screen and (max-width: 767px) {
+        margin-top: 1rem;
+      }
 		}
 	}
 

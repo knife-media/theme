@@ -22,13 +22,17 @@
 
     @media screen and (max-width: 1023px) {
       width: calc(50% - .5rem);
+
+      &:nth-child(n+7) {
+        display: none;
+      }
     }
 
     @media screen and (max-width: 479px) {
       width: 100%;
 
       &:nth-child(n+7) {
-        display: none;
+        display: flex;
       }
     }
   }

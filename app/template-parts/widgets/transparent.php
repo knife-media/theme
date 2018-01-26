@@ -24,7 +24,7 @@
 		<?php
 			knife_theme_post_meta([
 				'item' => '<img class="widget__sticker" src="%s">',
-				'meta' => 'post-sticker'
+				'meta' => '_knife-sticker'
 			]);
 		?>
 

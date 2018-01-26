@@ -1,0 +1,22 @@
+#post-body-content {
+	position: relative;
+}
+
+#poststuff #titlewrap {
+	padding-right: 51%;
+}
+
+#knife-tagline-input {
+	position: absolute;
+	top: 0;
+	right: 0;
+	outline: 0;
+
+	height: 1.7em;
+	width: 50%;
+	margin: 0 0 .5em;
+	padding: 3px 8px;
+
+	font-size: 1.7em;
+	line-height: 100%;
+}

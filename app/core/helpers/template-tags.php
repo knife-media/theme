@@ -372,7 +372,7 @@ function knife_theme_widget_options($base = 'widget__item', $post_id = null) {
 			break;
 
 		default:
-			if(!get_post_meta($post_id, '_knife-theme-cover', true))
+			if(!get_post_meta($post_id, '_knife-cover-meta', true))
 				break;
 
 			$options[] = $base . '--cover';

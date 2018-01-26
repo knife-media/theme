@@ -1,0 +1,57 @@
+#knife-sticker-box {
+	display: block;
+	text-align: center;
+}
+
+#knife-sticker-box > img {
+	display: block;
+
+	width: 80px;
+	height: 80px;
+	margin: 10px auto;
+}
+
+#knife-sticker-box fieldset {
+	margin: 0 -12px -12px;
+	padding: 10px;
+	background: #f5f5f5;
+	border-top: 1px solid #ddd;
+}
+
+#knife-sticker-box fieldset:after {
+	content: '';
+	display: block;
+	clear: both;
+}
+
+#knife-sticker-box fieldset > button {
+	float: right;
+}
+
+#knife-sticker-box fieldset > a {
+	display: none;
+	float: left;
+	padding-top: 4px;
+}
+
+#knife-sticker-box > img ~ fieldset > a {
+	display: block;
+}
+
+#knife-sticker-box .notice {
+	display: block;
+
+	margin-top: 10px;
+	text-align: left;
+	background-color: #f4f4f4;
+}
+
+#knife-sticker-box .howto {
+	display: block;
+
+	margin: 10px 0;
+}
+
+#knife-sticker-box > img ~ .howto {
+	display: none;
+}

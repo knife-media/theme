@@ -161,6 +161,48 @@ add_filter('embed_oembed_html', function($html, $url, $attr) {
 }, 10, 3);
 
 
+// Change default posts filter on posts list admin page
+add_filter('disable_categories_dropdown', '__return_true', 'post');
+
+add_action('restrict_manage_posts', function() {
+	$values = [
+		__('Все записи', 'knife-theme') => 0,
+		__('Только новости', 'knife-theme') => 'news',
+		__('Без новостей', 'knife-theme') => 'other'
+	];
+
+	$current = $_GET['cat'] ?? '';
+
+	print' <select name="cat">';
+
+	foreach($values as $label => $value) {
+		printf('<option value="%s"%s>%s</option>', $value, $value == $current ? ' selected="selected"' : '', $label);
+	}
+
+	print '</select>';
+}, 'post');
+
+add_filter('parse_query', function($query) {
+	global $pagenow;
+
+	if(!is_admin() || $pagenow !== 'edit.php' || empty($_GET['cat']))
+		return false;
+
+	if(isset($_GET['post_type']) && $_GET['post_type'] !== 'post')
+		return false;
+
+	// Categories ids
+	$cat_news = 620;
+	$cat_classics = 613;
+
+	if($_GET['cat'] === 'news')
+		$query->query_vars['cat'] = $cat_news;
+
+	if($_GET['cat'] === 'other')
+		$query->query_vars['category__not_in'] = [$cat_news, $cat_classics];
+});
+
+
 // Add theme menus
 add_action('after_setup_theme', function() {
 	register_nav_menus([
@@ -206,13 +248,14 @@ add_action('wp_enqueue_scripts', function() {
 }, 11);
 
 
-// Remove background controls from admin customizer
+// Remove background and site icon controls from admin customizer
 add_action("customize_register", function($wp_customize) {
 	$wp_customize->remove_control('background_preset');
  	$wp_customize->remove_control('background_position');
  	$wp_customize->remove_control('background_size');
  	$wp_customize->remove_control('background_repeat');
 	$wp_customize->remove_control('background_attachment');
+ 	$wp_customize->remove_control('site_icon');
 });
 
 
@@ -349,7 +392,7 @@ add_filter('nav_menu_item_title', function($title, $item, $args) {
 add_filter('nav_menu_item_id', '__return_empty_string');
 
 
-// Rename aside post format
+// Rename default posts format
 add_filter('gettext_with_context', function($translation, $text, $context, $domain) {
 	$names = [
 		'Standard' => __('Стандартный', 'knife-theme'),
@@ -461,14 +504,6 @@ add_action('pre_get_posts', function($query) {
 });
 
 
-//
-add_action('widget_init', function() {
-	global $knife_widgets_exclude;
-
-	$knife_widgets_exclude = [];
-});
-
-
 // Register widget area.
 add_action('widgets_init', function() {
 	register_sidebar([
@@ -562,7 +597,7 @@ add_action('init', function() {
 		'show_admin_column'     => true,
 		'show_in_nav_menus'     => true,
 		'query_var'             => true,
-		'rewrite'               => array('slug' => 'special'),
+		'rewrite'               => ['slug' => 'special'],
 	]);
 });
 
@@ -584,29 +619,43 @@ add_action('widgets_init', function() {
 }, 11);
 
 
-// Custom template tags for this theme.
-require get_template_directory() . '/inc/helpers/template-tags.php';
-
-// Add post settings rules and admin metaboxes
-require get_template_directory() . '/inc/helpers/post-settings.php';
-
-// Custom theme shortcodes
-require get_template_directory() . '/inc/helpers/theme-shortcodes.php';
-
-// Add plugins snippets
-require get_template_directory() . '/inc/helpers/plugin-snippets.php';
+// Add custom theme widgets from common hanlder
+require get_template_directory() . '/core/modules/widget-handler.php';
 
 // Login screen custom styles
-require get_template_directory() . '/inc/helpers/login-screen.php';
+require get_template_directory() . '/core/modules/access-screen.php';
 
-// Common widgets handler
-require get_template_directory() . '/inc/helpers/widgets-handler.php';
+// Custom header meta for social networks and search engines
+require get_template_directory() . '/core/modules/header-meta.php';
 
-// Add custom widgets defenitions
-require get_template_directory() . '/inc/widgets/recent.php';
-require get_template_directory() . '/inc/widgets/triple.php';
-require get_template_directory() . '/inc/widgets/double.php';
-require get_template_directory() . '/inc/widgets/single.php';
-require get_template_directory() . '/inc/widgets/feature.php';
-require get_template_directory() . '/inc/widgets/details.php';
-require get_template_directory() . '/inc/widgets/transparent.php';
+// Custom optional image for posts
+require get_template_directory() . '/core/modules/post-sticker.php';
+
+// Use to mark post as featured or not
+require get_template_directory() . '/core/modules/post-feature.php';
+
+// Add second title to post
+require get_template_directory() . '/core/modules/post-tagline.php';
+
+// Insert lead metabox to admin post screen
+require get_template_directory() . '/core/modules/post-lead.php';
+
+// Indicates how to show post in lists
+require get_template_directory() . '/core/modules/post-cover.php';
+
+// Send push notifications service
+require get_template_directory() . '/core/modules/push-service.php';
+
+// Custom search engine settings
+require get_template_directory() . '/core/modules/google-search.php';
+
+
+
+// Custom template tags for this theme.
+require get_template_directory() . '/core/helpers/template-tags.php';
+
+// Custom theme shortcodes
+require get_template_directory() . '/core/helpers/theme-shortcodes.php';
+
+// Add plugins snippets
+require get_template_directory() . '/core/helpers/plugin-snippets.php';

@@ -187,7 +187,15 @@
 		}
 
     .post__footer-share {
-			margin-top: 0;
+      margin: 0 -1rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+		}
+
+    .post__footer-tags {
+      margin: 1rem -1rem 0;
+      padding-left: 1rem;
+      padding-right: 1rem;
 		}
 
     .figure--outer {

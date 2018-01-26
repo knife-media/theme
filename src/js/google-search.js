@@ -1,10 +1,11 @@
 (function() {
-	var parent = '.search';
+	var parent = document.querySelector('.search');
+
+	if(parent === null || typeof knife_search_id === 'undefined')
+		return false;
+
 	var holder = 'search-gcse';
 	var detect = 'gsc-results';
-
-	if(document.querySelector(parent) === null)
-		return false;
 
 	var view = null;
 
@@ -47,7 +48,7 @@
 	}
 
 
-    var init = function() {
+    var init = function(gcse_id) {
 		// Create fake div for google results
 		var fake = document.createElement("div");
 
@@ -55,7 +56,7 @@
 		fake.style.display = 'none';
 
 		// Append fake div to base selector
-		document.querySelector(parent).appendChild(fake);
+		parent.appendChild(fake);
 
 		// Prepare gcse callback
 		window.__gcse = {
@@ -64,11 +65,10 @@
 		};
 
 		// Load gsce to page
-		var cx = '009571386059139339715:mqsuxgtrwyo';
 		var gcse = document.createElement('script');
 		gcse.type = 'text/javascript';
 		gcse.async = true;
-		gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+		gcse.src = 'https://cse.google.com/cse.js?cx=' + gcse_id;
 		var s = document.getElementsByTagName('script')[0];
 		s.parentNode.insertBefore(gcse, s);
 	}
@@ -78,30 +78,44 @@
 		var result = document.getElementById('search-results');
 		var source = document.getElementById(holder).querySelectorAll('.gs-result');
 
-		var html = '';
-
 		if(document.getElementById('search-input').value.length > 0) {
+			// Clear nodes. Faster than innerHTML
+			while (result.firstChild) {
+				result.removeChild(result.firstChild);
+			}
+
+			var append = function(source) {
+				var data = {
+					link: source.querySelector('a.gs-title').href,
+					head: source.querySelector('a.gs-title').textContent,
+					text: source.querySelector('.gs-snippet').textContent
+				}
+
+ 				var head = document.createElement('p');
+				head.className = 'search__results-head';
+				head.appendChild(document.createTextNode(data.head));
+
+ 				var text = document.createElement('p');
+				text.className = 'search__results-text';
+				text.appendChild(document.createTextNode(data.text));
+
+    			var link = document.createElement('a');
+				link.className = 'search__results-link';
+				link.href = data.link;
+				link.appendChild(head);
+ 				link.appendChild(text);
+
+				return result.appendChild(link);
+			}
 
 			for(var i = 0; i < source.length; i++) {
 				if(!source[i].querySelector('a.gs-title') || !source[i].querySelector('.gs-snippet'))
 					return false;
 
-				// TODO: Rework this behaviour
-				html += '<div class="search__results-item"><a class="search__results-link" href="' + source[i].querySelector('a.gs-title').href + '">';
-				html += '<p class="search__results-head">' + source[i].querySelector('a.gs-title').textContent + '</p>';
-				html += '<p class="search__results-text">' + source[i].querySelector('.gs-snippet').textContent + '</p>';
-				html += '</a></div>';
+				append(source[i]);
 			}
 		}
-
-		// Clear nodes. Faster than innerHTML
-		while (result.firstChild) {
-			result.removeChild(result.firstChild);
-		}
-
-		result.innerHTML = html;
 	}
-
 
 
 	// Init google cse on search layer open
@@ -114,7 +128,7 @@
 			return false;
 
 		if(typeof window.__gcse === 'undefined')
-			return init();
+			return init(knife_search_id);
 	});
 
 })();
