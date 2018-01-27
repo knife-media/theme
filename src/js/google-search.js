@@ -1,8 +1,9 @@
 (function() {
 	var parent = document.querySelector('.search');
 
+	// Check if search id and template defined
 	if(parent === null || typeof knife_search_id === 'undefined')
-		return false;
+		return document.getElementById('toggle-search').classList.add('toggle--hidden');
 
 	var holder = 'search-gcse';
 	var detect = 'gsc-results';
@@ -119,7 +120,7 @@
 
 
 	// Init google cse on search layer open
-	document.querySelector('.topline .toggle--search').addEventListener('click', function(e) {
+	document.getElementById('toggle-search').addEventListener('click', function(e) {
 		e.preventDefault();
 
 		document.getElementById('search-input').focus();

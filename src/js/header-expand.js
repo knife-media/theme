@@ -2,7 +2,6 @@
     var menu = document.getElementById('toggle-menu');
 	var search = document.getElementById('toggle-search');
 
-
 	// Toggle menu bar
 	menu.addEventListener('click', function(e) {
 		e.preventDefault();
