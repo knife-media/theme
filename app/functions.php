@@ -428,6 +428,14 @@ add_filter('excerpt_more', function($more) {
 });
 
 
+// Remove caption from instagram embeds
+add_filter('oembed_providers', function($providers) {
+	$providers['#https?://(www\.)?instagr(\.am|am\.com)/p/.*#i'] = array('https://api.instagram.com/oembed?hidecaption=true', true);
+
+	return $providers;
+});
+
+
 // Remove extra p from shortcodes
 add_filter('the_content', function($content) {
 	$array = [
