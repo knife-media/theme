@@ -31,7 +31,8 @@
 			knife_theme_share([
 				'before' => '<div class="post__header-share share">',
 				'after' => '</div>',
-				'title' => ''
+				'title' => '',
+				'action' => 'Share post — top'
 			]);
 		?>
 	</header>
@@ -52,7 +53,8 @@
 
 			knife_theme_share([
 				'before' => '<div class="post__footer-share share">',
-				'after' => '</div>'
+				'after' => '</div>',
+ 				'action' => 'Share post — bottom'
 			]);
 
 			knife_theme_tags([

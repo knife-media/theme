@@ -37,6 +37,7 @@
     display: flex;
     align-items: center;
     flex: 0 0 auto;
+    position: relative;
 
     margin-right: .5rem;
     padding: .375rem .375rem;
@@ -63,6 +64,17 @@
 
     &.share__link--telegram {
       background-color: #0088cc;
+    }
+
+    &:after {
+      content: "";
+
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      width: 100%;
+      height: 100%;
     }
 
     &:last-child {
