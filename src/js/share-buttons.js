@@ -50,12 +50,12 @@
 		return false;
 
 	for(var i = 0; i < links.length; i++) {
-		var network = links[i].dataset.id;
+		var network = links[i].dataset.label;
 
 		links[i].addEventListener('click', function(e) {
 			e.preventDefault();
 
-			return open_popup(this.href, {width: 600, height: 400, id: this.dataset.id})
+			return open_popup(this.href, {width: 600, height: 400, id: this.dataset.label})
 		});
 
 		if(network in counters && counters[network] === false)

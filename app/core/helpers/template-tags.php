@@ -246,7 +246,7 @@ function knife_theme_share($args, $html = '') {
 		'after' => '',
 		'title' => '<div class="share__title">%s</div>',
 		'text' => '<span class="share__text">%s</span>',
-		'item' => '<a class="share__link share__link--%3$s" href="%2$s" target="_blank" data-id="%3$s"%4$s>%1$s</a>',
+		'item' => '<a class="share__link share__link--%3$s" href="%2$s" target="_blank"%4$s>%1$s</a>',
 		'icon' => '<span class="icon icon--%s"></span>',
 		'action' => 'Share post',
 		'echo' => true
@@ -284,7 +284,7 @@ function knife_theme_share($args, $html = '') {
 		$item_text = !empty($data['text']) ? sprintf($args['text'], $data['text']) : '';
 		$item_icon = sprintf($args['icon'], $network);
 
-		$item_stat = sprintf(' data-action="%1$s" data-label="%2$s"',
+		$item_data = sprintf(' data-action="%1$s" data-label="%2$s"',
 			esc_attr($args['action']),
 			esc_attr($network)
 		);
@@ -298,7 +298,7 @@ function knife_theme_share($args, $html = '') {
 			$item_icon . $item_text,
 			esc_url($item_link),
 			esc_attr($network),
-			$item_stat
+			$item_data
 		);
 	}
 
