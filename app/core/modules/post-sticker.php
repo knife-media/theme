@@ -21,7 +21,6 @@ class Knife_Post_Sticker {
 
 	public function __construct() {
 		add_action('admin_enqueue_scripts', [$this, 'add_assets']);
-		add_action('save_post', [$this, 'save_meta']);
 
 		// post sticker
 		add_action('add_meta_boxes', [$this, 'add_metabox']);
@@ -140,5 +139,4 @@ class Knife_Post_Sticker {
 
 		wp_send_json_error(__('Не удалось удалить стикер', 'knife-theme'));
 	}
-
 }
