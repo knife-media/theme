@@ -45,6 +45,8 @@
     border-radius: 2px;
 
     .icon {
+      pointer-events: none;
+
       font-size: 1.25rem;
       margin-right: .5rem;
     }
