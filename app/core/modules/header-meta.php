@@ -65,7 +65,7 @@ class Knife_Header_Meta {
 
 		$meta[] = sprintf('<meta name="description" content="%s">',
 			get_the_excerpt($post_id)
-		); 
+		);
 
  		$meta[] = '<meta property="og:type" content="article" />';
 
@@ -113,11 +113,11 @@ class Knife_Header_Meta {
 	}
 
 	private function _archive_meta($meta = []) {
-		$cover = get_template_directory_uri() . '/assets/images/cover.png';
+		$cover = get_template_directory_uri() . '/assets/images/poster-default.png';
 
 		$meta[] = sprintf('<meta name="description" content="%s">',
 			get_bloginfo('description')
-		); 
+		);
 
   		$meta[] = '<meta property="og:type" content="website" />';
 
