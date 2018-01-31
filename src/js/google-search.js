@@ -123,8 +123,6 @@
 	document.getElementById('toggle-search').addEventListener('click', function(e) {
 		e.preventDefault();
 
-		document.getElementById('search-input').focus();
-
 		if(this.classList.contains('toggle--expand'))
 			return false;
 

@@ -19,8 +19,15 @@
 	search.addEventListener('click', function(e) {
 		e.preventDefault();
 
+		var input = document.getElementById('search-input');
+
  		if(document.querySelector('.topline__menu').classList.contains('topline__menu--expand'))
 			menu.click();
+
+		if(document.querySelector('.search').classList.contains('search--expand'))
+			input.blur();
+		else
+			input.focus();
 
 		document.querySelector('.search').classList.toggle('search--expand');
 		document.body.classList.toggle('body--search');
