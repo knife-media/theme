@@ -2,6 +2,9 @@
   line-height: 1.65;
   letter-spacing: .25px;
 
+  -moz-osx-font-smoothing: auto;
+  -webkit-font-smoothing: auto;
+
 	& > * {
 		max-width: $content-width;
 		width: 100%;
