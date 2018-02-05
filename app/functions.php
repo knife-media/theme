@@ -248,20 +248,9 @@ add_action('wp_enqueue_scripts', function() {
 }, 11);
 
 
-// Remove background and site icon controls from admin customizer
-add_action("customize_register", function($wp_customize) {
-	$wp_customize->remove_control('background_preset');
- 	$wp_customize->remove_control('background_position');
- 	$wp_customize->remove_control('background_size');
- 	$wp_customize->remove_control('background_repeat');
-	$wp_customize->remove_control('background_attachment');
+// Remove site icon controls from admin customizer
+add_action('customize_register', function($wp_customize) {
  	$wp_customize->remove_control('site_icon');
-});
-
-
-// Print fixed element with custom background
-add_action('wp_footer', function() {
-	knife_custom_background();
 });
 
 
@@ -656,6 +645,9 @@ require get_template_directory() . '/core/modules/push-service.php';
 
 // Custom search engine settings
 require get_template_directory() . '/core/modules/google-search.php';
+
+// Custom background handler
+require get_template_directory() . '/core/modules/custom-background.php';
 
 
 

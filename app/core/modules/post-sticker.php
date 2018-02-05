@@ -77,22 +77,6 @@ class Knife_Post_Sticker {
 	}
 
 
- 	/**
-	 * Generate new sticker filename
-	 */
-	public function set_filename($post_id, $folder) {
- 		$upload = wp_upload_dir();
-		$create = $upload['basedir'] . $folder;
-
- 		if(!is_dir($create) && !mkdir($create))
-			wp_send_json_error(__('Проверьте права на запись папки загрузок', 'knife-theme'));
-
-		$file = "/stickers/{$post_id}-" . time() . '.png';
-
-		return ['dir' => $upload['basedir'] . $file, 'url' => $upload['baseurl'] . $file];
-	}
-
-
 	/**
 	 * Ajax based image uploader
 	 */
@@ -138,5 +122,21 @@ class Knife_Post_Sticker {
 			wp_send_json_success(__('Стикер yспешно удален', 'knife-theme'));
 
 		wp_send_json_error(__('Не удалось удалить стикер', 'knife-theme'));
+	}
+
+
+	/**
+	 * Generate new sticker filename
+	 */
+	private function set_filename($post_id, $folder) {
+		$upload = wp_upload_dir();
+		$create = $upload['basedir'] . $folder;
+
+		if(!is_dir($create) && !mkdir($create))
+			wp_send_json_error(__('Проверьте права на запись папки загрузок', 'knife-theme'));
+
+		$file = "/stickers/{$post_id}-" . time() . '.png';
+
+		return ['dir' => $upload['basedir'] . $file, 'url' => $upload['baseurl'] . $file];
 	}
 }

@@ -204,7 +204,7 @@ class Knife_Double_Widget extends WP_Widget {
 			printf('<option value="%1$s"%3$s>%2$s</option>', $name, $title, selected($instance['cover'], $name, false));
 		}
 
-		echo '</select>';
+		echo '</select></p>';
 
 
 		// Taxonomies filter
@@ -219,7 +219,7 @@ class Knife_Double_Widget extends WP_Widget {
 			printf('<option value="%1$s"%3$s>%2$s</option>', $name, $object->label, selected($instance['taxonomy'], $name, false));
 		}
 
-		echo '</select>';
+		echo '</select></p>';
 
 
 		// Terms filter

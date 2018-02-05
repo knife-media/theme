@@ -433,39 +433,3 @@ function knife_theme_widget_template($args = []) {
 }
 
 endif;
-
-
-if(!function_exists('knife_custom_background')) :
-/**
- * Custom background callback
- *
- * We use it instead of default callback to update body to .wrap
- *
- * @link https://developer.wordpress.org/reference/functions/_custom_background_cb/
- * @since 1.1
- */
-function knife_custom_background($style = []) {
-	$image = set_url_scheme(get_background_image());
-	$color = get_background_color();
-
-	if($color === get_theme_support('custom-background', 'default-color'))
-		$color = false;
-
-	if($color)
-		$style[] = "background-color: #" . $color . ";";
-
-	if($image)
-		$style[] = "background-image: url(" . esc_url($image) . ");";
-
-	$html = sprintf(
-		'<div class="backdrop" style="%s"></div>',
-		implode(' ', $style)
-	);
-
- 	// Filter result html before return
-	$html = apply_filters('knife_custom_background', $html);
-
-	echo $html;
-}
-
-endif;

@@ -147,7 +147,7 @@ class Knife_Single_Widget extends WP_Widget {
 			printf('<option value="%1$s"%3$s>%2$s</option>', $name, $title, selected($instance['cover'], $name, false));
 		}
 
-		echo '</select>';
+		echo '</select></p>';
 
 
 		// Post url
