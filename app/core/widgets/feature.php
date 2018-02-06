@@ -54,6 +54,8 @@ class Knife_Feature_Widget extends WP_Widget {
 				$link = get_permalink($post->ID);
 				$base = $post->ID;
 
+				$slug = $post->post_name;
+
 				break;
 			}
 
@@ -70,6 +72,7 @@ class Knife_Feature_Widget extends WP_Widget {
 		set_query_var('widget_item', $item);
 		set_query_var('widget_link', $link);
  		set_query_var('widget_base', $base);
+		set_query_var('widget_slug', $slug);
 
 		get_template_part('template-parts/widgets/feature');
 

@@ -21,14 +21,6 @@
     color: $color-white;
     background-color: $color-feature;
 
-    &:hover {
-      filter: brightness(115%);
-
-      .icon {
-        transform: translateX(10px);
-      }
-    }
-
     .icon {
       display: block;
 
@@ -40,6 +32,25 @@
 
       @media screen and (max-width: 767px) {
         font-size: 1.375rem;
+      }
+    }
+
+    &:after {
+      content: "";
+
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      width: 100%;
+      height: 100%;
+    }
+
+    &:hover {
+      filter: brightness(115%);
+
+      .icon {
+        transform: translateX(10px);
       }
     }
   }

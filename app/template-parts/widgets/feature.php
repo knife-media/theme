@@ -9,7 +9,7 @@
  */
 ?>
 
-<a class="widget__link" href="<?php echo get_query_var('widget_link', get_permalink()); ?>">
+<a class="widget__link" href="<?php echo get_query_var('widget_link', get_permalink()); ?>" data-action="Feature click" data-label="<?php echo get_query_var('widget_slug', '(not set)') ?>">
 	<div class="widget__item block">
 		<?php
 			printf(
