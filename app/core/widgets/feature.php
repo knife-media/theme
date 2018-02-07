@@ -67,6 +67,9 @@ class Knife_Feature_Widget extends WP_Widget {
 		if(empty($item) || empty($link))
 			return;
 
+		if(is_single() && get_queried_object_id() === $base)
+			return;
+
 		echo $args['before_widget'];
 
 		set_query_var('widget_item', $item);
