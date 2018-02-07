@@ -257,14 +257,14 @@ function knife_theme_share($args, $html = '') {
 	$title = sprintf($args['title'], __('Поделиться в соцсетях:'));
 
 	$share_links = [
-		'facebook' => [
-			'link' => 'http://www.facebook.com/sharer/sharer.php?p[url]=%1$s&p[title]=%2$s',
-			'text' => __('Пошерить', 'knife-theme')
-		],
-
 		'vkontakte' => [
 			'link' => 'http://vk.com/share.php?url=%1$s&text=%2$s',
 			'text' => __('Поделиться', 'knife-theme')
+		],
+
+ 		'facebook' => [
+			'link' => 'http://www.facebook.com/sharer/sharer.php?p[url]=%1$s&p[title]=%2$s',
+			'text' => __('Пошерить', 'knife-theme')
 		],
 
 		'telegram' => [

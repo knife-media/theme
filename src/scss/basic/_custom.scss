@@ -215,10 +215,11 @@
 	}
 
   .button {
-    display: inline-block;
+    display: block;
 
-    width: auto;
+    width: 100%;
 
+    font-weight: 500;
     color: $color-white;
   }
 }
