@@ -263,7 +263,7 @@ function knife_theme_share($args, $html = '') {
 		],
 
  		'facebook' => [
-			'link' => 'http://www.facebook.com/sharer/sharer.php?p[url]=%1$s&p[title]=%2$s',
+			'link' => 'http://www.facebook.com/sharer/sharer.php?u=%1$s',
 			'text' => __('Пошерить', 'knife-theme')
 		],
 
