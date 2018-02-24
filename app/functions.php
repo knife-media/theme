@@ -417,14 +417,6 @@ add_filter('excerpt_more', function($more) {
 });
 
 
-// Remove caption from instagram embeds
-add_filter('oembed_providers', function($providers) {
-	$providers['#https?://(www\.)?instagr(\.am|am\.com)/p/.*#i'] = array('https://api.instagram.com/oembed?hidecaption=true', true);
-
-	return $providers;
-});
-
-
 // Remove extra p from shortcodes
 add_filter('the_content', function($content) {
 	$array = [
@@ -624,6 +616,9 @@ require get_template_directory() . '/core/modules/access-screen.php';
 
 // Custom header meta for social networks and search engines
 require get_template_directory() . '/core/modules/header-meta.php';
+
+// Customize default wordpress embed code
+require get_template_directory() . '/core/modules/embed-filters.php';
 
 // Custom optional image for posts
 require get_template_directory() . '/core/modules/post-sticker.php';
