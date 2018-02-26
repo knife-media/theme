@@ -644,6 +644,9 @@ require get_template_directory() . '/core/modules/google-search.php';
 // Custom background handler
 require get_template_directory() . '/core/modules/custom-background.php';
 
+// TinyMCE extending plugins
+require get_template_directory() . '/core/modules/mce-buttons.php';
+
 
 
 // Custom template tags for this theme.
