@@ -108,6 +108,14 @@
       font-weight: 500;
       text-decoration: none;
 
+      &[target="_blank"] {
+        padding: .25rem .5rem .375rem;
+        color: $color-primary;
+
+        border: solid 1px $color-primary;
+        border-radius: 3px;
+      }
+
       @media screen and (max-width: 1199px) {
         font-size: 1rem;
       }
