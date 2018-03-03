@@ -124,6 +124,14 @@
         padding: .875rem 1rem;
         color: $color-white;
 
+        &[target="_blank"] {
+          padding: .875rem 1rem;
+          color: $color-white;
+
+          border: none;
+          border-radius: 0;
+        }
+
         &:hover {
           color: $color-white;
         }
