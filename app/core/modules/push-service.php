@@ -17,7 +17,7 @@ if (!defined('WPINC')) {
 new Knife_Push_Service;
 
 class Knife_Push_Service {
-    private $meta   = '_knife-push';
+  private $meta   = '_knife-push';
 	private $option = 'knife-push-settings';
 
 	public function __construct() {
@@ -74,7 +74,7 @@ class Knife_Push_Service {
 	 * Add push settings submenu to main options menu
 	 */
 	public function add_menu() {
-		add_submenu_page('options-general.php', __('Настройки пушей', 'knife-theme'), __('Вебпуши', 'knife-theme'), 'manage_options', 'knife-push', [$this, 'settings_page']);
+		add_submenu_page('options-general.php', __('Настройки пушей', 'knife-theme'), __('Push-уведомления', 'knife-theme'), 'manage_options', 'knife-push', [$this, 'settings_page']);
 	}
 
 

@@ -17,7 +17,7 @@ if (!defined('WPINC')) {
 new Knife_Post_Cover;
 
 class Knife_Post_Cover {
-	private $meta   = '_knife-cover';
+	private $meta = '_knife-cover';
 
 	public function __construct() {
 		add_action('save_post', [$this, 'save_meta']);

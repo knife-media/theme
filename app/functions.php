@@ -623,9 +623,6 @@ require get_template_directory() . '/core/modules/embed-filters.php';
 // Custom optional image for posts
 require get_template_directory() . '/core/modules/post-sticker.php';
 
-// Use to mark post as featured or not
-require get_template_directory() . '/core/modules/post-feature.php';
-
 // Add second title to post
 require get_template_directory() . '/core/modules/post-tagline.php';
 
@@ -646,6 +643,12 @@ require get_template_directory() . '/core/modules/custom-background.php';
 
 // TinyMCE extending plugins
 require get_template_directory() . '/core/modules/mce-buttons.php';
+
+// Allow users to manage feed options from admin dashboard
+require get_template_directory() . '/core/modules/feed-manager.php';
+
+// Add custom Yandex.Zen feed template
+require get_template_directory() . '/core/modules/yandex-zen.php';
 
 
 

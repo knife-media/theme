@@ -20,7 +20,7 @@
 			knife_theme_post_meta([
 				'item' => '<img class="widget__sticker" src="%s">',
 				'meta' => '_knife-sticker',
-				'post_id' => get_query_var('widget_base', get_the_ID())
+				'post_id' => get_query_var('widget_post', 0)
 			]);
 		?>
 

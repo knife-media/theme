@@ -16,15 +16,4 @@
 
 		return list.hide();
 	});
-
-	jQuery(document).on('change', '.knife-widget-feature', function() {
-		var filter = jQuery(this).closest('.widget-content').find('p:nth-child(n+3)');
-
-		if(jQuery(this).prop('checked') === true)
-			return filter.hide();
-
-		return filter.show();
-	});
-
-	jQuery('.knife-widget-feature').trigger('change');
 })();

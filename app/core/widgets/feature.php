@@ -10,84 +10,57 @@
 
 
 class Knife_Feature_Widget extends WP_Widget {
-    public function __construct() {
-        $widget_ops = [
-            'classname' => 'feature',
-            'description' => __('Выводит фичер на всю ширину со стикером', 'knife-theme'),
-			'customize_selective_refresh' => true
-        ];
+  public function __construct() {
+    $widget_ops = [
+      'classname' => 'feature',
+      'description' => __('Выводит фичер на всю ширину со стикером', 'knife-theme'),
+      'customize_selective_refresh' => true
+    ];
 
-        parent::__construct('knife_theme_feature', __('[НОЖ] Фичер', 'knife-theme'), $widget_ops);
-    }
+    parent::__construct('knife_theme_feature', __('[НОЖ] Фичер', 'knife-theme'), $widget_ops);
+  }
 
 
-    /**
-     * Outputs the content of the widget
-     */
-    public function widget($args, $instance) {
-		$defaults = ['title' => '', 'feature' => 1, 'item' => '', 'link' => '', 'base' => 0];
+  /**
+   * Outputs the content of the widget
+   */
+  public function widget($args, $instance) {
+		$defaults = ['title' => '', 'item' => '', 'link' => ''];
 		$instance = wp_parse_args((array) $instance, $defaults);
 
 		extract($instance);
 
-		$q = [
-			'post_status' => 'publish',
-			'ignore_sticky_posts' => 1,
-			'posts_per_page' => 1,
-			'meta_query' => [
-				[
-					'key' => '_knife-feature',
-					'value' => 1,
-					'compare' => '='
-				]
-			]
-		];
-
-		// Get post if feature option seltected
-		if($feature === 1) :
-
-			// Check cache before get posts from database
-			$posts = get_transient($this->id) ?: get_posts($q);
-
-			foreach($posts as $post) {
-				$item = get_the_title($post->ID);
-				$link = get_permalink($post->ID);
-				$base = $post->ID;
-
-				$slug = $post->post_name;
-
-				break;
-			}
-
-			set_transient($this->id, $posts, 24 * HOUR_IN_SECONDS);
-
-		endif;
+    $post = url_to_postid($link);
 
 		// Don't show empty link
 		if(empty($item) || empty($link))
 			return;
 
-		if(is_single() && get_queried_object_id() === $base)
+    // Don't show self link inside single post
+		if(is_single() && get_queried_object_id() === $post)
 			return;
 
 		echo $args['before_widget'];
 
 		set_query_var('widget_item', $item);
 		set_query_var('widget_link', $link);
- 		set_query_var('widget_base', $base);
-		set_query_var('widget_slug', $slug);
+
+    if($post > 0) {
+      set_query_var('widget_post', $post);
+      set_query_var('widget_slug', get_post_field('post_name', $post));
+    }
 
 		get_template_part('template-parts/widgets/feature');
 
 		echo $args['after_widget'];
-    }
+  }
 
 
-    /**
-     * Outputs the options form on admin
-     */
-    function form($instance) {
-		$defaults = ['title' => '', 'feature' => 1, 'item' => '', 'link' => ''];
+  /**
+   * Outputs the options form on admin
+   */
+  function form($instance) {
+		$defaults = ['title' => '', 'item' => '', 'link' => ''];
 		$instance = wp_parse_args((array) $instance, $defaults);
 
 		printf(
@@ -97,14 +70,6 @@ class Knife_Feature_Widget extends WP_Widget {
 			__('Название виджета:', 'knife-theme'),
 			esc_attr($instance['title']),
  			__('Не будет отображаться на странице', 'knife-theme')
-		);
-
- 		printf(
-			'<p><input type="checkbox" id="%1$s" name="%2$s" class="checkbox knife-widget-feature"%4$s><label for="%1$s">%3$s</label></p>',
-			esc_attr($this->get_field_id('feature')),
-			esc_attr($this->get_field_name('feature')),
-			__('Вывести последний фичер пост', 'knife-theme'),
-			checked($instance['feature'], 1, false)
 		);
 
 		printf(
@@ -125,27 +90,18 @@ class Knife_Feature_Widget extends WP_Widget {
 	}
 
 
-    /**
-     * Processing widget options on save
-     */
-    public function update($new_instance, $old_instance) {
+  /**
+   * Processing widget options on save
+   */
+  public function update($new_instance, $old_instance) {
 		$instance = $old_instance;
 
 		$instance['title'] = sanitize_text_field($new_instance['title']);
  		$instance['item'] = sanitize_text_field($new_instance['item']);
-  		$instance['link'] = esc_url($new_instance['link']);
-		$instance['feature'] = $new_instance['feature'] ? 1 : 0;
+  	$instance['link'] = esc_url($new_instance['link']);
 
-        return $instance;
-    }
-
-
- 	/**
-	 * Remove transient on widget update
-	 */
- 	private function remove_cache() {
-		delete_transient($this->id);
-	}
+    return $instance;
+  }
 }
 
 
