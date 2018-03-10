@@ -74,12 +74,12 @@ class Knife_Yandex_Zen {
   }
 
 
-   /**
+  /**
    * Update posts query
    */
   public function update_query($query) {
     if($query->is_main_query() && $query->is_feed() && $this->slug === $query->get('feed')) {
-      $query->set('posts_per_rss', 5);
+      $query->set('posts_per_rss', 50);
       $query->set('post_type', 'post');
       $query->set('post_status', 'publish');
 
@@ -107,7 +107,7 @@ class Knife_Yandex_Zen {
   }
 
 
-   /**
+  /**
    * Upgrade content tag
    */
   public function clear_content($content) {
@@ -121,51 +121,35 @@ class Knife_Yandex_Zen {
   }
 
 
-   /**
+  /**
    * Add post content images
    */
   public function add_images($content) {
     preg_match_all('~<img.+?src="(.+?)"~is', $content, $images, PREG_PATTERN_ORDER);
 
-    $enclosure = $this->add_thumbnail([]);
+    $this->enclosure = [];
 
     foreach($images[1] as $link) {
-      if(empty($link))
-        continue;
-
-      $mime = wp_check_filetype($link);
-
-      array_push($enclosure, [
-        'type' => $mime['type'],
-        'link' => $link
-      ]);
+      if(!empty($link))
+	    $this->enclosure[] = $link;
     }
-
-    $this->enclosure = $enclosure;
 
     return $content;
   }
 
 
-   /**
+  /**
    * Add post thumbnail to enclosure list
    */
-  public function add_thumbnail($enclosure) {
+  public function add_thumbnail() {
     global $post;
 
-    if(!has_post_thumbnail($post->ID))
-      return $enclosure;
-
-    array_push($enclosure, [
-      'type' => get_post_mime_type(get_post_thumbnail_id($post->ID)),
-      'link' => get_the_post_thumbnail_url($post->ID, 'outer')
-    ]);
-
-    return $enclosure;
+    if(empty($this->enclosure) && has_post_thumbnail($post->ID))
+      $this->enclosure[] = get_the_post_thumbnail_url($post->ID, 'outer');
   }
 
 
-   /**
+  /**
    * Insert post categories
    */
   public function insert_category() {
@@ -181,13 +165,15 @@ class Knife_Yandex_Zen {
    * @link https://yandex.ru/support/zen/publishers/rss-modify.html#publication
    */
   public function insert_enclosure() {
+    $this->add_thumbnail();
+
     foreach($this->enclosure as $image) {
-      printf('<enclosure url="%s" type="%s" />', esc_url($image['link']), $image['type']);
+      printf('<enclosure url="%s" type="%s" />', esc_url($image), wp_check_filetype($image)['type']);
     }
   }
 
 
-   /**
+  /**
    * Strip tags, scripts and styles
    */
   public function strip_tags($string, $allowable_tags = null) {
@@ -198,7 +184,7 @@ class Knife_Yandex_Zen {
   }
 
 
-   /**
+  /**
    * Remove unwanted content
    */
   public function clear_xml($string) {
