@@ -79,7 +79,7 @@ class Knife_Yandex_Zen {
    */
   public function update_query($query) {
     if($query->is_main_query() && $query->is_feed() && $this->slug === $query->get('feed')) {
-      $query->set('posts_per_rss', 50);
+      $query->set('posts_per_rss', 5);
       $query->set('post_type', 'post');
       $query->set('post_status', 'publish');
 
@@ -125,7 +125,7 @@ class Knife_Yandex_Zen {
    * Add post content images
    */
   public function add_images($content) {
-    preg_match_all('~<img\s+?src="(.+?)"~is', $content, $images, PREG_PATTERN_ORDER);
+    preg_match_all('~<img.+?src="(.+?)"~is', $content, $images, PREG_PATTERN_ORDER);
 
     $enclosure = $this->add_thumbnail([]);
 
