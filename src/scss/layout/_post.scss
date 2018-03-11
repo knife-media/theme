@@ -120,12 +120,6 @@
       }
     }
 
-    .post__footer-related {
-      padding: 0;
-
-      background-color: transparent;
-    }
-
     .post__footer-share {
       margin-top: 1.5rem;
       padding-top: .75rem;
@@ -133,6 +127,14 @@
 
       background-color: $color-sheet;
     }
+  }
+
+  .post__widgets {
+    display: block;
+
+    width: 100%;
+    max-width: $content-width;
+    margin: 1rem auto;
   }
 
   .post__content {
