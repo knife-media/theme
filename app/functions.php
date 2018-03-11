@@ -568,6 +568,16 @@ add_action('widgets_init', function() {
 		'before_title'  => '<p class="widget__title">',
 		'after_title'   => '</p>'
 	]);
+
+  	register_sidebar([
+		'name'          => __('Виджеты под записью', 'knife-theme'),
+		'id'            => 'knife-post-widgets',
+		'description'   => __('Добавленные виджеты появятся в под записью на внутренних страницах.', 'knife-theme'),
+		'before_widget' => '<div class="widget widget-%2$s">',
+		'after_widget'  => '</div>',
+		'before_title'  => '<p class="widget__title">',
+		'after_title'   => '</p>'
+	]);    
 });
 
 

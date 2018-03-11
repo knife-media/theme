@@ -62,13 +62,15 @@
 				'after' => '</div>',
 				'item' => '<a class="refers__link" href="%2$s">%1$s</a>'
 			]);
-
- 			knife_theme_related([
-				'before' => '<div class="post__footer-related refers">',
-				'after' => '</div>'
-			]);
 		?>
 	</footer>
+
+	<?php if(is_active_sidebar('knife-post-widgets')) : ?>
+	<div class="post__widgets">
+		<?php dynamic_sidebar('knife-post-widgets'); ?>
+	</div>
+	<?php endif; ?>
+
 </article>
 
 <?php get_sidebar(); ?>
