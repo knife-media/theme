@@ -260,10 +260,24 @@ add_action('wp_footer', function() {
 });
 
 
-// Remove annoying body classes
-// It will be better to use body-- class prefix if we need it later
+// Update annoying body classes
+// @link https://github.com/WordPress/WordPress/blob/81500e50eff289e2f5601135707c22c03625a192/wp-includes/post-template.php#L590
 add_filter('body_class', function($wp_classes, $extra_classes) {
-	return [];
+	$classes = [];
+
+	if (is_front_page())
+		$classes[] = 'is-home';
+
+	if(is_single())
+		$classes[] = 'is-post';
+
+	if(is_page())
+		$classes[] = 'is-page';
+
+	if(is_archive())
+		$classes[] = 'is-archive';
+
+	return $classes;
 }, 10, 2);
 
 
