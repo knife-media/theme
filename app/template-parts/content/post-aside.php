@@ -62,12 +62,12 @@
 				'item' => '<a class="refers__link" href="%2$s">%1$s</a>'
 			]);
 		?>
-	</footer>
 
- 	<?php if(is_active_sidebar('knife-post-widgets')) : ?>
-	<div class="post__widgets">
-		<?php dynamic_sidebar('knife-post-widgets'); ?>
-	</div>
-	<?php endif; ?> 
+ 	  <?php if(is_active_sidebar('knife-post-widgets')) : ?>
+      <div class="post__footer-widgets">
+        <?php dynamic_sidebar('knife-post-widgets'); ?>
+      </div>
+    <?php endif; ?>
+	</footer>
 
 </article>

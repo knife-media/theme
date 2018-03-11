@@ -127,14 +127,12 @@
 
       background-color: $color-sheet;
     }
-  }
 
-  .post__widgets {
-    display: block;
-
-    width: 100%;
-    max-width: $content-width;
-    margin: 1rem auto;
+    .post__footer-widgets {
+      .relap-knife_media__block-title {
+        font-size: 1.125rem;
+      }
+    }
   }
 
   .post__content {
