@@ -41,7 +41,7 @@ class Knife_Feed_Manager {
 		printf(
 			'<div class="misc-pub-section misc-pub-section-last"><label><input type="checkbox" name="%1$s" class="checkbox"%3$s> %2$s</label></div>',
 			esc_attr($this->meta),
-			__('Исключить запись из RSS', 'knife-theme'),
+			__('Исключить запись из Яндекс.Дзен', 'knife-theme'),
 			checked($exclude, 1, false)
 		);
 	}
