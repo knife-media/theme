@@ -17,7 +17,7 @@ if (!defined('WPINC')) {
 new Knife_Push_Service;
 
 class Knife_Push_Service {
-  private $meta   = '_knife-push';
+    private $meta   = '_knife-push';
 	private $option = 'knife-push-settings';
 
 	public function __construct() {

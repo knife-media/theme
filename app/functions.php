@@ -577,7 +577,7 @@ add_action('widgets_init', function() {
 		'after_widget'  => '</div>',
 		'before_title'  => '<p class="widget__title">',
 		'after_title'   => '</p>'
-	]);    
+	]);
 });
 
 
@@ -667,9 +667,6 @@ require get_template_directory() . '/core/modules/custom-background.php';
 
 // TinyMCE extending plugins
 require get_template_directory() . '/core/modules/mce-buttons.php';
-
-// Allow users to manage feed options from admin dashboard
-require get_template_directory() . '/core/modules/feed-manager.php';
 
 // Add custom Yandex.Zen feed template
 require get_template_directory() . '/core/modules/yandex-zen.php';
