@@ -529,9 +529,19 @@ add_action('widgets_init', function() {
 		'after_title'	=> '</p>'
 	]);
 
+ 	register_sidebar([
+		'name'          => __('Сквозной над шапкой', 'knife-theme'),
+		'id'            => 'knife-over-header',
+		'description'   => __('Добавленные виджеты появятся над меню на всех страницах.', 'knife-theme'),
+		'before_widget' => '<div class="widget widget-%2$s widget--header">',
+		'after_widget'  => '</div>',
+		'before_title'  => '<p class="widget__title">',
+		'after_title'	=> '</p>'
+	]);
+
 	register_sidebar([
 		'name'          => __('Сквозной под шапкой', 'knife-theme'),
-		'id'            => 'knife-header',
+		'id'            => 'knife-under-header',
 		'description'   => __('Добавленные виджеты появятся под шапкой на главной и внутренних страницах.', 'knife-theme'),
 		'before_widget' => '<div class="widget widget-%2$s widget--header">',
 		'after_widget'  => '</div>',
@@ -589,20 +599,20 @@ add_filter('widget_title', '__return_empty_string');
 add_action('init', function() {
 	register_taxonomy('special', 'post', [
 		'labels' => [
-				'name'                       => __('Спецпроекты', 'knife-theme'),
-				'singular_name'              => __('Спецпроект', 'knife-theme'),
-				'search_items'               => __('Поиск', 'knife-theme'),
-				'popular_items'              => __('Популярные спецпроекты', 'knife-theme'),
-				'all_items'                  => __('Все', 'knife-theme'),
-				'edit_item'                  => __('Редактировать', 'knife-theme'),
-				'update_item'                => __('Обновить', 'knife-theme'),
-				'add_new_item'               => __('Добавить новый', 'knife-theme'),
-				'new_item_name'              => __('Новый спецпроект', 'knife-theme'),
-				'separate_items_with_commas' => __('Разделить записи запятыми', 'knife-theme'),
-				'add_or_remove_items'        => __('Добавить или удалить тип', 'knife-theme'),
-				'choose_from_most_used'      => __('Наиболее используемые', 'knife-theme'),
-				'not_found'                  => __('Не найдено', 'knife-theme'),
-				'menu_name'                  => __('Спецпроекты', 'knife-theme'),
+            'name'                       => __('Спецпроекты', 'knife-theme'),
+            'singular_name'              => __('Спецпроект', 'knife-theme'),
+            'search_items'               => __('Поиск', 'knife-theme'),
+            'popular_items'              => __('Популярные спецпроекты', 'knife-theme'),
+            'all_items'                  => __('Все', 'knife-theme'),
+            'edit_item'                  => __('Редактировать', 'knife-theme'),
+            'update_item'                => __('Обновить', 'knife-theme'),
+            'add_new_item'               => __('Добавить новый', 'knife-theme'),
+            'new_item_name'              => __('Новый спецпроект', 'knife-theme'),
+            'separate_items_with_commas' => __('Разделить записи запятыми', 'knife-theme'),
+            'add_or_remove_items'        => __('Добавить или удалить тип', 'knife-theme'),
+            'choose_from_most_used'      => __('Наиболее используемые', 'knife-theme'),
+            'not_found'                  => __('Не найдено', 'knife-theme'),
+            'menu_name'                  => __('Спецпроекты', 'knife-theme'),
 		],
 		'public'                => true,
 		'hierarchical'          => true,

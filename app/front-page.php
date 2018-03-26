@@ -14,9 +14,9 @@ get_header(); ?>
 
 <main class="wrap">
 
-<?php if(is_active_sidebar('knife-header')) : ?>
+<?php if(is_active_sidebar('knife-under-header')) : ?>
 	<div class="content">
-		<?php dynamic_sidebar('knife-header'); ?>
+		<?php dynamic_sidebar('knife-under-header'); ?>
 	</div>
 <?php endif; ?>
 
