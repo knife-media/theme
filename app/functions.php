@@ -507,92 +507,10 @@ add_action('pre_get_posts', function($query) {
 });
 
 
-// Register widget area.
-add_action('widgets_init', function() {
-	register_sidebar([
-		'name'          => __('Главная страница', 'knife-theme'),
-		'id'            => 'knife-frontal',
-		'description'   => __('Добавленные виджеты появятся на главной странице под телевизором, если он не пуст.', 'knife-theme'),
-		'before_widget' => '<div class="widget widget-%2$s">',
-		'after_widget'  => '</div>',
-		'before_title'  => '<p class="widget__title">',
-		'after_title'   => '</p>'
-	]);
-
-	register_sidebar([
-		'name'          => __('Телевизор на главной', 'knife-theme'),
-		'id'            => 'knife-feature-stripe',
-		'description'   => __('Добавленные виджеты появятся в телевизоре на главной странице.', 'knife-theme'),
-		'before_widget' => '<div class="widget widget-%2$s widget--split">',
-		'after_widget'  => '</div>',
-		'before_title'  => '<p class="widget__title">',
-		'after_title'	=> '</p>'
-	]);
-
- 	register_sidebar([
-		'name'          => __('Сквозной над шапкой', 'knife-theme'),
-		'id'            => 'knife-over-header',
-		'description'   => __('Добавленные виджеты появятся над меню на всех страницах.', 'knife-theme'),
-		'before_widget' => '<div class="widget widget-%2$s widget--header">',
-		'after_widget'  => '</div>',
-		'before_title'  => '<p class="widget__title">',
-		'after_title'	=> '</p>'
-	]);
-
-	register_sidebar([
-		'name'          => __('Сквозной под шапкой', 'knife-theme'),
-		'id'            => 'knife-under-header',
-		'description'   => __('Добавленные виджеты появятся под шапкой на главной и внутренних страницах.', 'knife-theme'),
-		'before_widget' => '<div class="widget widget-%2$s widget--header">',
-		'after_widget'  => '</div>',
-		'before_title'  => '<p class="widget__title">',
-		'after_title'	=> '</p>'
-	]);
-
-	register_sidebar([
-		'name'          => __('Подвал сайта', 'knife-theme'),
-		'id'            => 'knife-footer',
-		'description'   => __('Добавленные виджеты появятся справа в футере.', 'knife-theme'),
-		'before_widget' => '<aside class="widget widget-text">',
-		'after_widget'  => '</aside>',
-		'before_title'  => '<p class="widget__title">',
-		'after_title'   => '</p>'
-	]);
-
- 	register_sidebar([
-		'name'          => __('Сайдбар на главной', 'knife-theme'),
-		'id'            => 'knife-feature-sidebar',
-		'description'   => __('Добавленные виджеты появятся справа от телевизора.', 'knife-theme'),
-		'before_widget' => '<div class="widget widget-%2$s widget--split">',
-		'after_widget'  => '</div>',
-		'before_title'  => '<p class="widget__title">',
-		'after_title'   => '</p>'
-	]);
-
- 	register_sidebar([
-		'name'          => __('Сайдбар на внутренних', 'knife-theme'),
-		'id'            => 'knife-inner-sidebar',
-		'description'   => __('Добавленные виджеты появятся в сайдбаре внутри постов.', 'knife-theme'),
-		'before_widget' => '<div class="widget widget-%2$s widget--sidebar">',
-		'after_widget'  => '</div>',
-		'before_title'  => '<p class="widget__title">',
-		'after_title'   => '</p>'
-	]);
-
-  	register_sidebar([
-		'name'          => __('Виджеты под записью', 'knife-theme'),
-		'id'            => 'knife-post-widgets',
-		'description'   => __('Добавленные виджеты появятся в под записью на внутренних страницах.', 'knife-theme'),
-		'before_widget' => '<div class="widget widget-%2$s">',
-		'after_widget'  => '</div>',
-		'before_title'  => '<p class="widget__title">',
-		'after_title'   => '</p>'
-	]);
+// Hide comments menu from admin menu
+add_action('admin_menu', function() {
+	remove_menu_page('edit-comments.php');
 });
-
-
-// Hide default widgets title
-add_filter('widget_title', '__return_empty_string');
 
 
 // Register special post taxonomy
@@ -624,26 +542,12 @@ add_action('init', function() {
 	]);
 });
 
-// Remove default widgets to prevent printing unready styles on production
-add_action('widgets_init', function() {
-	unregister_widget('WP_Widget_Pages');
-	unregister_widget('WP_Widget_Calendar');
-	unregister_widget('WP_Widget_Archives');
-	unregister_widget('WP_Widget_Links');
-	unregister_widget('WP_Widget_Meta');
-	unregister_widget('WP_Widget_Search');
-	unregister_widget('WP_Widget_Categories');
-	unregister_widget('WP_Widget_Recent_Posts');
-	unregister_widget('WP_Widget_Recent_Comments');
-	unregister_widget('WP_Widget_RSS');
- 	unregister_widget('WP_Widget_Media_Video');
-	unregister_widget('WP_Widget_Tag_Cloud');
-	unregister_widget('WP_Nav_Menu_Widget');
-}, 11);
-
 
 // Add custom theme widgets from common hanlder
 require get_template_directory() . '/core/modules/widget-handler.php';
+
+// Manage Story section
+require get_template_directory() . '/core/modules/story-manager.php';
 
 // Login screen custom styles
 require get_template_directory() . '/core/modules/access-screen.php';
