@@ -22,6 +22,12 @@ jQuery(document).ready(function($) {
         return item;
     }
 
+    var dimmer = function(element, cl) {
+        element.addClass(cl).delay(500).queue(function(){
+            element.removeClass(cl).dequeue();
+        });
+    }
+
 
     // display image
     var display = function(item, link) {
@@ -85,6 +91,9 @@ jQuery(document).ready(function($) {
         var first = box.find('.item').first(),
             link  = first.find('.item__image').val(),
             item  = $(this).closest('.item');
+
+        if(link.length < 1)
+            return dimmer(first.find('.item__display'), 'item__display--error');
 
         item.find('.item__image').val(link);
 

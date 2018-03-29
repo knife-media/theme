@@ -74,11 +74,16 @@
         font-size: 14px;
 
         border: dashed 2px #ddd;
-        transition: border .2s;
     }
 
     #knife-story-box .item__display-blank:hover {
+        transition: border .2s;
+
         border-color: #0073aa;
+    }
+
+    #knife-story-box .item__display--error .item__display-blank {
+        border-color: #a00;
     }
 
 
