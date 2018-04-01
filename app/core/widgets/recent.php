@@ -25,7 +25,13 @@ class Knife_Recent_Widget extends WP_Widget {
      * Outputs the content of the widget
      */
     public function widget($args, $instance) {
- 		$defaults = ['title' => '', 'posts_per_page' => 10, 'cat' => 620];
+        $defaults = [
+            'title' => '',
+            'posts_per_page' => 10,
+            'cat' => 620,
+            'sticky' => 0
+        ];
+
 		$instance = wp_parse_args((array) $instance, $defaults);
 
 		extract($instance);
@@ -47,6 +53,13 @@ class Knife_Recent_Widget extends WP_Widget {
 		endif;
 
 		if($q->have_posts()) :
+
+            if($args['id'] === 'knife-inner-sidebar') {
+                printf('<div class="%s">',
+                    $sticky === 1 ? 'sidebar__widgets sidebar__widgets--sticky' : 'sidebar__widgets'
+                );
+            }
+
 			echo $args['before_widget'];
 
  			while($q->have_posts()) : $q->the_post();
@@ -64,7 +77,13 @@ class Knife_Recent_Widget extends WP_Widget {
 				esc_url(get_category_link($cat))
 			);
 
+
 			echo $args['after_widget'];
+
+            if($args['id'] === 'knife-inner-sidebar') {
+                echo '</div>';
+            }
+
 		endif;
     }
 
@@ -73,7 +92,13 @@ class Knife_Recent_Widget extends WP_Widget {
      * Outputs the options form on admin
      */
     function form($instance) {
-		$defaults = ['title' => '', 'posts_per_page' => 10, 'cat' => 620];
+        $defaults = [
+            'title' => '',
+            'posts_per_page' => 10,
+            'cat' => 620,
+            'sticky' => 0
+        ];
+
 		$instance = wp_parse_args((array) $instance, $defaults);
 
 		$category = wp_dropdown_categories([
@@ -106,6 +131,15 @@ class Knife_Recent_Widget extends WP_Widget {
 			__('Рубрика записей:', 'knife-theme'),
 			$category
 		);
+
+        // Stick widget
+		printf(
+			'<p><input type="checkbox" id="%1$s" name="%2$s" class="checkbox"%4$s><label for="%1$s">%3$s</label></p>',
+			esc_attr($this->get_field_id('sticky')),
+			esc_attr($this->get_field_name('sticky')),
+			__('Прилепить виджет', 'knife-theme'),
+			checked($instance['sticky'], 1, false)
+		);
 	}
 
 
@@ -118,19 +152,10 @@ class Knife_Recent_Widget extends WP_Widget {
  		$instance['cat'] = (int) $new_instance['cat'];
 		$instance['posts_per_page'] = (int) $new_instance['posts_per_page'];
 		$instance['title'] = sanitize_text_field($new_instance['title']);
-
-		$this->remove_cache();
+        $instance['sticky'] = $new_instance['sticky'] ? 1 : 0;
 
         return $instance;
     }
-
-
-	/**
-	 * Remove transient on widget update
-	 */
- 	private function remove_cache() {
-		delete_transient($this->id);
-	}
 }
 
 

@@ -30,13 +30,13 @@ class Knife_Feature_Widget extends WP_Widget {
 
 		extract($instance);
 
-    $post = url_to_postid($link);
+        $post = url_to_postid($link);
 
 		// Don't show empty link
 		if(empty($item) || empty($link))
 			return;
 
-    // Don't show self link inside single post
+        // Don't show self link inside single post
 		if(is_single() && get_queried_object_id() === $post)
 			return;
 
@@ -45,10 +45,10 @@ class Knife_Feature_Widget extends WP_Widget {
 		set_query_var('widget_item', $item);
 		set_query_var('widget_link', $link);
 
-    if($post > 0) {
-      set_query_var('widget_post', $post);
-      set_query_var('widget_slug', get_post_field('post_name', $post));
-    }
+        if($post > 0) {
+          set_query_var('widget_post', $post);
+          set_query_var('widget_slug', get_post_field('post_name', $post));
+        }
 
 		get_template_part('template-parts/widgets/feature');
 
