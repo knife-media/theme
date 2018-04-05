@@ -2,6 +2,9 @@
     var menu = document.getElementById('toggle-menu');
 	var search = document.getElementById('toggle-search');
 
+    if(menu === null || search === null)
+        return false;
+
 	// Toggle menu bar
 	menu.addEventListener('click', function(e) {
 		e.preventDefault();

@@ -1,9 +1,13 @@
 (function() {
-	var parent = document.querySelector('.search');
+	var popup = document.querySelector('.search');
+    var search = document.getElementById('toggle-search');
+
+    if(search === null)
+        return false;
 
 	// Check if search id and template defined
-	if(parent === null || typeof knife_search_id === 'undefined')
-		return document.getElementById('toggle-search').classList.add('toggle--hidden');
+	if(popup === null || typeof knife_search_id === 'undefined')
+		return search.classList.add('toggle--hidden');
 
 	var holder = 'search-gcse';
 	var detect = 'gsc-results';
@@ -120,7 +124,7 @@
 
 
 	// Init google cse on search layer open
-	document.getElementById('toggle-search').addEventListener('click', function(e) {
+	search.addEventListener('click', function(e) {
 		e.preventDefault();
 
 		if(this.classList.contains('toggle--expand'))
