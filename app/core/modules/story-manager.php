@@ -162,8 +162,27 @@ class Knife_Story_Manager {
                 if(isset($meta[$i]) && array_key_exists($key, $meta[$i]))
                     $i++;
 
-                if(!empty($value))
-                    $meta[$i][$key] = $value;
+                if(empty($value))
+                    continue;
+
+                switch($key) {
+                    case 'image':
+                        $value = esc_url($value);
+
+                        break;
+
+                    case 'color':
+                        $value = absint($value);
+
+                        break;
+
+                    case 'text':
+                        $value = esc_html($value);
+
+                        break;
+                }
+
+                $meta[$i][$key] = $value;
             }
         }
 
