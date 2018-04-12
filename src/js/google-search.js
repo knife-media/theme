@@ -109,6 +109,14 @@
         return result.appendChild(link);
       }
 
+      if (source.length == 1 && source[0].classList.contains('gs-no-results-result')) {
+        var head = document.createElement('p');
+        head.className = 'search__results-head';
+        head.appendChild(document.createTextNode(source[0].textContent));
+
+        result.appendChild(head);
+      }
+
       for(var i = 0; i < source.length; i++) {
         if(!source[i].querySelector('a.gs-title') || !source[i].querySelector('.gs-snippet'))
           return false;
