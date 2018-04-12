@@ -2,6 +2,10 @@
     display: block;
 }
 
+#knife-story-box .options {
+    margin-top: 100px;
+}
+
 #knife-story-box .dump {
     display: block;
     box-sizing: border-box;

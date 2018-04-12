@@ -49,4 +49,9 @@
     <div class="actions">
         <button class="actions__add button"><?php _e('Добавить слайд в историю'); ?></button>
     </div>
+
+    <div class="options">
+        <button class="options__image button"><?php _e('Добавить фон истории'); ?></button>
+    </div>
+
 </div>

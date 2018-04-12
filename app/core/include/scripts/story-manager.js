@@ -1,7 +1,7 @@
 jQuery(document).ready(function($) {
-	if (typeof wp.media === 'undefined') return;
+    if (typeof wp.media === 'undefined') return;
 
-	var box = $('#knife-story-box');
+    var box = $('#knife-story-box');
 
     // sort items
     box.sortable({
@@ -103,24 +103,24 @@ jQuery(document).ready(function($) {
 
     // add item image
     box.on('click', '.item__display', function(e) {
-		e.preventDefault();
+        e.preventDefault();
 
         var item = $(this).closest('.item');
 
         // open default wp.media image frame
-		var frame = wp.media({
-			title: knife_story_manager.choose,
-			multiple: false
-		});
+        var frame = wp.media({
+            title: knife_story_manager.choose,
+            multiple: false
+        });
 
         // on image select
-		frame.on('select', function() {
-			var attachment = frame.state().get('selection').first().toJSON();
+        frame.on('select', function() {
+            var attachment = frame.state().get('selection').first().toJSON();
 
             return display(item, attachment.url);
-		});
+        });
 
-		return frame.open();
-	});
+        return frame.open();
+    });
 
 });
