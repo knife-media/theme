@@ -7,6 +7,25 @@
         }
     ?>
 
+    <div class="box box--options">
+        <div class="option option--excerpt">
+            <label class="option__label"><?php _e('Описание на первом слайде', 'knife-theme'); ?></label>
+
+            <textarea class="option__excerpt"></textarea>
+        </div>
+
+        <div class="option option--background">
+            <label class="option__label"><?php _e('Фон всех слайдов', 'knife-theme'); ?></label>
+
+            <figure class="option__background">
+                <img class="option__background-image" src="https://picsum.photos/300/200" alt="">
+
+                <figcaption class="option__background-blank"><?php _e('Выбрать изображение', 'knife-theme'); ?></figcaption>
+            </figure>
+        </div>
+    </div>
+
+    <div class="box box--items">
     <?php foreach($stories as $story) : ?>
         <div class="item">
             <?php
@@ -27,14 +46,6 @@
                 );
             ?>
 
-            <figure class="item__display">
-                <?php if(!empty($story['image'])) : ?>
-                    <img class="item__display-image" src="<?php echo $story['image']; ?>" alt="">
-                <?php endif; ?>
-
-                <figcaption class="item__display-blank"><?php _e('Выбрать фон слайда', 'knife-theme'); ?></figcaption>
-            </figure>
-
             <div class="item__field">
                 <span class="item__field-drag"></span>
 
@@ -45,13 +56,9 @@
             </div>
         </div>
     <?php endforeach; ?>
+    </div>
 
-    <div class="actions">
+    <div class="box box--actions">
         <button class="actions__add button"><?php _e('Добавить слайд в историю'); ?></button>
     </div>
-
-    <div class="options">
-        <button class="options__image button"><?php _e('Добавить фон истории'); ?></button>
-    </div>
-
 </div>

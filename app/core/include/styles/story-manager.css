@@ -2,9 +2,108 @@
     display: block;
 }
 
-#knife-story-box .options {
-    margin-top: 100px;
+#knife-story-box .box {
+    position: relative;
 }
+
+#knife-story-box .box--options {
+    display: flex;
+    flex-flow: row wrap;
+
+    margin: -6px -12px 20px;
+    padding: 15px;
+
+    background: #f5f5f5;
+    border-bottom: 1px solid #ddd;
+}
+
+#knife-story-box .option {
+    display: flex;
+    position: relative;
+    flex-flow: column nowrap;
+}
+
+    #knife-story-box .option__label {
+        display: block;
+
+        margin-bottom: 7px;
+        font-weight: 700;
+    }
+
+    #knife-story-box .option__excerpt {
+        display: block;
+        flex: 1 1 auto;
+        resize: none;
+
+        width: 100%;
+    }
+
+    #knife-story-box .option__background {
+        display: flex;
+        position: relative;
+        cursor: pointer;
+        overflow: hidden;
+
+        margin: 0;
+        padding: 0;
+
+        width: 100%;
+        height: 200px;
+    }
+
+    #knife-story-box .option__background-image {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 2;
+
+        width: 100%;
+        height: 100%;
+
+        object-fit: cover;
+        object-position: top;
+    }
+
+    #knife-story-box .option__background-blank {
+        display: flex;
+        position: absolute;
+        top: 0;
+        left: 0;
+        align-items: center;
+        justify-content: center;
+
+        width: calc(100% - 4px);
+        height: calc(100% - 4px);
+
+        color: #666;
+        font-size: 14px;
+
+        border: dashed 2px #ddd;
+    }
+
+    #knife-story-box .option__background-blank:hover {
+        transition: border .2s;
+
+        border-color: #0073aa;
+    }
+
+    #knife-story-box .option__background--error .option__background-blank {
+        border-color: #a00;
+    }
+
+
+
+#knife-story-box .option--excerpt {
+    flex: 1 1 auto;
+
+    margin-right: 20px;
+}
+
+#knife-story-box .option--background {
+    flex: 0 0 300px;
+}
+
 
 #knife-story-box .dump {
     display: block;
@@ -33,63 +132,6 @@
     border: 1px solid #ddd;
     border-radius: 3px;
 }
-
-
-#knife-story-box .item__display {
-    display: flex;
-    position: relative;
-    cursor: pointer;
-    overflow: hidden;
-
-    margin: 0;
-    margin-right: 10px;
-    padding: 0;
-
-    width: 100%;
-    max-width: 200px;
-}
-
-    #knife-story-box .item__display-image {
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 2;
-
-        width: 100%;
-        height: 100%;
-
-        object-fit: cover;
-        object-position: top;
-    }
-
-    #knife-story-box .item__display-blank {
-        display: flex;
-        position: absolute;
-        top: 0;
-        left: 0;
-        align-items: center;
-        justify-content: center;
-
-        width: calc(100% - 4px);
-        height: calc(100% - 4px);
-
-        color: #666;
-        font-size: 14px;
-
-        border: dashed 2px #ddd;
-    }
-
-    #knife-story-box .item__display-blank:hover {
-        transition: border .2s;
-
-        border-color: #0073aa;
-    }
-
-    #knife-story-box .item__display--error .item__display-blank {
-        border-color: #a00;
-    }
-
 
 #knife-story-box .item__field {
     display: flex;
