@@ -79,12 +79,11 @@
     var result = document.getElementById('search-results');
     var source = document.getElementById(holder).querySelectorAll('.gs-result');
 
+    // Clear nodes. Faster than innerHTML
+    while (result.firstChild) {
+      result.removeChild(result.firstChild);
+    }
     if(document.getElementById('search-input').value.length > 0) {
-      // Clear nodes. Faster than innerHTML
-      while (result.firstChild) {
-        result.removeChild(result.firstChild);
-      }
-
       var append = function(source) {
         var data = {
           link: source.querySelector('a.gs-title').href,
