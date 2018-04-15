@@ -13,15 +13,19 @@ jQuery(document).ready(function($) {
 
     // clear item
     var clear = function(item) {
-        $.each(['color', 'image', 'text'], function(i, cl) {
-            item.find('.item__' + cl).val('');
+        $.each(['image', 'text'], function(i, cl) {
+			var match = '[data-form="' + cl + '"]';
+
+            item.find(match).val('');
         });
 
-        item.find('.item__display-image').remove();
+        item.find('.item__image').remove();
 
         return item;
     }
 
+
+	// add class for short time
     var dimmer = function(element, cl) {
         element.addClass(cl).delay(500).queue(function(){
             element.removeClass(cl).dequeue();
@@ -30,21 +34,31 @@ jQuery(document).ready(function($) {
 
 
     // display image
-    var display = function(item, link) {
-        var parent = item.find('.item__display');
+    var display = function(parent, link, cl, form) {
+		match = '[data-form="' + form + '"]';
+		image = '.' + cl;
 
         // set image url to hidden input
-        item.find('.item__image').val(link);
+        parent.find(match).val(link);
 
         // change src if image already exists
-        if(parent.find('.item__display-image').length > 0)
-            return parent.find('.item__display-image').attr('src', link);
+        if(parent.find(image).length > 0)
+            return parent.find(image).attr('src', link);
 
         // otherwise create new image
-        var image = $('<img />', {class: 'item__display-image', src: link});
+        var showcase = $('<img />', {class: cl, src: link});
 
-        return image.prependTo(parent);
+        return showcase.prependTo(parent);
     }
+
+
+	// set image shadow on load
+	var shadow = function(cl) {
+		var blank = box.find('.option__background-blank');
+        var shade = parseInt(box.find(cl).val()) / 100;
+
+        blank.css('background-color', 'rgba(0, 0, 0, ' + shade + ')');
+	}
 
 
     // add new item
@@ -52,7 +66,7 @@ jQuery(document).ready(function($) {
         e.preventDefault();
 
         var last = box.find('.item').last(),
-            copy  = clear(last.clone());
+            copy = clear(last.clone());
 
         return last.after(copy);
     });
@@ -71,38 +85,8 @@ jQuery(document).ready(function($) {
     });
 
 
-    // change item text color
-    box.on('click', '.item__field-color', function(e) {
-        e.preventDefault();
-
-        var color = $(this).closest('.item').find('.item__color');
-
-        if(!color.val())
-            return color.val(1);
-
-        return color.val('');
-    });
-
-
-    // clone image
-    box.on('click', '.item__field-clone', function(e) {
-        e.preventDefault();
-
-        var first = box.find('.item').first(),
-            link  = first.find('.item__image').val(),
-            item  = $(this).closest('.item');
-
-        if(link.length < 1)
-            return dimmer(first.find('.item__display'), 'item__display--error');
-
-        item.find('.item__image').val(link);
-
-        return display(item, link);
-    });
-
-
     // add item image
-    box.on('click', '.item__display', function(e) {
+    box.on('click', '.item__field-image', function(e) {
         e.preventDefault();
 
         var item = $(this).closest('.item');
@@ -117,10 +101,47 @@ jQuery(document).ready(function($) {
         frame.on('select', function() {
             var attachment = frame.state().get('selection').first().toJSON();
 
-            return display(item, attachment.url);
+            return display(item, attachment.url, 'item__image', 'image');
         });
 
         return frame.open();
     });
 
+
+    // add story background
+    box.on('click', '.option__background', function(e) {
+        e.preventDefault();
+
+        // open default wp.media image frame
+        var frame = wp.media({
+            title: knife_story_manager.choose,
+            multiple: false
+        });
+
+        // on image select
+        frame.on('select', function() {
+            var attachment = frame.state().get('selection').first().toJSON();
+			var background = box.find('.option__background');
+
+            return display(background, attachment.url, 'option__background-image', 'background');
+        });
+
+        return frame.open();
+    });
+
+
+    // shadow range
+    box.on('change', '.option__range', function(e) {
+        var blank = box.find('.option__background-blank');
+        var shade = parseInt($(this).val()) / 100;
+
+        if($(box.find('.option__background-image')).length < 1)
+            return dimmer(blank, 'option__background-blank--error');
+
+        blank.css('background-color', 'rgba(0, 0, 0, ' + shade + ')');
+    });
+
+
+	// shadow load
+	return shadow('.option__range');
 });

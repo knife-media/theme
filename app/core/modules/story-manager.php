@@ -24,6 +24,17 @@ class Knife_Story_Manager {
      */
     private $slug = 'story';
 
+
+    /**
+     * Meta key to store stories in post meta
+     *
+     * @since   1.3
+     * @access  private
+     * @var     string
+     */
+    private $meta = 'knife-story';
+
+
     public function __construct() {
         add_action('admin_enqueue_scripts', [$this, 'add_assets']);
 
@@ -140,25 +151,50 @@ class Knife_Story_Manager {
         if(!current_user_can('edit_post', $post_id))
             return;
 
-        // Delete post meta to create it again below
-        delete_post_meta($post_id, $this->slug);
 
-        if(empty($_REQUEST[$this->slug]))
-            return;
+        // update stories meta
+		$this->_update_stories($this->meta . '-stories', $post_id);
 
-        $meta = $this->_generate_meta();
+		// update other story options
+		foreach(['background', 'excerpt', 'shadow'] as $option) {
+			$query = $this->meta . "-{$option}";
 
-        foreach($meta as $item) {
-            add_post_meta($post_id, $this->slug, $item);
-        }
+			// get value by query
+			$value = $_REQUEST[$query];
+
+			switch($option) {
+				case 'background':
+                    $value = esc_url($value);
+
+                    break;
+
+                case 'excerpt':
+                    $value = esc_html($value);
+
+                    break;
+
+                case 'shadow':
+                    $value = absint($value);
+
+                    break;
+			}
+
+			update_post_meta($post_id, $query, $value);
+		}
     }
 
 
     /**
-     * Generate meta from post request
+     * Update stories meta from post-metabox
      */
-    private function _generate_meta($meta = [], $i = 0) {
-        foreach($_REQUEST[$this->slug] as $args) {
+    private function _update_stories($query, $post_id, $meta = [], $i = 0) {
+        if(empty($_REQUEST[$query]))
+            return;
+
+		// delete stories post meta to create it again below
+		delete_post_meta($post_id, $query);
+
+        foreach($_REQUEST[$query] as $args) {
             foreach($args as $key => $value) {
                 if(isset($meta[$i]) && array_key_exists($key, $meta[$i]))
                     $i++;
@@ -172,11 +208,6 @@ class Knife_Story_Manager {
 
                         break;
 
-                    case 'color':
-                        $value = absint($value);
-
-                        break;
-
                     case 'text':
                         $value = esc_html($value);
 
@@ -187,6 +218,8 @@ class Knife_Story_Manager {
             }
         }
 
-        return $meta;
+		foreach($meta as $key => $item) {
+			add_post_meta($post_id, $query, $item);
+		}
     }
 }
