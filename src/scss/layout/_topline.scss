@@ -3,7 +3,7 @@
   flex-flow: row nowrap;
   align-items: center;
   justify-content: space-between;
-	position: relative;
+  position: relative;
 
   width: 100%;
   height: 4rem;
@@ -13,15 +13,15 @@
   .topline__logo {
     display: flex;
     position: relative;
-		flex-flow: row nowrap;
-		align-items: center;
-		justify-content: center;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: center;
 
-		background-color: $color-white;
+    background-color: $color-white;
 
-		.topline__logo-link {
-			display: block;
-		}
+    .topline__logo-link {
+      display: block;
+    }
 
     .topline__logo-image {
       display: block;
@@ -35,15 +35,15 @@
       }
     }
 
-		@media screen and (max-width: 1023px) {
-			position: absolute;
-			top: 0;
-			left: 0;
-			z-index: 13;
+    @media screen and (max-width: 1023px) {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 13;
 
-			width: 100%;
-			height: 100%;
-		}
+      width: 100%;
+      height: 100%;
+    }
   }
 
   .topline__menu {
@@ -103,7 +103,7 @@
     .topline__menu-link {
       display: block;
 
-      font-size: 1.125rem;
+      font-size: 1.25rem;
       line-height: 1.25rem;
       font-weight: 500;
       text-decoration: none;
@@ -149,19 +149,19 @@
       width: 100%;
       background-color: $color-primary;
 
-			transform: translateY(-100%);
+      transform: translateY(-100%);
 
-			&.topline__menu--expand {
+      &.topline__menu--expand {
         opacity: 1;
-				transform: translateY(0);
-				transition: transform .25s;
-			}
+        transform: translateY(0);
+        transition: transform .25s;
+      }
     }
   }
 
   .topline__button {
     position: relative;
-		z-index: 15;
+    z-index: 15;
 
     outline: none;
     cursor: pointer;
@@ -183,7 +183,8 @@
     }
 
     &.topline__button--search {
-      display: block;
+      display: flex;
+      justify-content: center;
 
       height: 1.25rem;
       width: 1.375rem;
@@ -197,7 +198,7 @@
       }
 
       @media screen and (max-width: 767px) {
-        height: 1.125rem;
+        height: 1.25rem;
         width: 1.25rem;
 
         font-size: 1.125rem;
