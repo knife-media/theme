@@ -14,7 +14,7 @@ jQuery(document).ready(function($) {
     // clear item
     var clear = function(item) {
         $.each(['image', 'text'], function(i, cl) {
-			var match = '[data-form="' + cl + '"]';
+            var match = '[data-form="' + cl + '"]';
 
             item.find(match).val('');
         });
@@ -25,7 +25,7 @@ jQuery(document).ready(function($) {
     }
 
 
-	// add class for short time
+    // add class for short time
     var dimmer = function(element, cl) {
         element.addClass(cl).delay(500).queue(function(){
             element.removeClass(cl).dequeue();
@@ -35,8 +35,8 @@ jQuery(document).ready(function($) {
 
     // display image
     var display = function(parent, link, cl, form) {
-		match = '[data-form="' + form + '"]';
-		image = '.' + cl;
+        match = '[data-form="' + form + '"]';
+        image = '.' + cl;
 
         // set image url to hidden input
         parent.find(match).val(link);
@@ -52,13 +52,13 @@ jQuery(document).ready(function($) {
     }
 
 
-	// set image shadow on load
-	var shadow = function(cl) {
-		var blank = box.find('.option__background-blank');
+    // set image shadow on load
+    var shadow = function(cl) {
+        var blank = box.find('.option__background-blank');
         var shade = parseInt(box.find(cl).val()) / 100;
 
         blank.css('background-color', 'rgba(0, 0, 0, ' + shade + ')');
-	}
+    }
 
 
     // add new item
@@ -101,7 +101,7 @@ jQuery(document).ready(function($) {
         frame.on('select', function() {
             var attachment = frame.state().get('selection').first().toJSON();
 
-            return display(item, attachment.url, 'item__image', 'image');
+            display(item, attachment.url, 'item__image', 'image');
         });
 
         return frame.open();
@@ -121,9 +121,12 @@ jQuery(document).ready(function($) {
         // on image select
         frame.on('select', function() {
             var attachment = frame.state().get('selection').first().toJSON();
-			var background = box.find('.option__background');
+            var background = box.find('.option__background');
 
-            return display(background, attachment.url, 'option__background-image', 'background');
+            display(background, attachment.url, 'option__background-image', 'background');
+
+            // set shadow on image creation
+            box.find('.option__range').trigger('change');
         });
 
         return frame.open();
@@ -135,13 +138,11 @@ jQuery(document).ready(function($) {
         var blank = box.find('.option__background-blank');
         var shade = parseInt($(this).val()) / 100;
 
-        if($(box.find('.option__background-image')).length < 1)
+        if(box.find('.option__background-image').length < 1)
             return dimmer(blank, 'option__background-blank--error');
 
         blank.css('background-color', 'rgba(0, 0, 0, ' + shade + ')');
     });
 
-
-	// shadow load
-	return shadow('.option__range');
+    return box.find('.option__range').trigger('change');
 });

@@ -153,17 +153,20 @@ class Knife_Story_Manager {
 
 
         // update stories meta
-		$this->_update_stories($this->meta . '-stories', $post_id);
+        $this->_update_stories($this->meta . '-stories', $post_id);
 
-		// update other story options
-		foreach(['background', 'excerpt', 'shadow'] as $option) {
-			$query = $this->meta . "-{$option}";
+        // update other story options
+        foreach(['background', 'excerpt', 'shadow'] as $option) {
+            $query = $this->meta . "-{$option}";
 
-			// get value by query
-			$value = $_REQUEST[$query];
+            if(!isset($_REQUEST[$query]))
+                continue;
 
-			switch($option) {
-				case 'background':
+            // get value by query
+            $value = $_REQUEST[$query];
+
+            switch($option) {
+                case 'background':
                     $value = esc_url($value);
 
                     break;
@@ -177,10 +180,10 @@ class Knife_Story_Manager {
                     $value = absint($value);
 
                     break;
-			}
+            }
 
-			update_post_meta($post_id, $query, $value);
-		}
+            update_post_meta($post_id, $query, $value);
+        }
     }
 
 
@@ -191,8 +194,8 @@ class Knife_Story_Manager {
         if(empty($_REQUEST[$query]))
             return;
 
-		// delete stories post meta to create it again below
-		delete_post_meta($post_id, $query);
+        // delete stories post meta to create it again below
+        delete_post_meta($post_id, $query);
 
         foreach($_REQUEST[$query] as $args) {
             foreach($args as $key => $value) {
@@ -218,8 +221,8 @@ class Knife_Story_Manager {
             }
         }
 
-		foreach($meta as $key => $item) {
-			add_post_meta($post_id, $query, $item);
-		}
+        foreach($meta as $key => $item) {
+            add_post_meta($post_id, $query, $item);
+        }
     }
 }
