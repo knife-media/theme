@@ -30,7 +30,7 @@
 	<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KZ7MHM" style="display:none;"></iframe>
 </noscript>
 
-<?php if(is_active_sidebar('knife-over-header')) : ?>
+<?php if(is_active_sidebar('knife-over-header') && is_single()) : ?>
 <div class="banner">
     <?php dynamic_sidebar('knife-over-header'); ?>
 </div>

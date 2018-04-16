@@ -6,4 +6,8 @@
     position: relative;
 
     overflow: hidden;
+
+    &.widget--header {
+        width: 100%;
+    }
 }
