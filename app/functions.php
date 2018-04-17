@@ -78,6 +78,7 @@ add_action('after_setup_theme', function(){
 	add_image_size('triple', 480, 360, true);
 	add_image_size('double', 640, 480, true);
 	add_image_size('single', 1280, 360, true);
+    add_image_size('quatro', 480, 480, true);
 });
 
 

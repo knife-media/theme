@@ -221,18 +221,18 @@
       display: none;
     }
 
-		.widget__title {
-			font-size: 1.25rem;
-			line-height: 1.25;
+    .widget__title {
+      font-size: 1.25rem;
+      line-height: 1.25;
 
-			@media screen and (max-width: 1023px) {
-				font-size: 1.25rem;
-			}
+      @media screen and (max-width: 1023px) {
+        font-size: 1.25rem;
+      }
 
-			@media screen and (max-width: 767px) {
-				font-size: 1.125rem;
-			}
-		}
+      @media screen and (max-width: 767px) {
+        font-size: 1.125rem;
+      }
+    }
 
     @media screen and (max-width: 1023px) {
       width: calc(50% - .5rem);
