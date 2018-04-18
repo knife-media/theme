@@ -2,6 +2,8 @@
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
+  position: relative;
+  z-index: 6;
 
   width: 100%;
 
