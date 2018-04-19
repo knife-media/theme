@@ -1,9 +1,9 @@
 <?php
 /**
- * Template for display single post
+ * Single story
  *
  * @package knife-theme
- * @since 1.1
+ * @since 1.3
  */
 
 get_header(); ?>
@@ -11,24 +11,31 @@ get_header(); ?>
 <main class="wrap">
 
     <div class="content">
-<?php
-    if (have_posts()) :
-
-        while (have_posts()) : the_post();
-
-            // Include specific content template
-            get_template_part('template-parts/content/story');
-
-        endwhile;
-
-    else:
-
-        // Include "no posts found" template
-        get_template_part('template-parts/content/post', 'none');
-
-    endif;
-?>
+        <?php get_template_part('template-parts/content/story'); ?>
     </div>
+
+    <div class="content block">
+
+    <?php
+        $q = new WP_Query(['post_type' => 'story']);
+
+        if($q->have_posts()) :
+
+            while ($q->have_posts()) : $q->the_post();
+
+                knife_theme_widget_template([
+                    'size' => 'story',
+                    'before' => '<div class="widget widget-%s">',
+                    'after' => '</div>'
+                ]);
+
+            endwhile;
+
+        endif;
+    ?>
+
+    </div>
+
 
 </main>
 

@@ -46,6 +46,7 @@ class Knife_Story_Manager {
 
         // save story meta
         add_action('save_post', [$this, 'save_meta']);
+
     }
 
 

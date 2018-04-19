@@ -61,7 +61,7 @@
 		fake.style.display = 'none';
 
 		// Append fake div to base selector
-		parent.appendChild(fake);
+		popup.appendChild(fake);
 
 		// Prepare gcse callback
 		window.__gcse = {
