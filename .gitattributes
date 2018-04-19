@@ -1,0 +1,2 @@
+*.min.css merge=ours
+*.min.js merge=ours

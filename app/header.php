@@ -22,6 +22,16 @@
 	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 	})(window,document,'script','dataLayer','GTM-KZ7MHM');
 </script>
+
+<script src="https://yastatic.net/pcode/adfox/loader.js" crossorigin="anonymous"></script>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+<script>
+       (adsbygoogle = window.adsbygoogle || []).push({
+               google_ad_client: "ca-pub-9396492490714877",
+               enable_page_level_ads: true
+       });
+</script>
 </head>
 
 <body <?php body_class(); ?>>
