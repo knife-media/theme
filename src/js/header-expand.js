@@ -15,22 +15,33 @@
 	});
 
 
-	// Toggle search bar
+	// Toggle search popup
 	search.addEventListener('click', function(e) {
 		e.preventDefault();
 
 		var input = document.getElementById('search-input');
 
+        // close menu if opened
  		if(document.querySelector('.topline__menu').classList.contains('topline__menu--expand'))
 			menu.click();
 
-		if(document.querySelector('.search').classList.contains('search--expand'))
-			input.blur();
-		else
-			input.focus();
+        // blur search input
+ 		input.blur();
 
-		document.querySelector('.search').classList.toggle('search--expand');
-		document.body.classList.toggle('body--search');
+        // if user opens search forn
+		if(!document.querySelector('.search').classList.contains('search--expand')) {
+            var offset = document.querySelector('.header').offsetTop - window.pageYOffset;
+
+            // avoid banner size
+            if(offset > 0)
+                document.querySelector('.search').style.paddingTop = offset +'px';
+
+            // focus search input
+			input.focus();
+        }
+
+        document.querySelector('.search').classList.toggle('search--expand');
+        document.body.classList.toggle('body--search');
 
 		return this.classList.toggle('toggle--expand');
 	});
