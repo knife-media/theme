@@ -83,7 +83,8 @@
       margin-bottom: .75rem;
 
       @media screen and (max-width: 767px) {
-        display: none;
+        margin-top: 0;
+        margin-bottom: 0;
       }
     }
   }
