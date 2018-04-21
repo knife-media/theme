@@ -93,7 +93,8 @@ add_filter('image_size_names_choose', function($size_names) {
 	$size_names = array(
 		'outer' => __('На всю ширину', 'knife-theme'),
 		'inner' => __('По ширине текста', 'knife-theme'),
-		'full'  => __('Исходный размер', 'knife-theme')
+		'full'  => __('Исходный размер', 'knife-theme'),
+		'thumbnail' => __('Миниатюра', 'knife-theme')
 	);
 
 	return $size_names;
