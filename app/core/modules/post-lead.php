@@ -30,7 +30,9 @@ class Knife_Post_Lead {
 	 * Add lead-text metabox
 	 */
 	public function add_metabox() {
-		add_meta_box('knife-lead-metabox', __('Лид текст'), [$this, 'print_metabox'], 'post', 'normal', 'low');
+        $screen = apply_filters('knife_lead_screen', ['post']);
+
+		add_meta_box('knife-lead-metabox', __('Лид текст'), [$this, 'print_metabox'], $screen, 'normal', 'low');
 	}
 
 
@@ -54,7 +56,9 @@ class Knife_Post_Lead {
 	 * Save post options
 	 */
 	public function save_meta($post_id) {
-		if(get_post_type($post_id) !== 'post')
+        $post_types = apply_filters('knife_lead_screen', ['post']);
+
+		if(!in_array(get_post_type($post_id), $post_types))
 			return;
 
 		if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)

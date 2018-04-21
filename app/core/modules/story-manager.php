@@ -47,6 +47,14 @@ class Knife_Story_Manager {
         // save story meta
         add_action('save_post', [$this, 'save_meta']);
 
+        // insert vendor scripts and styles
+        add_action('wp_enqueue_scripts', [$this, 'enqueue_assets'], 9);
+
+		// include swiper options
+		add_action('wp_enqueue_scripts', [$this, 'inject_object'], 12);
+
+        // add lead to story admin page
+        add_filter('knife_lead_screen', [$this, 'add_lead']);
     }
 
 
@@ -66,7 +74,7 @@ class Knife_Story_Manager {
         $include = get_template_directory_uri() . '/core/include';
 
         // insert admin styles
-         wp_enqueue_style('knife-story-manager', $include . '/styles/story-manager.css', [], $version);
+        wp_enqueue_style('knife-story-manager', $include . '/styles/story-manager.css', [], $version);
 
         // insert admin scripts
         wp_enqueue_script('knife-story-manager', $include . '/scripts/story-manager.js', ['jquery', 'jquery-ui-sortable'], $version);
@@ -76,6 +84,54 @@ class Knife_Story_Manager {
         ];
 
         wp_localize_script('knife-story-manager', 'knife_story_manager', $options);
+    }
+
+
+    /**
+     * Enqueue swiper scripts and styles
+     */
+    public function enqueue_assets() {
+
+        if(!is_singular($this->slug))
+            return;
+
+        $version = '4.2.2';
+        $include = get_template_directory_uri() . '/assets';
+
+        // enqueue swiper css
+        wp_enqueue_style('swiper', $include . '/styles/swiper.min.css', [], $version);
+
+        // enqueue swiper js to bottom
+        wp_enqueue_script('swiper', $include . '/scripts/swiper.min.js', [], $version, true);
+    }
+
+
+    /**
+	 * Include swiper story meta options
+	 */
+	public function inject_object() {
+        if(!is_singular($this->slug))
+            return;
+
+        $post_id = get_the_ID();
+
+        $options = [];
+
+        foreach(['background', 'shadow', 'effect'] as $item) {
+            $options[$item] = get_post_meta($post_id, $this->meta . "-{$item}", true);
+        }
+
+		wp_localize_script('knife-theme', 'knife_story_meta', $options);
+	}
+
+
+    /**
+     * Add lead metabox to story admin page
+     */
+    public function add_lead($types) {
+        $types[] = $this->slug;
+
+        return $types;
     }
 
 
@@ -103,7 +159,7 @@ class Knife_Story_Manager {
             ],
             'label'                 => __('Истории', 'knife-theme'),
             'description'           => __('Слайды с интерактивными историями', 'knife-theme'),
-            'supports'              => ['title', 'thumbnail', 'revisions'],
+            'supports'              => ['title', 'thumbnail', 'revisions', 'excerpt'],
             'hierarchical'          => true,
             'public'                => true,
             'show_ui'               => true,
@@ -157,7 +213,7 @@ class Knife_Story_Manager {
         $this->_update_stories($this->meta . '-stories', $post_id);
 
         // update other story options
-        foreach(['background', 'excerpt', 'shadow'] as $option) {
+        foreach(['background', 'effect', 'shadow'] as $option) {
             $query = $this->meta . "-{$option}";
 
             if(!isset($_REQUEST[$query]))
@@ -172,7 +228,7 @@ class Knife_Story_Manager {
 
                     break;
 
-                case 'excerpt':
+                case 'effect':
                     $value = esc_html($value);
 
                     break;

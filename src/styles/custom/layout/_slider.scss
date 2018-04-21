@@ -1,7 +1,12 @@
 .slider {
+  display: block;
+  opacity: 0;
+
   width: 100%;
   height: calc(100vh - 8rem);
   min-height: 36rem;
+
+  transition: opacity .3s;
 
   .swiper-slide {
     position: relative;
@@ -38,18 +43,5 @@
     width: auto;
     height: auto;
     max-width: none;
-
-    object-fit: cover;
-    object-position: center center;
-
-    &:after {
-      content: "";
-
-      display: block;
-      height: 100%;
-      width: 100%;
-
-      background-color: rgba(0, 0, 0, .8);
-    }
   }
 }
