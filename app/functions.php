@@ -268,10 +268,11 @@ add_filter('body_class', function($wp_classes, $extra_classes) {
 	if (is_front_page())
 		$classes[] = 'is-home';
 
-	if(is_single())
+	// TODO: remove after moving cards to post type #34
+	if(is_singular('post') && !has_post_format('chat'))
 		$classes[] = 'is-post';
 
-	if(is_page())
+	if(is_singular('page'))
 		$classes[] = 'is-page';
 
 	if(is_archive())
