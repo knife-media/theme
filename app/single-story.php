@@ -11,7 +11,35 @@ get_header(); ?>
 <main class="wrap">
 
     <div class="content">
-        <?php get_template_part('template-parts/content/story'); ?>
+
+        <div class="slider swiper-container">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+
+                    <div class="slider__item block">
+                        <?php
+                            knife_theme_meta([
+                                'before' => '<div class="slider__item-meta meta">',
+                                'after' => '</div>'
+                            ]);
+
+                            the_title(
+                                '<h1 class="slider__item-title">',
+                                '</h1>'
+                            );
+
+                            knife_theme_post_meta([
+                                'before' => '<div class="slider__item-excerpt">',
+                                'after' => '</div>',
+                                'meta' => 'lead-text'
+                            ]);
+                        ?>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <div class="content block">
@@ -35,7 +63,6 @@ get_header(); ?>
     ?>
 
     </div>
-
 
 </main>
 

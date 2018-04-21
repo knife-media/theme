@@ -18,18 +18,19 @@
 
 
     <div class="box box--items">
-    <?php foreach($stories as $story) : ?>
+    <?php foreach($stories as $i => $story) : ?>
         <div class="item">
             <?php
                 if(!empty($story['image'])) {
                     printf('<img class="item__image" src="%s" alt="">', esc_url($story['image']));
                 }
 
-                printf('<textarea data-form="text" class="item__text" name="%1$s" placeholder="%3$s">%2$s</textarea>',
+
+                printf('<textarea data-form="text" class="item__text" name="%1$s">%2$s</textarea>',
                     $this->meta . '-stories[][text]',
-                    $story['text'] ?? '',
-                    __('Введите текст истории', 'knife-theme')
+                    $story['text'] ?? ''
                 );
+
 
                 printf('<input data-form="image" type="hidden" name="%s" value="%s">',
                     $this->meta . '-stories[][image]',

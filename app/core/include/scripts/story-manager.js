@@ -3,6 +3,10 @@ jQuery(document).ready(function($) {
 
     var box = $('#knife-story-box');
 
+    // use this variable as storage for current editor id
+    box.data('items', 0);
+
+
     // sort items
     box.sortable({
         items: '.item',
@@ -12,7 +16,9 @@ jQuery(document).ready(function($) {
 
 
     // clear item
-    var clear = function(item) {
+    var clear = function() {
+        var item = box.find('.item').first().clone()
+
         $.each(['image', 'text'], function(i, cl) {
             var match = '[data-form="' + cl + '"]';
 
@@ -22,6 +28,26 @@ jQuery(document).ready(function($) {
         item.find('.item__image').remove();
 
         return item;
+    }
+
+
+    // create virtual item element
+    var dummy = clear();
+
+
+    // create wp.editor using item element
+    var editor = function(el) {
+        var id  = 'knife-story-text-' + box.data('items');
+
+        el.find('[data-form="text"]').attr('id', id);
+
+        wp.editor.initialize(id, {
+            tinymce: true,
+            quicktags: true,
+            mediaButtons: true
+        });
+
+        return box.data().items++;
     }
 
 
@@ -66,9 +92,11 @@ jQuery(document).ready(function($) {
         e.preventDefault();
 
         var last = box.find('.item').last(),
-            copy = clear(last.clone());
+            copy = dummy.clone();
 
-        return last.after(copy);
+        last.after(copy);
+
+        return editor(copy);
     });
 
 
@@ -79,7 +107,7 @@ jQuery(document).ready(function($) {
         var item = $(this).closest('.item');
 
         if(box.find('.item').length === 1)
-            return clear(item);
+            box.find('.actions__add').trigger('click');
 
         return item.remove();
     });
@@ -143,6 +171,13 @@ jQuery(document).ready(function($) {
 
         blank.css('background-color', 'rgba(0, 0, 0, ' + shade + ')');
     });
+
+
+    // init wp editors
+    box.find('.item').each(function(i, el) {
+        return editor($(this));
+    });
+
 
     return box.find('.option__range').trigger('change');
 });

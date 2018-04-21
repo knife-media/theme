@@ -73,6 +73,9 @@ class Knife_Story_Manager {
         $version = wp_get_theme()->get('Version');
         $include = get_template_directory_uri() . '/core/include';
 
+        // insert scripts for dynaimc wp_editor
+        wp_enqueue_editor();
+
         // insert admin styles
         wp_enqueue_style('knife-story-manager', $include . '/styles/story-manager.css', [], $version);
 
@@ -265,11 +268,6 @@ class Knife_Story_Manager {
                 switch($key) {
                     case 'image':
                         $value = esc_url($value);
-
-                        break;
-
-                    case 'text':
-                        $value = esc_html($value);
 
                         break;
                 }
