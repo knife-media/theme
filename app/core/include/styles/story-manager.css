@@ -181,7 +181,6 @@
     right: 10px;
 }
 
-    #knife-story-box .item__field-image,
     #knife-story-box .item__field-trash,
     #knife-story-box .item__field-drag {
         display: block;
@@ -189,7 +188,6 @@
 
         width: 18px;
         height: 18px;
-        margin-top: 10px;
 
         font-size: 18px;
         line-height: 1;
@@ -199,6 +197,8 @@
 
     #knife-story-box .item__field-drag {
         cursor: move;
+
+        margin-top: 13px;
     }
         #knife-story-box .item__field-drag:before {
             content: "\f333";
@@ -211,13 +211,6 @@
     }
         #knife-story-box .item__field-trash:before {
             content: "\f182";
-        }
-
-    #knife-story-box .item__field-image {
-        font-size: 16px;
-    }
-        #knife-story-box .item__field-image:before {
-            content: "\f128";
         }
 
 #knife-story-box .item__text {

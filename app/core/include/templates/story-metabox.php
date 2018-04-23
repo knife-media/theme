@@ -12,7 +12,7 @@
         }
 
         if(count($stories) < 1) {
-            $stories[] = ['text' => '', 'image' => ''];
+            $stories[] = '';
         }
     ?>
 
@@ -21,26 +21,13 @@
     <?php foreach($stories as $i => $story) : ?>
         <div class="item">
             <?php
-                if(!empty($story['image'])) {
-                    printf('<img class="item__image" src="%s" alt="">', esc_url($story['image']));
-                }
-
-
-                printf('<textarea data-form="text" class="item__text" name="%1$s">%2$s</textarea>',
-                    $this->meta . '-stories[][text]',
-                    $story['text'] ?? ''
-                );
-
-
-                printf('<input data-form="image" type="hidden" name="%s" value="%s">',
-                    $this->meta . '-stories[][image]',
-                    $story['image'] ?? ''
+                printf('<textarea class="item__text" name="%1$s">%2$s</textarea>',
+                    $this->meta . '-stories[]', $story
                 );
             ?>
 
             <div class="item__field">
                 <span class="item__field-drag"></span>
-                <span class="item__field-image" title="<?php _e('Добавить изображение', 'knife-theme'); ?>"></span>
                 <span class="item__field-trash" title="<?php _e('Удалить слайд', 'knife-theme'); ?>"></span>
             </div>
         </div>
@@ -61,7 +48,7 @@
                 <figcaption class="option__background-blank"><?php _e('Выбрать изображение', 'knife-theme'); ?></figcaption>
 
                 <?php
-                    printf('<input data-form="background" type="hidden" name="%s" value="%s">',
+                    printf('<input class="option__background-input" type="hidden" name="%s" value="%s">',
                         $this->meta . '-background',
                         $options['background']
                     );

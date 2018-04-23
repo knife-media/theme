@@ -257,26 +257,10 @@ class Knife_Story_Manager {
         // delete stories post meta to create it again below
         delete_post_meta($post_id, $query);
 
-        foreach($_REQUEST[$query] as $args) {
-            foreach($args as $key => $value) {
-                if(isset($meta[$i]) && array_key_exists($key, $meta[$i]))
-                    $i++;
+        foreach($_REQUEST[$query] as $item) {
+            if(!current_user_can('unfiltered_html'))
+                $item = wp_kses_post($item);
 
-                if(empty($value))
-                    continue;
-
-                switch($key) {
-                    case 'image':
-                        $value = esc_url($value);
-
-                        break;
-                }
-
-                $meta[$i][$key] = $value;
-            }
-        }
-
-        foreach($meta as $key => $item) {
             add_post_meta($post_id, $query, $item);
         }
     }

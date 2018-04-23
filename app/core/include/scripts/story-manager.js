@@ -11,7 +11,7 @@ jQuery(document).ready(function($) {
     box.sortable({
         items: '.item',
         handle: '.item__field-drag',
-        placeholder: 'dump'
+        placeholder: 'dump',
     }).disableSelection();
 
 
@@ -19,13 +19,7 @@ jQuery(document).ready(function($) {
     var clear = function() {
         var item = box.find('.item').first().clone()
 
-        $.each(['image', 'text'], function(i, cl) {
-            var match = '[data-form="' + cl + '"]';
-
-            item.find(match).val('');
-        });
-
-        item.find('.item__image').remove();
+        item.find('.item__text').val('');
 
         return item;
     }
@@ -37,17 +31,24 @@ jQuery(document).ready(function($) {
 
     // create wp.editor using item element
     var editor = function(el) {
-        var id  = 'knife-story-text-' + box.data('items');
+        var text = el.find('.item__text');
+        var edit = text.attr('id');
 
-        el.find('[data-form="text"]').attr('id', id);
+        if(typeof edit === 'undefined') {
+            edit = 'knife-story-text-' + box.data('items');
+            text.attr('id', edit);
 
-        wp.editor.initialize(id, {
+            box.data().items++;
+        }
+        else {
+            wp.editor.remove(edit);
+        }
+
+        wp.editor.initialize(edit, {
             tinymce: true,
             quicktags: true,
             mediaButtons: true
         });
-
-        return box.data().items++;
     }
 
 
@@ -60,19 +61,18 @@ jQuery(document).ready(function($) {
 
 
     // display image
-    var display = function(parent, link, cl, form) {
-        match = '[data-form="' + form + '"]';
-        image = '.' + cl;
+    var display = function(parent, link) {
+        var image = 'option__background-image';
 
         // set image url to hidden input
-        parent.find(match).val(link);
+        parent.find('.option__background-input').val(link);
 
         // change src if image already exists
-        if(parent.find(image).length > 0)
-            return parent.find(image).attr('src', link);
+        if(parent.find('.' + image).length > 0)
+            return parent.find('.' + image).attr('src', link);
 
         // otherwise create new image
-        var showcase = $('<img />', {class: cl, src: link});
+        var showcase = $('<img />', {class: image, src: link});
 
         return showcase.prependTo(parent);
     }
@@ -113,29 +113,6 @@ jQuery(document).ready(function($) {
     });
 
 
-    // add item image
-    box.on('click', '.item__field-image', function(e) {
-        e.preventDefault();
-
-        var item = $(this).closest('.item');
-
-        // open default wp.media image frame
-        var frame = wp.media({
-            title: knife_story_manager.choose,
-            multiple: false
-        });
-
-        // on image select
-        frame.on('select', function() {
-            var attachment = frame.state().get('selection').first().toJSON();
-
-            display(item, attachment.url, 'item__image', 'image');
-        });
-
-        return frame.open();
-    });
-
-
     // add story background
     box.on('click', '.option__background', function(e) {
         e.preventDefault();
@@ -151,7 +128,7 @@ jQuery(document).ready(function($) {
             var attachment = frame.state().get('selection').first().toJSON();
             var background = box.find('.option__background');
 
-            display(background, attachment.url, 'option__background-image', 'background');
+            display(background, attachment.url);
 
             // set shadow on image creation
             box.find('.option__range').trigger('change');
@@ -170,6 +147,12 @@ jQuery(document).ready(function($) {
             return dimmer(blank, 'option__background-blank--error');
 
         blank.css('background-color', 'rgba(0, 0, 0, ' + shade + ')');
+    });
+
+
+    // reinit wp editor on drag
+    box.on("sortstop", function(event, ui) {
+        return editor(ui.item);
     });
 
 
