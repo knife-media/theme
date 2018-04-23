@@ -119,12 +119,17 @@ class Knife_Story_Manager {
         $post_id = get_the_ID();
 
         $options = [];
+        $stories = get_post_meta($post_id, $this->meta . "-stories");
 
         foreach(['background', 'shadow', 'effect'] as $item) {
             $options[$item] = get_post_meta($post_id, $this->meta . "-{$item}", true);
         }
 
-		wp_localize_script('knife-theme', 'knife_story_meta', $options);
+        // add stories options object
+		wp_localize_script('knife-theme', 'knife_story_options', $options);
+
+        // add stories items
+		wp_localize_script('knife-theme', 'knife_story_stories', $stories);
 	}
 
 

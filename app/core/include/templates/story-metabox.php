@@ -75,7 +75,7 @@
                     <?php
                         $effects = [
                             'parallax' => __('Параллакс', 'knife-theme'),
-                            'progress' => __('Прогресс', 'knife-theme'),
+                            'flip' => __('Переворот', 'knife-theme'),
                             'coube' => __('Кубический', 'knife-theme')
                         ];
 

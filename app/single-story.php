@@ -37,6 +37,7 @@ get_header(); ?>
                     </div>
 
                 </div>
+
             </div>
         </div>
 
@@ -45,7 +46,10 @@ get_header(); ?>
     <div class="content block">
 
     <?php
-        $q = new WP_Query(['post_type' => 'story']);
+        $q = new WP_Query([
+            'post_type' => 'story',
+            'posts_per_page' => 16
+        ]);
 
         if($q->have_posts()) :
 
