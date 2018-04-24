@@ -107,14 +107,6 @@
     overflow: hidden;
   }
 
-  .swiper-pagination-progressbar {
-    height: 5px;
-
-    .swiper-pagination-progressbar-fill {
-      background: $color-selection;
-    }
-  }
-
   .swiper-pagination-bullets {
     display: flex;
     align-items: center;
@@ -122,17 +114,49 @@
     bottom: 1rem;
 
     .swiper-pagination-bullet {
-      height: .5rem;
-      width: .5rem;
+      height: .375rem;
+      width: .375rem;
       margin: 0 .75rem;
 
       opacity: 1;
       background: $color-white;
 
       &.swiper-pagination-bullet-active {
-        height: .875rem;
-        width: .875rem;
+        height: .75rem;
+        width: .75rem;
       }
     }
+  }
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    outline: none;
+
+    height: 100%;
+    width: calc((100% - #{$site-width}) / 2);
+    min-width: 4rem;
+    margin: 0;
+
+    font-size: 2rem;
+    background-size: 1.25rem;
+
+    transition: opacity .25s;
+
+    &.swiper-button-disabled {
+      display: none;
+    }
+  }
+
+  .swiper-button-next {
+    right: 0;
+  }
+
+  .swiper-button-prev {
+    left: 0;
   }
 }

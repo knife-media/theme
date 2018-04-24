@@ -20,8 +20,9 @@
     image.classList.add('slider__background');
     image.style.backgroundImage = 'url(' + knife_story_options.background + ')';
 
-    image.setAttribute('data-swiper-parallax', '-20%');
-    image.style.width = '140%';
+    image.setAttribute('data-swiper-parallax', '-5%');
+    image.setAttribute('data-swiper-parallax-duration', '1000');
+    image.style.width = '110%';
 
     element.appendChild(image);
 
@@ -40,10 +41,41 @@
     image.appendChild(shadow);
   }
 
-var pag = document.createElement('div');
-    pag.classList.add('swiper-pagination');
 
-    slider.appendChild(pag);
+  // Create navigation
+  var createNavigation = function() {
+    // Create next button
+    var next = document.createElement('div');
+    next.classList.add('swiper-button-next');
+
+    slider.appendChild(next);
+
+    // Create prev button
+    var prev = document.createElement('div');
+    prev.classList.add('swiper-button-prev');
+
+    slider.appendChild(prev);
+
+    return {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev'
+    }
+  }
+
+
+  // Create pagination
+  var createPagination = function() {
+    // Create pagination element
+    var bullets = document.createElement('div');
+    bullets.classList.add('swiper-pagination');
+
+    slider.appendChild(bullets);
+
+    return {
+      el: '.swiper-pagination',
+      type: 'bullets'
+    }
+  }
 
 
 
@@ -53,22 +85,26 @@ var pag = document.createElement('div');
 
 	var swiper = new Swiper('.swiper-container', {
     effect: 'slide',
+    speed: 600,
 		parallax: true,
 			hashNavigation: {
 			  watchState: true,
 			},
-		pagination: {
-			el: '.swiper-pagination',
-			type: 'bullets',
-		},
-		navigation: {
-			nextEl: '.swiper-button-next',
-			prevEl: '.swiper-button-prev',
-		},
+		pagination: createPagination(),
+    navigation:createNavigation(),
+    keyboard: true,
         on: {
             init: function () {
                 console.log('swiper initialized');
             },
+          touchStart: function() {
+            document.querySelector('.swiper-button-next').style.opacity = 0;
+          },
+          touchEnd: function() {
+          document.querySelector('.swiper-button-next').style.opacity = 1;
+
+          }
+
         }
 	});
 
@@ -78,6 +114,7 @@ var pag = document.createElement('div');
     var slide = document.createElement('div');
     slide.classList.add('swiper-slide');
     slide.innerHTML = '<div class="slider__item block">' + knife_story_stories[i] + '</div>';
+    slide.setAttribute('data-hash', 'slider-' + i);
 
     swiper.appendSlide(slide);
 //    setBackground(slide);

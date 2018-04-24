@@ -266,6 +266,9 @@ class Knife_Story_Manager {
             if(!current_user_can('unfiltered_html'))
                 $item = wp_kses_post($item);
 
+            if(strlen($item) === 0)
+                continue;
+
             add_post_meta($post_id, $query, $item);
         }
     }

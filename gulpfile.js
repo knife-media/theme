@@ -4,9 +4,7 @@ var concat   = require('gulp-concat');
 var minifyCss  = require('gulp-minify-css');
 var uglify   = require('gulp-uglify');
 var plumber  = require('gulp-plumber');
-var flatten  = require('gulp-flatten');
 var prefix   = require('gulp-autoprefixer');
-var order    = require('gulp-order');
 
 var path = {
   source: 'src/',
@@ -22,7 +20,7 @@ gulp.task('styles', function() {
     .pipe(minifyCss({compatibility: 'ie8'}))
     .pipe(gulp.dest(path.assets))
 
-  gulp.src([path.source + '/styles/vendor/*.css'])
+  gulp.src([path.source + '/styles/vendor/*.min.css'])
     .pipe(gulp.dest(path.assets + '/styles/'));
 })
 
@@ -33,7 +31,7 @@ gulp.task('scripts', function() {
     .pipe(concat('scripts.min.js'))
     .pipe(gulp.dest(path.assets))
 
-  gulp.src([path.source + '/scripts/vendor/*.js'])
+  gulp.src([path.source + '/scripts/vendor/*.min.js'])
     .pipe(gulp.dest(path.assets + '/scripts/'));
 })
 
