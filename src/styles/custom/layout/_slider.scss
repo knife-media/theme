@@ -33,10 +33,11 @@
     position: relative;
     cursor: default;
 
+    width: 100%;
     height: 100%;
     padding-top: 4rem;
-    padding-bottom: 2rem;
-    padding-right: 40%;
+    padding-bottom: 4rem;
+    padding-right: $site-width / 2;
 
     .slider__item-meta {
       position: absolute;
@@ -95,6 +96,29 @@
         font-size: 1rem;
       }
     }
+
+    .slider__item-content {
+      display: flex;
+      flex-flow: column wrap;
+      justify-content: center;
+      align-items: flex-start;
+
+      width: 100%;
+      height: 100%;
+    }
+
+    @media screen and (max-width: 1365px) {
+      width: $site-width / 2;
+      max-width: 100%;
+
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    @media screen and (max-width: 768px) {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
   }
 
   .swiper-slide {
@@ -138,25 +162,51 @@
     outline: none;
 
     height: 100%;
-    width: calc((100% - #{$site-width}) / 2);
     min-width: 4rem;
     margin: 0;
+    opacity: .5;
 
     font-size: 2rem;
     background-size: 1.25rem;
 
     transition: opacity .25s;
 
+    &:hover {
+      opacity: 1;
+    }
+
+    &.swiper-button-hidden {
+      opacity: 0;
+    }
+
     &.swiper-button-disabled {
+      display: none;
+    }
+
+    @media screen and (max-width: 768px) {
       display: none;
     }
   }
 
   .swiper-button-next {
     right: 0;
+
+    width: 50%;
+    background-position: right 2rem center;
+
+
+    &:after {
+      content: "";
+      display: flex;
+
+      width: 200%;
+    }
   }
 
   .swiper-button-prev {
     left: 0;
+
+    width: calc((100% - #{$site-width}) / 2);
+    background-position: 2rem center;
   }
 }

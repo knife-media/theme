@@ -20,9 +20,6 @@
     image.classList.add('slider__background');
     image.style.backgroundImage = 'url(' + knife_story_options.background + ')';
 
-    image.setAttribute('data-swiper-parallax', '-5%');
-    image.setAttribute('data-swiper-parallax-duration', '1000');
-    image.style.width = '110%';
 
     element.appendChild(image);
 
@@ -78,43 +75,47 @@
   }
 
 
+  // Create slider
+  var createSlider = function() {
+    var args = {
+      keyboard: true,
+      simulateTouch: false,
+      speed: 400,
+      parallax: true,
+      updateOnImagesReady: true,
+      pagination: createPagination(),
+      navigation: createNavigation()
+    }
+    console.log(args);
+
+    return new Swiper('.slider', args);
+  }
+
+  var swiper = createSlider();
+
+  swiper.on('touchStart', function() {
+    document.querySelector('.swiper-button-next').classList.add('swiper-button-hidden');
+    document.querySelector('.swiper-button-prev').classList.add('swiper-button-hidden');
+  });
+
+  swiper.on('touchEnd', function() {
+    document.querySelector('.swiper-button-next').classList.remove('swiper-button-hidden');
+    document.querySelector('.swiper-button-prev').classList.remove('swiper-button-hidden');
+  });
 
     slider.style.opacity = 1;
 
+
+
+
   setBackground(slider);
 
-	var swiper = new Swiper('.swiper-container', {
-    effect: 'slide',
-    speed: 600,
-		parallax: true,
-			hashNavigation: {
-			  watchState: true,
-			},
-		pagination: createPagination(),
-    navigation:createNavigation(),
-    keyboard: true,
-        on: {
-            init: function () {
-                console.log('swiper initialized');
-            },
-          touchStart: function() {
-            document.querySelector('.swiper-button-next').style.opacity = 0;
-          },
-          touchEnd: function() {
-          document.querySelector('.swiper-button-next').style.opacity = 1;
-
-          }
-
-        }
-	});
 
   for(var i = 0; i < knife_story_stories.length; i++) {
-    console.log(1);
 
     var slide = document.createElement('div');
     slide.classList.add('swiper-slide');
-    slide.innerHTML = '<div class="slider__item block">' + knife_story_stories[i] + '</div>';
-    slide.setAttribute('data-hash', 'slider-' + i);
+    slide.innerHTML = '<div class="slider__item block"><div class="slider__item-content custom">' + knife_story_stories[i] + '</div></div>';
 
     swiper.appendSlide(slide);
 //    setBackground(slide);
