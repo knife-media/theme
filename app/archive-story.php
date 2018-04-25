@@ -12,34 +12,34 @@ get_header(); ?>
 
 <main class="wrap">
 
-	<div class="content block">
+    <div class="content block">
 <?php
-	if(have_posts()) :
+    if(have_posts()) :
 
-		while (have_posts()) : the_post();
+        while (have_posts()) : the_post();
 
-			knife_theme_widget_template([
-				'size' => 'story',
-				'before' => '<div class="widget widget-%s">',
-				'after' => '</div>'
-			]);
+            knife_theme_widget_template([
+                'size' => 'story',
+                'before' => '<div class="widget widget-%s">',
+                'after' => '</div>'
+            ]);
 
-		endwhile;
+        endwhile;
 
-	else:
+    else:
 
-		// Include "no posts found" template
-		get_template_part('template-parts/content/post', 'none');
+        // Include "no posts found" template
+        get_template_part('template-parts/content/post', 'none');
 
-	endif;
+    endif;
 ?>
-	</div>
+    </div>
 
 
-<?php if(have_posts()) : ?>
-	<div class="nav nav--logbook block">
-		<?php next_posts_link(__('Больше новостей', 'knife-theme')); ?>
-	</div>
+<?php if(get_next_posts_link()) : ?>
+    <div class="nav block">
+        <?php next_posts_link(__('Больше историй', 'knife-theme')); ?>
+    </div>
 <?php endif; ?>
 
 </main>

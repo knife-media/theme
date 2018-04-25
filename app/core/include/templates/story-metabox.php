@@ -75,8 +75,7 @@
                     <?php
                         $effects = [
                             'parallax' => __('Параллакс', 'knife-theme'),
-                            'flip' => __('Переворот', 'knife-theme'),
-                            'coube' => __('Кубический', 'knife-theme')
+                            'default' => __('Слайдер', 'knife-theme')
                         ];
 
                         foreach($effects as $value => $title) {

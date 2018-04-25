@@ -1,6 +1,6 @@
 <?php
 /**
- * Single story
+ * Single story template
  *
  * @package knife-theme
  * @since 1.3
@@ -42,17 +42,18 @@ get_header(); ?>
 
     </div>
 
-    <div class="content block">
-
     <?php
-        $q = new WP_Query([
+        $query = new WP_Query([
             'post_type' => 'story',
-            'posts_per_page' => 16
+            'posts_per_page' => 4
         ]);
+    ?>
 
-        if($q->have_posts()) :
+    <div class="content block">
+    <?php
+        if($query->have_posts()) :
 
-            while ($q->have_posts()) : $q->the_post();
+            while ($query->have_posts()) : $query->the_post();
 
                 knife_theme_widget_template([
                     'size' => 'story',
@@ -64,8 +65,17 @@ get_header(); ?>
 
         endif;
     ?>
-
     </div>
+
+    <?php
+        if($query->have_posts()) :
+
+          printf('<div class="nav block"><a class="button" href="%2$s">%1$s</a></div>',
+            __('Все истории', 'knife-theme'),
+            esc_url(get_post_type_archive_link('story'))
+          );
+        endif;
+    ?>
 
 </main>
 

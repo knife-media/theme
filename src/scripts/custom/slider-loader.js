@@ -20,27 +20,29 @@
     image.classList.add('slider__background');
     image.style.backgroundImage = 'url(' + knife_story_options.background + ')';
 
-
     element.appendChild(image);
 
     if(typeof knife_story_options.shadow === 'undefined')
-      return false;
+      return image;
 
     var alpha = parseInt(knife_story_options.shadow) / 100;
 
     if(alpha <= 0 || alpha > 1)
-      return false;
+      return image;
 
     var shadow = document.createElement('div');
     shadow.classList.add('slider__shadow');
     shadow.style.backgroundColor = 'rgba(0, 0, 0, ' + alpha + ')';
 
     image.appendChild(shadow);
+
+    return image;
   }
 
 
   // Create navigation
   var createNavigation = function() {
+
     // Create next button
     var next = document.createElement('div');
     next.classList.add('swiper-button-next');
@@ -62,6 +64,7 @@
 
   // Create pagination
   var createPagination = function() {
+
     // Create pagination element
     var bullets = document.createElement('div');
     bullets.classList.add('swiper-pagination');
@@ -75,50 +78,74 @@
   }
 
 
-  // Create slider
-  var createSlider = function() {
-    var args = {
-      keyboard: true,
-      simulateTouch: false,
-      speed: 400,
-      parallax: true,
-      updateOnImagesReady: true,
-      pagination: createPagination(),
-      navigation: createNavigation()
+  // Insert stories to slider
+  var insertStories = function() {
+    if(typeof knife_story_stories === 'undefined' || knife_story_stories.length < 1)
+      return false;
+
+    for(var i = 0; i < knife_story_stories.length; i++) {
+      var slide = document.createElement('div');
+      slide.classList.add('swiper-slide');
+
+      var item = document.createElement('div');
+      item.classList.add('slider__item', 'block');
+      slide.appendChild(item);
+
+      var content = document.createElement('div');
+      content.classList.add('slider__item-content', 'custom');
+      content.innerHTML = knife_story_stories[i];
+      item.appendChild(content);
+
+      swiper.appendSlide(slide);
     }
-    console.log(args);
-
-    return new Swiper('.slider', args);
   }
 
-  var swiper = createSlider();
 
-  swiper.on('touchStart', function() {
-    document.querySelector('.swiper-button-next').classList.add('swiper-button-hidden');
-    document.querySelector('.swiper-button-prev').classList.add('swiper-button-hidden');
-  });
+  // Apply effects using options
+  var applyEffects = function(args) {
 
-  swiper.on('touchEnd', function() {
-    document.querySelector('.swiper-button-next').classList.remove('swiper-button-hidden');
-    document.querySelector('.swiper-button-prev').classList.remove('swiper-button-hidden');
-  });
+    // Set background image
+    var background = setBackground(slider);
 
-    slider.style.opacity = 1;
+    if(typeof knife_story_options.effect === 'undefined' || !background)
+      return args;
 
+    switch(knife_story_options.effect) {
+      case 'parallax':
 
+        background.style.width = 'calc(100% + 200px)';
+        background.setAttribute('data-swiper-parallax-x', '-200');
+        background.setAttribute('data-swiper-parallax-duration', 700);
 
+        break;
+    }
 
-  setBackground(slider);
-
-
-  for(var i = 0; i < knife_story_stories.length; i++) {
-
-    var slide = document.createElement('div');
-    slide.classList.add('swiper-slide');
-    slide.innerHTML = '<div class="slider__item block"><div class="slider__item-content custom">' + knife_story_stories[i] + '</div></div>';
-
-    swiper.appendSlide(slide);
-//    setBackground(slide);
+    return args;
   }
 
+
+  // Set swiper options
+  var setOptions = function() {
+    var args = {};
+
+    // Allow keyboard shortcuts
+    args.keyboard = true;
+
+    // Slider speed
+    args.speed = 400;
+
+    // Get paginations elements
+    args.pagination = createPagination();
+
+    // Get navigation element
+    args.navigation = createNavigation();
+
+    return applyEffects(args);
+  }
+
+
+  // Create slider
+  var swiper = new Swiper('.slider', setOptions());
+
+  return insertStories();
 })();
