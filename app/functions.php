@@ -73,12 +73,13 @@ add_action('after_setup_theme', function(){
     set_post_thumbnail_size(300, 300, true);
 
     add_image_size('outer', 1024, 9999, false);
-     add_image_size('inner', 640, 9999, false);
+    add_image_size('inner', 640, 9999, false);
+    add_image_size('short', 620, 450, false);
 
+    add_image_size('ground', 1600, 900, true);
     add_image_size('triple', 480, 360, true);
     add_image_size('double', 640, 480, true);
     add_image_size('single', 1280, 360, true);
-    add_image_size('quatro', 480, 480, true);
 });
 
 
@@ -91,12 +92,13 @@ add_filter('max_srcset_image_width', function($width) {
 add_filter('image_size_names_choose', function($size_names) {
     global $_wp_additional_image_sizes;
 
-    $size_names = array(
+    $size_names = [
         'outer' => __('На всю ширину', 'knife-theme'),
         'inner' => __('По ширине текста', 'knife-theme'),
         'full'  => __('Исходный размер', 'knife-theme'),
+        'short' => __('Обрезанный по высоте', 'knife-theme'),
         'thumbnail' => __('Миниатюра', 'knife-theme')
-    );
+    ];
 
     return $size_names;
 });

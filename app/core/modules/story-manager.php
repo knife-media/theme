@@ -50,11 +50,14 @@ class Knife_Story_Manager {
         // insert vendor scripts and styles
         add_action('wp_enqueue_scripts', [$this, 'enqueue_assets'], 9);
 
-		// include swiper options
-		add_action('wp_enqueue_scripts', [$this, 'inject_object'], 12);
+        // include swiper options
+        add_action('wp_enqueue_scripts', [$this, 'inject_object'], 12);
 
         // add lead to story admin page
         add_filter('knife_lead_screen', [$this, 'add_lead']);
+
+        // change image sizes select for stories
+        add_filter('image_size_names_choose', [$this, 'update_images'], 12);
     }
 
 
@@ -110,9 +113,9 @@ class Knife_Story_Manager {
 
 
     /**
-	 * Include swiper story meta options
-	 */
-	public function inject_object() {
+     * Include swiper story meta options
+     */
+    public function inject_object() {
         if(!is_singular($this->slug))
             return;
 
@@ -126,11 +129,11 @@ class Knife_Story_Manager {
         }
 
         // add stories options object
-		wp_localize_script('knife-theme', 'knife_story_options', $options);
+        wp_localize_script('knife-theme', 'knife_story_options', $options);
 
         // add stories items
-		wp_localize_script('knife-theme', 'knife_story_stories', $stories);
-	}
+        wp_localize_script('knife-theme', 'knife_story_stories', $stories);
+    }
 
 
     /**
@@ -140,6 +143,23 @@ class Knife_Story_Manager {
         $types[] = $this->slug;
 
         return $types;
+    }
+
+
+    /**
+     * Change image sizes select for stories
+     */
+    public function update_images($size_names) {
+        global $typenow;
+
+        if($typenow === $this->slug) {
+            $size_names = [
+              'full'  => __('Исходный размер', 'knife-theme'),
+              'short' => __('Обрезанный по высоте', 'knife-theme')
+            ];
+        }
+
+        return $size_names;
     }
 
 

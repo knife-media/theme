@@ -47,7 +47,8 @@ jQuery(document).ready(function($) {
         wp.editor.initialize(edit, {
             tinymce: true,
             quicktags: true,
-            mediaButtons: true
+            mediaButtons: true,
+            tinymce: {toolbar1: 'formatselect,bold,italic,bullist,numlist,link'}
         });
     }
 

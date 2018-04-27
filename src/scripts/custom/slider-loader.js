@@ -1,9 +1,9 @@
 (function() {
-	var slider = document.querySelector('.slider');
+  var slider = document.querySelector('.slider');
 
-	// Check if Swiper object exists
-	if(typeof Swiper === 'undefined')
-		return false;
+  // Check if Swiper object exists
+  if(typeof Swiper === 'undefined')
+    return false;
 
 
   // Check slider element and options meta
@@ -139,6 +139,9 @@
 
     // Get navigation element
     args.navigation = createNavigation();
+
+    // add simulate touch only on small screen
+    args.simulateTouch = (window.innerWidth < 768);
 
     return applyEffects(args);
   }
