@@ -1,63 +1,66 @@
 (function() {
-    var menu = document.getElementById('toggle-menu');
-	var search = document.getElementById('toggle-search');
+  var menu = document.getElementById('toggle-menu');
+  var search = document.getElementById('toggle-search');
 
-	// Toggle menu bar
-	menu.addEventListener('click', function(e) {
-		e.preventDefault();
+  if(menu === null || search === null)
+    return false;
 
-		if(document.querySelector('.search').classList.contains('search--expand'))
-			search.click();
+  // Toggle menu bar
+  menu.addEventListener('click', function(e) {
+    e.preventDefault();
 
-		document.querySelector('.topline__menu').classList.toggle('topline__menu--expand');
+    if(document.querySelector('.search').classList.contains('search--expand'))
+      search.click();
 
-		return this.classList.toggle('toggle--expand');
-	});
+    document.querySelector('.topline__menu').classList.toggle('topline__menu--expand');
 
-
-	// Toggle search popup
-	search.addEventListener('click', function(e) {
-		e.preventDefault();
-
-		var input = document.getElementById('search-input');
-
-        // close menu if opened
- 		if(document.querySelector('.topline__menu').classList.contains('topline__menu--expand'))
-			menu.click();
-
-        // blur search input
- 		input.blur();
-
-        // if user opens search forn
-		if(!document.querySelector('.search').classList.contains('search--expand')) {
-            var offset = document.querySelector('.header').offsetTop - window.pageYOffset;
-
-            // avoid banner size
-            if(offset > 0)
-                document.querySelector('.search').style.paddingTop = offset +'px';
-
-            // focus search input
-			input.focus();
-        }
-
-        document.querySelector('.search').classList.toggle('search--expand');
-        document.body.classList.toggle('body--search');
-
-		return this.classList.toggle('toggle--expand');
-	});
+    return this.classList.toggle('toggle--expand');
+  });
 
 
-	// Close menu and search on ESC
-	window.addEventListener('keydown', function(e) {
-		e = e || window.event;
+  // Toggle search bar
+  search.addEventListener('click', function(e) {
+    e.preventDefault();
 
-		if(e.keyCode !== 27)
-			return false;
+    var input = document.getElementById('search-input');
 
-		if(document.querySelector('.search').classList.contains('search--expand'))
-			search.click();
+    // close menu if opened
+    if(document.querySelector('.topline__menu').classList.contains('topline__menu--expand'))
+      menu.click();
 
- 		if(document.querySelector('.topline__menu').classList.contains('topline__menu--expand'))
-			menu.click();
-	}, true);
+    // blur search input
+    input.blur();
+
+    // if user opens search forn
+    if(!document.querySelector('.search').classList.contains('search--expand')) {
+      var offset = document.querySelector('.header').offsetTop - window.pageYOffset;
+
+      // avoid banner size
+      if(offset > 0)
+        document.querySelector('.search').style.paddingTop = offset +'px';
+
+      // focus search input
+      input.focus();
+    }
+
+    document.querySelector('.search').classList.toggle('search--expand');
+    document.body.classList.toggle('body--search');
+
+    return this.classList.toggle('toggle--expand');
+  });
+
+
+  // Close menu and search on ESC
+  window.addEventListener('keydown', function(e) {
+    e = e || window.event;
+
+    if(e.keyCode !== 27)
+      return false;
+
+    if(document.querySelector('.search').classList.contains('search--expand'))
+      search.click();
+
+    if(document.querySelector('.topline__menu').classList.contains('topline__menu--expand'))
+      menu.click();
+  }, true);
 })();
