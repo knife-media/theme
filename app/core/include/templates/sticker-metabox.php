@@ -1,4 +1,4 @@
-<div id="knife-sticker-box" data-ajaxurl='<?php echo admin_url('admin-ajax.php') ?>' data-post="<?php echo get_the_ID() ?>">
+<div id="knife-sticker-box" data-ajaxurl="<?php echo admin_url('admin-ajax.php') ?>" data-post="<?php echo get_the_ID() ?>">
 	<?php $sticker = get_post_meta(get_the_ID(), $this->meta, true); ?>
 
 	<?php if($sticker) : ?>

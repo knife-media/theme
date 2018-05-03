@@ -12,7 +12,7 @@
 
   .post__header {
     display: flex;
-		flex-flow: column wrap;
+    flex-flow: column wrap;
     position: relative;
 
     width: 100%;
@@ -98,7 +98,7 @@
 
     .post__footer-nav {
       .refers__link:first-child {
-        margin-right: auto;
+      margin-right: auto;
       }
     }
 
@@ -172,32 +172,32 @@
   }
 
   .post__card {
-		width: 100%;
-		max-width: 100%;
-		margin: 0 0 1rem;
-		padding: 1.5rem 2rem;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 0 1rem;
+    padding: 1.5rem 2rem;
 
-		background-color: $color-white;
+    background-color: $color-white;
 
     & > *:first-child {
       margin-top: 0;
     }
 
-		.post__header-share {
-			margin-bottom: 0;
-		}
+    .post__header-share {
+      margin-bottom: 0;
+    }
 
     .post__footer-share {
       margin: 0 -1rem;
       padding-left: 1rem;
       padding-right: 1rem;
-		}
+    }
 
     .post__footer-tags {
       margin: 1rem -1rem 0;
       padding-left: 1rem;
       padding-right: 1rem;
-		}
+    }
 
     .figure--outer {
       width: calc(100% + 4rem);
@@ -225,7 +225,7 @@
 
   &.post--chat {
     flex: 0 1 44rem;
-  	align-items: center;
+    align-items: center;
 
     margin-left: auto;
     margin-right: auto;

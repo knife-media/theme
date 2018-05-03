@@ -10,25 +10,25 @@ get_header(); ?>
 
 <main class="wrap">
 
-	<div class="content block">
+    <div class="content block">
 <?php
-	if (have_posts()) :
+    if (have_posts()) :
 
-		while (have_posts()) : the_post();
+        while (have_posts()) : the_post();
 
-			// Include specific content template
-			get_template_part('template-parts/content/post', 'page');
+            // Include specific content template
+            get_template_part('template-parts/content/post', 'page');
 
-		endwhile;
+        endwhile;
 
-	else:
+    else:
 
-		// Include "no posts found" template
-		get_template_part('template-parts/content/post', 'none');
+        // Include "no posts found" template
+        get_template_part('template-parts/content/post', 'none');
 
-	endif;
+    endif;
 ?>
-	</div>
+    </div>
 
 </main>
 

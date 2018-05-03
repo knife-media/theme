@@ -10,14 +10,14 @@ get_header(); ?>
 
 <main class="wrap">
 
-	<div class="content block">
+    <div class="content block">
 
-	<?php
-		// Include "no posts found" template
-		get_template_part('template-parts/content/post', 'none');
-	?>
+    <?php
+        // Include "no posts found" template
+        get_template_part('template-parts/content/post', 'none');
+    ?>
 
-	</div>
+    </div>
 
 </main>
 

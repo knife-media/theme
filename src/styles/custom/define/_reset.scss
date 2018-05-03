@@ -53,3 +53,38 @@ table {
 a {
   outline: none;
 }
+
+.screen-reader-text {
+  position: absolute !important;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+
+  overflow: hidden;
+  word-wrap: normal !important;
+
+  border: 0;
+}
+
+.screen-reader-text:focus {
+  display: block;
+  top: 5px;
+  left: 5px;
+  z-index: 100000;
+  clip: auto !important;
+  clip-path: none;
+
+  width: auto;
+  height: auto;
+  padding: 15px 23px 14px;
+
+  color: #444;
+  font-size: 1rem;
+  line-height: normal;
+  text-decoration: none;
+  background-color: #eee;
+}

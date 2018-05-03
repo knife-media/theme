@@ -19,6 +19,8 @@ new Knife_Post_Tagline;
 class Knife_Post_Tagline {
 	private $meta = '_knife-tagline';
 
+    private $type = ['post', 'story'];
+
 	public function __construct() {
 		add_action('admin_enqueue_scripts', [$this, 'add_assets']);
 		add_action('save_post', [$this, 'save_meta']);
@@ -40,7 +42,7 @@ class Knife_Post_Tagline {
 
 		$post_id = get_the_ID();
 
-		if(get_post_type($post_id) !== 'post')
+        if(!in_array(get_post_type($post_id), $this->type))
 			return;
 
 		$version = wp_get_theme()->get('Version');
@@ -57,7 +59,7 @@ class Knife_Post_Tagline {
 	public function print_input() {
 		$post_id = get_the_ID();
 
-		if (get_post_type($post_id) !== 'post')
+        if(!in_array(get_post_type($post_id), $this->type))
 			return;
 
 		$tagline = get_post_meta($post_id, $this->meta, true);
@@ -114,7 +116,7 @@ class Knife_Post_Tagline {
 	 * Save post options
 	 */
 	public function save_meta($post_id) {
-		if(get_post_type($post_id) !== 'post')
+        if(!in_array(get_post_type($post_id), $this->type))
 			return;
 
 		if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)

@@ -1,21 +1,16 @@
 <?php
 /**
- * The template for displaying archive pages
+ * Stories archive
+ *
+ * Shows only story post type archive
  *
  * @package knife-theme
- * @since 1.1
+ * @since 1.3
  */
 
 get_header(); ?>
 
 <main class="wrap">
-
-<?php if(have_posts()) : ?>
-    <div class="caption block">
-         <h1 class="caption__title caption__title--category"><?php the_archive_title(); ?></h1>
-    </div>
-<?php endif; ?>
-
 
     <div class="content block">
 <?php
@@ -24,6 +19,7 @@ get_header(); ?>
         while (have_posts()) : the_post();
 
             knife_theme_widget_template([
+                'size' => 'story',
                 'before' => '<div class="widget widget-%s">',
                 'after' => '</div>'
             ]);
@@ -40,9 +36,9 @@ get_header(); ?>
     </div>
 
 
-<?php if(have_posts()) : ?>
+<?php if(get_next_posts_link()) : ?>
     <div class="nav block">
-        <?php next_posts_link(__('Больше статей', 'knife-theme')); ?>
+        <?php next_posts_link(__('Больше историй', 'knife-theme')); ?>
     </div>
 <?php endif; ?>
 

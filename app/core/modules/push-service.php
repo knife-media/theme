@@ -35,6 +35,9 @@ class Knife_Push_Service {
 
 		// ajax handler
 		add_action('wp_ajax_knife_push_send', [$this, 'send_push']);
+
+        // inject push template
+        add_action('wp_footer', [$this, 'inject_template']);
 	}
 
 
@@ -68,6 +71,23 @@ class Knife_Push_Service {
 
 		wp_localize_script('knife-theme', 'knife_push_id', $opts['appid']);
 	}
+
+
+    /**
+     * Inject push template to footer
+     *
+     * @since 1.3
+     */
+    public function inject_template() {
+	    $opts = get_option($this->option);
+
+		if(empty($opts['appid']))
+			return false;
+
+        $include = get_template_directory() . '/core/include';
+
+  		include_once($include . '/templates/push-template.php');
+    }
 
 
 	/**

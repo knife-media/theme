@@ -1,7 +1,3 @@
-// Import wordpress generated styles
-// https://codex.wordpress.org/CSS
-@import "vendor/wordpress";
-
 @import "define/reset";
 @import "define/setup";
 
@@ -32,6 +28,7 @@
 @import "layout/widget";
 @import "layout/search";
 @import "layout/push";
+@import "layout/slider";
 
 @import "widgets/triple";
 @import "widgets/double";
@@ -40,6 +37,7 @@
 @import "widgets/feature";
 @import "widgets/details";
 @import "widgets/recent";
+@import "widgets/story";
 @import "widgets/text";
 @import "widgets/script";
 @import "widgets/transparent";

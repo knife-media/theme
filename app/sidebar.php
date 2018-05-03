@@ -11,6 +11,6 @@
 
 <?php if(is_active_sidebar('knife-inner-sidebar')) : ?>
 <aside class="sidebar">
-	<?php dynamic_sidebar('knife-inner-sidebar'); ?>
+    <?php dynamic_sidebar('knife-inner-sidebar'); ?>
 </aside>
 <?php endif; ?>
