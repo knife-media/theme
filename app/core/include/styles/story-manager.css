@@ -1,21 +1,21 @@
 #knife-story-box {
-    display: block;
+  display: block;
 }
 
 #knife-story-box .box {
-    position: relative;
+  position: relative;
 }
 
 #knife-story-box .box--options {
-    display: flex;
-    flex-flow: row nowrap;
+  display: flex;
+  flex-flow: row nowrap;
 
-    margin: 25px -12px -12px;
-    padding: 15px;
+  margin: 25px -12px -12px;
+  padding: 15px;
 
-    background: #f5f5f5;
+  background: #f5f5f5;
 
-    border-top: 1px solid #ddd;
+  border-top: 1px solid #ddd;
 }
 
 @media screen and (max-width: 1199px) {
@@ -25,32 +25,32 @@
 }
 
 #knife-story-box .option {
-    display: flex;
-    position: relative;
-    flex-flow: column nowrap;
+  display: flex;
+  position: relative;
+  flex-flow: column nowrap;
 }
 
-    #knife-story-box .option__label {
-        display: block;
-        cursor: default;
+  #knife-story-box .option__label {
+    display: block;
+    cursor: default;
 
-        margin-bottom: 8px;
-        font-weight: 600;
-    }
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
 
-    #knife-story-box .option__range {
-        display: block;
+  #knife-story-box .option__range {
+    display: block;
 
-        width: 100%;
-        margin-bottom: 20px;
-    }
+    width: 100%;
+    margin-bottom: 20px;
+  }
 
-    #knife-story-box .option__select {
-        display: block;
+  #knife-story-box .option__select {
+    display: block;
 
-        width: 100%;
-        margin-bottom: 20px;
-    }
+    width: 100%;
+    margin-bottom: 20px;
+  }
 
 
 	#knife-story-box .option__howto {
@@ -59,61 +59,61 @@
 		text-align: right;
 	}
 
-    #knife-story-box .option__background {
-        display: flex;
-        position: relative;
-        cursor: pointer;
-        overflow: hidden;
+  #knife-story-box .option__background {
+    display: flex;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
 
-        margin: 0;
-        padding: 0;
+    margin: 0;
+    padding: 0;
 
-        width: 100%;
-        height: 175px;
-    }
+    width: 100%;
+    height: 175px;
+  }
 
-    #knife-story-box .option__background-image {
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 2;
+  #knife-story-box .option__background-image {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
 
-        width: 100%;
-        height: 100%;
+    width: 100%;
+    height: 100%;
 
-        object-fit: cover;
-        object-position: top;
-    }
+    object-fit: cover;
+    object-position: top;
+  }
 
-    #knife-story-box .option__background-blank {
-        display: flex;
-        position: absolute;
-        top: 0;
-        left: 0;
-        align-items: center;
-        justify-content: center;
+  #knife-story-box .option__background-blank {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    align-items: center;
+    justify-content: center;
 
-        width: calc(100% - 4px);
-        height: calc(100% - 4px);
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
 
-        color: #666;
-        font-size: 14px;
+    color: #666;
+    font-size: 14px;
 		transition: border .5s;
 
-        border: dashed 2px #ddd;
-    }
+    border: dashed 2px #ddd;
+  }
 		#knife-story-box .option__background-blank--error {
 			border-color: #a00;
 		}
 
-    #knife-story-box .option__background-blank:hover {
-        transition: border .2s;
+  #knife-story-box .option__background-blank:hover {
+    transition: border .2s;
 
-        border-color: #0073aa;
-    }
+    border-color: #0073aa;
+  }
 
-    #knife-story-box .option__background-image + .option__background-blank {
+  #knife-story-box .option__background-image + .option__background-blank {
 		z-index: 3;
 
 		width: 100%;
@@ -122,16 +122,16 @@
 		text-indent: -9999rem;
 
 		border: none;
-    }
+  }
 
 #knife-story-box .option--settings {
-    flex: 1 1 auto;
+  flex: 1 1 auto;
 
-    max-width: 400px;
+  max-width: 400px;
 }
 
 #knife-story-box .option--background {
-    flex: 0 0 300px;
+  flex: 0 0 300px;
 	margin-right: 30px;
 }
 
@@ -139,118 +139,118 @@
 	#knife-story-box .option--background {
 		flex: 0 0 auto;
 		margin-right: 0;
-        margin-bottom: 40px;
+    margin-bottom: 40px;
 	}
 }
 
 
 #knife-story-box .dump {
-    display: block;
-    box-sizing: border-box;
+  display: block;
+  box-sizing: border-box;
 
-    width: 100%;
-    height: 286px;
-    margin: 15px 0;
+  width: 100%;
+  height: 286px;
+  margin: 15px 0;
 
-    border: 2px dashed #ddd;
-    border-radius 3px;
+  border: 2px dashed #ddd;
+  border-radius 3px;
 }
 
 #knife-story-box .item {
-    display: flex;
-    position: relative;
-    box-sizing: border-box;
+  display: flex;
+  position: relative;
+  box-sizing: border-box;
 
-    width: 100%;
-    margin: 15px 0;
-    padding: 10px;
-    padding-right: 40px;
+  width: 100%;
+  margin: 15px 0;
+  padding: 10px;
+  padding-right: 40px;
 
-    background: #f5f5f5;
-    border: 1px solid #ddd;
-    border-radius: 3px;
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 3px;
 }
 
 #knife-story-box .item__field {
-    display: flex;
-    flex-flow: column wrap;
-    align-items: center;
-    position: absolute;
-    top: 0;
-    bottom: 10px;
-    right: 10px;
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  bottom: 10px;
+  right: 10px;
 }
 
-    #knife-story-box .item__field-trash,
-    #knife-story-box .item__field-drag {
-        display: block;
-        cursor: pointer;
+  #knife-story-box .item__field-trash,
+  #knife-story-box .item__field-drag {
+    display: block;
+    cursor: pointer;
 
-        width: 18px;
-        height: 18px;
+    width: 18px;
+    height: 18px;
 
-        font-size: 18px;
-        line-height: 1;
-        font-family: dashicons;
-        text-align: center;
+    font-size: 18px;
+    line-height: 1;
+    font-family: dashicons;
+    text-align: center;
+  }
+
+  #knife-story-box .item__field-drag {
+    cursor: move;
+
+    margin-top: 13px;
+  }
+    #knife-story-box .item__field-drag:before {
+      content: "\f333";
     }
 
-    #knife-story-box .item__field-drag {
-        cursor: move;
 
-        margin-top: 13px;
+  #knife-story-box .item__field-trash {
+    margin-top: auto;
+    color: #a00;
+  }
+    #knife-story-box .item__field-trash:before {
+      content: "\f182";
     }
-        #knife-story-box .item__field-drag:before {
-            content: "\f333";
-        }
-
-
-    #knife-story-box .item__field-trash {
-        margin-top: auto;
-        color: #a00;
-    }
-        #knife-story-box .item__field-trash:before {
-            content: "\f182";
-        }
 
 #knife-story-box .item__text {
-    display: block;
-    outline: none;
+  display: block;
+  outline: none;
 
-    width: 100%;
-    height: 170px;
-    padding: 8px;
+  width: 100%;
+  height: 170px;
+  padding: 8px;
 
-    line-height: 1.5;
-    font-family: Consolas,Monaco,monospace;
-    font-size: 13px;
+  line-height: 1.5;
+  font-family: Consolas,Monaco,monospace;
+  font-size: 13px;
 }
 
 #knife-story-box .item__image {
-    display: flex;
-    position: relative;
+  display: flex;
+  position: relative;
 	order: 2;
 
-    width: 100%;
+  width: 100%;
 	height: 100%;
-    max-width: 200px;
+  max-width: 200px;
 
-    margin: 0;
-    margin-left: 10px;
-    padding: 0;
-    overflow: hidden;
+  margin: 0;
+  margin-left: 10px;
+  padding: 0;
+  overflow: hidden;
 
 	object-fit: cover;
 	object-position: top;
 }
 
 #knife-story-box .wp-editor-wrap {
-    flex: 1;
+  flex: 1;
 }
 
 #knife-story-box .wp-editor-wrap .item__text {
-    margin-top: -1px;
-    box-shadow: none;
+  margin-top: -1px;
+  box-shadow: none;
 
-    border: none;
+  border: none;
 }
