@@ -74,7 +74,6 @@ add_action('after_setup_theme', function(){
 
     add_image_size('outer', 1024, 9999, false);
     add_image_size('inner', 640, 9999, false);
-    add_image_size('short', 620, 450, false);
 
     add_image_size('ground', 1600, 900, true);
     add_image_size('triple', 480, 360, true);
@@ -129,10 +128,7 @@ add_filter('get_image_tag', function($html) {
 add_filter('get_image_tag_class', function($class, $id, $align, $size) {
     $class = 'figure__image';
 
-    if(!empty($align))
-        $class = "$class align{$align}";
-
-     return $class;
+    return $class;
 }, 0, 4);
 
 
@@ -507,7 +503,10 @@ add_action('pre_get_posts', function($query) {
 // Remove private posts from archives and home page.
 // Note: Knife editors use private posts as drafts. So we don't want to see drafts in templates even if we have logged in
 add_action('pre_get_posts', function($query) {
-    if($query->is_main_query() && ($query->is_archive() || $query->is_home()))
+    if(is_admin() && $query->is_main_query())
+        return;
+
+    if($query->is_archive() || $query->is_home())
         $query->set('post_status', 'publish');
 });
 

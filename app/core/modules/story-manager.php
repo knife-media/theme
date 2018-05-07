@@ -39,7 +39,7 @@ class Knife_Story_Manager {
         add_action('admin_enqueue_scripts', [$this, 'add_assets']);
 
         // register story post type
-        add_action('init', [$this, 'register_story']);
+        $this->register_story();
 
         // core post metabox
         add_action('add_meta_boxes', [$this, 'add_metabox']);
@@ -155,9 +155,9 @@ class Knife_Story_Manager {
      */
     public function register_story() {
         register_post_type($this->slug, [
-            'labels'                => [
+            'labels'                    => [
                 'menu_name'             => __('Истории', 'knife-theme'),
-                'name_admin_bar'        => __('Истории', 'knife-theme'),
+                'name_admin_bar'        => __('Историю', 'knife-theme'),
                 'parent_item_colon'     => __('Родительская история:', 'knife-theme'),
                 'all_items'             => __('Все истории', 'knife-theme'),
                 'add_new_item'          => __('Добавить новую историю', 'knife-theme'),
