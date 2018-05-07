@@ -19,8 +19,8 @@ class Knife_Widget_Handler {
     * Unique nonce for widget ajax requests
     *
     * @since    1.2
-    * @access    private
-    * @var        string
+    * @access   private
+    * @var      string
     */
     private $nonce = 'knife-widget-nonce';
 
@@ -179,7 +179,7 @@ class Knife_Widget_Handler {
     public function include_widgets() {
         $widgets = get_template_directory() . '/core/widgets/';
 
-        foreach(['story', 'recent', 'triple', 'double', 'single', 'feature', 'details', 'transparent'] as $id) {
+        foreach(['blog', 'story', 'recent', 'triple', 'double', 'single', 'feature', 'details', 'transparent'] as $id) {
             include_once($widgets . $id . '.php');
         }
     }

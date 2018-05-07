@@ -1,24 +1,24 @@
 <?php
 /**
- * Story widget
+ * Blog widget
  *
- * 4 stories in a row
+ * 5 posts with create post button
  *
  * @package knife-theme
  * @since 1.3
  */
 
 
-class Knife_Story_Widget extends WP_Widget {
+class Knife_Blog_Widget extends WP_Widget {
 
     public function __construct() {
         $widget_ops = [
-            'classname' => 'story',
+            'classname' => 'blog',
             'description' => __('Выводит полосу из историй в виде карточек.', 'knife-theme'),
             'customize_selective_refresh' => true
         ];
 
-        parent::__construct('knife_theme_story', __('[НОЖ] Истории', 'knife-theme'), $widget_ops);
+        parent::__construct('knife_theme_blog', __('[НОЖ] Блоги', 'knife-theme'), $widget_ops);
     }
 
 
@@ -34,7 +34,6 @@ class Knife_Story_Widget extends WP_Widget {
 
         $defaults = [
             'title' => '',
-            'posts_per_page' => 4,
             'offset' => 0
         ];
 
@@ -42,41 +41,67 @@ class Knife_Story_Widget extends WP_Widget {
 
         extract($instance);
 
-        // Check cache before creating WP_Query object
-        $q = get_transient($this->id);
+        $html = false;//get_transient($this->id);
 
-        if($q === false) :
+        if($html === false) :
 
-            $base = [
+            // Get query by widget args
+            $q = new WP_Query([
                 'post_status' => 'publish',
                 'ignore_sticky_posts' => 1,
-                'post_type' => 'story',
-                'offset' => $offset,
-                'posts_per_page' => $posts_per_page
-            ];
+                'post_type' => 'blog',
+                'posts_per_page' => 5,
+                'offset' => $offset
+            ]);
 
-            $q = new WP_Query($base);
+            ob_start();
 
-            set_transient($this->id, $q, 24 * HOUR_IN_SECONDS);
+            echo $args['before_widget'];
+
+            printf('<div class="widget__head"><a class="widget__head-link" href="%2$s">%1$s</a></div>',
+                esc_html($title),
+                get_post_type_archive_link('blog')
+            );
+
+            while($q->have_posts()) : $q->the_post();
+
+?>
+    <div class="widget__item">
+        <footer class="widget__footer">
+			<?php
+				knife_theme_meta([
+					'opts' => ['author', 'date'],
+					'before' => '<div class="widget__meta meta">',
+					'after' => '</div>'
+				]);
+
+				printf(
+					'<a class="widget__link" href="%2$s">%1$s</a>',
+					the_title('<p class="widget__title">', '</p>', false),
+					get_permalink()
+				);
+			?>
+		</footer>
+    </div>
+<?php
+
+            endwhile;
+
+?>
+    <div class="widget__item">
+        <a class="widget__button button">Создать публикацию</a>
+    </div>
+<?php
+            echo $args['after_widget'];
+
+	        wp_reset_query();
+
+            $html = ob_get_clean();
+            set_transient($this->id, $html, 24 * HOUR_IN_SECONDS);
 
         endif;
 
-
-        if($q->have_posts()) :
-
-             while($q->have_posts()) : $q->the_post();
-
-                echo $args['before_widget'];
-
-                get_template_part('template-parts/widgets/story');
-
-                echo $args['after_widget'];
-
-             endwhile;
-
-            wp_reset_query();
-
-        endif;
+        echo $html;
     }
 
 
@@ -93,7 +118,6 @@ class Knife_Story_Widget extends WP_Widget {
     public function update($new_instance, $old_instance) {
         $instance = $old_instance;
 
-        $instance['posts_per_page'] = absint($new_instance['posts_per_page']);
         $instance['offset'] = absint($new_instance['offset']);
         $instance['title'] = sanitize_text_field($new_instance['title']);
 
@@ -123,18 +147,8 @@ class Knife_Story_Widget extends WP_Widget {
             esc_attr($this->get_field_name('title')),
             __('Заголовок:', 'knife-theme'),
             esc_attr($instance['title']),
-            __('Не будет отображаться на странице', 'knife-theme')
+            __('Отобразится на странице в лейбле', 'knife-theme')
         );
-
-        // Posts count
-        printf(
-            '<p><label for="%1$s">%3$s</label> <input class="tiny-text" id="%1$s" name="%2$s" type="number" value="%4$s"></p>',
-            esc_attr($this->get_field_id('posts_per_page')),
-            esc_attr($this->get_field_name('posts_per_page')),
-            __('Количество записей:', 'knife-theme'),
-            esc_attr($instance['posts_per_page'])
-        );
-
 
         // Posts offset
         printf(
@@ -152,5 +166,5 @@ class Knife_Story_Widget extends WP_Widget {
  * It is time to register widget
  */
 add_action('widgets_init', function() {
-    register_widget('Knife_Story_Widget');
+    register_widget('Knife_Blog_Widget');
 });

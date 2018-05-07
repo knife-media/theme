@@ -551,8 +551,11 @@ add_action('init', function() {
 // Add custom theme widgets from common hanlder
 require get_template_directory() . '/core/modules/widget-handler.php';
 
-// Manage Story section
+// Manage story section
 require get_template_directory() . '/core/modules/story-manager.php';
+
+// User generated blogs
+require get_template_directory() . '/core/modules/user-content.php';
 
 // Login screen custom styles
 require get_template_directory() . '/core/modules/access-screen.php';
