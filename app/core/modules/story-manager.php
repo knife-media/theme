@@ -53,9 +53,6 @@ class Knife_Story_Manager {
         // include swiper options
         add_action('wp_enqueue_scripts', [$this, 'inject_object'], 12);
 
-        // add lead to story admin page
-        add_filter('knife_lead_screen', [$this, 'add_lead']);
-
         // change image sizes select for stories
         add_filter('image_size_names_choose', [$this, 'update_images'], 12);
     }
@@ -137,16 +134,6 @@ class Knife_Story_Manager {
 
 
     /**
-     * Add lead metabox to story admin page
-     */
-    public function add_lead($types) {
-        $types[] = $this->slug;
-
-        return $types;
-    }
-
-
-    /**
      * Change image sizes select for stories
      */
     public function update_images($size_names) {
@@ -171,15 +158,15 @@ class Knife_Story_Manager {
             'labels'                => [
                 'menu_name'             => __('Истории', 'knife-theme'),
                 'name_admin_bar'        => __('Истории', 'knife-theme'),
-                'parent_item_colon'     => __('Родительская история:', 'knife-theme' ),
-                'all_items'             => __('Все истории', 'knife-theme' ),
-                'add_new_item'          => __('Добавить новую историю', 'knife-theme' ),
-                'add_new'               => __('Добавить новую', 'knife-theme' ),
-                'new_item'              => __('Новая история', 'knife-theme' ),
-                'edit_item'             => __('Редактировать историю', 'knife-theme' ),
-                'update_item'           => __('Обновить историю', 'knife-theme' ),
-                'view_item'             => __('Просмотреть историю', 'knife-theme' ),
-                'view_items'            => __('Просмотреть истории', 'knife-theme' ),
+                'parent_item_colon'     => __('Родительская история:', 'knife-theme'),
+                'all_items'             => __('Все истории', 'knife-theme'),
+                'add_new_item'          => __('Добавить новую историю', 'knife-theme'),
+                'add_new'               => __('Добавить новую', 'knife-theme'),
+                'new_item'              => __('Новая история', 'knife-theme'),
+                'edit_item'             => __('Редактировать историю', 'knife-theme'),
+                'update_item'           => __('Обновить историю', 'knife-theme'),
+                'view_item'             => __('Просмотреть историю', 'knife-theme'),
+                'view_items'            => __('Просмотреть истории', 'knife-theme'),
                 'search_items'          => __('Искать историю', 'knife-theme'),
                 'insert_into_item'      => __('Добавить в историю', 'knife-theme'),
                 'not_found'             => __('Историй не найдено', 'knife-theme'),
@@ -192,7 +179,7 @@ class Knife_Story_Manager {
             'public'                => true,
             'show_ui'               => true,
             'show_in_menu'          => true,
-            'menu_position'         => 10,
+            'menu_position'         => 20,
             'menu_icon'             => 'dashicons-slides',
             'show_in_admin_bar'     => true,
             'show_in_nav_menus'     => true,
