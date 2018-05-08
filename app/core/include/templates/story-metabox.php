@@ -12,8 +12,9 @@
         }
 
         if(count($stories) < 1) {
-            $stories[] = '';
+            $stories[] = ['entry' => '', 'media' => ''];
         }
+
     ?>
 
 
@@ -21,13 +22,23 @@
     <?php foreach($stories as $i => $story) : ?>
         <div class="item">
             <?php
-                printf('<textarea class="item__text" name="%1$s">%2$s</textarea>',
-                    $this->meta . '-stories[]', $story
+                if(!empty($story['media'])) {
+                    printf('<img class="item__image" src="%s" alt="">', wp_get_attachment_thumb_url($story['media']));
+                }
+
+                printf('<input class="item__media" type="hidden" name="%1$s" value="%2$s">',
+                    $this->meta . '-stories[][media]', $story['media'] ?? ''
+                );
+
+                printf('<textarea class="item__entry" name="%1$s">%2$s</textarea>',
+                    $this->meta . '-stories[][entry]', $story['entry'] ?? ''
                 );
             ?>
 
             <div class="item__field">
                 <span class="item__field-drag"></span>
+                <span class="item__field-image" title="<?php _e('Добавить медиафайл', 'knife-theme'); ?>"></span>
+
                 <span class="item__field-trash" title="<?php _e('Удалить слайд', 'knife-theme'); ?>"></span>
             </div>
         </div>
@@ -48,7 +59,7 @@
                 <figcaption class="option__background-blank"><?php _e('Выбрать изображение', 'knife-theme'); ?></figcaption>
 
                 <?php
-                    printf('<input class="option__background-input" type="hidden" name="%s" value="%s">',
+                    printf('<input class="option__background-media" type="hidden" name="%s" value="%s">',
                         $this->meta . '-background',
                         $options['background']
                     );

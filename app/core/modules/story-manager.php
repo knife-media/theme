@@ -117,9 +117,13 @@ class Knife_Story_Manager {
             return;
 
         $post_id = get_the_ID();
+        $stories = [];
 
-        $options = [];
-        $stories = get_post_meta($post_id, $this->meta . "-stories");
+        foreach(get_post_meta($post_id, $this->meta . "-stories") as $key => $story) {
+            $stories[$key]['image'] = wp_get_attachment_url($story['media']);
+            $stories[$key]['entry'] = $story['entry'];
+            $stories[$key]['caption'] = get_the_post_thumbnail_caption($story['media']);
+        }
 
         foreach(['background', 'shadow', 'effect'] as $item) {
             $options[$item] = get_post_meta($post_id, $this->meta . "-{$item}", true);
@@ -269,13 +273,25 @@ class Knife_Story_Manager {
         // delete stories post meta to create it again below
         delete_post_meta($post_id, $query);
 
-        foreach($_REQUEST[$query] as $item) {
-            if(!current_user_can('unfiltered_html'))
-                $item = wp_kses_post($item);
+		foreach($_REQUEST[$query] as $args) {
+            foreach($args as $key => $value) {
+                if(isset($meta[$i]) && array_key_exists($key, $meta[$i]))
+                    $i++;
 
-            if(strlen($item) === 0)
-                continue;
+                if(empty($value))
+                    continue;
 
+                switch($key) {
+                    case 'media':
+                        $value = absint($value);
+                        break;
+                }
+
+                $meta[$i][$key] = $value;
+            }
+        }
+
+        foreach($meta as $key => $item) {
             add_post_meta($post_id, $query, $item);
         }
     }
