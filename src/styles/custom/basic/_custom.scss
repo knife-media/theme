@@ -214,6 +214,42 @@
 		text-align: right;
 	}
 
+  form {
+    margin-top: 1rem;
+  }
+
+  label {
+    display: block;
+
+    width: 100%;
+    padding-bottom: .25rem;
+
+    font-size: .875rem;
+    font-weight: 500;
+  }
+
+  input[type="text"] {
+    display: block;
+
+    width: 100%;
+    padding: .5rem;
+
+    border: solid 1px silver;
+  }
+
+  input[type="submit"] {
+    cursor: pointer;
+  }
+
+  textarea {
+    display: block;
+
+    width: 100%;
+    padding: .5rem;
+
+    border: solid 1px silver;
+  }
+
   .button {
     display: block;
 
