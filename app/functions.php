@@ -265,7 +265,7 @@ add_action('wp_footer', function() {
 add_filter('body_class', function($wp_classes, $extra_classes) {
     $classes = [];
 
-    if (is_front_page())
+    if(is_front_page())
         $classes[] = 'is-home';
 
     // TODO: remove after moving cards to post type #34
@@ -277,6 +277,9 @@ add_filter('body_class', function($wp_classes, $extra_classes) {
 
     if(is_archive())
         $classes[] = 'is-archive';
+
+    if(is_admin_bar_showing())
+        $classes[] = 'admin-bar';
 
     return $classes;
 }, 10, 2);

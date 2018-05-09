@@ -186,7 +186,7 @@ jQuery(document).ready(function($) {
       background.find('.option__background-media').val(selection.url);
 
       // show preview
-      display(background, selection.url, 'option__background-media');
+      display(background, selection.url, 'option__background-image');
 
       // set shadow on image creation
       box.find('.option__range').trigger('change');

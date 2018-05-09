@@ -110,10 +110,14 @@
     if(typeof story.caption === 'undefined')
       return;
 
+    var notice = document.createElement('div');
+    notice.classList.add('slider__item-notice', 'custom');
+    figure.appendChild(notice);
+
     var caption = document.createElement('figcaption');
     caption.classList.add('slider__item-caption');
     caption.innerHTML = story.caption;
-    figure.appendChild(caption);
+    notice.appendChild(caption);
   }
 
 

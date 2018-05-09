@@ -3,7 +3,7 @@
 
   width: 100%;
   height: auto;
-  min-height: calc(100vh - 6rem);
+  min-height: calc(100vh - 4rem);
 
   .slider__background {
     display: flex;
@@ -83,14 +83,6 @@
       line-height: 1.6;
       letter-spacing: .125px;
 
-      a {
-        color: $color-primary;
-
-        &:hover {
-          filter: brightness(150%);
-        }
-      }
-
       @media screen and (max-width: 767px) {
         font-size: 1rem;
       }
@@ -131,13 +123,13 @@
       object-fit: contain;
 
       width: auto;
-      max-height: 24rem;
+      max-height: 30rem;
 
       transition: .25s;
     }
 
     .slider__item-caption {
-      display: block;
+      display: flex;
 
       width: 100%;
       margin: 1rem 0 0;
@@ -146,6 +138,25 @@
       line-height: 1.5;
 
       color: $color-white;
+
+      .slider__item-notice {
+        display: inline-block;
+        flex-grow: 1;
+
+        width: 0;
+      }
+    }
+
+    .custom {
+      a {
+        color: $color-white;
+
+        border-bottom: solid 1px $color-white;
+
+        &:hover {
+          border-bottom-color: transparent;
+        }
+      }
     }
 
     @media screen and (max-width: 1023px) {
@@ -247,5 +258,15 @@
 
     width: calc((100% - #{$site-width}) / 2);
     background-position: 2rem center;
+  }
+}
+
+body.admin-bar {
+  .slider {
+    min-height: calc(100vh - 6rem);
+
+    @media screen and (max-width: 782px) {
+      min-height: calc(100vh - 6.875rem);
+    }
   }
 }
