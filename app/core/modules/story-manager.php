@@ -52,7 +52,7 @@ class Knife_Story_Manager {
         $this->register_story();
 
         // core post metabox
-        add_action('add_meta_boxes', [$this, 'add_metabox']);
+        add_action('add_meta_boxes', [$this, 'add_metabox'], 1);
 
         // save story meta
         add_action('save_post', [$this, 'save_meta']);
@@ -162,7 +162,7 @@ class Knife_Story_Manager {
             ],
             'label'                 => __('Истории', 'knife-theme'),
             'description'           => __('Слайды с интерактивными историями', 'knife-theme'),
-            'supports'              => ['title', 'thumbnail', 'revisions', 'excerpt'],
+            'supports'              => ['title', 'thumbnail', 'revisions', 'excerpt', 'author'],
             'hierarchical'          => true,
             'public'                => true,
             'show_ui'               => true,
