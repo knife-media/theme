@@ -7,7 +7,7 @@
         $options = [];
 
         // get options
-        foreach(['background', 'shadow', 'effect'] as $item) {
+        foreach($this->opts as $item) {
             $options[$item] = get_post_meta($post_id, $this->meta . "-{$item}", true);
         }
 
@@ -38,6 +38,7 @@
             <div class="item__field">
                 <span class="item__field-drag"></span>
                 <span class="item__field-image" title="<?php _e('Добавить медиафайл', 'knife-theme'); ?>"></span>
+                <span class="item__field-clear" title="<?php _e('Удалить медиафайл', 'knife-theme'); ?>"></span>
 
                 <span class="item__field-trash" title="<?php _e('Удалить слайд', 'knife-theme'); ?>"></span>
             </div>
@@ -68,21 +69,32 @@
         </div>
 
         <div class="option option--settings">
-            <div class="option__shadow">
+            <div class="option__item">
                 <label class="option__label"><?php _e('Затемнение фона', 'knife-theme'); ?></label>
 
                 <?php
-                    printf('<input class="option__range" type="range" name="%1$s" min="0" max="100" step="5" value="%2$s">',
+                    printf('<input class="option__range option__range--shadow" type="range" name="%1$s" min="0" max="100" step="5" value="%2$s">',
                         $this->meta . '-shadow',
                         absint($options['shadow'])
                     );
                 ?>
             </div>
 
-            <div class="option__effect">
+            <div class="option__item">
+                <label class="option__label"><?php _e('Размытие фона', 'knife-theme'); ?></label>
+
+                <?php
+                    printf('<input class="option__range option__range--blur" type="range" name="%1$s" min="0" max="10" step="1" value="%2$s">',
+                        $this->meta . '-blur',
+                        absint($options['blur'])
+                    );
+                ?>
+            </div>
+
+            <div class="option__item">
                 <label class="option__label"><?php _e('Эффект слайдера', 'knife-theme'); ?></label>
 
-                <select class="option__select" name="<?php echo $this->meta . '-effect'; ?>">
+                <select class="option__select option__select--effect" name="<?php echo $this->meta . '-effect'; ?>">
                     <?php
                         $effects = [
                             'parallax' => __('Параллакс', 'knife-theme'),

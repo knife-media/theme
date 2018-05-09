@@ -35,6 +35,16 @@ class Knife_Story_Manager {
     private $meta = 'knife-story';
 
 
+    /**
+     * Availible stories options
+     *
+     * @since   1.3
+     * @access  private
+     * @var     string
+     */
+    private $opts = ['background', 'shadow', 'blur', 'effect'];
+
+
     public function __construct() {
         add_action('admin_enqueue_scripts', [$this, 'add_assets']);
 
@@ -52,9 +62,6 @@ class Knife_Story_Manager {
 
         // include swiper options
         add_action('wp_enqueue_scripts', [$this, 'inject_object'], 12);
-
-        // change image sizes select for stories
-        add_filter('image_size_names_choose', [$this, 'update_images'], 12);
     }
 
 
@@ -117,15 +124,9 @@ class Knife_Story_Manager {
             return;
 
         $post_id = get_the_ID();
-        $stories = [];
+        $stories = $this->_convert_stories($post_id);
 
-        foreach(get_post_meta($post_id, $this->meta . "-stories") as $key => $story) {
-            $stories[$key]['image'] = wp_get_attachment_url($story['media']);
-            $stories[$key]['entry'] = $story['entry'];
-            $stories[$key]['caption'] = get_the_post_thumbnail_caption($story['media']);
-        }
-
-        foreach(['background', 'shadow', 'effect'] as $item) {
+        foreach($this->opts as $item) {
             $options[$item] = get_post_meta($post_id, $this->meta . "-{$item}", true);
         }
 
@@ -134,23 +135,6 @@ class Knife_Story_Manager {
 
         // add stories items
         wp_localize_script('knife-theme', 'knife_story_stories', $stories);
-    }
-
-
-    /**
-     * Change image sizes select for stories
-     */
-    public function update_images($size_names) {
-        global $typenow;
-
-        if($typenow === $this->slug) {
-            $size_names = [
-              'full'  => __('Исходный размер', 'knife-theme'),
-              'short' => __('Обрезанный по высоте', 'knife-theme')
-            ];
-        }
-
-        return $size_names;
     }
 
 
@@ -232,7 +216,7 @@ class Knife_Story_Manager {
         $this->_update_stories($this->meta . '-stories', $post_id);
 
         // update other story options
-        foreach(['background', 'effect', 'shadow'] as $option) {
+        foreach($this->opts as $option) {
             $query = $this->meta . "-{$option}";
 
             if(!isset($_REQUEST[$query]))
@@ -256,10 +240,38 @@ class Knife_Story_Manager {
                     $value = absint($value);
 
                     break;
+
+                case 'blur':
+                    $value = absint($value);
+
+                    break;
             }
 
             update_post_meta($post_id, $query, $value);
         }
+    }
+
+
+    /**
+     * Convert stories post meta to object
+     */
+    private function _convert_stories($post_id, $stories = []) {
+        $items = get_post_meta($post_id, $this->meta . '-stories');
+
+        foreach($items as $i => $story) {
+            if(!empty($story['media'])) {
+                $stories[$i]['image'] = wp_get_attachment_image_url($story['media'], 'outer');
+
+                if($caption = wp_get_attachment_caption($story['media']))
+                    $stories[$i]['caption'] = $caption;
+            }
+
+            if(!empty($story['entry'])) {
+                $stories[$i]['entry'] = apply_filters('the_content', $story['entry']);
+            }
+        }
+
+        return $stories;
     }
 
 
@@ -273,13 +285,10 @@ class Knife_Story_Manager {
         // delete stories post meta to create it again below
         delete_post_meta($post_id, $query);
 
-		foreach($_REQUEST[$query] as $args) {
-            foreach($args as $key => $value) {
+        foreach($_REQUEST[$query] as $story) {
+            foreach($story as $key => $value) {
                 if(isset($meta[$i]) && array_key_exists($key, $meta[$i]))
                     $i++;
-
-                if(empty($value))
-                    continue;
 
                 switch($key) {
                     case 'media':

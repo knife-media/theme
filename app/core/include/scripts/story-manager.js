@@ -88,38 +88,7 @@ jQuery(document).ready(function($) {
   }
 
 
-  // add new item
-  box.on('click', '.actions__add', function(e) {
-    e.preventDefault();
-
-    var last = box.find('.item').last(),
-      copy = dummy.clone();
-
-    last.after(copy);
-
-    return editor(copy);
-  });
-
-
-  // delete or clear item
-  box.on('click', '.item__field-trash', function(e) {
-    e.preventDefault();
-
-    var item = $(this).closest('.item');
-
-    if(box.find('.item').length === 1)
-      box.find('.actions__add').trigger('click');
-
-    return item.remove();
-  });
-
-
-  // delete or clear item
-  box.on('click', '.item__field-image', function(e) {
-    e.preventDefault();
-
-    var item = $(this).closest('.item');
-
+  var media = function(item) {
     // open default wp.media image frame
     var frame = wp.media({
       title: knife_story_manager.choose,
@@ -148,6 +117,53 @@ jQuery(document).ready(function($) {
     });
 
     return frame.open();
+  }
+
+
+  // delete or clear item
+  box.on('click', '.item__field-trash', function(e) {
+    e.preventDefault();
+
+    var item = $(this).closest('.item');
+
+    if(box.find('.item').length === 1)
+      box.find('.actions__add').trigger('click');
+
+    return item.remove();
+  });
+
+
+  // add image to item
+  box.on('click', '.item__image', function(e) {
+    e.preventDefault();
+
+    var item = $(this).closest('.item');
+
+    return media(item);
+  });
+
+
+  // update item image on click
+  box.on('click', '.item__field-image', function(e) {
+    e.preventDefault();
+
+    var item = $(this).closest('.item');
+
+    return media(item);
+  });
+
+
+  // remove item image on click
+  box.on('click', '.item__field-clear', function(e) {
+    e.preventDefault();
+
+    var item = $(this).closest('.item');
+
+    // clear input values
+    item.find('.item__media').val('');
+
+    // destroy image tag
+    item.find('.item__image').remove();
   });
 
 
@@ -180,8 +196,21 @@ jQuery(document).ready(function($) {
   });
 
 
+  // add new item
+  box.on('click', '.actions__add', function(e) {
+    e.preventDefault();
+
+    var last = box.find('.item').last(),
+      copy = dummy.clone();
+
+    last.after(copy);
+
+    return editor(copy);
+  });
+
+
   // shadow range
-  box.on('change', '.option__range', function(e) {
+  box.on('change', '.option__range--shadow', function(e) {
     var blank = box.find('.option__background-blank');
     var shade = parseInt($(this).val()) / 100;
 
@@ -190,6 +219,20 @@ jQuery(document).ready(function($) {
 
     blank.css('background-color', 'rgba(0, 0, 0, ' + shade + ')');
   });
+
+
+  // blur range
+  box.on('change', '.option__range--blur', function(e) {
+    var blank = box.find('.option__background-blank');
+
+    if(box.find('.option__background-image').length < 1)
+      return dimmer(blank, 'option__background-blank--error');
+
+    var image = box.find('.option__background-image');
+
+    image.css('filter', 'blur(' + $(this).val() + 'px)');
+  });
+
 
 
   // reinit wp editor on drag
