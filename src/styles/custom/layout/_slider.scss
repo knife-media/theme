@@ -34,8 +34,8 @@
     width: calc(100% - 8rem);
     height: 100%;
 
-    padding-top: 2rem;
-    padding-bottom: 4rem;
+    padding-top: 5rem;
+    padding-bottom: 3rem;
 
     .slider__item-meta {
       position: absolute;
@@ -167,6 +167,8 @@
     }
 
     @media screen and (max-width: 767px) {
+      align-items: flex-start;
+
       padding-left: 1rem;
       padding-right: 1rem;
     }
@@ -265,8 +267,12 @@ body.admin-bar {
   .slider {
     min-height: calc(100vh - 6rem);
 
+    @media screen and (max-width: 1023px) {
+      min-height: calc(100vh - 5.25rem);
+    }
+
     @media screen and (max-width: 782px) {
-      min-height: calc(100vh - 6.875rem);
+      min-height: calc(100vh - 6.125rem);
     }
   }
 }
