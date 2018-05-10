@@ -20,6 +20,9 @@
     image.classList.add('slider__background');
     image.style.backgroundImage = 'url(' + knife_story_options.background + ')';
 
+    if(typeof knife_story_options.blur !== 'undefined' && parseInt(knife_story_options.blur) > 0)
+      image.style.filter = 'blur(' + knife_story_options.blur + 'px)';
+
     element.appendChild(image);
 
     if(typeof knife_story_options.shadow === 'undefined')
@@ -78,6 +81,46 @@
   }
 
 
+  // Create entry tag with html on slide insertion
+  var createEntry = function(story, item) {
+    if(typeof story.entry === 'undefined')
+      return;
+
+    var entry = document.createElement('div');
+    entry.classList.add('slider__item-entry', 'custom');
+    entry.innerHTML = story.entry;
+    item.appendChild(entry);
+  }
+
+
+  // Create image figure with optional caption on slide insertion
+  var createImage = function(story, item) {
+    if(typeof story.image === 'undefined')
+      return;
+
+    var figure = document.createElement('figure');
+    figure.classList.add('slider__item-media');
+    item.appendChild(figure);
+
+    var image = document.createElement('img');
+    image.classList.add('slider__item-image');
+    image.src = story.image;
+    figure.appendChild(image);
+
+    if(typeof story.caption === 'undefined')
+      return;
+
+    var notice = document.createElement('div');
+    notice.classList.add('slider__item-notice', 'custom');
+    figure.appendChild(notice);
+
+    var caption = document.createElement('figcaption');
+    caption.classList.add('slider__item-caption');
+    caption.innerHTML = story.caption;
+    notice.appendChild(caption);
+  }
+
+
   // Insert stories to slider
   var insertStories = function() {
     if(typeof knife_story_stories === 'undefined' || knife_story_stories.length < 1)
@@ -91,10 +134,11 @@
       item.classList.add('slider__item', 'block');
       slide.appendChild(item);
 
-      var content = document.createElement('div');
-      content.classList.add('slider__item-content', 'custom');
-      content.innerHTML = knife_story_stories[i];
-      item.appendChild(content);
+      // Set entry if exists
+      createEntry(knife_story_stories[i], item);
+
+      // Set image if exists
+      createImage(knife_story_stories[i], item);
 
       swiper.appendSlide(slide);
     }
@@ -113,8 +157,8 @@
     switch(knife_story_options.effect) {
       case 'parallax':
 
-        background.style.width = 'calc(100% + 200px)';
-        background.setAttribute('data-swiper-parallax-x', '-200');
+        background.style.width = 'calc(100% + 210px)';
+        background.setAttribute('data-swiper-parallax-x', -200);
         background.setAttribute('data-swiper-parallax-duration', 700);
 
         break;
@@ -140,7 +184,10 @@
     // Get navigation element
     args.navigation = createNavigation();
 
-    // add simulate touch only on small screen
+    // Disable resistance
+    args.resistanceRatio = 999;
+
+    // Add simulate touch only on small screen
     args.simulateTouch = (window.innerWidth < 768);
 
     return applyEffects(args);

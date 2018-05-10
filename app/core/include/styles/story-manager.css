@@ -69,7 +69,7 @@
     padding: 0;
 
     width: 100%;
-    height: 175px;
+    height: 190px;
   }
 
   #knife-story-box .option__background-image {
@@ -158,6 +158,7 @@
 
 #knife-story-box .item {
   display: flex;
+  flex-flow: row wrap;
   position: relative;
   box-sizing: border-box;
 
@@ -181,7 +182,9 @@
   right: 10px;
 }
 
+  #knife-story-box .item__field-image,
   #knife-story-box .item__field-trash,
+  #knife-story-box .item__field-clear,
   #knife-story-box .item__field-drag {
     display: block;
     cursor: pointer;
@@ -204,6 +207,22 @@
       content: "\f333";
     }
 
+	#knife-story-box .item__field-image {
+		margin-top: 10px;
+		font-size: 16px;
+  }
+    #knife-story-box .item__field-image:before {
+			content: "\f128";
+    }
+
+  #knife-story-box .item__field-clear {
+    display: none;
+
+		margin-top: 10px;
+  }
+    #knife-story-box .item__field-clear:before {
+      content: "\f335";
+    }
 
   #knife-story-box .item__field-trash {
     margin-top: auto;
@@ -213,12 +232,21 @@
       content: "\f182";
     }
 
-#knife-story-box .item__text {
+#knife-story-box .item__image ~ .item__field > .item__field-clear {
+  display: block;
+}
+
+#knife-story-box .item__image ~ .item__field > .item__field-image {
+  display: none;
+}
+
+
+#knife-story-box .item__entry {
   display: block;
   outline: none;
 
   width: 100%;
-  height: 170px;
+  height: 152px;
   padding: 8px;
 
   line-height: 1.5;
@@ -227,28 +255,35 @@
 }
 
 #knife-story-box .item__image {
-  display: flex;
-  position: relative;
-	order: 2;
+  display: block;
+  align-self: flex-start;
+  order: 2;
+  flex: 0 1 240px;
+  cursor: pointer;
 
-  width: 100%;
-	height: 100%;
-  max-width: 200px;
+  width: 240px;
+  height: auto;
 
-  margin: 0;
-  margin-left: 10px;
+  margin: 6px 0 0 10px;
   padding: 0;
   overflow: hidden;
-
-	object-fit: cover;
-	object-position: top;
 }
+
+@media screen and (max-width: 600px) {
+  #knife-story-box .item__image {
+    flex: 1 0 100%;
+    width: 100%;
+
+    margin-left: 0;
+  }
+}
+
 
 #knife-story-box .wp-editor-wrap {
   flex: 1;
 }
 
-#knife-story-box .wp-editor-wrap .item__text {
+#knife-story-box .wp-editor-wrap .item__entry {
   margin-top: -1px;
   box-shadow: none;
 

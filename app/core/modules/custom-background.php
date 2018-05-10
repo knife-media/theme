@@ -27,7 +27,8 @@ class Knife_Custom_Background {
 		add_action('edited_special', [$this, 'save_meta']);
 
 		// frontend styles
-		add_action('wp_footer', [$this, 'print_background']);
+        add_action('wp_enqueue_scripts', [$this, 'print_background'], 13);
+
 
 		add_action('customize_register', [$this, 'update_customizer']);
 	}
@@ -100,7 +101,7 @@ class Knife_Custom_Background {
 	 * Print fixed element with custom background
 	 */
 	public function print_background() {
-		$style = [];
+		$backdrop = [];
 
 		// set color style
 		$color = get_background_color();
@@ -109,26 +110,25 @@ class Knife_Custom_Background {
 			$color = false;
 
 		if($color)
-			$style[] = "background-color: #" . $color;
+			$backdrop['color'] = $color;
 
 
 		// set background image style
 		$image = $this->apply_meta('image', get_background_image());
 
-		if($image)
-			$style[] = "background-image: url(" . set_url_scheme($image) . ")";
+		if($image) {
+			$backdrop['image'] = set_url_scheme($image);
+
+            // set background size style
+            $size = $this->apply_meta('size', get_theme_mod('background_size'));
+
+            if(in_array($size, ['auto', 'contain', 'cover'], true))
+                $backdrop['size'] = $size;
+        }
 
 
-		// set background size style
-        $size = $this->apply_meta('size', get_theme_mod('background_size'));
-
-		if(in_array($size, ['auto', 'contain', 'cover'], true))
-			$style[] = "background-size: " . $size;
-
-		printf(
-			'<div class="backdrop" style="%s"></div>',
-			implode('; ', $style)
-		);
+        if(count($backdrop) > 0)
+            wp_localize_script('knife-theme', 'knife_backdrop', $backdrop);
 	}
 
 

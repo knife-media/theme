@@ -22,18 +22,22 @@ get_header(); ?>
                                 'before' => '<div class="slider__item-meta meta">',
                                 'after' => '</div>'
                             ]);
-
-                            the_title(
-                                '<h1 class="slider__item-title">',
-                                '</h1>'
-                            );
-
-                            knife_theme_post_meta([
-                                'before' => '<div class="slider__item-excerpt">',
-                                'after' => '</div>',
-                                'meta' => 'lead-text'
-                            ]);
                         ?>
+
+                        <div class="slider__item-entry">
+                            <?php
+                                the_title(
+                                    '<h1 class="slider__item-title">',
+                                    '</h1>'
+                                );
+
+                                knife_theme_post_meta([
+                                    'before' => '<div class="slider__item-excerpt">',
+                                    'after' => '</div>',
+                                    'meta' => 'lead-text'
+                                ]);
+                            ?>
+                        </div>
                     </div>
 
                 </div>
