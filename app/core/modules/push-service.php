@@ -66,7 +66,7 @@ class Knife_Push_Service {
 	public function inject_object() {
 		$opts = get_option($this->option);
 
-		if(empty($opts['appid']))
+		if(empty($opts['appid']) || empty($opts['popup']))
 			return false;
 
 		wp_localize_script('knife-theme', 'knife_push_id', $opts['appid']);
@@ -81,7 +81,7 @@ class Knife_Push_Service {
     public function inject_template() {
 	    $opts = get_option($this->option);
 
-		if(empty($opts['appid']))
+		if(empty($opts['appid']) || empty($opts['popup']))
 			return false;
 
         $include = get_template_directory() . '/core/include';
@@ -178,6 +178,15 @@ class Knife_Push_Service {
 			'knife-push-settings',
  			'knife-push-section'
 		);
+
+        add_settings_field(
+			'popup',
+			__('Показывать popup', 'knife-theme'),
+ 			[$this, 'setting_render_popup'],
+			'knife-push-settings',
+ 			'knife-push-section'
+		);
+
 	}
 
 	public function setting_render_appid() {
@@ -234,6 +243,18 @@ class Knife_Push_Service {
 			esc_attr($default)
 		);
 	}
+
+    public function setting_render_popup() {
+		$options = get_option($this->option);
+        $default = isset($options['popup']) ? $options['popup'] : 0;
+
+  		printf(
+			'<input type="checkbox" name="%1$s[popup]" value="1" %2$s>',
+ 			$this->option,
+  		    checked($default, 1, false)
+		);
+	}
+
 
 
 	/**
