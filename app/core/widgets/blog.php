@@ -22,7 +22,7 @@ class Knife_Blog_Widget extends WP_Widget {
     }
 
 
-     /**
+    /**
      * Outputs the content of the widget.
      *
      * @see WP_Widget::widget()
@@ -34,6 +34,7 @@ class Knife_Blog_Widget extends WP_Widget {
 
         $defaults = [
             'title' => '',
+            'link' => '',
             'offset' => 0
         ];
 
@@ -41,7 +42,7 @@ class Knife_Blog_Widget extends WP_Widget {
 
         extract($instance);
 
-        $html = false;//get_transient($this->id);
+        $html = get_transient($this->id);
 
         if($html === false) :
 
@@ -50,7 +51,7 @@ class Knife_Blog_Widget extends WP_Widget {
                 'post_status' => 'publish',
                 'ignore_sticky_posts' => 1,
                 'post_type' => 'blog',
-                'posts_per_page' => 5,
+                'posts_per_page' => empty($link) ? 6 : 5,
                 'offset' => $offset
             ]);
 
@@ -64,12 +65,9 @@ class Knife_Blog_Widget extends WP_Widget {
             );
 
             while($q->have_posts()) : $q->the_post();
+                echo '<div class="widget__item"><footer class="widget__footer">';
 
-?>
-    <div class="widget__item">
-        <footer class="widget__footer">
-			<?php
-				knife_theme_meta([
+                knife_theme_meta([
 					'opts' => ['author', 'date'],
 					'before' => '<div class="widget__meta meta">',
 					'after' => '</div>'
@@ -80,18 +78,17 @@ class Knife_Blog_Widget extends WP_Widget {
 					the_title('<p class="widget__title">', '</p>', false),
 					get_permalink()
 				);
-			?>
-		</footer>
-    </div>
-<?php
 
+                echo '</footer></div>';
             endwhile;
 
-?>
-    <div class="widget__item">
-        <a class="widget__button button">Создать публикацию</a>
-    </div>
-<?php
+            if(!empty($link)) :
+                printf('<div class="widget__item"><a class="widget__button button" href="%2$s" target="_blank">%1$s</a></div>',
+                    __('Создать публикацию', 'knife-theme'),
+                    esc_url($link)
+                );
+            endif;
+
             echo $args['after_widget'];
 
 	        wp_reset_query();
@@ -120,6 +117,7 @@ class Knife_Blog_Widget extends WP_Widget {
 
         $instance['offset'] = absint($new_instance['offset']);
         $instance['title'] = sanitize_text_field($new_instance['title']);
+        $instance['link'] = sanitize_text_field($new_instance['link']);
 
         return $instance;
     }
@@ -134,7 +132,7 @@ class Knife_Blog_Widget extends WP_Widget {
     public function form($instance) {
         $defaults = [
             'title' => '',
-            'posts_per_page' => 4,
+            'link' => '',
             'offset' => 0
         ];
 
@@ -149,6 +147,16 @@ class Knife_Blog_Widget extends WP_Widget {
             esc_attr($instance['title']),
             __('Отобразится на странице в лейбле', 'knife-theme')
         );
+
+        // Button link
+        printf(
+            '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
+            esc_attr($this->get_field_id('link')),
+            esc_attr($this->get_field_name('link')),
+            __('Ссылка с кнопки:', 'knife-theme'),
+            esc_attr($instance['link'])
+        );
+
 
         // Posts offset
         printf(
