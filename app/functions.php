@@ -571,6 +571,9 @@ require get_template_directory() . '/core/modules/post-sticker.php';
 // Add second title to post
 require get_template_directory() . '/core/modules/post-tagline.php';
 
+// Primary post tag
+require get_template_directory() . '/core/modules/primary-tag.php';
+
 // Insert lead metabox to admin post screen
 require get_template_directory() . '/core/modules/post-lead.php';
 
