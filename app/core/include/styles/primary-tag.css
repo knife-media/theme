@@ -1,8 +1,0 @@
-#tagsdiv-post_tag .tagchecklist li {
-  cursor: pointer;
-  user-select: none;
-}
-
-#tagsdiv-post_tag .tagchecklist .selected {
-  font-weight: 600;
-}

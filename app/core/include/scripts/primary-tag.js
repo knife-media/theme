@@ -1,47 +1,63 @@
 jQuery(document).ready(function($) {
   var box = $('#tagsdiv-post_tag');
 
-  if(box.length < 1)
+  var selected = knife_primary_tag.primary || '';
+  var delimiter = (window.tagsSuggestL10n && window.tagsSuggestL10n.tagDelimiter) || ',';
+
+  var checklist = box.find('.tagchecklist');
+
+  if(box.length < 1 || typeof knife_primary_tag === 'undefined')
     return false;
 
-  var input = $('<input>', {
-    name: 'primary-tag',
-    type: 'hidden'
-  });
 
-  box.append(input);
+  var parseTags = function() {
+    var thetags = box.find('.the-tags').val();
 
-  var howto = $('<p>', {
-    class: 'howto',
-    html: knife_primary_tag.howto
-  });
+    if($('#knife-primary-tag').length)
+      $('#knife-primary-tag').remove();
 
-  box.find('.tagchecklist').before(howto);
+    if(thetags.length < 1)
+      return false;
 
-  var getTerm = function(el) {
-    var term = el.clone().children().remove().end();
+    var block = $('<div>', {'id': 'knife-primary-tag'});
 
-    return term.text().trim();
+    $('<p>', {
+      'class': 'howto',
+      'html': knife_primary_tag.howto
+    }).appendTo(block);
+
+    $('<select>', {
+      'name': 'primary-tag',
+      'style': 'width: 98%'
+    }).appendTo(block);
+
+    block.appendTo(box.find('.tagsdiv'));
+
+
+    $.each(thetags.split(delimiter), function(key, val) {
+      val = $.trim(val);
+
+      var obj = {'value': val, 'html': val};
+
+      if(val === selected)
+        obj.selected = selected;
+
+      $('<option>', obj).appendTo(block.find('select'));
+    });
   }
 
-  box.on('click', '.tagchecklist > li', function(e) {
-    var el = $(this);
+  var observer = window.MutationObserver || window.WebKitMutationObserver;
 
-    // add selected term to input
-    input.val(getTerm(el));
-
-    // remove selected class from other items
-    box.find('.tagchecklist > li').removeClass('selected');
-
-    return el.addClass('selected');
+  view = new observer(function(mutations) {
+    return parseTags();
   });
 
-  box.on('click', '.tagchecklist > li.selected', function(e) {
-    var el = $(this);
-
-    // remove term from input
-    input.val('');
-
-    return el.removeClass('selected');
+  view.observe(checklist[0], {
+    subtree: true,
+    attributes: false,
+    childList: true,
+    characterData: false
   });
+
+  return parseTags();
 });

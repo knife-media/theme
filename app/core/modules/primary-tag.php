@@ -22,7 +22,11 @@ class Knife_Primary_Tag {
 	public function __construct() {
         add_action('admin_enqueue_scripts', [$this, 'add_assets']);
 
+        // save meta on save post
 		add_action('save_post', [$this, 'save_meta'], 15);
+
+        // move primary tag to first position
+        add_filter('get_the_tags', [$this, 'sort_tags']);
     }
 
 
@@ -41,17 +45,12 @@ class Knife_Primary_Tag {
 		$version = wp_get_theme()->get('Version');
 		$include = get_template_directory_uri() . '/core/include';
 
-        // insert admin styles
-		wp_enqueue_style('knife-primary-tag', $include . '/styles/primary-tag.css', [], $version);
-
         // insert admin scripts
 		wp_enqueue_script('knife-primary-tag', $include . '/scripts/primary-tag.js', ['jquery'], $version);
-
 
         $options = [
             'howto' => __('Выберите главную метку поста. Она отобразится на карточке', 'knife-theme')
         ];
-
 
         // get current primary term
         $term_id = get_post_meta($post_id, $this->meta, true);
@@ -83,4 +82,28 @@ class Knife_Primary_Tag {
         if($term && $term->term_id > 0)
 		    update_post_meta($post_id, $this->meta, $term->term_id);
 	}
+
+
+    /**
+     * Move primary tag to first position
+     */
+    public function sort_tags($items) {
+        global $post;
+
+        if($primary = get_post_meta($post->ID, $this->meta, true)) {
+            $sorted = [];
+
+            foreach($items as $item) {
+                if($item->term_id === (int) $primary) {
+                    array_unshift($sorted, $item);
+                } else {
+                    $sorted[] = $item;
+                }
+            }
+
+            $items = $sorted;
+        }
+
+        return $items;
+    }
 }
