@@ -330,6 +330,7 @@ function knife_theme_post_meta($args, $post_id = null) {
 		'after' => '',
 		'meta' => '',
 		'item' => '%s',
+        'filter' => false,
 		'post_id' => $post_id ?? $post->ID,
 		'echo' => true
 	];
@@ -341,7 +342,7 @@ function knife_theme_post_meta($args, $post_id = null) {
 	if(empty($meta))
 		return false;
 
-	$item = sprintf($args['item'], $meta);
+	$item = sprintf($args['item'], $args['filter'] ? wpautop($meta) : $meta);
 
 	$html = $args['before'] . $item . $args['after'];
 

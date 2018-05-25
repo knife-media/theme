@@ -22,9 +22,10 @@
             );
 
             knife_theme_post_meta([
-                'before' => '<div class="post__header-excerpt">',
+                'before' => '<div class="post__header-excerpt custom">',
                 'after' => '</div>',
-                'meta' => 'lead-text'
+                'meta' => 'lead-text',
+                'filter' => true
             ]);
 
             knife_theme_share([
