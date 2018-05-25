@@ -67,7 +67,7 @@ class Knife_MCE_Buttons {
      * Remove annoying span tags after google docs pasting
      */
     public function configure_tinymce($settings) {
-        $settings['extended_valid_elements']="span[!class]";
+        $settings['invalid_styles'] = 'color font-weight font-size';
 
         return $settings;
     }
