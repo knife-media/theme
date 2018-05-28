@@ -181,7 +181,7 @@ class Knife_Header_Meta {
 	}
 
 	private function _get_cover($post_id) {
-		$social = get_post_meta($post_id, 'social-image', true);
+		$social = get_post_meta($post_id, '_social-image', true);
 
 		if(empty($social))
 			return wp_get_attachment_image_src(get_post_thumbnail_id($post_id), 'outer');
