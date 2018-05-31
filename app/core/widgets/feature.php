@@ -81,7 +81,7 @@ class Knife_Feature_Widget extends WP_Widget {
         );
 
         // and finally print widget link
-        printf('<a class="%2$s" href="%1$s">%3$s</a>', esc_url($link),
+        printf('<a class="%2$s" href="%1$s" target="_blank">%3$s</a>', esc_url($link),
             $widget_class, $widget_item
         );
 
