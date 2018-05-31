@@ -54,16 +54,15 @@ class Knife_Feature_Widget extends WP_Widget {
         $widget_image = '';
 
         if($post_id > 0) {
-            $widget_class =  $widget_class . ' widget__link--banner';
+            $widget_class =  $widget_class . ' widget__link--article';
         }
 
         // get sticker from widget options or post meta
-        if(strlen($sticker) < 1) {
+        if(empty($sticker)) {
             $sticker = get_post_meta($post_id, '_knife-sticker', true);
         }
 
         // append widget_sticker if image exists
-
         if(!empty($sticker)) {
             $widget_image = sprintf('<img class="widget__sticker" src="%1$s" alt="%2$s">',
                 esc_url($sticker), esc_attr($title)

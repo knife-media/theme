@@ -17,8 +17,8 @@
 
     width: 100%;
 
-    color: $color-white;
-    background-color: $color-feature-inner;
+    color: $color-text;
+    background-color: $color-feature-outer;
 
     .icon {
       display: block;
@@ -53,9 +53,9 @@
       }
     }
 
-    &.widget__link--banner {
-      color: $color-text;
-      background-color: $color-feature-outer;
+    &.widget__link--article {
+      color: $color-white;
+      background-color: $color-feature-inner;
     }
   }
 
