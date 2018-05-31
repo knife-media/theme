@@ -13,13 +13,12 @@
     display: flex;
     flex-flow: column wrap;
     align-items: center;
-    justify-content: center;
     position: relative;
 
     width: 100%;
 
     color: $color-white;
-    background-color: $color-feature;
+    background-color: $color-feature-inner;
 
     .icon {
       display: block;
@@ -53,6 +52,11 @@
         transform: translateX(10px);
       }
     }
+
+    &.widget__link--banner {
+      color: $color-text;
+      background-color: $color-feature-outer;
+    }
   }
 
   .widget__item {
@@ -84,7 +88,7 @@
 
   .widget__sticker {
     margin-left: 1rem;
-    height: 2rem;
     width: 2rem;
+    max-height: 2rem;
   }
 }
