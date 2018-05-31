@@ -1,0 +1,51 @@
+.form {
+  position: relative;
+
+  .form__field {
+    display: block;
+    outline: none;
+
+    margin: .625rem 0;
+    padding: .625rem .75rem;
+
+    font-size: 1rem;
+    line-height: 1.5;
+
+    background-color: rgba( $color-bright, 0.1 );
+
+    border: none;
+
+    &.form__field--input {
+      width: 100%;
+    }
+
+    &.form__field--textarea {
+      resize: vertical;
+
+      width: 100%;
+      height: 20rem;
+    }
+
+    &.form__field--button {
+      align-self: flex-start;
+      cursor: pointer;
+
+      padding-left: 2.5rem;
+      padding-right: 2.5rem;
+
+      font-weight: 500;
+      color: $color-white;
+      background-color: $color-bright;
+
+      border-radius: 2px;
+
+      &:hover {
+        filter: brightness(110%);
+      }
+    }
+
+    &::placeholder {
+      color: rgba( desaturate( $color-bright, 65% ), 0.85 );
+    }
+  }
+}

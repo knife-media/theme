@@ -557,7 +557,7 @@ require get_template_directory() . '/core/modules/widget-handler.php';
 require get_template_directory() . '/core/modules/story-manager.php';
 
 // User generated blogs
-require get_template_directory() . '/core/modules/user-content.php';
+require get_template_directory() . '/core/modules/user-club.php';
 
 // Login screen custom styles
 require get_template_directory() . '/core/modules/access-screen.php';

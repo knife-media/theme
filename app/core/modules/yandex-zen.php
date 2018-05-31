@@ -10,7 +10,7 @@
 
 
 if (!defined('WPINC')) {
-	die;
+    die;
 }
 
 new Knife_Yandex_Zen;
@@ -38,39 +38,39 @@ class Knife_Yandex_Zen {
     private $enclosure = null;
 
 
-  public function __construct() {
-    add_action('init', [$this, 'init_feeds']);
-    add_action('wp', [$this, 'add_hooks']);
+    public function __construct() {
+        add_action('init', [$this, 'init_feeds']);
+        add_action('wp', [$this, 'add_hooks']);
 
-    // alter feed main query loop
-    add_action('pre_get_posts', [$this, 'update_query']);
+        // alter feed main query loop
+        add_action('pre_get_posts', [$this, 'update_query']);
 
-    // update zen feed meta on save post
-    add_action('save_post', [$this, 'save_meta']);
+        // update zen feed meta on save post
+        add_action('save_post', [$this, 'save_meta']);
 
-    // feature post meta
-    add_action('post_submitbox_misc_actions', [$this, 'print_checkbox']);
-  }
+        // feature post meta
+        add_action('post_submitbox_misc_actions', [$this, 'print_checkbox']);
+    }
 
 
-  /**
-	 * Prints checkbox in post publish action section
-	 */
-	public function print_checkbox() {
-		$post_id = get_the_ID();
+    /**
+     * Prints checkbox in post publish action section
+     */
+    public function print_checkbox() {
+        $post_id = get_the_ID();
 
-		if(get_post_type($post_id) !== 'post')
-			return;
+        if(get_post_type($post_id) !== 'post')
+            return;
 
- 		$exclude = get_post_meta($post_id, $this->meta, true);
+        $exclude = get_post_meta($post_id, $this->meta, true);
 
-		printf(
-			'<div class="misc-pub-section misc-pub-section-last"><label><input type="checkbox" name="%1$s" class="checkbox"%3$s> %2$s</label></div>',
-			esc_attr($this->meta),
-			__('Исключить запись из Яндекс.Дзен', 'knife-theme'),
-			checked($exclude, 1, false)
-		);
-	}
+        printf(
+            '<div class="misc-pub-section misc-pub-section-last"><label><input type="checkbox" name="%1$s" class="checkbox"%3$s> %2$s</label></div>',
+            esc_attr($this->meta),
+            __('Исключить запись из Яндекс.Дзен', 'knife-theme'),
+            checked($exclude, 1, false)
+        );
+    }
 
 
     /**
