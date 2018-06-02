@@ -4,52 +4,151 @@
     return false;
 
 
-  var form = null;
+  // Declare global elements
+  var form, notice, loader, submit;
 
+
+  // Create single form field
   var createField = function(key, field, form) {
     if(typeof field.element === 'undefined')
       return null;
 
-    var el = document.createElement(field.element);
-    el.classList.add('form__field', 'form__field--' + field.element);
-    el.setAttribute('name', key);
+    var element = document.createElement(field.element);
+    element.classList.add('form__field-' + field.element);
+    element.setAttribute('name', key);
 
-    if(typeof field.placeholder !== 'undefined')
-      el.setAttribute('placeholder', field.placeholder);
+    var wrapper = document.createElement('div');
+    wrapper.classList.add('form__field');
+    wrapper.appendChild(element);
 
-    if(typeof field.type !== 'undefined')
-      el.setAttribute('type', field.type);
+    delete field.element;
 
-    if(typeof field.value !== 'undefined')
-      el.innerHTML = field.value;
+    for(var i in field) {
+      element.setAttribute(i, field[i]);
+    }
 
 
-    return form.appendChild(el);
+
+  element.addEventListener('input', function (evt) {
+        console.log(this.value);
+  });
+
+
+
+    return form.appendChild(wrapper);
   }
 
 
+  // Create form controls
+  var appendControls = function(form) {
+    var wrapper = document.createElement('div');
+    wrapper.classList.add('form__control');
+
+    submit = document.createElement('button');
+    submit.classList.add('form__control-button', 'button');
+    submit.innerHTML = getOption('button', 'Send');
+    wrapper.appendChild(submit);
+
+    loader = document.createElement('span');
+    loader.classList.add('form__control-loader', 'icon');
+    wrapper.appendChild(loader);
+
+    notice = document.createElement('span');
+    notice.classList.add('form__control-notice');
+    wrapper.appendChild(notice);
+
+    return form.appendChild(wrapper);
+  }
+
+
+  // Control event before and after request
+  var requestEvent = function(stop) {
+    loader.classList.remove('icon--loop');
+
+    if(typeof stop === 'undefined' || stop === true)
+      return submit.removeAttribute('disabled', '');
+
+    loader.classList.remove('icon--alert', 'icon--done');
+    loader.classList.add('icon--loop');
+
+    notice.innerHTML = '';
+
+    return submit.setAttribute('disabled', '');
+  }
+
+
+  // Show form errors
+  var displayWarning = function(message) {
+    var message = message || getOption('warning', 'Request error');
+
+    loader.classList.add('icon--alert');
+    notice.innerHTML = message;
+  }
+
+
+  // Show form errors
+  var displaySuccess = function(message) {
+    var message = message || 'All done';
+
+    loader.classList.add('icon--done');
+    notice.innerHTML = message;
+
+    form.reset();
+  }
+
+
+  // Submit form event
   var submitForm = function(e) {
     e.preventDefault();
 
     var formData = new FormData(form);
-    var postData = 'action=' + knife_user_form.action;
 
-    formData.forEach(function(value, key){
+    // First of all append required params
+    var postData = 'action=' + getOption('action') + '&nonce=' + getOption('nonce');
+
+    // Get params from post fields
+    formData.forEach(function(value, key) {
       postData += '&' + key + '=' + value;
     });
 
 
-    console.log(postData);
 
+    // Send request
     var request = new XMLHttpRequest();
-    request.open('POST', ajaxurl);
+    request.open('POST', getOption('ajaxurl'));
     request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=utf-8');
+
+    request.onload = function() {
+      requestEvent(true);
+
+      if(request.status !== 200)
+        return displayWarning();
+
+      var response = JSON.parse(request.responseText);
+
+      if(response.success)
+        return displaySuccess(response.data);
+
+      return displayWarning(response.data);
+    }
+
     request.send(postData);
+
+    return requestEvent(false);
+  }
+
+
+  // Get option from global settings
+  var getOption = function(option, def) {
+    if(knife_user_form.hasOwnProperty(option))
+      return knife_user_form[option];
+
+    return def || '';
   }
 
 
   //  Append fields to form
-  var appendForm = function(form) {
+  var createForm = function(form) {
     var fields = knife_user_form.fields;
 
     for(var key in fields) {
@@ -58,8 +157,9 @@
 
       createField(key, fields[key], form);
     }
-  }
 
+    return appendControls(form);
+  }
 
   // Find post element
   var post = document.querySelector('.post');
@@ -69,5 +169,5 @@
   form.addEventListener('submit', submitForm);
   post.appendChild(form);
 
-  return appendForm(form);
+  return createForm(form);
 })();

@@ -25,7 +25,7 @@ class Knife_User_Club {
     private $slug = 'club';
 
 
-    /**
+   /**
     * User form meta
     *
     * @since   1.3
@@ -33,6 +33,26 @@ class Knife_User_Club {
     * @var     string
     */
     private $meta = '_knife-user-form';
+
+
+   /**
+    * Ajax action
+    *
+    * @since   1.3
+    * @access  private
+    * @var     string
+    */
+    private $action = 'knife-user-form';
+
+
+    /**
+     * Unique option key to store user settings
+     *
+     * @since   1.3
+     * @access  private
+     * @var     string
+     */
+    private $option = 'knife-user-settings';
 
 
     /**
@@ -52,26 +72,30 @@ class Knife_User_Club {
             'name' => [
                 'element' => 'input',
                 'type' => 'text',
-                'placeholder' => __('Ваше имя', 'knife-theme')
+                'required' => '',
+                'autocomplete' => 'name',
+                'placeholder' => __('Ваше имя', 'knife-theme'),
             ],
+
             'email' => [
                 'element' => 'input',
                 'type' => 'email',
+                'required' => '',
+                'autocomplete' => 'email',
                 'placeholder' => __('Электронная почта', 'knife-theme')
             ],
+
             'subject' => [
                 'element' => 'input',
                 'type' => 'text',
+                'required' => '',
                 'placeholder' => __('О чем хотите писать', 'knife-theme')
             ],
+
             'text' => [
                 'element' => 'textarea',
-                'placeholder' => __('Текст поста целиком', 'knife-theme')
-            ],
-            'submit' => [
-                'element' => 'button',
-                'type' => 'submit',
-                'value' => __('Отправить', 'knife-theme')
+                'required' => '',
+                'placeholder' => __('Текст поста целиком без форматирования', 'knife-theme')
             ]
         ];
 
@@ -89,9 +113,70 @@ class Knife_User_Club {
         add_filter('wp_enqueue_scripts', [$this, 'inject_object'], 12);
 
         // receive user form with ajax
-        add_action('wp_ajax_knife_user_form', [$this, 'submit_form']);
-        add_action('wp_ajax_nopriv_knife_user_form', [$this, 'submit_form']);
+        add_action('wp_ajax_' . $this->action, [$this, 'submit_form']);
+        add_action('wp_ajax_nopriv_' . $this->action, [$this, 'submit_form']);
+
+        // add settings page
+        add_action('admin_init', [$this, 'settings_init']);
+        add_action('admin_menu', [$this, 'add_menu']);
     }
+
+
+    /**
+     * Add push settings submenu to main options menu
+     */
+    public function add_menu() {
+        add_submenu_page('options-general.php', __('Настройки клуба', 'knife-theme'), __('Настройки клуба', 'knife-theme'), 'manage_options', 'knife-club', [$this, 'settings_page']);
+    }
+
+
+    /**
+     * Display push options page
+     */
+    public function settings_page() {
+        echo '<form class="wrap" action="options.php" method="post">';
+
+        settings_fields('knife-user-settings');
+        do_settings_sections('knife-user-settings');
+        submit_button();
+
+        echo '</form>';
+    }
+
+
+    /**
+     * Register settings forms
+     */
+    public function settings_init() {
+        register_setting('knife-user-settings', $this->option);
+
+        add_settings_section(
+            'knife-user-section',
+            __('Настройки уведомлений', 'knife-theme'),
+            [],
+            'knife-user-settings'
+        );
+
+        add_settings_field(
+            'telegram_bot',
+            __('Telegram Access Token', 'knife-theme'),
+            [$this, 'setting_render_telegram'],
+            'knife-user-settings',
+            'knife-user-section'
+        );
+    }
+
+    public function setting_render_telegram() {
+        $options = get_option($this->option);
+        $default = isset($options['telegram']) ? $options['telegram'] : '';
+
+        printf(
+            '<input type="text" name="%1$s[telegram]" class="widefat" value="%2$s">',
+            $this->option,
+            esc_attr($default)
+        );
+    }
+
 
 
     /**
@@ -179,12 +264,14 @@ class Knife_User_Club {
         if(!get_post_meta($post_id, $this->meta, true))
             return;
 
-		$options = [
-			'ajax_url' => admin_url('admin-ajax.php'),
-			'nonce' => wp_create_nonce('knife_user_form'),
-			'action' => 'knife_user_form',
-			'fields' => $this->fields
-		];
+        $options = [
+            'ajaxurl' => admin_url('admin-ajax.php'),
+            'warning' => __('Не удалось отправить форму. Попробуйте еще раз', 'knife-theme'),
+            'button' => __('Отправить', 'knife-theme'),
+            'action' => $this->action,
+            'fields' => $this->fields,
+            'nonce' => wp_create_nonce($this->action)
+        ];
 
         // add user form fields
         wp_localize_script('knife-theme', 'knife_user_form', $options);
@@ -195,7 +282,20 @@ class Knife_User_Club {
      * Save user form data
      */
     public function submit_form() {
-        print_r($_POST);
-        die;
+        if(!check_ajax_referer($this->action, 'nonce', false))
+            wp_send_json_error(__('Ошибка безопасности. Попробуйте еще раз', 'knife-theme'));
+
+        $output = [];
+
+        foreach($this->fields as $name => $field) {
+            if(empty($_REQUEST[$name]))
+                wp_send_json_error(__('Все поля формы обязательны к заполнению', 'knife-theme'));
+
+            $title = $field['placeholder'];
+
+            $output[$title] = $_REQUEST[$name];
+        }
+
+        wp_send_json_success(__('Сообщение успешно отправлено', 'knife-theme'));
     }
 }

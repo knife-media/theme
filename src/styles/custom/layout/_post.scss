@@ -83,11 +83,6 @@
   }
 
   .post__form {
-    display: flex;
-    flex-flow: column wrap;
-    position: relative;
-
-    width: 100%;
     max-width: $content-width;
     margin: 0 auto 1rem;
   }

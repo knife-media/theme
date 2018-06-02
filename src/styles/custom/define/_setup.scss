@@ -3,6 +3,10 @@ $color-white: #ffffff;
 
 $color-text: #111111;
 $color-primary: #1e488f;
+
+$color-success: #78bb13;
+$color-alert: #ab0f0f;
+
 $color-sheet: #faf9f3;
 $color-light: #2f72e1;
 $color-bright: #eaa728;
@@ -67,8 +71,12 @@ button {
   background-color: transparent;
   transition: .25s;
 
-
+  cursor: pointer;
   outline: none;
+
+  &[disabled] {
+    pointer-events: none;
+  }
 }
 
 input {
@@ -95,11 +103,21 @@ img {
 }
 
 @keyframes fade-in {
-  0% {
+  from {
     opacity: 0;
   }
 
-  100% {
+  to {
     opacity: 1;
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
   }
 }
