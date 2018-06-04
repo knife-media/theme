@@ -88,6 +88,56 @@
     .topline__menu-item {
       padding: 0 .75rem;
 
+      &.outline {
+        padding: 0 .5rem;
+
+        .topline__menu-link {
+          padding: .25rem .5rem .375rem;
+          color: $color-primary;
+
+          border: solid 1px $color-primary;
+          border-radius: 3px;
+
+          @media screen and (max-width: 1023px) {
+            padding: .875rem 1rem;
+            color: $color-white;
+
+            border: none;
+            border-radius: 0;
+          }
+        }
+
+        @media screen and (max-width: 1023px) {
+          padding: 0;
+        }
+      }
+
+      &.bright {
+        padding: 0 .5rem;
+
+        .topline__menu-link {
+          padding: .25rem .5rem .375rem;
+
+          color: $color-white;
+          background-color: $color-bright;
+
+          border: solid 1px $color-bright;
+          border-radius: 3px;
+
+          @media screen and (max-width: 1023px) {
+            padding: .875rem 1rem;
+            background-color: transparent;
+
+            border: none;
+            border-radius: 0;
+          }
+        }
+
+        @media screen and (max-width: 1023px) {
+          padding: 0;
+        }
+      }
+
       @media screen and (max-width: 1199px) {
         padding: 0 .5rem;
       }
@@ -96,9 +146,11 @@
         width: 100%;
         padding: 0;
 
-        border-bottom: solid 1px $color-white;
+        border-bottom: solid 1px rgba( $color-white, .25);
       }
     }
+
+
 
     .topline__menu-link {
       display: block;
@@ -108,14 +160,6 @@
       font-weight: 500;
       text-decoration: none;
 
-      &[target="_blank"] {
-        padding: .25rem .5rem .375rem;
-        color: $color-primary;
-
-        border: solid 1px $color-primary;
-        border-radius: 3px;
-      }
-
       @media screen and (max-width: 1199px) {
         font-size: 1rem;
       }
@@ -124,19 +168,12 @@
         padding: .875rem 1rem;
         color: $color-white;
 
-        &[target="_blank"] {
-          padding: .875rem 1rem;
-          color: $color-white;
-
-          border: none;
-          border-radius: 0;
-        }
-
         &:hover {
           color: $color-white;
         }
       }
     }
+
 
     @media screen and (max-width: 1023px) {
       display: flex;

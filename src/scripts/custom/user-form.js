@@ -7,7 +7,6 @@
   // Declare global elements
   var form, notice, loader, submit;
 
-
   // Create single form field
   var createField = function(key, field, form) {
     if(typeof field.element === 'undefined')
@@ -27,15 +26,31 @@
       element.setAttribute(i, field[i]);
     }
 
+    element.value = getStorage(key);
 
-
-  element.addEventListener('input', function (evt) {
-        console.log(this.value);
-  });
-
-
+    element.addEventListener('input', function(e) {
+      return setStorage(this.name, this.value);
+    });
 
     return form.appendChild(wrapper);
+  }
+
+
+  // Set local storage input value
+  var setStorage = function(name, value) {
+    var storage = JSON.parse(localStorage.getItem('knife_user_form')) || {};
+
+    storage[name] = value;
+
+    return localStorage.setItem('knife_user_form', JSON.stringify(storage));
+  }
+
+
+  // Get local storage input value by name
+  var getStorage = function(name) {
+    var storage = JSON.parse(localStorage.getItem('knife_user_form')) || {};
+
+    return storage[name] || '';
   }
 
 
@@ -93,7 +108,9 @@
     loader.classList.add('icon--done');
     notice.innerHTML = message;
 
-    form.reset();
+    localStorage.removeItem('knife_user_form');
+
+//    return form.reset();
   }
 
 

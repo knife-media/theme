@@ -74,6 +74,7 @@ class Knife_User_Club {
                 'type' => 'text',
                 'required' => '',
                 'autocomplete' => 'name',
+                'maxlength' => 50,
                 'placeholder' => __('Ваше имя', 'knife-theme'),
             ],
 
@@ -82,6 +83,7 @@ class Knife_User_Club {
                 'type' => 'email',
                 'required' => '',
                 'autocomplete' => 'email',
+                'maxlength' => 50,
                 'placeholder' => __('Электронная почта', 'knife-theme')
             ],
 
@@ -89,6 +91,7 @@ class Knife_User_Club {
                 'element' => 'input',
                 'type' => 'text',
                 'required' => '',
+                'maxlength' => 50,
                 'placeholder' => __('О чем хотите писать', 'knife-theme')
             ],
 
@@ -158,20 +161,64 @@ class Knife_User_Club {
         );
 
         add_settings_field(
-            'telegram_bot',
+            'telegram_token',
             __('Telegram Access Token', 'knife-theme'),
-            [$this, 'setting_render_telegram'],
+            [$this, 'setting_render_telegram_token'],
             'knife-user-settings',
             'knife-user-section'
         );
+
+        add_settings_field(
+            'telegram_chat',
+            __('ID чата администраторов в Telegram', 'knife-theme'),
+            [$this, 'setting_render_telegram_chat'],
+            'knife-user-settings',
+            'knife-user-section'
+        );
+
+        add_settings_field(
+            'request_id',
+            __('ID текущей заявки', 'knife-theme'),
+            [$this, 'setting_render_request_id'],
+            'knife-user-settings',
+            'knife-user-section'
+        );
+
+
     }
 
-    public function setting_render_telegram() {
+    public function setting_render_telegram_token() {
         $options = get_option($this->option);
-        $default = isset($options['telegram']) ? $options['telegram'] : '';
+        $default = isset($options['telegram_token']) ? $options['telegram_token'] : '';
 
         printf(
-            '<input type="text" name="%1$s[telegram]" class="widefat" value="%2$s">',
+            '<input type="text" name="%1$s[telegram_token]" class="regular-text" value="%2$s">',
+            $this->option,
+            esc_attr($default)
+        );
+    }
+
+    public function setting_render_telegram_chat() {
+        $options = get_option($this->option);
+        $default = isset($options['telegram_chat']) ? $options['telegram_chat'] : '';
+
+        printf(
+            '<input type="text" name="%1$s[telegram_chat]" class="regular-text" value="%2$s">',
+            $this->option,
+            esc_attr($default)
+        );
+
+        printf('<p class="description">%s</p>',
+            __('Добавьте бота в группу и запросите его состояние: <br>https://api.telegram.org/bot[TOKEN]/getUpdates', 'knife-theme')
+        );
+    }
+
+    public function setting_render_request_id() {
+        $options = get_option($this->option);
+        $default = isset($options['request_id']) ? $options['request_id'] : 1;
+
+        printf(
+            '<input type="text" name="%1$s[request_id]" class="regular-text" value="%2$s" readonly>',
             $this->option,
             esc_attr($default)
         );
@@ -293,9 +340,84 @@ class Knife_User_Club {
 
             $title = $field['placeholder'];
 
-            $output[$title] = $_REQUEST[$name];
+            $output[$title] = sanitize_text_field($_REQUEST[$name]);
         }
 
+        $options = get_option($this->option, []);
+
+        if(empty($options['telegram_token']) || empty($options['telegram_chat']))
+            wp_send_json_error(__('Ошибка отправки сообщения. Свяжитесь с администратором', 'knife-theme'));
+
+
+        $request = isset($options['request_id']) ? (int) $options['request_id'] + 1 : 1;
+
+        $message = [
+            'chat_id' => $options['telegram_chat'],
+            'text' => $this->create_request($output, $request),
+            'parse_mode' => 'HTML'
+        ];
+
+
+        if(!$this->send_telegram($options['telegram_token'], $message))
+            wp_send_json_error(__('Ошибка отправки сообщения. Свяжитесь с администратором', 'knife-theme'));
+
+
+        $options['request_id'] = $request;
+        update_option($this->option, $options);
+
         wp_send_json_success(__('Сообщение успешно отправлено', 'knife-theme'));
+    }
+
+
+    /**
+     * Send message to Telegram
+     */
+    private function send_telegram($token, $message) {
+        $url = 'https://api.telegram.org/bot' . $token . '/sendMessage';
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type:application/json']);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($message));
+        $response = curl_exec($ch);
+
+        return json_decode($response)->ok;
+    }
+
+
+    /**
+     * Create text from array
+     */
+    private function create_request($output, $request) {
+        $folder = '/requests/';
+        $upload = wp_upload_dir();
+        $create = $upload['basedir'] . $folder;
+
+        if(!is_dir($create) && !mkdir($create))
+            wp_send_json_error(__('Не удалось сохранить заявку.', 'knife-theme'));
+
+        $file = $folder . "{$request}-" . md5(time()) . '.html';
+
+        $message = '<!doctype html><head><meta charset="utf-8"></head>';
+
+        foreach($output as $title => $value) {
+            $message .= $title . "\n " . $value . "\n\n";
+        }
+
+        if(!file_put_contents($upload['basedir'] . $file, $message))
+            wp_send_json_error(__('Не удалось сохранить заявку.', 'knife-theme'));
+
+        return $upload['baseurl'] . $file;
+
+        $text = sprintf(__("<strong>Заявка #%s</strong>", 'knife-theme'), $request) . "\n\n";
+
+        foreach($output as $title => $value) {
+            $text .= "<em>{$title}</em>\n{$value}\n\n";
+        }
+
+        return $text;
     }
 }

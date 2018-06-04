@@ -1,6 +1,6 @@
 <?php
 /**
- * Blog widget
+ * club widget
  *
  * 5 posts with create post button
  *
@@ -9,16 +9,16 @@
  */
 
 
-class Knife_Blog_Widget extends WP_Widget {
+class Knife_club_Widget extends WP_Widget {
 
     public function __construct() {
         $widget_ops = [
-            'classname' => 'blog',
-            'description' => __('Выводит полосу из историй в виде карточек.', 'knife-theme'),
+            'classname' => 'club',
+            'description' => __('Выводит блок записей в клуб.', 'knife-theme'),
             'customize_selective_refresh' => true
         ];
 
-        parent::__construct('knife_theme_blog', __('[НОЖ] Блоги', 'knife-theme'), $widget_ops);
+        parent::__construct('knife_theme_club', __('[НОЖ] Клуб', 'knife-theme'), $widget_ops);
     }
 
 
@@ -50,7 +50,7 @@ class Knife_Blog_Widget extends WP_Widget {
             $q = new WP_Query([
                 'post_status' => 'publish',
                 'ignore_sticky_posts' => 1,
-                'post_type' => 'blog',
+                'post_type' => 'club',
                 'posts_per_page' => empty($link) ? 6 : 5,
                 'offset' => $offset
             ]);
@@ -61,37 +61,37 @@ class Knife_Blog_Widget extends WP_Widget {
 
             printf('<div class="widget__head"><a class="widget__head-link" href="%2$s">%1$s</a></div>',
                 esc_html($title),
-                get_post_type_archive_link('blog')
+                get_post_type_archive_link('club')
             );
 
             while($q->have_posts()) : $q->the_post();
                 echo '<div class="widget__item"><footer class="widget__footer">';
 
                 knife_theme_meta([
-					'opts' => ['author', 'date'],
-					'before' => '<div class="widget__meta meta">',
-					'after' => '</div>'
-				]);
+                    'opts' => ['author', 'date'],
+                    'before' => '<div class="widget__meta meta">',
+                    'after' => '</div>'
+                ]);
 
-				printf(
-					'<a class="widget__link" href="%2$s">%1$s</a>',
-					the_title('<p class="widget__title">', '</p>', false),
-					get_permalink()
-				);
+                printf(
+                    '<a class="widget__link" href="%2$s">%1$s</a>',
+                    the_title('<p class="widget__title">', '</p>', false),
+                    get_permalink()
+                );
 
                 echo '</footer></div>';
             endwhile;
 
             if(!empty($link)) :
                 printf('<div class="widget__item"><a class="widget__button button" href="%2$s" target="_blank">%1$s</a></div>',
-                    __('Создать публикацию', 'knife-theme'),
+                    __('Написать в клуб', 'knife-theme'),
                     esc_url($link)
                 );
             endif;
 
             echo $args['after_widget'];
 
-	        wp_reset_query();
+            wp_reset_query();
 
             $html = ob_get_clean();
             set_transient($this->id, $html, 24 * HOUR_IN_SECONDS);
@@ -174,5 +174,5 @@ class Knife_Blog_Widget extends WP_Widget {
  * It is time to register widget
  */
 add_action('widgets_init', function() {
-    register_widget('Knife_Blog_Widget');
+    register_widget('Knife_club_Widget');
 });

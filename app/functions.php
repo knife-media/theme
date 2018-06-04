@@ -358,16 +358,19 @@ add_filter('user_contactmethods', function($contact) {
 
 // Change default menu items class
 add_filter('nav_menu_css_class', function($classes, $item, $args) {
+    // Redefine classes array
+    $classes = [];
+
     if($args->theme_location === 'main')
-        return ['topline__menu-item'];
+        $classes[] = 'topline__menu-item';
 
     if($args->theme_location === 'footer')
-        return ['footer__menu-item'];
+        $classes[] = 'footer__menu-item';
 
     if($args->theme_location === 'social')
-        return ['social__item'];
+        $classes[] = 'social__item';
 
-    return $classes;
+    return array_merge($classes, (array) get_post_meta($item->ID, '_menu_item_classes', true));
 }, 10, 3);
 
 
