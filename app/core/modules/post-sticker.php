@@ -26,7 +26,7 @@ class Knife_Post_Sticker {
         add_action('add_meta_boxes', [$this, 'add_metabox']);
 
         add_action('wp_ajax_knife_sticker_upload', [$this, 'upload_sticker']);
-         add_action('wp_ajax_knife_sticker_delete', [$this, 'delete_sticker']);
+        add_action('wp_ajax_knife_sticker_delete', [$this, 'delete_sticker']);
     }
 
 
@@ -46,7 +46,7 @@ class Knife_Post_Sticker {
         $include = get_template_directory_uri() . '/core/include';
 
         // insert admin styles
-         wp_enqueue_style('knife-post-sticker', $include . '/styles/post-sticker.css', [], $version);
+        wp_enqueue_style('knife-post-sticker', $include . '/styles/post-sticker.css', [], $version);
 
         // insert admin scripts
         wp_enqueue_script('knife-post-sticker', $include . '/scripts/post-sticker.js', ['jquery'], $version);
