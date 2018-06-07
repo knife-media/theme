@@ -78,21 +78,22 @@ class Knife_User_Club {
         add_filter('wp_enqueue_scripts', [$this, 'inject_object'], 12);
 
         // receive user form with ajax
-        add_action('wp_ajax_' . $this->action, [$this, 'submit_form']);
-        add_action('wp_ajax_nopriv_' . $this->action, [$this, 'submit_form']);
+        add_action('wp_ajax_' . $this->action, [$this, 'submit_request']);
+        add_action('wp_ajax_nopriv_' . $this->action, [$this, 'submit_request']);
 
         // add settings page
         add_action('admin_init', [$this, 'settings_init']);
         add_action('admin_menu', [$this, 'add_menu']);
 
-        // create new role once on switch theme
-        add_action('after_setup_theme', [$this, 'create_role']);
+        // handle create role settings link
+        add_action('load-settings_page_knife-club', [$this, 'create_role']);
 
         // register club post type
         add_action('init', [$this, 'register_club']);
 
-        // add role caps
-        add_action('admin_init', [$this, 'add_capabilities']);
+        // notify on sendig to review
+        add_action('draft_to_pending', [$this, 'notify_review']);
+        add_action('auto-draft_to_pending', [$this, 'notify_review']);
     }
 
 
@@ -100,13 +101,32 @@ class Knife_User_Club {
      * Create new user role
      */
     public function create_role() {
-        add_role('club_user', __('Участник клуба', 'knife-theme'), [
-            'read' => true,
-            'edit_posts' => false,
-            'delete_posts' => false,
-            'publish_posts' => false,
-            'upload_files' => false,
-        ]);
+        if(!isset($_GET['_wpnonce'], $_GET['action']))
+            return;
+
+        $action = $_GET['action'];
+
+        if($action === 'create-role' && wp_verify_nonce($_GET['_wpnonce'], $action)) {
+
+            if(!$role = get_role('club_user')) {
+                $role = add_role('club_user', __('Участник клуба', 'knife-theme'), [
+                    'read' => true,
+                    'edit_posts' => false,
+                    'delete_posts' => false,
+                    'publish_posts' => false,
+                    'upload_files' => false,
+                ]);
+            }
+
+            $role->add_cap('read');
+            $role->add_cap('read_club_item');
+            $role->add_cap('edit_club_item');
+            $role->add_cap('edit_club_items');
+
+        }
+
+        wp_safe_redirect(admin_url('options-general.php?page=knife-club'));
+        exit;
     }
 
 
@@ -116,12 +136,15 @@ class Knife_User_Club {
     public function register_club() {
         register_post_type($this->slug, [
             'labels'                => [
-                'all_items'         => __('Все записи', 'knife-theme'),
+                'name'              => __('Записи клуба', 'knife-theme'),
+                'singular_name'     => __('Запись в клуб', 'knife-theme'),
+                'add_new'           => __('Добавить запись', 'knife-theme'),
+                'menu_name'         => __('Клуб', 'knife-theme')
             ],
             'label'                 => __('Клуб', 'knife-theme'),
             'description'           => __('Записи в клуб', 'knife-theme'),
             'supports'              => ['title', 'thumbnail', 'revisions', 'editor', 'excerpt'],
-            'hierarchical'          => true,
+            'hierarchical'          => false,
             'public'                => true,
             'show_ui'               => true,
             'show_in_menu'          => true,
@@ -136,26 +159,6 @@ class Knife_User_Club {
             'capability_type'       => ['club_item', 'club_items'],
             'map_meta_cap'          => true
         ]);
-    }
-
-
-    /**
-     * Add role capabilities to user roles
-     */
-    public function add_capabilities() {
-        $role = get_role('club_user');
-
-        $role->add_cap('read_club_item');
-        /*
-        $role->add_cap('edit_club_item');
-
-        $role->add_cap('edit_club_items');
-        $role->add_cap('edit_other_club_items');
-        $role->add_cap('edit_published_club_items');
-        $role->add_cap('publish_club_items');
-        $role->add_cap('read_private_club_items');
-        $role->add_cap('delete_club_item');
-        */
     }
 
 
@@ -175,7 +178,16 @@ class Knife_User_Club {
 
         settings_fields('knife-user-settings');
         do_settings_sections('knife-user-settings');
+
         submit_button();
+
+        if(!get_role('club_user')) {
+            $query = add_query_arg('action', 'create-role', 'options-general.php?page=knife-club');
+
+            printf(__('<p>Для корректной работы клуба необходимо <a href="%s">создать роль участника</a></p>', 'knife-theme'),
+                wp_nonce_url(admin_url($query), 'create-role')
+            );
+        }
 
         echo '</form>';
     }
@@ -189,7 +201,7 @@ class Knife_User_Club {
 
         add_settings_section(
             'knife-user-section',
-            __('Настройки уведомлений', 'knife-theme'),
+            __('Настройки клуба', 'knife-theme'),
             [],
             'knife-user-settings'
         );
@@ -212,13 +224,11 @@ class Knife_User_Club {
 
         add_settings_field(
             'request_id',
-            __('ID текущей заявки', 'knife-theme'),
+            __('ID последней заявки', 'knife-theme'),
             [$this, 'setting_render_request_id'],
             'knife-user-settings',
             'knife-user-section'
         );
-
-
     }
 
     public function setting_render_telegram_token() {
@@ -252,10 +262,15 @@ class Knife_User_Club {
         $default = isset($options['request_id']) ? $options['request_id'] : 1;
 
         printf(
-            '<input type="text" name="%1$s[request_id]" class="regular-text" value="%2$s" readonly>',
+            '<input type="text" name="%1$s[request_id]" class="regular-text" value="%2$s">',
             $this->option,
             esc_attr($default)
         );
+
+        printf('<p class="description">%s</p>',
+            __('Для сброса установите нулевое значение', 'knife-theme')
+        );
+
     }
 
 
@@ -352,7 +367,7 @@ class Knife_User_Club {
 
 
         $options = [
-            'ajaxurl' => admin_url('admin-ajax.php'),
+            'ajaxurl' => esc_url(admin_url('admin-ajax.php')),
             'warning' => __('Не удалось отправить форму. Попробуйте еще раз', 'knife-theme'),
             'button' => __('Отправить', 'knife-theme'),
             'action' => $this->action,
@@ -366,9 +381,26 @@ class Knife_User_Club {
 
 
     /**
+     * Notify on sending to review
+     */
+    public function notify_review($post) {
+        $options = get_option($this->option, []);
+
+        $message = [
+            'chat_id' => $options['telegram_chat'],
+            'text' => $this->get_review($post),
+            'parse_mode' => 'HTML'
+        ];
+
+
+        return $this->send_telegram($options['telegram_token'], $message);
+    }
+
+
+    /**
      * Save user form data
      */
-    public function submit_form() {
+    public function submit_request() {
         if(!check_ajax_referer($this->action, 'nonce', false))
             wp_send_json_error(__('Ошибка безопасности. Попробуйте еще раз', 'knife-theme'));
 
@@ -422,12 +454,37 @@ class Knife_User_Club {
         if(!file_put_contents($upload['basedir'] . $file, $content))
             wp_send_json_error(__('Не удалось сохранить заявку.', 'knife-theme'));
 
-        $text = sprintf(__('<strong>В клуб добавлена новая заявка #%d</strong>', 'knife-theme'), $request);
+        $text = sprintf("%s\n\n%s \n%s \n\n%s",
+            sprintf(__('<strong>В клуб добавлена новая заявка #%d</strong>', 'knife-theme'), $request),
+            sprintf(__('Автор: %s', 'knife-theme'), esc_attr($fields['name'])),
+            sprintf(__('Тема: %s', 'knife-theme'), esc_attr($fields['subject'])),
+            esc_url($upload['baseurl'] . $file)
+        );
 
-        return $text . "\n\n" . esc_url($upload['baseurl'] . $file);
+        return $text;
     }
 
 
+    /**
+     * Get review message for telegram bot
+     */
+    private function get_review($post) {
+        $author = get_userdata($post->post_author);
+
+        $text = sprintf("%s\n\n%s \n%s \n\n%s",
+            __('<strong>В клуб добавлена новая запись на утверждение</strong>', 'knife-theme'),
+            sprintf(__('Автор: %s', 'knife-theme'), esc_attr($author->display_name)),
+            sprintf(__('Тема: %s', 'knife-theme'), esc_attr($post->post_title)),
+            esc_url(get_preview_post_link($post))
+        );
+
+        return $text;
+    }
+
+
+    /**
+     * Create request byt template
+     */
     private function create_request($fields, $request) {
         extract($fields);
 

@@ -110,7 +110,7 @@
 
     localStorage.removeItem('knife_user_form');
 
-//    return form.reset();
+    return form.reset();
   }
 
 

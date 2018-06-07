@@ -12,7 +12,7 @@
                 margin: 0;
                 padding: 10px;
 
-                font: normal 16px/1.4 sans-serif;
+                font: normal 14px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
 
                 background-color: #eee;
             }
@@ -27,8 +27,9 @@
                 padding: 20px;
 
                 background-color: #fff;
+                box-shadow: 0 1px 1px rgba(0,0,0,.04);
 
-                box-shadow: 0 0 1px #aaa;
+                border: 1px solid #e5e5e5;
             }
 
             header {
@@ -37,10 +38,10 @@
                 grid-column-gap: 20px;
                 grid-row-gap: 7px;
 
-                margin: 20px 0;
+                margin: 10px 0 20px;
                 padding: 20px 0;
 
-                border: solid 1px #ccc;
+                border: solid 1px #eee;
                 border-left: 0;
                 border-right: 0;
             }
@@ -48,7 +49,10 @@
             h1 {
                 display: block;
 
-                font-size: 20px;
+                margin: 0;
+
+                font-size: 23px;
+                font-weight: 400;
             }
         </style>
     </head>

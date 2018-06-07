@@ -57,7 +57,7 @@ class Knife_Google_Search {
         echo '<form class="wrap" action="options.php" method="post">';
 
         settings_fields('knife-search-settings');
-        do_settings_sections('knife-sarch-settings');
+        do_settings_sections('knife-search-settings');
         submit_button();
 
         echo '</form>';
@@ -82,7 +82,7 @@ class Knife_Google_Search {
             __('Google Custom Search ID', 'knife-theme'),
             [$this, 'setting_render_appid'],
             'knife-search-settings',
-             'knife-search-section'
+            'knife-search-section'
         );
     }
 

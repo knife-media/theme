@@ -294,7 +294,7 @@ add_filter('post_class', function($classes, $class) {
 
 // Change mail from fields
 add_filter('wp_mail_from_name', function($name) {
-    return __('knife.media webmaster', 'knife-theme');
+    return __('knife.media', 'knife-theme');
 });
 
 add_filter('wp_mail_from', function($email) {
@@ -348,9 +348,9 @@ add_filter('wp_link_pages_link', function($link) {
 add_filter('user_contactmethods', function($contact) {
     $contact['vkontakte'] = __('Ссылка на ВКонтакте', 'knife-theme');
     $contact['facebook'] = __('Ссылка на Facebook', 'knife-theme');
-     $contact['telegram'] = __('Профиль Telegram', 'knife-theme');
-     $contact['instagram'] = __('Профиль Instagram', 'knife-theme');
-     $contact['twitter'] = __('Профиль Twitter', 'knife-theme');
+    $contact['telegram'] = __('Профиль Telegram', 'knife-theme');
+    $contact['instagram'] = __('Профиль Instagram', 'knife-theme');
+    $contact['twitter'] = __('Профиль Twitter', 'knife-theme');
 
     return $contact;
 });
@@ -408,7 +408,7 @@ add_filter('gettext_with_context', function($translation, $text, $context, $doma
         'Standard' => __('Стандартный', 'knife-theme'),
         'Aside'  => __('Без сайдбара', 'knife-theme'),
         'Video' => __('Видео', 'knife-theme'),
-         'Audio' => __('Аудио', 'knife-theme'),
+        'Audio' => __('Аудио', 'knife-theme'),
         'Gallery' => __('Галерея', 'knife-theme'),
         'Chat' => __('Карточки', 'knife-theme')
     ];
