@@ -14,27 +14,29 @@
       line-height: 1;
       color: inherit;
 
-			.icon {
-				display: block;
+      transition: none;
+
+      .icon {
+        display: block;
 
         transition: .25s;
 
-				&.icon--facebook:hover {
-        	color: #3b5998;
-				}
+        &.icon--facebook:hover {
+          color: #3b5998;
+        }
 
-				&.icon--vkontakte:hover {
-        	color: #5186bd;
-				}
+        &.icon--vkontakte:hover {
+          color: #5186bd;
+        }
 
-				&.icon--twitter:hover {
-        	color: #1da1f2;
-				}
+        &.icon--twitter:hover {
+          color: #1da1f2;
+        }
 
-				&.icon--telegram:hover {
-        	color: #0088cc;
-				}
-			}
+        &.icon--telegram:hover {
+          color: #0088cc;
+        }
+      }
     }
   }
 }

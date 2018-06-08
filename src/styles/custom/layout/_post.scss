@@ -82,6 +82,12 @@
     }
   }
 
+  .post__form {
+    max-width: $content-width;
+    margin: 0 auto 1rem;
+  }
+
+
   .post__footer {
     display: block;
 

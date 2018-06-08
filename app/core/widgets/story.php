@@ -96,7 +96,6 @@ class Knife_Story_Widget extends WP_Widget {
         $instance['posts_per_page'] = absint($new_instance['posts_per_page']);
         $instance['offset'] = absint($new_instance['offset']);
         $instance['title'] = sanitize_text_field($new_instance['title']);
-        $instance['post_type'] = sanitize_text_field($new_instance['post_type']);
 
         return $instance;
     }

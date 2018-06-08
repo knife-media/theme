@@ -294,7 +294,7 @@ add_filter('post_class', function($classes, $class) {
 
 // Change mail from fields
 add_filter('wp_mail_from_name', function($name) {
-    return __('knife.media webmaster', 'knife-theme');
+    return __('knife.media', 'knife-theme');
 });
 
 add_filter('wp_mail_from', function($email) {
@@ -348,9 +348,9 @@ add_filter('wp_link_pages_link', function($link) {
 add_filter('user_contactmethods', function($contact) {
     $contact['vkontakte'] = __('Ссылка на ВКонтакте', 'knife-theme');
     $contact['facebook'] = __('Ссылка на Facebook', 'knife-theme');
-     $contact['telegram'] = __('Профиль Telegram', 'knife-theme');
-     $contact['instagram'] = __('Профиль Instagram', 'knife-theme');
-     $contact['twitter'] = __('Профиль Twitter', 'knife-theme');
+    $contact['telegram'] = __('Профиль Telegram', 'knife-theme');
+    $contact['instagram'] = __('Профиль Instagram', 'knife-theme');
+    $contact['twitter'] = __('Профиль Twitter', 'knife-theme');
 
     return $contact;
 });
@@ -358,16 +358,19 @@ add_filter('user_contactmethods', function($contact) {
 
 // Change default menu items class
 add_filter('nav_menu_css_class', function($classes, $item, $args) {
+    // Redefine classes array
+    $classes = [];
+
     if($args->theme_location === 'main')
-        return ['topline__menu-item'];
+        $classes[] = 'topline__menu-item';
 
     if($args->theme_location === 'footer')
-        return ['footer__menu-item'];
+        $classes[] = 'footer__menu-item';
 
     if($args->theme_location === 'social')
-        return ['social__item'];
+        $classes[] = 'social__item';
 
-    return $classes;
+    return array_merge($classes, (array) get_post_meta($item->ID, '_menu_item_classes', true));
 }, 10, 3);
 
 
@@ -405,7 +408,7 @@ add_filter('gettext_with_context', function($translation, $text, $context, $doma
         'Standard' => __('Стандартный', 'knife-theme'),
         'Aside'  => __('Без сайдбара', 'knife-theme'),
         'Video' => __('Видео', 'knife-theme'),
-         'Audio' => __('Аудио', 'knife-theme'),
+        'Audio' => __('Аудио', 'knife-theme'),
         'Gallery' => __('Галерея', 'knife-theme'),
         'Chat' => __('Карточки', 'knife-theme')
     ];
@@ -553,8 +556,11 @@ add_action('init', function() {
 // Add custom theme widgets from common hanlder
 require get_template_directory() . '/core/modules/widget-handler.php';
 
-// Manage Story section
+// Manage story section
 require get_template_directory() . '/core/modules/story-manager.php';
+
+// User generated blogs
+require get_template_directory() . '/core/modules/user-club.php';
 
 // Login screen custom styles
 require get_template_directory() . '/core/modules/access-screen.php';

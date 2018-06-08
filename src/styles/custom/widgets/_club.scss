@@ -1,0 +1,144 @@
+.widget-club {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-self: flex-start;
+  position: relative;
+
+  width: 100%;
+  padding-bottom: .5rem;
+
+  background-color: $color-white;
+
+  .widget__head {
+    display: flex;
+
+    width: 100%;
+
+    .widget__head-link {
+      display: block;
+      cursor: pointer;
+
+      width: 100%;
+      padding: .725rem 1.25rem;
+
+      font-size: .5625rem;
+      font-weight: 700;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+
+      color: $color-white;
+      background-color: $color-bright;
+
+      &:hover {
+        filter: brightness(110%);
+      }
+    }
+  }
+
+  .widget__footer {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: flex-start;
+
+    width: 100%;
+    height: 100%;
+    padding: 1.5rem 0;
+
+    background-color: $color-white;
+
+    @media screen and (max-width: 1023px) {
+      padding: 1rem 0;
+    }
+  }
+
+  .widget__meta {
+    margin-bottom: 1rem;
+    color: $color-text;
+
+    a:hover {
+      opacity: .75;
+    }
+  }
+
+  .widget__title {
+    display: block;
+    position: relative;
+
+    width: 100%;
+
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.125;
+    letter-spacing: .25px;
+    word-wrap: break-word;
+
+    em {
+      font-family: $font-serif;
+      font-weight: 400;
+    }
+
+    @media screen and (max-width: 1023px) {
+      font-size: 1.375rem;
+      line-height: 1.25;
+    }
+
+    @media screen and (max-width: 767px) {
+      font-size: 1.125rem;
+    }
+  }
+
+  .widget__button {
+    align-self: flex-start;
+
+    margin: 1.5rem 0;
+
+    background-color: $color-bright;
+
+    border: solid 1px $color-bright;
+
+    &:hover {
+      filter: brightness(110%);
+    }
+  }
+
+  .widget__item {
+    display: flex;
+
+    width: calc(100% / 3);
+    padding: 0 1rem;
+
+    color: $color-text;
+
+    &:nth-last-child(n+4) {
+      .widget__footer {
+        border-bottom: solid 1px lightgray;
+      }
+    }
+
+    @media screen and (max-width: 1023px) {
+      width: 50%;
+
+      &:nth-last-child(n+3) {
+        .widget__footer {
+          border-bottom: solid 1px lightgray;
+        }
+      }
+    }
+
+    @media screen and (max-width: 767px) {
+      width: 100%;
+
+      &:nth-last-child(n+2) {
+        .widget__footer {
+          border-bottom: solid 1px lightgray;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    padding-bottom: 0;
+  }
+}
