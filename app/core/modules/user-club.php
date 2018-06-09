@@ -66,9 +66,7 @@ class Knife_User_Club {
 
 
     public function __construct() {
-
-        // set form fields
-                // print checkbox user form
+        // print checkbox user form
         add_action('page_attributes_misc_attributes', [$this, 'print_checkbox']);
 
         // save user form post meta
@@ -107,22 +105,46 @@ class Knife_User_Club {
         $action = $_GET['action'];
 
         if($action === 'create-role' && wp_verify_nonce($_GET['_wpnonce'], $action)) {
+            $roles = [
+                'administrator' => true,
+                'editor' => true,
+                'club_user' => false
+            ];
 
-            if(!$role = get_role('club_user')) {
-                $role = add_role('club_user', __('Участник клуба', 'knife-theme'), [
-                    'read' => true,
-                    'edit_posts' => false,
-                    'delete_posts' => false,
-                    'publish_posts' => false,
-                    'upload_files' => false,
-                ]);
+            add_role('club_user', __('Участник клуба', 'knife-theme'), [
+                'read' => true,
+                'edit_posts' => false,
+                'delete_posts' => false,
+                'publish_posts' => false,
+                'upload_files' => false,
+            ]);
+
+
+            foreach($roles as $name => $can_edit) {
+                if(!$role = get_role($name))
+                    continue;
+
+                $role->add_cap('read');
+                $role->add_cap('read_club_item');
+                $role->add_cap('edit_club_item');
+                $role->add_cap('edit_club_items');
+
+                if($can_edit === false)
+                    continue;
+
+              $role->add_cap('read_private_club_items');
+              $role->add_cap('edit_others_club_items');
+              $role->add_cap('edit_published_club_items');
+              $role->add_cap('publish_club_items');
+              $role->add_cap('delete_others_club_items');
+              $role->add_cap('delete_private_club_items');
+              $role->add_cap('delete_published_club_items');
             }
 
-            $role->add_cap('read');
-            $role->add_cap('read_club_item');
-            $role->add_cap('edit_club_item');
-            $role->add_cap('edit_club_items');
 
+            if(get_role('contributor')) {
+                remove_role('contributor');
+            }
         }
 
         wp_safe_redirect(admin_url('options-general.php?page=knife-club'));
@@ -179,15 +201,14 @@ class Knife_User_Club {
         settings_fields('knife-user-settings');
         do_settings_sections('knife-user-settings');
 
-        submit_button();
+        $reset = sprintf('<a href="%2$s" class="button">%1$s</a>',
+            __('Сбросить роли пользователей', 'knife-theme'),
+            wp_nonce_url(admin_url(add_query_arg('action', 'create-role', 'options-general.php?page=knife-club')), 'create-role')
+        );
 
-        if(!get_role('club_user')) {
-            $query = add_query_arg('action', 'create-role', 'options-general.php?page=knife-club');
-
-            printf(__('<p>Для корректной работы клуба необходимо <a href="%s">создать роль участника</a></p>', 'knife-theme'),
-                wp_nonce_url(admin_url($query), 'create-role')
-            );
-        }
+        printf('<p>%1$s &nbsp; %2$s</p>',
+            get_submit_button(__('Сохранить настройки'), 'primary', 'submit', false), $reset
+        );
 
         echo '</form>';
     }
