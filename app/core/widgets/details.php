@@ -59,6 +59,8 @@ class Knife_Details_Widget extends WP_Widget {
                 ]
             ]);
 
+            ob_start();
+
             if($q->have_posts()) :
                 echo $args['before_widget'];
 
