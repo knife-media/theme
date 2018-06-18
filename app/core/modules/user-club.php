@@ -525,21 +525,27 @@ class Knife_User_Club {
      */
     private function get_request($fields, $request) {
         $upload = wp_upload_dir();
+        $folder = '/requests/';
 
-        $file = sprintf("/requests/%d-%s.html", $request,
+        $file = sprintf("%d-%s.html", $request,
             substr(md5(uniqid()), -8)
         );
 
+        $path = $folder . $file;
+
+        if(!is_dir($upload['basedir'] . $folder) && !mkdir($upload['basedir'] . $folder))
+            wp_send_json_error(__('Не удалось сохранить заявку.', 'knife-theme'));
+
         $content = $this->create_request($fields, $request);
 
-        if(!file_put_contents($upload['basedir'] . $file, $content))
+        if(!file_put_contents($upload['basedir'] . $path, $content))
             wp_send_json_error(__('Не удалось сохранить заявку.', 'knife-theme'));
 
         $text = sprintf("%s\n\n%s \n%s \n\n%s",
             sprintf(__('<strong>В клуб добавлена новая заявка #%d</strong>', 'knife-theme'), $request),
             sprintf(__('Автор: %s', 'knife-theme'), esc_attr($fields['name'])),
             sprintf(__('Тема: %s', 'knife-theme'), esc_attr($fields['subject'])),
-            esc_url($upload['baseurl'] . $file)
+            esc_url($upload['baseurl'] . $path)
         );
 
         return $text;
