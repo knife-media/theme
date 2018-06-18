@@ -94,31 +94,6 @@
     }
   }
 
-  &.figure--profile {
-    align-items: flex-start;
-
-    width: calc(100% + 4rem);
-    max-width: calc(#{$content-width} + 4rem);
-    margin-left: -2rem;
-    margin-right: -2rem;
-    padding: 1.25rem 2rem;
-
-    font-size: 1rem;
-
-    background-color: $color-bright;
-
-    border-radius: 5px;
-
-    .figure__author {
-      margin: 0 0 .5rem;
-    }
-
-    @media screen and (max-width: 767px) {
-      font-size: .9375rem;
-    }
-  }
-
-
   &.figure--quote {
     align-items: flex-start;
 

@@ -1,0 +1,30 @@
+.profile {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  position: relative;
+  align-items: flex-start;
+
+  width: calc(100% + 4rem);
+  max-width: calc(#{$content-width} + 4rem);
+  margin-left: -2rem;
+  margin-right: -2rem;
+  margin-bottom: 2rem;
+  padding: 1.25rem 2rem;
+
+  text-decoration: none;
+
+  background-color: $color-bright;
+
+  border: none;
+  border-radius: 5px;
+
+  h3 {
+    margin: 0 0 .5rem;
+    font-weight: 700;
+  }
+
+  p {
+    margin-bottom: 0;
+  }
+}

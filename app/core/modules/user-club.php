@@ -97,7 +97,10 @@ class Knife_User_Club {
         add_action('auto-draft_to_pending', [$this, 'notify_review']);
 
         // add user post type to author archive
-        add_action('pre_get_posts', [$this, 'update_author']);
+        add_action('pre_get_posts', [$this, 'update_archive'], 12);
+
+        // add author meta to content
+        add_filter('the_content', [$this, 'insert_metalink']);
     }
 
 
@@ -214,12 +217,41 @@ class Knife_User_Club {
 
 
     /**
+     * Insert link to author on single club post
+     */
+    public function insert_metalink($content) {
+        if(get_post_type() !== $this->slug)
+            return $content;
+
+        if(!is_singular($this->slug) || !in_the_loop())
+            return $content;
+
+        $meta = get_the_author_meta('ID');
+
+        $link = sprintf('<a class="profile" href="%3$s"><h3>%1$s</h3><p>%2$s</p></a>',
+            get_the_author(),
+            get_the_author_meta('description'),
+            get_author_posts_url($meta)
+        );
+
+        return $link . $content;
+    }
+
+
+    /**
      * Append to author archive loop club posts
      */
-    public function update_author($query) {
-        if($query->is_author) {
-            // TODO: Fix this behaviour
-            $query->set('post_type', ['post', $this->slug]);
+    public function update_archive($query) {
+        if(is_author() && $query->is_main_query()) {
+            $types = $query->get('post_type');
+            $set = ['post'];
+
+            if(is_array($types))
+                $set = explode(',', $types);
+
+            $set[] = $this->slug;
+
+            $query->set('post_type', $set);
         }
     }
 

@@ -289,4 +289,14 @@
     font-weight: 500;
     color: $color-white;
   }
+
+  .profile {
+    color: $color-text;
+
+    border: none;
+
+    &:hover {
+      filter: brightness(120%);
+    }
+  }
 }
