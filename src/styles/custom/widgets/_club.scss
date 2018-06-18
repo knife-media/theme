@@ -28,7 +28,7 @@
       text-transform: uppercase;
       letter-spacing: 1px;
 
-      color: $color-white;
+      color: $color-text;
       background-color: $color-bright;
 
       &:hover {
@@ -50,6 +50,8 @@
 
     @media screen and (max-width: 1023px) {
       padding: 1rem 0;
+
+      border-bottom: solid 1px rgba(0, 0, 0, .125);
     }
   }
 
@@ -92,8 +94,18 @@
   .widget__button {
     align-self: flex-start;
 
-    width: 100%;
-    margin: 1rem auto .5rem;
+    width: 90%;
+    margin: 1.5rem auto 1rem;
+
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: 0;
+    text-transform: none;
+
+    box-shadow: 0 10px 10px -4px silver;
+
+    border-radius: 5px;
 
     &:hover {
       filter: brightness(110%);

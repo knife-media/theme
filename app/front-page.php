@@ -37,7 +37,7 @@ get_header(); ?>
 
 
 <?php if(is_active_sidebar('knife-frontal')) : ?>
-    <div class="content block">
+    <div class="content block up">
         <?php dynamic_sidebar('knife-frontal'); ?>
     </div>
 

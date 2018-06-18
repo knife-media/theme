@@ -35,6 +35,7 @@ class Knife_club_Widget extends WP_Widget {
         $defaults = [
             'title' => '',
             'link' => '',
+            'posts_per_page' => 5,
             'offset' => 0
         ];
 
@@ -51,7 +52,7 @@ class Knife_club_Widget extends WP_Widget {
                 'post_status' => 'publish',
                 'ignore_sticky_posts' => 1,
                 'post_type' => 'club',
-                'posts_per_page' => empty($link) ? 6 : 5,
+                'posts_per_page' => $posts_per_page,
                 'offset' => $offset
             ]);
 
@@ -115,6 +116,7 @@ class Knife_club_Widget extends WP_Widget {
     public function update($new_instance, $old_instance) {
         $instance = $old_instance;
 
+        $instance['posts_per_page'] = absint($new_instance['posts_per_page']);
         $instance['offset'] = absint($new_instance['offset']);
         $instance['title'] = sanitize_text_field($new_instance['title']);
         $instance['link'] = sanitize_text_field($new_instance['link']);
@@ -133,6 +135,7 @@ class Knife_club_Widget extends WP_Widget {
         $defaults = [
             'title' => '',
             'link' => '',
+            'posts_per_page' => 5,
             'offset' => 0
         ];
 
@@ -155,6 +158,16 @@ class Knife_club_Widget extends WP_Widget {
             esc_attr($this->get_field_name('link')),
             __('Ссылка с кнопки:', 'knife-theme'),
             esc_attr($instance['link'])
+        );
+
+
+        // Posts count
+        printf(
+            '<p><label for="%1$s">%3$s</label> <input class="tiny-text" id="%1$s" name="%2$s" type="number" value="%4$s"></p>',
+            esc_attr($this->get_field_id('posts_per_page')),
+            esc_attr($this->get_field_name('posts_per_page')),
+            __('Количество записей:', 'knife-theme'),
+             esc_attr($instance['posts_per_page'])
         );
 
 

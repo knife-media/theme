@@ -95,6 +95,9 @@ class Knife_User_Club {
         // notify on sendig to review
         add_action('draft_to_pending', [$this, 'notify_review']);
         add_action('auto-draft_to_pending', [$this, 'notify_review']);
+
+        // add user post type to author archive
+        add_action('pre_get_posts', [$this, 'update_author']);
     }
 
 
@@ -207,6 +210,17 @@ class Knife_User_Club {
         );
 
         return $description . $button;
+    }
+
+
+    /**
+     * Append to author archive loop club posts
+     */
+    public function update_author($query) {
+        if($query->is_author) {
+            // TODO: Fix this behaviour
+            $query->set('post_type', ['post', $this->slug]);
+        }
     }
 
 

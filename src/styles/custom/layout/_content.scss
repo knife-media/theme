@@ -9,6 +9,10 @@
     margin-top: 1rem;
   }
 
+  &.up {
+    margin-top: 0;
+  }
+
   @media screen and (max-width: 479px) {
     padding-left: 0;
     padding-right: 0;
