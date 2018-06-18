@@ -92,8 +92,8 @@
   .widget__button {
     align-self: flex-start;
 
-    width: 80%;
-    margin: 1.5rem auto;
+    width: 100%;
+    margin: 1rem auto .5rem;
 
     &:hover {
       filter: brightness(110%);
@@ -112,30 +112,12 @@
 
     color: $color-text;
 
-    &:nth-last-child(n+4) {
-      .widget__footer {
-        border-bottom: solid 1px lightgray;
-      }
-    }
-
     @media screen and (max-width: 1023px) {
       width: 50%;
-
-      &:nth-last-child(n+2) {
-        .widget__footer {
-          border-bottom: solid 1px lightgray;
-        }
-      }
     }
 
     @media screen and (max-width: 767px) {
       width: 100%;
-
-      &:nth-last-child(n+2) {
-        .widget__footer {
-          border-bottom: solid 1px lightgray;
-        }
-      }
     }
   }
 

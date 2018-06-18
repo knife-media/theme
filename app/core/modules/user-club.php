@@ -135,13 +135,13 @@ class Knife_User_Club {
                 if($can_edit === false)
                     continue;
 
-              $role->add_cap('read_private_club_items');
-              $role->add_cap('edit_others_club_items');
-              $role->add_cap('edit_published_club_items');
-              $role->add_cap('publish_club_items');
-              $role->add_cap('delete_others_club_items');
-              $role->add_cap('delete_private_club_items');
-              $role->add_cap('delete_published_club_items');
+                $role->add_cap('read_private_club_items');
+                $role->add_cap('edit_others_club_items');
+                $role->add_cap('edit_published_club_items');
+                $role->add_cap('publish_club_items');
+                $role->add_cap('delete_others_club_items');
+                $role->add_cap('delete_private_club_items');
+                $role->add_cap('delete_published_club_items');
             }
 
 
@@ -168,7 +168,7 @@ class Knife_User_Club {
             ],
             'label'                 => __('Клуб', 'knife-theme'),
             'description'           => __('Клуб — это сообщество друзей «Ножа», <br>которым есть что сказать.', 'knife-theme'),
-            'supports'              => ['title', 'thumbnail', 'revisions', 'editor', 'excerpt'],
+            'supports'              => ['title', 'thumbnail', 'revisions', 'editor', 'excerpt', 'author'],
             'hierarchical'          => false,
             'public'                => true,
             'show_ui'               => true,
@@ -192,6 +192,9 @@ class Knife_User_Club {
      */
     public function add_description($description) {
         $options = get_option($this->option);
+
+        if(get_post_type() !== $this->slug)
+            return $description;
 
         if(empty($options['button_link']))
             return $description;
@@ -400,7 +403,7 @@ class Knife_User_Club {
                 'required' => '',
                 'autocomplete' => 'name',
                 'maxlength' => 50,
-                'placeholder' => __('Ваше имя', 'knife-theme'),
+                'placeholder' => __('Ваше имя, род занятий и проекты', 'knife-theme'),
             ],
 
             'email' => [

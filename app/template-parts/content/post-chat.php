@@ -12,6 +12,7 @@
     <header class="post__header post__card">
         <?php
             knife_theme_meta([
+                'opts' => ['author', 'date', 'category', 'type'],
                 'before' => '<div class="post__header-meta meta">',
                 'after' => '</div>'
             ]);

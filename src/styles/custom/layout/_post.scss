@@ -24,6 +24,21 @@
 
       width: 100%;
       margin-bottom: 1.5rem;
+
+      .meta__link--club {
+        position: absolute;
+
+        padding: .125rem .375rem;
+        color: $color-white;
+        background-color: $color-bright;
+        transform: translateY(-.125rem);
+
+        border-radius: 3px;
+
+        &:hover {
+          filter: brightness(120%);
+        }
+      }
     }
 
     .post__header-title {

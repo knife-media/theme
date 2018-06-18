@@ -64,7 +64,7 @@
             <header>
                 <?php
                     printf(
-                        __('<strong>Имя:</strong><span>%s</span>', 'knife-theme'),
+                        __('<strong>Имя, род занятий:</strong><span>%s</span>', 'knife-theme'),
                         sanitize_text_field($name)
                     );
                     printf(

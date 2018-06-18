@@ -13,6 +13,7 @@
 <header class="post__header">
     <?php
         knife_theme_meta([
+            'opts' => ['author', 'date', 'category', 'type'],
             'before' => '<div class="post__header-meta meta">',
             'after' => '</div>'
         ]);
