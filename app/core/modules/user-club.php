@@ -138,7 +138,9 @@ class Knife_User_Club {
                 $role->add_cap('read_private_club_items');
                 $role->add_cap('edit_others_club_items');
                 $role->add_cap('edit_published_club_items');
+                $role->add_cap('edit_private_club_items');
                 $role->add_cap('publish_club_items');
+                $role->add_cap('delete_club_items');
                 $role->add_cap('delete_others_club_items');
                 $role->add_cap('delete_private_club_items');
                 $role->add_cap('delete_published_club_items');
