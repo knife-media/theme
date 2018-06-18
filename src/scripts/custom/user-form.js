@@ -60,7 +60,7 @@
     wrapper.classList.add('form__control');
 
     submit = document.createElement('button');
-    submit.classList.add('form__control-button', 'button');
+    submit.classList.add('form__control-button', 'button', 'bright');
     submit.innerHTML = getOption('button', 'Send');
     wrapper.appendChild(submit);
 

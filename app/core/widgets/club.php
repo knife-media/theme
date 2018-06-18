@@ -83,7 +83,7 @@ class Knife_club_Widget extends WP_Widget {
             endwhile;
 
             if(!empty($link)) :
-                printf('<div class="widget__item"><a class="widget__button button" href="%2$s" target="_blank">%1$s</a></div>',
+                printf('<div class="widget__item"><a class="widget__button button bright" href="%2$s">%1$s</a></div>',
                     __('Написать в клуб', 'knife-theme'),
                     esc_url($link)
                 );

@@ -17,6 +17,11 @@
   border: solid 1px $color-primary;
   border-radius: 2px;
 
+  &.bright {
+    background-color: $color-bright;
+    border: solid 1px $color-bright;
+  }
+
   &:hover {
     filter: brightness(125%);
   }

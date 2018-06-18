@@ -92,14 +92,15 @@
   .widget__button {
     align-self: flex-start;
 
-    margin: 1.5rem 0;
-
-    background-color: $color-bright;
-
-    border: solid 1px $color-bright;
+    width: 80%;
+    margin: 1.5rem auto;
 
     &:hover {
       filter: brightness(110%);
+    }
+
+    @media screen and (max-width: 1023px) {
+      width: 100%;
     }
   }
 
@@ -120,7 +121,7 @@
     @media screen and (max-width: 1023px) {
       width: 50%;
 
-      &:nth-last-child(n+3) {
+      &:nth-last-child(n+2) {
         .widget__footer {
           border-bottom: solid 1px lightgray;
         }

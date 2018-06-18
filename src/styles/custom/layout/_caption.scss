@@ -28,7 +28,22 @@
       -webkit-background-clip: text;
     }
 
-    &.caption__title--category {
+    &.caption__title--pure {
+      font-size: 4.875rem;
+      line-height: 1;
+      color: $color-white;
+      background: none;
+
+      @media screen and (max-width: 767px) {
+        font-size: 3.75rem;
+      }
+
+      @media screen and (max-width: 479px) {
+        font-size: 2.5rem;
+      }
+    }
+
+    &.caption__title--large {
       font-size: 10rem;
       line-height: 1;
 
@@ -69,7 +84,16 @@
     font-weight: 500;
     line-height: 1.5;
     color: $color-white;
-    letter-spacing: .25px;
+
+    .button {
+      width: auto;
+      margin-top: 1.5rem;
+      font-size: 1.25rem;
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: 0;
+      text-transform: none;
+    }
 
     @media screen and (max-width: 1023px) {
       font-size: 1.25rem;
@@ -82,5 +106,9 @@
     @media screen and (max-width: 479px) {
       font-size: 1rem;
     }
+  }
+
+  &.caption--club {
+    max-width: 60.25rem;
   }
 }

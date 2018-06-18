@@ -89,6 +89,9 @@ class Knife_User_Club {
         // register club post type
         add_action('init', [$this, 'register_club']);
 
+        // add post archive description
+        add_filter('get_the_archive_description', [$this, 'add_description'], 9);
+
         // notify on sendig to review
         add_action('draft_to_pending', [$this, 'notify_review']);
         add_action('auto-draft_to_pending', [$this, 'notify_review']);
@@ -158,13 +161,13 @@ class Knife_User_Club {
     public function register_club() {
         register_post_type($this->slug, [
             'labels'                => [
-                'name'              => __('Записи клуба', 'knife-theme'),
+                'name'              => __('Клуб', 'knife-theme'),
                 'singular_name'     => __('Запись в клуб', 'knife-theme'),
                 'add_new'           => __('Добавить запись', 'knife-theme'),
                 'menu_name'         => __('Клуб', 'knife-theme')
             ],
             'label'                 => __('Клуб', 'knife-theme'),
-            'description'           => __('Записи в клуб', 'knife-theme'),
+            'description'           => __('Клуб — это сообщество друзей «Ножа», <br>которым есть что сказать.', 'knife-theme'),
             'supports'              => ['title', 'thumbnail', 'revisions', 'editor', 'excerpt'],
             'hierarchical'          => false,
             'public'                => true,
@@ -181,6 +184,24 @@ class Knife_User_Club {
             'capability_type'       => ['club_item', 'club_items'],
             'map_meta_cap'          => true
         ]);
+    }
+
+
+    /**
+     * Add button to description
+     */
+    public function add_description($description) {
+        $options = get_option($this->option);
+
+        if(empty($options['button_link']))
+            return $description;
+
+        $button = sprintf('<a class="button bright" href="%2$s">%1$s</a>',
+            __('Присоединиться', 'knife-theme'),
+            esc_url($options['button_link'])
+        );
+
+        return $description . $button;
     }
 
 
@@ -244,6 +265,15 @@ class Knife_User_Club {
         );
 
         add_settings_field(
+            'button_link',
+            __('Ссылка с кнопки в архиве', 'knife-theme'),
+            [$this, 'setting_render_button_link'],
+            'knife-user-settings',
+            'knife-user-section'
+        );
+
+
+        add_settings_field(
             'request_id',
             __('ID последней заявки', 'knife-theme'),
             [$this, 'setting_render_request_id'],
@@ -275,6 +305,17 @@ class Knife_User_Club {
 
         printf('<p class="description">%s</p>',
             __('Добавьте бота в группу и запросите его состояние: <br>https://api.telegram.org/bot[TOKEN]/getUpdates', 'knife-theme')
+        );
+    }
+
+    public function setting_render_button_link() {
+        $options = get_option($this->option);
+        $default = isset($options['button_link']) ? $options['button_link'] : '';
+
+        printf(
+            '<input type="text" name="%1$s[button_link]" class="regular-text" value="%2$s">',
+            $this->option,
+            esc_attr($default)
         );
     }
 
