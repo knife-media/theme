@@ -110,7 +110,34 @@
     }
   }
 
-  &.caption--club {
-    max-width: 60.25rem;
+  &.special {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    padding: .625rem .5rem;
+    font-weight: 700;
+    line-height: 1;
+
+    background-color: #f7323d;
+    color: $color-white;
+
+    h1 {
+      font-size: 2.5rem;
+
+      @media screen and (max-width: 1023px) {
+        font-size: 2rem;
+      }
+
+      @media screen and (max-width: 767px) {
+        font-size: 1.875rem;
+      }
+
+      @media screen and (max-width: 478px) {
+        font-size: 1.5rem;
+      }
+
+    }
   }
 }

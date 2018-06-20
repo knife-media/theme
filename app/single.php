@@ -10,10 +10,11 @@ get_header(); ?>
 
 <main class="wrap">
 
-<?php if(is_active_sidebar('knife-under-header')) : ?>
-    <div class="content">
-        <?php dynamic_sidebar('knife-under-header'); ?>
-    </div>
+<?php if(has_term('vdnh', 'special')) : ?>
+    <a class="caption special" href="/special/vdnh">
+        <img src="https://knife.media/wp-content/uploads/2018/06/vdnh-logo.png" style="width: 50px; height: 50px; margin-right: 1rem;">
+        <h1><?php _e('ВДНХ &mdash; место силы','knife-theme'); ?></h1>
+    </a>
 <?php endif; ?>
 
 
@@ -41,5 +42,7 @@ get_header(); ?>
 
 
 <?php
-
-get_footer();
+if(has_term('vdnh', 'special'))
+    get_footer('vdnh');
+else
+    get_footer();

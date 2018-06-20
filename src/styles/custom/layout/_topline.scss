@@ -142,6 +142,36 @@
         }
       }
 
+      &.special {
+        padding: 0 .5rem;
+
+        .topline__menu-link {
+          padding: .25rem .5rem .375rem;
+
+          color: $color-white;
+          background-color: #f7323d;
+
+          border: solid 1px #f7323d;
+          border-radius: 3px;
+
+          &:hover {
+            filter: brightness(120%);
+          }
+
+          @media screen and (max-width: 1023px) {
+            padding: .875rem 1rem;
+            background-color: transparent;
+
+            border: none;
+            border-radius: 0;
+          }
+        }
+
+        @media screen and (max-width: 1023px) {
+          padding: 0;
+        }
+      }
+
       @media screen and (max-width: 1199px) {
         padding: 0 .5rem;
       }
