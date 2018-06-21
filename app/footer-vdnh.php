@@ -7,7 +7,7 @@
  */
 ?>
 
-<footer class="footer" style="background-color: #2d69c1">
+<footer class="footer" style="background-color: #431c5d">
 
     <div class="footer__inner block">
 
