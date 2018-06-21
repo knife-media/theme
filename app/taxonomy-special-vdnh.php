@@ -11,7 +11,6 @@ get_header(); ?>
 <main class="wrap">
     <?php if(have_posts()) : ?>
     <div class="caption special">
-        <img src="https://knife.media/wp-content/uploads/2018/06/vdnh-logo.png" style="width: 50px; height: 50px; margin-right: 1rem;">
         <h1><?php _e('ВДНХ &mdash; место силы','knife-theme'); ?></h1>
     </div>
     <?php endif; ?>
