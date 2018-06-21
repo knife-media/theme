@@ -12,7 +12,6 @@ get_header(); ?>
 
 <?php if(has_term('vdnh', 'special')) : ?>
     <a class="caption special" href="/special/vdnh">
-        <img src="https://knife.media/wp-content/uploads/2018/06/vdnh-logo.png" style="width: 50px; height: 50px; margin-right: 1rem;">
         <h1><?php _e('ВДНХ &mdash; место силы','knife-theme'); ?></h1>
     </a>
 <?php endif; ?>
