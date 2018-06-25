@@ -18,7 +18,10 @@ new Knife_Push_Service;
 
 class Knife_Push_Service {
     private $meta   = '_knife-push';
+
     private $option = 'knife-push-settings';
+
+    private $type = ['post', 'story', 'club'];
 
     public function __construct() {
         add_action('admin_enqueue_scripts', [$this, 'add_assets']);
@@ -45,12 +48,9 @@ class Knife_Push_Service {
     * Enqueue assets to admin post screen only
     */
     public function add_assets($hook) {
-        if(!in_array($hook, ['post.php', 'post-new.php']))
-            return;
-
         $post_id = get_the_ID();
 
-        if(get_post_type($post_id) !== 'post')
+        if(!in_array(get_post_type($post_id), $this->type))
             return;
 
         $version = wp_get_theme()->get('Version');
@@ -116,7 +116,7 @@ class Knife_Push_Service {
      * Add push sending metabox
      */
     public function add_metabox() {
-        add_meta_box('knife-push-metabox', __('Отправить пуш', 'knife-theme'), [$this, 'display_metabox'], 'post', 'side', 'low');
+        add_meta_box('knife-push-metabox', __('Отправить пуш', 'knife-theme'), [$this, 'display_metabox'], $this->type, 'side', 'low');
     }
 
 
