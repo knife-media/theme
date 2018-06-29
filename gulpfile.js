@@ -12,27 +12,21 @@ var path = {
 }
 
 gulp.task('styles', function() {
-  gulp.src([path.source + '/styles/custom/app.scss'])
+  gulp.src([path.source + '/styles/app.scss'])
     .pipe(plumber())
     .pipe(sass({errLogToConsole: true}))
     .pipe(prefix({browsers: ['ie >= 10', 'ff >= 30', 'chrome >= 34', 'safari >= 7', 'opera >= 23', 'ios >= 7', 'android >= 4.4']}))
     .pipe(concat('styles.min.css'))
     .pipe(minifyCss({compatibility: 'ie8'}))
     .pipe(gulp.dest(path.assets))
-
-  gulp.src([path.source + '/styles/vendor/*.min.css'])
-    .pipe(gulp.dest(path.assets + '/styles/'));
 })
 
 gulp.task('scripts', function() {
-  gulp.src([path.source + '/scripts/custom/*.js'])
+  gulp.src([path.source + '/scripts/*.js'])
     .pipe(plumber())
     .pipe(uglify())
     .pipe(concat('scripts.min.js'))
     .pipe(gulp.dest(path.assets))
-
-  gulp.src([path.source + '/scripts/vendor/*.min.js'])
-    .pipe(gulp.dest(path.assets + '/scripts/'));
 })
 
 gulp.task('images', function() {

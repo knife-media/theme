@@ -21,7 +21,7 @@ class Knife_Push_Service {
 
     private $option = 'knife-push-settings';
 
-    private $type = ['post', 'story', 'club'];
+    private $type = ['post', 'club'];
 
     public function __construct() {
         add_action('admin_enqueue_scripts', [$this, 'add_assets']);

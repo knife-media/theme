@@ -19,7 +19,7 @@ new Knife_Post_Lead;
 class Knife_Post_Lead {
     private $meta = 'lead-text';
 
-    private $type = ['post', 'story', 'club'];
+    private $type = ['post', 'club'];
 
     public function __construct() {
         add_action('save_post', [$this, 'save_meta']);

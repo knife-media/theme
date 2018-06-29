@@ -581,9 +581,6 @@ add_action('init', function() {
 // Add custom theme widgets from common hanlder
 require get_template_directory() . '/core/modules/widget-handler.php';
 
-// Manage story section
-require get_template_directory() . '/core/modules/story-manager.php';
-
 // User generated blogs
 require get_template_directory() . '/core/modules/user-club.php';
 

@@ -179,7 +179,7 @@ class Knife_Widget_Handler {
     public function include_widgets() {
         $widgets = get_template_directory() . '/core/widgets/';
 
-        foreach(['club', 'script', 'story', 'recent', 'triple', 'double', 'single', 'feature', 'details', 'transparent'] as $id) {
+        foreach(['club', 'script', 'recent', 'triple', 'double', 'single', 'feature', 'details', 'transparent'] as $id) {
             include_once($widgets . $id . '.php');
         }
     }

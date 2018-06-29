@@ -164,7 +164,7 @@ class Knife_User_Club {
 
 
     /**
-     * Register story post type
+     * Register club post type
      */
     public function register_club() {
         register_post_type($this->slug, [
