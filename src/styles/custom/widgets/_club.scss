@@ -6,9 +6,6 @@
   position: relative;
 
   width: 100%;
-  padding-bottom: .5rem;
-
-  background-color: $color-white;
 
   .widget__head {
     display: flex;
@@ -46,8 +43,6 @@
     height: 100%;
     padding: 1.5rem 0;
 
-    background-color: $color-white;
-
     @media screen and (max-width: 767px) {
       padding: 1rem 0;
 
@@ -58,6 +53,11 @@
   .widget__meta {
     margin-bottom: 1rem;
     color: $color-text;
+
+    .meta__link {
+      position: relative;
+      z-index: 2;
+    }
 
     a:hover {
       opacity: .75;
@@ -122,11 +122,13 @@
 
   .widget__item {
     display: flex;
+    position: relative;
 
     width: calc(100% / 3);
     padding: 0 1rem;
 
     color: $color-text;
+    background-color: $color-white;
 
     &:nth-last-child(n+4) {
       .widget__footer {
@@ -146,6 +148,53 @@
 
     @media screen and (max-width: 767px) {
       width: 100%;
+    }
+  }
+
+  &.widget--sidebar {
+    .widget__title {
+      font-size: 1.25rem;
+
+      @media screen and (max-width: 767px) {
+        font-size: 1.125rem;
+      }
+    }
+
+    .widget__footer {
+      padding: 1rem 0;
+    }
+
+    .widget__meta {
+      margin-bottom: .5rem;
+    }
+
+    .widget__link {
+      display: block;
+
+      &:after {
+        content: "";
+
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .widget__item {
+      width: 100%;
+      margin-bottom: 1px;
+
+      .widget__footer {
+        border-bottom: none;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
   }
 

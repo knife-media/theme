@@ -1,6 +1,6 @@
 <?php
 /**
- * club widget
+ * Club widget
  *
  * 5 posts with create post button
  *
@@ -9,7 +9,7 @@
  */
 
 
-class Knife_club_Widget extends WP_Widget {
+class Knife_Club_Widget extends WP_Widget {
 
     public function __construct() {
         $widget_ops = [
@@ -187,5 +187,5 @@ class Knife_club_Widget extends WP_Widget {
  * It is time to register widget
  */
 add_action('widgets_init', function() {
-    register_widget('Knife_club_Widget');
+    register_widget('Knife_Club_Widget');
 });
