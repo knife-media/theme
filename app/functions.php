@@ -557,6 +557,9 @@ require get_template_directory() . '/core/modules/user-club.php';
 // Special projects taxonomy settings
 require get_template_directory() . '/core/modules/special-projects.php';
 
+// Custom post type for manual articles collection
+require get_template_directory() . '/core/modules/selection-set.php';
+
 // Login screen custom styles
 require get_template_directory() . '/core/modules/access-screen.php';
 

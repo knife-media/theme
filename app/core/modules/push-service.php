@@ -21,7 +21,7 @@ class Knife_Push_Service {
 
     private $option = 'knife-push-settings';
 
-    private $type = ['post', 'club'];
+    private $type = ['post'];
 
     public function __construct() {
         add_action('admin_enqueue_scripts', [$this, 'add_assets']);
@@ -41,6 +41,19 @@ class Knife_Push_Service {
 
         // inject push template
         add_action('wp_footer', [$this, 'inject_template']);
+
+        // update type array by filters
+        add_action('init', [$this, 'set_type'], 20);
+    }
+
+
+    /**
+     * Update type array by modules filters
+     */
+    public function set_type() {
+        $default = $this->type;
+
+        $this->type = apply_filters('knife_push_service_type', $default);
     }
 
 

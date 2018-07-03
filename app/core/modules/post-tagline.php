@@ -30,6 +30,19 @@ class Knife_Post_Tagline {
 
         add_filter('the_title', [$this, 'post_tagline'], 10, 2);
         add_filter('document_title_parts', [$this, 'site_tagline'], 10, 1);
+
+        // update type array by filters
+        add_action('init', [$this, 'set_type'], 20);
+    }
+
+
+    /**
+     * Update type array by modules filters
+     */
+    public function set_type() {
+        $default = $this->type;
+
+        $this->type = apply_filters('knife_post_tagline_type', $default);
     }
 
 
