@@ -61,10 +61,11 @@ class Knife_Post_Lead {
             'textarea_name' =>
             $this->meta,
             'teeny' => true,
-            'tinymce' => true,
+            'tinymce' => false,
             'editor_height' => 100
         ]);
     }
+
 
     /**
      * Save post options

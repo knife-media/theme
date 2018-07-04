@@ -24,8 +24,25 @@ class Knife_Selection_Set {
      */
     private $slug = 'select';
 
+    /**
+     * Unique meta using for saving post data
+     *
+     * @since   1.3
+     * @access  private
+     * @var     string
+     */
+    private $meta = '_knife-select';
+
 
     public function __construct() {
+        add_action('save_post', [$this, 'save_meta']);
+
+        // add scripts to admin page
+        add_action('admin_enqueue_scripts', [$this, 'add_assets']);
+
+        // add selection metabox
+        add_action('add_meta_boxes', [$this, 'add_metabox']);
+
         // register club post type
         add_action('init', [$this, 'register_selection']);
 
@@ -63,8 +80,100 @@ class Knife_Selection_Set {
             'can_export'            => true,
             'has_archive'           => true,
             'exclude_from_search'   => false,
-            'publicly_queryable'    => true,
-            'taxonomies'            => ['post_tag']
+            'publicly_queryable'    => true
         ]);
+    }
+
+
+    /**
+     * Add selection metabox
+     */
+    public function add_metabox() {
+        add_meta_box('knife-selection-metabox', __('Подборка статей'), [$this, 'display_metabox'], $this->slug, 'normal', 'high');
+    }
+
+
+    /**
+    * Enqueue assets to admin post screen only
+    */
+    public function add_assets($hook) {
+        $post_id = get_the_ID();
+
+        if(get_post_type($post_id) !== $this->slug)
+            return;
+
+        $version = wp_get_theme()->get('Version');
+        $include = get_template_directory_uri() . '/core/include';
+
+        // insert admin styles
+        wp_enqueue_style('knife-selection-set', $include . '/styles/selection-set.css', [], $version);
+
+        // insert admin scripts
+        wp_enqueue_script('knife-selection-set', $include . '/scripts/selection-set.js', ['jquery', 'jquery-ui-sortable'], $version);
+    }
+
+
+    /**
+     * Print wp-editor based metabox for lead-text meta
+     */
+    public function display_metabox($post, $box) {
+        $include = get_template_directory() . '/core/include';
+
+        include_once($include . '/templates/selection-set.php');
+    }
+
+
+    /**
+     * Save post options
+     */
+    public function save_meta($post_id) {
+        if(get_post_type($post_id) !== $this->slug)
+            return;
+
+        if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
+            return;
+
+        if(!current_user_can('edit_post', $post_id))
+            return;
+
+        // update items meta
+        $this->_update_items($this->meta . '-items', $post_id);
+    }
+
+
+    /**
+     * Update selection items meta from post-metabox
+     */
+    private function _update_items($query, $post_id, $meta = [], $i = 0) {
+        if(empty($_REQUEST[$query]))
+            return;
+
+        // delete selection post meta to create it again below
+        delete_post_meta($post_id, $query);
+
+        foreach($_REQUEST[$query] as $item) {
+            foreach($item as $key => $value) {
+                if(isset($meta[$i]) && array_key_exists($key, $meta[$i]))
+                    $i++;
+
+                switch($key) {
+                    case 'text':
+                        $value = sanitize_text_field($value);
+                        break;
+
+                    case 'link':
+                        $value = esc_url($value);
+                        break;
+                }
+
+                $meta[$i][$key] = $value;
+            }
+        }
+
+        foreach($meta as $item) {
+            if(!empty($item['text']) && !empty($item['link'])) {
+                add_post_meta($post_id, $query, $item);
+            }
+        }
     }
 }
