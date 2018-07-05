@@ -9,19 +9,11 @@
 get_header(); ?>
 
 <main class="wrap">
-
-    <div class="content block">
-
     <?php
         // Include "no posts found" template
-        get_template_part('template-parts/content/post', 'none');
+        get_template_part('templates/content', 'none');
     ?>
-
-    </div>
-
 </main>
 
 
-<?php
-
-get_footer();
+<?php get_footer();
