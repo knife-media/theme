@@ -46,6 +46,9 @@ class Knife_Selection_Set {
         // register club post type
         add_action('init', [$this, 'register_selection']);
 
+        // filter content to show custom links
+        add_filter('the_content', [$this, 'update_content']);
+
         // add post lead to post type editor
         add_filter('knife_post_lead_type', function($default) {
             $default[] = $this->slug;
@@ -82,6 +85,51 @@ class Knife_Selection_Set {
             'exclude_from_search'   => false,
             'publicly_queryable'    => true
         ]);
+    }
+
+
+    /**
+     * Update content with custom links
+     */
+    public function update_content($content) {
+        $post_id = get_the_ID();
+
+        if(get_post_type($post_id) !== $this->slug)
+            return;
+
+        $items = get_post_meta($post_id, $this->meta . '-items');
+
+        if(count($items) === 0)
+            return $content;
+
+        foreach($items as $item) {
+            // check if link and text not empty
+            if(empty($item['link']) || empty($item['text']))
+                continue;
+
+            $link_id = url_to_postid($item['link']);
+
+            $output = '';
+
+            if($link_id > 0) {
+
+                $output .= knife_theme_meta([
+                    'opts' => ['author', 'date', 'category'],
+                    'before' => '<div class="post__links-meta meta">',
+                    'after' => '</div>',
+                    'echo' => false
+                ]);
+            }
+
+            $output .= sprintf('<a class="post_links-title" href="%s">%s</a>',
+                esc_url($item['link']),
+                esc_html($item['text'])
+            );
+
+            $content .= '<div class="post_links-item">' . $output . '</div>';
+        }
+
+        return $content;
     }
 
 
