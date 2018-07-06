@@ -18,24 +18,27 @@
                     'after' => '</div>'
                 ]);
 
+                the_info(
+                    '<div class="post__header-meta meta">',
+                    '<div>',
+                    ['author', 'date', 'category', 'type']
+                );
+
                 the_title(
                     '<h1 class="post__header-title">',
                     '</h1>'
                 );
 
-                knife_theme_post_meta([
-                    'before' => '<div class="post__header-excerpt custom">',
-                    'after' => '</div>',
-                    'meta' => 'lead-text',
-                    'filter' => true
-                ]);
+                the_lead(
+                    '<div class="post__header-excerpt custom">',
+                    '</div>'
+                );
 
-                knife_theme_share([
-                    'before' => '<div class="post__header-share share">',
-                    'after' => '</div>',
-                    'title' => '',
-                    'action' => 'Share post — top'
-                ]);
+                the_share(
+                    '<div class="post__header-share share">',
+                    '</div>',
+                    __('Share post — top', 'knife-theme')
+                );
             ?>
         </header>
 
@@ -53,17 +56,17 @@
                     'previouspagelink' => __('Назад', 'knife-theme')
                 ]);
 
-                knife_theme_share([
-                    'before' => '<div class="post__footer-share share">',
-                    'after' => '</div>',
-                    'action' => 'Share post — bottom'
-                ]);
+                the_share(
+                    '<div class="post__footer-share share">',
+                    '</div>',
+                    __('Share post — bottom', 'knife-theme'),
+                    __('Поделиться в соцсетях:', 'knife-theme')
+                );
 
-                knife_theme_tags([
-                    'before' => '<div class="post__footer-tags refers">',
-                    'after' => '</div>',
-                    'item' => '<a class="refers__link" href="%2$s">%1$s</a>'
-                ]);
+                the_tags(
+                    '<div class="post__footer-tags refers">',
+                    null, '</div>'
+                );
             ?>
 
            <?php if(is_active_sidebar('knife-post-widgets')) : ?>

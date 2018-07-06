@@ -14,14 +14,33 @@ if (!defined('WPINC')) {
 }
 
 
-new Knife_Post_Lead;
+(new Knife_Post_Lead)->init();
 
 class Knife_Post_Lead {
+   /**
+    * Backward compatibility meta name
+    *
+    * @since   1.2
+    * @access  private
+    * @var     string
+    */
     private $meta = 'lead-text';
 
+
+   /**
+    * Default post type lead text availible
+    *
+    * @since   1.2
+    * @access  private
+    * @var     array
+    */
     private $type = ['post'];
 
-    public function __construct() {
+
+    /**
+     * Use this method instead of constructor to avoid multiple hook setting
+     */
+    public function init() {
         add_action('save_post', [$this, 'save_meta']);
 
         // add lead-text metabox
@@ -68,6 +87,23 @@ class Knife_Post_Lead {
 
 
     /**
+     * Get post meta
+     */
+    public function get_meta($post_id = 0) {
+        global $post;
+
+        if((int) $post_id < 1)
+            $post_id = $post->ID;
+
+        $lead = get_post_meta($post_id, $this->meta, true);
+
+        if(strlen($lead) === 0)
+            return false;
+
+        return wpautop($lead);
+    }
+
+    /**
      * Save post options
      */
     public function save_meta($post_id) {
@@ -87,3 +123,23 @@ class Knife_Post_Lead {
             delete_post_meta($post_id, $this->meta);
     }
 }
+
+
+if(!function_exists('the_lead')) :
+    /**
+     * Public function using on templates to get current post lead text
+     */
+    function the_lead($before = '', $after = '', $echo = true) {
+        $lead = (new Knife_Post_Lead)->get_meta();
+
+        if(strlen($lead) === 0)
+            return;
+
+        $output = $before . $lead . $after;
+
+        if($echo === true)
+            echo $output;
+
+        return $output;
+    }
+endif;

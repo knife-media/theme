@@ -10,20 +10,20 @@
 
 
 if (!defined('WPINC')) {
-	die;
+    die;
 }
 
 
 new Knife_Primary_Tag;
 
 class Knife_Primary_Tag {
-	private $meta = 'primary-tag';
+    private $meta = 'primary-tag';
 
-	public function __construct() {
+    public function __construct() {
         add_action('admin_enqueue_scripts', [$this, 'add_assets']);
 
         // save meta on save post
-		add_action('save_post', [$this, 'save_meta'], 15);
+        add_action('save_post', [$this, 'save_meta'], 15);
 
         // move primary tag to first position
         add_filter('get_the_tags', [$this, 'sort_tags']);
@@ -31,22 +31,22 @@ class Knife_Primary_Tag {
 
 
     /**
-	 * Enqueue assets to admin post screen only
-	 */
-	public function add_assets($hook) {
-		if(!in_array($hook, ['post.php', 'post-new.php']))
-			return;
+     * Enqueue assets to admin post screen only
+     */
+    public function add_assets($hook) {
+        if(!in_array($hook, ['post.php', 'post-new.php']))
+            return;
 
-		$post_id = get_the_ID();
+        $post_id = get_the_ID();
 
-		if(get_post_type($post_id) !== 'post')
-			return;
+        if(get_post_type($post_id) !== 'post')
+            return;
 
-		$version = wp_get_theme()->get('Version');
-		$include = get_template_directory_uri() . '/core/include';
+        $version = wp_get_theme()->get('Version');
+        $include = get_template_directory_uri() . '/core/include';
 
         // insert admin scripts
-		wp_enqueue_script('knife-primary-tag', $include . '/scripts/primary-tag.js', ['jquery'], $version);
+        wp_enqueue_script('knife-primary-tag', $include . '/scripts/primary-tag.js', ['jquery'], $version);
 
         $options = [
             'howto' => __('Выберите главную метку поста. Она отобразится на карточке', 'knife-theme')
@@ -60,28 +60,28 @@ class Knife_Primary_Tag {
         }
 
         wp_localize_script('knife-primary-tag', 'knife_primary_tag', $options);
-	}
+    }
 
 
-	/**
-	 * Save post options
-	 */
-	public function save_meta($post_id) {
-		if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
-			return;
+    /**
+     * Save post options
+     */
+    public function save_meta($post_id) {
+        if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
+            return;
 
-		if(!current_user_can('edit_post', $post_id))
-			return;
+        if(!current_user_can('edit_post', $post_id))
+            return;
 
-		// Save meta
-		if(empty($_REQUEST[$this->meta]))
+        // Save meta
+        if(empty($_REQUEST[$this->meta]))
             return delete_post_meta($post_id, $this->meta);
 
         $term = get_term_by('name', $_REQUEST[$this->meta], 'post_tag');
 
         if($term && $term->term_id > 0)
-		    update_post_meta($post_id, $this->meta, $term->term_id);
-	}
+            update_post_meta($post_id, $this->meta, $term->term_id);
+    }
 
 
     /**

@@ -11,9 +11,8 @@ get_header(); ?>
 <main class="wrap">
     <?php
         if (have_posts()) :
-
             // Include specific content template
-            get_template_part('templates/archive');
+            get_template_part('templates/archive', 'news');
 
         else:
 
