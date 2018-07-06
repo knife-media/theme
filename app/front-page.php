@@ -39,10 +39,8 @@ get_header(); ?>
 <?php if(is_active_sidebar('knife-frontal')) : ?>
     <div class="content block up">
         <?php dynamic_sidebar('knife-frontal'); ?>
-    </div>
 
-     <div class="nav block">
-        <a class="button" href="<?php echo home_url('/recent/page/4/'); ?>"><?php _e('Больше статей', 'knife-media'); ?></a>
+        <a class="nav button" href="<?php echo home_url('/recent/page/4/'); ?>"><?php _e('Больше статей', 'knife-media'); ?></a>
     </div>
 <?php endif; ?>
 

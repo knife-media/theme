@@ -32,7 +32,7 @@
     text-transform: uppercase;
     letter-spacing: .5px;
 
-    .widget__head-item {
+    .meta__item {
       display: block;
       cursor: default;
 
@@ -41,7 +41,7 @@
       background-color: $color-white;
     }
 
-    .widget__head-link {
+    .meta__link {
       display: block;
       cursor: pointer;
 

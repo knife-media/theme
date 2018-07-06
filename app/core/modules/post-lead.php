@@ -89,13 +89,11 @@ class Knife_Post_Lead {
     /**
      * Get post meta
      */
-    public function get_meta($post_id = 0) {
-        global $post;
+    public function get_meta($post = 0) {
+        if(!$post = get_post($post))
+            return false;
 
-        if((int) $post_id < 1)
-            $post_id = $post->ID;
-
-        $lead = get_post_meta($post_id, $this->meta, true);
+        $lead = get_post_meta($post->ID, $this->meta, true);
 
         if(strlen($lead) === 0)
             return false;
@@ -132,7 +130,7 @@ if(!function_exists('the_lead')) :
     function the_lead($before = '', $after = '', $echo = true) {
         $lead = (new Knife_Post_Lead)->get_meta();
 
-        if(strlen($lead) === 0)
+        if($lead === false)
             return;
 
         $output = $before . $lead . $after;

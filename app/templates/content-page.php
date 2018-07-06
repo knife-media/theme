@@ -7,10 +7,14 @@
  */
 ?>
 
-<article <?php post_class('post post--page'); ?> id="post-<?php the_ID(); ?>">
+<section class="content block">
 
-    <div class="post__content custom">
-        <?php the_content(); ?>
-    </div>
+    <article <?php post_class('post post--page'); ?> id="post-<?php the_ID(); ?>">
 
-</article>
+        <div class="post__content custom">
+            <?php the_content(); ?>
+        </div>
+
+    </article>
+
+</section>

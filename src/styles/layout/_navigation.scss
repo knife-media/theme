@@ -2,22 +2,9 @@
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-around;
-  cursor: default;
 
   width: 100%;
   margin-bottom: 1rem;
-
-  .nav__link {
-    display: block;
-  }
-
-  &.nav--logbook {
-    margin-bottom: 3rem;
-
-    .nav__link {
-      max-width: 58.25rem;
-    }
-  }
 
   @media screen and (max-width: 479px) {
     padding-left: 0;

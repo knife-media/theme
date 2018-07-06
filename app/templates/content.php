@@ -9,18 +9,13 @@
 
 
 <section class="content block">
+
     <article <?php post_class('post'); ?> id="post-<?php the_ID(); ?>">
+
         <header class="post__header">
             <?php
-                knife_theme_meta([
-                    'opts' => ['author', 'date', 'category', 'type'],
-                    'before' => '<div class="post__header-meta meta">',
-                    'after' => '</div>'
-                ]);
-
                 the_info(
-                    '<div class="post__header-meta meta">',
-                    '<div>',
+                    '<div class="post__header-meta meta">', '</div>',
                     ['author', 'date', 'category', 'type']
                 );
 
@@ -75,8 +70,10 @@
               </div>
             <?php endif; ?>
         </footer>
+
     </article>
 
     <?php get_sidebar(); ?>
+
 </section>
 

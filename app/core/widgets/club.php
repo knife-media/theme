@@ -68,11 +68,10 @@ class Knife_Club_Widget extends WP_Widget {
             while($q->have_posts()) : $q->the_post();
                 echo '<div class="widget__item"><footer class="widget__footer">';
 
-                knife_theme_meta([
-                    'opts' => ['author', 'date'],
-                    'before' => '<div class="widget__meta meta">',
-                    'after' => '</div>'
-                ]);
+                the_info(
+                    '<div class="widget__meta meta">', '</div>',
+                    ['author', 'date']
+                );
 
                 printf(
                     '<a class="widget__link" href="%2$s">%1$s</a>',

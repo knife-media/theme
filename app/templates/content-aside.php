@@ -7,69 +7,70 @@
  */
 ?>
 
-<article <?php post_class('post post--aside'); ?> id="post-<?php the_ID(); ?>">
+<section class="content block">
 
-    <header class="post__header">
-        <?php
-            knife_theme_meta([
-                'opts' => ['author', 'date', 'category', 'type'],
-                'before' => '<div class="post__header-meta meta">',
-                'after' => '</div>'
-            ]);
+    <article <?php post_class('post post--aside'); ?> id="post-<?php the_ID(); ?>">
 
-            the_title(
-                '<h1 class="post__header-title">',
-                '</h1>'
-            );
+        <header class="post__header">
+            <?php
+                the_info(
+                    '<div class="post__header-meta meta">', '</div>',
+                    ['author', 'date', 'category', 'type']
+                );
 
-            knife_theme_post_meta([
-                'before' => '<div class="post__header-excerpt custom">',
-                'after' => '</div>',
-                'meta' => 'lead-text',
-                'filter' => true
-            ]);
+                the_title(
+                    '<h1 class="post__header-title">',
+                    '</h1>'
+                );
 
-            knife_theme_share([
-                'before' => '<div class="post__header-share share">',
-                'after' => '</div>',
-                'title' => '',
-                'action' => 'Share aside — top'
-            ]);
-        ?>
-    </header>
+                the_lead(
+                    '<div class="post__header-excerpt custom">',
+                    '</div>'
+                );
 
-    <div class="post__content custom">
-        <?php the_content(); ?>
-    </div>
+                the_share(
+                    '<div class="post__header-share share">',
+                    '</div>',
+                    __('Share aside — top', 'knife-theme')
+                );
+            ?>
+        </header>
 
-    <footer class="post__footer">
-        <?php
-            wp_link_pages([
-                'before' => '<div class="post__footer-nav refers">',
-                'after' => '</div>',
-                'next_or_number' => 'next',
-                'nextpagelink' => __('Следующая страница', 'knife-theme'),
-                'previouspagelink' => __('Назад', 'knife-theme')
-            ]);
+        <div class="post__content custom">
+            <?php the_content(); ?>
+        </div>
 
-            knife_theme_share([
-                'before' => '<div class="post__footer-share share">',
-                'after' => '</div>',
-                'action' => 'Share aside — bottom'
-            ]);
+        <footer class="post__footer">
+            <?php
+                wp_link_pages([
+                    'before' => '<div class="post__footer-nav refers">',
+                    'after' => '</div>',
+                    'next_or_number' => 'next',
+                    'nextpagelink' => __('Следующая страница', 'knife-theme'),
+                    'previouspagelink' => __('Назад', 'knife-theme')
+                ]);
 
-            knife_theme_tags([
-                'before' => '<div class="post__footer-tags refers">',
-                'after' => '</div>',
-                'item' => '<a class="refers__link" href="%2$s">%1$s</a>'
-            ]);
-        ?>
+                the_share(
+                    '<div class="post__footer-share share">',
+                    '</div>',
+                    __('Share aside — bottom', 'knife-theme'),
+                    __('Поделиться в соцсетях:', 'knife-theme')
+                );
 
-       <?php if(is_active_sidebar('knife-post-widgets')) : ?>
-      <div class="post__footer-widgets">
-        <?php dynamic_sidebar('knife-post-widgets'); ?>
-      </div>
-    <?php endif; ?>
-    </footer>
+                the_tags(
+                    '<div class="post__footer-tags refers">',
+                    null, '</div>'
+                );
+            ?>
 
-</article>
+           <?php if(is_active_sidebar('knife-post-widgets')) : ?>
+              <div class="post__footer-widgets">
+                <?php dynamic_sidebar('knife-post-widgets'); ?>
+              </div>
+            <?php endif; ?>
+        </footer>
+
+    </article>
+
+</section>
+

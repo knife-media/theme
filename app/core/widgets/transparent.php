@@ -52,13 +52,13 @@ class Knife_Transparent_Widget extends WP_Widget {
 
                 if(!empty($title)) {
                     if(empty($link)) {
-                        printf('<div class="widget__head"><span class="widget__head-item">%s</span></div>',
-                            sanitize_text_field($title)
+                        printf('<div class="widget__head meta"><span class="meta__item">%s</span></div>',
+                            esc_html($title)
                         );
                     }
                     else {
-                        printf('<div class="widget__head"><a class="widget__head-link" href="%2$s">%1$s</a></div>',
-                            sanitize_text_field($title), esc_url($link)
+                        printf('<div class="widget__head meta"><a class="meta__link" href="%2$s">%1$s</a></div>',
+                            esc_html($title), esc_url($link)
                         );
                     }
                 }
@@ -70,12 +70,10 @@ class Knife_Transparent_Widget extends WP_Widget {
                         $image = sprintf('<img class="widget__sticker" src="%s">', $picture);
                     }
 
-                    $meta = knife_theme_meta([
-                        'opts' => ['author', 'date'],
-                        'before' => '<div class="widget__meta meta">',
-                        'after' => '</div>',
-                        'echo' => false
-                    ]);
+                    $meta = the_info(
+                        '<div class="widget__meta meta">', '</div>',
+                        ['author', 'date'], false
+                    );
 
                     $link = sprintf(
                         '<a class="widget__link" href="%2$s">%1$s</a>',

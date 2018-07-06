@@ -60,14 +60,12 @@ class Knife_Triple_Widget extends WP_Widget {
                 while($q->have_posts()) : $q->the_post();
                     echo $args['before_widget'];
 
-                    $head = knife_theme_meta([
-                        'opts' => ['tag'],
-                        'before' => '<div class="widget__head">',
-                        'after' => '</div>',
-                        'item' => '<span class="widget__head-item">%s</span>',
-                        'link' => '<a class="widget__head-link" href="%2$s">%1$s</a>',
-                        'echo' => false
-                    ]);
+                    $classes = [];
+
+                    $head = the_info(
+                        '<div class="widget__head meta">', '</div>',
+                        ['tag'], false
+                    );
 
                     $image = sprintf('<div class="widget__image">%s</div>',
                         get_the_post_thumbnail(null, 'triple', ['class' => 'widget__image-thumbnail'])
@@ -78,14 +76,11 @@ class Knife_Triple_Widget extends WP_Widget {
                         esc_url(get_permalink())
                     );
 
-                    $meta = knife_theme_meta([
-                        'opts' => ['author', 'date'],
-                        'before' => '<div class="widget__meta meta">',
-                        'after' => '</div>',
-                        'echo' => false
-                    ]);
+                    $meta = the_info(
+                        '<div class="widget__meta meta">', '</div>',
+                        ['author', 'date'], false
+                    );
 
-                    $classes = [];
                     $classes[] = 'widget__item';
 
                     switch($cover) {

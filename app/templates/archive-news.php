@@ -7,18 +7,12 @@
  */
 ?>
 
-<section class="content narrow">
+<section class="content block block--narrow">
 
     <?php while (have_posts()) : the_post(); ?>
         <article class="widget widget-logbook">
 
-            <div class="<?php knife_theme_widget_options('widget__item'); ?>">
-                <?php if(get_post_meta($post->ID, '_knife-cover', true) && has_post_thumbnail()) : ?>
-                <div class="widget__image">
-                    <?php the_post_thumbnail('thumbnail', ['class' => 'widget__image-thumbnail']); ?>
-                </div>
-                <?php endif; ?>
-
+            <div class="widget__item">
                 <footer class="widget__footer">
                     <?php
                         printf(
@@ -27,11 +21,10 @@
                             get_permalink()
                         );
 
-                        knife_theme_meta([
-                            'opts' => ['time', 'date', 'tags'],
-                            'before' => '<div class="widget__meta meta">',
-                            'after' => '</div>'
-                        ]);
+                        the_info(
+                            '<div class="widget__meta meta">', '</div>',
+                            ['time', 'date', 'tags']
+                        );
                     ?>
                 </footer>
             </div>

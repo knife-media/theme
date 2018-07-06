@@ -116,22 +116,6 @@ add_filter('intermediate_image_sizes', function($def_sizes) {
 add_filter('disable_captions', '__return_true');
 
 
-// Remove useless image attributes
-add_filter('post_thumbnail_html', function($html) {
-    return preg_replace('/(width|height)="\d*"\s/', "", $html);
-}, 10);
-
-add_filter('get_image_tag', function($html) {
-    return preg_replace('/(width|height)="\d*"\s/', "", $html);
-}, 10);
-
-add_filter('get_image_tag_class', function($class, $id, $align, $size) {
-    $class = 'figure__image';
-
-    return $class;
-}, 0, 4);
-
-
 // Wrap all images in editor with figure
 add_filter('image_send_to_editor', function($html, $id, $caption, $title, $align, $url, $size, $alt) {
     $html = get_image_tag($id, $alt, '', $align, $size);
@@ -159,48 +143,6 @@ add_filter('embed_oembed_html', function($html, $url, $attr) {
 
     return $html;
 }, 10, 3);
-
-
-// Change default posts filter on posts list admin page
-add_filter('disable_categories_dropdown', '__return_true', 'post');
-
-add_action('restrict_manage_posts', function() {
-    $values = [
-        __('Все записи', 'knife-theme') => 0,
-        __('Только новости', 'knife-theme') => 'news',
-        __('Без новостей', 'knife-theme') => 'other'
-    ];
-
-    $current = $_GET['cat'] ?? '';
-
-    print' <select name="cat">';
-
-    foreach($values as $label => $value) {
-        printf('<option value="%s"%s>%s</option>', $value, $value == $current ? ' selected="selected"' : '', $label);
-    }
-
-    print '</select>';
-}, 'post');
-
-add_filter('parse_query', function($query) {
-    global $pagenow;
-
-    if(!is_admin() || $pagenow !== 'edit.php' || empty($_GET['cat']))
-        return false;
-
-    if(isset($_GET['post_type']) && $_GET['post_type'] !== 'post')
-        return false;
-
-    // Categories ids
-    $cat_news = 620;
-    $cat_classics = 613;
-
-    if($_GET['cat'] === 'news')
-        $query->query_vars['cat'] = $cat_news;
-
-    if($_GET['cat'] === 'other')
-        $query->query_vars['category__not_in'] = [$cat_news, $cat_classics];
-});
 
 
 // Add theme menus
@@ -324,11 +266,11 @@ add_filter('feed_links_show_comments_feed', '__return_false');
 
 // Navigation links classes
 add_filter('next_posts_link_attributes', function($atts) {
-    return 'class="nav__link button"';
+    return 'class="nav button"';
 });
 
 add_filter('previous_posts_link_attributes', function($atts) {
-    return 'class="nav__link button"';
+    return 'class="nav button"';
 });
 
 
@@ -474,7 +416,7 @@ add_filter('get_the_archive_title', function($title) {
 });
 
 
-// Custom archive title
+// Custom archive description
 add_filter('get_the_archive_description', function($description) {
     if(!empty($description)) {
         return sprintf('<div class="caption__text">%s</div>', $description);
@@ -517,20 +459,6 @@ add_action('parse_query', function($query) {
 }, 9);
 
 
-// Change posts_per_page for news category archive template
-add_action('pre_get_posts', function($query) {
-    if($query->is_main_query() && $query->is_category('news'))
-        $query->set('posts_per_page', 20);
-});
-
-
-// Remove news from home page
-add_action('pre_get_posts', function($query) {
-    if($query->is_main_query() && $query->is_home())
-        $query->set('category__not_in', [620]);
-});
-
-
 // Remove private posts from archives and home page.
 // Note: Knife editors use private posts as drafts. So we don't want to see drafts in templates even if we have logged in
 add_action('pre_get_posts', function($query) {
@@ -556,6 +484,9 @@ require get_template_directory() . '/core/modules/widget-handler.php';
 
 // User generated blogs
 require get_template_directory() . '/core/modules/user-club.php';
+
+// News category
+require get_template_directory() . '/core/modules/news-manager.php';
 
 // Special projects taxonomy settings
 require get_template_directory() . '/core/modules/special-projects.php';

@@ -2,7 +2,7 @@
 /**
 * Common template tags
 *
-* Useful template manager class for
+* Useful template manager class
 *
 * @package knife-theme
 * @since 1.3
@@ -19,15 +19,41 @@ class Knife_Template_Tags {
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public function init() {
-        add_filter('the_tags', [$this, 'tags'], 10, 1);
+        // Add navigation on archive pages
+        add_action('loop_end', [$this, 'archive_navigation']);
+
+
+        // Fix the_tags output
+        add_filter('the_tags', function($tags) {
+            return str_replace('href="', 'class="refers__link" href="', $tags);
+        }, 10, 1);
+
+
+        // Remove useless image attributes
+        add_filter('post_thumbnail_html', function($html) {
+            return preg_replace('/(width|height)="\d*"\s/', "", $html);
+        }, 10);
+
+        add_filter('get_image_tag', function($html) {
+            return preg_replace('/(width|height)="\d*"\s/', "", $html);
+        }, 10);
+
+        add_filter('get_image_tag_class', function($class, $id, $align, $size) {
+            $class = 'figure__image';
+
+            return $class;
+        }, 0, 4);
+
     }
 
 
     /**
-     * Prints current post tags list
+     * Prints navigation link if needed
      */
-    public function tags($tags) {
-        return str_replace('href="', 'class="refers__link" href="', $tags);
+    public function archive_navigation($query) {
+        if($query->is_archive() && get_next_posts_link()) {
+            next_posts_link(__('Больше статей', 'knife-theme'));
+        }
     }
 
 
@@ -86,129 +112,136 @@ class Knife_Template_Tags {
         return $output;
     }
 
-    public function meta($args, $html = '') {
-        $defaults = [
-            'opts' => ['author', 'date', 'category'],
-            'before' => '',
-            'after' => '',
-            'item' => '<span class="meta__item">%s</span>',
-            'link' => '<a class="meta__link" href="%2$s">%1$s</a>',
-            'is_link' => true,
-            'echo' => true
-        ];
+    public function info($options, $output = '') {
+        foreach($options as $option) {
+            $method = 'info_' . $option;
 
-        $args = wp_parse_args($args, $defaults);
+            if(!method_exists(__CLASS__, $method))
+                continue;
 
-        foreach($args['opts'] as $item) {
-            switch($item) {
-
-                // Prints post author
-                case 'author':
-                    if($args['is_link'] === false) :
-                        if(function_exists('coauthors'))
-                            $html .= sprintf($args['item'], coauthors('', '', null, null, false));
-                        else
-                            $html .= sprintf($args['item'], get_the_author());
-                    else :
-                        if(function_exists('coauthors_posts_links'))
-                            $html .= coauthors_posts_links('', '', null, null, false);
-                        else
-                            $html .= get_the_author_posts_link();
-                    endif;
-                break;
-
-                // Prints post category
-                case 'category':
-                    $cats = get_the_category();
-
-                    if(!isset($cats[0]))
-                        break;
-
-                    if($args['is_link'] === false) :
-                        $html .= sprintf($args['item'], sanitize_text_field($cats[0]->cat_name));
-                    else :
-                        $html .= sprintf($args['link'],
-                            sanitize_text_field($cats[0]->cat_name),
-                            esc_url(get_category_link($cats[0]->term_id))
-                        );
-                    endif;
-                break;
-
-                // Prints post publish date. Exclude current year
-                case 'date':
-                    $date = sprintf('<time datetime="%1$s">%2$s</time>',
-                        get_the_time('c'),
-                        get_the_date('Y') === date('Y') ? get_the_time('j F') : get_the_time('j F Y')
-                    );
-
-                     $html .= sprintf($args['item'], $date);
-                break;
-
-                // Prints only post publish time. Useful for news
-                case 'time':
-                     $html .= sprintf($args['item'], get_the_time('H:i'));
-                break;
-
-                //  Prints post single tag
-                case 'tag' :
-                    if($args['is_link'] === false) :
-                        $html .= knife_theme_tags(['item' => '%1$s', 'count' => 1, 'echo' => false]);
-                    else :
-                        $html .= knife_theme_tags(['item' => $args['link'], 'count' => 1, 'echo' => false]);
-                    endif;
-                break;
-
-                // Same as above but for 3 tags
-                case 'tags' :
-                    if($args['is_link'] === false) :
-                        $html .= knife_theme_tags(['item' => '%1$s', 'count' => 3, 'echo' => false, 'between' => '']);
-                    else :
-                        $html .= knife_theme_tags(['item' => $args['link'], 'count' => 3, 'echo' => false, 'between' => '']);
-                    endif;
-                break;
-
-                // Show widget head using widget query vars
-                case 'head' :
-                    $title = get_query_var('widget_title', '');
-                    $link = get_query_var('widget_link', '');
-
-                    if(empty($title))
-                        break;
-
-                    if(empty($link)) :
-                        $html .= sprintf($args['item'], sanitize_text_field($title));
-                    else:
-                        $html .= sprintf($args['link'], sanitize_text_field($title), esc_url($link));
-                    endif;
-                break;
-
-                // Show post type badge if exists
-                case 'type' :
-                    $inherit = ['post', 'page', 'attachmenet'];
-                    $type = get_post_type(get_the_ID());
-
-                    if(in_array($type, $inherit))
-                        break;
-
-                    $html .= sprintf('<a class="meta__link meta__link--%3$s" href="%2$s">%1$s</a>',
-                        sanitize_text_field(get_post_type_object($type)->labels->name),
-                        esc_url(get_post_type_archive_link($type)),
-                        esc_attr($type)
-                    );
-                break;
-            }
+            $output = $output . $this->$method();
         }
 
-        $html = $args['before'] . $html . $args['after'];
+        return $output;
+    }
 
-          // Filter result html before return
-        $html = apply_filters('knife_theme_meta', $html, $args);
 
-        if($args['echo'] === false)
-            return $html;
+    /**
+     * Get post author info
+     */
+    private function info_author() {
+        if(function_exists('coauthors_posts_links')) {
+            return coauthors_posts_links('', '', null, null, false);
+        }
 
-        echo $html;
+        return get_the_author_posts_link();
+    }
 
+
+    /**
+     * Get post category info
+     */
+    private function info_category() {
+        $cats = get_the_category();
+
+        if(!isset($cats[0])) {
+            return;
+        }
+
+        $output = sprintf('<a class="meta__link" href="%2$s">%1$s</a>',
+            esc_html($cats[0]->cat_name),
+            esc_url(get_category_link($cats[0]->term_id))
+        );
+
+        return $output;
+    }
+
+
+    /**
+     * Get post date info
+     */
+    private function info_date() {
+        $output = sprintf('<span class="meta__item"><time datetime="%1$s">%2$s</time></span>',
+            get_the_time('c'),
+            get_the_date('Y') === date('Y') ? get_the_time('j F') : get_the_time('j F Y')
+        );
+
+        return $output;
+    }
+
+
+    /**
+     * Get post time info
+     */
+    private function info_time() {
+        $output = sprintf('<span class="meta__item">%s</span>',
+            get_the_time('H:i')
+        );
+
+        return $output;
+    }
+
+
+    /**
+     * Get post type info
+     */
+    private function info_type() {
+        $type = get_post_type(get_the_ID());
+
+        if(in_array($type, ['post', 'page', 'attachmenet'])) {
+            return;
+        }
+
+        $output = sprintf('<a class="meta__link meta__link--%3$s" href="%2$s">%1$s</a>',
+            esc_html(get_post_type_object($type)->labels->name),
+            esc_url(get_post_type_archive_link($type)),
+            esc_attr($type)
+        );
+
+        return $output;
+    }
+
+
+    /**
+     * Get primary post tag info
+     */
+    private function info_tag() {
+        $tags = get_the_tags();
+
+        if(!isset($tags[0])) {
+            return;
+        }
+
+        $output = sprintf('<a class="meta__link" href="%2$s">%1$s</a>',
+            esc_html($tags[0]->name),
+            esc_url(get_tag_link($tags[0]->term_id))
+        );
+
+        return $output;
+    }
+
+
+    /**
+     * Get post tags info
+     */
+    private function info_tags($output = '') {
+        $tags = get_the_tags();
+
+        if($tags === false) {
+            return false;
+        }
+
+        foreach($tags as $i => $tag) {
+            if($i > 3)
+                break;
+
+            $output = $output . sprintf('<a class="meta__link" href="%2$s">%1$s</a>',
+                esc_html($tag->name),
+                esc_url(get_tag_link($tag->term_id))
+            );
+        }
+
+        return $output;
     }
 }
 
@@ -228,14 +261,14 @@ if(!function_exists('the_share')) :
     }
 endif;
 
-if(!function_exists('the_share')) :
+if(!function_exists('the_info')) :
     /**
      * Public function using on templates to get current post lead text
      */
-    function the_share($before = '', $after = '', $options = '', $echo = true) {
-        $share = (new Knife_Template_Tags)->share($action, $title);
+    function the_info($before = '', $after = '', $options = '', $echo = true) {
+        $info= (new Knife_Template_Tags)->info($options);
 
-        $output = $before . $share . $after;
+        $output = $before . $info . $after;
 
         if($echo === true)
             echo $output;
@@ -243,3 +276,6 @@ if(!function_exists('the_share')) :
         return $output;
     }
 endif;
+
+function knife_theme_meta() {
+}

@@ -54,11 +54,10 @@ class Knife_Recent_Widget extends WP_Widget {
                 while($q->have_posts()) : $q->the_post();
                     echo '<article class="widget__item">';
 
-                    knife_theme_meta([
-                        'opts' => ['time', 'tag'],
-                        'before' => '<div class="widget__meta meta">',
-                        'after' => '</div>'
-                    ]);
+                    the_info(
+                        '<div class="widget__meta meta">', '</div>',
+                        ['time', 'tag'], true
+                    );
 
                     printf(
                         '<a class="widget__link" href="%1$s">%2$s</a>',
