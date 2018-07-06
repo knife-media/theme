@@ -14,7 +14,7 @@ class Knife_Recent_Widget extends WP_Widget {
         $widget_ops = [
             'classname' => 'recent',
             'description' => __('Выводит последние посты c датой и тегом по выбранной категории.', 'knife-theme'),
-             'customize_selective_refresh' => true
+            'customize_selective_refresh' => true
         ];
 
         parent::__construct('knife_theme_recent', __('[НОЖ] Новости', 'knife-theme'), $widget_ops);
@@ -25,16 +25,20 @@ class Knife_Recent_Widget extends WP_Widget {
      * Outputs the content of the widget
      */
     public function widget($args, $instance) {
-        $defaults = ['title' => '', 'posts_per_page' => 10, 'cat' => 620];
+        $defaults = [
+            'title' => '',
+            'posts_per_page' => 10,
+            'cat' => 620
+        ];
+
         $instance = wp_parse_args((array) $instance, $defaults);
 
         extract($instance);
 
         // Check cache before creating WP_Query object
-        $q = get_transient($this->id);
+        $html = get_transient($this->id);
 
-        if($q === false) :
-
+        if($html === false) :
             $q = new WP_Query([
                 'cat' => $cat,
                 'posts_per_page' => $posts_per_page,
@@ -42,30 +46,45 @@ class Knife_Recent_Widget extends WP_Widget {
                 'ignore_sticky_posts' => 1,
             ]);
 
-            set_transient($this->id, $q, 24 * HOUR_IN_SECONDS);
+            ob_start();
 
-        endif;
+            if($q->have_posts()) :
+                echo $args['before_widget'];
 
-        if($q->have_posts()) :
-            echo $args['before_widget'];
+                while($q->have_posts()) : $q->the_post();
+                    echo '<article class="widget__item">';
 
-            while($q->have_posts()) : $q->the_post();
+                    knife_theme_meta([
+                        'opts' => ['time', 'tag'],
+                        'before' => '<div class="widget__meta meta">',
+                        'after' => '</div>'
+                    ]);
 
-                get_template_part('template-parts/widgets/recent');
+                    printf(
+                        '<a class="widget__link" href="%1$s">%2$s</a>',
+                        get_permalink(),
+                        get_the_title()
+                    );
 
-            endwhile;
+                    echo '</article>';
+                endwhile;
+
+                printf(
+                    '<a class="widget__more button" href="%2$s">%1$s</a>',
+                    __('Все новости', 'knife-theme'),
+                    esc_url(get_category_link($cat))
+                );
+
+                echo $args['after_widget'];
+            endif;
 
             wp_reset_query();
 
-            // Show load more button
-            printf(
-                '<a class="widget__more button" href="%2$s">%1$s</a>',
-                __('Все новости', 'knife-theme'),
-                esc_url(get_category_link($cat))
-            );
-
-            echo $args['after_widget'];
+            $html = ob_get_clean();
+            set_transient($this->id, $html, 24 * HOUR_IN_SECONDS);
         endif;
+
+        echo $html;
     }
 
 

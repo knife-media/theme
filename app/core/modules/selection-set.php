@@ -95,7 +95,7 @@ class Knife_Selection_Set {
         $post_id = get_the_ID();
 
         if(get_post_type($post_id) !== $this->slug)
-            return;
+            return $content;
 
         $items = get_post_meta($post_id, $this->meta . '-items');
 

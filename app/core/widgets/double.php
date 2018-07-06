@@ -11,254 +11,308 @@
 
 class Knife_Double_Widget extends WP_Widget {
 
-	public function __construct() {
-		$widget_ops = [
-			'classname' => 'double',
-			'description' => __('Выводит полосу из двух постов по заданному критерию в виде карточек.', 'knife-theme'),
-			'customize_selective_refresh' => true
-		];
+    public function __construct() {
+        $widget_ops = [
+            'classname' => 'double',
+            'description' => __('Выводит полосу из двух постов по заданному критерию в виде карточек.', 'knife-theme'),
+            'customize_selective_refresh' => true
+        ];
 
-		parent::__construct('knife_theme_double', __('[НОЖ] Два в ряд', 'knife-theme'), $widget_ops);
-	}
-
-
- 	/**
-	 * Outputs the content of the widget.
-	 *
-	 * @see WP_Widget::widget()
-	 *
-	 * @param array args  The array of form elements
-	 * @param array instance The current instance of the widget
-	 */
-	public function widget($args, $instance) {
-		$defaults = [
-			'title' => '',
-			'posts_per_page' => 2,
-			'offset' => 0,
-			'cover' => 'default',
-			'unique' => 0,
-			'taxonomy' => 'category',
-			'termlist' => []
-		];
-
-		$instance = wp_parse_args((array) $instance, $defaults);
-
-		extract($instance);
+        parent::__construct('knife_theme_double', __('[НОЖ] Два в ряд', 'knife-theme'), $widget_ops);
+    }
 
 
-		// Check cache before creating WP_Query object
-		$q = get_transient($this->id);
+     /**
+     * Outputs the content of the widget.
+     *
+     * @see WP_Widget::widget()
+     *
+     * @param array args  The array of form elements
+     * @param array instance The current instance of the widget
+     */
+    public function widget($args, $instance) {
+        $defaults = [
+            'title' => '',
+            'posts_per_page' => 2,
+            'offset' => 0,
+            'cover' => 'default',
+            'unique' => 0,
+            'taxonomy' => 'category',
+            'termlist' => []
+        ];
 
-		if($q === false) :
+        $instance = wp_parse_args((array) $instance, $defaults);
 
-			$exclude = get_query_var('widget_exclude', []);
+        extract($instance);
 
-			$base = [
-				'post_status' => 'publish',
-				'ignore_sticky_posts' => 1,
-				'offset' => $offset,
-				'posts_per_page' => $posts_per_page,
-				'tax_query' => [
-					[
-						'field' => 'id',
-						'taxonomy' => $taxonomy,
-						'terms' => $termlist
-					],
-				]
-			];
+        // Check cache before creating WP_Query object
+        $html = get_transient($this->id);
 
-			// Check option to show posts only unique posts
-			if($unique === 1 && !empty($exclude)) {
-				$base['post__not_in'] = $exclude;
-			}
+        if($html === false) :
+            $exclude = get_query_var('widget_exclude', []);
 
-			$q = new WP_Query($base);
+            $q = new WP_Query($this->get_query($instance, $exclude));
 
-			set_transient($this->id, $q, 24 * HOUR_IN_SECONDS);
-			set_query_var('widget_exclude', array_merge($exclude, wp_list_pluck($q->posts, 'ID')));
+            ob_start();
 
-		endif;
+            if($q->have_posts()) :
 
+                while($q->have_posts()) : $q->the_post();
+                    echo $args['before_widget'];
 
-		if($q->have_posts()) :
+                    $head = knife_theme_meta([
+                        'opts' => ['tag'],
+                        'before' => '<div class="widget__head">',
+                        'after' => '</div>',
+                        'item' => '<span class="widget__head-item">%s</span>',
+                        'link' => '<a class="widget__head-link" href="%2$s">%1$s</a>',
+                        'echo' => false
+                    ]);
 
- 			while($q->have_posts()) : $q->the_post();
+                    $image = sprintf('<div class="widget__image">%s</div>',
+                        get_the_post_thumbnail(null, 'double', ['class' => 'widget__image-thumbnail'])
+                    );
 
-				echo $args['before_widget'];
+                    $link = sprintf('<a class="widget__link" href="%2$s">%1$s</a>',
+                        the_title('<p class="widget__title">', '</p>', false),
+                        esc_url(get_permalink())
+                    );
 
-				set_query_var('widget_cover', $cover);
+                    $meta = knife_theme_meta([
+                        'opts' => ['author', 'date'],
+                        'before' => '<div class="widget__meta meta">',
+                        'after' => '</div>',
+                        'echo' => false
+                    ]);
 
-				get_template_part('template-parts/widgets/double');
+                    $classes = [];
+                    $classes[] = 'widget__item';
 
-				echo $args['after_widget'];
+                    switch($cover) {
+                        case 'cover':
+                            $classes[] = 'widget__item--cover';
 
- 			endwhile;
+                            break;
 
-			wp_reset_query();
+                        case 'nocover':
+                            break;
 
-		endif;
-	}
+                        default:
+                            if(!get_post_meta(get_the_ID(), '_knife-cover', true))
+                                break;
 
+                            $classes[] = 'widget__item--cover';
+                    }
 
-	/**
-	 * Sanitize widget form values as they are saved.
-	 *
-	 * @see WP_Widget::update()
-	 *
-	 * @param array $new_instance Values just sent to be saved.
-	 * @param array $old_instance Previously saved values from database.
-	 *
-	 * @return array Updated safe values to be saved.
-	 */
-	public function update($new_instance, $old_instance) {
+                    printf('<article class="%3$s">%1$s<footer class="widget__footer">%2$s</footer></article>',
+                        $head . $image, $link . $meta,
+                        implode(' ', $classes)
+                    );
 
-		if(taxonomy_exists($new_instance['taxonomy'])) {
-			$taxonomy = $new_instance['taxonomy'];
+                    echo $args['after_widget'];
+                endwhile;
 
-			if(isset($_REQUEST['widget-id']) && $_REQUEST['widget-id'] == $this->id) {
-				$posted_terms = [];
+                set_query_var('widget_exclude', array_merge($exclude, wp_list_pluck($q->posts, 'ID')));
+            endif;
 
-				if(isset($_POST['post_category']))
-					$posted_terms = $_POST['post_category'];
+            wp_reset_query();
 
-				if(isset($_POST['tax_input'][$taxonomy]))
-					$posted_terms = $_POST['tax_input'][$taxonomy];
+            $html = ob_get_clean();
+            set_transient($this->id, $html, 24 * HOUR_IN_SECONDS);
+        endif;
 
-				foreach($posted_terms as $term) {
-					if(term_exists(absint($term), $taxonomy))
-						$terms[] = absint($term);
-				}
-			}
-		}
+        echo $html;
+    }
 
- 		$instance = $old_instance;
-
-		$instance['posts_per_page'] = absint($new_instance['posts_per_page']);
-		$instance['offset'] = absint($new_instance['offset']);
-		$instance['title'] = sanitize_text_field($new_instance['title']);
-		$instance['cover'] = sanitize_text_field($new_instance['cover']);
- 		$instance['taxonomy'] = sanitize_text_field($new_instance['taxonomy']);
-		$instance['termlist'] = $terms;
- 		$instance['unique'] = $new_instance['unique'] ? 1 : 0;
-
-		return $instance;
-	}
 
     /**
-	 * Back-end widget form.
-	 *
-	 * @see WP_Widget::form()
-	 *
-	 * @param array $instance Previously saved values from database.
-	 */
-	public function form($instance) {
-		$defaults = [
-			'title' => '',
-			'posts_per_page' => 2,
-			'offset' => 0,
-			'cover' => 'default',
-			'unique' => 0,
-			'taxonomy' => 'category',
-			'termlist' => []
-		];
+     * Sanitize widget form values as they are saved.
+     *
+     * @see WP_Widget::update()
+     *
+     * @param array $new_instance Values just sent to be saved.
+     * @param array $old_instance Previously saved values from database.
+     *
+     * @return array Updated safe values to be saved.
+     */
+    public function update($new_instance, $old_instance) {
 
-		$instance = wp_parse_args((array) $instance, $defaults);
+        if(taxonomy_exists($new_instance['taxonomy'])) {
+            $taxonomy = $new_instance['taxonomy'];
 
-		$cover = [
-			'defalut' => __('По умолчанию', 'knife-theme'),
-			'cover' => __('Использовать подложку', 'knife-theme'),
-			'nocover' => __('Убрать подложку', 'knife-theme')
-		];
+            if(isset($_REQUEST['widget-id']) && $_REQUEST['widget-id'] == $this->id) {
+                $posted_terms = [];
 
-		$taxes = get_taxonomies([
-			'public' => true
-		], 'object');
+                if(isset($_POST['post_category']))
+                    $posted_terms = $_POST['post_category'];
 
-		$terms = wp_terms_checklist(0, [
-			'taxonomy' => $instance['taxonomy'],
-			'selected_cats' => $instance['termlist'],
-			'echo' => false
-		]);
+                if(isset($_POST['tax_input'][$taxonomy]))
+                    $posted_terms = $_POST['tax_input'][$taxonomy];
 
+                foreach($posted_terms as $term) {
+                    if(term_exists(absint($term), $taxonomy))
+                        $terms[] = absint($term);
+                }
+            }
+        }
 
-		// Widget title
-		printf(
-			'<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"><small>%5$s</small></p>',
-			esc_attr($this->get_field_id('title')),
-			esc_attr($this->get_field_name('title')),
-			__('Заголовок:', 'knife-theme'),
-			esc_attr($instance['title']),
-			__('Не будет отображаться на странице', 'knife-theme')
-		);
+        $instance = $old_instance;
 
+        $instance['posts_per_page'] = absint($new_instance['posts_per_page']);
+        $instance['offset'] = absint($new_instance['offset']);
+        $instance['title'] = sanitize_text_field($new_instance['title']);
+        $instance['cover'] = sanitize_text_field($new_instance['cover']);
+        $instance['taxonomy'] = sanitize_text_field($new_instance['taxonomy']);
+        $instance['termlist'] = $terms;
+        $instance['unique'] = $new_instance['unique'] ? 1 : 0;
 
-		// Cover manage
-		printf(
-			'<p><label for="%1$s">%3$s</label><select class="widefat" id="%1$s" name="%2$s">',
-			esc_attr($this->get_field_id('cover')),
- 			esc_attr($this->get_field_name('cover')),
-			__('Подложка карточек:', 'knife-theme')
-		);
+        return $instance;
+    }
 
-		foreach($cover as $name => $title) {
-			printf('<option value="%1$s"%3$s>%2$s</option>', $name, $title, selected($instance['cover'], $name, false));
-		}
+    /**
+     * Back-end widget form.
+     *
+     * @see WP_Widget::form()
+     *
+     * @param array $instance Previously saved values from database.
+     */
+    public function form($instance) {
+        $defaults = [
+            'title' => '',
+            'posts_per_page' => 2,
+            'offset' => 0,
+            'cover' => 'default',
+            'unique' => 0,
+            'taxonomy' => 'category',
+            'termlist' => []
+        ];
 
-		echo '</select></p>';
+        $instance = wp_parse_args((array) $instance, $defaults);
 
+        $cover = [
+            'defalut' => __('По умолчанию', 'knife-theme'),
+            'cover' => __('Использовать подложку', 'knife-theme'),
+            'nocover' => __('Убрать подложку', 'knife-theme')
+        ];
 
-		// Taxonomies filter
-		printf(
-			'<p><label for="%1$s">%3$s</label><select class="widefat knife-widget-taxonomy" id="%1$s" name="%2$s">',
-			esc_attr($this->get_field_id('taxonomy')),
- 			esc_attr($this->get_field_name('taxonomy')),
-			__('Фильтр записей:', 'knife-theme')
-		);
+        $taxes = get_taxonomies([
+            'public' => true
+        ], 'object');
 
-		foreach($taxes as $name => $object) {
-			printf('<option value="%1$s"%3$s>%2$s</option>', $name, $object->label, selected($instance['taxonomy'], $name, false));
-		}
-
-		echo '</select></p>';
-
-
-		// Terms filter
-		printf(
-			'<ul class="cat-checklist categorychecklist knife-widget-termlist" id="%1$s">%2$s</ul>',
-			esc_attr($this->get_field_id('termlist')),
-			$terms
-		);
-
-		// Exclude duplicate
-		printf(
-			'<p><input type="checkbox" id="%1$s" name="%2$s" class="checkbox"%4$s><label for="%1$s">%3$s</label></p>',
-			esc_attr($this->get_field_id('unique')),
-			esc_attr($this->get_field_name('unique')),
-			__('Только уникальные посты', 'knife-theme'),
-			checked($instance['unique'], 1, false)
-		);
+        $terms = wp_terms_checklist(0, [
+            'taxonomy' => $instance['taxonomy'],
+            'selected_cats' => $instance['termlist'],
+            'echo' => false
+        ]);
 
 
-		// Posts count
-		printf(
-			'<p><label for="%1$s">%3$s</label> <input class="tiny-text" id="%1$s" name="%2$s" type="number" value="%4$s"></p>',
-			esc_attr($this->get_field_id('posts_per_page')),
-			esc_attr($this->get_field_name('posts_per_page')),
-			__('Количество записей:', 'knife-theme'),
-			esc_attr($instance['posts_per_page'])
-		);
+        // Widget title
+        printf(
+            '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"><small>%5$s</small></p>',
+            esc_attr($this->get_field_id('title')),
+            esc_attr($this->get_field_name('title')),
+            __('Заголовок:', 'knife-theme'),
+            esc_attr($instance['title']),
+            __('Не будет отображаться на странице', 'knife-theme')
+        );
 
 
-		// Posts offset
-		printf(
-			'<p><label for="%1$s">%3$s</label> <input class="tiny-text" id="%1$s" name="%2$s" type="number" value="%4$s"></p>',
-			esc_attr($this->get_field_id('offset')),
-			esc_attr($this->get_field_name('offset')),
-			__('Пропустить записей:', 'knife-theme'),
-			esc_attr($instance['offset'])
-		);
+        // Cover manage
+        printf(
+            '<p><label for="%1$s">%3$s</label><select class="widefat" id="%1$s" name="%2$s">',
+            esc_attr($this->get_field_id('cover')),
+             esc_attr($this->get_field_name('cover')),
+            __('Подложка карточек:', 'knife-theme')
+        );
 
-	}
+        foreach($cover as $name => $title) {
+            printf('<option value="%1$s"%3$s>%2$s</option>', $name, $title, selected($instance['cover'], $name, false));
+        }
+
+        echo '</select></p>';
+
+
+        // Taxonomies filter
+        printf(
+            '<p><label for="%1$s">%3$s</label><select class="widefat knife-widget-taxonomy" id="%1$s" name="%2$s">',
+            esc_attr($this->get_field_id('taxonomy')),
+             esc_attr($this->get_field_name('taxonomy')),
+            __('Фильтр записей:', 'knife-theme')
+        );
+
+        foreach($taxes as $name => $object) {
+            printf('<option value="%1$s"%3$s>%2$s</option>', $name, $object->label, selected($instance['taxonomy'], $name, false));
+        }
+
+        echo '</select></p>';
+
+
+        // Terms filter
+        printf(
+            '<ul class="cat-checklist categorychecklist knife-widget-termlist" id="%1$s">%2$s</ul>',
+            esc_attr($this->get_field_id('termlist')),
+            $terms
+        );
+
+        // Exclude duplicate
+        printf(
+            '<p><input type="checkbox" id="%1$s" name="%2$s" class="checkbox"%4$s><label for="%1$s">%3$s</label></p>',
+            esc_attr($this->get_field_id('unique')),
+            esc_attr($this->get_field_name('unique')),
+            __('Только уникальные посты', 'knife-theme'),
+            checked($instance['unique'], 1, false)
+        );
+
+
+        // Posts count
+        printf(
+            '<p><label for="%1$s">%3$s</label> <input class="tiny-text" id="%1$s" name="%2$s" type="number" value="%4$s"></p>',
+            esc_attr($this->get_field_id('posts_per_page')),
+            esc_attr($this->get_field_name('posts_per_page')),
+            __('Количество записей:', 'knife-theme'),
+            esc_attr($instance['posts_per_page'])
+        );
+
+
+        // Posts offset
+        printf(
+            '<p><label for="%1$s">%3$s</label> <input class="tiny-text" id="%1$s" name="%2$s" type="number" value="%4$s"></p>',
+            esc_attr($this->get_field_id('offset')),
+            esc_attr($this->get_field_name('offset')),
+            __('Пропустить записей:', 'knife-theme'),
+            esc_attr($instance['offset'])
+        );
+
+    }
+
+
+    /**
+     * Generate query params from instance args
+     */
+    private function get_query($instance, $exclude) {
+        extract($instance);
+
+        $query = [
+            'post_status' => 'publish',
+            'ignore_sticky_posts' => 1,
+            'offset' => $offset,
+            'posts_per_page' => $posts_per_page,
+            'tax_query' => [
+                [
+                    'field' => 'id',
+                    'taxonomy' => $taxonomy,
+                    'terms' => $termlist
+                ],
+            ]
+        ];
+
+        // Check option to show posts only unique posts
+        if($unique === 1 && !empty($exclude)) {
+            $query['post__not_in'] = $exclude;
+        }
+
+        return $query;
+    }
 }
 
 
@@ -266,5 +320,5 @@ class Knife_Double_Widget extends WP_Widget {
  * It is time to register widget
  */
 add_action('widgets_init', function() {
-	register_widget('Knife_Double_Widget');
+    register_widget('Knife_Double_Widget');
 });

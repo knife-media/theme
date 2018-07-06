@@ -42,43 +42,87 @@ class Knife_Single_Widget extends WP_Widget {
         extract($instance);
 
         // Check cache before creating WP_Query object
-        $q = get_transient($this->id);
+        $html = get_transient($this->id);
 
-        if($q === false) :
-
+        if($html === false) :
             $exclude = get_query_var('widget_exclude', []);
 
             $q = new WP_Query([
                 'post_status' => 'publish',
-                'post_type' => 'any',
                 'posts_per_page' => 1,
                 'ignore_sticky_posts' => 1,
                 'post__in' => [url_to_postid($link)]
             ]);
 
-            set_transient($this->id, $q, 24 * HOUR_IN_SECONDS);
-            set_query_var('widget_exclude', array_merge($exclude, wp_list_pluck($q->posts, 'ID')));
+            ob_start();
 
-        endif;
+            if($q->have_posts()) :
 
+                while($q->have_posts()) : $q->the_post();
+                    echo $args['before_widget'];
 
-        if($q->have_posts()) :
+                    $head = knife_theme_meta([
+                        'opts' => ['tag'],
+                        'before' => '<div class="widget__head">',
+                        'after' => '</div>',
+                        'item' => '<span class="widget__head-item">%s</span>',
+                        'link' => '<a class="widget__head-link" href="%2$s">%1$s</a>',
+                        'echo' => false
+                    ]);
 
-             while($q->have_posts()) : $q->the_post();
+                    $image = sprintf('<div class="widget__image">%s</div>',
+                        get_the_post_thumbnail(null, 'single', ['class' => 'widget__image-thumbnail'])
+                    );
 
-                echo $args['before_widget'];
+                    $link = sprintf('<a class="widget__link" href="%2$s">%1$s</a>',
+                        the_title('<p class="widget__title">', '</p>', false),
+                        esc_url(get_permalink())
+                    );
 
-                set_query_var('widget_cover', $cover);
+                    $meta = knife_theme_meta([
+                        'opts' => ['author', 'date'],
+                        'before' => '<div class="widget__meta meta">',
+                        'after' => '</div>',
+                        'echo' => false
+                    ]);
 
-                get_template_part('template-parts/widgets/single');
+                    $classes = [];
+                    $classes[] = 'widget__item';
 
-                echo $args['after_widget'];
+                    switch($cover) {
+                        case 'cover':
+                            $classes[] = 'widget__item--cover';
 
-             endwhile;
+                            break;
+
+                        case 'nocover':
+                            break;
+
+                        default:
+                            if(!get_post_meta(get_the_ID(), '_knife-cover', true))
+                                break;
+
+                            $classes[] = 'widget__item--cover';
+                    }
+
+                    printf('<article class="%3$s">%1$s<footer class="widget__footer">%2$s</footer></article>',
+                        $head . $image, $link . $meta,
+                        implode(' ', $classes)
+                    );
+
+                    echo $args['after_widget'];
+                endwhile;
+
+                set_query_var('widget_exclude', array_merge($exclude, wp_list_pluck($q->posts, 'ID')));
+            endif;
 
             wp_reset_query();
 
+            $html = ob_get_clean();
+            set_transient($this->id, $html, 24 * HOUR_IN_SECONDS);
         endif;
+
+        echo $html;
     }
 
 
@@ -93,7 +137,7 @@ class Knife_Single_Widget extends WP_Widget {
      * @return array Updated safe values to be saved.
      */
     public function update($new_instance, $old_instance) {
-         $instance = $old_instance;
+        $instance = $old_instance;
 
         $instance['link'] = esc_url($new_instance['link']);
         $instance['title'] = sanitize_text_field($new_instance['title']);

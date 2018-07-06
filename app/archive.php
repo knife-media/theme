@@ -9,50 +9,19 @@
 get_header(); ?>
 
 <main class="wrap">
-
-    <?php if(have_posts()) : ?>
-    <div class="caption block">
-        <?php
-            // archive title
-            the_archive_title();
-
-            // archive description
-            the_archive_description();
-        ?>
-    </div>
-    <?php endif; ?>
-
-
-    <div class="content block">
     <?php
-        if(have_posts()) :
+        if (have_posts()) :
 
-            while (have_posts()) : the_post();
-
-                knife_theme_widget_template([
-                    'before' => '<div class="widget widget-%s">',
-                    'after' => '</div>'
-                ]);
-
-            endwhile;
+            // Include specific content template
+            get_template_part('templates/archive');
 
         else:
 
             // Include "no posts found" template
-            get_template_part('template-parts/content/post', 'none');
+            get_template_part('templates/content', 'none');
 
         endif;
     ?>
-    </div>
-
-
-    <?php if(get_next_posts_link()) : ?>
-    <div class="nav block">
-        <?php next_posts_link(__('Больше статей', 'knife-theme')); ?>
-    </div>
-    <?php endif; ?>
-
 </main>
-
 
 <?php get_footer();

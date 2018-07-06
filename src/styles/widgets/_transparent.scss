@@ -20,7 +20,7 @@
   }
 
   .widget__head {
-    display: none;
+    display: block;
     position: absolute;
     top: 0;
     left: 0;
@@ -184,7 +184,7 @@
       }
     }
 
-    &:first-child {
+    &:nth-child(2) {
       height: 100%;
 
       .widget__parent {
@@ -200,10 +200,6 @@
           margin-top: 3rem;
           margin-right: 0;
         }
-      }
-
-      .widget__head {
-        display: block;
       }
 
       .widget__sticker {

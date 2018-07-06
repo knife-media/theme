@@ -45,12 +45,11 @@ class Knife_Details_Widget extends WP_Widget {
         $html = get_transient($this->id);
 
         if($html === false) :
-
             $q = new WP_Query([
                 'post_status' => 'publish',
                 'ignore_sticky_posts' => 1,
                 'posts_per_page' => $posts_per_page,
-                 'tax_query' => [
+                'tax_query' => [
                     [
                         'field' => 'id',
                         'taxonomy' => $taxonomy,
@@ -80,7 +79,6 @@ class Knife_Details_Widget extends WP_Widget {
 
             $html = ob_get_clean();
             set_transient($this->id, $html, 24 * HOUR_IN_SECONDS);
-
         endif;
 
         echo $html;

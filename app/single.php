@@ -9,39 +9,21 @@
 get_header(); ?>
 
 <main class="wrap">
+    <?php
+        if (have_posts()) :
+            while (have_posts()) : the_post();
 
-<?php if(has_term('vdnh', 'special')) : ?>
-    <a class="caption special" href="/special/vdnh">
-        <h1><?php _e('ВДНХ &mdash; место силы','knife-theme'); ?></h1>
-    </a>
-<?php endif; ?>
+                // Include specific content template
+                get_template_part('templates/content', is_singular() ? get_post_format() : get_post_type());
 
+            endwhile;
+        else:
 
-    <div class="content block">
-<?php
-    if (have_posts()) :
+            // Include "no posts found" template
+            get_template_part('templates/content', 'none');
 
-        while (have_posts()) : the_post();
-
-            // Include specific content template
-            get_template_part('template-parts/content/post', get_post_format());
-
-        endwhile;
-
-    else:
-
-        // Include "no posts found" template
-        get_template_part('template-parts/content/post', 'none');
-
-    endif;
-?>
-    </div>
-
+        endif;
+    ?>
 </main>
 
-
-<?php
-if(has_term('vdnh', 'special'))
-    get_footer('vdnh');
-else
-    get_footer();
+<?php get_footer();

@@ -9,15 +9,10 @@
 
 
 <section class="content block">
+
     <article <?php post_class('post'); ?> id="post-<?php the_ID(); ?>">
         <header class="post__header">
             <?php
-                knife_theme_meta([
-                    'opts' => ['author', 'date', 'category', 'type'],
-                    'before' => '<div class="post__header-meta meta">',
-                    'after' => '</div>'
-                ]);
-
                 the_title(
                     '<h1 class="post__header-title">',
                     '</h1>'
@@ -45,24 +40,10 @@
 
         <footer class="post__footer">
             <?php
-                wp_link_pages([
-                    'before' => '<div class="post__footer-nav refers">',
-                    'after' => '</div>',
-                    'next_or_number' => 'next',
-                    'nextpagelink' => __('Следующая страница', 'knife-theme'),
-                    'previouspagelink' => __('Назад', 'knife-theme')
-                ]);
-
                 knife_theme_share([
                     'before' => '<div class="post__footer-share share">',
                     'after' => '</div>',
                     'action' => 'Share post — bottom'
-                ]);
-
-                knife_theme_tags([
-                    'before' => '<div class="post__footer-tags refers">',
-                    'after' => '</div>',
-                    'item' => '<a class="refers__link" href="%2$s">%1$s</a>'
                 ]);
             ?>
 
