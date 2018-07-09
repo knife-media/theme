@@ -9,80 +9,75 @@
  */
 
 
+if(!function_exists('the_template')) :
+    /**
+     * Public function for flexible replace default get_template_part function
+     *
+     * @since 1.3
+     */
+    function the_template($slug, $name = null) {
+        $templates = (new Knife_Template_Handler)->template($slug, $name);
 
-if(!function_exists('knife_theme_widget_options')) :
-/**
- * Merge and prints widget options as classes
- *
- * @since 1.1
- */
-function knife_theme_widget_options($base = 'widget__item', $post_id = null) {
-    global $post;
-
-    $post_id = $post_id ?? $post->ID;
-    $options = [$base];
-
-    switch(get_query_var('widget_cover', 'default')) {
-        case 'cover':
-            $options[] = $base . '--cover';
-
-            break;
-
-        case 'nocover':
-            break;
-
-        default:
-            if(!get_post_meta($post_id, '_knife-cover', true))
-                break;
-
-            $options[] = $base . '--cover';
+        locate_template($templates, true, false);
     }
-
-    $html = join(' ', $options);
-
-    // Filter result html before return
-    $html = apply_filters('knife_theme_widget_options', $html);
-
-    echo $html;
-}
-
 endif;
 
 
-if(!function_exists('knife_theme_widget_template')) :
-/**
- * Helper function to wrap template part with custom parent tag
- *
- * @since 1.1
- */
-function knife_theme_widget_template($args = []) {
-    global $wp_query;
+if(!function_exists('the_share')) :
+    /**
+     * Public function using on templates to get current post lead text
+     *
+     * @since 1.3
+     */
+    function the_share($before = '', $after = '', $action = '', $title = '', $echo = true) {
+        $share = (new Knife_Template_Handler)->share($action, $title);
 
-    $defaults = [
-        'size' => null,
-        'before' => '<div class="widget widget-%s">',
-        'after' => '</div>'
-    ];
+        $output = $before . $share . $after;
 
-    $args = wp_parse_args($args, $defaults);
+        if($echo === true)
+            echo $output;
 
-    $opts = function($current, $found) use (&$args) {
-        if($found < 3 || $current % 5 === 3 || $current % 5 === 4)
-            return 'double';
-
-        return 'triple';
-    };
+        return $output;
+    }
+endif;
 
 
-    if($args['size'] === null)
-        $args['size'] = $opts($wp_query->current_post, (int) $wp_query->found_posts);
+if(!function_exists('the_info')) :
+    /**
+     * Public function using on templates to get current post lead text
+     *
+     * @since 1.3
+     */
+    function the_info($before = '', $after = '', $options = '', $echo = true) {
+        $info= (new Knife_Template_Handler)->info($options);
+
+        $output = $before . $info . $after;
+
+        if($echo === true)
+            echo $output;
+
+        return $output;
+    }
+endif;
 
 
-    printf($args['before'], esc_attr($args['size']));
+if(!function_exists('the_lead')) :
+    /**
+     * Public function using on templates to get current post lead text
+     *
+     * @since 1.3
+     */
+    function the_lead($before = '', $after = '', $echo = true) {
+        $lead = (new Knife_Post_Lead)->get_meta();
 
-    get_template_part('template-parts/widgets/' . $args['size']);
+        if($lead === false)
+            return;
 
-    echo $args['after'];
-}
+        $output = $before . $lead . $after;
 
+        if($echo === true)
+            echo $output;
+
+        return $output;
+    }
 endif;

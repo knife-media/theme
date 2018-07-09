@@ -392,6 +392,28 @@ add_filter('the_content', function($content) {
 });
 
 
+// Fix the_tags output
+add_filter('the_tags', function($tags) {
+    return str_replace('href="', 'class="refers__link" href="', $tags);
+}, 10, 1);
+
+
+// Remove useless image attributes
+add_filter('post_thumbnail_html', function($html) {
+    return preg_replace('/(width|height)="\d*"\s/', "", $html);
+}, 10);
+
+add_filter('get_image_tag', function($html) {
+    return preg_replace('/(width|height)="\d*"\s/', "", $html);
+}, 10);
+
+add_filter('get_image_tag_class', function($class, $id, $align, $size) {
+    $class = 'figure__image';
+
+    return $class;
+}, 0, 4);
+
+
 // Custom archive title
 add_filter('get_the_archive_title', function($title) {
     if(is_post_type_archive()) {
@@ -477,7 +499,7 @@ add_action('admin_menu', function() {
 
 
 // Template manager
-require get_template_directory() . '/core/modules/template-tags.php';
+require get_template_directory() . '/core/modules/template-handler.php';
 
 // Add custom theme widgets from common hanlder
 require get_template_directory() . '/core/modules/widget-handler.php';

@@ -11,10 +11,7 @@
 get_header(); ?>
 
 <main class="wrap">
-    <?php
-        // Include "no posts found" template
-        get_template_part('templates/content', 'none');
-    ?>
+    <?php the_template(); ?>
 </main>
 
 

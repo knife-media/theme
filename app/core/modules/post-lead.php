@@ -121,23 +121,3 @@ class Knife_Post_Lead {
             delete_post_meta($post_id, $this->meta);
     }
 }
-
-
-if(!function_exists('the_lead')) :
-    /**
-     * Public function using on templates to get current post lead text
-     */
-    function the_lead($before = '', $after = '', $echo = true) {
-        $lead = (new Knife_Post_Lead)->get_meta();
-
-        if($lead === false)
-            return;
-
-        $output = $before . $lead . $after;
-
-        if($echo === true)
-            echo $output;
-
-        return $output;
-    }
-endif;

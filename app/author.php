@@ -12,16 +12,17 @@ get_header(); ?>
     <?php
         if (have_posts()) :
 
-            // Include specific content template
-            get_template_part('templates/archive', 'author');
+            // Include specific archive template
+            the_template('archive');
 
         else:
 
             // Include "no posts found" template
-            get_template_part('templates/content', 'none');
+            the_template('message');
 
         endif;
     ?>
 </main>
+
 
 <?php get_footer();

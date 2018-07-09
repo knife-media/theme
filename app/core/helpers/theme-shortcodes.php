@@ -23,5 +23,5 @@ add_shortcode('card', function($atts, $content = null) {
         do_shortcode(force_balance_tags($content))
     );
 
-    return apply_filters('knife_theme_shortcode_card', $html, $atts);
+    return $html;
 }, 10, 2);

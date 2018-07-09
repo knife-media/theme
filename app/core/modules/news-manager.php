@@ -36,7 +36,7 @@ class Knife_News_Manager {
 
     public function __construct() {
         // News archive template
-//        add_filter('template_include', [$this, 'include_template']);
+        add_filter('archive_template', [$this, 'include_template']);
 
         // Remove news from home page
         add_action('pre_get_posts', [$this, 'remove_home']);
@@ -56,7 +56,7 @@ class Knife_News_Manager {
      */
     public function include_template($template) {
         if(is_category($this->news_id)) {
-            $news_template = locate_template(['templates/general/archive-news.php']);
+            $news_template = locate_template(['templates/category-news.php']);
 
             if($news_template) {
                 $template = $news_template;

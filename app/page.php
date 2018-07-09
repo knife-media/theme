@@ -14,13 +14,13 @@ get_header(); ?>
             while (have_posts()) : the_post();
 
                 // Include specific content template
-                get_template_part('templates/content', 'page');
+                the_template('content', 'page');
 
             endwhile;
         else:
 
             // Include "no posts found" template
-            get_template_part('templates/content', 'none');
+            the_template('message');
 
         endif;
     ?>

@@ -130,8 +130,8 @@ class Knife_Yandex_Zen {
             $query->set('post_status', 'publish');
 
             $query->set('meta_query', [[
-            'key' => $this->meta,
-            'compare' => 'NOT EXISTS'
+                'key' => $this->meta,
+                'compare' => 'NOT EXISTS'
             ]]);
         }
     }

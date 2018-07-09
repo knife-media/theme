@@ -1,6 +1,6 @@
 <?php
 /**
-* Common template tags
+* Common template handler
 *
 * Useful template manager class
 *
@@ -12,48 +12,85 @@ if (!defined('WPINC')) {
     die;
 }
 
-(new Knife_Template_Tags)->init();
+(new Knife_Template_Handler)->init();
 
-class Knife_Template_Tags {
+class Knife_Template_Handler {
     /**
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public function init() {
         // Add navigation on archive pages
-        add_action('loop_end', [$this, 'archive_navigation']);
+        add_action('loop_end', [$this, 'navigation']);
+
+        // Add widget size query var
+        add_action('the_post', [$this, 'widget_size'], 10, 2);
+    }
 
 
-        // Fix the_tags output
-        add_filter('the_tags', function($tags) {
-            return str_replace('href="', 'class="refers__link" href="', $tags);
-        }, 10, 1);
+    /**
+     * Add widget size query var on archive loops
+     */
+    public function widget_size($post, $query) {
+        $size = function($current, $found) use (&$args) {
+            if($found < 3 || $current % 5 === 3 || $current % 5 === 4)
+                return 'double';
 
+            return 'triple';
+        };
 
-        // Remove useless image attributes
-        add_filter('post_thumbnail_html', function($html) {
-            return preg_replace('/(width|height)="\d*"\s/', "", $html);
-        }, 10);
-
-        add_filter('get_image_tag', function($html) {
-            return preg_replace('/(width|height)="\d*"\s/', "", $html);
-        }, 10);
-
-        add_filter('get_image_tag_class', function($class, $id, $align, $size) {
-            $class = 'figure__image';
-
-            return $class;
-        }, 0, 4);
-
+        if($query->is_archive() && $query->is_main_query()) {
+            set_query_var('widget_size', $size($query->current_post, (int) $query->found_posts));
+        }
     }
 
 
     /**
      * Prints navigation link if needed
      */
-    public function archive_navigation($query) {
+    public function navigation($query) {
         if($query->is_archive() && get_next_posts_link()) {
             next_posts_link(__('Больше статей', 'knife-theme'));
         }
+    }
+
+
+    /*
+     * Main template function using instead of default get_template_part
+     */
+    public function template($slug, $name = null) {
+        $templates = [];
+
+        // Default template part by slug
+        $templates[] = "templates/{$slug}.php";
+
+        // If name exists, return template array
+        if((string) $name !== '') {
+            array_unshift($templates, "templates/{$slug}-{$name}.php");
+            return $templates;
+        }
+
+        $method = 'template_' . $slug;
+
+        // Get custom name according class method
+        if(method_exists(__CLASS__, $method)) {
+            $name = (string) $this->$method();
+
+            array_unshift($templates, "templates/{$slug}-{$name}.php");
+            return $templates;
+        }
+
+        return $templates;
+    }
+
+
+    /**
+     * Get content template part
+     */
+    private function template_content() {
+        if(post_type_supports(get_post_type(), 'post-formats'))
+            return get_post_format();
+
+        return get_post_type();
     }
 
 
@@ -243,39 +280,4 @@ class Knife_Template_Tags {
 
         return $output;
     }
-}
-
-if(!function_exists('the_share')) :
-    /**
-     * Public function using on templates to get current post lead text
-     */
-    function the_share($before = '', $after = '', $action = '', $title = '',  $echo = true) {
-        $share = (new Knife_Template_Tags)->share($action, $title);
-
-        $output = $before . $share . $after;
-
-        if($echo === true)
-            echo $output;
-
-        return $output;
-    }
-endif;
-
-if(!function_exists('the_info')) :
-    /**
-     * Public function using on templates to get current post lead text
-     */
-    function the_info($before = '', $after = '', $options = '', $echo = true) {
-        $info= (new Knife_Template_Tags)->info($options);
-
-        $output = $before . $info . $after;
-
-        if($echo === true)
-            echo $output;
-
-        return $output;
-    }
-endif;
-
-function knife_theme_meta() {
 }
