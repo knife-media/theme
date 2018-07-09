@@ -35,9 +35,6 @@ class Knife_News_Manager {
 
 
     public function __construct() {
-        // News archive template
-        add_filter('archive_template', [$this, 'include_template']);
-
         // Remove news from home page
         add_action('pre_get_posts', [$this, 'remove_home']);
 
@@ -48,22 +45,37 @@ class Knife_News_Manager {
         add_filter('disable_categories_dropdown', '__return_true', 'post');
         add_action('restrict_manage_posts', [$this, 'print_dropdown'], 'post');
         add_action('parse_query', [$this, 'process_dropdown']);
+
+
+        // News archive template
+        add_filter('knife_template_archive', [$this, 'update_template']);
+
+        // News archive header
+        add_filter('knife_archive_header', [$this, 'update_header']);
     }
 
 
     /**
-     * Include archive template
+     * Update news archive template part
      */
-    public function include_template($template) {
+    public function update_template($template) {
         if(is_category($this->news_id)) {
-            $news_template = locate_template(['templates/category-news.php']);
-
-            if($news_template) {
-                $template = $news_template;
-            }
+            $template = $this->slug;
         }
 
         return $template;
+    }
+
+
+    /**
+     * Update news archive header
+     */
+    public function update_header($header) {
+        if(is_category($this->news_id)) {
+            $header = '';
+        }
+
+        return $header;
     }
 
 

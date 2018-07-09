@@ -14,7 +14,7 @@ get_header(); ?>
             while (have_posts()) : the_post();
 
                 // Include specific content template
-                the_template('message');
+                the_template('content');
 
             endwhile;
         else:

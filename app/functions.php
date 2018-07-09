@@ -414,40 +414,6 @@ add_filter('get_image_tag_class', function($class, $id, $align, $size) {
 }, 0, 4);
 
 
-// Custom archive title
-add_filter('get_the_archive_title', function($title) {
-    if(is_post_type_archive()) {
-        return sprintf('<h1 class="caption__title caption__title--pure">%s</h1>',
-            post_type_archive_title('', false)
-        );
-    }
-
-    if(is_category()) {
-        return sprintf('<h1 class="caption__title caption__title--large">%s</h1>',
-            single_term_title('', false)
-        );
-    }
-
-    if(is_tag() || is_tax()) {
-        return sprintf('<h1 class="caption__title">%s</h1>',
-            single_term_title('', false)
-        );
-    }
-
-    return sprintf('<h1 class="caption__title">%s</h1>', $title);
-});
-
-
-// Custom archive description
-add_filter('get_the_archive_description', function($description) {
-    if(!empty($description)) {
-        return sprintf('<div class="caption__text">%s</div>', $description);
-    }
-
-    return $description;
-});
-
-
 // Disable post attachment pages
 // Redirect to post parent if exists
 add_action('template_redirect', function() {
