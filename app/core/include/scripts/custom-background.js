@@ -1,53 +1,63 @@
 jQuery(document).ready(function($) {
-	if (typeof wp.media === 'undefined') return;
+  if (typeof wp.media === 'undefined') return;
 
-	var frame;
-	var block = $("#knife-term-background");
+  var frame;
 
-	var toggle = function() {
-        var image = block.find('.knife-input').val();
+  var image = $('.knife-background-image');
+  var color = $('.knife-background-color');
 
-		block.find('.knife-image').remove();
-		block.find('.knife-delete').hide();
-		block.find('.knife-size').hide();
 
-		if(image.length > 0) {
-			$('<img />', {class: 'knife-image', src: image}).prependTo(block);
+  function toggle() {
+    var src = image.find('input').val();
 
-			block.find('.knife-size').show();
-			block.find('.knife-delete').show();
-		}
-	}
+    image.find('img').remove();
+    image.find('button.remove').hide();
 
-	block.on('click', '.knife-select', function(e) {
-		e.preventDefault();
+    if(src.length > 0) {
+      $('<img />', {src: src}).prependTo(image).css('max-width', '50%');
 
-		if(frame)
-			return frame.open();
+      image.find('button.remove').show();
+    }
+  }
 
-		frame = wp.media({
-			title: knife_custom_background.choose,
-			multiple: false
-		});
 
-		frame.on('select', function() {
-			var attachment = frame.state().get('selection').first().toJSON();
+  // Define color input as colorpicker
+  color.find('input').wpColorPicker();
 
-			block.find('.knife-input').val(attachment.url);
 
-			return toggle();
-		});
+  // Process select image button click
+  image.on('click', 'button.select', function(e) {
+    e.preventDefault();
 
-		return frame.open();
-	});
+    if(frame)
+      return frame.open();
 
-	block.on('click', '.knife-delete', function(e) {
-		e.preventDefault();
+    frame = wp.media({
+      title: knife_custom_background.choose,
+      multiple: false
+    });
 
-		block.find('.knife-input').val('');
+    frame.on('select', function() {
+      var attachment = frame.state().get('selection').first().toJSON();
 
-		return toggle();
-	});
+      image.find('input').val(attachment.url);
 
-	return toggle();
+      return toggle();
+    });
+
+    return frame.open();
+  });
+
+
+  // Delete image on link clicking
+  image.on('click', 'button.remove', function(e) {
+    e.preventDefault();
+
+    image.find('input').val('');
+
+    return toggle();
+  });
+
+
+  return toggle();
 });

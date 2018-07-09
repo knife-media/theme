@@ -8,9 +8,11 @@
 * @since 1.3
 */
 
+
 if (!defined('WPINC')) {
     die;
 }
+
 
 new Knife_Special_Projects;
 
@@ -26,8 +28,15 @@ class Knife_Special_Projects {
 
 
     public function __construct() {
-        // register taxonomy
+        // Register taxonomy
         add_action('init', [$this, 'register_taxonomy']);
+
+        // Add custom background for special taxonomy
+        add_filter('knife_custom_background_taxes', function($default) {
+            $default[] = $this->slug;
+
+            return $default;
+        });
     }
 
 
