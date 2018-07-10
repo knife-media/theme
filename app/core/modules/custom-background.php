@@ -165,6 +165,39 @@ class Knife_Custom_Background {
         $meta = [];
 
         /**
+         * If is_single() we will check all post terms until we meet background settings
+         *
+         * @since 1.3
+         */
+        if(is_single()) {
+            foreach($this->taxes as $tax) {
+                $terms = wp_get_post_terms(get_queried_object_id(), $tax);
+
+                foreach($terms as $term) {
+                    $data = get_term_meta($term->term_id, $this->meta, true);
+
+                    if(!is_array($data))
+                        continue;
+
+                    $meta = $data;
+
+                    break;
+                }
+            }
+        }
+
+
+        /*
+         * We have to check archives separately
+         *
+         * @link https://core.trac.wordpress.org/ticket/18636
+         */
+        if(is_tax() || is_tag() || is_category()) {
+            $meta = get_term_meta(get_queried_object_id(), $this->meta, true);
+        }
+
+
+        /**
          * Filter custom background options
          *
          * @since 1.3

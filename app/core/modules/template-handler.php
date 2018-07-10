@@ -69,7 +69,7 @@ class Knife_Template_Handler {
      * Append archive header including title and description
      */
     public function archive_header() {
-        if(have_posts()) {
+        if(is_archive() && have_posts()) {
             $header = sprintf('<div class="caption block">%s</div>',
                 $this->archive_title() . $this->archive_description()
             );
