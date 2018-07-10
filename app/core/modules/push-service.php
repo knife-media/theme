@@ -51,9 +51,13 @@ class Knife_Push_Service {
      * Update type array by modules filters
      */
     public function set_type() {
-        $default = $this->type;
-
-        $this->type = apply_filters('knife_push_service_type', $default);
+       /**
+         * Filter push service support post types
+         *
+         * @since 1.3
+         * @param array $type
+         */
+        $this->type = apply_filters('knife_push_service_type', $this->type);
     }
 
 

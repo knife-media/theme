@@ -16,7 +16,7 @@ if(!function_exists('the_template')) :
      * @since 1.3
      */
     function the_template($slug, $name = null) {
-        $templates = (new Knife_Template_Handler)->template($slug, $name);
+        $templates = (new Knife_Theme_Templates)->get_template($slug, $name);
 
         locate_template($templates, true, false);
     }
@@ -30,7 +30,7 @@ if(!function_exists('the_share')) :
      * @since 1.3
      */
     function the_share($before = '', $after = '', $action = '', $title = '', $echo = true) {
-        $share = (new Knife_Template_Handler)->share($action, $title);
+        $share = (new Knife_Share_Buttons)->get_buttons($action, $title);
 
         $output = $before . $share . $after;
 
@@ -49,7 +49,7 @@ if(!function_exists('the_info')) :
      * @since 1.3
      */
     function the_info($before = '', $after = '', $options = '', $echo = true) {
-        $info= (new Knife_Template_Handler)->info($options);
+        $info = (new Knife_Post_Info)->get_info($options);
 
         $output = $before . $info . $after;
 

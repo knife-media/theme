@@ -7,19 +7,22 @@
   var backdrop = document.createElement('div');
   backdrop.classList.add('backdrop');
 
-  // Set element color
-  if(typeof knife_backdrop.color !== 'undefined')
-    backdrop.style.backgroundColor = '#' + knife_backdrop.color;
+  // Set footer element color
+  if(typeof knife_backdrop.color !== 'undefined') {
+    document.querySelector('.footer').style.backgroundColor = '#' + knife_backdrop.color;
+  }
 
   // Apply element if image is not set
-  if(typeof knife_backdrop.image === 'undefined')
+  if(typeof knife_backdrop.image === 'undefined') {
     return document.body.appendChild(backdrop);
+  }
 
   backdrop.style.backgroundImage = 'url(' + knife_backdrop.image + ')';
 
   // Set background size if exists
-  if(typeof knife_backdrop.size !== 'undefined')
+  if(typeof knife_backdrop.size !== 'undefined') {
     backdrop.style.backgroundSize = knife_backdrop.size;
+  }
 
   var image = new Image();
 

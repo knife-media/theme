@@ -40,9 +40,13 @@ class Knife_Post_Tagline {
      * Update type array by modules filters
      */
     public function set_type() {
-        $default = $this->type;
-
-        $this->type = apply_filters('knife_post_tagline_type', $default);
+        /**
+         * Filter tagline support post types
+         *
+         * @since 1.3
+         * @param array $type
+         */
+        $this->type = apply_filters('knife_post_tagline_type', $this->type);
     }
 
 

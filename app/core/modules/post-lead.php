@@ -55,9 +55,13 @@ class Knife_Post_Lead {
      * Update type array by modules filters
      */
     public function set_type() {
-        $default = $this->type;
-
-        $this->type = apply_filters('knife_post_lead_type', $default);
+        /**
+         * Filter post lead support post types
+         *
+         * @since 1.3
+         * @param array $type
+         */
+        $this->type = apply_filters('knife_post_lead_type', $this->type);
     }
 
 

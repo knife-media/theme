@@ -55,6 +55,12 @@ class Knife_Custom_Background {
      * Update taxes array by modules filters
      */
     public function set_taxes() {
+        /**
+         * Filter custom background taxes
+         *
+         * @since 1.3
+         * @param array $taxes
+         */
         $this->taxes = apply_filters('knife_custom_background_taxes', $this->taxes);
 
         foreach($this->taxes as $tax) {
@@ -82,18 +88,23 @@ class Knife_Custom_Background {
     public function print_background() {
         $backdrop = [];
 
-        $color = $this->get_meta('color', get_background_color());
+        $defaults = [
+            'color' => get_background_color(),
+            'image' => get_background_image(),
+            'size' => get_theme_mod('background_size')
+        ];
+
+        // Get term meta only once
+        $meta = wp_parse_args($this->get_meta(), $defaults);
+        extract($meta);
+
+        $color = ltrim($color, '#');
 
         if($color !== get_theme_support('custom-background', 'default-color'))
             $backdrop['color'] = $color;
 
-        $image = $this->get_meta('image', get_background_image());
-
         if($image) {
             $backdrop['image'] = set_url_scheme($image);
-
-            // Set background size style
-            $size = $this->get_meta('size', get_theme_mod('background_size'));
 
             if(in_array($size, ['auto', 'contain', 'cover'], true))
                 $backdrop['size'] = $size;
@@ -151,41 +162,29 @@ class Knife_Custom_Background {
         if(!current_user_can('edit_term', $term_id))
             return;
 
-        if(!empty($_REQUEST[$this->meta]))
-            update_term_meta($term_id, $this->meta, $_REQUEST[$this->meta]);
-        else
-            delete_term_meta($term_id, $this->meta);
+        if(empty($_REQUEST[$this->meta])) {
+            return delete_term_meta($term_id, $this->meta);
+        }
+
+        $meta = [];
+
+        foreach($_REQUEST[$this->meta] as $key => $value) {
+            if((string) $value !== '') {
+                $meta[$key] = $value;
+            }
+        }
+
+        update_term_meta($term_id, $this->meta, $meta);
     }
 
 
     /**
      * Filter background options using term meta
+     *
+     * @link https://github.com/knife-media/knife-theme/issues/49
      */
-    public function get_meta($option, $default = '') {
-        $meta = [];
-
-        /**
-         * If is_single() we will check all post terms until we meet background settings
-         *
-         * @since 1.3
-         */
-        if(is_single()) {
-            foreach($this->taxes as $tax) {
-                $terms = wp_get_post_terms(get_queried_object_id(), $tax);
-
-                foreach($terms as $term) {
-                    $data = get_term_meta($term->term_id, $this->meta, true);
-
-                    if(!is_array($data))
-                        continue;
-
-                    $meta = $data;
-
-                    break;
-                }
-            }
-        }
-
+    public function get_meta() {
+        $background = [];
 
         /*
          * We have to check archives separately
@@ -193,9 +192,8 @@ class Knife_Custom_Background {
          * @link https://core.trac.wordpress.org/ticket/18636
          */
         if(is_tax() || is_tag() || is_category()) {
-            $meta = get_term_meta(get_queried_object_id(), $this->meta, true);
+            $background = get_term_meta(get_queried_object_id(), $this->meta, true);
         }
-
 
         /**
          * Filter custom background options
@@ -203,12 +201,6 @@ class Knife_Custom_Background {
          * @since 1.3
          * @param array $meta
          */
-        $meta = apply_filters('knife_custom_background', $meta);
-
-        if(!empty($meta[$option])) {
-            return $meta[$option];
-        }
-
-        return $default;
+        return apply_filters('knife_custom_background', $background, $this->meta);
     }
 }

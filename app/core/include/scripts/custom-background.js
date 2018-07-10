@@ -11,12 +11,15 @@ jQuery(document).ready(function($) {
     var src = image.find('input').val();
 
     image.find('img').remove();
-    image.find('button.remove').hide();
+    image.find('button.remove').attr('disabled', 'disabled');
+    image.find('select').attr('disabled', 'disabled');
+
 
     if(src.length > 0) {
-      $('<img />', {src: src}).prependTo(image).css('max-width', '50%');
+      $('<img />', {src: src}).prependTo(image).css('max-width', '100%');
 
-      image.find('button.remove').show();
+      image.find('button.remove').removeAttr('disabled');
+      image.find('select').removeAttr('disabled');
     }
   }
 

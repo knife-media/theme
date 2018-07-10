@@ -465,7 +465,7 @@ add_action('admin_menu', function() {
 
 
 // Template manager
-require get_template_directory() . '/core/modules/template-handler.php';
+require get_template_directory() . '/core/modules/template-filters.php';
 
 // Add custom theme widgets from common hanlder
 require get_template_directory() . '/core/modules/widget-handler.php';
@@ -490,6 +490,15 @@ require get_template_directory() . '/core/modules/header-meta.php';
 
 // Customize default wordpress embed code
 require get_template_directory() . '/core/modules/embed-filters.php';
+
+// Share buttons manager class
+require get_template_directory() . '/core/modules/share-buttons.php';
+
+// Manage theme templates including
+require get_template_directory() . '/core/modules/theme-templates.php';
+
+// Return post info meta
+require get_template_directory() . '/core/modules/post-info.php';
 
 // Custom optional image for posts
 require get_template_directory() . '/core/modules/post-sticker.php';
