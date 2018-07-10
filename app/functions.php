@@ -228,8 +228,15 @@ add_filter('body_class', function($wp_classes, $extra_classes) {
 
 
 // Remove annoying post classes
-// We can use entry-- clas prefix better
 add_filter('post_class', function($classes, $class) {
+    $type = get_post_type();
+
+    if(post_type_supports($type, 'post-formats')) {
+        $type = get_post_format();
+    }
+
+    $class[] = 'post--' . $type;
+
     return $class;
 }, 10, 2);
 
@@ -479,8 +486,8 @@ require get_template_directory() . '/core/modules/news-manager.php';
 // Special projects taxonomy settings
 require get_template_directory() . '/core/modules/special-projects.php';
 
-// Custom post type for manual articles collection
-require get_template_directory() . '/core/modules/selection-set.php';
+// Custom post type for manual articles mention links
+require get_template_directory() . '/core/modules/mention-links.php';
 
 // Login screen custom styles
 require get_template_directory() . '/core/modules/access-screen.php';

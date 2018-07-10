@@ -1,8 +1,8 @@
 <?php
 /**
-* Selection set
+* Selection type
 *
-* Custom post type for manual articles collection
+* Custom post type for manual articles mention
 *
 * @package knife-theme
 * @since 1.3
@@ -12,9 +12,9 @@ if (!defined('WPINC')) {
     die;
 }
 
-new Knife_Selection_Set;
+new Knife_Mention_Links;
 
-class Knife_Selection_Set {
+class Knife_Mention_Links {
     /**
      * Unique slug using for custom post type register and url
      *
@@ -22,7 +22,7 @@ class Knife_Selection_Set {
      * @access  private
      * @var     string
      */
-    private $slug = 'select';
+    private $slug = 'mention';
 
     /**
      * Unique meta using for saving post data
@@ -31,25 +31,25 @@ class Knife_Selection_Set {
      * @access  private
      * @var     string
      */
-    private $meta = '_knife-select';
+    private $meta = '_knife-mention';
 
 
     public function __construct() {
         add_action('save_post', [$this, 'save_meta']);
 
-        // add scripts to admin page
+        // Add scripts to admin page
         add_action('admin_enqueue_scripts', [$this, 'add_assets']);
 
-        // add selection metabox
+        // Add mention metabox
         add_action('add_meta_boxes', [$this, 'add_metabox']);
 
-        // register club post type
-        add_action('init', [$this, 'register_selection']);
+        // Register mention post type
+        add_action('init', [$this, 'register_mention']);
 
-        // filter content to show custom links
+        // Filter content to show custom links
         add_filter('the_content', [$this, 'update_content']);
 
-        // add post lead to post type editor
+        // Add post lead to post type editor
         add_filter('knife_post_lead_type', function($default) {
             $default[] = $this->slug;
 
@@ -59,9 +59,9 @@ class Knife_Selection_Set {
 
 
     /**
-     * Register selection post type
+     * Register mention post type
      */
-    public function register_selection() {
+    public function register_mention() {
         register_post_type($this->slug, [
             'labels'                => [
                 'name'              => __('Подборка', 'knife-theme'),
@@ -94,50 +94,34 @@ class Knife_Selection_Set {
     public function update_content($content) {
         $post_id = get_the_ID();
 
-        if(get_post_type($post_id) !== $this->slug)
+        if(get_post_type($post_id) !== $this->slug) {
             return $content;
-
-        $items = get_post_meta($post_id, $this->meta . '-items');
-
-        if(count($items) === 0)
-            return $content;
-
-        foreach($items as $item) {
-            // check if link and text not empty
-            if(empty($item['link']) || empty($item['text']))
-                continue;
-
-            $link_id = url_to_postid($item['link']);
-
-            $output = '';
-
-            if($link_id > 0) {
-
-                $output .= knife_theme_meta([
-                    'opts' => ['author', 'date', 'category'],
-                    'before' => '<div class="post__links-meta meta">',
-                    'after' => '</div>',
-                    'echo' => false
-                ]);
-            }
-
-            $output .= sprintf('<a class="post_links-title" href="%s">%s</a>',
-                esc_url($item['link']),
-                esc_html($item['text'])
-            );
-
-            $content .= '<div class="post_links-item">' . $output . '</div>';
         }
 
-        return $content;
+        $html = false;//get_transient("knife_{$this->slug}_{$post_id}");
+
+        if($html === false) {
+            $items = get_post_meta($post_id, $this->meta . '-items');
+
+            ob_start();
+
+            foreach($items as $item) {
+                $this->process_item($item);
+            }
+
+            $html = ob_get_clean();
+            set_transient("knife_{$this->slug}_{$post_id}", $html, 24 * HOUR_IN_SECONDS);
+        }
+
+        return sprintf('<div class="post__content-mentions">%s</div>', $html);
     }
 
 
     /**
-     * Add selection metabox
+     * Add mention metabox
      */
     public function add_metabox() {
-        add_meta_box('knife-selection-metabox', __('Подборка статей'), [$this, 'display_metabox'], $this->slug, 'normal', 'high');
+        add_meta_box('knife-mention-metabox', __('Подборка статей'), [$this, 'display_metabox'], $this->slug, 'normal', 'high');
     }
 
 
@@ -154,10 +138,10 @@ class Knife_Selection_Set {
         $include = get_template_directory_uri() . '/core/include';
 
         // insert admin styles
-        wp_enqueue_style('knife-selection-set', $include . '/styles/selection-set.css', [], $version);
+        wp_enqueue_style('knife-mention-links', $include . '/styles/mention-links.css', [], $version);
 
         // insert admin scripts
-        wp_enqueue_script('knife-selection-set', $include . '/scripts/selection-set.js', ['jquery', 'jquery-ui-sortable'], $version);
+        wp_enqueue_script('knife-mention-links', $include . '/scripts/mention-links.js', ['jquery', 'jquery-ui-sortable'], $version);
     }
 
 
@@ -167,7 +151,7 @@ class Knife_Selection_Set {
     public function display_metabox($post, $box) {
         $include = get_template_directory() . '/core/include';
 
-        include_once($include . '/templates/selection-set.php');
+        include_once($include . '/templates/mention-links.php');
     }
 
 
@@ -184,25 +168,29 @@ class Knife_Selection_Set {
         if(!current_user_can('edit_post', $post_id))
             return;
 
-        // update items meta
-        $this->_update_items($this->meta . '-items', $post_id);
+        // Update items meta
+        $this->update_items($this->meta . '-items', $post_id);
+
+        // Remove html cache
+        delete_transient("knife_{$this->slug}_{$post_id}");
     }
 
 
     /**
-     * Update selection items meta from post-metabox
+     * Update mention items meta from post-metabox
      */
-    private function _update_items($query, $post_id, $meta = [], $i = 0) {
+    private function update_items($query, $post_id, $meta = [], $i = 0) {
         if(empty($_REQUEST[$query]))
             return;
 
-        // delete selection post meta to create it again below
+        // delete mention post meta to create it again below
         delete_post_meta($post_id, $query);
 
         foreach($_REQUEST[$query] as $item) {
             foreach($item as $key => $value) {
-                if(isset($meta[$i]) && array_key_exists($key, $meta[$i]))
+                if(isset($meta[$i]) && array_key_exists($key, $meta[$i])) {
                     $i++;
+                }
 
                 switch($key) {
                     case 'text':
@@ -223,5 +211,37 @@ class Knife_Selection_Set {
                 add_post_meta($post_id, $query, $item);
             }
         }
+    }
+
+
+    private function process_item($item) {
+        if(empty($item['text']) || empty($item['link'])) {
+            return;
+        }
+
+        $post_id = url_to_postid($item['link']);
+
+        echo '<div class="mention">';
+
+        if($post_id > 0) {
+            global $post;
+
+            $post = get_post($post_id);
+            setup_postdata($post);
+
+            the_info(
+                '<div class="mention__meta meta">', '</div>',
+                ['author', 'date']
+            );
+
+            wp_reset_postdata();
+        }
+
+        printf('<a class="mention__link" href="%2$s">%1$s</a>',
+            esc_html($item['text']),
+            esc_url($item['link'])
+        );
+
+        echo '</div>';
     }
 }

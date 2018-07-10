@@ -49,19 +49,19 @@ class Knife_Header_Meta {
     }
 
     public function add_meta() {
-        $meta = $this->_common_meta();
+        $meta = $this->common_meta();
 
-        $meta = (is_singular() && !is_front_page()) ? $this->_single_meta($meta) : $this->_archive_meta($meta);
+        $meta = (is_singular() && !is_front_page()) ? $this->single_meta($meta) : $this->archive_meta($meta);
 
         foreach($meta as $tag) {
             echo "$tag\n";
         }
     }
 
-    private function _single_meta($meta = []) {
+    private function single_meta($meta = []) {
         $post_id = get_queried_object_id();
 
-        $cover = $this->_get_cover($post_id);
+        $cover = $this->get_cover($post_id);
 
         $meta[] = sprintf('<meta name="description" content="%s">',
             get_the_excerpt($post_id)
@@ -112,7 +112,7 @@ class Knife_Header_Meta {
          return $meta;
     }
 
-    private function _archive_meta($meta = []) {
+    private function archive_meta($meta = []) {
         $cover = get_template_directory_uri() . '/assets/images/poster-default.png';
 
         $meta[] = sprintf('<meta name="description" content="%s">',
@@ -160,7 +160,7 @@ class Knife_Header_Meta {
         return $meta;
     }
 
-    private function _common_meta($meta = []) {
+    private function common_meta($meta = []) {
         $meta[] = '<meta property="fb:app_id" content="1281081571902073" />';
 
           $meta[] = '<meta name="twitter:card" content="summary_large_image" />';
@@ -180,7 +180,7 @@ class Knife_Header_Meta {
         return $meta;
     }
 
-    private function _get_cover($post_id) {
+    private function get_cover($post_id) {
         $social = get_post_meta($post_id, '_social-image', true);
 
         if(empty($social))
