@@ -483,6 +483,9 @@ require get_template_directory() . '/core/modules/user-club.php';
 // News category
 require get_template_directory() . '/core/modules/news-manager.php';
 
+// Story post type
+require get_template_directory() . '/core/modules/story-manager.php';
+
 // Special projects taxonomy settings
 require get_template_directory() . '/core/modules/special-projects.php';
 

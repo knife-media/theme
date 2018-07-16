@@ -129,6 +129,9 @@ class Knife_Mention_Links {
     * Enqueue assets to admin post screen only
     */
     public function add_assets($hook) {
+        if(!in_array($hook, ['post.php', 'post-new.php']))
+            return;
+
         $post_id = get_the_ID();
 
         if(get_post_type($post_id) !== $this->slug)
@@ -151,7 +154,7 @@ class Knife_Mention_Links {
     public function display_metabox($post, $box) {
         $include = get_template_directory() . '/core/include';
 
-        include_once($include . '/templates/mention-links.php');
+        include_once($include . '/templates/mention-metabox.php');
     }
 
 
