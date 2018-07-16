@@ -2,7 +2,7 @@
 /**
 * Selection type
 *
-* Custom post type for manual articles mention
+* Custom post type for manual articles select
 *
 * @package knife-theme
 * @since 1.3
@@ -12,9 +12,9 @@ if (!defined('WPINC')) {
     die;
 }
 
-new Knife_Mention_Links;
+new Knife_Select_Links;
 
-class Knife_Mention_Links {
+class Knife_Select_Links {
     /**
      * Unique slug using for custom post type register and url
      *
@@ -22,7 +22,7 @@ class Knife_Mention_Links {
      * @access  private
      * @var     string
      */
-    private $slug = 'mention';
+    private $slug = 'select';
 
     /**
      * Unique meta using for saving post data
@@ -31,7 +31,7 @@ class Knife_Mention_Links {
      * @access  private
      * @var     string
      */
-    private $meta = '_knife-mention';
+    private $meta = '_knife-select';
 
 
     public function __construct() {
@@ -40,11 +40,11 @@ class Knife_Mention_Links {
         // Add scripts to admin page
         add_action('admin_enqueue_scripts', [$this, 'add_assets']);
 
-        // Add mention metabox
+        // Add select metabox
         add_action('add_meta_boxes', [$this, 'add_metabox']);
 
-        // Register mention post type
-        add_action('init', [$this, 'register_mention']);
+        // Register select post type
+        add_action('init', [$this, 'register_select']);
 
         // Filter content to show custom links
         add_filter('the_content', [$this, 'update_content']);
@@ -59,9 +59,9 @@ class Knife_Mention_Links {
 
 
     /**
-     * Register mention post type
+     * Register select post type
      */
-    public function register_mention() {
+    public function register_select() {
         register_post_type($this->slug, [
             'labels'                => [
                 'name'              => __('Подборка', 'knife-theme'),
@@ -113,15 +113,15 @@ class Knife_Mention_Links {
             set_transient("knife_{$this->slug}_{$post_id}", $html, 24 * HOUR_IN_SECONDS);
         }
 
-        return sprintf('<div class="post__content-mentions">%s</div>', $html);
+        return sprintf('<div class="post__content-selects">%s</div>', $html);
     }
 
 
     /**
-     * Add mention metabox
+     * Add select metabox
      */
     public function add_metabox() {
-        add_meta_box('knife-mention-metabox', __('Подборка статей'), [$this, 'display_metabox'], $this->slug, 'normal', 'high');
+        add_meta_box('knife-select-metabox', __('Подборка статей'), [$this, 'display_metabox'], $this->slug, 'normal', 'high');
     }
 
 
@@ -141,10 +141,10 @@ class Knife_Mention_Links {
         $include = get_template_directory_uri() . '/core/include';
 
         // insert admin styles
-        wp_enqueue_style('knife-mention-links', $include . '/styles/mention-links.css', [], $version);
+        wp_enqueue_style('knife-select-links', $include . '/styles/select-links.css', [], $version);
 
         // insert admin scripts
-        wp_enqueue_script('knife-mention-links', $include . '/scripts/mention-links.js', ['jquery', 'jquery-ui-sortable'], $version);
+        wp_enqueue_script('knife-select-links', $include . '/scripts/select-links.js', ['jquery', 'jquery-ui-sortable'], $version);
     }
 
 
@@ -154,7 +154,7 @@ class Knife_Mention_Links {
     public function display_metabox($post, $box) {
         $include = get_template_directory() . '/core/include';
 
-        include_once($include . '/templates/mention-metabox.php');
+        include_once($include . '/templates/select-metabox.php');
     }
 
 
@@ -180,13 +180,13 @@ class Knife_Mention_Links {
 
 
     /**
-     * Update mention items meta from post-metabox
+     * Update select items meta from post-metabox
      */
     private function update_items($query, $post_id, $meta = [], $i = 0) {
         if(empty($_REQUEST[$query]))
             return;
 
-        // delete mention post meta to create it again below
+        // delete select post meta to create it again below
         delete_post_meta($post_id, $query);
 
         foreach($_REQUEST[$query] as $item) {
@@ -224,7 +224,7 @@ class Knife_Mention_Links {
 
         $post_id = url_to_postid($item['link']);
 
-        echo '<div class="mention">';
+        echo '<div class="select">';
 
         if($post_id > 0) {
             global $post;
@@ -233,14 +233,14 @@ class Knife_Mention_Links {
             setup_postdata($post);
 
             the_info(
-                '<div class="mention__meta meta">', '</div>',
+                '<div class="select__meta meta">', '</div>',
                 ['author', 'date']
             );
 
             wp_reset_postdata();
         }
 
-        printf('<a class="mention__link" href="%2$s">%1$s</a>',
+        printf('<a class="select__link" href="%2$s">%1$s</a>',
             esc_html($item['text']),
             esc_url($item['link'])
         );
