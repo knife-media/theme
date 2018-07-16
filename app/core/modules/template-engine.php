@@ -1,6 +1,6 @@
 <?php
 /**
-* Theme templates
+* Template engine
 *
 * Manage theme templates including
 *
@@ -12,9 +12,9 @@ if (!defined('WPINC')) {
     die;
 }
 
-new Knife_Theme_Templates;
+new Knife_Template_Engine;
 
-class Knife_Theme_Templates {
+class Knife_Template_Engine {
     /**
      * Main template function using instead of default get_template_part
      */

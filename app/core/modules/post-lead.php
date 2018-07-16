@@ -13,7 +13,6 @@ if (!defined('WPINC')) {
     die;
 }
 
-
 (new Knife_Post_Lead)->init();
 
 class Knife_Post_Lead {

@@ -471,11 +471,14 @@ add_action('admin_menu', function() {
 });
 
 
-// Template manager
-require get_template_directory() . '/core/modules/template-filters.php';
+// Template engine
+require get_template_directory() . '/core/modules/template-engine.php';
 
 // Add custom theme widgets from common hanlder
 require get_template_directory() . '/core/modules/widget-handler.php';
+
+// Theme filters
+require get_template_directory() . '/core/modules/theme-filters.php';
 
 // User generated blogs
 require get_template_directory() . '/core/modules/user-club.php';
@@ -503,9 +506,6 @@ require get_template_directory() . '/core/modules/embed-filters.php';
 
 // Share buttons manager class
 require get_template_directory() . '/core/modules/share-buttons.php';
-
-// Manage theme templates including
-require get_template_directory() . '/core/modules/theme-templates.php';
 
 // Return post info meta
 require get_template_directory() . '/core/modules/post-info.php';

@@ -1,6 +1,6 @@
 <?php
 /**
-* Common template filters
+* Common theme filters
 *
 * Useful template manager class
 *
@@ -12,9 +12,9 @@ if (!defined('WPINC')) {
     die;
 }
 
-new Knife_Template_Filters;
+new Knife_Theme_Filters;
 
-class Knife_Template_Filters {
+class Knife_Theme_Filters {
     public function __construct() {
         // Add widget size query var
         add_action('the_post', [$this, 'archive_item'], 10, 2);
@@ -100,6 +100,12 @@ class Knife_Template_Filters {
             );
         }
 
+        if(is_author()) {
+            return sprintf('<h1 class="caption__title caption__title--author">%s</h1>',
+                get_the_author()
+            );
+        }
+
         if(is_tag() || is_tax()) {
             return sprintf('<h1 class="caption__title">%s</h1>',
                 single_term_title('', false)
@@ -115,6 +121,10 @@ class Knife_Template_Filters {
      */
     private function archive_description() {
         $description = get_the_archive_description();
+
+        if(is_author()) {
+            $description = get_the_author_meta('description');
+        }
 
         if(!empty($description)) {
             $description = sprintf('<div class="caption__text">%s</div>', $description);
