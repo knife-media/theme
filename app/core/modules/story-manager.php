@@ -105,14 +105,11 @@ class Knife_Story_Manager {
         if(!is_singular($this->slug))
             return;
 
-        $version = '4.2.2';
+        $version = '3.1.0';
         $include = get_template_directory_uri() . '/assets';
 
-        // enqueue swiper css
-        wp_enqueue_style('swiper', $include . '/styles/swiper.min.css', [], $version);
-
         // enqueue swiper js to bottom
-        wp_enqueue_script('swiper', $include . '/scripts/swiper.min.js', [], $version, true);
+        wp_enqueue_script('glide', $include . '/vendor/glide.min.js', [], $version, true);
     }
 
 

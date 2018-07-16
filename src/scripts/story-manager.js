@@ -1,17 +1,25 @@
 (function() {
-  var slider = document.querySelector('.slider');
+  var slider = document.querySelector('.glide');
 
   // Check if Swiper object exists
-  if(typeof Swiper === 'undefined')
+  if(typeof Glide === 'undefined')
     return false;
+
+
+
+  return new Glide('.glide', {gap: 0}).mount();
+
+
+
+
+
+
 
 
   // Check slider element and options meta
   if(slider === null || typeof knife_story_options === 'undefined')
     return false;
 
-
-  // Set background and shadow using stories options
   var setBackground = function(element) {
     if(typeof knife_story_options.background === 'undefined')
       return false;

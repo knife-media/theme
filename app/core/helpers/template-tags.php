@@ -16,7 +16,7 @@ if(!function_exists('the_template')) :
      * @since 1.3
      */
     function the_template($slug, $name = null) {
-        $templates = (new Knife_Theme_Templates)->get_template($slug, $name);
+        $templates = (new Knife_Template_Engine)->get_template($slug, $name);
 
         locate_template($templates, true, false);
     }

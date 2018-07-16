@@ -76,4 +76,3 @@
     <?php get_sidebar(); ?>
 
 </section>
-
