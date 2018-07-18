@@ -53,7 +53,10 @@ jQuery(document).ready(function($) {
       tinymce: true,
       quicktags: true,
       mediaButtons: false,
-      tinymce: {toolbar1: 'formatselect,bold,italic,bullist,numlist,link'}
+      tinymce: {
+        toolbar1: 'formatselect,bold,italic,bullist,numlist,link',
+        block_formats: 'Paragraph=p;Heading 2=h2;Heading 3=h3;Heading 4=h4'
+      }
     });
   }
 

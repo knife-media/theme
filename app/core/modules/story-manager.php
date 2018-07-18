@@ -12,7 +12,7 @@ if (!defined('WPINC')) {
     die;
 }
 
-new Knife_Story_Manager;
+(new Knife_Story_Manager)->init();
 
 class Knife_Story_Manager {
     /**
@@ -42,26 +42,29 @@ class Knife_Story_Manager {
      * @access  private
      * @var     string
      */
-    private $opts = ['background', 'shadow', 'blur', 'effect'];
+    private $opts = ['background', 'shadow', 'blur'];
 
 
-    public function __construct() {
+    /*
+     * Use init function instead of constructor
+     */
+    public function init() {
         add_action('admin_enqueue_scripts', [$this, 'add_assets']);
 
-        // register story post type
+        // Register story post type
         add_action('init', [$this, 'register_story']);
 
-        // core post metabox
+        // Story post metabox
         add_action('add_meta_boxes', [$this, 'add_metabox'], 1);
 
-        // save story meta
+        // Save story meta
         add_action('save_post', [$this, 'save_meta']);
 
-        // insert vendor scripts and styles
+        // Insert vendor scripts and styles
         add_action('wp_enqueue_scripts', [$this, 'enqueue_assets'], 9);
 
-        // include swiper options
-        add_action('wp_enqueue_scripts', [$this, 'inject_object'], 12);
+        // Include slider options
+        add_action('wp_enqueue_scripts', [$this, 'inject_options'], 12);
     }
 
 
@@ -80,13 +83,13 @@ class Knife_Story_Manager {
         $version = wp_get_theme()->get('Version');
         $include = get_template_directory_uri() . '/core/include';
 
-        // insert scripts for dynaimc wp_editor
+        // Insert scripts for dynaimc wp_editor
         wp_enqueue_editor();
 
-        // insert admin styles
+        // Insert admin styles
         wp_enqueue_style('knife-story-manager', $include . '/styles/story-manager.css', [], $version);
 
-        // insert admin scripts
+        // Insert admin scripts
         wp_enqueue_script('knife-story-manager', $include . '/scripts/story-manager.js', ['jquery', 'jquery-ui-sortable'], $version);
 
         $options = [
@@ -98,40 +101,35 @@ class Knife_Story_Manager {
 
 
     /**
-     * Enqueue swiper scripts and styles
+     * Enqueue glide vendor script
      */
     public function enqueue_assets() {
-
         if(!is_singular($this->slug))
             return;
 
         $version = '3.1.0';
         $include = get_template_directory_uri() . '/assets';
 
-        // enqueue swiper js to bottom
+        // Enqueue swiper js to bottom
         wp_enqueue_script('glide', $include . '/vendor/glide.min.js', [], $version, true);
     }
 
 
     /**
-     * Include swiper story meta options
+     * Include slider story meta options
      */
-    public function inject_object() {
+    public function inject_options() {
         if(!is_singular($this->slug))
             return;
 
         $post_id = get_the_ID();
-        $stories = $this->convert_stories($post_id);
 
         foreach($this->opts as $item) {
             $options[$item] = get_post_meta($post_id, $this->meta . "-{$item}", true);
         }
 
-        // add stories options object
+        // Add stories options object
         wp_localize_script('knife-theme', 'knife_story_options', $options);
-
-        // add stories items
-        wp_localize_script('knife-theme', 'knife_story_stories', $stories);
     }
 
 
@@ -209,27 +207,22 @@ class Knife_Story_Manager {
             return;
 
 
-        // update stories meta
+        // Update stories meta
         $this->update_stories($this->meta . '-stories', $post_id);
 
-        // update other story options
+        // Update other story options
         foreach($this->opts as $option) {
             $query = $this->meta . "-{$option}";
 
             if(!isset($_REQUEST[$query]))
                 continue;
 
-            // get value by query
+            // Get value by query
             $value = $_REQUEST[$query];
 
             switch($option) {
                 case 'background':
                     $value = esc_url($value);
-
-                    break;
-
-                case 'effect':
-                    $value = esc_html($value);
 
                     break;
 
@@ -250,25 +243,73 @@ class Knife_Story_Manager {
 
 
     /**
-     * Convert stories post meta to object
+     * Update content with story items
      */
-    private function convert_stories($post_id, $stories = []) {
-        $items = get_post_meta($post_id, $this->meta . '-stories');
+    public function get_story($before, $after) {
+        $post_id = get_the_ID();
 
-        foreach($items as $i => $story) {
-            if(!empty($story['media'])) {
-                $stories[$i]['image'] = wp_get_attachment_image_url($story['media'], 'outer');
+        if(get_post_type($post_id) !== $this->slug) {
+            return $content;
+        }
 
-                if($caption = wp_get_attachment_caption($story['media']))
-                    $stories[$i]['caption'] = $caption;
+        $stories = get_post_meta($post_id, $this->meta . '-stories');
+
+        ob_start();
+
+        foreach($stories as $slide) {
+            echo $before;
+
+            // Append kicker based on post title
+            if($title = get_the_title($post_id)) {
+                printf('<div class="glide__slide-kicker"><span>%s</span></div>',
+                    esc_html($title)
+                );
             }
 
-            if(!empty($story['entry'])) {
-                $stories[$i]['entry'] = apply_filters('the_content', $story['entry']);
+            printf('<div class="glide__slide-wrap">%s</div>',
+                $this->append_media($slide) . $this->append_entry($slide)
+            );
+
+            echo $after;
+        }
+
+        return ob_get_clean();
+    }
+
+
+    /**
+     * Append slide media
+     */
+    private function append_media($slide, $html = '') {
+        if(isset($slide['media'])) {
+            $media = wp_get_attachment_image_src($slide['media'], 'inner');
+
+            if(is_array($media) && count($media) > 2) {
+
+                // Calculate image ratio using width and height
+                $ratio = $media[2] / max($media[1], 1);
+
+                $html = sprintf('<div class="glide__slide-image" style="background-image:url(%s); --image-ratio: %s"></div>',
+                    $media[0], round($ratio, 3)
+                );
             }
         }
 
-        return $stories;
+        return $html;
+    }
+
+
+    /**
+     * Append slide entry
+     */
+    private function append_entry($slide, $html = '') {
+        if(isset($slide['entry'])) {
+            $html = sprintf('<div class="glide__slide-entry">%s</div>',
+                apply_filters('the_content', $slide['entry'])
+            );
+        }
+
+        return $html;
     }
 
 
@@ -276,22 +317,17 @@ class Knife_Story_Manager {
      * Update stories meta from post-metabox
      */
     private function update_stories($query, $post_id, $meta = [], $i = 0) {
-        if(empty($_REQUEST[$query]))
+        if(empty($_REQUEST[$query])) {
             return;
+        }
 
-        // delete stories post meta to create it again below
+        // Delete stories post meta to create it again below
         delete_post_meta($post_id, $query);
 
         foreach($_REQUEST[$query] as $story) {
             foreach($story as $key => $value) {
                 if(isset($meta[$i]) && array_key_exists($key, $meta[$i])) {
                     $i++;
-                }
-
-                switch($key) {
-                    case 'media':
-                        $value = absint($value);
-                        break;
                 }
 
                 $meta[$i][$key] = $value;

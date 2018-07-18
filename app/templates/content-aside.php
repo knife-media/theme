@@ -10,7 +10,6 @@
 <section class="content block">
 
     <article <?php post_class('post'); ?> id="post-<?php the_ID(); ?>">
-
         <header class="post__header">
             <?php
                 the_info(
@@ -69,7 +68,6 @@
               </div>
             <?php endif; ?>
         </footer>
-
     </article>
 
 </section>

@@ -1,209 +1,147 @@
+/**
+ * Create story using Glide slider
+ *
+ * @since 1.3
+ */
+
 (function() {
-  var slider = document.querySelector('.glide');
+  var glide = document.querySelector('.glide');
 
-  // Check if Swiper object exists
-  if(typeof Glide === 'undefined')
+
+  /**
+   * Check if Glide object exists
+   */
+  if(glide === null || typeof Glide === 'undefined') {
     return false;
+  }
 
 
-
-  return new Glide('.glide', {gap: 0}).mount();
-
-
-
-
+  /**
+   * Define global vars
+   */
+  var count = glide.querySelectorAll('.glide__slide').length;
 
 
-
-
-  // Check slider element and options meta
-  if(slider === null || typeof knife_story_options === 'undefined')
+  /**
+   * Check slides count before story creation
+   */
+  if(count === 0) {
     return false;
+  }
 
-  var setBackground = function(element) {
-    if(typeof knife_story_options.background === 'undefined')
+
+  /*
+   * Create Glide instance with custom options
+   */
+  var story = new Glide('.glide', {
+    gap: 0, rewind: false, dragThreshold: false
+  });
+
+
+  /**
+   * Set custom background
+   */
+  story.on('mount.before', function() {
+    if(typeof knife_story_options.background === 'undefined') {
       return false;
+    }
 
     var image = document.createElement('div');
-    image.classList.add('slider__background');
+    image.classList.add('glide__backdrop');
     image.style.backgroundImage = 'url(' + knife_story_options.background + ')';
 
-    if(typeof knife_story_options.blur !== 'undefined' && parseInt(knife_story_options.blur) > 0)
+    if(typeof knife_story_options.blur !== 'undefined' && parseInt(knife_story_options.blur) > 0) {
       image.style.filter = 'blur(' + knife_story_options.blur + 'px)';
+    }
 
-    element.appendChild(image);
+    glide.appendChild(image);
 
-    if(typeof knife_story_options.shadow === 'undefined')
-      return image;
+    if(typeof knife_story_options.shadow === 'undefined') {
+      return false;
+    }
 
     var alpha = parseInt(knife_story_options.shadow) / 100;
 
-    if(alpha <= 0 || alpha > 1)
-      return image;
+    if(alpha <= 0 || alpha > 1) {
+      return false;
+    }
 
     var shadow = document.createElement('div');
-    shadow.classList.add('slider__shadow');
+    shadow.classList.add('glide__shadow');
     shadow.style.backgroundColor = 'rgba(0, 0, 0, ' + alpha + ')';
 
     image.appendChild(shadow);
-
-    return image;
-  }
+  });
 
 
-  // Create navigation
-  var createNavigation = function() {
 
-    // Create next button
-    var next = document.createElement('div');
-    next.classList.add('swiper-button-next');
-
-    slider.appendChild(next);
-
-    // Create prev button
-    var prev = document.createElement('div');
-    prev.classList.add('swiper-button-prev');
-
-    slider.appendChild(prev);
-
-    return {
-      nextEl: '.swiper-button-next',
-      prevEl: '.swiper-button-prev'
-    }
-  }
-
-
-  // Create pagination
-  var createPagination = function() {
-
-    // Create pagination element
+  /**
+   * Add bullets on Glide mounting
+   */
+  story.on('mount.before', function() {
     var bullets = document.createElement('div');
-    bullets.classList.add('swiper-pagination');
+    bullets.classList.add('glide__bullets');
 
-    slider.appendChild(bullets);
+    for (var i = 0; i < count; i++) {
+      var item = document.createElement('span');
+      item.classList.add('glide__bullets-item');
 
-    return {
-      el: '.swiper-pagination',
-      type: 'bullets'
-    }
-  }
-
-
-  // Create entry tag with html on slide insertion
-  var createEntry = function(story, item) {
-    if(typeof story.entry === 'undefined')
-      return;
-
-    var entry = document.createElement('div');
-    entry.classList.add('slider__item-entry', 'custom');
-    entry.innerHTML = story.entry;
-    item.appendChild(entry);
-  }
-
-
-  // Create image figure with optional caption on slide insertion
-  var createImage = function(story, item) {
-    if(typeof story.image === 'undefined')
-      return;
-
-    var figure = document.createElement('figure');
-    figure.classList.add('slider__item-media');
-    item.appendChild(figure);
-
-    var image = document.createElement('img');
-    image.classList.add('slider__item-image');
-    image.src = story.image;
-    figure.appendChild(image);
-
-    if(typeof story.caption === 'undefined')
-      return;
-
-    var notice = document.createElement('div');
-    notice.classList.add('slider__item-notice', 'custom');
-    figure.appendChild(notice);
-
-    var caption = document.createElement('figcaption');
-    caption.classList.add('slider__item-caption');
-    caption.innerHTML = story.caption;
-    notice.appendChild(caption);
-  }
-
-
-  // Insert stories to slider
-  var insertStories = function() {
-    if(typeof knife_story_stories === 'undefined' || knife_story_stories.length < 1)
-      return false;
-
-    for(var i = 0; i < knife_story_stories.length; i++) {
-      var slide = document.createElement('div');
-      slide.classList.add('swiper-slide');
-
-      var item = document.createElement('div');
-      item.classList.add('slider__item', 'block');
-      slide.appendChild(item);
-
-      // Set entry if exists
-      createEntry(knife_story_stories[i], item);
-
-      // Set image if exists
-      createImage(knife_story_stories[i], item);
-
-      swiper.appendSlide(slide);
-    }
-  }
-
-
-  // Apply effects using options
-  var applyEffects = function(args) {
-
-    // Set background image
-    var background = setBackground(slider);
-
-    if(typeof knife_story_options.effect === 'undefined' || !background)
-      return args;
-
-    switch(knife_story_options.effect) {
-      case 'parallax':
-
-        background.style.width = 'calc(100% + 210px)';
-        background.setAttribute('data-swiper-parallax-x', -200);
-        background.setAttribute('data-swiper-parallax-duration', 700);
-
-        break;
+      bullets.appendChild(item);
     }
 
-    return args;
-  }
+    return glide.appendChild(bullets);
+  });
 
 
-  // Set swiper options
-  var setOptions = function() {
-    var args = {};
+  /**
+   * Add bullets events
+   */
+  story.on(['mount.after', 'run'], function() {
+    var bullets = glide.querySelectorAll('.glide__bullets-item');
 
-    // Allow keyboard shortcuts
-    args.keyboard = true;
+    for (var i = 0, bullet; bullet = bullets[i]; i++) {
+      bullet.classList.remove('glide__bullets-item--active');
 
-    // Slider speed
-    args.speed = 400;
-
-    // Get paginations elements
-    args.pagination = createPagination();
-
-    // Get navigation element
-    args.navigation = createNavigation();
-
-    // Disable resistance
-    args.resistanceRatio = 999;
-
-    // Add simulate touch only on small screen
-    args.simulateTouch = (window.innerWidth < 768);
-
-    return applyEffects(args);
-  }
+      if(story.index === i) {
+        bullet.classList.add('glide__bullets-item--active');
+      }
+    }
+  });
 
 
-  // Create slider
-  var swiper = new Swiper('.slider', setOptions());
+  /**
+   * Add slider controls on Glide mounting
+   */
+  story.on('mount.before', function() {
+    ['prev', 'next'].forEach(function(cl, i) {
+      var control = document.createElement('div');
+      control.classList.add('glide__control', 'glide__control--' + cl);
+      control.classList.add();
 
-  return insertStories();
+      var icon = document.createElement('span');
+      icon.classList.add('icon', 'icon--' + cl);
+      control.appendChild(icon);
+
+      glide.appendChild(control);
+    });
+
+    glide.querySelector('.glide__control--next').addEventListener('click', function(e) {
+      e.preventDefault();
+
+      story.go('>');
+    });
+
+    glide.querySelector('.glide__control--prev').addEventListener('click', function(e) {
+      e.preventDefault();
+
+      story.go('<');
+    });
+  });
+
+
+  /**
+   * Let's rock!
+   */
+  return story.mount();
+
 })();

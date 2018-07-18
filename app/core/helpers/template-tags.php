@@ -81,3 +81,20 @@ if(!function_exists('the_lead')) :
         return $output;
     }
 endif;
+
+
+if(!function_exists('the_story')) :
+    /**
+     * Show story slides
+     *
+     * @since 1.3
+     */
+    function the_story($before = '', $after = '', $echo = true) {
+        $output = (new Knife_Story_Manager)->get_story($before, $after);
+
+        if($echo === true)
+            echo $output;
+
+        return $output;
+    }
+endif;

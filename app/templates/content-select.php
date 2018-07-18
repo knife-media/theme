@@ -1,9 +1,9 @@
 <?php
 /**
- * Standart post format content template width sidebar
+ * Select post type content template
  *
  * @package knife-theme
- * @since 1.1
+ * @since 1.3
  */
 ?>
 
@@ -11,7 +11,6 @@
 <section class="content block">
 
     <article <?php post_class('post'); ?> id="post-<?php the_ID(); ?>">
-
         <header class="post__header">
             <?php
                 the_title(
@@ -52,7 +51,6 @@
               </div>
             <?php endif; ?>
         </footer>
-
     </article>
 
 </section>
