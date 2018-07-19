@@ -259,21 +259,28 @@ class Knife_Story_Manager {
         foreach($stories as $slide) {
             echo $before;
 
-            // Append kicker based on post title
-            if($title = get_the_title($post_id)) {
-                printf('<div class="glide__slide-kicker"><span>%s</span></div>',
-                    esc_html($title)
-                );
-            }
-
             printf('<div class="glide__slide-wrap">%s</div>',
-                $this->append_media($slide) . $this->append_entry($slide)
+                $this->append_kicker($post_id) . $this->append_media($slide) . $this->append_entry($slide)
             );
 
             echo $after;
         }
 
         return ob_get_clean();
+    }
+
+
+    /**
+     * Append kicker based on post title
+     */
+    private function append_kicker($post_id, $html = '') {
+        if($title = get_the_title($post_id)) {
+            $html = sprintf('<div class="glide__slide-kicker"><span>%s</span></div>',
+                esc_html($title)
+            );
+        }
+
+        return $html;
     }
 
 

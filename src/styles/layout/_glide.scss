@@ -42,6 +42,7 @@
     height: 100%;
 
     .glide__slide-meta {
+      width: 100%;
       padding-bottom: 1rem;
       color: $color-white;
     }
@@ -50,7 +51,7 @@
       display: block;
 
       width: 100%;
-      max-width: $content-width;
+      max-width: 40rem;
       margin-bottom: 1.5rem;
 
       font-size: 3.5rem;
@@ -86,19 +87,25 @@
 
       width: calc(100% - 8rem);
       height: 100%;
-      max-width: $site-width;
-      padding: 3.25rem 1rem;
+      max-width: calc(#{$site-width} - 2rem);
+
+      padding: 4rem 0 3rem;
 
       @media screen and (max-width: 767px) {
-        width: 100%;
+        align-items: center;
+        width: calc(100% - 4rem);
+      }
+
+      @media screen and (max-width: 479px) {
+        width: calc(100% - 2rem);
       }
     }
 
     .glide__slide-kicker {
       position: absolute;
-      top: 1rem;
+      top: 2rem;
+      left: 0;
 
-      margin-left: 1rem;
       font-size: .8125rem;
       font-weight: 500;
       letter-spacing: .25px;
@@ -108,22 +115,28 @@
       flex: 1;
 
       width: 100%;
-      max-width: $content-width;
+      max-width: 40rem;
 
-      max-height: calc(#{$content-width} * (var(--image-ratio)));
+      height: 100%;
+      max-height: calc(40rem * (var(--image-ratio)));
 
       background-size: contain;
       background-repeat: no-repeat;
 
-      @media screen and (max-width: #{$content-width + 2rem}) {
-        max-height: calc(100vw * (var(--image-ratio)));
+      @media screen and (max-width: 44rem) {
+        max-height: calc((100vw - 4rem) * (var(--image-ratio)));
+      }
+
+      @media screen and (max-width: 479px) {
+        max-height: calc((100vw - 2rem) * (var(--image-ratio)));
       }
     }
 
     .glide__slide-entry {
       display: block;
 
-      max-width: $content-width;
+      width: 100%;
+      max-width: 40rem;
 
       font-size: 1rem;
       font-weight: 700;
@@ -241,7 +254,9 @@
       justify-content: flex-end;
       right: 0;
 
-      width: 50%;
+      width: calc(100% - 45rem);
+      max-width: calc(50% - 2rem);
+
       padding-right: 1rem;
     }
 
