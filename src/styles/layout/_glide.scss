@@ -10,6 +10,9 @@
   color: $color-white;
   background-color: $color-black;
 
+  opacity: 0;
+  transition: opacity .5s;
+
   .glide__track {
     overflow: hidden;
   }
@@ -312,5 +315,9 @@
     @media screen and (max-width: 767px) {
       display: none;
     }
+  }
+
+  &.glide--slider {
+    opacity: 1;
   }
 }

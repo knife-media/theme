@@ -68,7 +68,9 @@ class Knife_Story_Manager {
 
         // Remove global backdrop
         add_filter('knife_custom_background', function($meta) {
-            return ['image' => ''];
+            if(is_singular($this->slug)) {
+                return ['image' => ''];
+            }
         });
     }
 
@@ -293,7 +295,7 @@ class Knife_Story_Manager {
      * Append slide media
      */
     private function append_media($slide, $html = '') {
-        if(isset($slide['media'])) {
+        if(!empty($slide['media'])) {
             $media = wp_get_attachment_image_src($slide['media'], 'inner');
 
             if(is_array($media) && count($media) > 2) {
@@ -315,7 +317,7 @@ class Knife_Story_Manager {
      * Append slide entry
      */
     private function append_entry($slide, $html = '') {
-        if(isset($slide['entry'])) {
+        if(!empty($slide['entry'])) {
             $html = sprintf('<div class="glide__slide-entry">%s</div>',
                 apply_filters('the_content', $slide['entry'])
             );

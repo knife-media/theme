@@ -46,33 +46,66 @@
       return false;
     }
 
-    var image = document.createElement('div');
-    image.classList.add('glide__backdrop');
-    image.style.backgroundImage = 'url(' + knife_story_options.background + ')';
 
-    if(typeof knife_story_options.blur !== 'undefined' && parseInt(knife_story_options.blur) > 0) {
-      image.style.filter = 'blur(' + knife_story_options.blur + 'px)';
+    /**
+     * Append shadow element
+     */
+    var appendShadow = function(media) {
+      if(typeof knife_story_options.shadow === 'undefined') {
+        return false;
+      }
+
+      var alpha = parseInt(knife_story_options.shadow) / 100;
+
+      if(alpha <= 0 || alpha > 1) {
+        return false;
+      }
+
+      var shadow = document.createElement('div');
+      shadow.classList.add('glide__shadow');
+      shadow.style.backgroundColor = 'rgba(0, 0, 0, ' + alpha + ')';
+
+      media.appendChild(shadow);
     }
 
-    story.appendChild(image);
 
-    if(typeof knife_story_options.shadow === 'undefined') {
-      return false;
+    /**
+     * Add blur effect to image
+     */
+    var appendBlur = function(media) {
+      if(typeof knife_story_options.blur === 'undefined') {
+        return false;
+      }
+
+      var blur = parseInt(knife_story_options.blur);
+
+      if(blur <= 0) {
+        return false;
+      }
+
+      media.style.filter = 'blur(' + blur + 'px)';
     }
 
-    var alpha = parseInt(knife_story_options.shadow) / 100;
 
-    if(alpha <= 0 || alpha > 1) {
-      return false;
+    var image = new Image();
+
+    image.onload = function() {
+      // Create media element
+      var media = document.createElement('div');
+      media.classList.add('glide__backdrop');
+      media.style.backgroundImage = 'url(' + this.src + ')';
+
+      // Append shadow element
+      appendShadow(media);
+
+      // Add blur affect to media
+      appendBlur(media);
+
+      return story.appendChild(media);
     }
 
-    var shadow = document.createElement('div');
-    shadow.classList.add('glide__shadow');
-    shadow.style.backgroundColor = 'rgba(0, 0, 0, ' + alpha + ')';
-
-    image.appendChild(shadow);
+    return image.src = knife_story_options.background;
   });
-
 
 
   /**
