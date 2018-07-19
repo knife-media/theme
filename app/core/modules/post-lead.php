@@ -13,13 +13,13 @@ if (!defined('WPINC')) {
     die;
 }
 
+
 (new Knife_Post_Lead)->init();
 
 class Knife_Post_Lead {
    /**
     * Backward compatibility meta name
     *
-    * @since   1.2
     * @access  private
     * @var     string
     */
@@ -29,7 +29,6 @@ class Knife_Post_Lead {
    /**
     * Default post type lead text availible
     *
-    * @since   1.2
     * @access  private
     * @var     array
     */
@@ -38,6 +37,8 @@ class Knife_Post_Lead {
 
     /**
      * Use this method instead of constructor to avoid multiple hook setting
+     *
+     * @since 1.3
      */
     public function init() {
         add_action('save_post', [$this, 'save_meta']);

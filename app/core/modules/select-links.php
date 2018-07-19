@@ -12,7 +12,7 @@ if (!defined('WPINC')) {
     die;
 }
 
-new Knife_Select_Links;
+(new Knife_Select_Links)->init();
 
 class Knife_Select_Links {
     /**
@@ -34,7 +34,12 @@ class Knife_Select_Links {
     private $meta = '_knife-select';
 
 
-    public function __construct() {
+    /**
+     * Use this method instead of constructor to avoid multiple hook setting
+     *
+     * @since 1.3
+     */
+    public function init() {
         add_action('save_post', [$this, 'save_meta']);
 
         // Add scripts to admin page

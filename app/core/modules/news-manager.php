@@ -12,7 +12,7 @@ if (!defined('WPINC')) {
     die;
 }
 
-new Knife_News_Manager;
+(new Knife_News_Manager)->init();
 
 class Knife_News_Manager {
     /**
@@ -34,7 +34,12 @@ class Knife_News_Manager {
     private $news_id = 620;
 
 
-    public function __construct() {
+    /**
+     * Init function instead of constructor
+     *
+     * @since 1.3
+     */
+    public function init() {
         // Remove news from home page
         add_action('pre_get_posts', [$this, 'remove_home']);
 

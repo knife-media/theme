@@ -14,12 +14,24 @@ if (!defined('WPINC')) {
 }
 
 
-new Knife_Google_Search;
+(new Knife_Google_Search)->init();
 
 class Knife_Google_Search {
+    /**
+     * Option to store search settings
+     *
+     * @access  private
+     * @var     string
+     */
     private $option = 'knife-search-settings';
 
-    public function __construct() {
+
+    /**
+     * Init function instead of constructor
+     *
+     * @since 1.3
+     */
+    public function init() {
         // include Google Custom Search js sdk
         add_action('wp_enqueue_scripts', [$this, 'inject_object'], 12);
 

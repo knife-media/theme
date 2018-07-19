@@ -8,17 +8,28 @@
 * @since 1.3
 */
 
+
 if (!defined('WPINC')) {
     die;
 }
 
+
 new Knife_Share_Buttons;
 
 class Knife_Share_Buttons {
+   /**
+    * Buttons settings array
+    *
+    * @access  private
+    * @var     array
+    */
+    private $buttons = [];
+
+
     /**
-     * Prints social share buttons template
+     * Required class pre-options
      */
-    public function get_buttons($action, $title, $output = '') {
+    public function __construct() {
         $buttons = [
             'vkontakte' => [
                 'link' => 'http://vk.com/share.php?url=%1$s&text=%2$s',
@@ -41,7 +52,20 @@ class Knife_Share_Buttons {
             ]
         ];
 
-        foreach($buttons as $network => $data) {
+        /**
+         * Filter share buttons settings
+         *
+         * @param array $buttons
+         */
+        $this->buttons = apply_filters('knife_share_buttons', $buttons);
+    }
+
+
+    /**
+     * Prints social share buttons template
+     */
+    public function get_buttons($action, $title, $output = '') {
+        foreach($this->buttons as $network => $data) {
             $text = sprintf('<span class="icon icon--%s"></span>', $network);
 
             if($data['text'] !== null)

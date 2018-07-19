@@ -13,10 +13,15 @@ if (!defined('WPINC')) {
 }
 
 
-new Knife_Access_Screen;
+(new Knife_Access_Screen)->init();
 
 class Knife_Access_Screen {
-    public function __construct() {
+    /**
+     * Use this method instead of constructor to avoid multiple hook setting
+     *
+     * @since 1.3
+     */
+    public function init() {
         add_action('login_headerurl', [$this, 'change_url']);
         add_action('login_headertitle', [$this, 'change_title']);
 
@@ -26,6 +31,7 @@ class Knife_Access_Screen {
         // admin styles
         add_action('admin_enqueue_scripts', [$this, 'admin_styles']);
     }
+
 
     /**
      * Prints custom styles with custom logo

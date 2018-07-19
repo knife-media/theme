@@ -14,12 +14,24 @@ if (!defined('WPINC')) {
 }
 
 
-new Knife_Post_Cover;
+(new Knife_Post_Cover)->init();
 
 class Knife_Post_Cover {
+   /**
+    * Post meta name
+    *
+    * @access  private
+    * @var     string
+    */
     private $meta = '_knife-cover';
 
-    public function __construct() {
+
+    /**
+     * Use this method instead of constructor to avoid multiple hook setting
+     *
+     * @since 1.3
+     */
+    public function init() {
         add_action('save_post', [$this, 'save_meta']);
 
         // add checkbox above thumnail widget
@@ -27,7 +39,7 @@ class Knife_Post_Cover {
     }
 
 
-     /**
+    /**
      * Prints checkbox in post thumbnail editor metabox
      */
     public function print_checkbox($content, $post_id, $thumbnail_id = '')  {

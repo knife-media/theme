@@ -1,8 +1,8 @@
 <?php
 /**
-* Post sticker meta
+* Custom background
 *
-* Custom optional image for posts
+* Backdrop for sites and custom archives
 *
 * @package knife-theme
 * @since 1.2
@@ -14,7 +14,7 @@ if (!defined('WPINC')) {
 }
 
 
-new Knife_Custom_Background;
+(new Knife_Custom_Background)->init();
 
 class Knife_Custom_Background {
     /**
@@ -37,7 +37,12 @@ class Knife_Custom_Background {
     private $taxes = ['post_tag', 'category'];
 
 
-    public function __construct() {
+    /**
+     * Use this method instead of constructor to avoid multiple hook setting
+     *
+     * @since 1.3
+     */
+    public function init() {
         add_action('admin_enqueue_scripts', [$this, 'add_assets']);
 
         // Update Customizer

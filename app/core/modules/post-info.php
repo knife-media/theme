@@ -22,8 +22,9 @@ class Knife_Post_Info {
         foreach($options as $option) {
             $method = 'info_' . $option;
 
-            if(!method_exists(__CLASS__, $method))
+            if(!method_exists(__CLASS__, $method)) {
                 continue;
+            }
 
             $output = $output . $this->$method();
         }

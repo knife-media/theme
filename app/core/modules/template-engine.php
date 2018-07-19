@@ -8,9 +8,11 @@
 * @since 1.3
 */
 
+
 if (!defined('WPINC')) {
     die;
 }
+
 
 new Knife_Template_Engine;
 

@@ -14,16 +14,42 @@ if (!defined('WPINC')) {
 }
 
 
-new Knife_Push_Service;
+(new Knife_Push_Service)->init();
 
 class Knife_Push_Service {
+   /**
+    * Post meta name
+    *
+    * @access  private
+    * @var     string
+    */
     private $meta   = '_knife-push';
 
+
+   /**
+    * Option to store push settings
+    *
+    * @access  private
+    * @var     string
+    */
     private $option = 'knife-push-settings';
 
+
+   /**
+    * Default post type push service availible
+    *
+    * @access  private
+    * @var     array
+    */
     private $type = ['post'];
 
-    public function __construct() {
+
+    /**
+     * Use this method instead of constructor to avoid multiple hook setting
+     *
+     * @since 1.3
+     */
+    public function init() {
         add_action('admin_enqueue_scripts', [$this, 'add_assets']);
 
         // include OneSignal js sdk

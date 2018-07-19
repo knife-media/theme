@@ -8,23 +8,30 @@
 * @since 1.2
 */
 
+
 if (!defined('WPINC')) {
     die;
 }
 
-new Knife_Widget_Handler;
+
+(new Knife_Widget_Handler)->init();
 
 class Knife_Widget_Handler {
    /**
     * Unique nonce for widget ajax requests
     *
-    * @since    1.2
     * @access   private
     * @var      string
     */
     private $nonce = 'knife-widget-nonce';
 
-    public function __construct() {
+
+    /**
+     * Use this method instead of constructor to avoid multiple hook setting
+     *
+     * @since 1.3
+     */
+    public function init() {
         add_action('admin_enqueue_scripts', [$this, 'add_assets']);
 
         // include all widgets

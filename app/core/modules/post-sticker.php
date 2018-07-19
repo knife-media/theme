@@ -14,12 +14,24 @@ if (!defined('WPINC')) {
 }
 
 
-new Knife_Post_Sticker;
+(new Knife_Post_Sticker)->init();
 
 class Knife_Post_Sticker {
+   /**
+    * Post meta name
+    *
+    * @access  private
+    * @var     string
+    */
     private $meta = '_knife-sticker';
 
-    public function __construct() {
+
+    /**
+     * Use this method instead of constructor to avoid multiple hook setting
+     *
+     * @since 1.3
+     */
+    public function init() {
         add_action('admin_enqueue_scripts', [$this, 'add_assets']);
 
         // post sticker

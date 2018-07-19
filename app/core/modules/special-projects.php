@@ -14,7 +14,7 @@ if (!defined('WPINC')) {
 }
 
 
-new Knife_Special_Projects;
+(new Knife_Special_Projects)->init();
 
 class Knife_Special_Projects {
     /**
@@ -27,7 +27,12 @@ class Knife_Special_Projects {
     private $slug = 'special';
 
 
-    public function __construct() {
+    /**
+     * Use this method instead of constructor to avoid multiple hook setting
+     *
+     * @since 1.3
+     */
+    public function init() {
         // Register taxonomy
         add_action('init', [$this, 'register_taxonomy']);
 

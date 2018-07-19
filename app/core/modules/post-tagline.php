@@ -14,14 +14,33 @@ if (!defined('WPINC')) {
 }
 
 
-new Knife_Post_Tagline;
+(new Knife_Post_Tagline)->init();
 
 class Knife_Post_Tagline {
+   /**
+    * Post meta name
+    *
+    * @access  private
+    * @var     string
+    */
     private $meta = '_knife-tagline';
 
+
+   /**
+    * Default post type tagline availible
+    *
+    * @access  private
+    * @var     array
+    */
     private $type = ['post'];
 
-    public function __construct() {
+
+    /**
+     * Use this method instead of constructor to avoid multiple hook setting
+     *
+     * @since 1.3
+     */
+    public function init() {
         add_action('admin_enqueue_scripts', [$this, 'add_assets']);
         add_action('save_post', [$this, 'save_meta']);
 
@@ -50,7 +69,7 @@ class Knife_Post_Tagline {
     }
 
 
-     /**
+    /**
      * Enqueue assets to admin post screen only
      */
     public function add_assets($hook) {
@@ -91,7 +110,7 @@ class Knife_Post_Tagline {
     }
 
 
-     /**
+    /**
      * Filter the post title on the Posts screen, and on the front-end
      */
     public function post_tagline($title, $post_id) {

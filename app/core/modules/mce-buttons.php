@@ -14,10 +14,15 @@ if (!defined('WPINC')) {
 }
 
 
-new Knife_MCE_Buttons;
+(new Knife_MCE_Buttons)->init();
 
 class Knife_MCE_Buttons {
-    public function __construct() {
+    /**
+     * Use this method instead of constructor to avoid multiple hook setting
+     *
+     * @since 1.3
+     */
+    public function init() {
         // button tag
         add_action('admin_init', [$this, 'init_mce']);
 
@@ -30,11 +35,13 @@ class Knife_MCE_Buttons {
      * Init tinymce plugins
      */
     public function init_mce() {
-        if(!current_user_can('edit_posts') && !current_user_can('edit_pages'))
+        if(!current_user_can('edit_posts') && !current_user_can('edit_pages')) {
             return;
+        }
 
-        if(get_user_option('rich_editing') !== 'true')
+        if(get_user_option('rich_editing') !== 'true') {
             return;
+        }
 
         add_filter('mce_buttons', [$this, 'register_buttons']);
         add_filter('mce_external_plugins', [$this, 'add_plugins']);

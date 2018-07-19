@@ -14,12 +14,24 @@ if (!defined('WPINC')) {
 }
 
 
-new Knife_Primary_Tag;
+(new Knife_Primary_Tag)->init();
 
 class Knife_Primary_Tag {
+   /**
+    * Post meta name
+    *
+    * @access  private
+    * @var     string
+    */
     private $meta = 'primary-tag';
 
-    public function __construct() {
+
+    /**
+     * Use this method instead of constructor to avoid multiple hook setting
+     *
+     * @since 1.3
+     */
+    public function init() {
         add_action('admin_enqueue_scripts', [$this, 'add_assets']);
 
         // save meta on save post

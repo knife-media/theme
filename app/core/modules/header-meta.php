@@ -12,15 +12,21 @@ if (!defined('WPINC')) {
 }
 
 
-new Knife_Header_Meta;
+(new Knife_Header_Meta)->init();
 
 class Knife_Header_Meta {
-    public function __construct() {
+    /**
+     * Use this method instead of constructor to avoid multiple hook setting
+     *
+     * @since 1.3
+     */
+    public function init() {
         add_action('wp_head', [$this, 'add_meta'], 5);
-         add_action('wp_head', [$this, 'add_icon'], 4);
+        add_action('wp_head', [$this, 'add_icon'], 4);
 
         add_filter('language_attributes', [$this, 'add_xmlns']);
     }
+
 
     public function add_icon() {
         $meta = [];
@@ -44,9 +50,11 @@ class Knife_Header_Meta {
         }
     }
 
+
     public function add_xmlns($output) {
         return 'prefix="og: http://ogp.me/ns#" ' . $output;
     }
+
 
     public function add_meta() {
         $meta = $this->common_meta();
@@ -58,6 +66,7 @@ class Knife_Header_Meta {
         }
     }
 
+
     private function single_meta($meta = []) {
         $post_id = get_queried_object_id();
 
@@ -67,7 +76,7 @@ class Knife_Header_Meta {
             get_the_excerpt($post_id)
         );
 
-         $meta[] = '<meta property="og:type" content="article" />';
+        $meta[] = '<meta property="og:type" content="article" />';
 
         $meta[] = sprintf('<meta property="og:url" content="%s" />',
             get_permalink()
@@ -112,6 +121,7 @@ class Knife_Header_Meta {
          return $meta;
     }
 
+
     private function archive_meta($meta = []) {
         $cover = get_template_directory_uri() . '/assets/images/poster-default.png';
 
@@ -137,9 +147,9 @@ class Knife_Header_Meta {
             esc_url($cover)
         );
 
-          $meta[] = '<meta property="og:image:width" content="1200" />';
+        $meta[] = '<meta property="og:image:width" content="1200" />';
 
-         $meta[] = '<meta property="og:image:height" content="800" />';
+        $meta[] = '<meta property="og:image:height" content="800" />';
 
         $meta[] = sprintf('<meta property="twitter:title" content="%s" />',
             get_bloginfo('name')
@@ -160,14 +170,15 @@ class Knife_Header_Meta {
         return $meta;
     }
 
+
     private function common_meta($meta = []) {
         $meta[] = '<meta property="fb:app_id" content="1281081571902073" />';
 
-          $meta[] = '<meta name="twitter:card" content="summary_large_image" />';
+        $meta[] = '<meta name="twitter:card" content="summary_large_image" />';
 
         $meta[] = '<meta name="twitter:site" content="@knife_media" />';
 
-         $meta[] = '<meta name="twitter:creator" content="@knife_media" />';
+        $meta[] = '<meta name="twitter:creator" content="@knife_media" />';
 
         $meta[] = sprintf(
             '<meta property="og:site_name" content="%s" />', get_bloginfo('name')
@@ -180,11 +191,13 @@ class Knife_Header_Meta {
         return $meta;
     }
 
+
     private function get_cover($post_id) {
         $social = get_post_meta($post_id, '_social-image', true);
 
-        if(empty($social))
+        if(empty($social)) {
             return wp_get_attachment_image_src(get_post_thumbnail_id($post_id), 'outer');
+        }
 
         return [$social, 1024, 512];
     }

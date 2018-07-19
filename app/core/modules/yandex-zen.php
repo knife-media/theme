@@ -13,7 +13,7 @@ if (!defined('WPINC')) {
     die;
 }
 
-new Knife_Yandex_Zen;
+(new Knife_Yandex_Zen)->init();
 
 class Knife_Yandex_Zen {
 
@@ -38,7 +38,12 @@ class Knife_Yandex_Zen {
     private $enclosure = null;
 
 
-    public function __construct() {
+    /**
+     * Use this method instead of constructor to avoid multiple hook setting
+     *
+     * @since 1.3
+     */
+    public function init() {
         add_action('init', [$this, 'init_feeds']);
         add_action('wp', [$this, 'add_hooks']);
 

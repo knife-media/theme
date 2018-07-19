@@ -8,11 +8,13 @@
 * @since 1.3
 */
 
+
 if (!defined('WPINC')) {
     die;
 }
 
-new Knife_User_Club;
+
+(new Knife_User_Club)->init();
 
 class Knife_User_Club {
     /**
@@ -65,7 +67,12 @@ class Knife_User_Club {
     private $fields = [];
 
 
-    public function __construct() {
+    /**
+     * Use this method instead of constructor to avoid multiple hook setting
+     *
+     * @since 1.3
+     */
+    public function init() {
         // print checkbox user form
         add_action('page_attributes_misc_attributes', [$this, 'print_checkbox']);
 

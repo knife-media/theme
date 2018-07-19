@@ -12,10 +12,13 @@ if (!defined('WPINC')) {
     die;
 }
 
-new Knife_Theme_Filters;
+(new Knife_Theme_Filters)->init();
 
 class Knife_Theme_Filters {
-    public function __construct() {
+    /**
+     * Use this method instead of constructor to avoid multiple hook setting
+     */
+    public function init() {
         // Add widget size query var
         add_action('the_post', [$this, 'archive_item'], 10, 2);
 
