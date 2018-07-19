@@ -5,13 +5,13 @@
  */
 
 (function() {
-  var glide = document.querySelector('.glide');
+  var story = document.querySelector('.glide');
 
 
   /**
    * Check if Glide object exists
    */
-  if(glide === null || typeof Glide === 'undefined') {
+  if(story === null || typeof Glide === 'undefined') {
     return false;
   }
 
@@ -19,7 +19,7 @@
   /**
    * Define global vars
    */
-  var count = glide.querySelectorAll('.glide__slide').length;
+  var count = story.querySelectorAll('.glide__slide').length;
 
 
   /**
@@ -33,7 +33,7 @@
   /*
    * Create Glide instance with custom options
    */
-  var story = new Glide('.glide', {
+  var glide = new Glide('.glide', {
     gap: 0, rewind: false, dragThreshold: false
   });
 
@@ -41,7 +41,7 @@
   /**
    * Set custom background
    */
-  story.on('mount.before', function() {
+  glide.on('mount.before', function() {
     if(typeof knife_story_options.background === 'undefined') {
       return false;
     }
@@ -54,7 +54,7 @@
       image.style.filter = 'blur(' + knife_story_options.blur + 'px)';
     }
 
-    glide.appendChild(image);
+    story.appendChild(image);
 
     if(typeof knife_story_options.shadow === 'undefined') {
       return false;
@@ -78,7 +78,7 @@
   /**
    * Add bullets on Glide mounting
    */
-  story.on('mount.before', function() {
+  glide.on('mount.before', function() {
     var bullets = document.createElement('div');
     bullets.classList.add('glide__bullets');
 
@@ -89,20 +89,20 @@
       bullets.appendChild(item);
     }
 
-    return glide.appendChild(bullets);
+    return story.appendChild(bullets);
   });
 
 
   /**
    * Add bullets events
    */
-  story.on(['mount.after', 'run'], function() {
-    var bullets = glide.querySelectorAll('.glide__bullets-item');
+  glide.on(['mount.after', 'run'], function() {
+    var bullets = story.querySelectorAll('.glide__bullets-item');
 
     for (var i = 0, bullet; bullet = bullets[i]; i++) {
       bullet.classList.remove('glide__bullets-item--active');
 
-      if(story.index === i) {
+      if(glide.index === i) {
         bullet.classList.add('glide__bullets-item--active');
       }
     }
@@ -112,7 +112,7 @@
   /**
    * Add slider controls on Glide mounting
    */
-  story.on('mount.before', function() {
+  glide.on('mount.before', function() {
     ['prev', 'next'].forEach(function(cl, i) {
       var control = document.createElement('div');
       control.classList.add('glide__control', 'glide__control--' + cl);
@@ -122,26 +122,54 @@
       icon.classList.add('icon', 'icon--' + cl);
       control.appendChild(icon);
 
-      glide.appendChild(control);
+      story.appendChild(control);
     });
 
-    glide.querySelector('.glide__control--next').addEventListener('click', function(e) {
+    story.querySelector('.glide__control--next').addEventListener('click', function(e) {
       e.preventDefault();
 
-      story.go('>');
+      glide.go('>');
     });
 
-    glide.querySelector('.glide__control--prev').addEventListener('click', function(e) {
+    story.querySelector('.glide__control--prev').addEventListener('click', function(e) {
       e.preventDefault();
 
-      story.go('<');
+      glide.go('<');
     });
+  });
+
+
+  /**
+   * Manage prev slider control
+   */
+  glide.on(['mount.after', 'run'], function(move) {
+    var prev = story.querySelector('.glide__control--prev');
+
+    prev.classList.remove('glide__control--disabled');
+
+    if(glide.index === 0) {
+      prev.classList.add('glide__control--disabled');
+    }
+  });
+
+
+  /**
+   * Manage next slider control
+   */
+  glide.on(['mount.after', 'run'], function(move) {
+    var next = story.querySelector('.glide__control--next');
+
+    next.classList.remove('glide__control--disabled');
+
+    if(glide.index + 1 === count) {
+      next.classList.add('glide__control--disabled');
+    }
   });
 
 
   /**
    * Let's rock!
    */
-  return story.mount();
+  return glide.mount();
 
 })();

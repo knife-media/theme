@@ -65,6 +65,11 @@ class Knife_Story_Manager {
 
         // Include slider options
         add_action('wp_enqueue_scripts', [$this, 'inject_options'], 12);
+
+        // Remove global backdrop
+        add_filter('knife_custom_background', function($meta) {
+            return ['image' => ''];
+        });
     }
 
 
