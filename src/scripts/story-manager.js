@@ -17,16 +17,22 @@
 
 
   /**
-   * Define global vars
+   * Check slides count before story creation
    */
-  var count = story.querySelectorAll('.glide__slide').length;
+  if(story.querySelectorAll('.glide__slide').length === 0) {
+    return false;
+  }
 
 
   /**
-   * Check slides count before story creation
+   * Reload page if user go back with browser cache
+   *
+   * @link https://stackoverflow.com/a/13123626
    */
-  if(count === 0) {
-    return false;
+  window.onpageshow = function(event) {
+    if(event.persisted) {
+      window.location.reload(false)
+    }
   }
 
 
@@ -115,7 +121,7 @@
     var bullets = document.createElement('div');
     bullets.classList.add('glide__bullets');
 
-    for (var i = 0; i < count; i++) {
+    for (var i = 0; i < story.querySelectorAll('.glide__slide').length; i++) {
       var item = document.createElement('span');
       item.classList.add('glide__bullets-item');
 
@@ -139,6 +145,27 @@
         bullet.classList.add('glide__bullets-item--active');
       }
     }
+  });
+
+
+  /**
+   * Create empty slide if next post availible
+   */
+  glide.on('mount.before', function(move) {
+    var link = document.querySelector('link[rel="next"]');
+
+    if(link === null || !link.hasAttribute('href')) {
+      return false;
+    }
+
+    var empty = document.createElement('div');
+    empty.classList.add('glide__slide', 'glide__slide--empty');
+
+    glide.update({
+      href: link.href
+    });
+
+    return story.querySelector('.glide__slides').appendChild(empty);
   });
 
 
@@ -173,6 +200,18 @@
 
 
   /**
+   * Add last slide index to settings
+   */
+  glide.on('mount.after', function() {
+    var slides = story.querySelectorAll('.glide__slide');
+
+    glide.update({
+      count: slides.length - 1
+    });
+  });
+
+
+  /**
    * Manage prev slider control
    */
   glide.on(['mount.after', 'run'], function(move) {
@@ -189,20 +228,46 @@
   /**
    * Manage next slider control
    */
-  glide.on(['mount.after', 'run'], function(move) {
+  glide.on('run', function(move) {
     var next = story.querySelector('.glide__control--next');
 
     next.classList.remove('glide__control--disabled');
 
-    if(glide.index + 1 === count) {
+    if(glide.index === glide.settings.count) {
       next.classList.add('glide__control--disabled');
     }
   });
 
 
   /**
+   * Hide story if extra slide exists
+   */
+  glide.on('run', function(move) {
+    if(glide.index === glide.settings.count && glide.settings.href) {
+      return story.style.opacity = 0;
+    }
+  });
+
+
+  /**
+   * Load next story if exists
+   */
+  glide.on('run.after', function(move) {
+    if(glide.index === glide.settings.count && glide.settings.href) {
+      return document.location.href = glide.settings.href;
+    }
+  });
+
+
+  story.addEventListener('touchmove', function(e) {
+     e.preventDefault();
+
+     console.log(e);
+  }, { passive: false });
+
+
+  /**
    * Let's rock!
    */
   return glide.mount();
-
 })();
