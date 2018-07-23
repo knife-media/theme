@@ -66,11 +66,21 @@ class Knife_Story_Manager {
         // Include slider options
         add_action('wp_enqueue_scripts', [$this, 'inject_options'], 12);
 
+
         // Remove global backdrop
         add_filter('knife_custom_background', function($meta) {
             if(is_singular($this->slug)) {
                 return ['image' => ''];
             }
+        });
+
+        // Stories archive header
+        add_filter('knife_archive_header', function($header) {
+            if(is_post_type_archive($this->slug)) {
+                $header = '';
+            }
+
+            return $header;
         });
     }
 

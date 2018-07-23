@@ -53,34 +53,22 @@ class Knife_News_Manager {
 
 
         // News archive template
-        add_filter('knife_template_archive', [$this, 'update_template']);
+        add_filter('knife_template_archive', function($template) {
+            if(is_category($this->news_id)) {
+                $template = $this->slug;
+            }
+
+            return $template;
+        });
 
         // News archive header
-        add_filter('knife_archive_header', [$this, 'update_header']);
-    }
+        add_filter('knife_archive_header', function($header) {
+            if(is_category($this->news_id)) {
+                $header = '';
+            }
 
-
-    /**
-     * Update news archive template part
-     */
-    public function update_template($template) {
-        if(is_category($this->news_id)) {
-            $template = $this->slug;
-        }
-
-        return $template;
-    }
-
-
-    /**
-     * Update news archive header
-     */
-    public function update_header($header) {
-        if(is_category($this->news_id)) {
-            $header = '';
-        }
-
-        return $header;
+            return $header;
+        });
     }
 
 

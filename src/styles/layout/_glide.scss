@@ -88,7 +88,7 @@
 
     .glide__slide-wrap {
       display: flex;
-      flex-flow: column wrap;
+      flex-flow: column nowrap;
       justify-content: center;
       align-items: flex-start;
       position: relative;
@@ -214,6 +214,10 @@
           font-size: .875rem;
           font-weight: 500;
         }
+      }
+
+      a {
+        border-bottom: solid 1px $color-white;
       }
     }
   }

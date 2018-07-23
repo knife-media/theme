@@ -57,7 +57,7 @@ class Knife_Template_Engine {
     private function template_content() {
         $template = get_post_type();
 
-        if(post_type_supports($template, 'post-formats')) {
+        if(is_singular('post')) {
             $template = get_post_format();
         }
 
@@ -72,10 +72,14 @@ class Knife_Template_Engine {
 
 
     /**
-     * Get content template part
+     * Get archive template part
      */
     private function template_archive() {
         $template = null;
+
+        if(is_post_type_archive()) {
+            $template = get_queried_object()->name;
+        }
 
         /**
          * Filters archive template

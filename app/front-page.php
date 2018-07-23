@@ -14,35 +14,35 @@ get_header(); ?>
 
 <main class="wrap">
 
-<?php if(is_active_sidebar('knife-under-header')) : ?>
-    <div class="content">
-        <?php dynamic_sidebar('knife-under-header'); ?>
-    </div>
-<?php endif; ?>
-
-
-<?php if(is_active_sidebar('knife-feature-stripe')) : ?>
-    <div class="content block">
-        <div class="split split--content">
-            <?php dynamic_sidebar('knife-feature-stripe'); ?>
+    <?php if(is_active_sidebar('knife-under-header')) : ?>
+        <div class="content">
+            <?php dynamic_sidebar('knife-under-header'); ?>
         </div>
-
-    <?php if(is_active_sidebar('knife-feature-sidebar')) : ?>
-        <aside class="split split--sidebar">
-            <?php dynamic_sidebar('knife-feature-sidebar'); ?>
-        </aside>
     <?php endif; ?>
-    </div>
-<?php endif; ?>
 
 
-<?php if(is_active_sidebar('knife-frontal')) : ?>
-    <div class="content block up">
-        <?php dynamic_sidebar('knife-frontal'); ?>
+    <?php if(is_active_sidebar('knife-feature-stripe')) : ?>
+        <div class="content block">
+            <div class="split split--content">
+                <?php dynamic_sidebar('knife-feature-stripe'); ?>
+            </div>
 
-        <a class="nav button" href="<?php echo home_url('/recent/page/4/'); ?>"><?php _e('Больше статей', 'knife-media'); ?></a>
-    </div>
-<?php endif; ?>
+        <?php if(is_active_sidebar('knife-feature-sidebar')) : ?>
+            <aside class="split split--sidebar">
+                <?php dynamic_sidebar('knife-feature-sidebar'); ?>
+            </aside>
+        <?php endif; ?>
+        </div>
+    <?php endif; ?>
+
+
+    <?php if(is_active_sidebar('knife-frontal')) : ?>
+        <div class="content block up">
+            <?php dynamic_sidebar('knife-frontal'); ?>
+
+            <a class="nav button" href="<?php echo home_url('/recent/page/4/'); ?>"><?php _e('Больше статей', 'knife-media'); ?></a>
+        </div>
+    <?php endif; ?>
 
 </main>
 

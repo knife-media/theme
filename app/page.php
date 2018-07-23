@@ -11,12 +11,10 @@ get_header(); ?>
 <main class="wrap">
     <?php
         if (have_posts()) :
-            while (have_posts()) : the_post();
 
-                // Include specific content template
-                the_template('content', 'page');
+            // Include specific content template
+            the_template('content', 'page');
 
-            endwhile;
         else:
 
             // Include "no posts found" template

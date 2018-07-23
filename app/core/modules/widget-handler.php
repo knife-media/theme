@@ -164,7 +164,7 @@ class Knife_Widget_Handler {
     }
 
 
-      /**
+    /**
      * Enqueue assets to admin post screen only
      */
     public function add_assets($hook) {
@@ -186,7 +186,7 @@ class Knife_Widget_Handler {
     public function include_widgets() {
         $widgets = get_template_directory() . '/core/widgets/';
 
-        foreach(['club', 'script', 'recent', 'triple', 'double', 'single', 'feature', 'details', 'transparent'] as $id) {
+        foreach(['story', 'club', 'script', 'recent', 'triple', 'double', 'single', 'feature', 'details', 'transparent'] as $id) {
             include_once($widgets . $id . '.php');
         }
     }
@@ -198,11 +198,11 @@ class Knife_Widget_Handler {
         $sidebars = get_option('sidebars_widgets');
 
         foreach($sidebars as $sidebar) {
-            if(!is_array($sidebar))
-                continue;
-
-            foreach($sidebar as $widget)
-                delete_transient($widget);
+            if(is_array($sidebar)) {
+                foreach($sidebar as $widget) {
+                    delete_transient($widget);
+                }
+            }
         }
 
         return $instance;

@@ -43,13 +43,9 @@
                     __('Share post — bottom', 'knife-theme'),
                     __('Поделиться в соцсетях:', 'knife-theme')
                 );
-            ?>
 
-            <?php if(is_active_sidebar('knife-post-widgets')) : ?>
-              <div class="post__footer-widgets">
-                <?php dynamic_sidebar('knife-post-widgets'); ?>
-              </div>
-            <?php endif; ?>
+                dynamic_sidebar('knife-post-widgets');
+            ?>
         </footer>
     </article>
 

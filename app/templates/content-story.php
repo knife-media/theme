@@ -7,35 +7,37 @@
  */
 ?>
 
-<section class="glide">
+<section class="content glide">
 
-    <div class="glide__track" data-glide-el="track">
+    <?php while (have_posts()) : the_post(); ?>
+        <div class="glide__track" data-glide-el="track">
 
-        <article class="glide__slides">
-            <div class="glide__slide">
-                <div class="glide__slide-wrap">
-                    <?php
-                        the_info(
-                            '<div class="glide__slide-meta meta">', '</div>',
-                            ['author', 'date']
-                        );
+            <article class="glide__slides">
+                <div class="glide__slide">
+                    <div class="glide__slide-wrap">
+                        <?php
+                            the_info(
+                                '<div class="glide__slide-meta meta">', '</div>',
+                                ['author', 'date']
+                            );
 
-                        the_title(
-                            '<h1 class="glide__slide-title">',
-                            '</h1>'
-                        );
-                    ?>
+                            the_title(
+                                '<h1 class="glide__slide-title">',
+                                '</h1>'
+                            );
+                        ?>
+                    </div>
                 </div>
-            </div>
 
-            <?php
-                the_story(
-                    '<div class="glide__slide">',
-                    '</div>'
-                );
-            ?>
-        </article>
+                <?php
+                    the_story(
+                        '<div class="glide__slide">',
+                        '</div>'
+                    );
+                ?>
+            </article>
 
-    </div>
+        </div>
+    <?php endwhile; ?>
 
 </section>
