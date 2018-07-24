@@ -4,14 +4,17 @@
   z-index: -1;
 
   width: 100%;
-  height: calc(100vh - 7rem);
+  height: calc(100vh - 4rem);
   min-height: 28rem;
+  overflow: hidden;
 
   color: $color-white;
   background-color: $color-black;
 
   opacity: 0;
   transition: opacity .5s;
+
+  transform: translate3d(0, 0, 0);
 
   .glide__track {
     overflow: hidden;
@@ -46,8 +49,42 @@
 
     .glide__slide-meta {
       width: 100%;
+      max-width: 40rem;
       padding-bottom: 1rem;
       color: $color-white;
+    }
+
+    .glide__slide-share {
+      width: 100%;
+      max-width: 40rem;
+      min-width: 0;
+      margin-left: 0;
+      margin-right: 0;
+      padding: .5rem 0;
+    }
+
+    .glide__slide-excerpt {
+      display: block;
+
+      width: 100%;
+      max-width: 40rem;
+
+      font-size: 1rem;
+      font-weight: 700;
+
+      p {
+        margin-bottom: 1rem;
+
+        @media screen and (max-width: 479px) {
+          margin-bottom: .75rem;
+          font-size: .875rem;
+          font-weight: 500;
+        }
+      }
+
+      a {
+        border-bottom: solid 1px $color-white;
+      }
     }
 
     .glide__slide-title {
@@ -55,11 +92,11 @@
 
       width: 100%;
       max-width: 40rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
 
-      font-size: 3.5rem;
+      font-size: 3rem;
       font-weight: 700;
-      line-height: 1;
+      line-height: 1.075;
       letter-spacing: .5px;
 
       transform: translateX(-3px);
@@ -67,12 +104,6 @@
       em {
         font-family: $font-serif;
         font-weight: 400;
-      }
-
-      @media screen and (max-width: 1023px) {
-        margin-bottom: .75rem;
-        font-size: 3rem;
-        line-height: 1.075;
       }
 
       @media screen and (max-width: 767px) {
@@ -98,6 +129,10 @@
       max-width: calc(#{$site-width} - 2rem);
 
       padding: 4rem 0 3rem;
+
+      &.glide__slide-wrap--first {
+        padding: 2rem 0 4rem;
+      }
 
       @media screen and (max-width: 767px) {
         align-items: center;
@@ -217,7 +252,12 @@
       }
 
       a {
+        transition: border .25s;
         border-bottom: solid 1px $color-white;
+
+        &:hover {
+          border-bottom-color: transparent;
+        }
       }
     }
   }
@@ -323,5 +363,19 @@
 
   &.glide--slider {
     opacity: 1;
+  }
+}
+
+body.admin-bar {
+  .glide {
+    height: calc(100vh - 6rem);
+
+    @media screen and (max-width: 1023px) {
+      height: calc(100vh - 5.25rem);
+    }
+
+    @media screen and (max-width: 782px) {
+      height: calc(100vh - 6.125rem);
+    }
   }
 }

@@ -82,6 +82,13 @@ class Knife_Story_Manager {
 
             return $header;
         });
+
+        // Add post lead to story post type
+        add_filter('knife_post_lead_type', function($types) {
+            $types[] = $this->slug;
+
+            return $types;
+        });
     }
 
 

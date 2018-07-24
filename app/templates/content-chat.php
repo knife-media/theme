@@ -30,7 +30,7 @@
                 the_share(
                     '<div class="post__header-share share">',
                     '</div>',
-                    __('Share aside — top', 'knife-theme')
+                    __('Share cards — top', 'knife-theme')
                 );
             ?>
         </header>
@@ -52,7 +52,7 @@
                 the_share(
                     '<div class="post__footer-share share">',
                     '</div>',
-                    __('Share aside — bottom', 'knife-theme'),
+                    __('Share cards — bottom', 'knife-theme'),
                     __('Поделиться в соцсетях:', 'knife-theme')
                 );
 

@@ -56,7 +56,7 @@ class Knife_Story_Widget extends WP_Widget {
 
             ob_start();
 
-            if($q->have_posts()) :
+            if($q->have_posts() && $q->found_posts >= $posts_per_page) :
                 while($q->have_posts()) : $q->the_post();
 
                     echo $args['before_widget'];
@@ -77,7 +77,6 @@ class Knife_Story_Widget extends WP_Widget {
                     echo $args['after_widget'];
 
                 endwhile;
-
             endif;
 
             wp_reset_query();

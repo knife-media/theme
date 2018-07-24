@@ -45,13 +45,6 @@
     margin-bottom: 20px;
   }
 
-  #knife-story-box .option__select {
-    display: block;
-
-    width: 100%;
-  }
-
-
   #knife-story-box .option__howto {
     margin-top: 5px;
     margin-bottom: 7px;
@@ -139,6 +132,10 @@
     flex: 0 0 auto;
     margin-right: 0;
     margin-bottom: 40px;
+  }
+
+  #knife-story-box .option--settings {
+    max-width: 100%;
   }
 }
 

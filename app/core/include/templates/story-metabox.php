@@ -90,27 +90,6 @@
                     );
                 ?>
             </div>
-
-            <div class="option__item">
-                <label class="option__label"><?php _e('Эффект слайдера', 'knife-theme'); ?></label>
-
-                <select class="option__select option__select--effect" name="<?php echo $this->meta . '-effect'; ?>">
-                    <?php
-                        $effects = [
-                            'parallax' => __('Параллакс', 'knife-theme'),
-                            'default' => __('Слайдер', 'knife-theme')
-                        ];
-
-                        foreach($effects as $value => $title) {
-                            printf('<option value="%1$s" %3$s>%2$s</option>',
-                                $value, $title,
-                                selected($options['effect'], $value)
-                            );
-                        }
-                    ?>
-                </select>
-            </div>
-
         </div>
     </div>
 

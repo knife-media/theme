@@ -14,7 +14,7 @@
 
             <article class="glide__slides">
                 <div class="glide__slide">
-                    <div class="glide__slide-wrap">
+                    <div class="glide__slide-wrap glide__slide-wrap--first">
                         <?php
                             the_info(
                                 '<div class="glide__slide-meta meta">', '</div>',
@@ -24,6 +24,17 @@
                             the_title(
                                 '<h1 class="glide__slide-title">',
                                 '</h1>'
+                            );
+
+                            the_lead(
+                                '<div class="glide__slide-excerpt">',
+                                '</div>'
+                            );
+
+                            the_share(
+                                '<div class="glide__slide-share share">',
+                                '</div>',
+                                __('Share story — top', 'knife-theme')
                             );
                         ?>
                     </div>

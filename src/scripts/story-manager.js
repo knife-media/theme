@@ -36,11 +36,17 @@
   }
 
 
+//  window.onresize = function(){
+        story.style.height = window.innerHeight - 52 + 'px';
+        console.log(window.innerHeight);
+//  }
+//  window.onresize();
+
   /*
    * Create Glide instance with custom options
    */
   var glide = new Glide('.glide', {
-    gap: 0, rewind: false, dragThreshold: false
+    gap: 0, rewind: false, dragThreshold: false, touchAngle: 30
   });
 
 
@@ -89,6 +95,11 @@
         return false;
       }
 
+      // Add negative margins to blured backdrop
+      // https://stackoverflow.com/a/12224347/
+      media.style.margin = '-' + blur + 'px';
+
+      // Add blur
       media.style.filter = 'blur(' + blur + 'px)';
     }
 
@@ -257,13 +268,6 @@
       return document.location.href = glide.settings.href;
     }
   });
-
-
-  story.addEventListener('touchmove', function(e) {
-     e.preventDefault();
-
-     console.log(e);
-  }, { passive: false });
 
 
   /**

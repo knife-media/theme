@@ -109,18 +109,19 @@ class Knife_User_Club {
         // add author meta to content
         add_filter('the_content', [$this, 'insert_metalink']);
 
-        // add post lead to post type editor
-        add_filter('knife_post_lead_type', function($default) {
-            $default[] = $this->slug;
 
-            return $default;
+        // add post lead to post type editor
+        add_filter('knife_post_lead_type', function($types) {
+            $types[] = $this->slug;
+
+            return $types;
         });
 
         // add push service club post type
-        add_filter('knife_push_service_type', function($default) {
-            $default[] = $this->slug;
+        add_filter('knife_push_service_type', function($types) {
+            $types[] = $this->slug;
 
-            return $default;
+            return $types;
         });
     }
 
