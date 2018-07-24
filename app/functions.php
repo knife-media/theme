@@ -492,9 +492,6 @@ require get_template_directory() . '/core/modules/story-manager.php';
 // Special projects taxonomy settings
 require get_template_directory() . '/core/modules/special-projects.php';
 
-// Custom post type for manual articles select links
-require get_template_directory() . '/core/modules/select-links.php';
-
 // Login screen custom styles
 require get_template_directory() . '/core/modules/access-screen.php';
 
