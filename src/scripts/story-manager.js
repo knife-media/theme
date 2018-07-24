@@ -17,7 +17,9 @@
 
 
   /**
-   * Check slides count before story creation
+   * Check slides existsing before story creation
+   *
+   * @link https://github.com/glidejs/glide/issues/224
    */
   if(story.querySelectorAll('.glide__slide').length === 0) {
     return false;
@@ -73,9 +75,143 @@
 
 
   /**
-   * Set custom background
+   * Add slides
    */
   glide.on('mount.before', function() {
+    if(typeof knife_story_stories === 'undefined' || knife_story_stories.length < 1) {
+      return false;
+    }
+
+    for (var i = 0, item; item = knife_story_stories[i]; i++) {
+      var slide = document.createElement('div');
+      slide.classList.add('glide__slide-wrap');
+
+      // Append kicker
+      (function(){
+        if(typeof item.kicker === 'undefined') {
+          return false;
+        }
+
+        var kicker = document.createElement('div');
+        kicker.classList.add('glide__slide-kicker');
+        kicker.innerHTML = item.kicker;
+
+        slide.appendChild(kicker);
+      })();
+
+
+      // Append media
+      (function(){
+        if(typeof item.image === 'undefined' || typeof item.ratio === 'undefined') {
+          return false;
+        }
+
+        var image = document.createElement('div');
+        image.classList.add('glide__slide-image');
+        image.style.setProperty('background-image', 'url(' + item.image + ')');
+        image.style.setProperty('--image-ratio', item.ratio);
+
+        slide.appendChild(image);
+      })();
+
+
+      // Append entry
+      (function(){
+        if(typeof item.entry === 'undefined') {
+          return false;
+        }
+
+        var entry = document.createElement('div');
+        entry.classList.add('glide__slide-entry');
+        entry.innerHTML = item.entry;
+
+        slide.appendChild(entry);
+      })();
+
+
+      var block = document.createElement('div');
+      block.classList.add('glide__slide');
+      block.appendChild(slide);
+
+      story.querySelector('.glide__slides').appendChild(block);
+    }
+  });
+
+
+  /**
+   * Add bullets on Glide mounting
+   */
+  glide.on('mount.before', function() {
+    var bullets = document.createElement('div');
+    bullets.classList.add('glide__bullets');
+
+    for (var i = 0; i < story.querySelectorAll('.glide__slide').length; i++) {
+      var item = document.createElement('span');
+      item.classList.add('glide__bullets-item');
+
+      bullets.appendChild(item);
+    }
+
+    return story.appendChild(bullets);
+  });
+
+
+  /**
+   * Create empty slide if next post availible
+   */
+  glide.on('mount.before', function(move) {
+    var link = document.querySelector('link[rel="next"]');
+
+    if(link === null || !link.hasAttribute('href')) {
+      return false;
+    }
+
+    var empty = document.createElement('div');
+    empty.classList.add('glide__slide', 'glide__slide--empty');
+
+    glide.update({
+      href: link.href
+    });
+
+    return story.querySelector('.glide__slides').appendChild(empty);
+  });
+
+
+  /**
+   * Add slider controls on Glide mounting
+   */
+  glide.on('mount.before', function() {
+    ['prev', 'next'].forEach(function(cl, i) {
+      var control = document.createElement('div');
+      control.classList.add('glide__control', 'glide__control--' + cl);
+      control.classList.add();
+
+      var icon = document.createElement('span');
+      icon.classList.add('icon', 'icon--' + cl);
+      control.appendChild(icon);
+
+      story.appendChild(control);
+    });
+
+    story.querySelector('.glide__control--next').addEventListener('click', function(e) {
+      e.preventDefault();
+
+      glide.go('>');
+    });
+
+    story.querySelector('.glide__control--prev').addEventListener('click', function(e) {
+      e.preventDefault();
+
+      glide.go('<');
+    });
+  });
+
+
+
+  /**
+   * Set custom background
+   */
+  glide.on('mount.after', function() {
     if(typeof knife_story_options.background === 'undefined') {
       return false;
     }
@@ -129,24 +265,6 @@
 
 
   /**
-   * Add bullets on Glide mounting
-   */
-  glide.on('mount.before', function() {
-    var bullets = document.createElement('div');
-    bullets.classList.add('glide__bullets');
-
-    for (var i = 0; i < story.querySelectorAll('.glide__slide').length; i++) {
-      var item = document.createElement('span');
-      item.classList.add('glide__bullets-item');
-
-      bullets.appendChild(item);
-    }
-
-    return story.appendChild(bullets);
-  });
-
-
-  /**
    * Add bullets events
    */
   glide.on(['mount.after', 'run'], function() {
@@ -159,57 +277,6 @@
         bullet.classList.add('glide__bullets-item--active');
       }
     }
-  });
-
-
-  /**
-   * Create empty slide if next post availible
-   */
-  glide.on('mount.before', function(move) {
-    var link = document.querySelector('link[rel="next"]');
-
-    if(link === null || !link.hasAttribute('href')) {
-      return false;
-    }
-
-    var empty = document.createElement('div');
-    empty.classList.add('glide__slide', 'glide__slide--empty');
-
-    glide.update({
-      href: link.href
-    });
-
-    return story.querySelector('.glide__slides').appendChild(empty);
-  });
-
-
-  /**
-   * Add slider controls on Glide mounting
-   */
-  glide.on('mount.before', function() {
-    ['prev', 'next'].forEach(function(cl, i) {
-      var control = document.createElement('div');
-      control.classList.add('glide__control', 'glide__control--' + cl);
-      control.classList.add();
-
-      var icon = document.createElement('span');
-      icon.classList.add('icon', 'icon--' + cl);
-      control.appendChild(icon);
-
-      story.appendChild(control);
-    });
-
-    story.querySelector('.glide__control--next').addEventListener('click', function(e) {
-      e.preventDefault();
-
-      glide.go('>');
-    });
-
-    story.querySelector('.glide__control--prev').addEventListener('click', function(e) {
-      e.preventDefault();
-
-      glide.go('<');
-    });
   });
 
 

@@ -64,7 +64,7 @@ class Knife_Story_Manager {
         add_action('wp_enqueue_scripts', [$this, 'enqueue_assets'], 9);
 
         // Include slider options
-        add_action('wp_enqueue_scripts', [$this, 'inject_options'], 12);
+        add_action('wp_enqueue_scripts', [$this, 'inject_stories'], 12);
 
 
         // Remove global backdrop
@@ -142,11 +142,12 @@ class Knife_Story_Manager {
     /**
      * Include slider story meta options
      */
-    public function inject_options() {
+    public function inject_stories() {
         if(!is_singular($this->slug))
             return;
 
         $post_id = get_the_ID();
+        $stories = $this->convert_stories($post_id);
 
         foreach($this->opts as $item) {
             $options[$item] = get_post_meta($post_id, $this->meta . "-{$item}", true);
@@ -154,6 +155,9 @@ class Knife_Story_Manager {
 
         // Add stories options object
         wp_localize_script('knife-theme', 'knife_story_options', $options);
+
+        // Add stories items
+        wp_localize_script('knife-theme', 'knife_story_stories', $stories);
     }
 
 
@@ -267,84 +271,6 @@ class Knife_Story_Manager {
 
 
     /**
-     * Update content with story items
-     */
-    public function get_story($before, $after) {
-        $post_id = get_the_ID();
-
-        if(get_post_type($post_id) !== $this->slug) {
-            return $content;
-        }
-
-        $stories = get_post_meta($post_id, $this->meta . '-stories');
-
-        ob_start();
-
-        foreach($stories as $slide) {
-            echo $before;
-
-            printf('<div class="glide__slide-wrap">%s</div>',
-                $this->append_kicker($post_id) . $this->append_media($slide) . $this->append_entry($slide)
-            );
-
-            echo $after;
-        }
-
-        return ob_get_clean();
-    }
-
-
-    /**
-     * Append kicker based on post title
-     */
-    private function append_kicker($post_id, $html = '') {
-        if($title = get_the_title($post_id)) {
-            $html = sprintf('<div class="glide__slide-kicker"><span>%s</span></div>',
-                esc_html($title)
-            );
-        }
-
-        return $html;
-    }
-
-
-    /**
-     * Append slide media
-     */
-    private function append_media($slide, $html = '') {
-        if(!empty($slide['media'])) {
-            $media = wp_get_attachment_image_src($slide['media'], 'inner');
-
-            if(is_array($media) && count($media) > 2) {
-
-                // Calculate image ratio using width and height
-                $ratio = $media[2] / max($media[1], 1);
-
-                $html = sprintf('<div class="glide__slide-image" style="background-image:url(%s); --image-ratio: %s"></div>',
-                    $media[0], round($ratio, 3)
-                );
-            }
-        }
-
-        return $html;
-    }
-
-
-    /**
-     * Append slide entry
-     */
-    private function append_entry($slide, $html = '') {
-        if(!empty($slide['entry'])) {
-            $html = sprintf('<div class="glide__slide-entry">%s</div>',
-                apply_filters('the_content', $slide['entry'])
-            );
-        }
-
-        return $html;
-    }
-
-
-    /**
      * Update stories meta from post-metabox
      */
     private function update_stories($query, $post_id, $meta = [], $i = 0) {
@@ -368,5 +294,37 @@ class Knife_Story_Manager {
         foreach($meta as $key => $item) {
             add_post_meta($post_id, $query, $item);
         }
+    }
+
+
+    /**
+     * Convert stories post meta to object
+     */
+    private function convert_stories($post_id, $stories = []) {
+        $items = get_post_meta($post_id, $this->meta . '-stories');
+
+        foreach($items as $i => $slide) {
+            if(!empty($slide['media'])) {
+                $media = wp_get_attachment_image_src($slide['media'], 'inner');
+
+                if(is_array($media) && count($media) > 2) {
+                    // Calculate image ratio using width and height
+                    $ratio = $media[2] / max($media[1], 1);
+
+                    $stories[$i]['image'] = $media[0];
+                    $stories[$i]['ratio'] = $ratio;
+                }
+            }
+
+            if(!empty($slide['entry'])) {
+                $stories[$i]['entry'] = apply_filters('the_content', $slide['entry']);
+            }
+
+            if($title = get_the_title($post_id)) {
+                $stories[$i]['kicker'] = esc_html($title);
+            }
+        }
+
+        return $stories;
     }
 }

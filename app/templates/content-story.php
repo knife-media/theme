@@ -39,13 +39,6 @@
                         ?>
                     </div>
                 </div>
-
-                <?php
-                    the_story(
-                        '<div class="glide__slide">',
-                        '</div>'
-                    );
-                ?>
             </article>
 
         </div>
