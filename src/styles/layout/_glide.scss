@@ -404,3 +404,17 @@
     }
   }
 }
+
+body.admin-bar {
+  .glide {
+    height: calc(100vh - 6rem);
+
+    @media screen and (max-width: 1023px) {
+      height: calc(100vh - 5.25rem);
+    }
+
+    @media screen and (max-width: 782px) {
+      height: calc(100vh - 6.125rem);
+    }
+  }
+}
