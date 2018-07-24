@@ -186,7 +186,7 @@ class Knife_Story_Manager {
             'public'                => true,
             'show_ui'               => true,
             'show_in_menu'          => true,
-            'menu_position'         => 20,
+            'menu_position'         => 9,
             'menu_icon'             => 'dashicons-slides',
             'show_in_admin_bar'     => true,
             'show_in_nav_menus'     => true,

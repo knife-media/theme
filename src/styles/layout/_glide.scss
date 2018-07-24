@@ -1,6 +1,7 @@
 .glide {
   display: flex;
   position: relative;
+  visibility: visible;
   z-index: -1;
 
   width: 100%;
@@ -11,10 +12,45 @@
   color: $color-white;
   background-color: $color-black;
 
-  opacity: 0;
-  transition: opacity .5s;
-
   transform: translate3d(0, 0, 0);
+
+  @each $name in 'track' 'control' 'backdrop' 'bullets' {
+    .glide__#{$name} {
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity .25s;
+    }
+  }
+
+  &.glide--active {
+    @each $name in 'track' 'control' 'backdrop' 'bullets' {
+      .glide__#{$name} {
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+
+    .glide__loader {
+      display: none;
+    }
+  }
+
+  .glide__loader {
+    display: block;
+    position: absolute;
+    top: 40vh;
+    left: 50%;
+
+    margin-left: -2rem;
+    margin-top: -2rem;
+
+    line-height: 1;
+
+    font-size: 4rem;
+    color: rgba(255, 255, 255, 0.1);
+
+    animation: rotate 1s linear infinite;
+  }
 
   .glide__track {
     overflow: hidden;
@@ -148,11 +184,17 @@
     .glide__slide-kicker {
       position: absolute;
       top: 2rem;
-      left: 0;
+
+      width: 100%;
+      max-width: 40rem;
+      overflow: hidden;
 
       font-size: .8125rem;
       font-weight: 500;
       letter-spacing: .25px;
+
+      white-space: nowrap;
+      text-overflow: ellipsis;
 
       @media screen and (max-width: 479px) {
         top: 1rem;
@@ -210,39 +252,41 @@
       h3 {
         margin: 1rem 0;
 
-        font-size: 2rem;
-        line-height: 1.125;
+        font-size: 1.5rem;
+        line-height: 1.25;
 
         @media screen and (max-width: 767px) {
-          font-size: 1.5rem;
+          font-size: 1.375rem;
           line-height: 1.25;
         }
 
         @media screen and (max-width: 479px) {
           margin: .75rem 0;
-          font-size: 1.375rem;
+          font-size: 1.25rem;
+          line-height: 1.375;
         }
       }
 
       h4 {
         margin: 1rem 0;
 
-        font-size: 1.5rem;
-        line-height: 1.25;
+        font-size: 1.25rem;
+        line-height: 1.375;
 
         @media screen and (max-width: 767px) {
-          font-size: 1.25rem;
-          line-height: 1.375;
+          font-size: 1.125rem;
+          line-height: 1.5;
         }
 
         @media screen and (max-width: 479px) {
+          font-size: 1rem;
           margin: .75rem 0;
-          font-size: 1.125rem;
         }
       }
 
       p {
         margin: 1rem 0;
+        font-size: 1rem;
 
         @media screen and (max-width: 479px) {
           margin: .75rem 0;
@@ -317,7 +361,6 @@
     position: absolute;
     top: 0;
     outline: none;
-    visibility: visible;
     cursor: pointer;
 
     width: 100%;
@@ -358,24 +401,6 @@
 
     @media screen and (max-width: 767px) {
       display: none;
-    }
-  }
-
-  &.glide--slider {
-    opacity: 1;
-  }
-}
-
-body.admin-bar {
-  .glide {
-    height: calc(100vh - 6rem);
-
-    @media screen and (max-width: 1023px) {
-      height: calc(100vh - 5.25rem);
-    }
-
-    @media screen and (max-width: 782px) {
-      height: calc(100vh - 6.125rem);
     }
   }
 }

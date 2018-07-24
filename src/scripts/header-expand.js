@@ -31,13 +31,13 @@
     // blur search input
     input.blur();
 
-    // if user opens search forn
+    // if user opens search form
     if(!document.querySelector('.search').classList.contains('search--expand')) {
       var offset = document.querySelector('.header').offsetTop - window.pageYOffset;
 
       // avoid banner size
       if(offset > 0)
-        document.querySelector('.search').style.paddingTop = offset +'px';
+        document.querySelector('.search').style.paddingTop = offset + 'px';
 
       // focus search input
       input.focus();

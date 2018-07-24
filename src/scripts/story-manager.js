@@ -29,24 +29,40 @@
    *
    * @link https://stackoverflow.com/a/13123626
    */
-  window.onpageshow = function(event) {
+  window.addEventListener('pageshow', function(event) {
     if(event.persisted) {
       window.location.reload(false)
     }
-  }
+  });
 
 
-//  window.onresize = function(){
-        story.style.height = window.innerHeight - 52 + 'px';
-        console.log(window.innerHeight);
-//  }
-//  window.onresize();
+  /**
+   * Set story height on and slow slider load
+   */
+  window.addEventListener('load', function() {
+    var offset = story.getBoundingClientRect();
+    story.style.height = window.innerHeight - offset.top - window.pageYOffset + 'px';
+
+    return story.classList.add('glide--active');
+  });
+
 
   /*
    * Create Glide instance with custom options
    */
   var glide = new Glide('.glide', {
     gap: 0, rewind: false, dragThreshold: false, touchAngle: 30
+  });
+
+
+  /**
+   * Add preloader to story
+   */
+  glide.on('mount.before', function() {
+    var loader = document.createElement('div');
+    loader.classList.add('glide__loader', 'icon', 'icon--loop');
+
+    return story.appendChild(loader);
   });
 
 
@@ -58,33 +74,12 @@
       return false;
     }
 
+    var media = document.createElement('div');
+    media.classList.add('glide__backdrop');
+    media.style.backgroundImage = 'url(' + knife_story_options.background + ')';
 
-    /**
-     * Append shadow element
-     */
-    var appendShadow = function(media) {
-      if(typeof knife_story_options.shadow === 'undefined') {
-        return false;
-      }
-
-      var alpha = parseInt(knife_story_options.shadow) / 100;
-
-      if(alpha <= 0 || alpha > 1) {
-        return false;
-      }
-
-      var shadow = document.createElement('div');
-      shadow.classList.add('glide__shadow');
-      shadow.style.backgroundColor = 'rgba(0, 0, 0, ' + alpha + ')';
-
-      media.appendChild(shadow);
-    }
-
-
-    /**
-     * Add blur effect to image
-     */
-    var appendBlur = function(media) {
+    // Append blur element
+    (function() {
       if(typeof knife_story_options.blur === 'undefined') {
         return false;
       }
@@ -101,27 +96,29 @@
 
       // Add blur
       media.style.filter = 'blur(' + blur + 'px)';
-    }
+    })();
 
 
-    var image = new Image();
+    // Append shadow element
+    (function() {
+      if(typeof knife_story_options.shadow === 'undefined') {
+        return false;
+      }
 
-    image.onload = function() {
-      // Create media element
-      var media = document.createElement('div');
-      media.classList.add('glide__backdrop');
-      media.style.backgroundImage = 'url(' + this.src + ')';
+      var alpha = parseInt(knife_story_options.shadow) / 100;
 
-      // Append shadow element
-      appendShadow(media);
+      if(alpha <= 0 || alpha > 1) {
+        return false;
+      }
 
-      // Add blur affect to media
-      appendBlur(media);
+      var shadow = document.createElement('div');
+      shadow.classList.add('glide__shadow');
+      shadow.style.backgroundColor = 'rgba(0, 0, 0, ' + alpha + ')';
 
-      return story.appendChild(media);
-    }
+      media.appendChild(shadow);
+    })();
 
-    return image.src = knife_story_options.background;
+    return story.appendChild(media);
   });
 
 
@@ -255,7 +252,7 @@
    */
   glide.on('run', function(move) {
     if(glide.index === glide.settings.count && glide.settings.href) {
-      return story.style.opacity = 0;
+      story.classList.remove('glide--active');
     }
   });
 
@@ -265,7 +262,7 @@
    */
   glide.on('run.after', function(move) {
     if(glide.index === glide.settings.count && glide.settings.href) {
-      return document.location.href = glide.settings.href;
+      document.location.href = glide.settings.href;
     }
   });
 

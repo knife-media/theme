@@ -159,6 +159,7 @@
   box-sizing: border-box;
 
   width: 100%;
+  min-height: 250px;
   margin: 15px 0;
   padding: 10px;
   padding-right: 40px;
@@ -239,6 +240,7 @@
 
 #knife-story-box .item__entry {
   display: block;
+  flex: 1;
   outline: none;
 
   width: 100%;
