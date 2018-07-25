@@ -266,14 +266,14 @@ class Knife_User_Club {
     public function update_archive($query) {
         if(is_author() && $query->is_main_query()) {
             $types = $query->get('post_type');
-            $set = ['post'];
 
-            if(is_array($types))
-                $set = explode(',', $types);
+            if(!is_array($types)) {
+                $types = ['post'];
+            }
 
-            $set[] = $this->slug;
+            $types[] = $this->slug;
 
-            $query->set('post_type', $set);
+            $query->set('post_type', $types);
         }
     }
 
