@@ -26,29 +26,6 @@
   }
 
 
-  /**
-   * Reload page if user go back with browser cache
-   *
-   * @link https://stackoverflow.com/a/13123626
-   */
-  window.addEventListener('pageshow', function(event) {
-    if(event.persisted) {
-      window.location.reload(false)
-    }
-  });
-
-
-  /**
-   * Set story height on and slow slider load
-   */
-  window.addEventListener('load', function() {
-    var offset = story.getBoundingClientRect();
-    story.style.height = window.innerHeight - offset.top - window.pageYOffset + 'px';
-
-    return story.classList.add('glide--active');
-  });
-
-
   /*
    * Create Glide instance with custom options
    */
@@ -339,6 +316,33 @@
     }
   });
 
+
+  /**
+   * Reload page if user go back with browser cache
+   *
+   * @link https://stackoverflow.com/a/13123626
+   */
+  window.addEventListener('pageshow', function(event) {
+    if(event.persisted) {
+      window.location.reload(false)
+    }
+  });
+
+
+  /**
+   * Set story height on and slow slider load
+   */
+  window.addEventListener('load', function() {
+    var offset = story.getBoundingClientRect();
+    story.style.height = window.innerHeight - offset.top - window.pageYOffset + 'px';
+
+    return story.classList.add('glide--active');
+  });
+
+
+  glide.on('run.before', function(move) {
+    console.log(move)
+  });
 
   /**
    * Let's rock!

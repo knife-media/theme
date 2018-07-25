@@ -63,7 +63,11 @@
                         null, '</div>'
                     );
 
-                    dynamic_sidebar('knife-post-widgets');
+                    the_sidebar(
+                        'knife-post-widgets',
+                        '<div class="post__footer-widgets">',
+                        '</div>'
+                    );
                 ?>
             </footer>
 

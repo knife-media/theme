@@ -165,6 +165,23 @@ class Knife_Widget_Handler {
 
 
     /**
+     * Show sidebar if exists
+     */
+    public function get_sidebar($id, $sidebar = '') {
+        if(is_active_sidebar($id)) {
+            ob_start();
+
+            dynamic_sidebar($id);
+
+            $sidebar = ob_get_clean();
+        }
+
+        return $sidebar;
+    }
+
+
+
+    /**
      * Enqueue assets to admin post screen only
      */
     public function add_assets($hook) {
@@ -180,6 +197,7 @@ class Knife_Widget_Handler {
         wp_localize_script('knife-widget-handler', 'knife_widget_handler', $options);
     }
 
+
     /**
      * Include widgets classes
      */
@@ -190,6 +208,7 @@ class Knife_Widget_Handler {
             include_once($widgets . $id . '.php');
         }
     }
+
 
     /**
      * Remove widgets cache on save or delete post

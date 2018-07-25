@@ -27,10 +27,6 @@ class Knife_Theme_Filters {
 
         // Add archive header
         add_action('knife_template', [$this, 'archive_header']);
-
-        // Add sidebar wrapper if exists
-        add_action('dynamic_sidebar_before', [$this, 'sidebar_before'], 10, 2);
-        add_action('dynamic_sidebar_after', [$this, 'sidebar_after'], 10, 2);
     }
 
 
@@ -85,34 +81,6 @@ class Knife_Theme_Filters {
              * @param string $header
              */
             echo apply_filters('knife_archive_header', $header);
-        }
-    }
-
-
-    /**
-     *
-     */
-    public function sidebar_before($index, $has_widgets) {
-        if($has_widgets === false) {
-            return;
-        }
-
-        if(is_single() && $index === 'knife-post-widgets') {
-            echo '<div class="post__footer-widgets">';
-        }
-    }
-
-
-    /**
-     *
-     */
-    public function sidebar_after($index, $has_widgets) {
-        if($has_widgets === false) {
-            return;
-        }
-
-        if(is_single() && $index === 'knife-post-widgets') {
-            echo '</div>';
         }
     }
 

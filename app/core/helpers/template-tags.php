@@ -34,8 +34,9 @@ if(!function_exists('the_share')) :
 
         $output = $before . $share . $after;
 
-        if($echo === true)
+        if($echo === true) {
             echo $output;
+        }
 
         return $output;
     }
@@ -53,8 +54,9 @@ if(!function_exists('the_info')) :
 
         $output = $before . $info . $after;
 
-        if($echo === true)
+        if($echo === true) {
             echo $output;
+        }
 
         return $output;
     }
@@ -70,13 +72,39 @@ if(!function_exists('the_lead')) :
     function the_lead($before = '', $after = '', $echo = true) {
         $lead = (new Knife_Post_Lead)->get_meta();
 
-        if($lead === false)
+        if((string) $lead === '') {
             return;
+        }
 
         $output = $before . $lead . $after;
 
-        if($echo === true)
+        if($echo === true) {
             echo $output;
+        }
+
+        return $output;
+    }
+endif;
+
+
+if(!function_exists('the_sidebar')) :
+    /**
+     * Public function using on templates to show sidebar with before and after
+     *
+     * @since 1.3
+     */
+    function the_sidebar($id, $before = '', $after = '', $echo = true) {
+        $sidebar = (new Knife_Widget_Handler)->get_sidebar($id);
+
+        if((string) $sidebar === '') {
+            return;
+        }
+
+        $output = $before . $sidebar . $after;
+
+        if($echo === true) {
+            echo $output;
+        }
 
         return $output;
     }
