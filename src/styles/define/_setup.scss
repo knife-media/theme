@@ -123,3 +123,17 @@ img {
     transform: rotate(360deg);
   }
 }
+
+@keyframes loader {
+  0% {
+    fill: $color-text;
+  }
+
+  25% {
+    fill: silver;
+  }
+
+  100% {
+    fill: $color-text;
+  }
+}

@@ -41,15 +41,24 @@
     top: 40vh;
     left: 50%;
 
-    margin-left: -2rem;
-    margin-top: -2rem;
+    width: 100px;
+    height: 29px;
 
-    line-height: 1;
+    fill: none;
+    transform: translate(-50%, -50%);
 
-    font-size: 4rem;
-    color: rgba(255, 255, 255, 0.1);
+    path {
+      fill: $color-text;
+      animation: loader 2s infinite;
 
-    animation: rotate 1s linear infinite;
+      &:nth-child(2) {
+        animation-delay: .25s;
+      }
+
+      &:last-child {
+        animation-delay: .5s;
+      }
+    }
   }
 
   .glide__track {

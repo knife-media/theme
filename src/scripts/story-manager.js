@@ -41,17 +41,6 @@
 
 
   /**
-   * Add preloader to story
-   */
-  glide.on('mount.before', function() {
-    var loader = document.createElement('div');
-    loader.classList.add('glide__loader', 'icon', 'icon--loop');
-
-    return story.appendChild(loader);
-  });
-
-
-  /**
    * Add slides
    */
   glide.on('mount.before', function() {
@@ -339,10 +328,6 @@
     return story.classList.add('glide--active');
   });
 
-
-  glide.on('run.before', function(move) {
-    console.log(move)
-  });
 
   /**
    * Let's rock!
