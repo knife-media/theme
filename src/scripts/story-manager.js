@@ -126,7 +126,7 @@
    * Create empty slide if next post availible
    */
   glide.on('mount.before', function(move) {
-    var link = document.querySelector('link[rel="next"]');
+    var link = document.querySelector('link[rel="prev"]');
 
     if(link === null || !link.hasAttribute('href')) {
       return false;
