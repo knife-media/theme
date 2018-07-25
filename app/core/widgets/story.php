@@ -31,7 +31,6 @@ class Knife_Story_Widget extends WP_Widget {
      * @param array instance The current instance of the widget
      */
     public function widget($args, $instance) {
-
         $defaults = [
             'title' => '',
             'posts_per_page' => 4,

@@ -34,7 +34,7 @@ class Knife_Special_Projects {
      */
     public function init() {
         // Register taxonomy
-        add_action('init', [$this, 'register_taxonomy']);
+        add_action('after_setup_theme', [$this, 'register_taxonomy']);
 
         // Add special single header
         add_action('knife_template', [$this, 'single_header']);
@@ -86,19 +86,17 @@ class Knife_Special_Projects {
     }
 
 
-     /**
+    /**
      * Append header special taxonomy link
      */
     public function single_header() {
         if(is_single() && has_term('', $this->slug)) {
             $terms = wp_get_post_terms(get_queried_object_id(), $this->slug);
 
-            $header = sprintf('<a class="caption special" href="%1$s"><h1>%2$s</h1></a>',
+            printf('<a class="caption special" href="%1$s"><h1>%2$s</h1></a>',
                 esc_url(get_term_link($terms[0]->term_id)),
                 esc_html($terms[0]->name)
             );
-
-            echo $header;
         }
     }
 

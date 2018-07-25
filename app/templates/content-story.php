@@ -34,7 +34,7 @@
                             the_share(
                                 '<div class="glide__slide-share share">',
                                 '</div>',
-                                __('Share story — top', 'knife-theme')
+                                __('Share story — first', 'knife-theme')
                             );
                         ?>
                     </div>
@@ -56,12 +56,17 @@
 
 </section>
 
-<section class="content block">
 
-<?php
-    $q = new WP_Query(['posts_per_page'=> 4, 'post_type' => 'story']);
-?>
-    <?php while ($q->have_posts()) : $q->the_post(); ?>
+<section class="content block">
+    <?php
+        $query = new WP_Query([
+            'post_type' => 'story',
+            'post__not_in' => [$post->ID],
+            'posts_per_page' => 4
+        ]);
+    ?>
+
+    <?php while ($query->have_posts()) : $query->the_post(); ?>
         <article class="widget widget-story">
 
             <div class="widget__item">
@@ -87,5 +92,14 @@
 
         </article>
     <?php endwhile; wp_reset_query(); ?>
+
+    <?php
+        if($query->have_posts()) {
+          printf('<a class="button" href="%2$s">%1$s</a>',
+            __('Все истории', 'knife-theme'),
+            esc_url(get_post_type_archive_link('story'))
+          );
+        }
+    ?>
 
 </section>

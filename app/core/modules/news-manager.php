@@ -51,7 +51,15 @@ class Knife_News_Manager {
         add_action('restrict_manage_posts', [$this, 'print_dropdown'], 'post');
         add_action('parse_query', [$this, 'process_dropdown']);
 
+        // Apply theme hooks
+        add_action('after_setup_theme', [$this, 'setup_theme']);
+    }
 
+
+    /**
+     * Setup theme hooks
+     */
+    public function setup_theme() {
         // News archive template
         add_filter('knife_template_archive', function($template) {
             if(is_category($this->news_id)) {

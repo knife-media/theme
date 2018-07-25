@@ -49,10 +49,14 @@ class Knife_Story_Manager {
      * Use init function instead of constructor
      */
     public function init() {
-        add_action('admin_enqueue_scripts', [$this, 'add_assets']);
+        // Apply theme hooks
+        add_action('after_setup_theme', [$this, 'setup_theme']);
 
         // Register story post type
-        add_action('init', [$this, 'register_story']);
+        add_action('after_setup_theme', [$this, 'register_story']);
+
+        // Insert admin side assets
+        add_action('admin_enqueue_scripts', [$this, 'add_assets']);
 
         // Story post metabox
         add_action('add_meta_boxes', [$this, 'add_metabox'], 1);
@@ -65,13 +69,20 @@ class Knife_Story_Manager {
 
         // Include slider options
         add_action('wp_enqueue_scripts', [$this, 'inject_stories'], 12);
+    }
 
 
+    /**
+     * Setup theme hooks
+     */
+    public function setup_theme() {
         // Remove global backdrop
-        add_filter('knife_custom_background', function($meta) {
-            if(is_singular($this->slug)) {
-                return ['image' => ''];
+        add_filter('knife_custom_background', function($background) {
+            if(is_singular($this->slug) || is_post_type_archive($this->slug)) {
+                $background = ['image' => ''];
             }
+
+            return $background;
         });
 
         // Stories archive header
@@ -96,13 +107,15 @@ class Knife_Story_Manager {
      * Enqueue assets to admin post screen only
      */
     public function add_assets($hook) {
-        if(!in_array($hook, ['post.php', 'post-new.php']))
+        if(!in_array($hook, ['post.php', 'post-new.php'])) {
             return;
+        }
 
         $post_id = get_the_ID();
 
-        if(get_post_type($post_id) !== $this->slug)
+        if(get_post_type($post_id) !== $this->slug) {
             return;
+        }
 
         $version = wp_get_theme()->get('Version');
         $include = get_template_directory_uri() . '/core/include';
@@ -128,8 +141,9 @@ class Knife_Story_Manager {
      * Enqueue glide vendor script
      */
     public function enqueue_assets() {
-        if(!is_singular($this->slug))
+        if(!is_singular($this->slug)) {
             return;
+        }
 
         $version = '3.1.0';
         $include = get_template_directory_uri() . '/assets';
@@ -143,8 +157,9 @@ class Knife_Story_Manager {
      * Include slider story meta options
      */
     public function inject_stories() {
-        if(!is_singular($this->slug))
+        if(!is_singular($this->slug)) {
             return;
+        }
 
         $post_id = get_the_ID();
         $stories = $this->convert_stories($post_id);
@@ -225,14 +240,17 @@ class Knife_Story_Manager {
      * Save post options
      */
     public function save_meta($post_id) {
-        if(get_post_type($post_id) !== $this->slug)
+        if(get_post_type($post_id) !== $this->slug) {
             return;
+        }
 
-        if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
+        if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return;
+        }
 
-        if(!current_user_can('edit_post', $post_id))
+        if(!current_user_can('edit_post', $post_id)) {
             return;
+        }
 
 
         // Update stories meta
@@ -242,30 +260,20 @@ class Knife_Story_Manager {
         foreach($this->opts as $option) {
             $query = $this->meta . "-{$option}";
 
-            if(!isset($_REQUEST[$query]))
-                continue;
+            if(isset($_REQUEST[$query])) {
+                // Get value by query
+                $value = $_REQUEST[$query];
 
-            // Get value by query
-            $value = $_REQUEST[$query];
+                if(in_array($option, ['shadow', 'blur'])) {
+                    $value = absint($value);
+                }
 
-            switch($option) {
-                case 'background':
+                if($option === 'background') {
                     $value = esc_url($value);
+                }
 
-                    break;
-
-                case 'shadow':
-                    $value = absint($value);
-
-                    break;
-
-                case 'blur':
-                    $value = absint($value);
-
-                    break;
+                update_post_meta($post_id, $query, $value);
             }
-
-            update_post_meta($post_id, $query, $value);
         }
     }
 
