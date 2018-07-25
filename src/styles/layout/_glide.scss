@@ -6,7 +6,7 @@
 
   width: 100%;
   height: calc(100vh - 4rem);
-  min-height: 28rem;
+  min-height: 24rem;
   overflow: hidden;
 
   color: $color-white;
@@ -159,6 +159,10 @@
       @media screen and (max-width: 479px) {
         font-size: 2rem;
         line-height: 1.125;
+      }
+
+      @media screen and (max-width: 359px) {
+        font-size: 1.75rem;
       }
     }
 
