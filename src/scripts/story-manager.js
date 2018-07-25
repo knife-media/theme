@@ -30,7 +30,7 @@
    * Create Glide instance with custom options
    */
   var glide = new Glide('.glide', {
-    gap: 0, rewind: false, touchAngle: 30,
+    gap: 0, rewind: false, touchAngle: 45,
     dragThreshold: false,
     breakpoints: {
       767: {
@@ -326,6 +326,29 @@
     story.style.height = window.innerHeight - offset.top - window.pageYOffset + 'px';
 
     return story.classList.add('glide--active');
+  });
+
+
+  /**
+   * Disable touch bounce effect
+   */
+  glide.on('build.after', function() {
+    var start = 0;
+
+    story.addEventListener('touchstart', function(e) {
+      var touch = e.changedTouches[0];
+
+      start = touch.pageY;
+    }, false);
+
+
+    story.addEventListener('touchmove', function(e) {
+      var touch = e.changedTouches[0];
+
+      if(start < touch.pageY && window.pageYOffset === 0) {
+        e.preventDefault();
+      }
+    }, false);
   });
 
 

@@ -9,6 +9,8 @@
   height: 4rem;
 
   transition: height .25s;
+  transform: translate3d(0, 0, 0);
+
 
   .topline__logo {
     display: flex;
