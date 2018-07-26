@@ -126,14 +126,18 @@ img {
 
 @keyframes loader {
   0% {
-    fill: $color-text;
+    fill: #333333;
   }
 
-  25% {
-    fill: silver;
+  20% {
+    fill: #dddddd;
+  }
+
+  60% {
+    fill: #dddddd;
   }
 
   100% {
-    fill: $color-text;
+    fill: #333333;
   }
 }

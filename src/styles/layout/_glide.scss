@@ -13,6 +13,7 @@
   background-color: $color-black;
 
   transform: translate3d(0, 0, 0);
+  transition: height .25s;
 
   @each $name in 'track' 'control' 'backdrop' 'bullets' {
     .glide__#{$name} {
@@ -49,14 +50,14 @@
 
     path {
       fill: $color-text;
-      animation: loader 2s infinite;
+      animation: loader 2.5s infinite;
 
       &:nth-child(2) {
-        animation-delay: .25s;
+        animation-delay: .1s;
       }
 
       &:last-child {
-        animation-delay: .5s;
+        animation-delay: .2s;
       }
     }
   }
