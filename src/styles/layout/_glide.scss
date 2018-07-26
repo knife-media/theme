@@ -13,7 +13,6 @@
   background-color: $color-black;
 
   transform: translate3d(0, 0, 0);
-  transition: height .25s;
 
   @each $name in 'track' 'control' 'backdrop' 'bullets' {
     .glide__#{$name} {
