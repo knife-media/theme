@@ -9,19 +9,17 @@
 get_header(); ?>
 
 <main class="wrap">
-    <?php
-        if (have_posts()) :
+    <section class="content block">
 
-            // Include specific content template
-            the_template('content', 'page');
+        <?php
+            while(have_posts()) : the_post();
 
-        else:
+                get_template_part('templates/content', 'page');
 
-            // Include "no posts found" template
-            the_template('message');
+            endwhile;
+        ?>
 
-        endif;
-    ?>
+    </section>
 </main>
 
 <?php get_footer();
