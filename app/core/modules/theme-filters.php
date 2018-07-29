@@ -26,7 +26,9 @@ class Knife_Theme_Filters {
         add_action('loop_end', [$this, 'archive_more']);
 
         // Add archive header
-        add_action('knife_template', [$this, 'archive_header']);
+        add_action('get_the_archive_title', [$this, 'archive_title']);
+        add_action('get_the_archive_description', [$this, 'archive_description']);
+
     }
 
 
@@ -88,9 +90,7 @@ class Knife_Theme_Filters {
     /**
      * Custom archive title
      */
-    private function archive_title() {
-        $title = get_the_archive_title();
-
+    public function archive_title($title) {
         if(is_post_type_archive()) {
             return sprintf('<h1 class="caption__title caption__title--pure">%s</h1>',
                 post_type_archive_title('', false)
@@ -122,9 +122,7 @@ class Knife_Theme_Filters {
     /**
      * Custom archive description
      */
-    private function archive_description() {
-        $description = get_the_archive_description();
-
+    public function archive_description($description) {
         if(is_author()) {
             $description = get_the_author_meta('description');
         }

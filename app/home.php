@@ -1,29 +1,26 @@
 <?php
 /**
- * The template for displaying main archive
- *
- * List of articles ordered by asc on replacement front page to show all posts.
+ * The template for displaying archive pages
  *
  * @package knife-theme
  * @since 1.1
+ * @version 1.4
  */
 
 get_header(); ?>
 
-<main class="wrap">
-    <?php
-        if (have_posts()) :
+<div class="wrap">
+    <section class="content block">
 
-            // Include specific archive template
-            the_template('archive');
+        <?php
+            while(have_posts()) : the_post();
 
-        else:
+                get_template_part('partials/archive');
 
-            // Include "no posts found" template
-            the_template('message');
+            endwhile;
+        ?>
 
-        endif;
-    ?>
-</main>
+    </section>
+</div>
 
 <?php get_footer();

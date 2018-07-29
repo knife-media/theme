@@ -4,6 +4,7 @@
  *
  * @package knife-theme
  * @since 1.1
+ * @version 1.4
  */
 
 get_header(); ?>
@@ -14,7 +15,7 @@ get_header(); ?>
         <?php
             while(have_posts()) : the_post();
 
-                get_template_part('templates/content', 'page');
+                get_template_part('partials/content', 'page');
 
             endwhile;
         ?>

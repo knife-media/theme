@@ -4,24 +4,31 @@
  *
  * @package knife-theme
  * @since 1.1
+ * @version 1.4
  */
 
 get_header(); ?>
 
-<main class="wrap">
-    <?php
-        if (have_posts()) :
+<div class="wrap">
+    <header class="caption block">
+        <?php
+            the_archive_title('<h1 class="caption__title">', '</h1>');
 
-            // Include specific archive template
-            the_template('archive');
+            the_archive_description('<div class="caption__text">', '</div>');
+        ?>
+    </header>
 
-        else:
+    <section class="content block">
 
-            // Include "no posts found" template
-            the_template('message');
+       <?php
+            while(have_posts()) : the_post();
 
-        endif;
-    ?>
-</main>
+                get_template_part('partials/archive');
+
+            endwhile;
+        ?>
+
+    </section>
+</div>
 
 <?php get_footer();

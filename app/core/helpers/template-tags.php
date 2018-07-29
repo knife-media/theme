@@ -6,21 +6,8 @@
  *
  * @package knife-theme
  * @since 1.1
+ * @version 1.4
  */
-
-
-if(!function_exists('the_template')) :
-    /**
-     * Public function for flexible replace default get_template_part function
-     *
-     * @since 1.3
-     */
-    function the_template($slug, $name = null) {
-        $templates = (new Knife_Template_Engine)->get_template($slug, $name);
-
-        locate_template($templates, true);
-    }
-endif;
 
 
 if(!function_exists('the_share')) :
