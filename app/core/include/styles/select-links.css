@@ -1,8 +1,8 @@
-#knife-selection-box .knife-selection-manage {
+#knife-select-box .knife-select-manage {
   margin-bottom: 20px;
 }
 
-#knife-selection-box .knife-selection-items {
+#knife-select-box .knife-select-items {
   display: block;
   position: relative;
 
@@ -13,7 +13,7 @@
   border-top: solid 1px #ddd;
 }
 
-#knife-selection-box .knife-selection-item {
+#knife-select-box .knife-select-item {
   position: relative;
 
   min-height: 50px;
@@ -25,7 +25,7 @@
   border-radius: 2px;
 }
 
-#knife-selection-box .knife-selection-dump {
+#knife-select-box .knife-select-dump {
   display: block;
   box-sizing: border-box;
 
@@ -36,23 +36,23 @@
   border-radius 3px;
 }
 
-#knife-selection-box .knife-selection-item h1 {
+#knife-select-box .knife-select-item h1 {
   font-size: 20px;
 }
 
-#knife-selection-box .knife-selection-item .dashicons {
+#knife-select-box .knife-select-item .dashicons {
   position: absolute;
   right: 5px;
 
   font-size: 16px;
 }
 
-#knife-selection-box .knife-selection-item .dashicons-menu {
+#knife-select-box .knife-select-item .dashicons-menu {
   top: 5px;
   cursor: move;
 }
 
-#knife-selection-box .knife-selection-item .dashicons-trash {
+#knife-select-box .knife-select-item .dashicons-trash {
   bottom: 5px;
   cursor: pointer;
 

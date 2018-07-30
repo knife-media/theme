@@ -5,7 +5,7 @@
 * Custom post type for manual articles select
 *
 * @package knife-theme
-* @since 1.3
+* @since 1.4
 */
 
 if (!defined('WPINC')) {
@@ -16,7 +16,6 @@ class Knife_Select_Links {
     /**
      * Unique slug using for custom post type register and url
      *
-     * @since   1.3
      * @access  private
      * @var     string
      */
@@ -25,7 +24,6 @@ class Knife_Select_Links {
     /**
      * Unique meta using for saving post data
      *
-     * @since   1.3
      * @access  private
      * @var     string
      */
@@ -34,24 +32,33 @@ class Knife_Select_Links {
 
     /**
      * Use this method instead of constructor to avoid multiple hook setting
-     *
-     * @since 1.3
      */
-    public static function load() {
-        add_action('save_post', [__CLASS__, 'save_meta']);
+    public static function load_module() {
+        // Apply theme hooks
+        add_action('after_setup_theme', [__CLASS__, 'setup_actions']);
 
-        // Add scripts to admin page
-        add_action('admin_enqueue_scripts', [__CLASS__, 'add_assets']);
+
+        // Register select post type
+        add_action('init', [__CLASS__, 'register_type']);
 
         // Add select metabox
         add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
 
-        // Register select post type
-        add_action('init', [__CLASS__, 'register_select']);
+        // Save metabox
+        add_action('save_post', [__CLASS__, 'save_metabox']);
+
+        // Add scripts to admin page
+        add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
 
         // Filter content to show custom links
         add_filter('the_content', [__CLASS__, 'update_content']);
+    }
 
+
+    /**
+     * Setup theme hooks
+     */
+    public static function setup_actions() {
         // Add post lead to post type editor
         add_filter('knife_post_lead_type', function($default) {
             $default[] = self::$slug;
@@ -64,7 +71,7 @@ class Knife_Select_Links {
     /**
      * Register select post type
      */
-    public static function register_select() {
+    public static function register_type() {
         register_post_type(self::$slug, [
             'labels'                => [
                 'name'              => __('Подборка', 'knife-theme'),
@@ -131,7 +138,7 @@ class Knife_Select_Links {
     /**
     * Enqueue assets to admin post screen only
     */
-    public static function add_assets($hook) {
+    public static function enqueue_assets($hook) {
         if(!in_array($hook, ['post.php', 'post-new.php'])) {
             return;
         }
@@ -154,7 +161,7 @@ class Knife_Select_Links {
 
 
     /**
-     * Print wp-editor based metabox for lead-text meta
+     * Display select link metabox
      */
     public static function display_metabox($post, $box) {
         $include = get_template_directory() . '/core/include';
@@ -166,15 +173,18 @@ class Knife_Select_Links {
     /**
      * Save post options
      */
-    public static function save_meta($post_id) {
-        if(get_post_type($post_id) !== self::$slug)
+    public static function save_metabox($post_id) {
+        if(get_post_type($post_id) !== self::$slug) {
             return;
+        }
 
-        if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
+        if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return;
+        }
 
-        if(!current_user_can('edit_post', $post_id))
+        if(!current_user_can('edit_post', $post_id)) {
             return;
+        }
 
         // Update items meta
         self::update_items(self::$meta . '-items', $post_id);
@@ -253,6 +263,6 @@ class Knife_Select_Links {
 
 
 /**
- * Load current class environment
+ * Load current module environment
  */
-Knife_Select_Links::load();
+Knife_Select_Links::load_module();

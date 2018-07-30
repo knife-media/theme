@@ -458,13 +458,15 @@ class Knife_User_Club {
      * Append user form to page content
      */
     public function inject_object() {
-        if(!is_singular('page'))
+        if(!is_singular('page')) {
             return;
+        }
 
         $post_id = get_the_ID();
 
-        if(!get_post_meta($post_id, $this->meta, true))
+        if(!get_post_meta($post_id, $this->meta, true)) {
             return;
+        }
 
         $fields = [
             'name' => [
@@ -587,13 +589,15 @@ class Knife_User_Club {
 
         $path = $folder . $file;
 
-        if(!is_dir($upload['basedir'] . $folder) && !mkdir($upload['basedir'] . $folder))
+        if(!is_dir($upload['basedir'] . $folder) && !mkdir($upload['basedir'] . $folder)) {
             wp_send_json_error(__('Не удалось сохранить заявку.', 'knife-theme'));
+        }
 
         $content = $this->create_request($fields, $request);
 
-        if(!file_put_contents($upload['basedir'] . $path, $content))
+        if(!file_put_contents($upload['basedir'] . $path, $content)) {
             wp_send_json_error(__('Не удалось сохранить заявку.', 'knife-theme'));
+        }
 
         $text = sprintf("%s\n\n%s \n%s \n\n%s",
             sprintf(__('<strong>В клуб добавлена новая заявка #%d</strong>', 'knife-theme'), $request),
