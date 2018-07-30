@@ -33,9 +33,11 @@
 
     font-size: 1.5rem;
     font-weight: 700;
+    line-height: 1.125;
 
     @media screen and (max-width: 767px) {
       font-size: 1.25rem;
+      line-height: 1.375;
     }
   }
 
@@ -45,9 +47,11 @@
 
     font-size: 1.75rem;
     font-weight: 700;
+    line-height: 1.125;
 
     @media screen and (max-width: 767px) {
       font-size: 1.25rem;
+      line-height: 1.375;
     }
   }
 
