@@ -1,28 +1,28 @@
 .push {
-	display: flex;
+  display: flex;
   flex-flow: row-reverse nowrap;
-	align-items: center;
+  align-items: center;
   justify-content: space-between;
 
-	position: fixed;
+  position: fixed;
   right: 0;
   left: 0;
-	bottom: 0;
-	z-index: 3;
+  bottom: 0;
+  z-index: 3;
   visibility: visible;
 
   width: 25rem;
-	max-width: calc(100% - 2rem);
+  max-width: calc(100% - 2rem);
   margin-right: auto;
   margin-left: auto;
-	padding: 1rem;
+  padding: 1rem;
 
-	background: $color-white;
+  background: $color-white;
 
   transform: translateY(-30%);
-	transition: .5s 5s;
+  transition: .5s 5s;
 
-	box-shadow: 0 0 1px 0 $color-text;
+  box-shadow: 0 0 1px 0 $color-text;
 
   .push__button {
     display: flex;
@@ -46,6 +46,7 @@
     border-radius: 2px;
 
     .icon {
+      order: -1;
       pointer-events: none;
 
       font-size: 1.25rem;
@@ -106,7 +107,7 @@
     }
 
     &:after {
-	    transform: rotate(-45deg);
+      transform: rotate(-45deg);
     }
 
     &:before {
@@ -126,7 +127,7 @@
   }
 
   @media screen and (max-width: 479px) {
-		flex-flow: column;
+    flex-flow: column;
     padding: .75rem;
 
     transform: translateY(-10%);
