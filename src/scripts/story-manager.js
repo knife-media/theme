@@ -50,7 +50,7 @@
 
     for (var i = 0, item; item = knife_story_stories[i]; i++) {
       var slide = document.createElement('div');
-      slide.classList.add('glide__slide-wrap');
+      slide.classList.add('glide__slide-content');
 
       // Append kicker
       (function(){
@@ -95,9 +95,13 @@
       })();
 
 
+      var wrap = document.createElement('div');
+      wrap.classList.add('glide__slide-wrap');
+      wrap.appendChild(slide);
+
       var block = document.createElement('div');
       block.classList.add('glide__slide');
-      block.appendChild(slide);
+      block.appendChild(wrap);
 
       story.querySelector('.glide__slides').appendChild(block);
     }
