@@ -1,0 +1,62 @@
+.outbound {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+
+  width: calc(100% + 4rem);
+  max-width: calc(#{$content-width} + 4rem);
+  margin-left: -2rem;
+  margin-right: -2rem;
+  margin-bottom: 1rem;
+  padding: 1.25rem 2rem;
+
+  text-decoration: none;
+
+  background-color: $color-bright;
+
+  border: none;
+  border-radius: 5px;
+
+  p {
+    width: 100%;
+    margin: .5rem 0 0;
+  }
+
+  .icon {
+    font-size: 1.5rem;
+  }
+
+  .outbound__author {
+    margin: 0;
+
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.125;
+
+    @media screen and (max-width: 767px) {
+      font-size: 1.25rem;
+      line-height: 1.375;
+    }
+  }
+
+  .outbound__button {
+    width: auto;
+    margin: 0;
+
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.125;
+
+    @media screen and (max-width: 767px) {
+      font-size: 1.25rem;
+      line-height: 1.375;
+    }
+  }
+
+  &.outbound--footer {
+    margin-top: 1rem;
+    margin-bottom: -1rem;
+  }
+}
