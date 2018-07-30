@@ -126,18 +126,18 @@ img {
 
 @keyframes loader {
   0% {
-    fill: #333333;
+    transform: scale(0);
   }
 
-  15% {
-    fill: #dddddd;
+  10% {
+    transform: scale(1);
   }
 
-  60% {
-    fill: #dddddd;
+  80% {
+    transform: scale(1);
   }
 
   100% {
-    fill: #333333;
+    transform: scale(0);
   }
 }
