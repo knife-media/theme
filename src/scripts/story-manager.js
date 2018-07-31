@@ -127,7 +127,17 @@
     var clone = share.cloneNode(true);
     var slide = slides[slides.length - 1];
 
-    return slide.querySelector('.glide__slide-content').appendChild(clone);
+    if(typeof knife_story_options.action !== 'undefined') {
+      var links = clone.querySelectorAll('.share__link');
+
+      for (var i = 0, link; link = links[i]; i++) {
+        link.setAttribute('data-action', knife_story_options.action);
+      }
+    }
+
+    slide.querySelector('.glide__slide-content').appendChild(clone);
+
+    return window.shareButtons();
   });
 
 

@@ -167,9 +167,13 @@ class Knife_Story_Manager {
         $post_id = get_the_ID();
         $stories = $this->convert_stories($post_id);
 
+        $options = [];
+
         foreach($this->opts as $item) {
             $options[$item] = get_post_meta($post_id, $this->meta . "-{$item}", true);
         }
+
+        $options['action'] = __('Share story — last', 'knife-media');
 
         // Add stories options object
         wp_localize_script('knife-theme', 'knife_story_options', $options);

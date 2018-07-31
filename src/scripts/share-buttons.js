@@ -1,6 +1,7 @@
 (function() {
-  if(document.querySelector('.share') === null)
+  if(document.querySelector('.share') === null) {
     return false;
+  }
 
   var counters = {facebook: false, vkontakte: false};
 
@@ -60,23 +61,29 @@
   }
 
 
-  var links = document.querySelectorAll('.share .share__link');
+  /**
+   * Global share buttons function
+   */
+  window.shareButtons = function() {
+    var links = document.querySelectorAll('.share .share__link');
 
-  if(links === null) {
-    return false;
-  }
+    if(links === null) {
+      return false;
+    }
 
-  for(var i = 0; i < links.length; i++) {
-    var network = links[i].dataset.label;
+    for(var i = 0; i < links.length; i++) {
+      var network = links[i].dataset.label;
 
-    links[i].addEventListener('click', function(e) {
-      e.preventDefault();
+      links[i].addEventListener('click', function(e) {
+        e.preventDefault();
 
-      return openPopup(this.href, {width: 600, height: 400, id: this.dataset.label})
-    });
+        return openPopup(this.href, {width: 600, height: 400, id: this.dataset.label})
+      });
 
-    if(network in counters && counters[network] === false)
-      counters[network] = getShares(network);
+      if(network in counters && counters[network] === false) {
+        counters[network] = getShares(network);
+      }
+    }
   }
 
   window.VK = {
@@ -118,4 +125,6 @@
       }
     }
   }
+
+  return window.shareButtons();
 })();
