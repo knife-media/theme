@@ -315,6 +315,8 @@ class Knife_User_Club {
             __('Вы тоже можете писать в Клуб «Ножа»!<br> Попробуйте, это бесплатно и совершенно не страшно.', 'knife-theme'),
             esc_url($options['button_link'])
         );
+
+        return $content . $link;
     }
 
 

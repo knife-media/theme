@@ -46,12 +46,14 @@
 
     @media screen and (max-width: 767px) {
       font-size: 1.125rem;
-      line-height: 1.5;
     }
   }
 
   &.outbound--footer {
     margin-top: 1rem;
     margin-bottom: -1rem;
+
+    padding-top: 1.75rem;
+    padding-bottom: 1.75rem;
   }
 }
