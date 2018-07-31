@@ -42,14 +42,10 @@ class Knife_Single_Widget extends WP_Widget {
         extract($instance);
 
         // Check cache before creating WP_Query object
-        $html = false;//get_transient($this->id);
+        $html = get_transient($this->id);
 
         if($html === false) :
             $exclude = get_query_var('widget_exclude', []);
-
-            $p = url_to_postid($link);
-            var_du,p
-
 
             $q = new WP_Query([
                 'post_status' => 'publish',
