@@ -376,7 +376,7 @@
       var touch = e.changedTouches[0];
 
       start = touch.pageY;
-    }, {passive: false});
+    }, true);
 
 
     story.addEventListener('touchmove', function(e) {
@@ -385,7 +385,7 @@
       if(start < touch.pageY && window.pageYOffset === 0) {
         e.preventDefault();
       }
-    }, {passive: false});
+    }, true);
   });
 
 
