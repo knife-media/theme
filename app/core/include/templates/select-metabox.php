@@ -19,6 +19,7 @@
 
         <fieldset>
             <a id="knife-select-add" href="#select-add" class="button"><?php _e('Добавить', 'knife-theme'); ?></a>
+            <span class="spinner"></span>
         </fieldset>
     </div>
 

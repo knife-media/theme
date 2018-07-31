@@ -2,6 +2,10 @@
   margin-bottom: 20px;
 }
 
+#knife-select-box .knife-select-manage .spinner {
+  float: none;
+}
+
 #knife-select-box .knife-select-items {
   display: block;
   position: relative;

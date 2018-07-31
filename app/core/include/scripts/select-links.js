@@ -1,6 +1,11 @@
 jQuery(document).ready(function($) {
   var box = $("#knife-select-box");
 
+  var wait = function() {
+    box.find('#knife-select-add').toggleClass('disabled');
+    box.find('.spinner').toggleClass('is-active');
+  }
+
   // Sort items
   box.sortable({
     containment: 'parent',
@@ -20,6 +25,22 @@ jQuery(document).ready(function($) {
     if(link.length < 1) {
       return;
     }
+
+    var data = {
+      action: 'knife-select-postid',
+      link: link
+    }
+
+    var xhr = $.ajax({method: 'POST', url: ajaxurl, data: data}, 'json');
+
+    xhr.done(function(answer) {
+      wait();
+
+      console.log(answer);
+    });
+
+    return wait();
+
 
     var item = box.find('.knife-select-item:first').clone();
 

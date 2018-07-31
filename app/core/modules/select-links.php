@@ -21,6 +21,7 @@ class Knife_Select_Links {
      */
     private static $slug = 'select';
 
+
     /**
      * Unique meta using for saving post data
      *
@@ -30,13 +31,21 @@ class Knife_Select_Links {
     private static $meta = '_knife-select';
 
 
+   /**
+    * Ajax action
+    *
+    * @access  private static
+    * @var     string
+    */
+    private static $action = 'knife-select-postid';
+
+
     /**
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public static function load_module() {
         // Apply theme hooks
         add_action('after_setup_theme', [__CLASS__, 'setup_actions']);
-
 
         // Register select post type
         add_action('init', [__CLASS__, 'register_type']);
@@ -46,6 +55,9 @@ class Knife_Select_Links {
 
         // Save metabox
         add_action('save_post', [__CLASS__, 'save_metabox']);
+
+        // Get postid by url
+        add_action('wp_ajax_' . self::$action, [__CLASS__, 'get_postid']);
 
         // Add scripts to admin page
         add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
@@ -95,6 +107,25 @@ class Knife_Select_Links {
             'exclude_from_search'   => false,
             'publicly_queryable'    => true
         ]);
+    }
+
+
+    /*
+     * Get postid by url by admin side ajax
+     */
+    public static function get_postid() {
+        $link = $_POST['link'];
+
+        $post_id = url_to_postid($link);
+
+        if($post_id > 0) {
+            $title = get_the_title($post_id);
+
+            wp_send_json_success($title);
+        }
+
+
+        wp_send_json_error('error');
     }
 
 
@@ -152,10 +183,10 @@ class Knife_Select_Links {
         $version = wp_get_theme()->get('Version');
         $include = get_template_directory_uri() . '/core/include';
 
-        // insert admin styles
+        // Insert admin styles
         wp_enqueue_style('knife-select-links', $include . '/styles/select-links.css', [], $version);
 
-        // insert admin scripts
+        // Insert admin scripts
         wp_enqueue_script('knife-select-links', $include . '/scripts/select-links.js', ['jquery', 'jquery-ui-sortable'], $version);
     }
 
