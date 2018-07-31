@@ -41,6 +41,12 @@
 
 
   /**
+   * Declare global options object
+   */
+  var options = {}
+
+
+  /**
    * Add slides
    */
   glide.on('mount.before', function() {
@@ -169,12 +175,10 @@
       return false;
     }
 
+    options.href = link.href;
+
     var empty = document.createElement('div');
     empty.classList.add('glide__slide', 'glide__slide--empty');
-
-    glide.update({
-      href: link.href
-    });
 
     return story.querySelector('.glide__slides').appendChild(empty);
   });
@@ -284,14 +288,11 @@
 
 
   /**
-   * Add last slide index to settings
+   * Add last slide index to options
    */
   glide.on('mount.after', function() {
     var slides = story.querySelectorAll('.glide__slide');
-
-    glide.update({
-      count: slides.length - 1
-    });
+    options.count = slides.length - 1
   });
 
 
@@ -317,7 +318,7 @@
 
     next.classList.remove('glide__control--disabled');
 
-    if(glide.index === glide.settings.count) {
+    if(glide.index === options.count) {
       next.classList.add('glide__control--disabled');
     }
   });
@@ -327,7 +328,7 @@
    * Hide story if extra slide exists
    */
   glide.on('run', function(move) {
-    if(glide.index === glide.settings.count && glide.settings.href) {
+    if(glide.index === options.count && options.href) {
       story.classList.remove('glide--active');
     }
   });
@@ -337,8 +338,8 @@
    * Load next story if exists
    */
   glide.on('run.after', function(move) {
-    if(glide.index === glide.settings.count && glide.settings.href) {
-      document.location.href = glide.settings.href;
+    if(glide.index === options.count && options.href) {
+      document.location.href = options.href;
     }
   });
 
