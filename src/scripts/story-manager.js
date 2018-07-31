@@ -109,6 +109,39 @@
 
 
   /**
+   * Apend share buttons to the last slide
+   */
+  glide.on('mount.before', function() {
+    var slides = story.querySelectorAll('.glide__slide');
+
+    if(slides.length <= 1) {
+      return false;
+    }
+
+    var share = slides[0].querySelector('.share');
+
+    if(share === null) {
+      return false
+    }
+
+    var clone = share.cloneNode(true);
+    var slide = slides[slides.length - 1];
+
+    if(typeof knife_story_options.action !== 'undefined') {
+      var links = clone.querySelectorAll('.share__link');
+
+      for (var i = 0, link; link = links[i]; i++) {
+        link.setAttribute('data-action', knife_story_options.action);
+      }
+    }
+
+    slide.querySelector('.glide__slide-content').appendChild(clone);
+
+    return window.shareButtons();
+  });
+
+
+  /**
    * Add bullets on Glide mounting
    */
   glide.on('mount.before', function() {
@@ -343,7 +376,7 @@
       var touch = e.changedTouches[0];
 
       start = touch.pageY;
-    }, false);
+    }, {passive: false});
 
 
     story.addEventListener('touchmove', function(e) {
@@ -352,7 +385,7 @@
       if(start < touch.pageY && window.pageYOffset === 0) {
         e.preventDefault();
       }
-    }, false);
+    }, {passive: false});
   });
 
 
