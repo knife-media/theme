@@ -101,8 +101,11 @@ class Knife_User_Club {
         // Prepend author meta to content
         add_filter('the_content', [__CLASS__, 'insert_metalink']);
 
-        // Append author meta to content
-        add_filter('the_content', [__CLASS__, 'insert_promolink']);
+        // Append promo link to club content
+        add_filter('the_content', [__CLASS__, 'insert_club_promo']);
+
+        // Append promo link to standart post content
+        add_filter('the_content', [__CLASS__, 'insert_post_promo']);
     }
 
 
@@ -264,28 +267,54 @@ class Knife_User_Club {
 
 
     /**
-     * Insert user club promo link on single club post
+     * Insert user club promo link to content
      *
      * @since 1.4
      */
-    public static function insert_promolink($content) {
-        $options = get_option(self::$option);
-
-        if(!is_singular(self::$slug) || !in_the_loop()) {
+    public static function insert_post_promo($content) {
+        if(!is_singular('post') || !in_the_loop()) {
             return $content;
         }
+
+        if(get_post_format() !== false) {
+            return $content;
+        }
+
+        $options = get_option(self::$option);
 
         if(empty($options['button_link'])) {
             return $content;
         }
 
-        $link = sprintf('<a class="outbound outbound--footer" href="%3$s"><p class="outbound__button">%1$s</p>%2$s</span></a>',
-            __('Написать в клуб', 'knife-theme'),
-            '<span class="icon icon--right">',
+        $link = sprintf('<a class="outbound outbound--footer" href="%2$s"><p class="outbound__promo">%1$s</p></a>',
+            __('Хотите тоже написать что-то интересное в «Нож», но у вас мало опыта? Это не страшно: присоединяйтесь к нашему Клубу! Там мы публикуем тексты читателей, а лучшим предлагаем стать нашими постоянными авторами.', 'knife-theme'),
             esc_url($options['button_link'])
         );
 
         return $content . $link;
+    }
+
+
+    /**
+     * Insert user club promo link to content
+     *
+     * @since 1.4
+     */
+    public static function insert_club_promo($content) {
+        if(!is_singular(self::$slug) || !in_the_loop()) {
+            return $content;
+        }
+
+        $options = get_option(self::$option);
+
+        if(empty($options['button_link'])) {
+            return $content;
+        }
+
+        $link = sprintf('<a class="outbound outbound--footer" href="%2$s"><p class="outbound__promo">%1$s</p></a>',
+            __('Вы тоже можете писать в Клуб «Ножа»!<br> Попробуйте, это бесплатно и совершенно не страшно.', 'knife-theme'),
+            esc_url($options['button_link'])
+        );
     }
 
 

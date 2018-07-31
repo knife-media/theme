@@ -24,10 +24,6 @@
     margin: .5rem 0 0;
   }
 
-  .icon {
-    font-size: 1.5rem;
-  }
-
   .outbound__author {
     margin: 0;
 
@@ -41,17 +37,16 @@
     }
   }
 
-  .outbound__button {
-    width: auto;
+  .outbound__promo {
     margin: 0;
 
-    font-size: 1.75rem;
-    font-weight: 700;
-    line-height: 1.125;
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.375;
 
     @media screen and (max-width: 767px) {
-      font-size: 1.25rem;
-      line-height: 1.375;
+      font-size: 1.125rem;
+      line-height: 1.5;
     }
   }
 
