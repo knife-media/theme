@@ -77,6 +77,15 @@ class Knife_News_Manager {
 
             return $header;
         });
+
+        // Remove promo from news content
+        add_filter('the_content', function($content) {
+            if(in_category($this->news_id)) {
+                remove_filter('the_content', ['Knife_User_Club', 'insert_post_promo']);
+            }
+
+            return $content;
+        }, 9);
     }
 
 
