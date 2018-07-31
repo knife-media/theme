@@ -148,7 +148,7 @@ class Knife_Story_Manager {
             return;
         }
 
-        $version = '3.1.0';
+        $version = '3.2.2';
         $include = get_template_directory_uri() . '/assets';
 
         // Enqueue swiper js to bottom
