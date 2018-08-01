@@ -6,6 +6,20 @@
   float: none;
 }
 
+#knife-select-box .knife-select-manage input {
+  line-height: 1.5;
+  transition: .5s;
+  transition-property: border, background;
+
+  border: solid 1px #ddd;
+}
+
+#knife-select-box .knife-select-manage input.warning {
+  background: rgba(170, 0, 0, .15);
+
+  border: solid 1px #a00;
+}
+
 #knife-select-box .knife-select-items {
   display: block;
   position: relative;

@@ -31,13 +31,19 @@ class Knife_Select_Links {
     private static $meta = '_knife-select';
 
 
+    /**
+     * Unique nonce string using for ajax referer check
+     */
+    private static $nonce = 'knife-select-nonce';
+
+
    /**
     * Ajax action
     *
     * @access  private static
     * @var     string
     */
-    private static $action = 'knife-select-postid';
+    private static $action = 'knife-select-title';
 
 
     /**
@@ -57,7 +63,7 @@ class Knife_Select_Links {
         add_action('save_post', [__CLASS__, 'save_metabox']);
 
         // Get postid by url
-        add_action('wp_ajax_' . self::$action, [__CLASS__, 'get_postid']);
+        add_action('wp_ajax_' . self::$action, [__CLASS__, 'get_title']);
 
         // Add scripts to admin page
         add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
@@ -110,22 +116,26 @@ class Knife_Select_Links {
     }
 
 
-    /*
-     * Get postid by url by admin side ajax
+    /**
+     * Get postid by url using admin side ajax
      */
-    public static function get_postid() {
-        $link = $_POST['link'];
+    public static function get_title() {
+        check_admin_referer(self::$nonce, 'nonce');
 
-        $post_id = url_to_postid($link);
+        if(isset($_POST['link'])) {
+            $link = sanitize_text_field($_POST['link']);
 
-        if($post_id > 0) {
-            $title = get_the_title($post_id);
+            // Get post id by url
+            $post_id = url_to_postid($link);
 
-            wp_send_json_success($title);
+            if($post_id > 0) {
+                $title = get_the_title($post_id);
+
+                wp_send_json_success($title);
+            }
         }
 
-
-        wp_send_json_error('error');
+        wp_send_json_error();
     }
 
 
@@ -139,22 +149,17 @@ class Knife_Select_Links {
             return $content;
         }
 
-        $html = false;//get_transient("knife_{self::$slug}_{$post_id}");
+        $items = get_post_meta($post_id, self::$meta . '-items');
 
-        if($html === false) {
-            $items = get_post_meta($post_id, self::$meta . '-items');
+        ob_start();
 
-            ob_start();
-
-            foreach($items as $item) {
-                self::process_item($item);
-            }
-
-            $html = ob_get_clean();
-            set_transient("knife_{self::$slug}_{$post_id}", $html, 24 * HOUR_IN_SECONDS);
+        foreach($items as $item) {
+//                self::process_item($item);
         }
 
-        return sprintf('<div class="post__content-selects">%s</div>', $html);
+        $html = ob_get_clean();
+
+        return sprintf('<div class="post__content-select">%s</div>', $html);
     }
 
 
@@ -226,10 +231,11 @@ class Knife_Select_Links {
      * Update select items meta from post-metabox
      */
     private static function update_items($query, $post_id, $meta = [], $i = 0) {
-        if(empty($_REQUEST[$query]))
+        if(empty($_REQUEST[$query])) {
             return;
+        }
 
-        // delete select post meta to create it again below
+        // Delete select post meta to create it again below
         delete_post_meta($post_id, $query);
 
         foreach($_REQUEST[$query] as $item) {
@@ -238,57 +244,19 @@ class Knife_Select_Links {
                     $i++;
                 }
 
-                switch($key) {
-                    case 'text':
-                        $value = sanitize_text_field($value);
-                        break;
+                if(!empty($value)) {
+                    $meta[$i][$key] = sanitize_text_field($value);
 
-                    case 'link':
-                        $value = esc_url($value);
-                        break;
+                    if($key === 'link') {
+                        $meta[$i]['post'] = url_to_postid($value);
+                    }
                 }
-
-                $meta[$i][$key] = $value;
             }
         }
 
         foreach($meta as $item) {
-            if(!empty($item['text']) && !empty($item['link'])) {
-                add_post_meta($post_id, $query, $item);
-            }
+            add_post_meta($post_id, $query, $item);
         }
-    }
-
-
-    private static function process_item($item) {
-        if(empty($item['text']) || empty($item['link'])) {
-            return;
-        }
-
-        $post_id = url_to_postid($item['link']);
-
-        echo '<div class="select">';
-
-        if($post_id > 0) {
-            global $post;
-
-            $post = get_post($post_id);
-            setup_postdata($post);
-
-            the_info(
-                '<div class="select__meta meta">', '</div>',
-                ['author', 'date']
-            );
-
-            wp_reset_postdata();
-        }
-
-        printf('<a class="select__link" href="%2$s">%1$s</a>',
-            esc_html($item['text']),
-            esc_url($item['link'])
-        );
-
-        echo '</div>';
     }
 }
 
