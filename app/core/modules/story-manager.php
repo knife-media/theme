@@ -320,7 +320,13 @@ class Knife_Story_Manager {
                     $i++;
                 }
 
-                $meta[$i][$key] = $value;
+                if($key === 'entry') {
+                    $meta[$i][$key] = wp_kses_post($value);
+                }
+
+                if($key === 'media') {
+                    $meta[$i][$key] = absint($value);
+                }
             }
         }
 
