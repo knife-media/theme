@@ -56,6 +56,9 @@ class Knife_Select_Links {
         // Register select post type
         add_action('init', [__CLASS__, 'register_type']);
 
+        // Change single post type template path
+        add_action('template_include', [__CLASS__, 'include_template']);
+
         // Add select metabox
         add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
 
@@ -117,6 +120,22 @@ class Knife_Select_Links {
 
 
     /**
+     * Include single select template
+     */
+    public static function include_template($template) {
+        if(is_singular(self::$slug)) {
+            $new_template = locate_template(['templates/single-select.php']);
+
+            if(!empty($new_template)) {
+                return $new_template;
+            }
+        }
+
+        return $template;
+    }
+
+
+    /**
      * Get postid by url using admin side ajax
      */
     public static function get_title() {
@@ -143,23 +162,18 @@ class Knife_Select_Links {
      * Update content with custom links
      */
     public static function update_content($content) {
-        $post_id = get_the_ID();
 
-        if(get_post_type($post_id) !== self::$slug) {
+        if(!is_singular(self::$slug) || !in_the_loop()) {
             return $content;
         }
 
-        $items = get_post_meta($post_id, self::$meta . '-items');
+        $items = get_post_meta(get_the_ID(), self::$meta . '-items');
 
-        ob_start();
-
-        foreach($items as $item) {
-//                self::process_item($item);
+        foreach($items as $i => $item) {
+            $content = self::get_item($item, $content);
         }
 
-        $html = ob_get_clean();
-
-        return sprintf('<div class="post__content-select">%s</div>', $html);
+        return $content;
     }
 
 
@@ -257,6 +271,29 @@ class Knife_Select_Links {
         foreach($meta as $item) {
             add_post_meta($post_id, $query, $item);
         }
+    }
+
+
+    /**
+     * Get select item from meta
+     */
+    private static function get_item($item, $content = '', $meta = '') {
+        if(intval($item['post']) > 0) {
+            $meta = the_info(
+                '<div class="select__meta meta">', '</div>',
+                ['author', 'date'], false, $item['post']
+            );
+        }
+
+        $link = sprintf('<a class="select__link" href="%2$s">%1$s</a>',
+            esc_html($item['text'] ?? ''), esc_url($item['link'] ?? '')
+        );
+
+        $select = sprintf('<div class="select">%s</div>',
+            $meta . $link
+        );
+
+        return $content . $select;
     }
 }
 
