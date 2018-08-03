@@ -31,7 +31,7 @@ class Knife_Post_Info {
             $output = $output . self::$method();
         }
 
-        wp_reset_postdata();
+//        wp_reset_postdata();
 
         return $output;
     }
