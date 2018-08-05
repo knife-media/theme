@@ -12,13 +12,11 @@ if (!defined('WPINC')) {
     die;
 }
 
-new Knife_Post_Info;
-
 class Knife_Post_Info {
     /**
      * Common method to output posts info meta
      */
-    public function get_info($options, $output = '') {
+    public static function get_info($options = [], $output = '') {
         foreach($options as $option) {
             $method = 'info_' . $option;
 
@@ -26,7 +24,7 @@ class Knife_Post_Info {
                 continue;
             }
 
-            $output = $output . $this->$method();
+            $output = $output . self::$method();
         }
 
         return $output;
@@ -36,7 +34,7 @@ class Knife_Post_Info {
     /**
      * Get post author info
      */
-    private function info_author() {
+    private static function info_author() {
         if(function_exists('coauthors_posts_links')) {
             return coauthors_posts_links('', '', null, null, false);
         }
@@ -48,10 +46,10 @@ class Knife_Post_Info {
     /**
      * Get post category info
      */
-    private function info_category() {
+    private static function info_category() {
         $cats = get_the_category();
 
-        if(!isset($cats[0])) {
+        if(empty($cats[0])) {
             return;
         }
 
@@ -67,7 +65,7 @@ class Knife_Post_Info {
     /**
      * Get post date info
      */
-    private function info_date() {
+    private static function info_date() {
         $output = sprintf('<span class="meta__item"><time datetime="%1$s">%2$s</time></span>',
             get_the_time('c'),
             get_the_date('Y') === date('Y') ? get_the_time('j F') : get_the_time('j F Y')
@@ -80,7 +78,7 @@ class Knife_Post_Info {
     /**
      * Get post time info
      */
-    private function info_time() {
+    private static function info_time() {
         $output = sprintf('<span class="meta__item">%s</span>',
             get_the_time('H:i')
         );
@@ -92,7 +90,7 @@ class Knife_Post_Info {
     /**
      * Get post type info
      */
-    private function info_type() {
+    private static function info_type() {
         $type = get_post_type(get_the_ID());
 
         if(in_array($type, ['post', 'page', 'attachmenet'])) {
@@ -112,7 +110,7 @@ class Knife_Post_Info {
     /**
      * Get primary post tag info
      */
-    private function info_tag() {
+    private static function info_tag() {
         $tags = get_the_tags();
 
         if(!isset($tags[0])) {
@@ -131,7 +129,7 @@ class Knife_Post_Info {
     /**
      * Get post tags info
      */
-    private function info_tags($output = '') {
+    private static function info_tags($output = '') {
         $tags = get_the_tags();
 
         if($tags === false) {
@@ -139,13 +137,12 @@ class Knife_Post_Info {
         }
 
         foreach($tags as $i => $tag) {
-            if($i > 3)
-                break;
-
-            $output = $output . sprintf('<a class="meta__link" href="%2$s">%1$s</a>',
-                esc_html($tag->name),
-                esc_url(get_tag_link($tag->term_id))
-            );
+            if($i <= 3) {
+                $output = $output . sprintf('<a class="meta__link" href="%2$s">%1$s</a>',
+                    esc_html($tag->name),
+                    esc_url(get_tag_link($tag->term_id))
+                );
+            }
         }
 
         return $output;

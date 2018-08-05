@@ -6,15 +6,12 @@
 *
 * @package knife-theme
 * @since 1.2
+* @version 1.4
 */
-
 
 if (!defined('WPINC')) {
     die;
 }
-
-
-(new Knife_Push_Service)->init();
 
 class Knife_Push_Service {
    /**
@@ -23,7 +20,7 @@ class Knife_Push_Service {
     * @access  private
     * @var     string
     */
-    private $meta   = '_knife-push';
+    private static $meta  = '_knife-push';
 
 
    /**
@@ -32,7 +29,7 @@ class Knife_Push_Service {
     * @access  private
     * @var     string
     */
-    private $option = 'knife-push-settings';
+    private static $option = 'knife-push-settings';
 
 
    /**
@@ -41,7 +38,7 @@ class Knife_Push_Service {
     * @access  private
     * @var     array
     */
-    private $type = ['post'];
+    private static $type = ['post'];
 
 
     /**
@@ -49,52 +46,51 @@ class Knife_Push_Service {
      *
      * @since 1.3
      */
-    public function init() {
-        add_action('admin_enqueue_scripts', [$this, 'add_assets']);
+    public static function load_module() {
+        // Update type array by filters
+        add_action('init', [__CLASS__, 'set_type'], 20);
 
-        // include OneSignal js sdk
-        add_action('wp_enqueue_scripts', [$this, 'inject_object'], 12);
+        // Add admin side assets
+        add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
 
-        // plugin settings
-        add_action('admin_init', [$this, 'settings_init']);
-        add_action('admin_menu', [$this, 'add_menu']);
+        // Include OneSignal js sdk
+        add_action('wp_enqueue_scripts', [__CLASS__, 'inject_object'], 12);
 
-        // post metabox
-        add_action('add_meta_boxes', [$this, 'add_metabox']);
+        // Plugin settings
+        add_action('admin_init', [__CLASS__, 'settings_init']);
+        add_action('admin_menu', [__CLASS__, 'add_menu']);
 
-        // ajax handler
-        add_action('wp_ajax_knife_push_send', [$this, 'send_push']);
+        // Post metabox
+        add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
 
-        // inject push template
-        add_action('wp_footer', [$this, 'inject_template']);
-
-        // update type array by filters
-        add_action('init', [$this, 'set_type'], 20);
+        // Ajax handler
+        add_action('wp_ajax_knife_push_send', [__CLASS__, 'send_push']);
     }
 
 
     /**
      * Update type array by modules filters
      */
-    public function set_type() {
+    public static function set_type() {
        /**
          * Filter push service support post types
          *
          * @since 1.3
          * @param array $type
          */
-        $this->type = apply_filters('knife_push_service_type', $this->type);
+        self::$type = apply_filters('knife_push_service_type', self::$type);
     }
 
 
    /**
     * Enqueue assets to admin post screen only
     */
-    public function add_assets($hook) {
+    public static function enqueue_assets($hook) {
         $post_id = get_the_ID();
 
-        if(!in_array(get_post_type($post_id), $this->type))
+        if(!in_array(get_post_type($post_id), self::$type)) {
             return;
+        }
 
         $version = wp_get_theme()->get('Version');
         $include = get_template_directory_uri() . '/core/include';
@@ -106,45 +102,41 @@ class Knife_Push_Service {
     /**
      * Include app id for OneSignal API to knife-theme js script
      */
-    public function inject_object() {
-        $opts = get_option($this->option);
+    public static function inject_object() {
+        $options = get_option(self::$option);
 
-        if(empty($opts['appid']) || empty($opts['popup']))
+        if(empty($options['appid']) || empty($options['popup'])) {
             return false;
+        }
 
-        wp_localize_script('knife-theme', 'knife_push_id', $opts['appid']);
-    }
+        $include = [
+            'appid' => $options['appid'],
+            'button' => __('Подписаться', 'knife-theme'),
+            'promo' => __('Получать последние обновления&nbsp;сайта', 'knife-theme')
+        ];
 
-
-    /**
-     * Inject push template to footer
-     *
-     * @since 1.3
-     */
-    public function inject_template() {
-        $opts = get_option($this->option);
-
-        if(empty($opts['appid']) || empty($opts['popup']))
-            return false;
-
-        $include = get_template_directory() . '/core/include';
-
-        include_once($include . '/templates/push-template.php');
+        wp_localize_script('knife-theme', 'knife_push', $include);
     }
 
 
     /**
      * Add push settings submenu to main options menu
      */
-    public function add_menu() {
-        add_submenu_page('options-general.php', __('Настройки пушей', 'knife-theme'), __('Push-уведомления', 'knife-theme'), 'manage_options', 'knife-push', [$this, 'settings_page']);
+    public static function add_menu() {
+        add_submenu_page('options-general.php',
+            __('Настройки пушей', 'knife-theme'),
+            __('Push-уведомления', 'knife-theme'),
+            'manage_options',
+            'knife-push',
+            [__CLASS__, 'settings_page']
+        );
     }
 
 
     /**
      * Display push options page
      */
-     public function settings_page() {
+     public static function settings_page() {
         echo '<form class="wrap" action="options.php" method="post">';
 
         settings_fields('knife-push-settings');
@@ -158,15 +150,19 @@ class Knife_Push_Service {
     /**
      * Add push sending metabox
      */
-    public function add_metabox() {
-        add_meta_box('knife-push-metabox', __('Отправить пуш', 'knife-theme'), [$this, 'display_metabox'], $this->type, 'side', 'low');
+    public static function add_metabox() {
+        add_meta_box('knife-push-metabox',
+            __('Отправить пуш', 'knife-theme'),
+            [__CLASS__, 'display_metabox'],
+            self::$type, 'side', 'low'
+        );
     }
 
 
     /**
      * Display push sending metabox
      */
-    public function display_metabox() {
+    public static function display_metabox() {
         $include = get_template_directory() . '/core/include';
 
         include_once($include . '/templates/push-metabox.php');
@@ -176,8 +172,8 @@ class Knife_Push_Service {
     /**
      * Register settings forms
      */
-    public function settings_init() {
-        register_setting('knife-push-settings', $this->option);
+    public static function settings_init() {
+        register_setting('knife-push-settings', self::$option);
 
         add_settings_section(
             'knife-push-section',
@@ -189,7 +185,7 @@ class Knife_Push_Service {
         add_settings_field(
             'appid',
             __('OneSignal App ID', 'knife-theme'),
-            [$this, 'setting_render_appid'],
+            [__CLASS__, 'setting_render_appid'],
             'knife-push-settings',
              'knife-push-section'
         );
@@ -197,7 +193,7 @@ class Knife_Push_Service {
         add_settings_field(
             'rest',
             __('REST API Key', 'knife-theme'),
-             [$this, 'setting_render_rest'],
+             [__CLASS__, 'setting_render_rest'],
             'knife-push-settings',
              'knife-push-section'
         );
@@ -205,7 +201,7 @@ class Knife_Push_Service {
         add_settings_field(
             'segments',
             __('Сегменты рассылки (через запятую)', 'knife-theme'),
-             [$this, 'setting_render_segments'],
+             [__CLASS__, 'setting_render_segments'],
             'knife-push-settings',
              'knife-push-section'
         );
@@ -213,7 +209,7 @@ class Knife_Push_Service {
         add_settings_field(
             'title',
             __('Заголовок пуша по умолчанию', 'knife-theme'),
-             [$this, 'setting_render_title'],
+             [__CLASS__, 'setting_render_title'],
             'knife-push-settings',
              'knife-push-section'
         );
@@ -221,7 +217,7 @@ class Knife_Push_Service {
          add_settings_field(
             'utm',
             __('Параметры ссылки', 'knife-theme'),
-             [$this, 'setting_render_utm'],
+             [__CLASS__, 'setting_render_utm'],
             'knife-push-settings',
              'knife-push-section'
         );
@@ -229,75 +225,75 @@ class Knife_Push_Service {
         add_settings_field(
             'popup',
             __('Показывать popup', 'knife-theme'),
-             [$this, 'setting_render_popup'],
+             [__CLASS__, 'setting_render_popup'],
             'knife-push-settings',
              'knife-push-section'
         );
 
     }
 
-    public function setting_render_appid() {
-        $options = get_option($this->option);
+    public static function setting_render_appid() {
+        $options = get_option(self::$option);
         $default = isset($options['appid']) ? $options['appid'] : '';
 
         printf(
             '<input type="text" name="%1$s[appid]" class="widefat" value="%2$s">',
-            $this->option,
+            self::$option,
             esc_attr($default)
         );
     }
 
-    public function setting_render_rest() {
-        $options = get_option($this->option);
+    public static function setting_render_rest() {
+        $options = get_option(self::$option);
         $default = isset($options['rest']) ? $options['rest'] : '';
 
         printf(
             '<input type="text" name="%1$s[rest]" class="widefat" value="%2$s">',
-             $this->option,
+             self::$option,
             esc_attr($default)
         );
     }
 
-    public function setting_render_segments() {
-        $options = get_option($this->option);
+    public static function setting_render_segments() {
+        $options = get_option(self::$option);
         $default = isset($options['segments']) ? $options['segments'] : '';
 
         printf(
             '<input type="text" name="%1$s[segments]" placeholder="All" class="widefat" value="%2$s">',
-            $this->option,
+            self::$option,
             esc_attr($default)
         );
     }
 
-    public function setting_render_title() {
-        $options = get_option($this->option);
+    public static function setting_render_title() {
+        $options = get_option(self::$option);
         $default = isset($options['title']) ? $options['title'] : '';
 
         printf(
             '<input type="text" name="%1$s[title]" class="widefat" value="%2$s">',
-            $this->option,
+            self::$option,
             esc_attr($default)
         );
     }
 
-     public function setting_render_utm() {
-        $options = get_option($this->option);
+     public static function setting_render_utm() {
+        $options = get_option(self::$option);
         $default = isset($options['utm']) ? $options['utm'] : '';
 
         printf(
             '<input type="text" name="%1$s[utm]" placeholder="utm_source=site&utm_medium=webpush" class="widefat" value="%2$s">',
-            $this->option,
+            self::$option,
             esc_attr($default)
         );
     }
 
-    public function setting_render_popup() {
-        $options = get_option($this->option);
+    public static function setting_render_popup() {
+        $options = get_option(self::$option);
         $default = isset($options['popup']) ? $options['popup'] : 0;
 
         printf(
             '<input type="checkbox" name="%1$s[popup]" value="1" %2$s>',
-            $this->option,
+            self::$option,
             checked($default, 1, false)
         );
     }
@@ -307,13 +303,13 @@ class Knife_Push_Service {
     /**
      * Send push using OneSignal API
      */
-    public function send_push() {
+    public static function send_push() {
         $post_id = $_POST['post'];
 
         if(empty($post_id))
             wp_send_json_error(__("Неверный ID записи", 'knife-theme'));
 
-        $opts = get_option($this->option);
+        $opts = get_option(self::$option);
 
         if(empty($opts['appid']) || empty($opts['rest']))
             wp_send_json_error(__("Необходимо заполнить опции на странице настроек", 'knife-theme'));
@@ -361,8 +357,15 @@ class Knife_Push_Service {
         if(!isset($answer->id))
             wp_send_json_error(__("Пуш не отправлен. Что-то пошло не так", 'knife-theme'));
 
-        update_post_meta($post_id, $this->meta, $answer->id);
+        update_post_meta($post_id, self::$meta, $answer->id);
 
         wp_send_json_success(__("Пуш успешно отправлен", 'knife-theme'));
     }
 }
+
+
+/**
+ * Load module
+ */
+Knife_Push_Service::load_module();
+

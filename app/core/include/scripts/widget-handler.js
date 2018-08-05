@@ -1,19 +1,21 @@
-(function() {
-	jQuery(document).on('change', '.knife-widget-taxonomy', function() {
-		var list = jQuery(this).closest('.widget-content').find('.knife-widget-termlist');
+jQuery(document).ready(function($) {
 
-		var data = {
-			action: 'knife_widget_terms',
-			filter: jQuery(this).val(),
-			nonce: knife_widget_handler.nonce
-		}
+  $(document).on('change', '.knife-widget-taxonomy', function() {
+    var list = $(this).closest('.widget-content').find('.knife-widget-termlist');
 
-		jQuery.post(ajaxurl, data, function(response) {
-			list.html(response);
+    var data = {
+      action: 'knife_widget_terms',
+      filter: jQuery(this).val(),
+      nonce: knife_widget_handler.nonce
+    }
 
-			return list.show();
-		});
+    $.post(ajaxurl, data, function(response) {
+      list.html(response);
 
-		return list.hide();
-	});
-})();
+      return list.show();
+    });
+
+    return list.hide();
+  });
+
+});

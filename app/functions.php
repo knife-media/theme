@@ -489,6 +489,9 @@ require get_template_directory() . '/core/modules/news-manager.php';
 // Story post type
 require get_template_directory() . '/core/modules/story-manager.php';
 
+// Select post type
+require get_template_directory() . '/core/modules/select-links.php';
+
 // Special projects taxonomy settings
 require get_template_directory() . '/core/modules/special-projects.php';
 

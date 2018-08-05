@@ -25,7 +25,7 @@
                     );
 
                     the_lead(
-                        '<div class="post__header-excerpt custom">',
+                        '<div class="post__header-excerpt">',
                         '</div>'
                     );
 
