@@ -169,7 +169,7 @@ class Knife_Select_Links {
 
         $items = get_post_meta(get_the_ID(), self::$meta . '-items');
 
-        foreach($items as $i => $item) {
+        foreach($items as $item) {
             $content = self::get_item($item, $content);
         }
 
@@ -260,10 +260,6 @@ class Knife_Select_Links {
 
                 if(!empty($value)) {
                     $meta[$i][$key] = sanitize_text_field($value);
-
-                    if($key === 'link') {
-                        $meta[$i]['post'] = url_to_postid($value);
-                    }
                 }
             }
         }
@@ -277,20 +273,9 @@ class Knife_Select_Links {
     /**
      * Get select item from meta
      */
-    private static function get_item($item, $content = '', $meta = '') {
-        if(intval($item['post']) > 0) {
-            $meta = the_info(
-                '<div class="select__meta meta">', '</div>',
-                ['author', 'date'], false, $item['post']
-            );
-        }
-
-        $link = sprintf('<a class="select__link" href="%2$s">%1$s</a>',
+    private static function get_item($item, $content = '') {
+        $select = sprintf('<div class="select"><a class="select__link" href="%2$s">%1$s</a></div>',
             esc_html($item['text'] ?? ''), esc_url($item['link'] ?? '')
-        );
-
-        $select = sprintf('<div class="select">%s</div>',
-            $meta . $link
         );
 
         return $content . $select;

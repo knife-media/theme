@@ -50,8 +50,8 @@ if(!function_exists('the_info')) :
      * @since 1.3
      * @version 1.4
      */
-    function the_info($before = '', $after = '', $options = [], $echo = true, $post = 0) {
-        $info = Knife_Post_Info::get_info($options, $post);
+    function the_info($before = '', $after = '', $options = [], $echo = true) {
+        $info = Knife_Post_Info::get_info($options);
 
         $output = $before . $info . $after;
 

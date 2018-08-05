@@ -1,6 +1,7 @@
 .post {
   display: flex;
   flex-flow: column wrap;
+  align-items: center;
   flex: 1 1 42.25rem;
   position: relative;
 
@@ -17,7 +18,7 @@
 
     width: 100%;
     max-width: $content-width;
-    margin: 0 auto 1rem;
+    margin: 0 0 1rem;
 
     .post__header-meta {
       display: block;
@@ -110,7 +111,7 @@
 
   .post__form {
     max-width: $content-width;
-    margin: 0 auto 1rem;
+    margin: 0 0 1rem;
   }
 
 
@@ -119,11 +120,11 @@
 
     width: 100%;
     max-width: $content-width;
-    margin: 1rem auto;
+    margin: 1rem 0;
 
     .post__footer-nav {
       .refers__link:first-child {
-      margin-right: auto;
+        margin-right: auto;
       }
     }
 
@@ -214,8 +215,11 @@
   }
 
   &.post--select {
+    align-items: flex-end;
+    padding-right: 18.75rem;
+
     .post__header {
-      max-width: 52rem;
+      max-width: 50rem;
 
       .post__header-title {
         font-size: 3.75rem;
@@ -235,7 +239,7 @@
 
       .post__header-excerpt {
         p {
-          font-size: 1.25rem;
+          font-size: 1.375rem;
           line-height: 1.375;
           letter-spacing: 0;
 
@@ -252,13 +256,16 @@
     }
 
     .post__content {
-      max-width: 52rem;
-      margin-left: auto;
-      margin-right: auto;
+      max-width: 50rem;
     }
 
     .post__footer {
-      max-width: 52rem;
+      max-width: 50rem;
+    }
+
+    @media screen and (max-width: 1199px) {
+      align-items: center;
+      padding-right: 1rem;
     }
   }
 

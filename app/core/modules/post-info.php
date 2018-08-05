@@ -16,11 +16,7 @@ class Knife_Post_Info {
     /**
      * Common method to output posts info meta
      */
-    public static function get_info($options = [], $post = 0, $output = '') {
-        $GLOBALS['post'] = get_post($post);
-
-        setup_postdata($post);
-
+    public static function get_info($options = [], $output = '') {
         foreach($options as $option) {
             $method = 'info_' . $option;
 
@@ -30,8 +26,6 @@ class Knife_Post_Info {
 
             $output = $output . self::$method();
         }
-
-//        wp_reset_postdata();
 
         return $output;
     }
