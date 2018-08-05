@@ -1,5 +1,5 @@
 (function() {
-  if(typeof knife_push.appid === 'undefined')
+  if(typeof knife_push === 'undefined')
     return false;
 
   OneSignal = window.OneSignal || [];
@@ -81,7 +81,7 @@
   }
 
   document.addEventListener('DOMContentLoaded', function() {
-    if(checkStorage() === false) {
+    if(checkStorage() === false || typeof knife_push.appid === 'undefined') {
       return false;
     }
 
