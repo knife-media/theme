@@ -86,6 +86,15 @@ class Knife_Select_Links {
 
             return $default;
         });
+
+        // Select archive header
+        add_filter('knife_archive_header', function($header) {
+            if(is_post_type_archive(self::$slug)) {
+                $header = '';
+            }
+
+            return $header;
+        });
     }
 
 
@@ -260,6 +269,10 @@ class Knife_Select_Links {
 
                 if(!empty($value)) {
                     $meta[$i][$key] = sanitize_text_field($value);
+
+                    if($key === 'link') {
+                        $meta[$i]['post'] = url_to_postid($value);
+                    }
                 }
             }
         }
@@ -273,9 +286,27 @@ class Knife_Select_Links {
     /**
      * Get select item from meta
      */
-    private static function get_item($item, $content = '') {
-        $select = sprintf('<div class="select"><a class="select__link" href="%2$s">%1$s</a></div>',
+    private static function get_item($item, $content = '', $meta = '') {
+        global $post;
+
+        if(intval($item['post']) > 0) {
+            $post = get_post($item['post']);
+            setup_postdata($post);
+
+            $meta = the_info(
+                '<div class="select__meta meta">', '</div>',
+                ['author', 'date'], false
+            );
+
+            wp_reset_postdata();
+        }
+
+        $link = sprintf('<a class="select__link" href="%2$s">%1$s</a>',
             esc_html($item['text'] ?? ''), esc_url($item['link'] ?? '')
+        );
+
+        $select = sprintf('<div class="select">%s</div>',
+            $meta . $link
         );
 
         return $content . $select;
