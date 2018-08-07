@@ -535,7 +535,7 @@ require get_template_directory() . '/core/modules/google-search.php';
 require get_template_directory() . '/core/modules/custom-background.php';
 
 // TinyMCE extending plugins
-require get_template_directory() . '/core/modules/mce-buttons.php';
+require get_template_directory() . '/core/modules/mce-plugins.php';
 
 // Add custom Yandex.Zen feed template
 require get_template_directory() . '/core/modules/yandex-zen.php';
