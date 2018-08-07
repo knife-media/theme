@@ -34,10 +34,6 @@ class Knife_MCE_Plugins {
      * Init tinymce plugins
      */
     public static function init_mce() {
-        if(!current_user_can('edit_pages')) {
-            return;
-        }
-
         if(get_user_option('rich_editing') !== 'true') {
             return;
         }
