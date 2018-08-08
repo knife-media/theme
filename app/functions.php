@@ -550,3 +550,6 @@ require get_template_directory() . '/core/helpers/theme-shortcodes.php';
 
 // Add plugins snippets
 require get_template_directory() . '/core/helpers/plugin-snippets.php';
+
+// Custom template filters for promo projects
+require get_template_directory() . '/core/helpers/promo-filters.php';
