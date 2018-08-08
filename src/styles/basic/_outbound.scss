@@ -51,17 +51,10 @@
 
   .outbound__image {
     position: absolute;
-<<<<<<< HEAD
     top: 2rem;
     right: 2rem;
 
     width: 60px;
-=======
-    top: 1.5rem;
-    right: 2rem;
-
-    width: 75px;
->>>>>>> 641772af4b145d38503e279dbd425e61fab7752b
     height: auto;
   }
 
@@ -75,14 +68,12 @@
 
   &.outbound--skyeng {
     max-width: none;
-<<<<<<< HEAD
     margin-top: 1rem;
     margin-bottom: 0;
     padding: 2rem 7rem 2rem 2rem;
 
     color: $color-white;
     background: linear-gradient(to bottom, #3f76ea 0%, #3e71e0 100%);
-=======
 
     margin-top: 1rem;
     margin-bottom: -1rem;
@@ -90,7 +81,6 @@
 
     color: $color-white;
     background-color: #2f71ef;
->>>>>>> 641772af4b145d38503e279dbd425e61fab7752b
 
     .outbound__promo {
       font-size: 1.625rem;
@@ -109,7 +99,6 @@
       }
     }
   }
-<<<<<<< HEAD
 
   &:hover {
     filter: brightness(120%);
@@ -118,6 +107,4 @@
   @media screen and (max-width: 1023px) {
     width: 100%;
   }
-=======
->>>>>>> 641772af4b145d38503e279dbd425e61fab7752b
 }
