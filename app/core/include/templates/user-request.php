@@ -32,6 +32,10 @@
                 border: 1px solid #e5e5e5;
             }
 
+            article {
+                word-wrap: break-word;
+            }
+
             header {
                 display: grid;
                 grid-template-columns: auto 1fr;
