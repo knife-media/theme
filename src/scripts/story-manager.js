@@ -218,14 +218,21 @@
   /**
    * Set custom background
    */
-  glide.on('mount.after', function() {
+  glide.on('build.after', function() {
     if(typeof knife_story_options.background === 'undefined') {
       return false;
     }
 
     var media = document.createElement('div');
     media.classList.add('glide__backdrop');
-    media.style.backgroundImage = 'url(' + knife_story_options.background + ')';
+
+    var image = new Image();
+
+    image.onload = function() {
+      media.style.backgroundImage = 'url(' + knife_story_options.background + ')';
+    }
+
+    image.src = knife_story_options.background;
 
     // Append blur element
     (function() {
@@ -345,29 +352,6 @@
 
 
   /**
-   * Reload page if user go back with browser cache
-   *
-   * @link https://stackoverflow.com/a/13123626
-   */
-  window.addEventListener('pageshow', function(event) {
-    if(event.persisted) {
-      window.location.reload(false)
-    }
-  });
-
-
-  /**
-   * Set story height on and slow slider load
-   */
-  window.addEventListener('load', function() {
-    var offset = story.getBoundingClientRect();
-    story.style.height = window.innerHeight - offset.top - window.pageYOffset + 'px';
-
-    return story.classList.add('glide--active');
-  });
-
-
-  /**
    * Disable touch bounce effect
    */
   glide.on('build.after', function() {
@@ -387,6 +371,29 @@
         e.preventDefault();
       }
     }, true);
+  });
+
+
+  /**
+   * Set story height after slider build
+   */
+  glide.on('build.after', function() {
+    var offset = story.getBoundingClientRect();
+    story.style.height = window.innerHeight - offset.top - window.pageYOffset + 'px';
+
+    return story.classList.add('glide--active');
+  });
+
+
+  /**
+   * Reload page if user go back with browser cache
+   *
+   * @link https://stackoverflow.com/a/13123626
+   */
+  window.addEventListener('pageshow', function(event) {
+    if(event.persisted) {
+      window.location.reload(false)
+    }
   });
 
 
