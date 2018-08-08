@@ -214,70 +214,6 @@
   });
 
 
-
-  /**
-   * Set custom background
-   */
-  glide.on('build.after', function() {
-    if(typeof knife_story_options.background === 'undefined') {
-      return false;
-    }
-
-    var media = document.createElement('div');
-    media.classList.add('glide__backdrop');
-
-    var image = new Image();
-
-    image.onload = function() {
-      media.style.backgroundImage = 'url(' + knife_story_options.background + ')';
-    }
-
-    image.src = knife_story_options.background;
-
-    // Append blur element
-    (function() {
-      if(typeof knife_story_options.blur === 'undefined') {
-        return false;
-      }
-
-      var blur = parseInt(knife_story_options.blur);
-
-      if(blur <= 0) {
-        return false;
-      }
-
-      // Add negative margins to blured backdrop
-      // https://stackoverflow.com/a/12224347/
-      media.style.margin = '-' + blur + 'px';
-
-      // Add blur
-      media.style.filter = 'blur(' + blur + 'px)';
-    })();
-
-
-    // Append shadow element
-    (function() {
-      if(typeof knife_story_options.shadow === 'undefined') {
-        return false;
-      }
-
-      var alpha = parseInt(knife_story_options.shadow) / 100;
-
-      if(alpha <= 0 || alpha > 1) {
-        return false;
-      }
-
-      var shadow = document.createElement('div');
-      shadow.classList.add('glide__shadow');
-      shadow.style.backgroundColor = 'rgba(0, 0, 0, ' + alpha + ')';
-
-      media.appendChild(shadow);
-    })();
-
-    return story.appendChild(media);
-  });
-
-
   /**
    * Add bullets events
    */
@@ -380,8 +316,71 @@
   glide.on('build.after', function() {
     var offset = story.getBoundingClientRect();
     story.style.height = window.innerHeight - offset.top - window.pageYOffset + 'px';
+  });
 
-    return story.classList.add('glide--active');
+
+  /**
+   * Set custom background
+   */
+  glide.on('build.after', function() {
+    if(typeof knife_story_options.background === 'undefined') {
+      return story.classList.add('glide--active');
+    }
+
+    var image = new Image();
+    image.addEventListener('load', function() {
+      return story.classList.add('glide--active');
+    });
+
+    image.src = knife_story_options.background;
+
+
+    var media = document.createElement('div');
+    media.classList.add('glide__backdrop');
+    media.style.backgroundImage = 'url(' + knife_story_options.background  + ')';
+
+    // Append blur element
+    (function() {
+      if(typeof knife_story_options.blur === 'undefined') {
+        return false;
+      }
+
+      var blur = parseInt(knife_story_options.blur);
+
+      if(blur <= 0) {
+        return false;
+      }
+
+      // Add negative margins to blured backdrop
+      // https://stackoverflow.com/a/12224347/
+      media.style.margin = '-' + blur + 'px';
+
+      // Add blur
+      media.style.filter = 'blur(' + blur + 'px)';
+    })();
+
+
+    // Append shadow element
+    (function() {
+      if(typeof knife_story_options.shadow === 'undefined') {
+        return false;
+      }
+
+      var alpha = parseInt(knife_story_options.shadow) / 100;
+
+      if(alpha <= 0 || alpha > 1) {
+        return false;
+      }
+
+      var shadow = document.createElement('div');
+      shadow.classList.add('glide__shadow');
+      shadow.style.backgroundColor = 'rgba(0, 0, 0, ' + alpha + ')';
+
+      media.appendChild(shadow);
+    })();
+
+
+    return story.appendChild(media);
   });
 
 
