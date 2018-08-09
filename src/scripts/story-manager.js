@@ -215,6 +215,16 @@
 
 
   /**
+   * Set story height before slider mount
+   */
+  glide.on('mount.before', function() {
+    var offset = story.getBoundingClientRect();
+    story.style.height = window.innerHeight - offset.top - window.pageYOffset + 'px';
+  });
+
+
+
+  /**
    * Add bullets events
    */
   glide.on(['mount.after', 'run'], function() {
@@ -307,15 +317,6 @@
         e.preventDefault();
       }
     }, true);
-  });
-
-
-  /**
-   * Set story height after slider build
-   */
-  glide.on('build.after', function() {
-    var offset = story.getBoundingClientRect();
-    story.style.height = window.innerHeight - offset.top - window.pageYOffset + 'px';
   });
 
 
