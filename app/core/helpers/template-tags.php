@@ -35,9 +35,10 @@ if(!function_exists('the_info')) :
      * Public function using on templates to get current post lead text
      *
      * @since 1.3
+     * @version 1.4
      */
-    function the_info($before = '', $after = '', $options = '', $echo = true) {
-        $info = (new Knife_Post_Info)->get_info($options);
+    function the_info($before = '', $after = '', $options = [], $echo = true) {
+        $info = Knife_Post_Info::get_info($options);
 
         $output = $before . $info . $after;
 

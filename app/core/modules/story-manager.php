@@ -148,7 +148,7 @@ class Knife_Story_Manager {
             return;
         }
 
-        $version = '3.1.0';
+        $version = '3.2.2';
         $include = get_template_directory_uri() . '/assets';
 
         // Enqueue swiper js to bottom
@@ -167,9 +167,13 @@ class Knife_Story_Manager {
         $post_id = get_the_ID();
         $stories = $this->convert_stories($post_id);
 
+        $options = [];
+
         foreach($this->opts as $item) {
             $options[$item] = get_post_meta($post_id, $this->meta . "-{$item}", true);
         }
+
+        $options['action'] = __('Share story — last', 'knife-media');
 
         // Add stories options object
         wp_localize_script('knife-theme', 'knife_story_options', $options);
@@ -316,7 +320,13 @@ class Knife_Story_Manager {
                     $i++;
                 }
 
-                $meta[$i][$key] = $value;
+                if($key === 'entry') {
+                    $meta[$i][$key] = wp_kses_post($value);
+                }
+
+                if($key === 'media') {
+                    $meta[$i][$key] = absint($value);
+                }
             }
         }
 

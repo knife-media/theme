@@ -6,6 +6,7 @@
 *
 * @package knife-theme
 * @since 1.2
+* @version 1.4
 */
 
 
@@ -14,8 +15,6 @@ if (!defined('WPINC')) {
 }
 
 
-(new Knife_Post_Lead)->init();
-
 class Knife_Post_Lead {
    /**
     * Backward compatibility meta name
@@ -23,7 +22,7 @@ class Knife_Post_Lead {
     * @access  private
     * @var     string
     */
-    private $meta = 'lead-text';
+    private static $meta = 'lead-text';
 
 
    /**
@@ -32,7 +31,7 @@ class Knife_Post_Lead {
     * @access  private
     * @var     array
     */
-    private $type = ['post'];
+    private static $type = ['post'];
 
 
     /**
@@ -40,52 +39,57 @@ class Knife_Post_Lead {
      *
      * @since 1.3
      */
-    public function init() {
-        add_action('save_post', [$this, 'save_meta']);
+    public static function init() {
+        add_action('save_post', [__CLASS__, 'save_meta']);
 
         // add lead-text metabox
-        add_action('add_meta_boxes', [$this, 'add_metabox']);
+        add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
 
         // update type array by filters
-        add_action('init', [$this, 'set_type'], 20);
+        add_action('init', [__CLASS__, 'set_type'], 20);
     }
 
 
     /**
      * Update type array by modules filters
      */
-    public function set_type() {
+    public static function set_type() {
         /**
          * Filter post lead support post types
          *
          * @since 1.3
          * @param array $type
          */
-        $this->type = apply_filters('knife_post_lead_type', $this->type);
+        self::$type = apply_filters('knife_post_lead_type', self::$type);
     }
 
 
     /**
      * Add lead-text metabox
      */
-    public function add_metabox() {
-        add_meta_box('knife-lead-metabox', __('Лид текст'), [$this, 'print_metabox'], $this->type, 'normal', 'low');
+    public static function add_metabox() {
+        add_meta_box('knife-lead-metabox', __('Лид текст'), [__CLASS__, 'print_metabox'], self::$type, 'normal', 'low');
     }
 
 
     /**
      * Print wp-editor based metabox for lead-text meta
      */
-    public function print_metabox($post, $box) {
-        $lead = get_post_meta($post->ID, $this->meta, true);
+    public static function print_metabox($post, $box) {
+        $lead = get_post_meta($post->ID, self::$meta, true);
 
         wp_editor($lead, 'knife-lead-editor', [
             'media_buttons' => false,
             'textarea_name' =>
-            $this->meta,
+            self::$meta,
             'teeny' => true,
-            'tinymce' => false,
-            'editor_height' => 100
+            'tinymce' => true,
+            'tinymce' => [
+                'toolbar1' => 'bold,italic,link',
+                'block_formats' => 'Paragraph=p;Heading 2=h2;Heading 3=h3;Heading 4=h4'
+            ],
+            'editor_height' => 100,
+            'drag_drop_upload' => false
         ]);
     }
 
@@ -93,12 +97,12 @@ class Knife_Post_Lead {
     /**
      * Get post meta
      */
-    public function get_meta($post = 0, $lead = '') {
+    public static function get_meta($post = 0, $lead = '') {
         if(!$post = get_post($post)) {
             return $lead;
         }
 
-        $lead = get_post_meta($post->ID, $this->meta, true);
+        $lead = get_post_meta($post->ID, self::$meta, true);
 
         if(strlen($lead) > 0) {
             $lead = wpautop($lead);
@@ -110,20 +114,29 @@ class Knife_Post_Lead {
     /**
      * Save post options
      */
-    public function save_meta($post_id) {
-        if(!in_array(get_post_type($post_id), $this->type))
+    public static function save_meta($post_id) {
+        if(!in_array(get_post_type($post_id), self::$type)) {
             return;
+        }
 
-        if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
+        if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return;
+        }
 
-        if(!current_user_can('edit_post', $post_id))
+        if(!current_user_can('edit_post', $post_id)) {
             return;
+        }
 
         // Save lead-text meta
-        if(!empty($_REQUEST[$this->meta]))
-            update_post_meta($post_id, $this->meta, $_REQUEST[$this->meta]);
-        else
-            delete_post_meta($post_id, $this->meta);
+        if(!empty($_REQUEST[self::$meta])) {
+            update_post_meta($post_id, self::$meta, $_REQUEST[self::$meta]);
+        }
+        else {
+            delete_post_meta($post_id, self::$meta);
+        }
     }
 }
+
+
+Knife_Post_Lead::init();
+

@@ -1,0 +1,78 @@
+#knife-select-box .knife-select-manage {
+  margin-bottom: 20px;
+}
+
+#knife-select-box .knife-select-manage .spinner {
+  float: none;
+}
+
+#knife-select-box .knife-select-manage input {
+  line-height: 1.5;
+  transition: .5s;
+  transition-property: border, background;
+
+  border: solid 1px #ddd;
+}
+
+#knife-select-box .knife-select-manage input.warning {
+  background: rgba(170, 0, 0, .15);
+
+  border: solid 1px #a00;
+}
+
+#knife-select-box .knife-select-items {
+  display: block;
+  position: relative;
+
+  margin: 0 -12px -12px;
+  overflow: hidden;
+  background: #f1f1f1;
+
+  border-top: solid 1px #ddd;
+}
+
+#knife-select-box .knife-select-item {
+  position: relative;
+
+  min-height: 50px;
+  margin: 12px;
+  padding: 0 30px 10px 10px;
+  background: #fff;
+
+  border: solid 1px #ddd;
+  border-radius: 2px;
+}
+
+#knife-select-box .knife-select-dump {
+  display: block;
+  box-sizing: border-box;
+
+  height: 72px;
+  margin: 12px;
+
+  border: 2px dashed #ddd;
+  border-radius 3px;
+}
+
+#knife-select-box .knife-select-item h1 {
+  font-size: 20px;
+}
+
+#knife-select-box .knife-select-item .dashicons {
+  position: absolute;
+  right: 5px;
+
+  font-size: 16px;
+}
+
+#knife-select-box .knife-select-item .dashicons-menu {
+  top: 5px;
+  cursor: move;
+}
+
+#knife-select-box .knife-select-item .dashicons-trash {
+  bottom: 5px;
+  cursor: pointer;
+
+  color: #a00;
+}

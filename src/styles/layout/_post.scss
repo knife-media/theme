@@ -1,6 +1,7 @@
 .post {
   display: flex;
   flex-flow: column wrap;
+  align-items: center;
   flex: 1 1 42.25rem;
   position: relative;
 
@@ -17,7 +18,7 @@
 
     width: 100%;
     max-width: $content-width;
-    margin: 0 auto 1rem;
+    margin: 0 0 1rem;
 
     .post__header-meta {
       display: block;
@@ -75,13 +76,24 @@
       width: 100%;
 
       p {
-        line-height: 1.6;
+        margin-bottom: 1rem;
+        line-height: 1.5;
         font-size: 1.125rem;
         font-weight: 500;
         letter-spacing: .25px;
 
         @media screen and (max-width: 767px) {
           font-size: 1rem;
+        }
+      }
+
+      a {
+        color: $color-primary;
+        border-bottom: 1px solid $color-primary;
+
+        &:hover {
+          filter: brightness(150%);
+          border-bottom-color: transparent;
         }
       }
     }
@@ -99,7 +111,7 @@
 
   .post__form {
     max-width: $content-width;
-    margin: 0 auto 1rem;
+    margin: 0 0 1rem;
   }
 
 
@@ -108,11 +120,11 @@
 
     width: 100%;
     max-width: $content-width;
-    margin: 1rem auto;
+    margin: 1rem 0;
 
     .post__footer-nav {
       .refers__link:first-child {
-      margin-right: auto;
+        margin-right: auto;
       }
     }
 
@@ -199,6 +211,61 @@
 
     @media screen and (max-width: 767px) {
       padding: 1rem;
+    }
+  }
+
+  &.post--select {
+    align-items: flex-end;
+    padding-right: 18.75rem;
+
+    .post__header {
+      max-width: 50rem;
+
+      .post__header-title {
+        font-size: 3.75rem;
+        line-height: 1;
+
+        @media screen and (max-width: 1023px) {
+          margin-bottom: .75rem;
+          font-size: 2.5rem;
+          line-height: 1.125;
+        }
+
+        @media screen and (max-width: 767px) {
+          font-size: 2rem;
+          line-height: 1.25;
+        }
+      }
+
+      .post__header-excerpt {
+        p {
+          font-size: 1.375rem;
+          line-height: 1.375;
+          letter-spacing: 0;
+
+          @media screen and (max-width: 1023px) {
+            font-size: 1.125rem;
+            line-height: 1.5;
+          }
+
+          @media screen and (max-width: 767px) {
+            font-size: 1rem;
+          }
+        }
+      }
+    }
+
+    .post__content {
+      max-width: 50rem;
+    }
+
+    .post__footer {
+      max-width: 50rem;
+    }
+
+    @media screen and (max-width: 1199px) {
+      align-items: center;
+      padding-right: 1rem;
     }
   }
 

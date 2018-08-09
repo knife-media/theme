@@ -1,7 +1,7 @@
 <div id="knife-push-box" data-ajaxurl="<?php echo admin_url('admin-ajax.php') ?>" data-post="<?php echo get_the_ID() ?>" style="margin-bottom: -10px;">
     <?php
-        $opts = get_option($this->option);
-        $push = get_post_meta(get_the_ID(), $this->meta, true);
+        $opts = get_option(self::$option);
+        $push = get_post_meta(get_the_ID(), self::$meta, true);
 
         $title = empty($opts['title']) ? __('Новая статья', 'knife-theme') : $opts['title'];
     ?>

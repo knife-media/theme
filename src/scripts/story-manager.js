@@ -41,6 +41,12 @@
 
 
   /**
+   * Declare global options object
+   */
+  var options = {}
+
+
+  /**
    * Add slides
    */
   glide.on('mount.before', function() {
@@ -50,7 +56,7 @@
 
     for (var i = 0, item; item = knife_story_stories[i]; i++) {
       var slide = document.createElement('div');
-      slide.classList.add('glide__slide-wrap');
+      slide.classList.add('glide__slide-content');
 
       // Append kicker
       (function(){
@@ -95,12 +101,49 @@
       })();
 
 
+      var wrap = document.createElement('div');
+      wrap.classList.add('glide__slide-wrap');
+      wrap.appendChild(slide);
+
       var block = document.createElement('div');
       block.classList.add('glide__slide');
-      block.appendChild(slide);
+      block.appendChild(wrap);
 
       story.querySelector('.glide__slides').appendChild(block);
     }
+  });
+
+
+  /**
+   * Apend share buttons to the last slide
+   */
+  glide.on('mount.before', function() {
+    var slides = story.querySelectorAll('.glide__slide');
+
+    if(slides.length <= 1) {
+      return false;
+    }
+
+    var share = slides[0].querySelector('.share');
+
+    if(share === null) {
+      return false
+    }
+
+    var clone = share.cloneNode(true);
+    var slide = slides[slides.length - 1];
+
+    if(typeof knife_story_options.action !== 'undefined') {
+      var links = clone.querySelectorAll('.share__link');
+
+      for (var i = 0, link; link = links[i]; i++) {
+        link.setAttribute('data-action', knife_story_options.action);
+      }
+    }
+
+    slide.querySelector('.glide__slide-content').appendChild(clone);
+
+    return window.shareButtons();
   });
 
 
@@ -132,12 +175,10 @@
       return false;
     }
 
+    options.href = link.href;
+
     var empty = document.createElement('div');
     empty.classList.add('glide__slide', 'glide__slide--empty');
-
-    glide.update({
-      href: link.href
-    });
 
     return story.querySelector('.glide__slides').appendChild(empty);
   });
@@ -173,18 +214,130 @@
   });
 
 
+  /**
+   * Add bullets events
+   */
+  glide.on(['mount.after', 'run'], function() {
+    var bullets = story.querySelectorAll('.glide__bullets-item');
+
+    for (var i = 0, bullet; bullet = bullets[i]; i++) {
+      bullet.classList.remove('glide__bullets-item--active');
+
+      if(glide.index === i) {
+        bullet.classList.add('glide__bullets-item--active');
+      }
+    }
+  });
+
+
+  /**
+   * Add last slide index to options
+   */
+  glide.on('mount.after', function() {
+    var slides = story.querySelectorAll('.glide__slide');
+    options.count = slides.length - 1
+  });
+
+
+  /**
+   * Manage prev slider control
+   */
+  glide.on(['mount.after', 'run'], function(move) {
+    var prev = story.querySelector('.glide__control--prev');
+
+    prev.classList.remove('glide__control--disabled');
+
+    if(glide.index === 0) {
+      prev.classList.add('glide__control--disabled');
+    }
+  });
+
+
+  /**
+   * Manage next slider control
+   */
+  glide.on('run', function(move) {
+    var next = story.querySelector('.glide__control--next');
+
+    next.classList.remove('glide__control--disabled');
+
+    if(glide.index === options.count) {
+      next.classList.add('glide__control--disabled');
+    }
+  });
+
+
+  /**
+   * Hide story if extra slide exists
+   */
+  glide.on('run', function(move) {
+    if(glide.index === options.count && options.href) {
+      story.classList.remove('glide--active');
+    }
+  });
+
+
+  /**
+   * Load next story if exists
+   */
+  glide.on('run.after', function(move) {
+    if(glide.index === options.count && options.href) {
+      document.location.href = options.href;
+    }
+  });
+
+
+  /**
+   * Disable touch bounce effect
+   */
+  glide.on('build.after', function() {
+    var start = 0;
+
+    story.addEventListener('touchstart', function(e) {
+      var touch = e.changedTouches[0];
+
+      start = touch.pageY;
+    }, true);
+
+
+    story.addEventListener('touchmove', function(e) {
+      var touch = e.changedTouches[0];
+
+      if(start < touch.pageY && window.pageYOffset === 0) {
+        e.preventDefault();
+      }
+    }, true);
+  });
+
+
+  /**
+   * Set story height after slider build
+   */
+  glide.on('build.after', function() {
+    var offset = story.getBoundingClientRect();
+    story.style.height = window.innerHeight - offset.top - window.pageYOffset + 'px';
+  });
+
 
   /**
    * Set custom background
    */
-  glide.on('mount.after', function() {
+  glide.on('build.after', function() {
     if(typeof knife_story_options.background === 'undefined') {
-      return false;
+      return story.classList.add('glide--active');
     }
+
+    var image = new Image();
+    image.addEventListener('load', function() {
+      return story.classList.add('glide--active');
+    });
+
+    image.src = knife_story_options.background;
+
 
     var media = document.createElement('div');
     media.classList.add('glide__backdrop');
-    media.style.backgroundImage = 'url(' + knife_story_options.background + ')';
+    media.style.backgroundImage = 'url(' + knife_story_options.background  + ')';
 
     // Append blur element
     (function() {
@@ -226,83 +379,8 @@
       media.appendChild(shadow);
     })();
 
+
     return story.appendChild(media);
-  });
-
-
-  /**
-   * Add bullets events
-   */
-  glide.on(['mount.after', 'run'], function() {
-    var bullets = story.querySelectorAll('.glide__bullets-item');
-
-    for (var i = 0, bullet; bullet = bullets[i]; i++) {
-      bullet.classList.remove('glide__bullets-item--active');
-
-      if(glide.index === i) {
-        bullet.classList.add('glide__bullets-item--active');
-      }
-    }
-  });
-
-
-  /**
-   * Add last slide index to settings
-   */
-  glide.on('mount.after', function() {
-    var slides = story.querySelectorAll('.glide__slide');
-
-    glide.update({
-      count: slides.length - 1
-    });
-  });
-
-
-  /**
-   * Manage prev slider control
-   */
-  glide.on(['mount.after', 'run'], function(move) {
-    var prev = story.querySelector('.glide__control--prev');
-
-    prev.classList.remove('glide__control--disabled');
-
-    if(glide.index === 0) {
-      prev.classList.add('glide__control--disabled');
-    }
-  });
-
-
-  /**
-   * Manage next slider control
-   */
-  glide.on('run', function(move) {
-    var next = story.querySelector('.glide__control--next');
-
-    next.classList.remove('glide__control--disabled');
-
-    if(glide.index === glide.settings.count) {
-      next.classList.add('glide__control--disabled');
-    }
-  });
-
-
-  /**
-   * Hide story if extra slide exists
-   */
-  glide.on('run', function(move) {
-    if(glide.index === glide.settings.count && glide.settings.href) {
-      story.classList.remove('glide--active');
-    }
-  });
-
-
-  /**
-   * Load next story if exists
-   */
-  glide.on('run.after', function(move) {
-    if(glide.index === glide.settings.count && glide.settings.href) {
-      document.location.href = glide.settings.href;
-    }
   });
 
 
@@ -315,40 +393,6 @@
     if(event.persisted) {
       window.location.reload(false)
     }
-  });
-
-
-  /**
-   * Set story height on and slow slider load
-   */
-  window.addEventListener('load', function() {
-    var offset = story.getBoundingClientRect();
-    story.style.height = window.innerHeight - offset.top - window.pageYOffset + 'px';
-
-    return story.classList.add('glide--active');
-  });
-
-
-  /**
-   * Disable touch bounce effect
-   */
-  glide.on('build.after', function() {
-    var start = 0;
-
-    story.addEventListener('touchstart', function(e) {
-      var touch = e.changedTouches[0];
-
-      start = touch.pageY;
-    }, false);
-
-
-    story.addEventListener('touchmove', function(e) {
-      var touch = e.changedTouches[0];
-
-      if(start < touch.pageY && window.pageYOffset === 0) {
-        e.preventDefault();
-      }
-    }, false);
   });
 
 

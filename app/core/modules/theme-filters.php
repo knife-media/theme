@@ -43,7 +43,7 @@ class Knife_Theme_Filters {
             return 'triple';
         };
 
-        if($query->is_archive() && $query->is_main_query()) {
+        if(($query->is_archive() || $query->is_home()) && $query->is_main_query()) {
             set_query_var('widget_size', $size($query->current_post, (int) $query->found_posts));
         }
     }
@@ -53,7 +53,7 @@ class Knife_Theme_Filters {
      * Prints navigation link if needed
      */
     public function archive_more($query) {
-        if($query->is_archive() && get_next_posts_link()) {
+        if(($query->is_archive() || $query->is_home()) && get_next_posts_link()) {
             $more = next_posts_link(__('Больше статей', 'knife-theme'));
 
             /**

@@ -36,32 +36,44 @@
   }
 
   .glide__loader {
-    display: block;
+    display: flex;
+    justify-content: space-between;
     position: absolute;
     top: 40vh;
     left: 50%;
 
-    width: 100px;
-    height: 29px;
+    width: 4rem;
+    margin-left: -2rem;
 
-    fill: none;
-    transform: translate(-50%, -50%);
+    &:after,
+    &:before,
+    .glide__loader-bounce {
+      width: 8px;
+      height: 8px;
 
-    path {
-      fill: $color-text;
-      animation: loader 2.5s infinite;
+      background-color: $color-white;
+      border-radius: 50%;
 
-      &:nth-child(2) {
-        animation-delay: .1s;
-      }
+      transform: scale(0);
+      animation: loader 2s infinite;
+      animation-delay: .125s;
+    }
 
-      &:last-child {
-        animation-delay: .2s;
-      }
+    &:after {
+      content: '';
+      animation-delay: .25s;
+    }
+
+    &:before {
+      content: '';
+      animation-delay: 0s;
     }
   }
 
   .glide__track {
+    display: block;
+
+    height: 100%;
     overflow: hidden;
   }
 
@@ -97,11 +109,18 @@
       max-width: 40rem;
       padding-bottom: 1rem;
       color: $color-white;
+
+      .meta__link {
+        transition: none;
+      }
+
+      @media screen and (max-width: 767px) {
+        font-size: .75rem;
+      }
     }
 
     .glide__slide-share {
       width: 100%;
-      max-width: 40rem;
       min-width: 0;
       margin-left: 0;
       margin-right: 0;
@@ -112,7 +131,6 @@
       display: block;
 
       width: 100%;
-      max-width: 40rem;
 
       font-size: 1rem;
       font-weight: 700;
@@ -128,7 +146,14 @@
       }
 
       a {
-        border-bottom: solid 1px $color-white;
+        color: $color-adjust;
+        transition: border .25s;
+
+        border-bottom: solid 1px $color-adjust;
+
+        &:hover {
+          border-bottom-color: transparent;
+        }
       }
     }
 
@@ -136,10 +161,9 @@
       display: block;
 
       width: 100%;
-      max-width: 40rem;
       margin-bottom: 1rem;
 
-      font-size: 3rem;
+      font-size: 3.5rem;
       font-weight: 700;
       line-height: 1.075;
       letter-spacing: .5px;
@@ -149,6 +173,15 @@
       em {
         font-family: $font-serif;
         font-weight: 400;
+      }
+
+      @media screen and (max-height: 767px) {
+        font-size: 3rem;
+      }
+
+      @media screen and (max-width: 1023px) {
+        font-size: 3rem;
+        line-height: 1.075;
       }
 
       @media screen and (max-width: 767px) {
@@ -170,21 +203,25 @@
       display: flex;
       flex-flow: column nowrap;
       justify-content: center;
-      align-items: flex-start;
+      align-items: center;
       position: relative;
 
       width: calc(100% - 8rem);
       height: 100%;
       max-width: calc(#{$site-width} - 2rem);
 
-      padding: 4rem 0 3rem;
+      padding: 4rem 16rem 3rem 0;
 
-      &.glide__slide-wrap--first {
-        padding: 2rem 0 4rem;
+      &.glide__slide-wrap--head {
+        padding-top: 2rem;
+        padding-bottom: 3rem;
+      }
+
+      @media screen and (max-width: 1023px) {
+        padding-right: 0;
       }
 
       @media screen and (max-width: 767px) {
-        align-items: center;
         width: calc(100% - 4rem);
       }
 
@@ -194,12 +231,23 @@
       }
     }
 
-    .glide__slide-kicker {
-      position: absolute;
-      top: 2rem;
+    .glide__slide-content {
+      display: flex;
+      flex-flow: column nowrap;
+      justify-content: center;
+      align-items: flex-start;
+      position: relative;
 
       width: 100%;
       max-width: 40rem;
+      height: 100%;
+    }
+
+    .glide__slide-kicker {
+      position: absolute;
+      top: -2rem;
+
+      width: 100%;
       overflow: hidden;
 
       font-size: .8125rem;
@@ -209,8 +257,12 @@
       white-space: nowrap;
       text-overflow: ellipsis;
 
+      @media screen and (max-width: 767px) {
+        font-size: .75rem;
+      }
+
       @media screen and (max-width: 479px) {
-        top: 1rem;
+        top: -1.5rem;
       }
     }
 
@@ -218,7 +270,6 @@
       flex: 1;
 
       width: 100%;
-      max-width: 40rem;
 
       height: 100%;
       max-height: calc(40rem * (var(--image-ratio)));
@@ -239,7 +290,6 @@
       display: block;
 
       width: 100%;
-      max-width: 40rem;
 
       font-size: 1rem;
       font-weight: 700;
@@ -280,11 +330,16 @@
         }
       }
 
-      h4 {
+      h4, li {
         margin: 1rem 0;
 
-        font-size: 1.25rem;
-        line-height: 1.375;
+        font-size: 1.5rem;
+        line-height: 1.25;
+
+        @media screen and (max-width: 1023px) {
+          font-size: 1.25rem;
+          line-height: 1.375;
+        }
 
         @media screen and (max-width: 767px) {
           font-size: 1.125rem;
@@ -295,6 +350,20 @@
           font-size: 1rem;
           margin: .75rem 0;
         }
+      }
+
+      ul, ol {
+        margin-left: 2.5rem;
+      }
+
+      ul > li {
+        margin: 0;
+        list-style: disc;
+      }
+
+      ol > li {
+        margin: 0;
+        list-style: decimal;
       }
 
       p {
@@ -309,8 +378,10 @@
       }
 
       a {
+        color: $color-adjust;
         transition: border .25s;
-        border-bottom: solid 1px $color-white;
+
+        border-bottom: solid 1px $color-adjust;
 
         &:hover {
           border-bottom-color: transparent;
@@ -380,8 +451,8 @@
     height: 100%;
     min-width: 4rem;
     margin: 0;
-    opacity: .5;
 
+    opacity: .5;
     font-size: 2rem;
 
     transition: all .25s;
@@ -394,18 +465,26 @@
       justify-content: flex-end;
       right: 0;
 
-      width: calc(100% - 45rem);
+      width: calc((100% - 24rem) / 2);
       max-width: calc(50% - 2rem);
 
       padding-right: 1rem;
+
+      @media screen and (max-width: 1023px) {
+        width: calc(50% - 20rem);
+      }
     }
 
     &.glide__control--prev {
       justify-content: flex-start;
       left: 0;
 
-      width: calc((100% - #{$site-width}) / 2);
+      width: calc((100% - 56rem) / 2);
       padding-left: 1rem;
+
+      @media screen and (max-width: 1023px) {
+        width: calc(50% - 20rem);
+      }
     }
 
     &.glide__control--disabled {

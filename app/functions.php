@@ -489,6 +489,9 @@ require get_template_directory() . '/core/modules/news-manager.php';
 // Story post type
 require get_template_directory() . '/core/modules/story-manager.php';
 
+// Select post type
+require get_template_directory() . '/core/modules/select-links.php';
+
 // Special projects taxonomy settings
 require get_template_directory() . '/core/modules/special-projects.php';
 
@@ -532,7 +535,7 @@ require get_template_directory() . '/core/modules/google-search.php';
 require get_template_directory() . '/core/modules/custom-background.php';
 
 // TinyMCE extending plugins
-require get_template_directory() . '/core/modules/mce-buttons.php';
+require get_template_directory() . '/core/modules/mce-plugins.php';
 
 // Add custom Yandex.Zen feed template
 require get_template_directory() . '/core/modules/yandex-zen.php';
@@ -547,3 +550,6 @@ require get_template_directory() . '/core/helpers/theme-shortcodes.php';
 
 // Add plugins snippets
 require get_template_directory() . '/core/helpers/plugin-snippets.php';
+
+// Custom template filters for promo projects
+require get_template_directory() . '/core/helpers/promo-filters.php';

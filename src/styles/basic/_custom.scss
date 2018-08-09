@@ -33,12 +33,10 @@
 
   a {
     color: $color-primary;
-
     border-bottom: 1px solid $color-primary;
 
     &:hover {
       filter: brightness(150%);
-
       border-bottom-color: transparent;
     }
   }
@@ -300,7 +298,7 @@
     color: $color-white;
   }
 
-  .profile {
+  .outbound {
     color: $color-text;
 
     border: none;

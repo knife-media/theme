@@ -50,6 +50,7 @@ class Knife_Single_Widget extends WP_Widget {
             $q = new WP_Query([
                 'post_status' => 'publish',
                 'posts_per_page' => 1,
+                'post_type' => 'any',
                 'ignore_sticky_posts' => 1,
                 'post__in' => [url_to_postid($link)]
             ]);
