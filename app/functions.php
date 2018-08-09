@@ -471,9 +471,6 @@ add_action('admin_menu', function() {
 });
 
 
-// Template engine
-require get_template_directory() . '/core/modules/template-engine.php';
-
 // Add custom theme widgets from common hanlder
 require get_template_directory() . '/core/modules/widget-handler.php';
 

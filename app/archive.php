@@ -12,14 +12,12 @@ get_header(); ?>
 <div class="wrap">
     <header class="caption block">
         <?php
-            the_archive_title('<h1 class="caption__title">', '</h1>');
-
-            the_archive_description('<div class="caption__text">', '</div>');
+            the_archive_title();
+            the_archive_description();
         ?>
     </header>
 
     <section class="content block">
-
        <?php
             while(have_posts()) : the_post();
 
@@ -27,7 +25,6 @@ get_header(); ?>
 
             endwhile;
         ?>
-
     </section>
 </div>
 

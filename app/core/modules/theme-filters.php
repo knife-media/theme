@@ -6,36 +6,33 @@
 *
 * @package knife-theme
 * @since 1.3
+* @version 1.4
 */
 
 if (!defined('WPINC')) {
     die;
 }
 
-(new Knife_Theme_Filters)->init();
-
 class Knife_Theme_Filters {
     /**
      * Use this method instead of constructor to avoid multiple hook setting
      */
-    public function init() {
+    public static function load_module() {
         // Add widget size query var
-        add_action('the_post', [$this, 'archive_item'], 10, 2);
+        add_action('the_post', [__CLASS__, 'archive_item'], 10, 2);
 
-        // Add navigation on archive pages
-        add_action('loop_end', [$this, 'archive_more']);
+        // Update archive template title
+        add_action('get_the_archive_title', [__CLASS__, 'archive_title']);
 
-        // Add archive header
-        add_action('get_the_archive_title', [$this, 'archive_title']);
-        add_action('get_the_archive_description', [$this, 'archive_description']);
-
+        // Update archive template description
+        add_action('get_the_archive_description', [__CLASS__, 'archive_description']);
     }
 
 
     /**
      * Add widget size query var on archive loops
      */
-    public function archive_item($post, $query) {
+    public static function archive_item($post, $query) {
         $size = function($current, $found) use (&$args) {
             if($found < 3 || $current % 5 === 3 || $current % 5 === 4)
                 return 'double';
@@ -50,47 +47,9 @@ class Knife_Theme_Filters {
 
 
     /**
-     * Prints navigation link if needed
-     */
-    public function archive_more($query) {
-        if(($query->is_archive() || $query->is_home()) && get_next_posts_link()) {
-            $more = next_posts_link(__('Больше статей', 'knife-theme'));
-
-            /**
-             * Filter archive more link
-             *
-             * @since 1.3
-             * @param string $more
-             */
-            echo apply_filters('knife_archive_more', $more);
-        }
-    }
-
-
-    /**
-     * Append archive header including title and description
-     */
-    public function archive_header() {
-        if(is_archive() && have_posts()) {
-            $header = sprintf('<div class="caption block">%s</div>',
-                $this->archive_title() . $this->archive_description()
-            );
-
-            /**
-             * Filter archive header block
-             *
-             * @since 1.3
-             * @param string $header
-             */
-            echo apply_filters('knife_archive_header', $header);
-        }
-    }
-
-
-    /**
      * Custom archive title
      */
-    public function archive_title($title) {
+    public static function archive_title($title) {
         if(is_post_type_archive()) {
             return sprintf('<h1 class="caption__title caption__title--pure">%s</h1>',
                 post_type_archive_title('', false)
@@ -122,7 +81,7 @@ class Knife_Theme_Filters {
     /**
      * Custom archive description
      */
-    public function archive_description($description) {
+    public static function archive_description($description) {
         if(is_author()) {
             $description = get_the_author_meta('description');
         }
@@ -134,3 +93,6 @@ class Knife_Theme_Filters {
         return $description;
     }
 }
+
+Knife_Theme_Filters::load_module();
+
