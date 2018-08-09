@@ -316,6 +316,10 @@
       if(start < touch.pageY && window.pageYOffset === 0) {
         e.preventDefault();
       }
+
+      if(story.classList.contains('glide--dragging')) {
+        e.preventDefault();
+      }
     }, true);
   });
 
