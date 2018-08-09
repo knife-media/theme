@@ -37,7 +37,7 @@
                 ?>
             </header>
 
-            <div class="post__content custom">
+            <div class="post__content custom js-mediator-article">
                 <?php the_content(); ?>
             </div>
 

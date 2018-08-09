@@ -12,7 +12,7 @@
     <?php while (have_posts()) : the_post(); ?>
         <article <?php post_class('post'); ?> id="post-<?php the_ID(); ?>">
 
-            <div class="post__content custom">
+            <div class="post__content custom js-mediator-article">
                 <?php the_content(); ?>
             </div>
 
