@@ -86,7 +86,7 @@ class Knife_Header_Meta {
         }
 
         // Add published time to meta
-        $meta[] = sprintf('<meta name="mediator_published_time" content="%s" />', get_the_time('c'));
+        $meta[] = sprintf('<meta name="mediator_published_time" content="%s" />', substr_replace(get_the_time('c'), '', -3, 1));
 
         // Print mediator custom meta
         foreach($meta as $tag) {
