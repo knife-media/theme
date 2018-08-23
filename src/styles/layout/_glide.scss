@@ -210,7 +210,7 @@
       height: 100%;
       max-width: calc(#{$site-width} - 2rem);
 
-      padding: 4rem 16rem 3rem 0;
+      padding: 2rem 16rem 3rem 0;
 
       &.glide__slide-wrap--head {
         padding-top: 2rem;
@@ -227,12 +227,13 @@
 
       @media screen and (max-width: 479px) {
         width: calc(100% - 2rem);
-        padding-top: 3rem;
+        padding-top: 1rem;
       }
     }
 
     .glide__slide-content {
       display: flex;
+      flex: 1;
       flex-flow: column nowrap;
       justify-content: center;
       align-items: flex-start;
@@ -240,29 +241,21 @@
 
       width: 100%;
       max-width: 40rem;
-      height: 100%;
     }
 
     .glide__slide-kicker {
-      position: absolute;
-      top: -2rem;
+      display: block;
 
       width: 100%;
-      overflow: hidden;
+      max-width: 40rem;
+      margin-bottom: .5rem;
 
       font-size: .8125rem;
       font-weight: 500;
       letter-spacing: .25px;
 
-      white-space: nowrap;
-      text-overflow: ellipsis;
-
       @media screen and (max-width: 767px) {
         font-size: .75rem;
-      }
-
-      @media screen and (max-width: 479px) {
-        top: -1.5rem;
       }
     }
 

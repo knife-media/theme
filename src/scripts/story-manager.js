@@ -55,6 +55,9 @@
     }
 
     for (var i = 0, item; item = knife_story_stories[i]; i++) {
+      var wrap = document.createElement('div');
+      wrap.classList.add('glide__slide-wrap');
+
       var slide = document.createElement('div');
       slide.classList.add('glide__slide-content');
 
@@ -68,7 +71,7 @@
         kicker.classList.add('glide__slide-kicker');
         kicker.innerHTML = item.kicker;
 
-        slide.appendChild(kicker);
+        wrap.appendChild(kicker);
       })();
 
 
@@ -100,14 +103,11 @@
         slide.appendChild(entry);
       })();
 
-
-      var wrap = document.createElement('div');
-      wrap.classList.add('glide__slide-wrap');
-      wrap.appendChild(slide);
-
       var block = document.createElement('div');
       block.classList.add('glide__slide');
       block.appendChild(wrap);
+
+      wrap.appendChild(slide);
 
       story.querySelector('.glide__slides').appendChild(block);
     }
