@@ -156,6 +156,14 @@
     }
 
     .post__footer-widgets {
+      margin-left: -2rem;
+      margin-right: -2rem;
+
+      .relap-knife_media__top-container {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+      }
+
       .relap-knife_media__block-title {
         font-size: 1.125rem;
       }

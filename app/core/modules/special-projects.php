@@ -93,7 +93,7 @@ class Knife_Special_Projects {
         if(is_single() && has_term('', $this->slug)) {
             $terms = wp_get_post_terms(get_queried_object_id(), $this->slug);
 
-            printf('<a class="caption special" href="%1$s"><h1>%2$s</h1></a>',
+            printf('<a class="caption special" href="%1$s"><p>%2$s</p></a>',
                 esc_url(get_term_link($terms[0]->term_id)),
                 esc_html($terms[0]->name)
             );

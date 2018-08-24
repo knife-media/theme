@@ -30,7 +30,7 @@
    * Create Glide instance with custom options
    */
   var glide = new Glide('.glide', {
-    gap: 0, rewind: false, touchAngle: 45,
+    gap: 0, rewind: false, touchAngle: 30,
     dragThreshold: false,
     breakpoints: {
       767: {
@@ -55,6 +55,9 @@
     }
 
     for (var i = 0, item; item = knife_story_stories[i]; i++) {
+      var wrap = document.createElement('div');
+      wrap.classList.add('glide__slide-wrap');
+
       var slide = document.createElement('div');
       slide.classList.add('glide__slide-content');
 
@@ -68,7 +71,7 @@
         kicker.classList.add('glide__slide-kicker');
         kicker.innerHTML = item.kicker;
 
-        slide.appendChild(kicker);
+        wrap.appendChild(kicker);
       })();
 
 
@@ -100,14 +103,11 @@
         slide.appendChild(entry);
       })();
 
-
-      var wrap = document.createElement('div');
-      wrap.classList.add('glide__slide-wrap');
-      wrap.appendChild(slide);
-
       var block = document.createElement('div');
       block.classList.add('glide__slide');
       block.appendChild(wrap);
+
+      wrap.appendChild(slide);
 
       story.querySelector('.glide__slides').appendChild(block);
     }
@@ -215,6 +215,16 @@
 
 
   /**
+   * Set story height before slider mount
+   */
+  glide.on('mount.before', function() {
+    var offset = story.getBoundingClientRect();
+    story.style.height = window.innerHeight - offset.top - window.pageYOffset + 'px';
+  });
+
+
+
+  /**
    * Add bullets events
    */
   glide.on(['mount.after', 'run'], function() {
@@ -306,16 +316,11 @@
       if(start < touch.pageY && window.pageYOffset === 0) {
         e.preventDefault();
       }
+
+      if(story.classList.contains('glide--dragging')) {
+        e.preventDefault();
+      }
     }, true);
-  });
-
-
-  /**
-   * Set story height after slider build
-   */
-  glide.on('build.after', function() {
-    var offset = story.getBoundingClientRect();
-    story.style.height = window.innerHeight - offset.top - window.pageYOffset + 'px';
   });
 
 

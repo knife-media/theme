@@ -19,10 +19,12 @@ class Knife_Header_Meta {
      * Use this method instead of constructor to avoid multiple hook setting
      *
      * @since 1.3
+     * @version 1.4
      */
     public function init() {
         add_action('wp_head', [$this, 'add_meta'], 5);
         add_action('wp_head', [$this, 'add_icon'], 4);
+        add_action('wp_head', [$this, 'add_mediator'], 6);
 
         add_filter('language_attributes', [$this, 'add_xmlns']);
     }
@@ -45,7 +47,7 @@ class Knife_Header_Meta {
             $path . '/icon-180.png'
         );
 
-         foreach($meta as $tag) {
+        foreach($meta as $tag) {
             echo "$tag\n";
         }
     }
@@ -53,6 +55,43 @@ class Knife_Header_Meta {
 
     public function add_xmlns($output) {
         return 'prefix="og: http://ogp.me/ns#" ' . $output;
+    }
+
+
+    /**
+     * Add mediator tags to singular templates
+     *
+     * @link https://mediator.media/ru/install/
+     * @since 1.4
+     */
+    public function add_mediator() {
+        if(!is_singular()) {
+            return;
+        }
+
+        global $post;
+
+        $meta = [];
+
+        // Add post author to meta
+        if(function_exists('get_coauthors')) {
+            foreach(get_coauthors() as $author) {
+                $meta[] = sprintf('<meta name="mediator_author" content="%s" />', $author->display_name);
+            }
+        }
+
+        // Add post terms to meta
+        foreach(wp_get_post_tags($post->ID) as $term) {
+            $meta[] = sprintf('<meta name="mediator_theme" content="%s" />', $term->name);
+        }
+
+        // Add published time to meta
+        $meta[] = sprintf('<meta name="mediator_published_time" content="%s" />', substr_replace(get_the_time('c'), '', -3, 1));
+
+        // Print mediator custom meta
+        foreach($meta as $tag) {
+            echo "$tag\n";
+        }
     }
 
 

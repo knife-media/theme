@@ -1,0 +1,36 @@
+.comments {
+  display: block;
+
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  background-color: $color-sheet;
+
+  .hcc {
+    font-family: $font-regular, sans-serif;
+  }
+
+  .hc__menu__comment {
+    font-size: 1.125rem;
+  }
+
+  .hc__menu__line {
+    display: none;
+  }
+
+  .hc__form__send {
+    padding: .5rem 1.25rem;
+    background-color: $color-primary;
+    box-shadow: none;
+
+    transition: .25s;
+
+    &:hover {
+      background-color: $color-primary;
+      box-shadow: none;
+
+      filter: brightness(120%);
+    }
+  }
+}
