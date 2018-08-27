@@ -11,15 +11,19 @@ get_header(); ?>
 
 <div class="wrap">
     <section class="content block">
+       <?php
+            if(have_posts()) :
+                while(have_posts()) : the_post();
 
-        <?php
-            while(have_posts()) : the_post();
+                    get_template_part('partials/archive');
 
-                get_template_part('partials/archive');
+                endwhile;
+            else :
 
-            endwhile;
+                get_template_part('partials/content', 'none');
+
+            endif;
         ?>
-
     </section>
 </div>
 

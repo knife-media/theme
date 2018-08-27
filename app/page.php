@@ -11,7 +11,6 @@ get_header(); ?>
 
 <main class="wrap">
     <section class="content block">
-
         <?php
             while(have_posts()) : the_post();
 
@@ -19,7 +18,6 @@ get_header(); ?>
 
             endwhile;
         ?>
-
     </section>
 </main>
 
