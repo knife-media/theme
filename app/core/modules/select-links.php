@@ -57,7 +57,7 @@ class Knife_Select_Links {
         add_action('init', [__CLASS__, 'register_type']);
 
         // Change single post type template path
-        add_action('template_include', [__CLASS__, 'include_template']);
+        add_action('single_template', [__CLASS__, 'include_single']);
 
         // Add select metabox
         add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
@@ -131,7 +131,7 @@ class Knife_Select_Links {
     /**
      * Include single select template
      */
-    public static function include_template($template) {
+    public static function include_single($template) {
         if(is_singular(self::$slug)) {
             $new_template = locate_template(['templates/single-select.php']);
 

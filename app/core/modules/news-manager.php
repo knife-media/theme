@@ -6,81 +6,61 @@
 *
 * @package knife-theme
 * @since 1.3
+* @version 1.4
 */
 
 if (!defined('WPINC')) {
     die;
 }
 
-(new Knife_News_Manager)->init();
-
 class Knife_News_Manager {
     /**
      * Unique slug using for news category url
      *
-     * @since   1.3
      * @access  private
      * @var     string
      */
-    private $slug = 'news';
+    private static $slug = 'news';
 
     /**
      * News category id
      *
-     * @since   1.3
      * @access  private
      * @var     int
      */
-    private $news_id = 620;
+    private static $news_id = 620;
 
 
     /**
      * Init function instead of constructor
-     *
-     * @since 1.3
      */
-    public function init() {
+    public static function load_module() {
+        // Apply theme hooks
+        add_action('after_setup_theme', [__CLASS__, 'setup_actions']);
+
+        // Include news archive template
+        add_filter('archive_template', [__CLASS__, 'include_archive']);
+
         // Remove news from home page
-        add_action('pre_get_posts', [$this, 'remove_home']);
+        add_action('pre_get_posts', [__CLASS__, 'remove_home']);
 
         // Change posts count on news archive
-        add_action('pre_get_posts', [$this, 'update_count']);
+        add_action('pre_get_posts', [__CLASS__, 'update_count']);
 
         // Set custom categories dropdown
         add_filter('disable_categories_dropdown', '__return_true', 'post');
-        add_action('restrict_manage_posts', [$this, 'print_dropdown'], 'post');
-        add_action('parse_query', [$this, 'process_dropdown']);
-
-        // Apply theme hooks
-        add_action('after_setup_theme', [$this, 'setup_theme']);
+        add_action('restrict_manage_posts', [__CLASS__, 'print_dropdown'], 'post');
+        add_action('parse_query', [__CLASS__, 'process_dropdown']);
     }
 
 
     /**
      * Setup theme hooks
      */
-    public function setup_theme() {
-        // News archive template
-        add_filter('knife_template_archive', function($template) {
-            if(is_category($this->news_id)) {
-                $template = $this->slug;
-            }
-
-            return $template;
-        });
-
-        // News archive header
-        add_filter('knife_archive_header', function($header) {
-            if(is_category($this->news_id)) {
-                $header = '';
-            }
-
-            return $header;
-        });
-
+    public static function setup_actions() {
         // Remove promo from news content
         add_filter('the_content', function($content) {
-            if(in_category($this->news_id)) {
+            if(in_category(self::$news_id)) {
                 remove_filter('the_content', ['Knife_User_Club', 'insert_post_promo']);
             }
 
@@ -90,11 +70,27 @@ class Knife_News_Manager {
 
 
     /**
+     * Include custom archive template for news
+     */
+    public static function include_archive($template) {
+        if(is_category(self::$news_id)) {
+            $new_template = locate_template(['templates/archive-news.php']);
+
+            if(!empty($new_template)) {
+                return $new_template;
+            }
+        }
+
+        return $template;
+    }
+
+
+    /**
      * Remove news from home page
      */
-    public function remove_home($query) {
+    public static function remove_home($query) {
         if($query->is_main_query() && $query->is_home()) {
-            $query->set('category__not_in', [$this->news_id]);
+            $query->set('category__not_in', [self::$news_id]);
         }
     }
 
@@ -102,8 +98,8 @@ class Knife_News_Manager {
     /**
      * Change posts_per_page for news category archive template
      */
-    public function update_count($query) {
-        if($query->is_main_query() && $query->is_category($this->slug)) {
+    public static function update_count($query) {
+        if($query->is_main_query() && $query->is_category(self::$slug)) {
             $query->set('posts_per_page', 20);
         }
     }
@@ -112,10 +108,10 @@ class Knife_News_Manager {
     /**
      * Print custom categories dropdown
      */
-    public function print_dropdown() {
+    public static function print_dropdown() {
         $values = [
             __('Все записи', 'knife-theme') => 0,
-            __('Только новости', 'knife-theme') => $this->slug,
+            __('Только новости', 'knife-theme') => self::$slug,
             __('Без новостей', 'knife-theme') => 'other'
         ];
 
@@ -134,7 +130,7 @@ class Knife_News_Manager {
     /**
      * Process custom categories dropdown
      */
-    public function process_dropdown($query) {
+    public static function process_dropdown($query) {
         global $pagenow;
 
         if(!is_admin() || $pagenow !== 'edit.php' || empty($_GET['cat'])) {
@@ -147,12 +143,18 @@ class Knife_News_Manager {
 
         $classics = get_category_by_slug('classics');
 
-        if($_GET['cat'] === $this->slug) {
-            $query->query_vars['cat'] = $this->news_id;
+        if($_GET['cat'] === self::$slug) {
+            $query->query_vars['cat'] = self::$news_id;
         }
 
         if($_GET['cat'] === 'other') {
-            $query->query_vars['category__not_in'] = [$this->news_id, $classics->term_id];
+            $query->query_vars['category__not_in'] = [self::$news_id, $classics->term_id];
         }
     }
 }
+
+
+/**
+ * Load current module environment
+ */
+Knife_News_Manager::load_module();

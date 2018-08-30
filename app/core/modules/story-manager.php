@@ -6,13 +6,12 @@
 *
 * @package knife-theme
 * @since 1.3
+* @version 1.4
 */
 
 if (!defined('WPINC')) {
     die;
 }
-
-(new Knife_Story_Manager)->init();
 
 class Knife_Story_Manager {
     /**
@@ -22,7 +21,7 @@ class Knife_Story_Manager {
      * @access  private
      * @var     string
      */
-    private $slug = 'story';
+    private static $slug = 'story';
 
 
     /**
@@ -32,7 +31,7 @@ class Knife_Story_Manager {
      * @access  private
      * @var     string
      */
-    private $meta = '_knife-story';
+    private static $meta = '_knife-story';
 
 
     /**
@@ -42,64 +41,64 @@ class Knife_Story_Manager {
      * @access  private
      * @var     string
      */
-    private $opts = ['background', 'shadow', 'blur'];
+    private static $opts = ['background', 'shadow', 'blur'];
 
 
     /*
      * Use init function instead of constructor
      */
-    public function init() {
+    public static function load_module() {
         // Apply theme hooks
-        add_action('after_setup_theme', [$this, 'setup_theme']);
+        add_action('after_setup_theme', [__CLASS__, 'setup_actions']);
 
         // Register story post type
-        add_action('after_setup_theme', [$this, 'register_story']);
+        add_action('after_setup_theme', [__CLASS__, 'register_story']);
+
+        // Include news archive template
+        add_filter('single_template', [__CLASS__, 'include_single']);
+
+        // Include news archive template
+        add_filter('archive_template', [__CLASS__, 'include_archive']);
 
         // Insert admin side assets
-        add_action('admin_enqueue_scripts', [$this, 'add_assets']);
+        add_action('admin_enqueue_scripts', [__CLASS__, 'add_assets']);
 
         // Story post metabox
-        add_action('add_meta_boxes', [$this, 'add_metabox'], 1);
+        add_action('add_meta_boxes', [__CLASS__, 'add_metabox'], 1);
 
         // Save story meta
-        add_action('save_post', [$this, 'save_meta']);
+        add_action('save_post', [__CLASS__, 'save_meta']);
 
         // Add user post type to author archive
-        add_action('pre_get_posts', [$this, 'update_archive'], 12);
+        add_action('pre_get_posts', [__CLASS__, 'update_archive'], 12);
+
+        // Change posts count on story archive
+        add_action('pre_get_posts', [__CLASS__, 'update_count']);
 
         // Insert vendor scripts and styles
-        add_action('wp_enqueue_scripts', [$this, 'enqueue_assets'], 9);
+        add_action('wp_enqueue_scripts', [__CLASS__, 'enqueue_assets'], 9);
 
         // Include slider options
-        add_action('wp_enqueue_scripts', [$this, 'inject_stories'], 12);
+        add_action('wp_enqueue_scripts', [__CLASS__, 'inject_stories'], 12);
     }
 
 
     /**
      * Setup theme hooks
      */
-    public function setup_theme() {
+    public static function setup_actions() {
         // Remove global backdrop
         add_filter('knife_custom_background', function($background) {
-            if(is_singular($this->slug) || is_post_type_archive($this->slug)) {
+            if(is_singular(self::$slug) || is_post_type_archive(self::$slug)) {
                 $background = ['image' => ''];
             }
 
             return $background;
         });
 
-        // Stories archive header
-        add_filter('knife_archive_header', function($header) {
-            if(is_post_type_archive($this->slug)) {
-                $header = '';
-            }
-
-            return $header;
-        });
-
         // Add post lead to story post type
         add_filter('knife_post_lead_type', function($types) {
-            $types[] = $this->slug;
+            $types[] = self::$slug;
 
             return $types;
         });
@@ -107,16 +106,52 @@ class Knife_Story_Manager {
 
 
     /**
+     * Include single story template
+     *
+     * @since 1.4
+     */
+    public static function include_archive($template) {
+        if(is_post_type_archive(self::$slug)) {
+            $new_template = locate_template(['templates/archive-story.php']);
+
+            if(!empty($new_template)) {
+                return $new_template;
+            }
+        }
+
+        return $template;
+    }
+
+
+    /**
+     * Include archive story template
+     *
+     * @since 1.4
+     */
+    public static function include_single($template) {
+        if(is_singular(self::$slug)) {
+            $new_template = locate_template(['templates/single-story.php']);
+
+            if(!empty($new_template)) {
+                return $new_template;
+            }
+        }
+
+        return $template;
+    }
+
+
+    /**
      * Enqueue assets to admin post screen only
      */
-    public function add_assets($hook) {
+    public static function add_assets($hook) {
         if(!in_array($hook, ['post.php', 'post-new.php'])) {
             return;
         }
 
         $post_id = get_the_ID();
 
-        if(get_post_type($post_id) !== $this->slug) {
+        if(get_post_type($post_id) !== self::$slug) {
             return;
         }
 
@@ -143,8 +178,8 @@ class Knife_Story_Manager {
     /**
      * Enqueue glide vendor script
      */
-    public function enqueue_assets() {
-        if(!is_singular($this->slug)) {
+    public static function enqueue_assets() {
+        if(!is_singular(self::$slug)) {
             return;
         }
 
@@ -159,18 +194,18 @@ class Knife_Story_Manager {
     /**
      * Include slider story meta options
      */
-    public function inject_stories() {
-        if(!is_singular($this->slug)) {
+    public static function inject_stories() {
+        if(!is_singular(self::$slug)) {
             return;
         }
 
         $post_id = get_the_ID();
-        $stories = $this->convert_stories($post_id);
+        $stories = self::convert_stories($post_id);
 
         $options = [];
 
-        foreach($this->opts as $item) {
-            $options[$item] = get_post_meta($post_id, $this->meta . "-{$item}", true);
+        foreach(self::$opts as $item) {
+            $options[$item] = get_post_meta($post_id, self::$meta . "-{$item}", true);
         }
 
         $options['action'] = __('Share story — last', 'knife-media');
@@ -186,8 +221,8 @@ class Knife_Story_Manager {
     /**
      * Register story post type
      */
-    public function register_story() {
-        register_post_type($this->slug, [
+    public static function register_story() {
+        register_post_type(self::$slug, [
             'labels'                    => [
                 'menu_name'             => __('Истории', 'knife-theme'),
                 'name_admin_bar'        => __('Историю', 'knife-theme'),
@@ -228,7 +263,7 @@ class Knife_Story_Manager {
     /**
      * Append to author archive loop story posts
      */
-    public function update_archive($query) {
+    public static function update_archive($query) {
         if(is_author() && $query->is_main_query()) {
             $types = $query->get('post_type');
 
@@ -236,7 +271,7 @@ class Knife_Story_Manager {
                 $types = ['post'];
             }
 
-            $types[] = $this->slug;
+            $types[] = self::$slug;
 
             $query->set('post_type', $types);
         }
@@ -244,17 +279,29 @@ class Knife_Story_Manager {
 
 
     /**
+     * Change posts_per_page for stories archive template
+     *
+     * @since 1.4
+     */
+    public static function update_count($query) {
+        if($query->is_main_query() && $query->is_post_type_archive(self::$slug)) {
+            $query->set('posts_per_page', 12);
+        }
+    }
+
+
+    /**
      * Add story manage metabox
      */
-    public function add_metabox() {
-        add_meta_box('knife-story-metabox', __('Настройки истории', 'knife-theme'), [$this, 'display_metabox'], $this->slug, 'normal', 'high');
+    public static function add_metabox() {
+        add_meta_box('knife-story-metabox', __('Настройки истории', 'knife-theme'), [__CLASS__, 'display_metabox'], self::$slug, 'normal', 'high');
     }
 
 
     /**
      * Display story slides metabox
      */
-    public function display_metabox() {
+    public static function display_metabox() {
         $include = get_template_directory() . '/core/include';
 
         include_once($include . '/templates/story-metabox.php');
@@ -264,8 +311,8 @@ class Knife_Story_Manager {
     /**
      * Save post options
      */
-    public function save_meta($post_id) {
-        if(get_post_type($post_id) !== $this->slug) {
+    public static function save_meta($post_id) {
+        if(get_post_type($post_id) !== self::$slug) {
             return;
         }
 
@@ -279,11 +326,11 @@ class Knife_Story_Manager {
 
 
         // Update stories meta
-        $this->update_stories($this->meta . '-stories', $post_id);
+        self::update_stories(self::$meta . '-stories', $post_id);
 
         // Update other story options
-        foreach($this->opts as $option) {
-            $query = $this->meta . "-{$option}";
+        foreach(self::$opts as $option) {
+            $query = self::$meta . "-{$option}";
 
             if(isset($_REQUEST[$query])) {
                 // Get value by query
@@ -306,7 +353,7 @@ class Knife_Story_Manager {
     /**
      * Update stories meta from post-metabox
      */
-    private function update_stories($query, $post_id, $meta = [], $i = 0) {
+    private static function update_stories($query, $post_id, $meta = [], $i = 0) {
         if(empty($_REQUEST[$query])) {
             return;
         }
@@ -339,8 +386,8 @@ class Knife_Story_Manager {
     /**
      * Convert stories post meta to object
      */
-    private function convert_stories($post_id, $stories = []) {
-        $items = get_post_meta($post_id, $this->meta . '-stories');
+    private static function convert_stories($post_id, $stories = []) {
+        $items = get_post_meta($post_id, self::$meta . '-stories');
 
         foreach($items as $i => $slide) {
             if(!empty($slide['media'])) {
@@ -367,3 +414,9 @@ class Knife_Story_Manager {
         return $stories;
     }
 }
+
+
+/**
+ * Load current module environment
+ */
+Knife_Story_Manager::load_module();

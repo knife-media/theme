@@ -273,11 +273,11 @@ add_filter('feed_links_show_comments_feed', '__return_false');
 
 // Navigation links classes
 add_filter('next_posts_link_attributes', function($atts) {
-    return 'class="nav button"';
+    return 'class="button"';
 });
 
 add_filter('previous_posts_link_attributes', function($atts) {
-    return 'class="nav button"';
+    return 'class="button"';
 });
 
 

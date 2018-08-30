@@ -11,29 +11,28 @@ get_header(); ?>
 
 <div class="wrap">
     <section class="content block block--narrow">
-        <?php while (have_posts()) : the_post(); ?>
-            <article class="widget widget-logbook">
+       <?php
+            if(have_posts()) :
+                while(have_posts()) : the_post();
 
-                <div class="widget__item">
-                    <footer class="widget__footer">
-                        <?php
-                            printf(
-                                '<a class="widget__link" href="%2$s">%1$s</a>',
-                                the_title('<p class="widget__title">', '</p>', false),
-                                get_permalink()
-                            );
+                    get_template_part('partials/loop', 'news');
 
-                            the_info(
-                                '<div class="widget__meta meta">', '</div>',
-                                ['time', 'date', 'tags']
-                            );
-                        ?>
-                    </footer>
-                </div>
+                endwhile;
+            else :
 
-            </article>
-        <?php endwhile; ?>
+                get_template_part('partials/content', 'none');
+
+            endif;
+        ?>
     </section>
+
+    <?php if(have_posts() && get_next_posts_link()) : ?>
+        <nav class="nav block block--narrow">
+            <?php
+                next_posts_link(__('Больше историй', 'knife-theme'));
+            ?>
+        </nav>
+    <?php endif; ?>
 </div>
 
 <?php get_footer();

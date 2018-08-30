@@ -6,6 +6,7 @@
 *
 * @package knife-theme
 * @since 1.2
+* @version 1.4
 */
 
 
@@ -14,8 +15,6 @@ if (!defined('WPINC')) {
 }
 
 
-(new Knife_Post_Tagline)->init();
-
 class Knife_Post_Tagline {
    /**
     * Post meta name
@@ -23,7 +22,7 @@ class Knife_Post_Tagline {
     * @access  private
     * @var     string
     */
-    private $meta = '_knife-tagline';
+    private static $meta = '_knife-tagline';
 
 
    /**
@@ -32,7 +31,7 @@ class Knife_Post_Tagline {
     * @access  private
     * @var     array
     */
-    private $type = ['post'];
+    private static $type = ['post'];
 
 
     /**
@@ -40,46 +39,51 @@ class Knife_Post_Tagline {
      *
      * @since 1.3
      */
-    public function init() {
-        add_action('admin_enqueue_scripts', [$this, 'add_assets']);
-        add_action('save_post', [$this, 'save_meta']);
+    public static function load_module() {
+        // Update type array by filters
+        add_action('init', [__CLASS__, 'set_type'], 20);
 
-        // tagline post meta
-        add_action('edit_form_after_title', [$this, 'print_input']);
+        // Include scripts admin page only
+        add_action('admin_enqueue_scripts', [__CLASS__, 'add_assets']);
 
-        add_filter('the_title', [$this, 'post_tagline'], 10, 2);
-        add_filter('document_title_parts', [$this, 'site_tagline'], 10, 1);
+        // Save tagline meta
+        add_action('save_post', [__CLASS__, 'save_meta']);
 
-        // update type array by filters
-        add_action('init', [$this, 'set_type'], 20);
+        // Tagline post meta
+        add_action('edit_form_after_title', [__CLASS__, 'print_input']);
+
+        add_filter('the_title', [__CLASS__, 'post_tagline'], 10, 2);
+        add_filter('document_title_parts', [__CLASS__, 'site_tagline'], 10, 1);
     }
 
 
     /**
      * Update type array by modules filters
      */
-    public function set_type() {
+    public static function set_type() {
         /**
          * Filter tagline support post types
          *
          * @since 1.3
          * @param array $type
          */
-        $this->type = apply_filters('knife_post_tagline_type', $this->type);
+        self::$type = apply_filters('knife_post_tagline_type', self::$type);
     }
 
 
     /**
      * Enqueue assets to admin post screen only
      */
-    public function add_assets($hook) {
-        if(!in_array($hook, ['post.php', 'post-new.php']))
+    public static function add_assets($hook) {
+        if(!in_array($hook, ['post.php', 'post-new.php'])) {
             return;
+        }
 
         $post_id = get_the_ID();
 
-        if(!in_array(get_post_type($post_id), $this->type))
+        if(!in_array(get_post_type($post_id), self::$type)) {
             return;
+        }
 
         $version = wp_get_theme()->get('Version');
         $include = get_template_directory_uri() . '/core/include';
@@ -92,19 +96,20 @@ class Knife_Post_Tagline {
     /**
      * Shows tagline input right after post title form on admin page
      */
-    public function print_input() {
+    public static function print_input() {
         $post_id = get_the_ID();
 
-        if(!in_array(get_post_type($post_id), $this->type))
+        if(!in_array(get_post_type($post_id), self::$type)) {
             return;
+        }
 
-        $tagline = get_post_meta($post_id, $this->meta, true);
+        $tagline = get_post_meta($post_id, self::$meta, true);
         $tagline = sanitize_text_field($tagline);
 
         printf(
             '<input id="knife-tagline-input" type="text" class="large-text" value="%1$s" name="%2$s" placeholder="%3$s">',
             esc_attr($tagline),
-            esc_attr($this->meta),
+            esc_attr(self::$meta),
             __('Подзаголовок', 'knife-theme')
         );
     }
@@ -113,14 +118,16 @@ class Knife_Post_Tagline {
     /**
      * Filter the post title on the Posts screen, and on the front-end
      */
-    public function post_tagline($title, $post_id) {
-        $tagline = get_post_meta($post_id, $this->meta, true);
+    public static function post_tagline($title, $post_id) {
+        $tagline = get_post_meta($post_id, self::$meta, true);
 
-        if(empty($tagline))
+        if(empty($tagline)) {
             return $title;
+        }
 
-        if(is_admin())
+        if(is_admin()) {
             return "{$title} {$tagline}";
+        }
 
         return "{$title} <em>{$tagline}</em>";
 
@@ -130,17 +137,19 @@ class Knife_Post_Tagline {
     /**
      * Filter the document title in the head.
      */
-    public function site_tagline($title) {
+    public static function site_tagline($title) {
         global $post;
 
-        if(!is_singular() || !isset($post->ID))
+        if(!is_singular() || !isset($post->ID)) {
             return $title;
+        }
 
-        $tagline = get_post_meta($post->ID, $this->meta, true);
+        $tagline = get_post_meta($post->ID, self::$meta, true);
         $tagline = sanitize_text_field($tagline);
 
-        if(empty($tagline))
+        if(empty($tagline)) {
             return $title;
+        }
 
         $title['title'] = "{$title['title']} {$tagline}";
 
@@ -151,20 +160,30 @@ class Knife_Post_Tagline {
     /**
      * Save post options
      */
-    public function save_meta($post_id) {
-        if(!in_array(get_post_type($post_id), $this->type))
+    public static function save_meta($post_id) {
+        if(!in_array(get_post_type($post_id), self::$type)) {
             return;
+        }
 
-        if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
+        if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return;
+        }
 
-        if(!current_user_can('edit_post', $post_id))
+        if(!current_user_can('edit_post', $post_id)) {
             return;
+        }
 
         // Save tagline meta
-        if(!empty($_REQUEST[$this->meta]))
-            update_post_meta($post_id, $this->meta, trim($_REQUEST[$this->meta]));
-        else
-            delete_post_meta($post_id, $this->meta);
+        if(empty($_REQUEST[self::$meta])) {
+            return delete_post_meta($post_id, self::$meta);
+        }
+
+        return update_post_meta($post_id, self::$meta, trim($_REQUEST[self::$meta]));
     }
 }
+
+
+/**
+ * Load current module environment
+ */
+Knife_Post_Tagline::load_module();

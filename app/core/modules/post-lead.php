@@ -39,14 +39,15 @@ class Knife_Post_Lead {
      *
      * @since 1.3
      */
-    public static function init() {
+    public static function load_module() {
+        // Update type array by filters
+        add_action('init', [__CLASS__, 'set_type'], 20);
+
+        // Save meta
         add_action('save_post', [__CLASS__, 'save_meta']);
 
-        // add lead-text metabox
+        // Add lead-text metabox
         add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
-
-        // update type array by filters
-        add_action('init', [__CLASS__, 'set_type'], 20);
     }
 
 
@@ -138,5 +139,4 @@ class Knife_Post_Lead {
 }
 
 
-Knife_Post_Lead::init();
-
+Knife_Post_Lead::load_module();

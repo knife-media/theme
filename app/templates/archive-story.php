@@ -4,36 +4,34 @@
  *
  * @package knife-theme
  * @since 1.3
+ * @version 1.4
  */
-?>
+get_header(); ?>
 
-<section class="content block">
+<div class="wrap">
+    <section class="content block">
+       <?php
+            if(have_posts()) :
+                while(have_posts()) : the_post();
 
-    <?php while (have_posts()) : the_post(); ?>
-        <article class="widget widget-story">
+                    get_template_part('partials/loop', 'story');
 
-            <div class="widget__item">
-               <div class="widget__image">
-                    <?php
-                        the_post_thumbnail(
-                            get_query_var('widget_size', 'triple'),
-                            ['class' => 'widget__image-thumbnail']
-                        );
-                    ?>
-                </div>
+                endwhile;
+            else :
 
-                <footer class="widget__footer">
-                    <?php
-                        printf(
-                            '<a class="widget__link" href="%2$s">%1$s</a>',
-                            the_title('<p class="widget__title">', '</p>', false),
-                            get_permalink()
-                        );
-                    ?>
-                </footer>
-            </div>
+                get_template_part('partials/content', 'none');
 
-        </article>
-    <?php endwhile; ?>
+            endif;
+        ?>
+    </section>
 
-</section>
+    <?php if(have_posts() && get_next_posts_link()) : ?>
+        <nav class="nav block">
+            <?php
+                next_posts_link(__('Больше историй', 'knife-theme'));
+            ?>
+        </nav>
+    <?php endif; ?>
+</div>
+
+<?php get_footer();

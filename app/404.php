@@ -10,11 +10,11 @@
 get_header(); ?>
 
 <main class="wrap">
-    <?php
-
+    <section class="content block">
+        <?php
             get_template_part('partials/content', 'none');
-
-    ?>
+        ?>
+    </section>
 </main>
 
 <?php get_footer();
