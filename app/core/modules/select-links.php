@@ -104,13 +104,12 @@ class Knife_Select_Links {
     public static function register_type() {
         register_post_type(self::$slug, [
             'labels'                => [
-                'name'              => __('Подборка', 'knife-theme'),
+                'name'              => __('Подборки', 'knife-theme'),
                 'singular_name'     => __('Запись в подборку', 'knife-theme'),
                 'add_new'           => __('Добавить запись', 'knife-theme'),
                 'menu_name'         => __('Подборки', 'knife-theme')
             ],
             'label'                 => __('Подборка', 'knife-theme'),
-            'description'           => __('Подборки статей', 'knife-theme'),
             'supports'              => ['title', 'thumbnail', 'revisions', 'excerpt', 'author'],
             'hierarchical'          => false,
             'public'                => true,

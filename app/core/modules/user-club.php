@@ -510,10 +510,11 @@ class Knife_User_Club {
             return;
         }
 
-        if(!empty($_REQUEST[self::$meta]))
-            update_post_meta($post_id, self::$meta, 1);
-        else
-            delete_post_meta($post_id, self::$meta);
+        if(empty($_REQUEST[self::$meta])) {
+            return delete_post_meta($post_id, self::$meta);
+        }
+
+        return update_post_meta($post_id, self::$meta, 1);
     }
 
 

@@ -6,15 +6,13 @@
 *
 * @package knife-theme
 * @since 1.2
+* @version 1.4
 */
 
 
 if (!defined('WPINC')) {
     die;
 }
-
-
-(new Knife_Custom_Background)->init();
 
 class Knife_Custom_Background {
     /**
@@ -24,7 +22,7 @@ class Knife_Custom_Background {
      * @access  private
      * @var     string
      */
-    private $meta = '_knife-term-background';
+    private static $meta = '_knife-term-background';
 
 
     /**
@@ -34,43 +32,44 @@ class Knife_Custom_Background {
      * @access  private
      * @var     string
      */
-    private $taxes = ['post_tag', 'category'];
+    private static $taxes = ['post_tag', 'category'];
 
 
     /**
      * Use this method instead of constructor to avoid multiple hook setting
      *
-     * @since 1.3
+     * @since 1.4
      */
-    public function init() {
-        add_action('admin_enqueue_scripts', [$this, 'add_assets']);
+    public static function load_module() {
+        // Enqueue scripts only on admin screen
+        add_action('admin_enqueue_scripts', [__CLASS__, 'add_assets']);
 
         // Update Customizer
-        add_action('customize_register', [$this, 'update_customizer']);
+        add_action('customize_register', [__CLASS__, 'update_customizer']);
 
         // Frontend styles
-        add_action('wp_enqueue_scripts', [$this, 'print_background'], 13);
+        add_action('wp_enqueue_scripts', [__CLASS__, 'print_background'], 13);
 
         // update taxes array by filters
-        add_action('init', [$this, 'set_taxes'], 20);
+        add_action('init', [__CLASS__, 'set_taxes'], 20);
     }
 
 
     /**
      * Update taxes array by modules filters
      */
-    public function set_taxes() {
+    public static function set_taxes() {
         /**
          * Filter custom background taxes
          *
          * @since 1.3
          * @param array $taxes
          */
-        $this->taxes = apply_filters('knife_custom_background_taxes', $this->taxes);
+        self::$taxes = apply_filters('knife_custom_background_taxes', self::$taxes);
 
-        foreach($this->taxes as $tax) {
-            add_action("{$tax}_edit_form_fields", [$this, 'print_row'], 10, 2);
-            add_action("edited_{$tax}", [$this, 'save_meta']);
+        foreach(self::$taxes as $tax) {
+            add_action("{$tax}_edit_form_fields", [__CLASS__, 'print_row'], 10, 2);
+            add_action("edited_{$tax}", [__CLASS__, 'save_meta']);
         }
     }
 
@@ -78,7 +77,7 @@ class Knife_Custom_Background {
     /**
      * Update background controls in admin customizer
      */
-    public function update_customizer($wp_customize) {
+    public static function update_customizer($wp_customize) {
         // We don't need these options at the moment
         $wp_customize->remove_control('background_preset');
         $wp_customize->remove_control('background_attachment');
@@ -90,7 +89,7 @@ class Knife_Custom_Background {
     /**
      * Print fixed element with custom background
      */
-    public function print_background() {
+    public static function print_background() {
         $backdrop = [];
 
         $defaults = [
@@ -100,19 +99,21 @@ class Knife_Custom_Background {
         ];
 
         // Get term meta only once
-        $meta = wp_parse_args($this->get_meta(), $defaults);
+        $meta = wp_parse_args(self::get_meta(), $defaults);
         extract($meta);
 
         $color = ltrim($color, '#');
 
-        if($color !== get_theme_support('custom-background', 'default-color'))
+        if($color !== get_theme_support('custom-background', 'default-color')) {
             $backdrop['color'] = $color;
+        }
 
         if($image) {
             $backdrop['image'] = set_url_scheme($image);
 
-            if(in_array($size, ['auto', 'contain', 'cover'], true))
+            if(in_array($size, ['auto', 'contain', 'cover'], true)) {
                 $backdrop['size'] = $size;
+            }
         }
 
         if(count($backdrop) > 0) {
@@ -124,10 +125,10 @@ class Knife_Custom_Background {
     /**
      * Enqueue assets to term edit screen only
      */
-    public function add_assets($hook) {
+    public static function add_assets($hook) {
         $screen = get_current_screen()->taxonomy;
 
-        if($hook !== 'term.php' || !in_array($screen, $this->taxes)) {
+        if($hook !== 'term.php' || !in_array($screen, self::$taxes)) {
             return;
         }
 
@@ -154,7 +155,7 @@ class Knife_Custom_Background {
     /**
      * Display custom background options row
      */
-    public function print_row($term, $taxonomy) {
+    public static function print_row($term, $taxonomy) {
         $include = get_template_directory() . '/core/include';
 
         include_once($include . '/templates/custom-background.php');
@@ -163,23 +164,24 @@ class Knife_Custom_Background {
     /**
      * Save image meta
      */
-    public function save_meta($term_id) {
-        if(!current_user_can('edit_term', $term_id))
+    public static function save_meta($term_id) {
+        if(!current_user_can('edit_term', $term_id)) {
             return;
+        }
 
-        if(empty($_REQUEST[$this->meta])) {
-            return delete_term_meta($term_id, $this->meta);
+        if(empty($_REQUEST[self::$meta])) {
+            return delete_term_meta($term_id, self::$meta);
         }
 
         $meta = [];
 
-        foreach($_REQUEST[$this->meta] as $key => $value) {
+        foreach($_REQUEST[self::$meta] as $key => $value) {
             if((string) $value !== '') {
                 $meta[$key] = $value;
             }
         }
 
-        update_term_meta($term_id, $this->meta, $meta);
+        update_term_meta($term_id, self::$meta, $meta);
     }
 
 
@@ -188,7 +190,7 @@ class Knife_Custom_Background {
      *
      * @link https://github.com/knife-media/knife-theme/issues/49
      */
-    public function get_meta() {
+    public static function get_meta() {
         $background = [];
 
         /*
@@ -197,7 +199,7 @@ class Knife_Custom_Background {
          * @link https://core.trac.wordpress.org/ticket/18636
          */
         if(is_tax() || is_tag() || is_category()) {
-            $background = get_term_meta(get_queried_object_id(), $this->meta, true);
+            $background = get_term_meta(get_queried_object_id(), self::$meta, true);
         }
 
         /**
@@ -206,6 +208,12 @@ class Knife_Custom_Background {
          * @since 1.3
          * @param array $meta
          */
-        return apply_filters('knife_custom_background', $background, $this->meta);
+        return apply_filters('knife_custom_background', $background, self::$meta);
     }
 }
+
+
+/**
+ * Load current module environment
+ */
+Knife_Custom_Background::load_module();

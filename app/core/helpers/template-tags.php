@@ -17,7 +17,7 @@ if(!function_exists('the_share')) :
      * @since 1.3
      */
     function the_share($before = '', $after = '', $action = '', $title = '', $echo = true) {
-        $share = (new Knife_Share_Buttons)->get_buttons($action, $title);
+        $share = Knife_Share_Buttons::get_buttons($action, $title);
 
         $output = $before . $share . $after;
 
@@ -58,7 +58,7 @@ if(!function_exists('the_lead')) :
      * @since 1.3
      */
     function the_lead($before = '', $after = '', $echo = true) {
-        $lead = (new Knife_Post_Lead)->get_meta();
+        $lead = Knife_Post_Lead::get_meta();
 
         if((string) $lead === '') {
             return;
@@ -82,7 +82,7 @@ if(!function_exists('the_sidebar')) :
      * @since 1.3
      */
     function the_sidebar($id, $before = '', $after = '', $echo = true) {
-        $sidebar = (new Knife_Widget_Handler)->get_sidebar($id);
+        $sidebar = Knife_Widget_Handler::get_sidebar($id);
 
         if((string) $sidebar === '') {
             return;

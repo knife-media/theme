@@ -4,6 +4,7 @@
 *
 * @package knife-theme
 * @since 1.2
+* @version 1.4
 */
 
 
@@ -12,25 +13,22 @@ if (!defined('WPINC')) {
 }
 
 
-(new Knife_Header_Meta)->init();
-
 class Knife_Header_Meta {
     /**
      * Use this method instead of constructor to avoid multiple hook setting
      *
-     * @since 1.3
-     * @version 1.4
+     * @since 1.4
      */
-    public function init() {
-        add_action('wp_head', [$this, 'add_meta'], 5);
-        add_action('wp_head', [$this, 'add_icon'], 4);
-        add_action('wp_head', [$this, 'add_mediator'], 6);
+    public static function load_module() {
+        add_action('wp_head', [__CLASS__, 'add_meta'], 5);
+        add_action('wp_head', [__CLASS__, 'add_icon'], 4);
+        add_action('wp_head', [__CLASS__, 'add_mediator'], 6);
 
-        add_filter('language_attributes', [$this, 'add_xmlns']);
+        add_filter('language_attributes', [__CLASS__, 'add_xmlns']);
     }
 
 
-    public function add_icon() {
+    public static function add_icon() {
         $meta = [];
 
         $path = get_template_directory_uri() . '/assets/images';
@@ -53,7 +51,7 @@ class Knife_Header_Meta {
     }
 
 
-    public function add_xmlns($output) {
+    public static function add_xmlns($output) {
         return 'prefix="og: http://ogp.me/ns#" ' . $output;
     }
 
@@ -64,7 +62,7 @@ class Knife_Header_Meta {
      * @link https://mediator.media/ru/install/
      * @since 1.4
      */
-    public function add_mediator() {
+    public static function add_mediator() {
         if(!is_singular()) {
             return;
         }
@@ -95,10 +93,10 @@ class Knife_Header_Meta {
     }
 
 
-    public function add_meta() {
-        $meta = $this->common_meta();
+    public static function add_meta() {
+        $meta = self::common_meta();
 
-        $meta = (is_singular() && !is_front_page()) ? $this->single_meta($meta) : $this->archive_meta($meta);
+        $meta = (is_singular() && !is_front_page()) ? self::single_meta($meta) : self::archive_meta($meta);
 
         foreach($meta as $tag) {
             echo "$tag\n";
@@ -106,10 +104,10 @@ class Knife_Header_Meta {
     }
 
 
-    private function single_meta($meta = []) {
+    private static function single_meta($meta = []) {
         $post_id = get_queried_object_id();
 
-        $cover = $this->get_cover($post_id);
+        $cover = self::get_cover($post_id);
 
         $meta[] = sprintf('<meta name="description" content="%s">',
             get_the_excerpt($post_id)
@@ -161,7 +159,7 @@ class Knife_Header_Meta {
     }
 
 
-    private function archive_meta($meta = []) {
+    private static function archive_meta($meta = []) {
         $cover = get_template_directory_uri() . '/assets/images/poster-default.png';
 
         $meta[] = sprintf('<meta name="description" content="%s">',
@@ -210,7 +208,7 @@ class Knife_Header_Meta {
     }
 
 
-    private function common_meta($meta = []) {
+    private static function common_meta($meta = []) {
         $meta[] = '<meta property="fb:app_id" content="1281081571902073" />';
 
         $meta[] = '<meta name="twitter:card" content="summary_large_image" />';
@@ -231,7 +229,7 @@ class Knife_Header_Meta {
     }
 
 
-    private function get_cover($post_id) {
+    private static function get_cover($post_id) {
         $social = get_post_meta($post_id, '_social-image', true);
 
         if(empty($social)) {
@@ -241,3 +239,9 @@ class Knife_Header_Meta {
         return [$social, 1024, 512];
     }
 }
+
+
+/**
+ * Load current module environment
+ */
+Knife_Header_Meta::load_module();

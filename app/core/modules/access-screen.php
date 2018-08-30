@@ -6,6 +6,7 @@
 *
 * @package knife-theme
 * @since 1.2
+* @version 1.4
 */
 
 if (!defined('WPINC')) {
@@ -13,30 +14,28 @@ if (!defined('WPINC')) {
 }
 
 
-(new Knife_Access_Screen)->init();
-
 class Knife_Access_Screen {
     /**
      * Use this method instead of constructor to avoid multiple hook setting
      *
-     * @since 1.3
+     * @since 1.4
      */
-    public function init() {
-        add_action('login_headerurl', [$this, 'change_url']);
-        add_action('login_headertitle', [$this, 'change_title']);
+    public static function load_module() {
+        add_action('login_headerurl', [__CLASS__, 'change_url']);
+        add_action('login_headertitle', [__CLASS__, 'change_title']);
 
         // login styles
-        add_filter('login_enqueue_scripts', [$this, 'login_styles']);
+        add_filter('login_enqueue_scripts', [__CLASS__, 'login_styles']);
 
         // admin styles
-        add_action('admin_enqueue_scripts', [$this, 'admin_styles']);
+        add_action('admin_enqueue_scripts', [__CLASS__, 'admin_styles']);
     }
 
 
     /**
      * Prints custom styles with custom logo
      */
-    public function login_styles() {
+    public static function login_styles() {
         $version = wp_get_theme()->get('Version');
         $include = get_template_directory_uri() . '/core/include';
 
@@ -47,7 +46,7 @@ class Knife_Access_Screen {
     /**
      * We have to style login layer on auth-check
      */
-    public function admin_styles() {
+    public static function admin_styles() {
         $version = wp_get_theme()->get('Version');
         $include = get_template_directory_uri() . '/core/include';
 
@@ -57,14 +56,20 @@ class Knife_Access_Screen {
     /**
      * Change logo links to front page instead of wordpress.org
      */
-    public function change_url() {
+    public static function change_url() {
         return home_url();
     }
 
     /**
      * Change logo title
      */
-    public function change_title() {
+    public static function change_title() {
         return __('На главную', 'knife-theme');
     }
 }
+
+
+/**
+ * Load current module environment
+ */
+Knife_Access_Screen::load_module();

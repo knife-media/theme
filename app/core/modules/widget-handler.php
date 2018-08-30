@@ -6,15 +6,13 @@
 *
 * @package knife-theme
 * @since 1.2
+* @version 1.4
 */
 
 
 if (!defined('WPINC')) {
     die;
 }
-
-
-(new Knife_Widget_Handler)->init();
 
 class Knife_Widget_Handler {
    /**
@@ -23,45 +21,45 @@ class Knife_Widget_Handler {
     * @access   private
     * @var      string
     */
-    private $nonce = 'knife-widget-nonce';
+    private static $nonce = 'knife-widget-nonce';
 
 
     /**
      * Use this method instead of constructor to avoid multiple hook setting
      *
-     * @since 1.3
+     * @since 1.4
      */
-    public function init() {
-        add_action('admin_enqueue_scripts', [$this, 'add_assets']);
+    public static function load_module() {
+        add_action('admin_enqueue_scripts', [__CLASS__, 'add_assets']);
 
         // include all widgets
-        add_action('after_setup_theme', [$this, 'include_widgets']);
+        add_action('after_setup_theme', [__CLASS__, 'include_widgets']);
 
         // register widget areas
-        add_action('widgets_init', [$this, 'register_sidebars']);
+        add_action('widgets_init', [__CLASS__, 'register_sidebars']);
 
         // unregister default widgets
-        add_action('widget_init', [$this, 'unregister_defaults'], 11);
+        add_action('widget_init', [__CLASS__, 'unregister_defaults'], 11);
 
         // hide default widgets title
         add_filter('widget_title', '__return_empty_string');
 
         // clear cache
-        add_action('added_post_meta', [$this, 'clear_cache']);
-        add_action('deleted_post_meta', [$this, 'clear_cache']);
-        add_action('updated_post_meta', [$this, 'clear_cache']);
-        add_action('deleted_post', [$this, 'clear_cache']);
-        add_action('save_post', [$this, 'clear_cache']);
-        add_action('widget_update_callback', [$this, 'clear_cache']);
+        add_action('added_post_meta', [__CLASS__, 'clear_cache']);
+        add_action('deleted_post_meta', [__CLASS__, 'clear_cache']);
+        add_action('updated_post_meta', [__CLASS__, 'clear_cache']);
+        add_action('deleted_post', [__CLASS__, 'clear_cache']);
+        add_action('save_post', [__CLASS__, 'clear_cache']);
+        add_action('widget_update_callback', [__CLASS__, 'clear_cache']);
 
-        add_action('wp_ajax_knife_widget_terms', [$this, 'ajax_terms']);
+        add_action('wp_ajax_knife_widget_terms', [__CLASS__, 'ajax_terms']);
     }
 
 
     /**
      * Register widget areas
      */
-    public function register_sidebars() {
+    public static function register_sidebars() {
         register_sidebar([
             'name'          => __('Главная страница', 'knife-theme'),
             'id'            => 'knife-frontal',
@@ -147,7 +145,7 @@ class Knife_Widget_Handler {
     /**
      * Remove default widgets to prevent printing unready styles on production
      */
-    public function unregister_defaults() {
+    public static function unregister_defaults() {
         unregister_widget('WP_Widget_Pages');
         unregister_widget('WP_Widget_Calendar');
         unregister_widget('WP_Widget_Archives');
@@ -167,7 +165,7 @@ class Knife_Widget_Handler {
     /**
      * Show sidebar if exists
      */
-    public function get_sidebar($id, $sidebar = '') {
+    public static function get_sidebar($id, $sidebar = '') {
         if(is_active_sidebar($id)) {
             ob_start();
 
@@ -184,14 +182,14 @@ class Knife_Widget_Handler {
     /**
      * Enqueue assets to admin post screen only
      */
-    public function add_assets($hook) {
+    public static function add_assets($hook) {
         $version = wp_get_theme()->get('Version');
         $include = get_template_directory_uri() . '/core/include';
 
         wp_enqueue_script('knife-widget-handler', $include . '/scripts/widget-handler.js', ['jquery'], $version);
 
         $options = [
-            'nonce' => wp_create_nonce($this->nonce)
+            'nonce' => wp_create_nonce(self::$nonce)
         ];
 
         wp_localize_script('knife-widget-handler', 'knife_widget_handler', $options);
@@ -201,7 +199,7 @@ class Knife_Widget_Handler {
     /**
      * Include widgets classes
      */
-    public function include_widgets() {
+    public static function include_widgets() {
         $widgets = get_template_directory() . '/core/widgets/';
 
         foreach(['story', 'club', 'script', 'recent', 'triple', 'double', 'single', 'feature', 'details', 'transparent'] as $id) {
@@ -213,7 +211,7 @@ class Knife_Widget_Handler {
     /**
      * Remove widgets cache on save or delete post
      */
-    public function clear_cache($instance) {
+    public static function clear_cache($instance) {
         $sidebars = get_option('sidebars_widgets');
 
         foreach($sidebars as $sidebar) {
@@ -231,8 +229,8 @@ class Knife_Widget_Handler {
     /**
      * Custom terms form by taxonomy name
      */
-    public function ajax_terms() {
-        check_ajax_referer($this->nonce, 'nonce');
+    public static function ajax_terms() {
+        check_ajax_referer(self::$nonce, 'nonce');
 
         wp_terms_checklist(0, [
             'taxonomy' => esc_attr($_POST['filter'])
@@ -241,3 +239,9 @@ class Knife_Widget_Handler {
         wp_die();
     }
 }
+
+
+/**
+ * Load current module environment
+ */
+Knife_Widget_Handler::load_module();

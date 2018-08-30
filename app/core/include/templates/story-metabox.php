@@ -2,13 +2,13 @@
     <?php
         // get stories array
         $post_id = get_the_ID();
-        $stories = get_post_meta($post_id, $this->meta . '-stories');
+        $stories = get_post_meta($post_id, self::$meta . '-stories');
 
         $options = [];
 
         // get options
-        foreach($this->opts as $item) {
-            $options[$item] = get_post_meta($post_id, $this->meta . "-{$item}", true);
+        foreach(self::$opts as $item) {
+            $options[$item] = get_post_meta($post_id, self::$meta . "-{$item}", true);
         }
 
         if(count($stories) < 1) {
@@ -27,11 +27,11 @@
                 }
 
                 printf('<input class="item__media" type="hidden" name="%1$s" value="%2$s">',
-                    $this->meta . '-stories[][media]', $story['media'] ?? ''
+                    self::$meta . '-stories[][media]', $story['media'] ?? ''
                 );
 
                 printf('<textarea class="item__entry" name="%1$s">%2$s</textarea>',
-                    $this->meta . '-stories[][entry]', $story['entry'] ?? ''
+                    self::$meta . '-stories[][entry]', $story['entry'] ?? ''
                 );
             ?>
 
@@ -61,7 +61,7 @@
 
                 <?php
                     printf('<input class="option__background-media" type="hidden" name="%s" value="%s">',
-                        $this->meta . '-background',
+                        self::$meta . '-background',
                         $options['background']
                     );
                 ?>
@@ -74,7 +74,7 @@
 
                 <?php
                     printf('<input class="option__range option__range--shadow" type="range" name="%1$s" min="0" max="100" step="5" value="%2$s">',
-                        $this->meta . '-shadow',
+                        self::$meta . '-shadow',
                         absint($options['shadow'])
                     );
                 ?>
@@ -85,7 +85,7 @@
 
                 <?php
                     printf('<input class="option__range option__range--blur" type="range" name="%1$s" min="0" max="10" step="1" value="%2$s">',
-                        $this->meta . '-blur',
+                        self::$meta . '-blur',
                         absint($options['blur'])
                     );
                 ?>

@@ -183,6 +183,34 @@
     width: 100%;
   }
 
+  .post__message {
+    display: flex;
+    flex-flow: column wrap;
+    align-items: flex-start;
+    justify-content: center;
+
+    color: $color-white;
+    min-height: 40vh;
+
+    .post__message-title {
+      display: block;
+
+      width: 100%;
+      margin-bottom: 1.5rem;
+
+      font-size: 2.5rem;
+      font-weight: 700;
+      line-height: 1.075;
+      letter-spacing: .5px;
+
+      @media screen and (max-width: 767px) {
+        margin-bottom: .75rem;
+        font-size: 1.625rem;
+        line-height: 1.125;
+      }
+    }
+  }
+
   .post__card {
     width: 100%;
     max-width: 100%;
@@ -284,6 +312,18 @@
     margin-left: auto;
     margin-right: auto;
     padding: 0;
+
+    background-color: transparent;
+  }
+
+  &.post--none {
+    flex-flow: column wrap;
+    align-items: flex-start;
+    justify-content: center;
+
+    width: 100%;
+    min-height: 60vh;
+    padding: 2rem 0;
 
     background-color: transparent;
   }

@@ -120,7 +120,7 @@
   glide.on('mount.before', function() {
     var slides = story.querySelectorAll('.glide__slide');
 
-    if(slides.length <= 1) {
+    if(slides.length < 1) {
       return false;
     }
 
@@ -328,7 +328,7 @@
    * Set custom background
    */
   glide.on('build.after', function() {
-    if(typeof knife_story_options.background === 'undefined') {
+    if(typeof knife_story_options.background === 'undefined' || knife_story_options.background.length < 1) {
       return story.classList.add('glide--active');
     }
 

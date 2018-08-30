@@ -6,6 +6,7 @@
 *
 * @package knife-theme
 * @since 1.2
+* @version 1.4
 */
 
 if (!defined('WPINC')) {
@@ -13,26 +14,24 @@ if (!defined('WPINC')) {
 }
 
 
-(new Knife_Embed_Filters)->init();
-
 class Knife_Embed_Filters {
     /**
      * Use this method instead of constructor to avoid multiple hook setting
      *
      * @since 1.3
      */
-    public function init() {
+    public static function load_module() {
         // Instagram update
-        add_filter('oembed_providers', [$this, 'instagram_api']);
-        add_filter('embed_oembed_html', [$this, 'instagram_script'], 10, 4);
-        add_filter('script_loader_tag', [$this, 'instagram_loader'], 10, 3);
+        add_filter('oembed_providers', [__CLASS__, 'instagram_api']);
+        add_filter('embed_oembed_html', [__CLASS__, 'instagram_script'], 10, 4);
+        add_filter('script_loader_tag', [__CLASS__, 'instagram_loader'], 10, 3);
     }
 
 
     /**
      * Remove instagram embeds caption
      */
-    public function instagram_api($providers) {
+    public static function instagram_api($providers) {
         $providers['#https?://(www\.)?instagr(\.am|am\.com)/p/.*#i'] = array('https://api.instagram.com/oembed?hidecaption=true', true);
 
         return $providers;
@@ -42,7 +41,7 @@ class Knife_Embed_Filters {
     /**
      * Remove multiple js script from embeds and insert single with enqueue
      */
-    public function instagram_script($cache, $url, $attr, $post_id) {
+    public static function instagram_script($cache, $url, $attr, $post_id) {
         if(!preg_match('#https?://(www\.)?instagr(\.am|am\.com)/p/.*#i', $url)) {
             return $cache;
         }
@@ -56,7 +55,7 @@ class Knife_Embed_Filters {
     /**
      * Add async and defer atts to instagram loader tag
      */
-    public function instagram_loader($tag, $handle, $src) {
+    public static function instagram_loader($tag, $handle, $src) {
         if ($handle !== 'instagram-embed') {
             return $tag;
         }
@@ -64,3 +63,9 @@ class Knife_Embed_Filters {
         return str_replace('<script', '<script async defer', $tag);
     }
 }
+
+
+/**
+ * Load current module environment
+ */
+Knife_Embed_Filters::load_module();

@@ -6,6 +6,7 @@
 *
 * @package knife-theme
 * @since 1.2
+* @version 1.4
 */
 
 
@@ -14,8 +15,6 @@ if (!defined('WPINC')) {
 }
 
 
-(new Knife_Post_Sticker)->init();
-
 class Knife_Post_Sticker {
    /**
     * Post meta name
@@ -23,36 +22,38 @@ class Knife_Post_Sticker {
     * @access  private
     * @var     string
     */
-    private $meta = '_knife-sticker';
+    private static $meta = '_knife-sticker';
 
 
     /**
      * Use this method instead of constructor to avoid multiple hook setting
      *
-     * @since 1.3
+     * @since 1.4
      */
-    public function init() {
-        add_action('admin_enqueue_scripts', [$this, 'add_assets']);
+    public static function load_module() {
+        add_action('admin_enqueue_scripts', [__CLASS__, 'add_assets']);
 
         // post sticker
-        add_action('add_meta_boxes', [$this, 'add_metabox']);
+        add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
 
-        add_action('wp_ajax_knife_sticker_upload', [$this, 'upload_sticker']);
-        add_action('wp_ajax_knife_sticker_delete', [$this, 'delete_sticker']);
+        add_action('wp_ajax_knife_sticker_upload', [__CLASS__, 'upload_sticker']);
+        add_action('wp_ajax_knife_sticker_delete', [__CLASS__, 'delete_sticker']);
     }
 
 
      /**
      * Enqueue assets to admin post screen only
      */
-    public function add_assets($hook) {
-        if(!in_array($hook, ['post.php', 'post-new.php']))
+    public static function add_assets($hook) {
+        if(!in_array($hook, ['post.php', 'post-new.php'])) {
             return;
+        }
 
         $post_id = get_the_ID();
 
-        if(get_post_type($post_id) !== 'post')
+        if(get_post_type($post_id) !== 'post') {
             return;
+        }
 
         $version = wp_get_theme()->get('Version');
         $include = get_template_directory_uri() . '/core/include';
@@ -74,15 +75,15 @@ class Knife_Post_Sticker {
     /**
      * Add meta box to admin post screen
      */
-    public function add_metabox() {
-        add_meta_box('knife-sticker-metabox', __('Стикер', 'knife-theme'), [$this, 'print_metabox'], 'post', 'side');
+    public static function add_metabox() {
+        add_meta_box('knife-sticker-metabox', __('Стикер', 'knife-theme'), [__CLASS__, 'print_metabox'], 'post', 'side');
     }
 
 
     /**
      * Display meta box template
      */
-    public function print_metabox() {
+    public static function print_metabox() {
         $include = get_template_directory() . '/core/include';
 
         include_once($include . '/templates/sticker-metabox.php');
@@ -92,19 +93,21 @@ class Knife_Post_Sticker {
     /**
      * Ajax based image uploader
      */
-    public function upload_sticker() {
+    public static function upload_sticker() {
         $post_id = intval($_POST['post']);
         $sticker = intval($_POST['sticker']);
 
-        if(!current_user_can('edit_post', $post_id))
+        if(!current_user_can('edit_post', $post_id)) {
             wp_send_json_error(__('Нет прав на редактирование записи', 'knife-theme'));
+        }
 
-        $file = $this->set_filename($post_id, '/stickers/');
+        $file = self::set_filename($post_id, '/stickers/');
 
         $image = wp_get_image_editor(get_attached_file($sticker));
 
-        if(is_wp_error($image))
+        if(is_wp_error($image)) {
             wp_send_json_error($image->get_error_message());
+        }
 
         $image->resize(150, 150, true);
         $image->save($file['dir'], 'image/png');
@@ -112,10 +115,11 @@ class Knife_Post_Sticker {
         if(is_wp_error($image))
             wp_send_json_error($image->get_error_message());
 
-        $meta = update_post_meta($post_id, $this->meta, $file['url']);
+        $meta = update_post_meta($post_id, self::$meta, $file['url']);
 
-        if($meta)
+        if($meta) {
             return wp_send_json_success($file['url']);
+        }
 
         return wp_send_json_error(__('Ошибка при сохранении стикера', 'knife-theme'));
     }
@@ -124,14 +128,16 @@ class Knife_Post_Sticker {
     /**
      * Remove meta from post
      */
-    public function delete_sticker() {
+    public static function delete_sticker() {
         $post_id = intval($_POST['post']);
 
-        if(!current_user_can('edit_post', $post_id))
+        if(!current_user_can('edit_post', $post_id)) {
             wp_send_json_error(__('Нет прав на редактирование записи', 'knife-theme'));
+        }
 
-        if(delete_post_meta($post_id, $this->meta))
+        if(delete_post_meta($post_id, self::$meta)) {
             wp_send_json_success(__('Стикер yспешно удален', 'knife-theme'));
+        }
 
         wp_send_json_error(__('Не удалось удалить стикер', 'knife-theme'));
     }
@@ -140,15 +146,22 @@ class Knife_Post_Sticker {
     /**
      * Generate new sticker filename
      */
-    private function set_filename($post_id, $folder) {
+    private static function set_filename($post_id, $folder) {
         $upload = wp_upload_dir();
         $create = $upload['basedir'] . $folder;
 
-        if(!is_dir($create) && !mkdir($create))
+        if(!is_dir($create) && !mkdir($create)) {
             wp_send_json_error(__('Проверьте права на запись папки загрузок', 'knife-theme'));
+        }
 
         $file = $folder . "{$post_id}-" . time() . '.png';
 
         return ['dir' => $upload['basedir'] . $file, 'url' => $upload['baseurl'] . $file];
     }
 }
+
+
+/**
+ * Load current module environment
+ */
+Knife_Post_Sticker::load_module();

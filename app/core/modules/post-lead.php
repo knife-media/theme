@@ -129,12 +129,11 @@ class Knife_Post_Lead {
         }
 
         // Save lead-text meta
-        if(!empty($_REQUEST[self::$meta])) {
-            update_post_meta($post_id, self::$meta, $_REQUEST[self::$meta]);
+        if(empty($_REQUEST[self::$meta])) {
+            return delete_post_meta($post_id, self::$meta);
         }
-        else {
-            delete_post_meta($post_id, self::$meta);
-        }
+
+        return update_post_meta($post_id, self::$meta, $_REQUEST[self::$meta]);
     }
 }
 

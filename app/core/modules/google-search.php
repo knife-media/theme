@@ -6,15 +6,13 @@
 *
 * @package knife-theme
 * @since 1.2
+* @version 1.4
 */
 
 
 if (!defined('WPINC')) {
     die;
 }
-
-
-(new Knife_Google_Search)->init();
 
 class Knife_Google_Search {
     /**
@@ -23,32 +21,33 @@ class Knife_Google_Search {
      * @access  private
      * @var     string
      */
-    private $option = 'knife-search-settings';
+    private static $option = 'knife-search-settings';
 
 
     /**
      * Init function instead of constructor
      *
-     * @since 1.3
+     * @since 1.4
      */
-    public function init() {
-        // include Google Custom Search js sdk
-        add_action('wp_enqueue_scripts', [$this, 'inject_object'], 12);
+    public static function load_module() {
+        // Include Google Custom Search js sdk
+        add_action('wp_enqueue_scripts', [__CLASS__, 'inject_object'], 12);
 
-        // plugin settings
-        add_action('admin_init', [$this, 'settings_init']);
-        add_action('admin_menu', [$this, 'add_menu']);
+        // Plugin settings
+        add_action('admin_init', [__CLASS__, 'settings_init']);
+        add_action('admin_menu', [__CLASS__, 'add_menu']);
     }
 
 
     /**
      * Include app id for Google Custom Search API to knife-theme js script
      */
-    public function inject_object() {
-        $opts = get_option($this->option);
+    public static function inject_object() {
+        $opts = get_option(self::$option);
 
-        if(empty($opts['appid']))
+        if(empty($opts['appid'])) {
             return false;
+        }
 
         wp_localize_script('knife-theme', 'knife_search_id', $opts['appid']);
     }
@@ -57,15 +56,15 @@ class Knife_Google_Search {
     /**
      * Add push settings submenu to main options menu
      */
-    public function add_menu() {
-        add_submenu_page('options-general.php', __('Настройка поиска', 'knife-theme'), __('Поиск по сайту', 'knife-theme'), 'manage_options', 'knife-search', [$this, 'settings_page']);
+    public static function add_menu() {
+        add_submenu_page('options-general.php', __('Настройка поиска', 'knife-theme'), __('Поиск по сайту', 'knife-theme'), 'manage_options', 'knife-search', [__CLASS__, 'settings_page']);
     }
 
 
     /**
      * Display push options page
      */
-     public function settings_page() {
+     public static function settings_page() {
         echo '<form class="wrap" action="options.php" method="post">';
 
         settings_fields('knife-search-settings');
@@ -79,8 +78,8 @@ class Knife_Google_Search {
     /**
      * Register settings forms
      */
-    public function settings_init() {
-        register_setting('knife-search-settings', $this->option);
+    public static function settings_init() {
+        register_setting('knife-search-settings', self::$option);
 
         add_settings_section(
             'knife-search-section',
@@ -92,20 +91,26 @@ class Knife_Google_Search {
         add_settings_field(
             'appid',
             __('Google Custom Search ID', 'knife-theme'),
-            [$this, 'setting_render_appid'],
+            [__CLASS__, 'setting_render_appid'],
             'knife-search-settings',
             'knife-search-section'
         );
     }
 
-    public function setting_render_appid() {
-        $options = get_option($this->option);
+    public static function setting_render_appid() {
+        $options = get_option(self::$option);
         $default = isset($options['appid']) ? $options['appid'] : '';
 
         printf(
             '<input type="text" name="%1$s[appid]" class="widefat" value="%2$s">',
-            $this->option,
+            self::$option,
             esc_attr($default)
         );
     }
 }
+
+
+/**
+ * Load current module environment
+ */
+Knife_Google_Search::load_module();

@@ -6,6 +6,7 @@
 *
 * @package knife-theme
 * @since 1.3
+* @version 1.4
 */
 
 
@@ -13,8 +14,6 @@ if (!defined('WPINC')) {
     die;
 }
 
-
-(new Knife_Special_Projects)->init();
 
 class Knife_Special_Projects {
     /**
@@ -24,41 +23,34 @@ class Knife_Special_Projects {
      * @access  private
      * @var     string
      */
-    private $slug = 'special';
+    private static $slug = 'special';
 
 
     /**
      * Use this method instead of constructor to avoid multiple hook setting
      *
-     * @since 1.3
+     * @since 1.4
      */
-    public function init() {
+    public static function load_module() {
         // Register taxonomy
-        add_action('after_setup_theme', [$this, 'register_taxonomy']);
+        add_action('after_setup_theme', [__CLASS__, 'register_taxonomy']);
 
         // Add special single header
-        add_action('knife_template', [$this, 'single_header']);
+        add_action('knife_template', [__CLASS__, 'single_header']);
 
         // Filter special archive header
-        add_filter('knife_archive_header', [$this, 'archive_header']);
+        add_filter('knife_archive_header', [__CLASS__, 'archive_header']);
 
         // Add custom background to single post if exists
-        add_filter('knife_custom_background', [$this, 'update_background'], 10, 2);
-
-        // Add custom background for special taxonomy
-        add_filter('knife_custom_background_taxes', function($default) {
-            $default[] = $this->slug;
-
-            return $default;
-        });
+        add_filter('knife_custom_background', [__CLASS__, 'update_background'], 10, 2);
     }
 
 
     /**
      * Create custom taxonomy
      */
-    public function register_taxonomy() {
-        register_taxonomy($this->slug, 'post', [
+    public static function register_taxonomy() {
+        register_taxonomy(self::$slug, 'post', [
             'labels' => [
                 'name'                       => __('Спецпроекты', 'knife-theme'),
                 'singular_name'              => __('Спецпроект', 'knife-theme'),
@@ -81,7 +73,7 @@ class Knife_Special_Projects {
             'show_admin_column'     => true,
             'show_in_nav_menus'     => true,
             'query_var'             => true,
-            'rewrite'               => ['slug' => $this->slug],
+            'rewrite'               => ['slug' => self::$slug],
         ]);
     }
 
@@ -89,9 +81,9 @@ class Knife_Special_Projects {
     /**
      * Append header special taxonomy link
      */
-    public function single_header() {
-        if(is_single() && has_term('', $this->slug)) {
-            $terms = wp_get_post_terms(get_queried_object_id(), $this->slug);
+    public static function single_header() {
+        if(is_single() && has_term('', self::$slug)) {
+            $terms = wp_get_post_terms(get_queried_object_id(), self::$slug);
 
             printf('<a class="caption special" href="%1$s"><p>%2$s</p></a>',
                 esc_url(get_term_link($terms[0]->term_id)),
@@ -104,8 +96,8 @@ class Knife_Special_Projects {
     /**
      * Filter archive special header
      */
-    public function archive_header($header) {
-        if(is_tax($this->slug)) {
+    public static function archive_header($header) {
+        if(is_tax(self::$slug)) {
             $header = sprintf('<div class="caption special"><h1>%s</h1></div>',
                 single_term_title('', false)
             );
@@ -118,9 +110,9 @@ class Knife_Special_Projects {
     /**
      * Set custom background from term meta
      */
-    public function update_background($background, $meta) {
-        if(is_single() && has_term('', $this->slug)) {
-            $post_terms = wp_get_post_terms(get_queried_object_id(), $this->slug);
+    public static function update_background($background, $meta) {
+        if(is_single() && has_term('', self::$slug)) {
+            $post_terms = wp_get_post_terms(get_queried_object_id(), self::$slug);
 
             // Check only first term
             $background = get_term_meta($post_terms[0]->term_id, $meta, true);
@@ -129,3 +121,9 @@ class Knife_Special_Projects {
         return $background;
     }
 }
+
+
+/**
+ * Load current module environment
+ */
+Knife_Special_Projects::load_module();
