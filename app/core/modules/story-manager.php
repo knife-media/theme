@@ -264,7 +264,7 @@ class Knife_Story_Manager {
      * Append to author archive loop story posts
      */
     public static function update_archive($query) {
-        if(is_author() && $query->is_main_query()) {
+        if(!is_admin() && is_author() && $query->is_main_query()) {
             $types = $query->get('post_type');
 
             if(!is_array($types)) {
