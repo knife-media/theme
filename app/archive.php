@@ -11,7 +11,7 @@ get_header(); ?>
 
 <div class="wrap">
     <?php if(have_posts() && get_the_archive_title()) : ?>
-        <header class="caption block">
+        <header class="caption">
             <?php
                 the_archive_title();
 
@@ -20,7 +20,7 @@ get_header(); ?>
         </header>
     <?php endif; ?>
 
-    <section class="content block">
+    <section class="content">
        <?php
             if(have_posts()) :
                 while(have_posts()) : the_post();
@@ -37,7 +37,7 @@ get_header(); ?>
     </section>
 
     <?php if(have_posts() && get_next_posts_link()) : ?>
-        <nav class="nav block">
+        <nav class="navigation">
             <?php
                 next_posts_link(__('Больше статей', 'knife-theme'));
             ?>

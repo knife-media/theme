@@ -11,6 +11,9 @@
     flex-flow: row wrap;
 
     width: 100%;
+    max-width: $site-width;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
   .footer__copy {

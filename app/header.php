@@ -38,7 +38,7 @@
 <?php endif; ?>
 
 <header class="header">
-    <div class="header__topline topline block">
+    <div class="header__topline topline">
          <button class="topline__button topline__button--menu toggle toggle--menu" id="toggle-menu" role="button">
             <span class="toggle__line"></span>
              <span class="toggle__line"></span>

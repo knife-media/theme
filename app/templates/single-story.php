@@ -9,7 +9,7 @@
 get_header(); ?>
 
 <div class="wrap">
-    <section class="content glide">
+    <section class="glide">
         <?php
             while(have_posts()) : the_post();
 
@@ -19,7 +19,7 @@ get_header(); ?>
         ?>
     </section>
 
-    <section class="content block">
+    <section class="content">
         <?php
             $stories = new WP_Query([
                 'post_type' => 'story',
@@ -39,7 +39,7 @@ get_header(); ?>
         ?>
     </section>
 
-    <nav class="nav block">
+    <nav class="navigation">
         <?php
             printf('<a class="button" href="%2$s">%1$s</a>',
                 __('Все истории', 'knife-theme'),

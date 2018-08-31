@@ -9,7 +9,7 @@
 
 <footer class="footer">
 
-    <div class="footer__inner block">
+    <div class="footer__inner">
 
         <div class="footer__logo">
             <a class="footer__logo-link" href="<?php echo esc_url(home_url('/')); ?>">

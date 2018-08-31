@@ -10,7 +10,7 @@
 get_header(); ?>
 
 <div class="wrap">
-    <section class="content block">
+    <section class="content">
         <?php
             while(have_posts()) : the_post();
 

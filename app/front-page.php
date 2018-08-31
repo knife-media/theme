@@ -15,14 +15,14 @@ get_header(); ?>
 <main class="wrap">
 
     <?php if(is_active_sidebar('knife-under-header')) : ?>
-        <div class="content">
+        <div class="">
             <?php dynamic_sidebar('knife-under-header'); ?>
         </div>
     <?php endif; ?>
 
 
     <?php if(is_active_sidebar('knife-feature-stripe')) : ?>
-        <div class="content block">
+        <div class="content">
             <div class="split split--content">
                 <?php dynamic_sidebar('knife-feature-stripe'); ?>
             </div>
@@ -37,13 +37,21 @@ get_header(); ?>
 
 
     <?php if(is_active_sidebar('knife-frontal')) : ?>
-        <div class="content block up">
-            <?php dynamic_sidebar('knife-frontal'); ?>
-
-            <a class="nav button" href="<?php echo home_url('/recent/page/4/'); ?>"><?php _e('Больше статей', 'knife-media'); ?></a>
+        <div class="content content--press">
+            <?php
+                dynamic_sidebar('knife-frontal');
+            ?>
         </div>
-    <?php endif; ?>
 
+        <nav class="navigation">
+            <?php
+                printf('<a class="button" href="%2$s">%1$s</a>',
+                    __('Больше статей', 'knife-theme'),
+                    esc_url(home_url('/recent/page/4/'))
+                );
+            ?>
+        </nav>
+    <?php endif; ?>
 </main>
 
 <?php get_footer();

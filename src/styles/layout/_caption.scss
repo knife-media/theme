@@ -2,8 +2,9 @@
   display: block;
 
   width: 100%;
-  padding-top: 1rem;
-  padding-bottom: 0;
+  max-width: $site-width;
+
+  padding: 1rem 1rem 0;
 
   .caption__title {
     display: inline-block;

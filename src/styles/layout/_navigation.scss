@@ -1,10 +1,18 @@
-.nav {
+.navigation {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-around;
 
   width: 100%;
+  max-width: $site-width;
+
   margin-bottom: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  &.navigation--slim {
+    max-width: $slim-width;
+  }
 
   @media screen and (max-width: 479px) {
     padding-left: 0;

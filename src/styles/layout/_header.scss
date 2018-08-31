@@ -10,4 +10,10 @@
 
   color: $color-text;
   background-color: $color-white;
+
+  .header__topline {
+    max-width: $site-width;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }
