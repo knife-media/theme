@@ -99,7 +99,7 @@ class Knife_User_Club {
         add_action('pre_get_posts', [__CLASS__, 'update_archive'], 12);
 
         // Prepend author meta to content
-        add_filter('the_content', [__CLASS__, 'insert_metalink']);
+        add_filter('the_content', [__CLASS__, 'insert_author_link']);
 
         // Append promo link to club content
         add_filter('the_content', [__CLASS__, 'insert_club_promo']);
@@ -249,20 +249,24 @@ class Knife_User_Club {
     /**
      * Insert link to author on single club post
      */
-    public static function insert_metalink($content) {
+    public static function insert_author_link($content) {
         if(!is_singular(self::$slug) || !in_the_loop()) {
             return $content;
         }
 
-        $meta = get_the_author_meta('ID');
+        $user_url = get_the_author_meta('user_url');
 
-        $link = sprintf('<a class="outbound" href="%3$s"><p class="outbound__author">%1$s</p><p>%2$s</p></a>',
+        if(empty($user_url)) {
+            $user_url = get_author_posts_url(get_the_author_meta('ID'));
+        }
+
+        $outbound = sprintf('<a class="outbound" href="%3$s" target="_blank"><p class="outbound__author">%1$s</p><p>%2$s</p></a>',
             get_the_author(),
-            get_the_author_meta('description'),
-            get_author_posts_url($meta)
+            esc_html(get_the_author_meta('description')),
+            esc_url($user_url)
         );
 
-        return $link . $content;
+        return $outbound . $content;
     }
 
 
