@@ -260,7 +260,7 @@ class Knife_User_Club {
             $user_url = get_author_posts_url(get_the_author_meta('ID'));
         }
 
-        $outbound = sprintf('<a class="outbound" href="%3$s" target="_blank"><p class="outbound__author">%1$s</p><p>%2$s</p></a>',
+        $outbound = sprintf('<a class="outbound" href="%3$s" target="_blank"><p class="outbound__author">%1$s</p> <p>%2$s</p></a>',
             get_the_author(),
             esc_html(get_the_author_meta('description')),
             esc_url($user_url)
