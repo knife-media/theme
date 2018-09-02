@@ -4,18 +4,26 @@
   justify-content: space-between;
 
   width: 100%;
-  max-width: $site-width;
+  max-width: $width-site;
   margin-top: 1rem;
 
   padding-left: 1rem;
   padding-right: 1rem;
 
-  &.content--press {
-    margin-top: 0;
+  &.content--news {
+    max-width: $width-news;
   }
 
-  &.content--slim {
-    max-width: $slim-width;
+  &.content--post {
+    justify-content: center;
+
+    @media screen and (max-width: 1023px) {
+      max-width: 100%;
+    }
+  }
+
+  @media screen and (max-width: 1023px) {
+    max-width: $width-tablet;
   }
 
   @media screen and (max-width: 479px) {

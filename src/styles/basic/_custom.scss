@@ -6,7 +6,7 @@
   -webkit-font-smoothing: auto;
 
   & > * {
-    max-width: $content-width;
+    max-width: $width-content;
     width: 100%;
 
     &:first-child {
@@ -15,7 +15,7 @@
   }
 
   blockquote {
-    max-width: $content-width;
+    max-width: $width-content;
     width: 100%;
   }
 
@@ -220,7 +220,7 @@
     }
 
     td {
-      min-width: calc(#{$content-width} / 2);
+      min-width: calc(#{$width-content} / 2);
       padding: .5rem;
 
       &:first-child {

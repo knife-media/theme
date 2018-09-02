@@ -2,7 +2,7 @@
   display: block;
 
   width: 100%;
-  max-width: $site-width;
+  max-width: $width-site;
 
   padding: 1rem 1rem 0;
 
@@ -35,7 +35,7 @@
       color: $color-white;
       background: none;
 
-      @media screen and (max-width: 767px) {
+      @media screen and (max-width: 1023px) {
         font-size: 3.75rem;
       }
 
@@ -53,10 +53,6 @@
       }
 
       @media screen and (max-width: 1023px) {
-        font-size: 6rem;
-      }
-
-      @media screen and (max-width: 767px) {
         font-size: 3.75rem;
       }
 
@@ -111,34 +107,7 @@
     }
   }
 
-  &.special {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    width: 100%;
-    padding: .625rem .5rem;
-    font-weight: 700;
-    line-height: 1;
-
-    background-color: #e05915;
-    color: $color-white;
-
-    h1, p {
-      font-size: 2.5rem;
-
-      @media screen and (max-width: 1023px) {
-        font-size: 2rem;
-      }
-
-      @media screen and (max-width: 767px) {
-        font-size: 1.875rem;
-      }
-
-      @media screen and (max-width: 478px) {
-        font-size: 1.5rem;
-      }
-
-    }
+  @media screen and (max-width: 1023px) {
+    max-width: $width-tablet;
   }
 }

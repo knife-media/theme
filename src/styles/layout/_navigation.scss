@@ -4,14 +4,18 @@
   justify-content: space-around;
 
   width: 100%;
-  max-width: $site-width;
+  max-width: $width-site;
 
   margin-bottom: 1rem;
   padding-left: 1rem;
   padding-right: 1rem;
 
-  &.navigation--slim {
-    max-width: $slim-width;
+  &.navigation--news {
+    max-width: $width-news;
+  }
+
+  @media screen and (max-width: 1023px) {
+    max-width: $width-tablet;
   }
 
   @media screen and (max-width: 479px) {

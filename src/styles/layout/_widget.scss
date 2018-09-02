@@ -1,10 +1,4 @@
 .widget {
   display: flex;
   position: relative;
-
-  margin-bottom: 1rem;
-
-  &.widget--header:last-child {
-    margin-bottom: 0;
-  }
 }

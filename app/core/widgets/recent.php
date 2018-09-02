@@ -17,7 +17,7 @@ class Knife_Recent_Widget extends WP_Widget {
             'customize_selective_refresh' => true
         ];
 
-        parent::__construct('knife_theme_recent', __('[НОЖ] Новости', 'knife-theme'), $widget_ops);
+        parent::__construct('knife_widget_recent', __('[НОЖ] Новости', 'knife-theme'), $widget_ops);
     }
 
 

@@ -9,8 +9,8 @@
 
 get_header(); ?>
 
-<main class="wrap">
-    <section class="content">
+<div class="wrap">
+    <section class="content content--post">
         <?php
             while(have_posts()) : the_post();
 
@@ -19,6 +19,6 @@ get_header(); ?>
             endwhile;
         ?>
     </section>
-</main>
+</div>
 
 <?php get_footer();

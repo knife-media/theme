@@ -10,7 +10,7 @@
 get_header(); ?>
 
 <div class="wrap">
-    <section class="content content--slim">
+    <section class="content content--news">
        <?php
             if(have_posts()) :
                 while(have_posts()) : the_post();
@@ -27,9 +27,9 @@ get_header(); ?>
     </section>
 
     <?php if(have_posts() && get_next_posts_link()) : ?>
-        <nav class="navigation navigation--slim">
+        <nav class="navigation navigation--news">
             <?php
-                next_posts_link(__('Больше историй', 'knife-theme'));
+                next_posts_link(__('Больше новостей', 'knife-theme'));
             ?>
         </nav>
     <?php endif; ?>

@@ -6,6 +6,7 @@
  *
  * @package knife-theme
  * @since 1.1
+ * @version 1.4
  */
 
 
@@ -18,7 +19,7 @@ class Knife_Single_Widget extends WP_Widget {
             'customize_selective_refresh' => true
         ];
 
-        parent::__construct('knife_theme_single', __('[НОЖ] На всю ширину', 'knife-theme'), $widget_ops);
+        parent::__construct('knife_widget_single', __('[НОЖ] На всю ширину', 'knife-theme'), $widget_ops);
     }
 
 
@@ -39,87 +40,51 @@ class Knife_Single_Widget extends WP_Widget {
 
         $instance = wp_parse_args((array) $instance, $defaults);
 
-        extract($instance);
+        $exclude = get_query_var('widget_exclude', []);
+        $post_id = url_to_postid($instance['link']);
 
-        // Check cache before creating WP_Query object
-        $html = get_transient($this->id);
+        $query = new WP_Query([
+            'post_status' => 'publish',
+            'posts_per_page' => 1,
+            'post_type' => 'any',
+            'ignore_sticky_posts' => 1,
+            'post__in' => [$post_id]
+        ]);
 
-        if($html === false) :
-            $exclude = get_query_var('widget_exclude', []);
+        if($query->have_posts()) : $query->the_post();
+            echo $args['before_widget'];
 
-            $q = new WP_Query([
-                'post_status' => 'publish',
-                'posts_per_page' => 1,
-                'post_type' => 'any',
-                'ignore_sticky_posts' => 1,
-                'post__in' => [url_to_postid($link)]
-            ]);
+            the_info(
+                '<div class="widget-single__head meta">', '</div>',
+                ['tag']
+            );
 
-            ob_start();
+            printf(
+                '<div class="widget-single__image">%s</div>',
+                get_the_post_thumbnail(null, 'single', ['class' => 'widget-single__image-thumbnail'])
+            );
 
-            if($q->have_posts()) :
+            $title = sprintf(
+                '<a class="widget-single__content-title" href="%2$s">%1$s</a>',
+                get_the_title(),
+                esc_url(get_permalink())
+            );
 
-                while($q->have_posts()) : $q->the_post();
-                    echo $args['before_widget'];
+            $meta = the_info(
+                '<div class="widget-single__content-meta meta">', '</div>',
+                ['author', 'date'], false
+            );
 
-                    $classes = [];
+            printf(
+                '<div class="widget-single__content">%s</div>',
+                $title . $meta
+            );
 
-                    $head = the_info(
-                        '<div class="widget__head meta">', '</div>',
-                        ['tag'], false
-                    );
+            echo $args['after_widget'];
 
-
-                    $image = sprintf('<div class="widget__image">%s</div>',
-                        get_the_post_thumbnail(null, 'single', ['class' => 'widget__image-thumbnail'])
-                    );
-
-                    $link = sprintf('<a class="widget__link" href="%2$s">%1$s</a>',
-                        the_title('<p class="widget__title">', '</p>', false),
-                        esc_url(get_permalink())
-                    );
-
-                    $meta = the_info(
-                        '<div class="widget__meta meta">', '</div>',
-                        ['author', 'date'], false
-                    );
-
-                    $classes[] = 'widget__item';
-
-                    switch($cover) {
-                        case 'cover':
-                            $classes[] = 'widget__item--cover';
-
-                            break;
-
-                        case 'nocover':
-                            break;
-
-                        default:
-                            if(!get_post_meta(get_the_ID(), '_knife-cover', true))
-                                break;
-
-                            $classes[] = 'widget__item--cover';
-                    }
-
-                    printf('<article class="%3$s">%1$s<footer class="widget__footer">%2$s</footer></article>',
-                        $head . $image, $link . $meta,
-                        implode(' ', $classes)
-                    );
-
-                    echo $args['after_widget'];
-                endwhile;
-
-                set_query_var('widget_exclude', array_merge($exclude, wp_list_pluck($q->posts, 'ID')));
-            endif;
-
+            set_query_var('widget_exclude', array_merge($exclude, wp_list_pluck($query->posts, 'ID')));
             wp_reset_query();
-
-            $html = ob_get_clean();
-            set_transient($this->id, $html, 24 * HOUR_IN_SECONDS);
         endif;
-
-        echo $html;
     }
 
 
@@ -159,13 +124,6 @@ class Knife_Single_Widget extends WP_Widget {
 
         $instance = wp_parse_args((array) $instance, $defaults);
 
-        $cover = [
-            'defalut' => __('По умолчанию', 'knife-theme'),
-            'cover' => __('Использовать подложку', 'knife-theme'),
-            'nocover' => __('Убрать подложку', 'knife-theme')
-        ];
-
-
         // Widget title
         printf(
             '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"><small>%5$s</small></p>',
@@ -175,22 +133,6 @@ class Knife_Single_Widget extends WP_Widget {
             esc_attr($instance['title']),
             __('Не будет отображаться на странице', 'knife-theme')
         );
-
-
-        // Cover manage
-        printf(
-            '<p><label for="%1$s">%3$s</label><select class="widefat" id="%1$s" name="%2$s">',
-            esc_attr($this->get_field_id('cover')),
-             esc_attr($this->get_field_name('cover')),
-            __('Подложка карточки:', 'knife-theme')
-        );
-
-        foreach($cover as $name => $title) {
-            printf('<option value="%1$s"%3$s>%2$s</option>', $name, $title, selected($instance['cover'], $name, false));
-        }
-
-        echo '</select></p>';
-
 
         // Post url
         printf(

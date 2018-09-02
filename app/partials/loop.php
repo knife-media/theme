@@ -8,38 +8,37 @@
  */
 ?>
 
-<article class="widget widget-<?php echo get_query_var('widget_size', 'triple'); ?>">
-    <div class="widget__item">
+<article class="unit unit--<?php echo get_query_var('widget_size', 'triple'); ?>">
+    <div class="unit__item">
         <?php
             the_info(
-                '<div class="widget__head">', '</div>',
+                '<div class="unit__head">', '</div>',
                 ['tag']
             );
         ?>
 
-        <div class="widget__image">
+        <div class="unit__image">
             <?php
                 the_post_thumbnail(
                     get_query_var('widget_size', 'triple'),
-                    ['class' => 'widget__image-thumbnail']
+                    ['class' => 'unit__image-thumbnail']
                 );
             ?>
         </div>
 
-        <footer class="widget__footer">
+        <footer class="unit__footer">
             <?php
                 printf(
-                    '<a class="widget__link" href="%2$s">%1$s</a>',
-                    the_title('<p class="widget__title">', '</p>', false),
+                    '<a class="unit__link" href="%2$s">%1$s</a>',
+                    the_title('<p class="unit__title">', '</p>', false),
                     get_permalink()
                 );
 
                 the_info(
-                    '<div class="widget__meta meta">', '</div>',
+                    '<div class="unit__meta meta">', '</div>',
                     ['author', 'date']
                 );
             ?>
         </footer>
     </div>
 </article>
-

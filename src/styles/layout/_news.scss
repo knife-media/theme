@@ -1,0 +1,116 @@
+.news {
+  display: block;
+  position: relative;
+
+  width: 100%;
+  margin-bottom: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+
+  color: $color-text;
+  background-color: $color-white;
+
+ .news__footer {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: space-between;
+    flex: 1 1 70%;
+    z-index: 1;
+
+    padding: 1.25rem;
+
+    background-color: $color-white;
+
+    @media screen and (max-width: 1023px) {
+      padding: 1rem;
+    }
+  }
+
+  .news__title {
+    display: block;
+
+    width: 100%;
+
+    font-size: 1.875rem;
+    font-weight: 700;
+    line-height: 1.125;
+    letter-spacing: .25px;
+    word-wrap: break-word;
+
+    strong {
+      color: $color-primary;
+    }
+
+    @media screen and (max-width: 1023px) {
+      font-size: 1.5rem;
+      line-height: 1.25;
+    }
+
+    @media screen and (max-width: 767px) {
+      font-size: 1.25rem;
+    }
+
+    @media screen and (max-width: 479px) {
+      font-size: 1.125rem;
+    }
+  }
+
+  .news__meta {
+    display: block;
+
+    width: 100%;
+    margin-top: 1rem;
+
+    font-size: .5625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+
+    .meta__link {
+      position: relative;
+
+      @media screen and (max-width: 767px) {
+        &:nth-child(3):after {
+          display: none;
+        }
+
+        &:nth-child(n+4) {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .news__item {
+    display: flex;
+    flex-flow: row-reverse nowrap;
+    cursor: pointer;
+
+    width: 100%;
+    height: 100%;
+    padding-top: 0;
+
+    color: $color-text;
+    background-color: $color-white;
+  }
+
+  .news__link {
+    display: block;
+
+    &:after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      cursor: pointer;
+
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    margin-bottom: .5rem;
+  }
+}

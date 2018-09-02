@@ -11,9 +11,13 @@
     flex-flow: row wrap;
 
     width: 100%;
-    max-width: $site-width;
+    max-width: $width-site;
     padding-left: 1rem;
     padding-right: 1rem;
+
+    @media screen and (max-width: 1023px) {
+      max-width: $width-tablet;
+    }
   }
 
   .footer__copy {
@@ -22,10 +26,6 @@
 
     @media screen and (max-width:1023px) {
       width: 100%;
-      padding-top: 1rem;
-    }
-
-    @media screen and (max-width:767px) {
       padding: 0;
     }
   }
@@ -60,18 +60,9 @@
 
       width: 6.25rem;
       height: 1.875rem;
-
-      @media screen and (max-width: 1023px) {
-        width: 5rem;
-        height: 1.5rem;
-      }
     }
 
     @media screen and (max-width: 1023px) {
-      width: 50%;
-    }
-
-    @media screen and (max-width: 767px) {
       display: none;
     }
   }
@@ -116,16 +107,12 @@
     }
 
     @media screen and (max-width: 1023px) {
-      width: 50%;
-    }
-
-    @media screen and (max-width: 767px) {
       width: 100%;
       padding-bottom: 1rem;
     }
   }
 
-  @media screen and (max-width: 767px) {
+  @media screen and (max-width: 1023px) {
     padding: 1rem 0;
   }
 }

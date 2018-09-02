@@ -7,19 +7,19 @@
  */
 ?>
 
-<article class="widget widget-logbook">
+<article class="news">
 
-    <div class="widget__item">
-        <footer class="widget__footer">
+    <div class="news__item">
+        <footer class="news__footer">
             <?php
                 printf(
-                    '<a class="widget__link" href="%2$s">%1$s</a>',
-                    the_title('<p class="widget__title">', '</p>', false),
+                    '<a class="news__link" href="%2$s">%1$s</a>',
+                    the_title('<p class="news__title">', '</p>', false),
                     get_permalink()
                 );
 
                 the_info(
-                    '<div class="widget__meta meta">', '</div>',
+                    '<div class="news__meta meta">', '</div>',
                     ['time', 'date', 'tags']
                 );
             ?>
