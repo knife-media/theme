@@ -33,6 +33,7 @@ class Knife_Televisor_Widget extends WP_Widget {
     public function widget($args, $instance) {
         $defaults = [
             'title' => '',
+            'link' => '',
             'filter' => -1,
             'unique' => 0
         ];
@@ -75,6 +76,8 @@ class Knife_Televisor_Widget extends WP_Widget {
         $instance['title'] = sanitize_text_field($new_instance['title']);
         $instance['unique'] = $new_instance['unique'] ? 1 : 0;
         $instance['filter'] = absint($new_instance['filter']);
+        $instance['link'] = esc_url($new_instance['link']);
+
 
         return $instance;
     }
@@ -106,7 +109,6 @@ class Knife_Televisor_Widget extends WP_Widget {
             __('Не будет отображаться на странице', 'knife-theme')
         );
 
-
         // Exclude duplicate
         printf(
             '<p><input type="checkbox" id="%1$s" name="%2$s" class="checkbox"%4$s><label for="%1$s">%3$s</label></p>',
@@ -131,6 +133,17 @@ class Knife_Televisor_Widget extends WP_Widget {
             esc_attr($this->get_field_id('filter')),
             $categories
         );
+
+        // Post url
+        printf(
+            '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"><small>%5$s</small></p>',
+            esc_attr($this->get_field_id('link')),
+            esc_attr($this->get_field_name('link')),
+            __('Ссылка на запись во всю ширину:', 'knife-theme'),
+            esc_attr($instance['link']),
+            __('Абсолютная ссылка с этого сайта', 'knife-theme')
+        );
+
     }
 
 
@@ -177,26 +190,25 @@ class Knife_Televisor_Widget extends WP_Widget {
                 );
 
                 $link = sprintf(
-                    '<a class="unit__link" href="%2$s">%1$s</a>',
-                    the_title('<p class="unit__title">', '</p>', false),
-                    esc_url(get_permalink())
+                    '<a class="unit__content-link" href="%1$s">%2$s</a>',
+                    esc_html(get_permalink()),
+                    get_the_title()
                 );
 
                 $meta = the_info(
-                    '<div class="unit__meta meta">', '</div>',
+                    '<div class="unit__content-meta meta">', '</div>',
                     ['author', 'date'], false
                 );
 
-                $footer = sprintf(
-                    '<footer class="unit__footer">%s</footer>',
+                $content = sprintf(
+                    '<div class="unit__content">%s</div>',
                     $link . $meta
                 );
 
                 printf(
-                    '<div class="unit unit--triple"><div class="unit__item">%1$s</div></div>',
-                    $head . $image . $footer
+                    '<div class="unit unit--triple"><div class="unit__inner">%s</div></div>',
+                    $head . $image . $content
                 );
-
             endwhile;
 
             echo '</div>';
@@ -211,14 +223,14 @@ class Knife_Televisor_Widget extends WP_Widget {
      * Show single post part
      */
     private function show_single($instance, $exclude) {
-        extract($instance);
+        $post_id = url_to_postid($instance['link']);
 
         $query = new WP_Query([
             'post_status' => 'publish',
             'posts_per_page' => 1,
             'post_type' => 'any',
             'ignore_sticky_posts' => 1,
-            'post__in' => [url_to_postid('/soviet-movies/')]
+            'post__in' => [$post_id]
         ]);
 
         if($query->have_posts()) : $query->the_post();
@@ -262,12 +274,10 @@ class Knife_Televisor_Widget extends WP_Widget {
      * Show recent news part
      */
     private function show_recent($instance) {
-        extract($instance);
-
         $query = new WP_Query([
             'post_status' => 'publish',
             'ignore_sticky_posts' => 1,
-            'cat' => $filter,
+            'cat' => $instance['filter'],
             'posts_per_page' => 7
         ]);
 
@@ -277,7 +287,7 @@ class Knife_Televisor_Widget extends WP_Widget {
             printf(
                 '<a class="widget-recent__head" href="%2$s">%1$s</a>',
                 __('Новости', 'knife-theme'),
-                esc_url(get_category_link($filter))
+                esc_url(get_category_link($instance['filter']))
             );
 
             while($query->have_posts()) : $query->the_post();
@@ -301,7 +311,7 @@ class Knife_Televisor_Widget extends WP_Widget {
             printf(
                 '<a class="widget-recent__more button" href="%2$s">%1$s</a>',
                 __('Все новости', 'knife-theme'),
-                esc_url(get_category_link($filter))
+                esc_url(get_category_link($instance['filter']))
             );
 
             echo '</div>';

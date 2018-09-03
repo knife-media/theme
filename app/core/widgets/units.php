@@ -229,24 +229,24 @@ class Knife_Units_Widget extends WP_Widget {
         );
 
         $link = sprintf(
-            '<a class="unit__link" href="%2$s">%1$s</a>',
-            the_title('<p class="unit__title">', '</p>', false),
-            esc_url(get_permalink())
+            '<a class="unit__content-link" href="%1$s">%2$s</a>',
+            esc_html(get_permalink()),
+            get_the_title()
         );
 
         $meta = the_info(
-            '<div class="unit__meta meta">', '</div>',
+            '<div class="unit__content-meta meta">', '</div>',
             ['author', 'date'], false
         );
 
-        $footer = sprintf(
-            '<footer class="unit__footer">%s</footer>',
+        $content = sprintf(
+            '<div class="unit__content">%s</div>',
             $link . $meta
         );
 
         printf(
-            '<article class="unit unit--%2$s"><div class="unit__item">%1$s</div></article>',
-            $head . $image . $footer,
+            '<div class="unit unit--%2$s"><div class="unit__inner">%1$s</div></div>',
+            $head . $image . $content,
             esc_attr($size)
         );
     }

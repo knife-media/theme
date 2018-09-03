@@ -51,40 +51,14 @@ class Knife_Single_Widget extends WP_Widget {
             'post__in' => [$post_id]
         ]);
 
-        if($query->have_posts()) : $query->the_post();
-            echo $args['before_widget'];
+        if($query->have_posts()) {
+            $query->the_post();
 
-            the_info(
-                '<div class="widget-single__head meta">', '</div>',
-                ['tag']
-            );
-
-            printf(
-                '<div class="widget-single__image">%s</div>',
-                get_the_post_thumbnail(null, 'single', ['class' => 'widget-single__image-thumbnail'])
-            );
-
-            $title = sprintf(
-                '<a class="widget-single__content-title" href="%2$s">%1$s</a>',
-                get_the_title(),
-                esc_url(get_permalink())
-            );
-
-            $meta = the_info(
-                '<div class="widget-single__content-meta meta">', '</div>',
-                ['author', 'date'], false
-            );
-
-            printf(
-                '<div class="widget-single__content">%s</div>',
-                $title . $meta
-            );
-
-            echo $args['after_widget'];
+            include_once(get_template_directory() . '/templates/widget-single.php');
 
             set_query_var('widget_exclude', array_merge($exclude, wp_list_pluck($query->posts, 'ID')));
             wp_reset_query();
-        endif;
+        }
     }
 
 

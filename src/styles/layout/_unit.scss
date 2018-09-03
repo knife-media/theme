@@ -23,16 +23,18 @@
       display: block;
       cursor: default;
 
-      padding: .725rem 1.25rem;
       color: $color-primary;
       background-color: $color-white;
     }
 
     .meta__link {
-      display: block;
+      display: flex;
       cursor: pointer;
+      align-items: center;
 
-      padding: .725rem 1.25rem;
+      height: 2rem;
+      padding: 0 1.25rem;
+
       color: $color-white;
       background-color: $color-primary;
 
@@ -73,7 +75,7 @@
     }
   }
 
-  .unit__footer {
+  .unit__content {
     display: flex;
     flex-flow: column wrap;
     justify-content: space-between;
@@ -84,68 +86,63 @@
 
     background-color: $color-white;
 
+    .unit__content-link {
+      display: block;
+
+      width: 100%;
+
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1.125;
+      letter-spacing: .25px;
+      word-wrap: break-word;
+
+      &:after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        cursor: pointer;
+
+        width: 100%;
+        height: 100%;
+      }
+
+      em {
+        font-family: $font-serif;
+        font-weight: 400;
+      }
+
+      @media screen and (max-width: 1023px) {
+        font-size: 1.375rem;
+        line-height: 1.25;
+      }
+
+      @media screen and (max-width: 767px) {
+        font-size: 1.125rem;
+      }
+    }
+
+    .unit__content-meta {
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: flex-start;
+
+      width: 100%;
+      margin-top: 1.5rem;
+
+      .meta__link {
+        position: relative;
+        z-index: 2;
+      }
+    }
+
     @media screen and (max-width: 1023px) {
       padding: 1rem;
     }
   }
 
-  .unit__title {
-    display: block;
-    position: relative;
-
-    width: 100%;
-
-    font-size: 1.5rem;
-    font-weight: 700;
-    line-height: 1.125;
-    letter-spacing: .25px;
-    word-wrap: break-word;
-
-    em {
-      font-family: $font-serif;
-      font-weight: 400;
-    }
-
-    @media screen and (max-width: 1023px) {
-      font-size: 1.375rem;
-      line-height: 1.25;
-    }
-
-    @media screen and (max-width: 767px) {
-      font-size: 1.125rem;
-    }
-  }
-
-  .unit__meta {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: flex-start;
-
-    width: 100%;
-    margin-top: 1.5rem;
-
-    .meta__link {
-      position: relative;
-      z-index: 2;
-    }
-  }
-
-  .unit__link {
-    display: block;
-
-    &:after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      cursor: pointer;
-
-      width: 100%;
-      height: 100%;
-    }
-  }
-
-  .unit__item {
+  .unit__inner {
     display: block;
 
     width: 100%;

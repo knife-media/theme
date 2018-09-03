@@ -12,6 +12,10 @@
 
   &.navigation--news {
     max-width: $width-news;
+
+    @media screen and (max-width: 1023px) {
+      max-width: $width-tablet;
+    }
   }
 
   @media screen and (max-width: 1023px) {
