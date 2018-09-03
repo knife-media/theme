@@ -196,6 +196,16 @@
         margin-bottom: 0;
       }
     }
+
+    @media screen and (max-width: 1023px) {
+      .widget__item {
+        display: none;
+
+        &:nth-child(-n + 3) {
+          display: flex;
+        }
+      }
+    }
   }
 
   @media screen and (max-width: 767px) {

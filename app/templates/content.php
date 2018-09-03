@@ -51,16 +51,17 @@
                         'previouspagelink' => __('Назад', 'knife-theme')
                     ]);
 
+                    the_tags(
+                        '<div class="post__footer-tags refers">',
+                        null, '</div>'
+                    );
+
+
                     the_share(
                         '<div class="post__footer-share share">',
                         '</div>',
                         __('Share post — bottom', 'knife-theme'),
                         __('Поделиться в соцсетях:', 'knife-theme')
-                    );
-
-                    the_tags(
-                        '<div class="post__footer-tags refers">',
-                        null, '</div>'
                     );
 
                     the_sidebar(
