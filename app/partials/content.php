@@ -61,7 +61,7 @@
             );
 
             the_sidebar(
-                'knife-post-widgets',
+                'knife-inside',
                 '<div class="post__footer-widgets">',
                 '</div>'
             );

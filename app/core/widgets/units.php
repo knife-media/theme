@@ -47,20 +47,21 @@ class Knife_Units_Widget extends WP_Widget {
         // Create new WP_Query by instance vars
         $query = new WP_Query($this->get_query($instance, $exclude));
 
-        if($query->have_posts()) :
+        if($query->have_posts()) {
             echo $args['before_widget'];
 
-            while($query->have_posts()) : $query->the_post();
+            while($query->have_posts()) {
+                $query->the_post();
                 $size = $this->calc_size($query->current_post, $instance['posts_per_page']);
 
-                $this->show_unit($size);
-            endwhile;
-
-            echo $args['after_widget'];
+                include(get_template_directory() . '/templates/widget-units.php');
+            }
 
             wp_reset_query();
             set_query_var('widget_exclude', array_merge($exclude, wp_list_pluck($query->posts, 'ID')));
-        endif;
+
+            echo $args['after_widget'];
+        }
     }
 
 
@@ -209,46 +210,6 @@ class Knife_Units_Widget extends WP_Widget {
         }
 
         return 'triple';
-    }
-
-
-    /**
-     * Create widget output using query loop
-     *
-     * @since 1.4
-     */
-    private function show_unit($size = 'triple') {
-        $head = the_info(
-            '<div class="unit__head meta">', '</div>',
-            ['tag'], false
-        );
-
-        $image = sprintf(
-            '<div class="unit__image">%s</div>',
-            get_the_post_thumbnail(null, $size, ['class' => 'unit__image-thumbnail'])
-        );
-
-        $link = sprintf(
-            '<a class="unit__content-link" href="%1$s">%2$s</a>',
-            esc_html(get_permalink()),
-            get_the_title()
-        );
-
-        $meta = the_info(
-            '<div class="unit__content-meta meta">', '</div>',
-            ['author', 'date'], false
-        );
-
-        $content = sprintf(
-            '<div class="unit__content">%s</div>',
-            $link . $meta
-        );
-
-        printf(
-            '<div class="unit unit--%2$s"><div class="unit__inner">%1$s</div></div>',
-            $head . $image . $content,
-            esc_attr($size)
-        );
     }
 }
 

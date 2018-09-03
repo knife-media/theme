@@ -10,7 +10,7 @@
   margin-bottom: 1rem;
   overflow: hidden;
 
-  .widget-recent__item {
+  .widget-recent__content {
     display: flex;
     flex-flow: column wrap;
     justify-content: flex-start;
@@ -24,7 +24,7 @@
     color: $color-text;
     background-color: $color-white;
 
-    .widget-recent__item-meta {
+    .widget-recent__content-meta {
       display: block;
 
       width: 100%;
@@ -41,7 +41,7 @@
       }
     }
 
-    .widget-recent__item-link {
+    .widget-recent__content-link {
       display: inline-block;
 
       margin-top: .25rem;

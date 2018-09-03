@@ -30,7 +30,7 @@ get_header(); ?>
             if($stories->have_posts()) :
                 while($stories->have_posts()) : $stories->the_post();
 
-                    get_template_part('partials/loop', 'story');
+                    get_template_part('partials/interate', 'story');
 
                 endwhile;
 

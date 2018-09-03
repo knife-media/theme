@@ -28,62 +28,42 @@ class Knife_Recent_Widget extends WP_Widget {
         $defaults = [
             'title' => '',
             'posts_per_page' => 10,
-            'cat' => 620
+            'filter' => -1
         ];
 
         $instance = wp_parse_args((array) $instance, $defaults);
 
-        extract($instance);
+        $query = new WP_Query([
+            'cat' => $instance['filter'],
+            'posts_per_page' => $instance['posts_per_page'],
+            'post_status' => 'publish',
+            'ignore_sticky_posts' => 1
+        ]);
 
-        // Check cache before creating WP_Query object
-        $html = get_transient($this->id);
+        if($query->have_posts()) {
+            echo $args['before_widget'];
 
-        if($html === false) :
-            $q = new WP_Query([
-                'cat' => $cat,
-                'posts_per_page' => $posts_per_page,
-                'post_status' => 'publish',
-                'ignore_sticky_posts' => 1,
-            ]);
+            printf(
+                '<a class="widget-recent__head" href="%2$s">%1$s</a>',
+                __('Новости', 'knife-theme'),
+                esc_url(get_category_link($instance['filter']))
+            );
 
-            ob_start();
+            while($query->have_posts()) {
+                $query->the_post();
 
-            if($q->have_posts()) :
-                echo $args['before_widget'];
+                include(get_template_directory() . '/templates/widget-recent.php');
+            }
 
-                while($q->have_posts()) : $q->the_post();
-                    echo '<article class="widget__item">';
-
-                    the_info(
-                        '<div class="widget__meta meta">', '</div>',
-                        ['time', 'tag'], true
-                    );
-
-                    printf(
-                        '<a class="widget__link" href="%1$s">%2$s</a>',
-                        get_permalink(),
-                        get_the_title()
-                    );
-
-                    echo '</article>';
-                endwhile;
-
-                printf(
-                    '<a class="widget__more button" href="%2$s">%1$s</a>',
-                    __('Все новости', 'knife-theme'),
-                    esc_url(get_category_link($cat))
-                );
-
-                echo $args['after_widget'];
-            endif;
+            printf(
+                '<a class="widget-recent__more button" href="%2$s">%1$s</a>',
+                __('Все новости', 'knife-theme'),
+                esc_url(get_category_link($instance['filter']))
+            );
 
             wp_reset_query();
-
-            $html = ob_get_clean();
-            set_transient($this->id, $html, 24 * HOUR_IN_SECONDS);
-        endif;
-
-        echo $html;
+            echo $args['after_widget'];
+        }
     }
 
 
@@ -91,13 +71,18 @@ class Knife_Recent_Widget extends WP_Widget {
      * Outputs the options form on admin
      */
     function form($instance) {
-        $defaults = ['title' => '', 'posts_per_page' => 10, 'cat' => 620];
+        $defaults = [
+            'title' => '',
+            'posts_per_page' => 10,
+            'filter' => -1
+        ];
+
         $instance = wp_parse_args((array) $instance, $defaults);
 
         $category = wp_dropdown_categories([
-            'id' => esc_attr($this->get_field_id('cat')),
-            'name' => esc_attr($this->get_field_name('cat')),
-            'selected' => esc_attr($instance['cat']),
+            'id' => esc_attr($this->get_field_id('filter')),
+            'name' => esc_attr($this->get_field_name('filter')),
+            'selected' => esc_attr($instance['filter']),
             'class' => 'widefat',
             'echo' => false,
         ]);
@@ -120,8 +105,8 @@ class Knife_Recent_Widget extends WP_Widget {
 
         printf(
             '<p><label for="%1$s">%2$s</label>%3$s</p>',
-            esc_attr($this->get_field_id('cat')),
-            __('Рубрика записей:', 'knife-theme'),
+            esc_attr($this->get_field_id('filter')),
+            __('Рубрика новостей:', 'knife-theme'),
             $category
         );
     }
@@ -133,21 +118,11 @@ class Knife_Recent_Widget extends WP_Widget {
     public function update($new_instance, $old_instance) {
         $instance = $old_instance;
 
-        $instance['cat'] = (int) $new_instance['cat'];
+        $instance['filter'] = (int) $new_instance['filter'];
         $instance['posts_per_page'] = (int) $new_instance['posts_per_page'];
         $instance['title'] = sanitize_text_field($new_instance['title']);
 
-        $this->remove_cache();
-
         return $instance;
-    }
-
-
-    /**
-     * Remove transient on widget update
-     */
-     private function remove_cache() {
-        delete_transient($this->id);
     }
 }
 

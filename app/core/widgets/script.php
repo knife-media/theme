@@ -39,19 +39,7 @@ class Knife_Script_Widget extends WP_Widget {
 
         $instance = wp_parse_args((array) $instance, $defaults);
 
-        extract($instance);
-
-        if($args['id'] === 'knife-inner-sidebar') {
-            printf('<div class="%s">',
-                $sticky === 1 ? 'sidebar__widgets sidebar__widgets--sticky' : 'sidebar__widgets'
-            );
-        }
-
-        echo $args['before_widget'] . $content . $args['after_widget'];
-
-        if($args['id'] === 'knife-inner-sidebar') {
-            echo '</div>';
-        }
+        echo $args['before_widget'] . $instance['content'] . $args['after_widget'];
     }
 
 

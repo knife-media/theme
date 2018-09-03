@@ -72,7 +72,7 @@ class Knife_Widget_Handler {
             'name'          => __('Сквозной над шапкой', 'knife-theme'),
             'id'            => 'knife-header',
             'description'   => __('Добавленные виджеты появятся над меню на всех страницах.', 'knife-theme'),
-            'before_widget' => '<div class="widget-%2$s widget--header">',
+            'before_widget' => '<div class="widget-%2$s">',
             'after_widget'  => '</div>'
         ]);
 
@@ -80,7 +80,7 @@ class Knife_Widget_Handler {
             'name'          => __('Сквозной под шапкой', 'knife-theme'),
             'id'            => 'knife-feature',
             'description'   => __('Добавленные виджеты появятся под шапкой на главной и внутренних страницах.', 'knife-theme'),
-            'before_widget' => '<div class="widget-%2$s widget--header">',
+            'before_widget' => '<div class="widget-%2$s">',
             'after_widget'  => '</div>'
         ]);
 

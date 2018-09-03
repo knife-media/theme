@@ -9,8 +9,8 @@
  */
 ?>
 
-<?php if(is_active_sidebar('knife-inner-sidebar')) : ?>
-<aside class="sidebar">
-    <?php dynamic_sidebar('knife-inner-sidebar'); ?>
-</aside>
+<?php if(is_active_sidebar('knife-sidebar')) : ?>
+    <aside class="sidebar">
+        <?php dynamic_sidebar('knife-sidebar'); ?>
+    </aside>
 <?php endif; ?>

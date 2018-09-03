@@ -7,7 +7,7 @@
  */
 ?>
 
-<div class="widget-single">
+<div class="widget-single__inner">
     <?php
         the_info(
             '<div class="widget-single__head meta">', '</div>',
@@ -27,7 +27,7 @@
     <div class="widget-single__content">
         <?php
             printf(
-                '<a class="widget-single-content-title" href="%1$s">%2$s</a>',
+                '<a class="widget-single__content-title" href="%1$s">%2$s</a>',
                 esc_html(get_permalink()),
                 get_the_title()
             );

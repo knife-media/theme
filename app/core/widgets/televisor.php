@@ -175,47 +175,21 @@ class Knife_Televisor_Widget extends WP_Widget {
     private function show_units($instance, $exclude) {
         $query = new WP_Query($this->get_query($instance, $exclude));
 
-        if($query->have_posts()) :
+        if($query->have_posts()) {
             echo '<div class="widget-units">';
 
-            while($query->have_posts()) : $query->the_post();
-                $head = the_info(
-                    '<div class="unit__head meta">', '</div>',
-                    ['tag'], false
-                );
+            while($query->have_posts()) {
+                $query->the_post();
+                $size = 'triple';
 
-                $image = sprintf(
-                    '<div class="unit__image">%s</div>',
-                    get_the_post_thumbnail(null, 'triple', ['class' => 'unit__image-thumbnail'])
-                );
+                include(get_template_directory() . '/templates/widget-units.php');
+            }
 
-                $link = sprintf(
-                    '<a class="unit__content-link" href="%1$s">%2$s</a>',
-                    esc_html(get_permalink()),
-                    get_the_title()
-                );
-
-                $meta = the_info(
-                    '<div class="unit__content-meta meta">', '</div>',
-                    ['author', 'date'], false
-                );
-
-                $content = sprintf(
-                    '<div class="unit__content">%s</div>',
-                    $link . $meta
-                );
-
-                printf(
-                    '<div class="unit unit--triple"><div class="unit__inner">%s</div></div>',
-                    $head . $image . $content
-                );
-            endwhile;
+            wp_reset_query();
+            set_query_var('widget_exclude', array_merge($exclude, wp_list_pluck($query->posts, 'ID')));
 
             echo '</div>';
-
-            set_query_var('widget_exclude', array_merge($exclude, wp_list_pluck($query->posts, 'ID')));
-            wp_reset_query();
-        endif;
+        }
     }
 
 
@@ -233,40 +207,17 @@ class Knife_Televisor_Widget extends WP_Widget {
             'post__in' => [$post_id]
         ]);
 
-        if($query->have_posts()) : $query->the_post();
+        if($query->have_posts()) {
             echo '<div class="widget-single">';
 
-            the_info(
-                '<div class="widget-single__head meta">', '</div>',
-                ['tag']
-            );
-
-            printf(
-                '<div class="widget-single__image">%s</div>',
-                get_the_post_thumbnail(null, 'single', ['class' => 'widget-single__image-thumbnail'])
-            );
-
-            $title = sprintf(
-                '<a class="widget-single__content-title" href="%2$s">%1$s</a>',
-                get_the_title(),
-                esc_url(get_permalink())
-            );
-
-            $meta = the_info(
-                '<div class="widget-single__content-meta meta">', '</div>',
-                ['author', 'date'], false
-            );
-
-            printf(
-                '<div class="widget-single__content">%s</div>',
-                $title . $meta
-            );
-
-            echo '</div>';
+            $query->the_post();
+            include(get_template_directory() . '/templates/widget-single.php');
 
             set_query_var('widget_exclude', array_merge($exclude, wp_list_pluck($query->posts, 'ID')));
             wp_reset_query();
-        endif;
+
+            echo '</div>';
+        }
     }
 
 
@@ -281,7 +232,7 @@ class Knife_Televisor_Widget extends WP_Widget {
             'posts_per_page' => 7
         ]);
 
-        if($query->have_posts()) :
+        if($query->have_posts()) {
             echo '<div class="widget-recent">';
 
             printf(
@@ -290,23 +241,11 @@ class Knife_Televisor_Widget extends WP_Widget {
                 esc_url(get_category_link($instance['filter']))
             );
 
-            while($query->have_posts()) : $query->the_post();
-                echo '<div class="widget-recent__item">';
+            while($query->have_posts()) {
+                $query->the_post();
 
-                the_info(
-                    '<div class="widget-recent__item-meta meta">', '</div>',
-                    ['time', 'tag'], true
-                );
-
-                printf(
-                    '<a class="widget-recent__item-link" href="%1$s">%2$s</a>',
-                    get_permalink(),
-                    get_the_title()
-                );
-
-                echo '</div>';
-
-            endwhile;
+                include(get_template_directory() . '/templates/widget-recent.php');
+            }
 
             printf(
                 '<a class="widget-recent__more button" href="%2$s">%1$s</a>',
@@ -314,10 +253,9 @@ class Knife_Televisor_Widget extends WP_Widget {
                 esc_url(get_category_link($instance['filter']))
             );
 
-            echo '</div>';
-
             wp_reset_query();
-        endif;
+            echo '</div>';
+        }
     }
 }
 

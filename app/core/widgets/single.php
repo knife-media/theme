@@ -52,12 +52,15 @@ class Knife_Single_Widget extends WP_Widget {
         ]);
 
         if($query->have_posts()) {
-            $query->the_post();
+            echo $args['before_widget'];
 
-            include_once(get_template_directory() . '/templates/widget-single.php');
+            $query->the_post();
+            include(get_template_directory() . '/templates/widget-single.php');
 
             set_query_var('widget_exclude', array_merge($exclude, wp_list_pluck($query->posts, 'ID')));
             wp_reset_query();
+
+            echo $args['after_widget'];
         }
     }
 
