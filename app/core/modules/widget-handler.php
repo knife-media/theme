@@ -44,14 +44,7 @@ class Knife_Widget_Handler {
         // hide default widgets title
         add_filter('widget_title', '__return_empty_string');
 
-        // clear cache
-        add_action('added_post_meta', [__CLASS__, 'clear_cache']);
-        add_action('deleted_post_meta', [__CLASS__, 'clear_cache']);
-        add_action('updated_post_meta', [__CLASS__, 'clear_cache']);
-        add_action('deleted_post', [__CLASS__, 'clear_cache']);
-        add_action('save_post', [__CLASS__, 'clear_cache']);
-        add_action('widget_update_callback', [__CLASS__, 'clear_cache']);
-
+        // ajax terms handler
         add_action('wp_ajax_knife_widget_terms', [__CLASS__, 'ajax_terms']);
     }
 
@@ -127,6 +120,7 @@ class Knife_Widget_Handler {
         unregister_widget('WP_Widget_Media_Video');
         unregister_widget('WP_Widget_Tag_Cloud');
         unregister_widget('WP_Nav_Menu_Widget');
+        unregister_widget('WP_Widget_Custom_HTML');
     }
 
 
@@ -153,6 +147,12 @@ class Knife_Widget_Handler {
         $version = wp_get_theme()->get('Version');
         $include = get_template_directory_uri() . '/core/include';
 
+        if('widgets.php' === $hook) {
+            wp_enqueue_style('wp-color-picker');
+            wp_enqueue_script('wp-color-picker');
+            wp_enqueue_script('underscore');
+        }
+
         wp_enqueue_script('knife-widget-handler', $include . '/scripts/widget-handler.js', ['jquery'], $version);
 
         $options = [
@@ -167,29 +167,15 @@ class Knife_Widget_Handler {
      * Include widgets classes
      */
     public static function include_widgets() {
-        $widgets = get_template_directory() . '/core/widgets/';
+        $include = get_template_directory() . '/core/widgets/';
 
-        foreach(['story', 'club', 'script', 'televisor', 'recent', 'units', 'single', 'feature', 'details', 'transparent'] as $id) {
-            include_once($widgets . $id . '.php');
+        $widgets = [
+            'story', 'club', 'script', 'televisor', 'color', 'recent', 'units', 'single', 'feature', 'details', 'transparent'
+        ];
+
+        foreach($widgets as $id) {
+            include_once($include . $id . '.php');
         }
-    }
-
-
-    /**
-     * Remove widgets cache on save or delete post
-     */
-    public static function clear_cache($instance) {
-        $sidebars = get_option('sidebars_widgets');
-
-        foreach($sidebars as $sidebar) {
-            if(is_array($sidebar)) {
-                foreach($sidebar as $widget) {
-                    delete_transient($widget);
-                }
-            }
-        }
-
-        return $instance;
     }
 
 

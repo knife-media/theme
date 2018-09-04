@@ -21,8 +21,8 @@
 
 @import "layout/header";
 @import "layout/content";
-@import "layout/split";
 @import "layout/caption";
+@import "layout/feature";
 @import "layout/navigation";
 @import "layout/sidebar";
 @import "layout/footer";
@@ -36,15 +36,11 @@
 @import "layout/news";
 
 @import "widgets/units";
-@import "widgets/triple";
-@import "widgets/double";
 @import "widgets/single";
-@import "widgets/logbook";
 @import "widgets/feature";
 @import "widgets/details";
 @import "widgets/recent";
 @import "widgets/story";
-@import "widgets/text";
 @import "widgets/script";
 @import "widgets/club";
 @import "widgets/transparent";

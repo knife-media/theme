@@ -17,82 +17,81 @@ class Knife_Feature_Widget extends WP_Widget {
             'customize_selective_refresh' => true
         ];
 
-        parent::__construct('knife_theme_feature', __('[НОЖ] Фичер', 'knife-theme'), $widget_ops);
+        parent::__construct('knife_widget_feature', __('[НОЖ] Фичер', 'knife-theme'), $widget_ops);
     }
 
 
     /**
-     * Outputs the content of the widget
+     * Outputs the content of the widget.
+     *
+     * @see WP_Widget::widget()
+     *
+     * @param array args  The array of form elements
+     * @param array instance The current instance of the widget
      */
     public function widget($args, $instance) {
-        $defaults = ['title' => '', 'link' => '', 'sticker' => ''];
+        $defaults = [
+            'title' => '',
+            'link' => '',
+            'sticker' => '',
+            'color' => '#ffe64e'
+        ];
 
         $instance = wp_parse_args((array) $instance, $defaults);
 
         extract($instance);
 
-        // Don't show empty link
-        if(empty($title) || empty($link))
-            return;
+        if(!empty($title) && !empty($link)) {
+            echo $args['before_widget'];
 
-        $post_id = url_to_postid($link);
+            if(empty($sticker)) {
+                $post_id = url_to_postid($link);
+                $sticker = get_post_meta($post_id, '_knife-sticker', true);
+            }
 
-        // Don't show self link inside single post
-        if(is_single() && get_queried_object_id() === $post_id)
-            return;
+            include(get_template_directory() . '/templates/widget-feature.php');
 
-
-        echo $args['before_widget'];
-
-        // right icon
-        $widget_right = '<span class="icon icon--right"></span>';
-
-        // set additional widget class to link
-        $widget_class = 'widget__link';
-
-        // set default widget image
-        $widget_image = '';
-
-        if($post_id > 0) {
-            $widget_class =  $widget_class . ' widget__link--article';
+            echo $args['after_widget'];
         }
-
-        // get sticker from widget options or post meta
-        if(empty($sticker)) {
-            $sticker = get_post_meta($post_id, '_knife-sticker', true);
-        }
-
-        // append widget_sticker if image exists
-        if(!empty($sticker)) {
-            $widget_image = sprintf('<img class="widget__sticker" src="%1$s" alt="%2$s">',
-                esc_url($sticker), esc_attr($title)
-            );
-        }
-
-        // set widget title
-        $widget_title = sprintf('<p class="widget__title">%s</p>',
-            sanitize_text_field($title)
-        );
-
-        // set widget item
-        $widget_item = sprintf('<div class="widget__item block">%s</div>',
-            $widget_title . $widget_image . $widget_right
-        );
-
-        // and finally print widget link
-        printf('<a class="%2$s" href="%1$s" target="_blank">%3$s</a>', esc_url($link),
-            $widget_class, $widget_item
-        );
-
-        echo $args['after_widget'];
-  }
+    }
 
 
     /**
-     * Outputs the options form on admin
+     * Sanitize widget form values as they are saved.
+     *
+     * @see WP_Widget::update()
+     *
+     * @param array $new_instance Values just sent to be saved.
+     * @param array $old_instance Previously saved values from database.
+     *
+     * @return array Updated safe values to be saved.
+     */
+    public function update($new_instance, $old_instance) {
+        $instance = $old_instance;
+
+        $instance['title'] = sanitize_text_field($new_instance['title']);
+        $instance['link'] = esc_url($new_instance['link']);
+        $instance['sticker'] = esc_url($new_instance['sticker']);
+        $instance['color'] = sanitize_text_field($new_instance['color']);
+
+        return $instance;
+    }
+
+
+    /**
+     * Back-end widget form.
+     *
+     * @see WP_Widget::form()
+     *
+     * @param array $instance Previously saved values from database.
      */
     function form($instance) {
-        $defaults = ['title' => '', 'link' => '', 'sticker' => ''];
+        $defaults = [
+            'title' => '',
+            'link' => '',
+            'sticker' => '',
+            'color' => '#ffe64e'
+        ];
 
         $instance = wp_parse_args((array) $instance, $defaults);
 
@@ -121,20 +120,15 @@ class Knife_Feature_Widget extends WP_Widget {
             esc_attr($instance['sticker']),
             __('По умолчанию отобразится стикер записи', 'knife-theme')
         );
-    }
 
+        printf(
+            '<p><label for="%1$s">%3$s</label><input class="color-picker" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
+            esc_attr($this->get_field_id('color')),
+            esc_attr($this->get_field_name('color')),
+            __('Цвет фичера', 'knife-theme'),
+            esc_attr($instance['color'])
+        );
 
-    /**
-     * Processing widget options on save
-     */
-    public function update($new_instance, $old_instance) {
-        $instance = $old_instance;
-
-        $instance['title'] = sanitize_text_field($new_instance['title']);
-        $instance['link'] = esc_url($new_instance['link']);
-        $instance['sticker'] = esc_url($new_instance['sticker']);
-
-        return $instance;
     }
 }
 

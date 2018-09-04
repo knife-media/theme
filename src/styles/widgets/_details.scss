@@ -5,11 +5,12 @@
   flex: 1 1 auto;
 
   width: 100%;
+  margin-bottom: 1rem;
 
   color: $color-white;
   background: transparent;
 
- .widget__link {
+ .widget-details__link {
     display: block;
     position: relative;
 
@@ -29,16 +30,16 @@
     }
 
     @media screen and (max-width: 1023px) {
+      width: 100%;
       font-size: 1.25rem;
     }
 
     @media screen and (max-width: 767px) {
-      width: 100%;
       font-size: 1.125rem;
     }
   }
 
-  .widget__item {
+  .widget-details__inner {
     display: flex;
 
     width: auto;
@@ -48,7 +49,7 @@
     &:nth-child(-n+2) {
       width: 100%;
 
-      .widget__link {
+      .widget-details__link {
         font-size: 1.875rem;
         line-height: 1.075;
 
@@ -72,7 +73,7 @@
       }
     }
 
-    @media screen and (max-width: 767px) {
+    @media screen and (max-width: 1023px) {
       width: 100%;
       margin-right: 0;
     }

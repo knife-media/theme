@@ -3,22 +3,40 @@
   flex-flow: row wrap;
   justify-content: flex-start;
   flex: 1 1 auto;
+  position: relative;
 
   width: 100%;
 
   color: $color-white;
   background-color: transparent;
 
-  .widget__link {
+  .widget-feature__inner {
     display: flex;
-    flex-flow: column wrap;
-    align-items: center;
-    position: relative;
+    flex-flow: row wrap;
+    justify-content: center;
 
     width: 100%;
 
+    &:hover {
+      filter: brightness(115%);
+
+      .icon {
+        transform: translateX(10px);
+      }
+    }
+  }
+
+  .widget-feature__content {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+
+    width: 100%;
+    max-width: $width-site;
+    min-height: 3rem;
+    padding: .5rem 1rem;
+
     color: $color-text;
-    background-color: $color-feature-outer;
 
     .icon {
       display: block;
@@ -34,61 +52,26 @@
       }
     }
 
-    &:after {
-      content: "";
+    .widget-feature__content-title {
+      display: inline-block;
 
-      position: absolute;
-      top: 0;
-      left: 0;
+      font-size: 1.375rem;
+      font-weight: 700;
+      line-height: 1.125;
 
-      width: 100%;
-      height: 100%;
-    }
+      @media screen and (max-width: 1023px) {
+        font-size: 1.25rem;
+      }
 
-    &:hover {
-      filter: brightness(115%);
-
-      .icon {
-        transform: translateX(10px);
+      @media screen and (max-width: 767px) {
+        font-size: 1rem;
       }
     }
 
-    &.widget__link--article {
-      color: $color-white;
-      background-color: $color-feature-inner;
+    .widget-feature__content-sticker {
+      margin-left: 1rem;
+      width: 2rem;
+      max-height: 2rem;
     }
-  }
-
-  .widget__item {
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-
-    width: 100%;
-    min-height: 3rem;
-    padding-top: .5rem;
-    padding-bottom: .5rem;
-  }
-
-  .widget__title {
-    display: inline-block;
-
-    font-size: 1.375rem;
-    font-weight: 700;
-    line-height: 1.125;
-
-    @media screen and (max-width: 1023px) {
-      font-size: 1.25rem;
-    }
-
-    @media screen and (max-width: 767px) {
-      font-size: 1rem;
-    }
-  }
-
-  .widget__sticker {
-    margin-left: 1rem;
-    width: 2rem;
-    max-height: 2rem;
   }
 }

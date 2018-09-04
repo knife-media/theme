@@ -18,7 +18,7 @@ class Knife_Details_Widget extends WP_Widget {
             'customize_selective_refresh' => true
         ];
 
-        parent::__construct('knife_theme_details', __('[НОЖ] Микроформаты', 'knife-theme'), $widget_ops);
+        parent::__construct('knife_widget_details', __('[НОЖ] Микроформаты', 'knife-theme'), $widget_ops);
     }
 
 
@@ -40,48 +40,32 @@ class Knife_Details_Widget extends WP_Widget {
 
         $instance = wp_parse_args((array) $instance, $defaults);
 
-        extract($instance);
+        $query = new WP_Query([
+            'post_status' => 'publish',
+            'ignore_sticky_posts' => 1,
+            'posts_per_page' => $instance['posts_per_page'],
+            'tax_query' => [
+                [
+                    'field' => 'id',
+                    'taxonomy' => $instance['taxonomy'],
+                    'terms' => $instance['termlist']
+                ],
+            ]
+        ]);
 
-        $html = get_transient($this->id);
+        if($query->have_posts()) {
+            echo $args['before_widget'];
 
-        if($html === false) :
-            $q = new WP_Query([
-                'post_status' => 'publish',
-                'ignore_sticky_posts' => 1,
-                'posts_per_page' => $posts_per_page,
-                'tax_query' => [
-                    [
-                        'field' => 'id',
-                        'taxonomy' => $taxonomy,
-                        'terms' => $termlist
-                    ],
-                ]
-            ]);
+            while($query->have_posts()) {
+                $query->the_post();
 
-            ob_start();
-
-            if($q->have_posts()) :
-                echo $args['before_widget'];
-
-                while($q->have_posts()) : $q->the_post();
-
-                    printf('<article class="widget__item"><a class="widget__link" href="%1$s">%2$s</a></article>',
-                        get_permalink(),
-                        get_the_title()
-                    );
-
-                endwhile;
-
-                echo $args['after_widget'];
-            endif;
+                include(get_template_directory() . '/templates/widget-details.php');
+            }
 
             wp_reset_query();
 
-            $html = ob_get_clean();
-            set_transient($this->id, $html, 24 * HOUR_IN_SECONDS);
-        endif;
-
-        echo $html;
+            echo $args['after_widget'];
+        }
     }
 
 
@@ -96,7 +80,7 @@ class Knife_Details_Widget extends WP_Widget {
         $defaults = [
             'title' => '',
             'posts_per_page' => 10,
-             'taxonomy' => 'category',
+            'taxonomy' => 'category',
             'termlist' => []
         ];
 
@@ -113,7 +97,7 @@ class Knife_Details_Widget extends WP_Widget {
         ]);
 
 
-         // Widget title
+        // Widget title
         printf(
             '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
             esc_attr($this->get_field_id('title')),
@@ -171,15 +155,18 @@ class Knife_Details_Widget extends WP_Widget {
             if(isset($_REQUEST['widget-id']) && $_REQUEST['widget-id'] == $this->id) {
                 $posted_terms = [];
 
-                if(isset($_POST['post_category']))
+                if(isset($_POST['post_category'])) {
                     $posted_terms = $_POST['post_category'];
+                }
 
-                if(isset($_POST['tax_input'][$taxonomy]))
+                if(isset($_POST['tax_input'][$taxonomy])) {
                     $posted_terms = $_POST['tax_input'][$taxonomy];
+                }
 
                 foreach($posted_terms as $term) {
-                    if(term_exists(absint($term), $taxonomy))
+                    if(term_exists(absint($term), $taxonomy)) {
                         $terms[] = absint($term);
+                    }
                 }
             }
         }

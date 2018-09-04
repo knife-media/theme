@@ -6,6 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
+ * @version 1.4
  */
 
 
@@ -33,8 +34,7 @@ class Knife_Script_Widget extends WP_Widget {
     public function widget($args, $instance) {
         $defaults = [
             'title'   => '',
-            'content' => '',
-            'sticky' => 0
+            'content' => ''
         ];
 
         $instance = wp_parse_args((array) $instance, $defaults);
@@ -53,13 +53,12 @@ class Knife_Script_Widget extends WP_Widget {
     function form($instance) {
         $defaults = [
             'title'   => '',
-            'content' => '',
-            'sticky' => 0
+            'content' => ''
         ];
 
         $instance = wp_parse_args((array) $instance, $defaults);
 
-           // Widget title
+        // Widget title
         printf(
             '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"><small>%5$s</small></p>',
             esc_attr($this->get_field_id('title')),
@@ -104,7 +103,6 @@ class Knife_Script_Widget extends WP_Widget {
         $instance = $old_instance;
 
         $instance['title'] = sanitize_text_field($new_instance['title']);
-        $instance['sticky'] = $new_instance['sticky'] ? 1 : 0;
 
         if(current_user_can('unfiltered_html')) {
             $instance['content'] = $new_instance['content'];

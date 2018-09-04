@@ -1,13 +1,9 @@
 .widget-script {
     display: flex;
     flex-flow: row wrap;
-    justify-content: space-between;
+    justify-content: center;
     align-self: flex-start;
     position: relative;
 
     overflow: hidden;
-
-    &.widget--header {
-        width: 100%;
-    }
 }

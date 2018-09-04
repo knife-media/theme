@@ -21,8 +21,33 @@
   }
 
   .footer__copy {
+    display: block;
+
     width: 50%;
     padding-right: 0;
+
+    margin-bottom: 0;
+
+    line-height: 1.4;
+    font-size: .8125rem;
+    font-weight: 500;
+    letter-spacing: .5px;
+
+    p {
+      margin-bottom: .5rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    a {
+      color: $color-light;
+
+      &:hover {
+        filter: brightness(120%);
+      }
+    }
 
     @media screen and (max-width:1023px) {
       width: 100%;
