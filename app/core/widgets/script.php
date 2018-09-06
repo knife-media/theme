@@ -10,7 +10,7 @@
  */
 
 
-class Knife_Script_Widget extends WP_Widget {
+class Knife_Widget_Script extends WP_Widget {
 
     public function __construct() {
         $widget_ops = [
@@ -119,5 +119,5 @@ class Knife_Script_Widget extends WP_Widget {
  * It is time to register widget
  */
 add_action('widgets_init', function() {
-    register_widget('Knife_Script_Widget');
+    register_widget('Knife_Widget_Script');
 });

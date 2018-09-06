@@ -3,23 +3,14 @@
   flex-flow: column wrap;
   justify-content: flex-start;
   align-content: space-between;
+  position: relative;
 
   width: 100%;
   margin-bottom: 1rem;
 
   border-top: solid 1px $color-white;
 
-  .widget__parent {
-    display: flex;
-
-    height: auto;
-
-    @media screen and (max-width: 1023px) {
-      border-bottom: solid 1px $color-white;
-    }
-  }
-
-  .widget__head {
+  .widget-transparent__head {
     display: block;
     position: absolute;
     top: 0;
@@ -32,20 +23,13 @@
     text-transform: uppercase;
     letter-spacing: .5px;
 
-    .meta__item {
-      display: block;
-      cursor: default;
-
-      padding: .725rem 1.25rem;
-      color: $color-primary;
-      background-color: $color-white;
-    }
-
     .meta__link {
-      display: block;
+      display: flex;
+      align-items: center;
       cursor: pointer;
 
-      padding: .725rem 1.25rem;
+      height: 2rem;
+      padding: 0 1.25rem;
       color: $color-white;
       background-color: $color-primary;
 
@@ -55,7 +39,7 @@
     }
   }
 
-  .widget__sticker {
+  .widget-transparent__sticker {
     display: flex;
     align-self: flex-start;
 
@@ -85,11 +69,64 @@
     }
   }
 
-  .widget__footer {
+  .widget-transparent__content {
     width: 100%;
     padding: 1.5rem 0;
 
     border-bottom: solid 1px $color-white;
+
+    .widget-transparent__content-link {
+      display: block;
+
+      font-size: 1.875rem;
+      font-weight: 700;
+      line-height: 1.125;
+      letter-spacing: .25px;
+      word-wrap: break-word;
+
+      color: $color-white;
+
+      em {
+        font-family: $font-serif;
+        font-weight: 400;
+      }
+
+      &:hover {
+        filter: brightness(80%);
+      }
+
+      @media screen and (max-width: 1023px) {
+        font-size: 1.375rem;
+        line-height: 1.25;
+      }
+
+      @media screen and (max-width: 767px) {
+        font-size: 1.125rem;
+      }
+    }
+
+    .widget-transparent__content-meta {
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: flex-start;
+
+      width: 100%;
+      margin-top: 0;
+      margin-bottom: 1rem;
+
+      color: $color-white;
+
+      .meta__link {
+        position: relative;
+        z-index: 2;
+
+        color: $color-white;
+
+        &:hover {
+          filter: brightness(80%);
+        }
+      }
+    }
 
     @media screen and (max-width: 1023px) {
       padding: 1rem .5rem;
@@ -98,65 +135,9 @@
     }
   }
 
-  .widget__title {
-    display: block;
 
-    font-size: 1.875rem;
-    font-weight: 700;
-    line-height: 1.125;
-    letter-spacing: .25px;
-    word-wrap: break-word;
-
-    em {
-      font-family: $font-serif;
-      font-weight: 400;
-    }
-
-    @media screen and (max-width: 1023px) {
-      font-size: 1.375rem;
-      line-height: 1.25;
-    }
-
-    @media screen and (max-width: 767px) {
-      font-size: 1.125rem;
-    }
-  }
-
-  .widget__link {
-    display: block;
-
-    color: $color-white;
-
-    &:hover {
-      filter: brightness(80%);
-    }
-  }
-
-  .widget__meta {
+  .widget-transparent__inner {
     display: flex;
-    flex-flow: row wrap;
-    justify-content: flex-start;
-
-    width: 100%;
-    margin-top: 0;
-    margin-bottom: 1rem;
-
-    color: $color-white;
-
-    .meta__link {
-      position: relative;
-      z-index: 2;
-
-      color: $color-white;
-
-      &:hover {
-        filter: brightness(80%);
-      }
-    }
-  }
-
-  .widget__item {
-    display: block;
     position: relative;
 
     width: calc(50% - .5rem);
@@ -168,30 +149,52 @@
 
 
     &:last-child {
-      .widget__footer {
+      .widget-transparent__content {
         border-bottom: none;
       }
     }
 
-    &:nth-child(2) {
+    &:nth-last-child(4) {
       height: 100%;
 
-      .widget__parent {
+      .widget-transparent__content {
         position: absolute;
         left: 0;
         bottom: 0;
 
         margin-right: 2rem;
 
+        border-bottom: none;
+
+        .widget-transparent__content-link {
+          font-size: 2.625rem;
+          line-height: 1.125;
+          letter-spacing: .75px;
+
+          @media screen and (max-width: 1199px) {
+            font-size: 2rem;
+            line-height: 1.125;
+          }
+
+          @media screen and (max-width: 1023px) {
+            font-size: 1.375rem;
+            line-height: 1.25;
+            letter-spacing: .25px;
+          }
+
+          @media screen and (max-width: 767px) {
+            font-size: 1.125rem;
+          }
+        }
+
         @media screen and (max-width: 1023px) {
           position: relative;
 
-          margin-top: 3rem;
           margin-right: 0;
         }
       }
 
-      .widget__sticker {
+      .widget-transparent__sticker {
         display: none;
 
         @media screen and (max-width: 1023px) {
@@ -199,69 +202,16 @@
         }
       }
 
-      .widget__footer {
-        border-bottom: none;
-      }
-
-      .widget__title {
-        font-size: 2.625rem;
-        line-height: 1.125;
-        letter-spacing: .75px;
-
-        @media screen and (max-width: 1199px) {
-          font-size: 2rem;
-          line-height: 1.125;
-        }
-
-        @media screen and (max-width: 1023px) {
-          font-size: 1.375rem;
-          line-height: 1.25;
-          letter-spacing: .25px;
-        }
-
-        @media screen and (max-width: 767px) {
-          font-size: 1.125rem;
-        }
-      }
-
       @media screen and (max-width: 1023px) {
         height: auto;
+        padding-top: 2rem;
       }
     }
 
     @media screen and (max-width: 1023px) {
       width: 100%;
-    }
-  }
 
-  &.widget--sidebar {
-    .widget__item {
-      width: 100%;
-    }
-
-    .widget__title {
-      font-size: 1.125rem;
-    }
-
-    .widget__sticker {
-      display: none;
-    }
-
-    &:first-child {
-      .widget__parent {
-        position: relative;
-
-        margin-right: 0;
-      }
-
-      .widget__title {
-        font-size: 1.125rem;
-        line-height: 1.25;
-      }
-
-      .widget__footer {
-        border-bottom: solid 1px #fff;
-      }
+      border-bottom: solid 1px $color-white;
     }
   }
 }

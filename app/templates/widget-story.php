@@ -1,13 +1,13 @@
 <?php
 /**
- * Story archive loop partial template
+ * Story widget template
  *
  * @package knife-theme
  * @since 1.4
  */
 ?>
 
-<article class="story">
+<div class="story">
     <div class="story__inner">
        <div class="story__image">
             <?php
@@ -25,4 +25,4 @@
             ?>
         </div>
     </div>
-</article>
+</div>

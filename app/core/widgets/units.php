@@ -5,12 +5,11 @@
  * Widget shows multiple units rows
  *
  * @package knife-theme
- * @since 1.1
- * @version 1.4
+ * @since 1.4
  */
 
 
-class Knife_Units_Widget extends WP_Widget {
+class Knife_Widget_Units extends WP_Widget {
 
     public function __construct() {
         $widget_ops = [
@@ -218,5 +217,5 @@ class Knife_Units_Widget extends WP_Widget {
  * It is time to register widget
  */
 add_action('widgets_init', function() {
-    register_widget('Knife_Units_Widget');
+    register_widget('Knife_Widget_Units');
 });

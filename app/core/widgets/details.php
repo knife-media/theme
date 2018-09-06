@@ -6,10 +6,11 @@
  *
  * @package knife-theme
  * @since 1.1
+ * @version 1.4
  */
 
 
-class Knife_Details_Widget extends WP_Widget {
+class Knife_Widget_Details extends WP_Widget {
 
     public function __construct() {
         $widget_ops = [
@@ -22,7 +23,7 @@ class Knife_Details_Widget extends WP_Widget {
     }
 
 
-     /**
+    /**
      * Outputs the content of the widget.
      *
      * @see WP_Widget::widget()
@@ -187,5 +188,5 @@ class Knife_Details_Widget extends WP_Widget {
  * It is time to register widget
  */
 add_action('widgets_init', function() {
-    register_widget('Knife_Details_Widget');
+    register_widget('Knife_Widget_Details');
 });

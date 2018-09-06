@@ -6,10 +6,11 @@
  *
  * @package knife-theme
  * @since 1.3
+ * @version 1.4
  */
 
 
-class Knife_Story_Widget extends WP_Widget {
+class Knife_Widget_Story extends WP_Widget {
 
     public function __construct() {
         $widget_ops = [
@@ -18,7 +19,7 @@ class Knife_Story_Widget extends WP_Widget {
             'customize_selective_refresh' => true
         ];
 
-        parent::__construct('knife_theme_story', __('[НОЖ] Истории', 'knife-theme'), $widget_ops);
+        parent::__construct('knife_widget_story', __('[НОЖ] Истории', 'knife-theme'), $widget_ops);
     }
 
 
@@ -39,52 +40,27 @@ class Knife_Story_Widget extends WP_Widget {
 
         $instance = wp_parse_args((array) $instance, $defaults);
 
-        extract($instance);
+        $query = new WP_Query([
+            'post_status' => 'publish',
+            'ignore_sticky_posts' => 1,
+            'post_type' => 'story',
+            'offset' => $instance['offset'],
+            'posts_per_page' => $instance['posts_per_page']
+        ]);
 
-        // Check cache before creating WP_Query object
-        $html = get_transient($this->id);
 
-        if($html === false) :
-            $q = new WP_Query([
-                'post_status' => 'publish',
-                'ignore_sticky_posts' => 1,
-                'post_type' => 'story',
-                'offset' => $offset,
-                'posts_per_page' => $posts_per_page
-            ]);
+        if($query->have_posts() && $query->found_posts >= $instance['posts_per_page']) {
+            echo $args['before_widget'];
 
-            ob_start();
+            while($query->have_posts()) {
+                $query->the_post();
 
-            if($q->have_posts() && $q->found_posts >= $posts_per_page) :
-                while($q->have_posts()) : $q->the_post();
-
-                    echo $args['before_widget'];
-
-                    $image = sprintf('<div class="widget__image">%s</div>',
-                        get_the_post_thumbnail(null, 'triple', ['class' => 'widget__image-thumbnail'])
-                    );
-
-                    $link = sprintf('<a class="widget__link" href="%2$s">%1$s</a>',
-                        the_title('<p class="widget__title">', '</p>', false),
-                        esc_url(get_permalink())
-                    );
-
-                    printf('<article class="widget__item">%1$s<footer class="widget__footer">%2$s</footer></article>',
-                        $image, $link
-                    );
-
-                    echo $args['after_widget'];
-
-                endwhile;
-            endif;
+                include(get_template_directory() . '/templates/widget-story.php');
+            }
 
             wp_reset_query();
-
-            $html = ob_get_clean();
-            set_transient($this->id, $html, 24 * HOUR_IN_SECONDS);
-        endif;
-
-        echo $html;
+            echo $args['after_widget'];
+        }
     }
 
 
@@ -161,5 +137,5 @@ class Knife_Story_Widget extends WP_Widget {
  * It is time to register widget
  */
 add_action('widgets_init', function() {
-    register_widget('Knife_Story_Widget');
+    register_widget('Knife_Widget_Story');
 });

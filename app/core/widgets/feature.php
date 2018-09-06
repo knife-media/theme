@@ -6,10 +6,11 @@
  *
  * @package knife-theme
  * @since 1.1
+ * @version 1.4
  */
 
 
-class Knife_Feature_Widget extends WP_Widget {
+class Knife_Widget_Feature extends WP_Widget {
     public function __construct() {
         $widget_ops = [
             'classname' => 'feature',
@@ -39,13 +40,11 @@ class Knife_Feature_Widget extends WP_Widget {
 
         $instance = wp_parse_args((array) $instance, $defaults);
 
-        extract($instance);
-
-        if(!empty($title) && !empty($link)) {
+        if(!empty($instance['title']) && !empty($instance['link'])) {
             echo $args['before_widget'];
 
-            if(empty($sticker)) {
-                $post_id = url_to_postid($link);
+            if(empty($instance['sticker'])) {
+                $post_id = url_to_postid($instance['link']);
                 $sticker = get_post_meta($post_id, '_knife-sticker', true);
             }
 
@@ -137,5 +136,5 @@ class Knife_Feature_Widget extends WP_Widget {
  * It is time to register widget
  */
 add_action('widgets_init', function() {
-    register_widget('Knife_Feature_Widget');
+    register_widget('Knife_Widget_Feature');
 });

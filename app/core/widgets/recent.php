@@ -6,10 +6,11 @@
  *
  * @package knife-theme
  * @since 1.1
+ * @version 1.4
  */
 
 
-class Knife_Recent_Widget extends WP_Widget {
+class Knife_Widget_Recent extends WP_Widget {
     public function __construct() {
         $widget_ops = [
             'classname' => 'recent',
@@ -21,8 +22,13 @@ class Knife_Recent_Widget extends WP_Widget {
     }
 
 
-    /**
-     * Outputs the content of the widget
+   /**
+     * Outputs the content of the widget.
+     *
+     * @see WP_Widget::widget()
+     *
+     * @param array args  The array of form elements
+     * @param array instance The current instance of the widget
      */
     public function widget($args, $instance) {
         $defaults = [
@@ -67,8 +73,12 @@ class Knife_Recent_Widget extends WP_Widget {
     }
 
 
-    /**
-     * Outputs the options form on admin
+   /**
+     * Back-end widget form.
+     *
+     * @see WP_Widget::form()
+     *
+     * @param array $instance Previously saved values from database.
      */
     function form($instance) {
         $defaults = [
@@ -113,7 +123,14 @@ class Knife_Recent_Widget extends WP_Widget {
 
 
     /**
-     * Processing widget options on save
+     * Sanitize widget form values as they are saved.
+     *
+     * @see WP_Widget::update()
+     *
+     * @param array $new_instance Values just sent to be saved.
+     * @param array $old_instance Previously saved values from database.
+     *
+     * @return array Updated safe values to be saved.
      */
     public function update($new_instance, $old_instance) {
         $instance = $old_instance;
@@ -131,5 +148,5 @@ class Knife_Recent_Widget extends WP_Widget {
  * It is time to register widget
  */
 add_action('widgets_init', function() {
-    register_widget('Knife_Recent_Widget');
+    register_widget('Knife_Widget_Recent');
 });

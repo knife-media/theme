@@ -6,10 +6,11 @@
  *
  * @package knife-theme
  * @since 1.1
+ * @version 1.4
  */
 
 
-class Knife_Transparent_Widget extends WP_Widget {
+class Knife_Widget_Transparent extends WP_Widget {
 
     public function __construct() {
         $widget_ops = [
@@ -18,12 +19,17 @@ class Knife_Transparent_Widget extends WP_Widget {
             'customize_selective_refresh' => true
         ];
 
-        parent::__construct('knife_theme_transparent', __('[НОЖ] Прозрачный', 'knife-theme'), $widget_ops);
+        parent::__construct('knife_widget_transparent', __('[НОЖ] Прозрачный', 'knife-theme'), $widget_ops);
     }
 
 
     /**
-     * Outputs the content of the widget
+     * Outputs the content of the widget.
+     *
+     * @see WP_Widget::widget()
+     *
+     * @param array args  The array of form elements
+     * @param array instance The current instance of the widget
      */
     public function widget($args, $instance) {
         $defaults = [
@@ -37,69 +43,28 @@ class Knife_Transparent_Widget extends WP_Widget {
 
         $instance = wp_parse_args((array) $instance, $defaults);
 
-        extract($instance);
+        $query = new WP_Query($this->get_query($instance));
 
-        // Check cache before creating WP_Query object
-        $html = get_transient($this->id);
+        if($query->have_posts()) {
+            echo $args['before_widget'];
 
-        if($html === false) :
-            $q = new WP_Query($this->get_query($instance));
+            if(!empty($instance['title']) && !empty($instance['link'])) {
+                printf('<div class="widget-transparent__head meta"><a class="meta__link" href="%2$s">%1$s</a></div>',
+                    esc_html($instance['title']), esc_url($instance['link'])
+                );
+            }
 
-            ob_start();
+            while($query->have_posts()) {
+                $query->the_post();
+                $image = get_post_meta(get_the_ID(), '_knife-sticker', true);
 
-            if($q->have_posts()) :
-                echo $args['before_widget'];
-
-                if(!empty($title)) {
-                    if(empty($link)) {
-                        printf('<div class="widget__head meta"><span class="meta__item">%s</span></div>',
-                            esc_html($title)
-                        );
-                    }
-                    else {
-                        printf('<div class="widget__head meta"><a class="meta__link" href="%2$s">%1$s</a></div>',
-                            esc_html($title), esc_url($link)
-                        );
-                    }
-                }
-
-                while($q->have_posts()) : $q->the_post();
-                    $image = '';
-
-                    if($picture = get_post_meta(get_the_ID(), '_knife-sticker', true)) {
-                        $image = sprintf('<img class="widget__sticker" src="%s">', $picture);
-                    }
-
-                    $meta = the_info(
-                        '<div class="widget__meta meta">', '</div>',
-                        ['author', 'date'], false
-                    );
-
-                    $link = sprintf(
-                        '<a class="widget__link" href="%2$s">%1$s</a>',
-                        the_title('<p class="widget__title">', '</p>', false),
-                        get_permalink()
-                    );
-
-                    $footer = sprintf('<footer class="widget__footer">%1$s %2$s</footer>',
-                        $meta, $link
-                    );
-
-                    printf('<article class="widget__item"><div class="widget__parent">%s</div></article>',
-                        $image . $footer
-                    );
-                endwhile;
-
-                echo $args['after_widget'];
-            endif;
+                include(get_template_directory() . '/templates/widget-transparent.php');
+            }
 
             wp_reset_query();
 
-            $html = ob_get_clean();
-            set_transient($this->id, $html, 24 * HOUR_IN_SECONDS);
-        endif;
-
-        echo $html;
+            echo $args['after_widget'];
+        }
     }
 
 
@@ -279,5 +244,5 @@ class Knife_Transparent_Widget extends WP_Widget {
  * It is time to register widget
  */
 add_action('widgets_init', function() {
-    register_widget('Knife_Transparent_Widget');
+    register_widget('Knife_Widget_Transparent');
 });

@@ -1,0 +1,136 @@
+.story {
+  width: calc(100% / 4 - .75rem);
+  margin-bottom: 1rem;
+  overflow: hidden;
+
+  .story__image {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+
+    width: 100%;
+    padding-top: 100%;
+    overflow: hidden;
+
+    background-color: $color-white;
+
+    .story__image-thumbnail {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      width: 100%;
+      height: 100%;
+
+      object-fit: cover;
+      object-position: center;
+
+      transition: opacity .25s;
+
+      -webkit-backface-visibility: hidden;
+    }
+
+    @media screen and (max-width: 1023px) {
+      padding-top: 70%;
+    }
+
+    @media screen and (max-width: 767px) {
+      padding-top: 60%;
+    }
+  }
+
+  .story__content {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: space-between;
+
+    width: 100%;
+    height: 100%;
+    padding: 1rem 1.25rem 1.25rem;
+
+    background-color: $color-primary;
+
+    .story__content-link {
+      display: block;
+
+      width: 100%;
+
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1.125;
+      letter-spacing: .25px;
+      word-wrap: break-word;
+
+      &:after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        cursor: pointer;
+
+        width: 100%;
+        height: 100%;
+      }
+
+      em {
+        font-family: $font-serif;
+        font-weight: 400;
+      }
+
+      @media screen and (max-width: 1199px) {
+        font-size: 1.375rem;
+        line-height: 1.25;
+      }
+
+      @media screen and (max-width: 767px) {
+        font-size: 1.125rem;
+      }
+    }
+
+    @media screen and (max-width: 1023px) {
+      min-height: 8rem;
+
+      padding: 1rem;
+    }
+
+    @media screen and (max-width: 767px) {
+      min-height: 6rem;
+    }
+  }
+
+  .story__inner {
+    display: block;
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+    padding-top: 100%;
+
+    color: $color-white;
+
+    &:hover {
+      .story__image-thumbnail {
+        opacity: .9;
+      }
+    }
+
+    @media screen and (max-width: 1023px) {
+      padding-top: 70%;
+    }
+
+    @media screen and (max-width: 767px) {
+      padding-top: 60%;
+    }
+  }
+
+  @media screen and (max-width: 1023px) {
+    width: calc(50% - .5rem);
+  }
+
+  @media screen and (max-width: 479px) {
+    width: 100%;
+  }
+}
