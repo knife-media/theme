@@ -31,12 +31,6 @@
     <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KZ7MHM" style="display:none;"></iframe>
 </noscript>
 
-<?php if(is_active_sidebar('knife-over-header') && is_singular('post')) : ?>
-<div class="banner">
-    <?php dynamic_sidebar('knife-over-header'); ?>
-</div>
-<?php endif; ?>
-
 <header class="header">
     <div class="header__topline topline">
          <button class="topline__button topline__button--menu toggle toggle--menu" id="toggle-menu" role="button">
