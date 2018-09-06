@@ -96,7 +96,7 @@ class Knife_User_Club {
         add_action('auto-draft_to_pending', [__CLASS__, 'notify_review']);
 
         // Add user post type to author archive
-        add_action('pre_get_posts', [__CLASS__, 'update_archive'], 12);
+        add_action('pre_get_posts', [__CLASS__, 'update_author_archive'], 12);
 
         // Prepend author meta to content
         add_filter('the_content', [__CLASS__, 'insert_author_link']);
@@ -327,7 +327,7 @@ class Knife_User_Club {
     /**
      * Append to author archive loop club posts
      */
-    public static function update_archive($query) {
+    public static function update_author_archive($query) {
         if(!is_admin() && is_author() && $query->is_main_query()) {
             $types = $query->get('post_type');
 

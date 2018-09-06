@@ -65,7 +65,7 @@ class Knife_Story_Manager {
         add_action('save_post', [$this, 'save_meta']);
 
         // Add user post type to author archive
-        add_action('pre_get_posts', [$this, 'update_archive'], 12);
+        add_action('pre_get_posts', [$this, 'update_author_archive'], 12);
 
         // Insert vendor scripts and styles
         add_action('wp_enqueue_scripts', [$this, 'enqueue_assets'], 9);
@@ -228,7 +228,7 @@ class Knife_Story_Manager {
     /**
      * Append to author archive loop story posts
      */
-    public function update_archive($query) {
+    public function update_author_archive($query) {
         if(!is_admin() && is_author() && $query->is_main_query()) {
             $types = $query->get('post_type');
 
