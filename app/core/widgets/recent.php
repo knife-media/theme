@@ -33,8 +33,8 @@ class Knife_Widget_Recent extends WP_Widget {
     public function widget($args, $instance) {
         $defaults = [
             'title' => '',
-            'posts_per_page' => 10,
-            'filter' => -1
+            'posts_per_page' => 7,
+            'filter' => 620
         ];
 
         $instance = wp_parse_args((array) $instance, $defaults);
@@ -83,8 +83,8 @@ class Knife_Widget_Recent extends WP_Widget {
     function form($instance) {
         $defaults = [
             'title' => '',
-            'posts_per_page' => 10,
-            'filter' => -1
+            'posts_per_page' => 7,
+            'filter' => 620
         ];
 
         $instance = wp_parse_args((array) $instance, $defaults);

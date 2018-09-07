@@ -68,7 +68,6 @@
 
     .widget-club__content-link {
       display: block;
-      position: relative;
 
       width: 100%;
 
@@ -164,49 +163,58 @@
   }
 
   &.widget--sidebar {
-    .widget__title {
-      font-size: 1.25rem;
-
-      @media screen and (max-width: 767px) {
-        font-size: 1.125rem;
-      }
-    }
-
-    .widget__footer {
-      padding: 1rem 0;
-    }
-
-    .widget__meta {
-      margin-bottom: .5rem;
-    }
-
-    .widget__link {
-      display: block;
-
-      &:after {
-        content: "";
-
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-
-        width: 100%;
-        height: 100%;
-      }
-    }
-
-    .widget__item {
+    .widget-club__inner {
       width: 100%;
       margin-bottom: 1px;
 
       &:last-child {
         margin-bottom: 0;
       }
-    }
-  }
 
-  @media screen and (max-width: 767px) {
-    padding-bottom: 0;
+      @media screen and (max-width: 1023px) {
+        display: none;
+
+        &:nth-child(-n+3) {
+          display: flex;
+        }
+      }
+    }
+
+    .widget-club__more {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .widget-club__content {
+      padding: 1rem 0;
+
+      .widget-club__content-meta {
+        margin-bottom: .5rem;
+      }
+
+      .widget-club__content-link {
+        font-size: 1.25rem;
+
+        &:after {
+          content: "";
+
+          position: absolute;
+          cursor: pointer;
+          top: 0;
+          left: 0;
+
+          width: 100%;
+          height: 100%;
+        }
+
+        @media screen and (max-width: 767px) {
+          font-size: 1.125rem;
+        }
+      }
+    }
+
+    @media screen and (max-width: 767px) {
+      padding-bottom: 0;
+    }
   }
 }

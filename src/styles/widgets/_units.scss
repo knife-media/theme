@@ -4,4 +4,10 @@
   justify-content: space-between;
 
   width: 100%;
+
+  &.widget--sidebar {
+    .unit {
+      width: 100%;
+    }
+  }
 }

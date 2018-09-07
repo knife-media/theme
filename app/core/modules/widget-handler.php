@@ -39,7 +39,7 @@ class Knife_Widget_Handler {
         add_action('widgets_init', [__CLASS__, 'register_sidebars']);
 
         // unregister default widgets
-        add_action('widget_init', [__CLASS__, 'unregister_defaults'], 11);
+        add_action('widgets_init', [__CLASS__, 'unregister_defaults'], 1);
 
         // hide default widgets title
         add_filter('widget_title', '__return_empty_string');
@@ -113,6 +113,10 @@ class Knife_Widget_Handler {
         unregister_widget('WP_Widget_Tag_Cloud');
         unregister_widget('WP_Nav_Menu_Widget');
         unregister_widget('WP_Widget_Custom_HTML');
+        unregister_widget('WP_Widget_Text');
+        unregister_widget('WP_Widget_Audio');
+        unregister_widget('WP_Widget_Media_Audio');
+//        unregister_widget('WP_Widget_Media_Image');
     }
 
 
