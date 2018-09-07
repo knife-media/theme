@@ -1,7 +1,11 @@
 .widget-televisor {
   display: flex;
-  flex-flow: row wrap;
-  justify-content: space-between;
+
+  .widget-televisor__inner {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+  }
 
   .widget-televisor__content {
     display: flex;

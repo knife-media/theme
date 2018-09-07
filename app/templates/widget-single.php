@@ -17,8 +17,8 @@
 
     <div class="widget-single__image">
         <?php
-            the_post_thumbnail(
-                get_query_var('widget_size', 'single'),
+            echo wp_get_attachment_image(
+                $instance['cover'], 'single', false,
                 ['class' => 'widget-single__image-thumbnail']
             );
         ?>

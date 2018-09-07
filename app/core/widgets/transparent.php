@@ -86,15 +86,18 @@ class Knife_Widget_Transparent extends WP_Widget {
             if(isset($_REQUEST['widget-id']) && $_REQUEST['widget-id'] == $this->id) {
                 $posted_terms = [];
 
-                if(isset($_POST['post_category']))
+                if(isset($_POST['post_category'])) {
                     $posted_terms = $_POST['post_category'];
+                }
 
-                if(isset($_POST['tax_input'][$taxonomy]))
+                if(isset($_POST['tax_input'][$taxonomy])) {
                     $posted_terms = $_POST['tax_input'][$taxonomy];
+                }
 
                 foreach($posted_terms as $term) {
-                    if(term_exists(absint($term), $taxonomy))
+                    if(term_exists(absint($term), $taxonomy)) {
                         $terms[] = absint($term);
+                    }
                 }
             }
         }
@@ -168,7 +171,7 @@ class Knife_Widget_Transparent extends WP_Widget {
         printf(
             '<p><label for="%1$s">%3$s</label><select class="widefat knife-widget-taxonomy" id="%1$s" name="%2$s">',
             esc_attr($this->get_field_id('taxonomy')),
-             esc_attr($this->get_field_name('taxonomy')),
+            esc_attr($this->get_field_name('taxonomy')),
             __('Фильтр записей:', 'knife-theme')
         );
 

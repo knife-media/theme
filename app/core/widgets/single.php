@@ -34,7 +34,7 @@ class Knife_Widget_Single extends WP_Widget {
     public function widget($args, $instance) {
         $defaults = [
             'title' => '',
-            'cover' => 'default',
+            'cover' => 0,
             'link' => '',
         ];
 
@@ -80,7 +80,7 @@ class Knife_Widget_Single extends WP_Widget {
 
         $instance['link'] = esc_url($new_instance['link']);
         $instance['title'] = sanitize_text_field($new_instance['title']);
-        $instance['cover'] = sanitize_text_field($new_instance['cover']);
+        $instance['cover'] = absint($new_instance['cover']);
 
         return $instance;
     }
@@ -96,10 +96,12 @@ class Knife_Widget_Single extends WP_Widget {
         $defaults = [
             'title' => '',
             'link' => '',
-            'cover' => 'default'
+            'cover' => 0
         ];
 
+        $picture = '';
         $instance = wp_parse_args((array) $instance, $defaults);
+
 
         // Widget title
         printf(
@@ -110,6 +112,22 @@ class Knife_Widget_Single extends WP_Widget {
             esc_attr($instance['title']),
             __('Не будет отображаться на странице', 'knife-theme')
         );
+
+
+        // Widget cover
+        if($cover = wp_get_attachment_url($instance['cover'])) {
+            $picture = sprintf('<img src="%s" alt="" style="max-width: 100%%;">', esc_url($cover));
+        }
+
+        printf(
+            '<p>%5$s<input id="%1$s" name="%2$s" type="hidden" value="%3$s"><button class="button knife-widget-image">%4$s</button></p>',
+            esc_attr($this->get_field_id('cover')),
+            esc_attr($this->get_field_name('cover')),
+            esc_attr($instance['cover']),
+            __('Выбрать обложку', 'knife-theme'),
+            $picture
+        );
+
 
         // Post url
         printf(

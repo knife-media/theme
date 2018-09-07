@@ -32,8 +32,9 @@ jQuery(document).ready(function($) {
   image.on('click', 'button.select', function(e) {
     e.preventDefault();
 
-    if(frame)
+    if(frame) {
       return frame.open();
+    }
 
     frame = wp.media({
       title: knife_custom_background.choose,

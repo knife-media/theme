@@ -35,26 +35,15 @@ class Knife_Widget_Televisor extends WP_Widget {
             'title' => '',
             'link' => '',
             'filter' => -1,
+            'cover' => 0,
             'unique' => 0
         ];
 
         $instance = wp_parse_args((array) $instance, $defaults);
 
-        // Using exclude global query var to avoid posts duplicate
-        $exclude = get_query_var('widget_exclude', []);
-
         echo $args['before_widget'];
 
-        // Show single and units widget
-        echo '<div class="widget-televisor__content">';
-        $this->show_single($instance, $exclude);
-        $this->show_units($instance, $exclude);
-        echo '</div>';
-
-        // Show recent widget in sidebar
-        echo '<div class="widget-televisor__sidebar">';
-        $this->show_recent($instance);
-        echo '</div>';
+        include(get_template_directory() . '/templates/widget-televisor.php');
 
         echo $args['after_widget'];
     }
@@ -77,7 +66,7 @@ class Knife_Widget_Televisor extends WP_Widget {
         $instance['unique'] = $new_instance['unique'] ? 1 : 0;
         $instance['filter'] = absint($new_instance['filter']);
         $instance['link'] = esc_url($new_instance['link']);
-
+        $instance['cover'] = absint($new_instance['cover']);
 
         return $instance;
     }
@@ -94,10 +83,13 @@ class Knife_Widget_Televisor extends WP_Widget {
         $defaults = [
             'title' => '',
             'filter' => -1,
+            'cover' => 0,
             'unique' => 0
         ];
 
+        $picture = '';
         $instance = wp_parse_args((array) $instance, $defaults);
+
 
         // Widget title
         printf(
@@ -109,6 +101,7 @@ class Knife_Widget_Televisor extends WP_Widget {
             __('Не будет отображаться на странице', 'knife-theme')
         );
 
+
         // Exclude duplicate
         printf(
             '<p><input type="checkbox" id="%1$s" name="%2$s" class="checkbox"%4$s><label for="%1$s">%3$s</label></p>',
@@ -117,6 +110,7 @@ class Knife_Widget_Televisor extends WP_Widget {
             __('Только уникальные посты', 'knife-theme'),
             checked($instance['unique'], 1, false)
         );
+
 
         // Categories filter
         $categories = wp_dropdown_categories([
@@ -134,16 +128,31 @@ class Knife_Widget_Televisor extends WP_Widget {
             $categories
         );
 
+
+        // Widget cover
+        if($cover = wp_get_attachment_url($instance['cover'])) {
+            $picture = sprintf('<img src="%s" alt="" style="max-width: 100%%;">', esc_url($cover));
+        }
+
+        printf(
+            '<p>%5$s<input id="%1$s" name="%2$s" type="hidden" value="%3$s"><button class="button knife-widget-image">%4$s</button></p>',
+            esc_attr($this->get_field_id('cover')),
+            esc_attr($this->get_field_name('cover')),
+            esc_attr($instance['cover']),
+            __('Выбрать обложку фичера', 'knife-theme'),
+            $picture
+        );
+
+
         // Post url
         printf(
             '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"><small>%5$s</small></p>',
             esc_attr($this->get_field_id('link')),
             esc_attr($this->get_field_name('link')),
-            __('Ссылка на запись во всю ширину:', 'knife-theme'),
+            __('Ссылка с фичера:', 'knife-theme'),
             esc_attr($instance['link']),
             __('Абсолютная ссылка с этого сайта', 'knife-theme')
         );
-
     }
 
 
@@ -172,7 +181,8 @@ class Knife_Widget_Televisor extends WP_Widget {
     /**
      * Show unit using query loop
      */
-    private function show_units($instance, $exclude) {
+    private function show_units($instance) {
+        $exclude = get_query_var('widget_exclude', []);
         $query = new WP_Query($this->get_query($instance, $exclude));
 
         if($query->have_posts()) {
@@ -196,7 +206,8 @@ class Knife_Widget_Televisor extends WP_Widget {
     /**
      * Show single post part
      */
-    private function show_single($instance, $exclude) {
+    private function show_single($instance) {
+        $exclude = get_query_var('widget_exclude', []);
         $post_id = url_to_postid($instance['link']);
 
         $query = new WP_Query([

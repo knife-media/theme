@@ -143,6 +143,8 @@ class Knife_Widget_Handler {
         $version = wp_get_theme()->get('Version');
         $include = get_template_directory_uri() . '/core/include';
 
+        wp_enqueue_media();
+
         if('widgets.php' === $hook) {
             wp_enqueue_style('wp-color-picker');
             wp_enqueue_script('wp-color-picker');
@@ -152,7 +154,8 @@ class Knife_Widget_Handler {
         wp_enqueue_script('knife-widget-handler', $include . '/scripts/widget-handler.js', ['jquery'], $version);
 
         $options = [
-            'nonce' => wp_create_nonce(self::$nonce)
+            'nonce' => wp_create_nonce(self::$nonce),
+            'choose' => __('Выберите обложку', 'knife-theme')
         ];
 
         wp_localize_script('knife-widget-handler', 'knife_widget_handler', $options);

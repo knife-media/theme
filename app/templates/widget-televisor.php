@@ -1,0 +1,14 @@
+<div class="widget-televisor__inner">
+    <div class="widget-televisor__content">
+        <?php
+            $this->show_single($instance);
+            $this->show_units($instance);
+        ?>
+    </div>
+
+    <div class="widget-televisor__sidebar">
+        <?php
+            $this->show_recent($instance);
+        ?>
+    </div>
+</div>
