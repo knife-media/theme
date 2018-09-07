@@ -1,8 +1,8 @@
 <?php
 /**
- * Feature widget
+ * Informer widget
  *
- * Recent posts widget showing as bright links
+ * Informer line with optional sticker and custom colors
  *
  * @package knife-theme
  * @since 1.1
@@ -10,15 +10,15 @@
  */
 
 
-class Knife_Widget_Feature extends WP_Widget {
+class Knife_Widget_Informer extends WP_Widget {
     public function __construct() {
         $widget_ops = [
-            'classname' => 'feature',
-            'description' => __('Выводит фичер на всю ширину со стикером', 'knife-theme'),
+            'classname' => 'informer',
+            'description' => __('Выводит информер на всю ширину со стикером', 'knife-theme'),
             'customize_selective_refresh' => true
         ];
 
-        parent::__construct('knife_widget_feature', __('[НОЖ] Фичер', 'knife-theme'), $widget_ops);
+        parent::__construct('knife_widget_informer', __('[НОЖ] Информер', 'knife-theme'), $widget_ops);
     }
 
 
@@ -35,7 +35,8 @@ class Knife_Widget_Feature extends WP_Widget {
             'title' => '',
             'link' => '',
             'sticker' => '',
-            'color' => '#ffe64e'
+            'color' => '#000000',
+            'background' => '#ffe64e'
         ];
 
         $instance = wp_parse_args((array) $instance, $defaults);
@@ -43,12 +44,17 @@ class Knife_Widget_Feature extends WP_Widget {
         if(!empty($instance['title']) && !empty($instance['link'])) {
             echo $args['before_widget'];
 
+            $styles = [
+                'color: ' . $instance['color'],
+                'background-color: ' . $instance['background']
+            ];
+
             if(empty($instance['sticker'])) {
                 $post_id = url_to_postid($instance['link']);
                 $sticker = get_post_meta($post_id, '_knife-sticker', true);
             }
 
-            include(get_template_directory() . '/templates/widget-feature.php');
+            include(get_template_directory() . '/templates/widget-informer.php');
 
             echo $args['after_widget'];
         }
@@ -72,6 +78,7 @@ class Knife_Widget_Feature extends WP_Widget {
         $instance['link'] = esc_url($new_instance['link']);
         $instance['sticker'] = esc_url($new_instance['sticker']);
         $instance['color'] = sanitize_text_field($new_instance['color']);
+        $instance['background'] = sanitize_text_field($new_instance['background']);
 
         return $instance;
     }
@@ -89,7 +96,8 @@ class Knife_Widget_Feature extends WP_Widget {
             'title' => '',
             'link' => '',
             'sticker' => '',
-            'color' => '#ffe64e'
+            'color' => '#000000',
+            'background' => '#ffe64e'
         ];
 
         $instance = wp_parse_args((array) $instance, $defaults);
@@ -98,7 +106,7 @@ class Knife_Widget_Feature extends WP_Widget {
             '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"><small>%5$s</small></p>',
             esc_attr($this->get_field_id('title')),
             esc_attr($this->get_field_name('title')),
-            __('Заголовок фичера', 'knife-theme'),
+            __('Заголовок информера', 'knife-theme'),
             esc_attr($instance['title']),
              __('Отобразится на странице', 'knife-theme')
         );
@@ -107,7 +115,7 @@ class Knife_Widget_Feature extends WP_Widget {
             '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
             esc_attr($this->get_field_id('link')),
             esc_attr($this->get_field_name('link')),
-            __('Ссылка с фичера', 'knife-theme'),
+            __('Ссылка с информера', 'knife-theme'),
             esc_attr($instance['link'])
         );
 
@@ -124,10 +132,17 @@ class Knife_Widget_Feature extends WP_Widget {
             '<p><label for="%1$s">%3$s</label><input class="color-picker" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
             esc_attr($this->get_field_id('color')),
             esc_attr($this->get_field_name('color')),
-            __('Цвет фичера', 'knife-theme'),
+            __('Цвет текста', 'knife-theme'),
             esc_attr($instance['color'])
         );
 
+        printf(
+            '<p><label for="%1$s">%3$s</label><input class="color-picker" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
+            esc_attr($this->get_field_id('background')),
+            esc_attr($this->get_field_name('background')),
+            __('Цвет фона', 'knife-theme'),
+            esc_attr($instance['background'])
+        );
     }
 }
 
@@ -136,5 +151,5 @@ class Knife_Widget_Feature extends WP_Widget {
  * It is time to register widget
  */
 add_action('widgets_init', function() {
-    register_widget('Knife_Widget_Feature');
+    register_widget('Knife_Widget_Informer');
 });

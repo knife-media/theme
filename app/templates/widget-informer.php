@@ -9,17 +9,17 @@
  */
 ?>
 
-<a class="widget-feature__inner" href="<?php echo esc_url($instance['link']); ?>" target="_blank" style="background-color: <?php echo $instance['color']; ?>">
-    <div class="widget-feature__content">
+<a class="widget-informer__inner" href="<?php echo esc_url($instance['link']); ?>" target="_blank" style="<?php echo implode('; ', $styles); ?>">
+    <div class="widget-informer__content" style="">
         <?php
             printf(
-                '<p class="widget-feature__content-title">%s</p>',
+                '<p class="widget-informer__content-title">%s</p>',
                 esc_html($instance['title'])
             );
 
             if(!empty($instance['sticker'])) {
                 printf(
-                    '<img class="widget-feature__content-sticker" src="%1$s" alt="%2$s">',
+                    '<img class="widget-informer__content-sticker" src="%1$s" alt="%2$s">',
                     esc_url($instance['sticker']), esc_attr($instance['title'])
                 );
             }

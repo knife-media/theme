@@ -166,7 +166,7 @@ class Knife_Widget_Handler {
         $include = get_template_directory() . '/core/widgets/';
 
         $widgets = [
-            'story', 'club', 'script', 'televisor', 'recent', 'units', 'single', 'feature', 'details', 'transparent'
+            'story', 'club', 'script', 'televisor', 'recent', 'units', 'single', 'informer', 'details', 'transparent'
         ];
 
         foreach($widgets as $id) {
