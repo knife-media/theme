@@ -65,7 +65,7 @@ class Knife_Widget_Handler {
             'name'          => __('Фичер под меню', 'knife-theme'),
             'id'            => 'knife-feature',
             'description'   => __('Добавленные виджеты появятся под шапкой на главной и внутренних страницах.', 'knife-theme'),
-            'before_widget' => '<div class="widget-%2$s">',
+            'before_widget' => '<div class="widget-%2$s widget-%2$s--feature">',
             'after_widget'  => '</div>'
         ]);
 
@@ -73,7 +73,7 @@ class Knife_Widget_Handler {
             'name'          => __('Подвал сайта', 'knife-theme'),
             'id'            => 'knife-footer',
             'description'   => __('Добавленные виджеты появятся справа в футере.', 'knife-theme'),
-            'before_widget' => '<aside class="widget widget-text">',
+            'before_widget' => '<aside class="widget-%2$s">',
             'after_widget'  => '</aside>'
         ]);
 
@@ -81,7 +81,7 @@ class Knife_Widget_Handler {
             'name'          => __('Сайдбар на внутренних', 'knife-theme'),
             'id'            => 'knife-sidebar',
             'description'   => __('Добавленные виджеты появятся в сайдбаре внутри постов.', 'knife-theme'),
-            'before_widget' => '<div class="widget-%2$s widget--sidebar">',
+            'before_widget' => '<div class="widget-%2$s widget-%2$s--sidebar">',
             'after_widget'  => '</div>'
         ]);
 
@@ -89,7 +89,7 @@ class Knife_Widget_Handler {
             'name'          => __('Виджеты под записью', 'knife-theme'),
             'id'            => 'knife-inside',
             'description'   => __('Добавленные виджеты появятся в под записью на внутренних страницах.', 'knife-theme'),
-            'before_widget' => '<div class="widget-%2$s">',
+            'before_widget' => '<div class="widget-%2$s widget-%2$s--inside">',
             'after_widget'  => '</div>'
         ]);
     }
@@ -116,7 +116,8 @@ class Knife_Widget_Handler {
         unregister_widget('WP_Widget_Text');
         unregister_widget('WP_Widget_Audio');
         unregister_widget('WP_Widget_Media_Audio');
-//        unregister_widget('WP_Widget_Media_Image');
+        unregister_widget('WP_Widget_Media_Image');
+        unregister_widget('WP_Widget_Media_Gallery');
     }
 
 
