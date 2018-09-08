@@ -20,8 +20,9 @@ if(!isset($content_width)) {
 add_action('wp_enqueue_scripts', function() {
     $version = wp_get_theme()->get('Version');
 
-    if(defined('WP_DEBUG') && true === WP_DEBUG)
+    if(defined('WP_DEBUG') && true === WP_DEBUG) {
         $version = date('U');
+    }
 
     wp_enqueue_script('knife-theme', get_template_directory_uri() . '/assets/scripts.min.js', [], $version, true);
 });
@@ -31,8 +32,9 @@ add_action('wp_enqueue_scripts', function() {
 add_action('wp_print_styles', function() {
     $version = wp_get_theme()->get('Version');
 
-    if(defined('WP_DEBUG') && true === WP_DEBUG)
+    if(defined('WP_DEBUG') && true === WP_DEBUG) {
         $version = date('U');
+    }
 
     wp_enqueue_style('knife-theme', get_template_directory_uri() . '/assets/styles.min.css', [], $version);
 });
@@ -120,11 +122,13 @@ add_filter('disable_captions', '__return_true');
 add_filter('image_send_to_editor', function($html, $id, $caption, $title, $align, $url, $size, $alt) {
     $html = get_image_tag($id, $alt, '', $align, $size);
 
-    if($url)
+    if($url) {
         $html = '<a href="' . esc_attr($url) . '">' . $html . '</a>';
+    }
 
-    if($caption)
+    if($caption) {
         $html = $html . '<figcaption class="figure__caption">' . $caption . '</figcaption>';
+    }
 
     $html = '<figure class="figure figure--' . esc_attr($size) . '">' . $html . '</figure>';
 
@@ -185,8 +189,9 @@ add_action('wp_enqueue_scripts', function() {
 add_action('wp_enqueue_scripts', function() {
     return false;
 
-    if(!is_user_logged_in())
+    if(!is_user_logged_in()) {
         wp_deregister_script('jquery');
+    }
 }, 11);
 
 
@@ -211,17 +216,21 @@ add_filter('body_class', function($wp_classes, $extra_classes) {
         $classes[] = 'is-home';
 
     // TODO: remove after moving cards to post type #34
-    if(is_singular('post') && !has_post_format('chat'))
+    if(is_singular('post') && !has_post_format('chat')) {
         $classes[] = 'is-post';
+    }
 
-    if(is_singular('page'))
+    if(is_singular('page')) {
         $classes[] = 'is-page';
+    }
 
-    if(is_archive())
+    if(is_archive()) {
         $classes[] = 'is-archive';
+    }
 
-    if(is_admin_bar_showing())
+    if(is_admin_bar_showing()) {
         $classes[] = 'admin-bar';
+    }
 
     return $classes;
 }, 10, 2);
@@ -256,8 +265,9 @@ add_filter('wp_mail_from', function($email) {
 // It is good to remove auto suggestings for SEO
 // https://core.trac.wordpress.org/ticket/16557
 add_filter('redirect_canonical', function($url) {
-    if(is_404() && !isset($_GET['p']))
+    if(is_404() && !isset($_GET['p'])) {
         return false;
+    }
 
     return $url;
 });
@@ -310,14 +320,17 @@ add_filter('nav_menu_css_class', function($classes, $item, $args) {
     // Redefine classes array
     $classes = [];
 
-    if($args->theme_location === 'main')
+    if($args->theme_location === 'main') {
         $classes[] = 'topline__menu-item';
+    }
 
-    if($args->theme_location === 'footer')
+    if($args->theme_location === 'footer') {
         $classes[] = 'footer__menu-item';
+    }
 
-    if($args->theme_location === 'social')
+    if($args->theme_location === 'social') {
         $classes[] = 'social__item';
+    }
 
     return array_merge($classes, (array) get_post_meta($item->ID, '_menu_item_classes', true));
 }, 10, 3);
@@ -325,14 +338,17 @@ add_filter('nav_menu_css_class', function($classes, $item, $args) {
 
 // Add class to menu item link
 add_filter('nav_menu_link_attributes', function($atts, $item, $args) {
-    if($args->theme_location === 'main')
-         $atts['class'] = 'topline__menu-link';
+    if($args->theme_location === 'main') {
+        $atts['class'] = 'topline__menu-link';
+    }
 
-     if($args->theme_location === 'footer')
-         $atts['class'] = 'footer__menu-link';
+    if($args->theme_location === 'footer') {
+        $atts['class'] = 'footer__menu-link';
+    }
 
-    if($args->theme_location === 'social')
+    if($args->theme_location === 'social') {
         $atts['class'] = 'social__item-link';
+    }
 
     return $atts;
 }, 10, 3);
@@ -340,8 +356,9 @@ add_filter('nav_menu_link_attributes', function($atts, $item, $args) {
 
 // We have to change titles to icons in social menu
 add_filter('nav_menu_item_title', function($title, $item, $args) {
-    if($args->theme_location === 'social')
+    if($args->theme_location === 'social') {
         return sprintf('<span class="icon icon--%1$s" title="%1$s"></span>', strtolower($title));
+    }
 
     return $title;
 }, 10, 3);
@@ -362,8 +379,9 @@ add_filter('gettext_with_context', function($translation, $text, $context, $doma
         'Chat' => __('Карточки', 'knife-theme')
     ];
 
-    if($context !== 'Post format')
+    if($context !== 'Post format') {
         return $translation;
+    }
 
     return str_replace(array_keys($names), array_values($names), $text);
 }, 10, 4);
@@ -371,11 +389,13 @@ add_filter('gettext_with_context', function($translation, $text, $context, $doma
 
 // We need to wrap the content with card tag if it in chat post format
 add_filter('the_content', function($content) {
-    if(get_post_format() !== 'chat')
+    if(get_post_format() !== 'chat') {
         return $content;
+    }
 
-    if(has_shortcode($content, 'card'))
+    if(has_shortcode($content, 'card')) {
         return $content;
+    }
 
     return '<div class="post__card">' . $content . '</div>';
 });
@@ -426,13 +446,16 @@ add_filter('get_image_tag_class', function($class, $id, $align, $size) {
 add_action('template_redirect', function() {
     global $post;
 
-    if(!is_attachment())
+    if(!is_attachment()) {
         return false;
+    }
 
-    if(isset($post->post_parent) && $post->post_parent > 0)
+    if(isset($post->post_parent) && $post->post_parent > 0) {
         $url = get_permalink($post->post_parent);
-    else
+    }
+    else {
         $url = home_url('/');
+    }
 
     wp_redirect(esc_url($url), 301);
     exit;
@@ -445,8 +468,9 @@ add_filter('attachment_link', function() {
 
 // Disable wordpress based search to reduce CPU load and prevent DDOS attacks
 add_action('parse_query', function($query) {
-    if(!$query->is_search() || is_admin())
+    if(!$query->is_search() || is_admin()) {
         return false;
+    }
 
     $query->set('s', '');
     $query->is_search = false;
@@ -457,11 +481,13 @@ add_action('parse_query', function($query) {
 // Remove private posts from archives and home page.
 // Note: Knife editors use private posts as drafts. So we don't want to see drafts in templates even if we have logged in
 add_action('pre_get_posts', function($query) {
-    if(is_admin() && $query->is_main_query())
+    if(is_admin() && $query->is_main_query()) {
         return;
+    }
 
-    if($query->is_archive() || $query->is_home())
+    if($query->is_archive() || $query->is_home()) {
         $query->set('post_status', 'publish');
+    }
 });
 
 

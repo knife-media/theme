@@ -96,7 +96,7 @@ class Knife_User_Club {
         add_action('auto-draft_to_pending', [__CLASS__, 'notify_review']);
 
         // Add user post type to author archive
-        add_action('pre_get_posts', [__CLASS__, 'update_archive'], 12);
+        add_action('pre_get_posts', [__CLASS__, 'update_author_archive'], 12);
 
         // Prepend author meta to content
         add_filter('the_content', [__CLASS__, 'insert_author_link']);
@@ -260,7 +260,7 @@ class Knife_User_Club {
             $user_url = get_author_posts_url(get_the_author_meta('ID'));
         }
 
-        $outbound = sprintf('<a class="outbound" href="%3$s" target="_blank"><p class="outbound__author">%1$s</p><p>%2$s</p></a>',
+        $outbound = sprintf('<a class="outbound" href="%3$s" target="_blank"><p class="outbound__author">%1$s </p><p>%2$s</p></a>',
             get_the_author(),
             esc_html(get_the_author_meta('description')),
             esc_url($user_url)
@@ -291,7 +291,7 @@ class Knife_User_Club {
         }
 
         $link = sprintf('<a class="outbound outbound--footer" href="%2$s"><p class="outbound__promo">%1$s</p></a>',
-            __('Хотите тоже написать что-то интересное в «Нож»,<br> но у вас мало опыта? Это не страшно: присоединяйтесь к нашему Клубу! Там мы публикуем тексты читателей,<br> а лучшим предлагаем стать нашими постоянными авторами.', 'knife-theme'),
+            __('Хотите написать что-то интересное в «Нож», но у вас мало опыта? Присоединяйтесь к нашему Клубу!', 'knife-theme'),
             esc_url($options['button_link'])
         );
 
@@ -327,7 +327,7 @@ class Knife_User_Club {
     /**
      * Append to author archive loop club posts
      */
-    public static function update_archive($query) {
+    public static function update_author_archive($query) {
         if(!is_admin() && is_author() && $query->is_main_query()) {
             $types = $query->get('post_type');
 

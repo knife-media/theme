@@ -70,7 +70,7 @@ class Knife_Story_Manager {
         add_action('save_post', [__CLASS__, 'save_meta']);
 
         // Add user post type to author archive
-        add_action('pre_get_posts', [__CLASS__, 'update_archive'], 12);
+        add_action('pre_get_posts', [$this, 'update_author_archive'], 12);
 
         // Change posts count on story archive
         add_action('pre_get_posts', [__CLASS__, 'update_count']);
@@ -263,7 +263,7 @@ class Knife_Story_Manager {
     /**
      * Append to author archive loop story posts
      */
-    public static function update_archive($query) {
+    public function update_author_archive($query) {
         if(!is_admin() && is_author() && $query->is_main_query()) {
             $types = $query->get('post_type');
 
