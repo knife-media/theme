@@ -65,6 +65,8 @@
       }
 
       @media screen and (max-width: 767px) {
+        margin-bottom: 1rem;
+
         font-size: 1.625rem;
         line-height: 1.25;
       }
@@ -83,6 +85,8 @@
         letter-spacing: .25px;
 
         @media screen and (max-width: 767px) {
+          margin-bottom: .5rem;
+
           font-size: 1rem;
         }
       }
@@ -106,6 +110,10 @@
         margin-top: 0;
         margin-bottom: 0;
       }
+    }
+
+    @media screen and (max-width: 767px) {
+      margin-bottom: .5rem;
     }
   }
 

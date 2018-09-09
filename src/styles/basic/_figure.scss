@@ -188,5 +188,10 @@
       line-height: 1.5;
     }
   }
+
+  @media screen and (max-width: 767px) {
+    margin-top: .5rem;
+    margin-bottom: 1rem;
+  }
 }
 
