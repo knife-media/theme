@@ -16,8 +16,8 @@ if(!function_exists('the_share')) :
      *
      * @since 1.3
      */
-    function the_share($before = '', $after = '', $action = '', $title = '', $echo = true) {
-        $share = Knife_Share_Buttons::get_buttons($action, $title);
+    function the_share($before = '', $after = '', $action = '', $expand = false, $echo = true) {
+        $share = Knife_Share_Buttons::get_buttons($action, $expand);
 
         $output = $before . $share . $after;
 

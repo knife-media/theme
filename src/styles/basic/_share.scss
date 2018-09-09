@@ -10,29 +10,6 @@
   margin-right: -2rem;
   padding: .5rem 2rem;
 
-  .share__title {
-    display: block;
-    cursor: default;
-
-    width: 100%;
-    margin: 0 auto 0 0;
-    padding-right: .5rem;
-
-    font-size: 1.125rem;
-    font-weight: 400;
-    line-height: 1.25;
-    letter-spacing: .25px;
-
-    @media screen and (max-width: 767px) {
-      width: 100%;
-      margin: 0 0 1rem;
-    }
-
-    @media screen and (max-width: 479px) {
-      font-size: 1.125rem;
-    }
-  }
-
   .share__link {
     display: flex;
     align-items: center;
@@ -103,13 +80,13 @@
   }
 
   .share__text {
-    margin-left: .5rem;
+    margin-left: .75rem;
     font-size: .875rem;
     font-weight: 300;
     letter-spacing: .5px;
     line-height: 1rem;
 
-    @media screen and (max-width: 479px) {
+    @media screen and (max-width: 767px) {
       display: none;
     }
   }

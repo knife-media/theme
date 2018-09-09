@@ -18,34 +18,39 @@ class Knife_Share_Buttons {
     /**
      * Prints social share buttons template
      */
-    public static function get_buttons($action, $title, $output = '') {
+    public static function get_buttons($action, $expand = false, $output = '') {
         $buttons = [
             'vkontakte' => [
                 'link' => 'http://vk.com/share.php?url=%1$s&text=%2$s',
-                'text' => __('Поделиться', 'knife-theme')
+                'text' => __('Поделиться', 'knife-theme'),
+                'full' => true
             ],
 
              'facebook' => [
                 'link' => 'http://www.facebook.com/sharer/sharer.php?u=%1$s',
-                'text' => __('Пошерить', 'knife-theme')
+                'text' => __('Пошерить', 'knife-theme'),
+                'full' => true
             ],
 
             'telegram' => [
                 'link' => 'https://t.me/share/url?url=%1$s&text=%2$s',
-                'text' => null
+                'text' => __('Репостнуть', 'knife-theme'),
+                'full' => false
             ],
 
             'twitter' => [
                 'link' => 'https://twitter.com/intent/tweet?text=%2$s&url=%1$s',
-                'text' => null
+                'text' => __('Твитнуть', 'knife-theme'),
+                'full' => false
             ]
         ];
 
         foreach($buttons as $network => $data) {
             $text = sprintf('<span class="icon icon--%s"></span>', $network);
 
-            if($data['text'] !== null)
+            if($data['full'] === true || $expand === true) {
                 $text .= sprintf('<span class="share__text">%s</span>', $data['text']);
+            }
 
             $atts = sprintf(' data-action="%1$s" data-label="%2$s"',
                 esc_attr($action),
@@ -62,10 +67,6 @@ class Knife_Share_Buttons {
             );
 
             $output = $output . $item;
-        }
-
-        if(strlen($title) > 0) {
-            return sprintf('<div class="share__title">%s</div>', $title) . $output;
         }
 
         return $output;

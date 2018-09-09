@@ -148,11 +148,17 @@
     }
 
     .post__footer-share {
+      justify-content: space-between;
+
       margin-top: 1.5rem;
       padding-top: .75rem;
       padding-bottom: .75rem;
 
       background-color: $color-sheet;
+
+      .share__link {
+        flex: 1 1 auto;
+      }
     }
 
     .post__footer-widgets {

@@ -35,10 +35,8 @@
     <footer class="post__footer">
         <?php
             the_share(
-                '<div class="post__footer-share share">',
-                '</div>',
-                __('Share select — bottom', 'knife-theme'),
-                __('Поделиться в соцсетях:', 'knife-theme')
+                '<div class="post__footer-share share">', '</div>',
+                __('Share select — bottom', 'knife-theme'), true
             );
 
             the_sidebar(

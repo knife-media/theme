@@ -33,8 +33,7 @@
                         );
 
                         the_share(
-                            '<div class="glide__slide-share share">',
-                            '</div>',
+                            '<div class="glide__slide-share share">', '</div>',
                             __('Share story — first', 'knife-theme')
                         );
                     ?>
