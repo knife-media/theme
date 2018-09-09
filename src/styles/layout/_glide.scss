@@ -6,7 +6,7 @@
 
   width: 100%;
   height: calc(100vh - 4rem);
-  min-height: 24rem;
+  min-height: 30rem;
   overflow: hidden;
 
   color: $color-white;
@@ -163,7 +163,7 @@
       width: 100%;
       margin-bottom: 1rem;
 
-      font-size: 3.5rem;
+      font-size: 3.25rem;
       font-weight: 700;
       line-height: 1.075;
       letter-spacing: .5px;
@@ -173,10 +173,6 @@
       em {
         font-family: $font-serif;
         font-weight: 400;
-      }
-
-      @media screen and (max-height: 767px) {
-        font-size: 3rem;
       }
 
       @media screen and (max-width: 1023px) {
@@ -487,6 +483,10 @@
     @media screen and (max-width: 767px) {
       display: none;
     }
+  }
+
+  @media screen and (max-width: 1023px) {
+    min-height: 24rem;
   }
 }
 
