@@ -73,6 +73,14 @@
 
       -webkit-backface-visibility: hidden;
     }
+
+    @media screen and (max-width: 1023px) {
+      padding-top: 60%;
+    }
+
+    @media screen and (max-width: 767px) {
+      padding-top: 75%;
+    }
   }
 
   .unit__content {

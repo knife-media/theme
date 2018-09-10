@@ -34,7 +34,7 @@ class Knife_Widget_Televisor extends WP_Widget {
         $defaults = [
             'title' => '',
             'link' => '',
-            'filter' => -1,
+            'filter' => 620,
             'cover' => 0,
             'unique' => 0
         ];
@@ -82,7 +82,8 @@ class Knife_Widget_Televisor extends WP_Widget {
     public function form($instance) {
         $defaults = [
             'title' => '',
-            'filter' => -1,
+            'link' => '',
+            'filter' => 620,
             'cover' => 0,
             'unique' => 0
         ];
@@ -116,7 +117,6 @@ class Knife_Widget_Televisor extends WP_Widget {
         $categories = wp_dropdown_categories([
             'name' => $this->get_field_name('filter'),
             'id' => $this->get_field_id('filter'),
-            'show_option_none' => __('Без фильтра', 'knife-theme'),
             'selected' => esc_attr($instance['filter']),
             'class' => 'widefat',
             'echo' => false
@@ -135,7 +135,7 @@ class Knife_Widget_Televisor extends WP_Widget {
         }
 
         printf(
-            '<p>%5$s<input id="%1$s" name="%2$s" type="hidden" value="%3$s"><button class="button knife-widget-image">%4$s</button></p>',
+            '<p>%5$s<input id="%1$s" name="%2$s" type="hidden" value="%3$s"><button type="button" class="button knife-widget-image">%4$s</button></p>',
             esc_attr($this->get_field_id('cover')),
             esc_attr($this->get_field_name('cover')),
             esc_attr($instance['cover']),

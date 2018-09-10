@@ -120,7 +120,7 @@ class Knife_Widget_Single extends WP_Widget {
         }
 
         printf(
-            '<p>%5$s<input id="%1$s" name="%2$s" type="hidden" value="%3$s"><button class="button knife-widget-image">%4$s</button></p>',
+            '<p>%5$s<input id="%1$s" name="%2$s" type="hidden" value="%3$s"><button type="button" class="button knife-widget-image">%4$s</button></p>',
             esc_attr($this->get_field_id('cover')),
             esc_attr($this->get_field_name('cover')),
             esc_attr($instance['cover']),

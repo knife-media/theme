@@ -35,6 +35,15 @@
       multiple: false
     });
 
+    frame.on('open', function() {
+      var selection = frame.state().get('selection');
+      var selected = block.find('input[type="hidden"]').val();
+
+      if(selected) {
+        selection.add(wp.media.attachment(selected));
+      }
+    });
+
     frame.on('select', function() {
       var attachment = frame.state().get('selection').first().toJSON();
 

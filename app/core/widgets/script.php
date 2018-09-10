@@ -76,16 +76,6 @@ class Knife_Widget_Script extends WP_Widget {
             __('HTML-код:', 'knife-theme'),
             esc_attr($instance['content'])
         );
-
-        // Stick widget
-        printf(
-            '<p><input type="checkbox" id="%1$s" name="%2$s" class="checkbox"%4$s><label for="%1$s">%3$s</label></p>',
-            esc_attr($this->get_field_id('sticky')),
-            esc_attr($this->get_field_name('sticky')),
-            __('Прилепить виджет', 'knife-theme'),
-            checked($instance['sticky'], 1, false)
-        );
-
     }
 
 

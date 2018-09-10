@@ -1,13 +1,21 @@
 .widget-script {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-    align-self: flex-start;
-    position: relative;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-self: flex-start;
+  position: relative;
 
-    overflow: hidden;
+  overflow: hidden;
 
-    p {
-      width: 100%;
-    }
+  p {
+    width: 100%;
+  }
+
+  img {
+    display: block;
+  }
+
+  &.widget-script--sidebar {
+    margin-top: 1rem;
+  }
 }
