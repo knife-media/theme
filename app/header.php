@@ -53,15 +53,15 @@
             </a>
         </div>
 
-        <nav class="topline__menu">
+        <nav class="topline__nav">
             <?php
                 if(has_nav_menu('main')) :
                     wp_nav_menu([
                         'theme_location' => 'main',
                         'depth' => 1,
                         'echo' => true,
-                        'items_wrap' => '<ul class="topline__menu-list">%3$s</ul>',
-                        'container' => false
+                        'items_wrap' => '<ul class="menu">%3$s</ul>',
+                        'container_class' => 'topline__nav-menu'
                     ]);
                 endif;
 
@@ -71,7 +71,7 @@
                         'depth' => 1,
                         'echo' => true,
                         'items_wrap' => '<ul class="social">%3$s</ul>',
-                        'container_class' => 'topline__menu-social'
+                        'container_class' => 'topline__nav-social'
                     ]);
                 endif;
             ?>

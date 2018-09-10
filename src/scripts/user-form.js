@@ -60,7 +60,7 @@
     wrapper.classList.add('form__control');
 
     submit = document.createElement('button');
-    submit.classList.add('form__control-button', 'button', 'bright');
+    submit.classList.add('form__control-button', 'button');
     submit.innerHTML = getOption('button', 'Send');
     wrapper.appendChild(submit);
 
@@ -182,7 +182,7 @@
   var post = document.querySelector('.post');
 
   var form = document.createElement('form');
-  form.classList.add('post__form', 'form');
+  form.classList.add('post__form', 'form', 'form--club');
   form.addEventListener('submit', submitForm);
   post.appendChild(form);
 

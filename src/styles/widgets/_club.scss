@@ -28,7 +28,7 @@
     letter-spacing: 1px;
 
     color: $color-text;
-    background-color: $color-bright;
+    background-color: $color-club;
 
     &:hover {
       filter: brightness(110%);
@@ -120,10 +120,10 @@
       letter-spacing: 0;
       text-transform: none;
 
-      background-color: $color-bright;
+      background-color: $color-club;
       box-shadow: 0 10px 10px -4px silver;
 
-      border: solid 1px $color-bright;
+      border: solid 1px $color-club;
       border-radius: 5px;
 
       &:hover {

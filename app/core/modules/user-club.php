@@ -82,14 +82,17 @@ class Knife_User_Club {
         add_action('wp_ajax_nopriv_' . self::$action, [__CLASS__, 'submit_request']);
 
         // Add settings page
-        add_action('admin_init', [__CLASS__, 'settings_init']);
+        add_action('admin_init', [__CLASS__, 'init_settings']);
         add_action('admin_menu', [__CLASS__, 'add_menu']);
 
         // Handle create role settings link
         add_action('load-settings_page_knife-club', [__CLASS__, 'create_role']);
 
-        // Add post archive description
-        add_filter('get_the_archive_description', [__CLASS__, 'add_description'], 9);
+        // Update archive caption description
+        add_filter('get_the_archive_description', [__CLASS__, 'update_archive_description'], 12);
+
+        // Update archive caption title
+        add_filter('get_the_archive_title', [__CLASS__, 'update_archive_title'], 12);
 
         // Notify on sendig to review
         add_action('draft_to_pending', [__CLASS__, 'notify_review']);
@@ -103,9 +106,6 @@ class Knife_User_Club {
 
         // Append promo link to club content
         add_filter('the_content', [__CLASS__, 'insert_club_promo']);
-
-        // Append promo link to standart post content
-        add_filter('the_content', [__CLASS__, 'insert_post_promo']);
     }
 
 
@@ -226,23 +226,36 @@ class Knife_User_Club {
     /**
      * Add button to description
      */
-    public static function add_description($description) {
+    public static function update_archive_description($description) {
         $options = get_option(self::$option);
 
-        if(get_post_type() !== self::$slug) {
-            return $description;
+        if(is_post_type_archive(self::$slug) && array_key_exists('button_link', $options)) {
+            $button = sprintf('<div class="caption__button caption__button--club"><a class="button" href="%2$s">%1$s</a></div>',
+                __('Присоединиться', 'knife-theme'),
+                esc_url($options['button_link'])
+            );
+
+            $description = $description . $button;
         }
 
-        if(empty($options['button_link'])) {
-            return $description;
+        return $description;
+    }
+
+
+    /**
+     * Update post archive caption title
+     *
+     * @since 1.4
+     */
+    public static function update_archive_title($title) {
+        if(is_post_type_archive(self::$slug)) {
+            $title = sprintf('<h1 class="caption__title caption__title--club">%s</h1>',
+                post_type_archive_title('', false)
+            );
         }
 
-        $button = sprintf('<a class="button bright" href="%2$s">%1$s</a>',
-            __('Присоединиться', 'knife-theme'),
-            esc_url($options['button_link'])
-        );
+        return $title;
 
-        return $description . $button;
     }
 
 
@@ -267,35 +280,6 @@ class Knife_User_Club {
         );
 
         return $outbound . $content;
-    }
-
-
-    /**
-     * Insert user club promo link to content
-     *
-     * @since 1.4
-     */
-    public static function insert_post_promo($content) {
-        if(!is_singular('post') || !in_the_loop()) {
-            return $content;
-        }
-
-        if(get_post_format() !== false) {
-            return $content;
-        }
-
-        $options = get_option(self::$option);
-
-        if(empty($options['button_link'])) {
-            return $content;
-        }
-
-        $link = sprintf('<a class="outbound outbound--footer" href="%2$s"><p class="outbound__promo">%1$s</p></a>',
-            __('Хотите написать что-то интересное в «Нож», но у вас мало опыта? Присоединяйтесь к нашему Клубу!', 'knife-theme'),
-            esc_url($options['button_link'])
-        );
-
-        return $content . $link;
     }
 
 
@@ -375,7 +359,7 @@ class Knife_User_Club {
     /**
      * Register settings forms
      */
-    public static function settings_init() {
+    public static function init_settings() {
         register_setting('knife-user-settings', self::$option);
 
         add_settings_section(
@@ -408,7 +392,6 @@ class Knife_User_Club {
             'knife-user-settings',
             'knife-user-section'
         );
-
 
         add_settings_field(
             'request_id',

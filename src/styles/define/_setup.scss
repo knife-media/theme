@@ -1,29 +1,14 @@
 $color-black: #000000;
 $color-white: #ffffff;
-
-$color-text: #111111;
 $color-primary: #1e488f;
 
+$color-text: #111111;
+$color-light: #7ab9f9;
+$color-sheet: #faf9f3;
 $color-success: #78bb13;
 $color-alert: #ab0f0f;
 
-$color-sheet: #faf9f3;
-$color-light: #2f72e1;
-$color-bright: #eaa728;
-$color-adjust: #7ab9f9;
-
-$color-feature-inner: #a7397d;
-$color-feature-outer: #ffe64e;
-
-$color-details-inner: #8bb847;
-$color-details-outer: #6aa535;
-
-$color-title-start: #fbcb34;
-$color-title-finish: #ed4f71;
-$color-author-start: #7ce568;
-$color-author-finish: #67e3d6;
-
-$color-selection: #ffff00;
+$color-club: #eaa728;
 
 $font-regular: "Formular", sans-serif;
 $font-serif: "PT Serif", serif;
@@ -100,7 +85,7 @@ img {
 }
 
 ::selection {
-  background-color: $color-selection;
+  background-color: #ffff00;
 }
 
 ::placeholder {

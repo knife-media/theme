@@ -146,10 +146,10 @@
       }
 
       a {
-        color: $color-adjust;
+        color: $color-light;
         transition: border .25s;
 
-        border-bottom: solid 1px $color-adjust;
+        border-bottom: solid 1px $color-light;
 
         &:hover {
           border-bottom-color: transparent;
@@ -367,10 +367,10 @@
       }
 
       a {
-        color: $color-adjust;
+        color: $color-light;
         transition: border .25s;
 
-        border-bottom: solid 1px $color-adjust;
+        border-bottom: solid 1px $color-light;
 
         &:hover {
           border-bottom-color: transparent;

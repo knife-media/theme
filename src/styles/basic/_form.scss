@@ -25,12 +25,12 @@
       font-size: 1rem;
       line-height: 1.5;
 
-      background-color: rgba( $color-bright, 0.1 );
+      background-color: rgba( $color-primary, 0.1 );
 
       border-radius: 2px;
 
       &::placeholder {
-        color: rgba( desaturate( $color-bright, 65% ), 0.85 );
+        color: rgba( desaturate( $color-primary, 65% ), 0.85 );
       }
     }
 
@@ -48,12 +48,12 @@
       font-size: 1rem;
       line-height: 1.5;
 
-      background-color: rgba( $color-bright, 0.1 );
+      background-color: rgba( $color-primary, 0.1 );
 
       border-radius: 2px;
 
       &::placeholder {
-        color: rgba( desaturate( $color-bright, 65% ), 0.85 );
+        color: rgba( desaturate( $color-primary, 65% ), 0.85 );
       }
     }
   }
@@ -80,6 +80,9 @@
       letter-spacing: 0;
 
       color: $color-white;
+      background-color: $color-club;
+
+      border: solid 1px $color-club;
 
       &:hover {
         filter: brightness(110%);
@@ -142,5 +145,24 @@
     @media screen and (max-width: 767px) {
       flex-flow: row wrap;
     }
+  }
+
+  &.form--club {
+    .form__field-input {
+      background-color: rgba( $color-club, 0.1 );
+
+      &::placeholder {
+        color: rgba( desaturate( $color-club, 65% ), 0.85 );
+      }
+    }
+
+    .form__field-textarea {
+      background-color: rgba( $color-club, 0.1 );
+
+      &::placeholder {
+        color: rgba( desaturate( $color-club, 65% ), 0.85 );
+      }
+    }
+
   }
 }

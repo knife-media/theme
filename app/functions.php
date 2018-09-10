@@ -149,16 +149,6 @@ add_filter('embed_oembed_html', function($html, $url, $attr) {
 }, 10, 3);
 
 
-// Add theme menus
-add_action('after_setup_theme', function() {
-    register_nav_menus([
-        'main' => __('Верхнее меню', 'knife-theme'),
-        'footer' => __('Нижнее меню', 'knife-theme'),
-        'social' => __('Меню социальных ссылок', 'knife-theme')
-    ]);
-});
-
-
 // Remove fcking emojis and wordpress meta for security reasons
 add_action('init', function() {
     remove_action('wp_head', 'print_emoji_detection_script', 7);
@@ -315,59 +305,6 @@ add_filter('user_contactmethods', function($contact) {
 });
 
 
-// Change default menu items class
-add_filter('nav_menu_css_class', function($classes, $item, $args) {
-    // Redefine classes array
-    $classes = [];
-
-    if($args->theme_location === 'main') {
-        $classes[] = 'topline__menu-item';
-    }
-
-    if($args->theme_location === 'footer') {
-        $classes[] = 'footer__menu-item';
-    }
-
-    if($args->theme_location === 'social') {
-        $classes[] = 'social__item';
-    }
-
-    return array_merge($classes, (array) get_post_meta($item->ID, '_menu_item_classes', true));
-}, 10, 3);
-
-
-// Add class to menu item link
-add_filter('nav_menu_link_attributes', function($atts, $item, $args) {
-    if($args->theme_location === 'main') {
-        $atts['class'] = 'topline__menu-link';
-    }
-
-    if($args->theme_location === 'footer') {
-        $atts['class'] = 'footer__menu-link';
-    }
-
-    if($args->theme_location === 'social') {
-        $atts['class'] = 'social__item-link';
-    }
-
-    return $atts;
-}, 10, 3);
-
-
-// We have to change titles to icons in social menu
-add_filter('nav_menu_item_title', function($title, $item, $args) {
-    if($args->theme_location === 'social') {
-        return sprintf('<span class="icon icon--%1$s" title="%1$s"></span>', strtolower($title));
-    }
-
-    return $title;
-}, 10, 3);
-
-
-// Remove menu ids
-add_filter('nav_menu_item_id', '__return_empty_string');
-
-
 // Rename default posts format
 add_filter('gettext_with_context', function($translation, $text, $context, $domain) {
     $names = [
@@ -503,6 +440,9 @@ require get_template_directory() . '/core/modules/widget-handler.php';
 // Theme filters
 require get_template_directory() . '/core/modules/theme-filters.php';
 
+// Upgrade theme menus
+require get_template_directory() . '/core/modules/menu-upgrade.php';
+
 // User generated blogs
 require get_template_directory() . '/core/modules/user-club.php';
 
@@ -576,3 +516,4 @@ require get_template_directory() . '/core/helpers/plugin-snippets.php';
 
 // Custom template filters for promo projects
 require get_template_directory() . '/core/helpers/promo-filters.php';
+

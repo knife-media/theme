@@ -2,7 +2,7 @@
 /**
  * Script widget
  *
- * Recent posts widget showing as bright links
+ * Widget for banners and custom html code
  *
  * @package knife-theme
  * @since 1.3

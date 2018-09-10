@@ -8,7 +8,6 @@
 ?>
 
 <footer class="footer">
-
     <div class="footer__inner">
 
         <div class="footer__logo">
@@ -27,14 +26,14 @@
             <p class="footer__logo-desc"><?php bloginfo('description'); ?></p>
         </div>
 
-         <div class="footer__menu">
+        <nav class="footer__nav">
             <?php
                 if(has_nav_menu('footer')) :
                     wp_nav_menu([
                         'theme_location' => 'footer',
                         'depth' => 1,
                         'echo' => true,
-                        'items_wrap' => '<ul class="footer__menu-list">%3$s</ul>',
+                        'items_wrap' => '<ul class="footer__nav-menu">%3$s</ul>',
                         'container' => false
                     ]);
                 endif;
@@ -45,11 +44,11 @@
                         'depth' => 1,
                         'echo' => true,
                         'items_wrap' => '<ul class="social">%3$s</ul>',
-                        'container_class' => 'footer__menu-social'
+                        'container_class' => 'footer__nav-social'
                     ]);
                 endif;
             ?>
-        </div>
+        </nav>
 
          <div class="footer__copy">
             <?php
@@ -60,7 +59,6 @@
         </div>
 
     </div>
-
 </footer>
 
 <?php wp_footer(); ?>

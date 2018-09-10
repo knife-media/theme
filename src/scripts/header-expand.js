@@ -12,7 +12,7 @@
     if(document.querySelector('.search').classList.contains('search--expand'))
       search.click();
 
-    document.querySelector('.topline__menu').classList.toggle('topline__menu--expand');
+    document.querySelector('.topline__nav').classList.toggle('topline__nav--expand');
 
     return this.classList.toggle('toggle--expand');
   });
@@ -25,7 +25,7 @@
     var input = document.getElementById('search-input');
 
     // close menu if opened
-    if(document.querySelector('.topline__menu').classList.contains('topline__menu--expand'))
+    if(document.querySelector('.topline__nav').classList.contains('topline__nav--expand'))
       menu.click();
 
     // blur search input
@@ -60,7 +60,7 @@
     if(document.querySelector('.search').classList.contains('search--expand'))
       search.click();
 
-    if(document.querySelector('.topline__menu').classList.contains('topline__menu--expand'))
+    if(document.querySelector('.topline__nav').classList.contains('topline__nav--expand'))
       menu.click();
   }, true);
 })();

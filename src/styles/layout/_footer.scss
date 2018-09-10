@@ -92,7 +92,7 @@
     }
   }
 
-  .footer__menu {
+  .footer__nav {
     display: flex;
     flex-flow: column nowrap;
     justify-content: space-between;
@@ -100,17 +100,17 @@
     width: 25%;
     padding-right: 1rem;
 
-    .footer__menu-list {
+    .footer__nav-menu {
       display: block;
     }
 
-    .footer__menu-item {
+    .footer__nav-item {
       display: block;
 
       padding: .125rem 0;
     }
 
-    .footer__menu-link {
+    .footer__nav-link {
       font-size: 1.125rem;
       font-weight: 500;
       line-height: 1;
@@ -121,8 +121,8 @@
       }
     }
 
-    .footer__menu-social {
-      display: block;
+    .footer__nav-social {
+      display: flex;
 
       padding-top: 1rem;
 

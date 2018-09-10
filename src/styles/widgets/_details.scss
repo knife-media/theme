@@ -22,7 +22,7 @@
     line-height: 1.25;
 
     color: $color-white;
-    background: $color-details-inner;
+    background-color: #8bb847;
 
     &:hover {
       filter: brightness(115%);
@@ -52,7 +52,7 @@
         font-size: 1.875rem;
         line-height: 1.075;
 
-        background: $color-details-outer;
+        background-color: #6aa535;
 
         @media screen and (max-width: 1023px) {
           font-size: 1.5rem;
