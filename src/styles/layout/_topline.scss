@@ -56,18 +56,16 @@
     justify-content: flex-start;
     z-index: 12;
 
-    margin-left: auto;
-    margin-right: auto;
+    width: 100%;
 
     .topline__nav-social {
-      margin-right: 1.5rem;
+      padding-right: 1.5rem;
 
       @media screen and (max-width: 1023px) {
-        width: calc(100% - 2rem);
-        margin: 0 1rem;
-        padding: .875rem 1rem;
+        width: 100%;
+        margin-top: 1rem;
+        padding: 1rem 0 0;
 
-        font-size: 1.25rem;
         color: $color-white;
 
         border-top: solid 1px rgba(255, 255, 255, .25);
@@ -84,9 +82,8 @@
       margin-right: auto;
 
       @media screen and (max-width: 1023px) {
-        flex-flow: row wrap;
-
-        padding: 1rem;
+        width: 100%;
+        margin: 0;
       }
     }
 
@@ -99,6 +96,7 @@
       opacity: 0;
 
       width: 100%;
+      padding: 1rem;
       background-color: $color-primary;
 
       transform: translateY(-100%);
