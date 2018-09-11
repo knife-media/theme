@@ -485,9 +485,6 @@ require get_template_directory() . '/core/modules/primary-tag.php';
 // Insert lead metabox to admin post screen
 require get_template_directory() . '/core/modules/post-lead.php';
 
-// Indicates how to show post in lists
-require get_template_directory() . '/core/modules/post-cover.php';
-
 // Send push notifications service
 require get_template_directory() . '/core/modules/push-service.php';
 

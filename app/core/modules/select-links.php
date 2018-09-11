@@ -50,9 +50,6 @@ class Knife_Select_Links {
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public static function load_module() {
-        // Apply theme hooks
-        add_action('after_setup_theme', [__CLASS__, 'setup_actions']);
-
         // Register select post type
         add_action('init', [__CLASS__, 'register_type']);
 
@@ -73,28 +70,6 @@ class Knife_Select_Links {
 
         // Filter content to show custom links
         add_filter('the_content', [__CLASS__, 'update_content']);
-    }
-
-
-    /**
-     * Setup theme hooks
-     */
-    public static function setup_actions() {
-        // Add post lead to post type editor
-        add_filter('knife_post_lead_type', function($default) {
-            $default[] = self::$slug;
-
-            return $default;
-        });
-
-        // Select archive header
-        add_filter('knife_archive_header', function($header) {
-            if(is_post_type_archive(self::$slug)) {
-                $header = '';
-            }
-
-            return $header;
-        });
     }
 
 

@@ -48,9 +48,6 @@ class Knife_Story_Manager {
      * Use init function instead of constructor
      */
     public static function load_module() {
-        // Apply theme hooks
-        add_action('after_setup_theme', [__CLASS__, 'setup_actions']);
-
         // Register story post type
         add_action('after_setup_theme', [__CLASS__, 'register_story']);
 
@@ -80,28 +77,6 @@ class Knife_Story_Manager {
 
         // Include slider options
         add_action('wp_enqueue_scripts', [__CLASS__, 'inject_stories'], 12);
-    }
-
-
-    /**
-     * Setup theme hooks
-     */
-    public static function setup_actions() {
-        // Remove global backdrop
-        add_filter('knife_custom_background', function($background) {
-            if(is_singular(self::$slug) || is_post_type_archive(self::$slug)) {
-                $background = ['image' => ''];
-            }
-
-            return $background;
-        });
-
-        // Add post lead to story post type
-        add_filter('knife_post_lead_type', function($types) {
-            $types[] = self::$slug;
-
-            return $types;
-        });
     }
 
 

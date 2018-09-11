@@ -32,7 +32,7 @@ class Knife_Custom_Background {
      * @access  private
      * @var     string
      */
-    private static $taxes = ['post_tag', 'category'];
+    private static $taxes = ['special'];
 
 
     /**
@@ -41,6 +41,9 @@ class Knife_Custom_Background {
      * @since 1.4
      */
     public static function load_module() {
+        // Add background form fields
+        add_action('admin_init', [__CLASS__, 'add_fields']);
+
         // Enqueue scripts only on admin screen
         add_action('admin_enqueue_scripts', [__CLASS__, 'add_assets']);
 
@@ -49,24 +52,15 @@ class Knife_Custom_Background {
 
         // Frontend styles
         add_action('wp_enqueue_scripts', [__CLASS__, 'print_background'], 13);
-
-        // update taxes array by filters
-        add_action('init', [__CLASS__, 'set_taxes'], 20);
     }
 
 
     /**
-     * Update taxes array by modules filters
+     * Add adminside edit form fields
+     *
+     * @since 1.4
      */
-    public static function set_taxes() {
-        /**
-         * Filter custom background taxes
-         *
-         * @since 1.3
-         * @param array $taxes
-         */
-        self::$taxes = apply_filters('knife_custom_background_taxes', self::$taxes);
-
+    public static function add_fields() {
         foreach(self::$taxes as $tax) {
             add_action("{$tax}_edit_form_fields", [__CLASS__, 'print_row'], 10, 2);
             add_action("edited_{$tax}", [__CLASS__, 'save_meta']);
@@ -100,19 +94,18 @@ class Knife_Custom_Background {
 
         // Get term meta only once
         $meta = wp_parse_args(self::get_meta(), $defaults);
-        extract($meta);
 
-        $color = ltrim($color, '#');
+        $meta['color'] = ltrim($meta['color'], '#');
 
-        if($color !== get_theme_support('custom-background', 'default-color')) {
-            $backdrop['color'] = $color;
+        if($meta['color'] !== get_theme_support('custom-background', 'default-color')) {
+            $backdrop['color'] = $meta['color'];
         }
 
-        if($image) {
-            $backdrop['image'] = set_url_scheme($image);
+        if($meta['image']) {
+            $backdrop['image'] = set_url_scheme($meta['image']);
 
-            if(in_array($size, ['auto', 'contain', 'cover'], true)) {
-                $backdrop['size'] = $size;
+            if(in_array($meta['size'], ['auto', 'contain', 'cover'], true)) {
+                $backdrop['size'] = $meta['size'];
             }
         }
 
@@ -202,13 +195,20 @@ class Knife_Custom_Background {
             $background = get_term_meta(get_queried_object_id(), self::$meta, true);
         }
 
-        /**
-         * Filter custom background options
-         *
-         * @since 1.3
-         * @param array $meta
-         */
-        return apply_filters('knife_custom_background', $background, self::$meta);
+        foreach(self::$taxes as $tax) {
+            if(!is_single() || !has_term('', $tax)) {
+                continue;
+            }
+
+            // Loop over all tax terms
+            foreach(wp_get_post_terms(get_queried_object_id(), $tax) as $term) {
+                if($background = get_term_meta($term->term_id, self::$meta, true)) {
+                    break 2;
+                }
+            }
+        }
+
+        return $background;
     }
 }
 

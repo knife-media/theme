@@ -62,9 +62,6 @@ class Knife_User_Club {
      * @since 1.3
      */
     public static function load_module() {
-        // Apply theme hooks
-        add_action('after_setup_theme', [__CLASS__, 'setup_actions']);
-
         // Register club post type
         add_action('init', [__CLASS__, 'register_club']);
 
@@ -106,28 +103,6 @@ class Knife_User_Club {
 
         // Append promo link to club content
         add_filter('the_content', [__CLASS__, 'insert_club_promo']);
-    }
-
-
-    /**
-     * Setup theme hooks
-     *
-     * @since 1.4
-     */
-    public static function setup_actions() {
-        // Add post lead to post type editor
-        add_filter('knife_post_lead_type', function($types) {
-            $types[] = self::$slug;
-
-            return $types;
-        });
-
-        // Add push service club post type
-        add_filter('knife_push_service_type', function($types) {
-            $types[] = self::$slug;
-
-            return $types;
-        });
     }
 
 

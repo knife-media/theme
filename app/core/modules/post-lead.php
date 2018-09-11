@@ -31,7 +31,7 @@ class Knife_Post_Lead {
     * @access  private
     * @var     array
     */
-    private static $type = ['post'];
+    private static $type = ['post', 'club', 'select'];
 
 
     /**
@@ -40,28 +40,11 @@ class Knife_Post_Lead {
      * @since 1.3
      */
     public static function load_module() {
-        // Update type array by filters
-        add_action('init', [__CLASS__, 'set_type'], 20);
-
         // Save meta
         add_action('save_post', [__CLASS__, 'save_meta']);
 
         // Add lead-text metabox
         add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
-    }
-
-
-    /**
-     * Update type array by modules filters
-     */
-    public static function set_type() {
-        /**
-         * Filter post lead support post types
-         *
-         * @since 1.3
-         * @param array $type
-         */
-        self::$type = apply_filters('knife_post_lead_type', self::$type);
     }
 
 

@@ -38,7 +38,7 @@ class Knife_Push_Service {
     * @access  private
     * @var     array
     */
-    private static $type = ['post'];
+    private static $type = ['post', 'select', 'club'];
 
 
     /**
@@ -47,9 +47,6 @@ class Knife_Push_Service {
      * @since 1.3
      */
     public static function load_module() {
-        // Update type array by filters
-        add_action('init', [__CLASS__, 'set_type'], 20);
-
         // Add admin side assets
         add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
 
@@ -65,20 +62,6 @@ class Knife_Push_Service {
 
         // Ajax handler
         add_action('wp_ajax_knife_push_send', [__CLASS__, 'send_push']);
-    }
-
-
-    /**
-     * Update type array by modules filters
-     */
-    public static function set_type() {
-       /**
-         * Filter push service support post types
-         *
-         * @since 1.3
-         * @param array $type
-         */
-        self::$type = apply_filters('knife_push_service_type', self::$type);
     }
 
 

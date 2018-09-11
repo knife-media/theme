@@ -31,7 +31,7 @@ class Knife_Post_Tagline {
     * @access  private
     * @var     array
     */
-    private static $type = ['post'];
+    private static $type = ['post', 'club'];
 
 
     /**
@@ -40,9 +40,6 @@ class Knife_Post_Tagline {
      * @since 1.3
      */
     public static function load_module() {
-        // Update type array by filters
-        add_action('init', [__CLASS__, 'set_type'], 20);
-
         // Include scripts admin page only
         add_action('admin_enqueue_scripts', [__CLASS__, 'add_assets']);
 
@@ -52,22 +49,9 @@ class Knife_Post_Tagline {
         // Tagline post meta
         add_action('edit_form_after_title', [__CLASS__, 'print_input']);
 
+        // Update title with tagline
         add_filter('the_title', [__CLASS__, 'post_tagline'], 10, 2);
         add_filter('document_title_parts', [__CLASS__, 'site_tagline'], 10, 1);
-    }
-
-
-    /**
-     * Update type array by modules filters
-     */
-    public static function set_type() {
-        /**
-         * Filter tagline support post types
-         *
-         * @since 1.3
-         * @param array $type
-         */
-        self::$type = apply_filters('knife_post_tagline_type', self::$type);
     }
 
 
