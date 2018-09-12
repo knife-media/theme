@@ -9,40 +9,38 @@
 
 get_header(); ?>
 
-<div class="wrap">
-    <?php if(have_posts() && get_the_archive_title()) : ?>
-        <header class="caption">
-            <?php
-                the_archive_title();
+<?php if(have_posts() && get_the_archive_title()) : ?>
+    <div class="caption">
+        <?php
+            the_archive_title();
 
-                the_archive_description();
-            ?>
-        </header>
-    <?php endif; ?>
-
-    <section class="content">
-       <?php
-            if(have_posts()) :
-                while(have_posts()) : the_post();
-
-                    get_template_part('partials/iterate');
-
-                endwhile;
-            else :
-
-                get_template_part('partials/content', 'none');
-
-            endif;
+            the_archive_description();
         ?>
-    </section>
+    </div>
+<?php endif; ?>
 
-    <?php if(have_posts() && get_next_posts_link()) : ?>
-        <nav class="navigation">
-            <?php
-                next_posts_link(__('Больше статей', 'knife-theme'));
-            ?>
-        </nav>
-    <?php endif; ?>
+<div class="content">
+   <?php
+        if(have_posts()) :
+            while(have_posts()) : the_post();
+
+                get_template_part('partials/iterate');
+
+            endwhile;
+        else :
+
+            get_template_part('partials/content', 'none');
+
+        endif;
+    ?>
 </div>
+
+<?php if(have_posts() && get_next_posts_link()) : ?>
+    <nav class="navigation">
+        <?php
+            next_posts_link(__('Больше статей', 'knife-theme'));
+        ?>
+    </nav>
+<?php endif; ?>
 
 <?php get_footer();

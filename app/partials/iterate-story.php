@@ -7,7 +7,7 @@
  */
 ?>
 
-<article class="story">
+<div class="story">
     <div class="story__inner">
        <div class="story__image">
             <?php
@@ -25,4 +25,4 @@
             ?>
         </div>
     </div>
-</article>
+</div>

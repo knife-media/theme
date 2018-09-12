@@ -9,12 +9,10 @@
 
 get_header(); ?>
 
-<div class="wrap">
-    <section class="content">
-        <?php
-            get_template_part('partials/content', 'none');
-        ?>
-    </section>
+<div class="content">
+    <?php
+        get_template_part('partials/content', 'none');
+    ?>
 </div>
 
 <?php get_footer();

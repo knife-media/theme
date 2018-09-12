@@ -7,7 +7,7 @@
  */
 ?>
 
-<article class="news">
+<div class="news">
 
     <div class="news__item">
         <footer class="news__footer">
@@ -26,4 +26,4 @@
         </footer>
     </div>
 
-</article>
+</div>

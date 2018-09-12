@@ -9,16 +9,14 @@
 
 get_header(); ?>
 
-<div class="wrap">
-    <section class="content content--post">
-        <?php
-            while(have_posts()) : the_post();
+<div class="content content--post">
+    <?php
+        while(have_posts()) : the_post();
 
-                get_template_part('partials/content', 'page');
+            get_template_part('partials/content', 'page');
 
-            endwhile;
-        ?>
-    </section>
+        endwhile;
+    ?>
 </div>
 
 <?php get_footer();

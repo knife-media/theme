@@ -9,30 +9,28 @@
 
 get_header(); ?>
 
-<div class="wrap">
-    <section class="content content--news">
-       <?php
-            if(have_posts()) :
-                while(have_posts()) : the_post();
+<div class="content content--news">
+   <?php
+        if(have_posts()) :
+            while(have_posts()) : the_post();
 
-                    get_template_part('partials/iterate', 'news');
+                get_template_part('partials/iterate', 'news');
 
-                endwhile;
-            else :
+            endwhile;
+        else :
 
-                get_template_part('partials/content', 'none');
+            get_template_part('partials/content', 'none');
 
-            endif;
-        ?>
-    </section>
-
-    <?php if(have_posts() && get_next_posts_link()) : ?>
-        <nav class="navigation navigation--news">
-            <?php
-                next_posts_link(__('Больше новостей', 'knife-theme'));
-            ?>
-        </nav>
-    <?php endif; ?>
+        endif;
+    ?>
 </div>
+
+<?php if(have_posts() && get_next_posts_link()) : ?>
+    <nav class="navigation navigation--news">
+        <?php
+            next_posts_link(__('Больше новостей', 'knife-theme'));
+        ?>
+    </nav>
+<?php endif; ?>
 
 <?php get_footer();

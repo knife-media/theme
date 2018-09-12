@@ -8,7 +8,7 @@
  */
 ?>
 
-<article class="unit unit--<?php echo get_query_var('widget_size', 'triple'); ?>">
+<div class="unit unit--<?php echo get_query_var('widget_size', 'triple'); ?>">
     <div class="unit__inner">
         <?php
             the_info(
@@ -41,4 +41,4 @@
             ?>
         </div>
     </div>
-</article>
+</div>
