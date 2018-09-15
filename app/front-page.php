@@ -22,7 +22,7 @@ get_header(); ?>
 <?php endif; ?>
 
 <?php if(is_active_sidebar('knife-frontal')) : ?>
-    <div class="content">
+    <div class="wrapper">
         <?php
             dynamic_sidebar('knife-frontal');
         ?>

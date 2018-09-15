@@ -29,6 +29,21 @@
     &:hover {
       filter: brightness(150%);
     }
+
+    &.meta__link--club {
+      position: absolute;
+
+      padding: .125rem .375rem;
+      color: $color-white;
+      background-color: $color-club;
+      transform: translateY(-.125rem);
+
+      border-radius: 3px;
+
+      &:hover {
+        filter: brightness(120%);
+      }
+    }
   }
 
   .meta__item {

@@ -6,22 +6,21 @@
 @import "basic/toggle";
 @import "basic/social";
 @import "basic/menu";
-@import "basic/wrap";
 @import "basic/meta";
 @import "basic/refers";
 @import "basic/share";
-@import "basic/custom";
 @import "basic/figure";
 @import "basic/outbound";
 @import "basic/button";
 @import "basic/backdrop";
-@import "basic/banner";
 @import "basic/form";
 @import "basic/select";
 @import "basic/comments";
 
 @import "layout/header";
 @import "layout/content";
+@import "layout/message";
+@import "layout/wrapper";
 @import "layout/caption";
 @import "layout/feature";
 @import "layout/navigation";
@@ -35,6 +34,12 @@
 @import "layout/unit";
 @import "layout/story";
 @import "layout/news";
+
+@import "entry/header";
+@import "entry/content";
+@import "entry/board";
+@import "entry/form";
+@import "entry/footer";
 
 @import "widgets/units";
 @import "widgets/single";

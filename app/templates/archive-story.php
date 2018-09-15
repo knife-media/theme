@@ -8,17 +8,17 @@
  */
 get_header(); ?>
 
-<div class="content">
+<div class="wrapper">
    <?php
         if(have_posts()) :
             while(have_posts()) : the_post();
 
-                get_template_part('partials/iterate', 'story');
+                get_template_part('partials/loop', 'story');
 
             endwhile;
         else :
 
-            get_template_part('partials/content', 'none');
+            get_template_part('partials/message');
 
         endif;
     ?>

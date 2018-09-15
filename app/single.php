@@ -17,7 +17,7 @@ get_header(); ?>
     </div>
 <?php endif; ?>
 
-<div class="content content--post">
+<div class="content">
     <?php
         while(have_posts()) : the_post();
 

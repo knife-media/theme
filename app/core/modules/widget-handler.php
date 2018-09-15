@@ -122,22 +122,6 @@ class Knife_Widget_Handler {
 
 
     /**
-     * Show sidebar if exists
-     */
-    public static function get_sidebar($id, $sidebar = '') {
-        if(is_active_sidebar($id)) {
-            ob_start();
-
-            dynamic_sidebar($id);
-
-            $sidebar = ob_get_clean();
-        }
-
-        return $sidebar;
-    }
-
-
-    /**
      * Enqueue assets to admin post screen only
      */
     public static function add_assets($hook) {

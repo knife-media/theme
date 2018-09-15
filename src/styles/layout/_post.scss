@@ -6,261 +6,39 @@
   position: relative;
 
   margin-top: 1rem;
-  padding: 2rem 1rem;
   overflow: hidden;
-  color: $color-text;
-  background-color: $color-white;
 
-  .post__header {
-    display: flex;
-    flex-flow: column wrap;
-    position: relative;
-
-    width: 100%;
-    max-width: $width-content;
-    margin: 0 0 1rem;
-
-    .post__header-meta {
-      display: block;
-
-      width: 100%;
-      margin-bottom: 1.5rem;
-
-      .meta__link--club {
-        position: absolute;
-
-        padding: .125rem .375rem;
-        color: $color-white;
-        background-color: $color-club;
-        transform: translateY(-.125rem);
-
-        border-radius: 3px;
-
-        &:hover {
-          filter: brightness(120%);
-        }
-      }
-    }
-
-    .post__header-title {
-      display: block;
-
-      width: 100%;
-      margin-bottom: 1.5rem;
-
-      font-size: 2.5rem;
-      font-weight: 700;
-      line-height: 1.075;
-      letter-spacing: .5px;
-
-      em {
-        font-family: $font-serif;
-        font-weight: 400;
-      }
-
-      @media screen and (max-width: 1023px) {
-        margin-bottom: .75rem;
-        font-size: 2rem;
-        line-height: 1.125;
-      }
-
-      @media screen and (max-width: 767px) {
-        margin-bottom: 1rem;
-
-        font-size: 1.625rem;
-        line-height: 1.25;
-      }
-    }
-
-    .post__header-excerpt {
-      display: block;
-
-      width: 100%;
-
-      p {
-        margin-bottom: 1rem;
-        line-height: 1.5;
-        font-size: 1.125rem;
-        font-weight: 500;
-        letter-spacing: .25px;
-
-        @media screen and (max-width: 767px) {
-          margin-bottom: .5rem;
-
-          font-size: 1rem;
-        }
-      }
-
-      a {
-        color: $color-primary;
-        border-bottom: 1px solid $color-primary;
-
-        &:hover {
-          filter: brightness(150%);
-          border-bottom-color: transparent;
-        }
-      }
-    }
-
-    .post__header-share {
-      margin-top: .5rem;
-      margin-bottom: .75rem;
-
-      @media screen and (max-width: 767px) {
-        margin-top: 0;
-        margin-bottom: 0;
-      }
-    }
-
-    @media screen and (max-width: 767px) {
-      margin-bottom: .5rem;
-    }
-  }
-
-  .post__form {
-    max-width: $width-content;
-    margin: 0 0 1rem;
-  }
-
-
-  .post__footer {
-    display: block;
-
-    width: 100%;
-    max-width: $width-content;
-    margin: 1rem 0;
-
-    .post__footer-nav {
-      .refers__link:first-child {
-        margin-right: auto;
-      }
-    }
-
-    .post__footer-tags {
-      .refers__link {
-        margin-right: 2rem;
-        line-height: 2rem;
-
-        &:before {
-          content: "#";
-
-          padding-right: .125rem;
-          font-size: 1rem;
-          color: rgba(0, 0, 0, .9);
-        }
-
-        @media screen and (max-width: 479px) {
-          margin-right: 1.5rem;
-        }
-      }
-    }
-
-    .post__footer-share {
-      justify-content: space-between;
-
-      margin-top: 1.5rem;
-      padding-top: .75rem;
-      padding-bottom: .75rem;
-
-      background-color: $color-sheet;
-
-      .share__link {
-        flex: 1 1 auto;
-      }
-    }
-
-    .post__footer-widgets {
-      margin-left: -2rem;
-      margin-right: -2rem;
-
-      .relap-knife_media__top-container {
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-      }
-
-      .relap-knife_media__block-title {
-        font-size: 1.125rem;
-      }
-
-      .widget-feature {
-        width: calc(100% + 4rem);
-        margin: 1.5rem -2rem 0;
-      }
-    }
-  }
-
-  .post__content {
-    display: flex;
-    flex-flow: column wrap;
+  &.post--chat {
+    flex: 0 1 44rem;
     align-items: center;
 
-    width: 100%;
-  }
+    padding: 0;
 
-  .post__message {
-    display: flex;
-    flex-flow: column wrap;
-    align-items: flex-start;
-    justify-content: center;
-
-    color: $color-white;
-    min-height: 40vh;
-
-    .post__message-title {
-      display: block;
-
-      width: 100%;
-      margin-bottom: 1.5rem;
-
-      font-size: 2.5rem;
-      font-weight: 700;
-      line-height: 1.075;
-      letter-spacing: .5px;
+    .entry-header {
+      padding: 1.5rem 2rem;
 
       @media screen and (max-width: 767px) {
-        margin-bottom: .75rem;
-        font-size: 1.625rem;
-        line-height: 1.125;
+        padding: 1rem;
       }
     }
-  }
 
-  .post__card {
-    width: 100%;
-    max-width: 100%;
-    margin: 0 0 1rem;
-    padding: 1.5rem 2rem;
+    .entry-content {
+      margin-top: 1rem;
+      padding: 1.5rem 2rem;
 
-    background-color: $color-white;
+      .figure--outer {
+        width: calc(100% + 4rem);
+        margin-left: -2rem;
+        margin-right: -2rem;
+      }
 
-    & > *:first-child {
-      margin-top: 0;
+      @media screen and (max-width: 767px) {
+        padding: 1rem;
+      }
     }
 
-    .post__header-share {
-      margin-bottom: 0;
-    }
-
-    .post__footer-share {
-      margin: 0 -1rem;
-      padding-left: 1rem;
-      padding-right: 1rem;
-    }
-
-    .post__footer-tags {
-      margin: 1rem -1rem 0;
-      padding-left: 1rem;
-      padding-right: 1rem;
-    }
-
-    .figure--outer {
-      width: calc(100% + 4rem);
-      margin-left: -2rem;
-      margin-right: -2rem;
-    }
-
-    @media screen and (max-width: 767px) {
-      padding: 1rem;
+    .entry-footer {
+      margin-top: 1rem;
     }
   }
 
@@ -268,10 +46,10 @@
     align-items: flex-end;
     padding-right: 18.75rem;
 
-    .post__header {
+    .entry-header {
       max-width: 50rem;
 
-      .post__header-title {
+      .entry-header__title {
         font-size: 3.75rem;
         line-height: 1;
 
@@ -287,7 +65,7 @@
         }
       }
 
-      .post__header-excerpt {
+      .entry-header__excerpt {
         p {
           font-size: 1.375rem;
           line-height: 1.375;
@@ -305,11 +83,11 @@
       }
     }
 
-    .post__content {
+    .entry-content {
       max-width: 50rem;
     }
 
-    .post__footer {
+    .entry-footer {
       max-width: 50rem;
     }
 
@@ -317,32 +95,5 @@
       align-items: center;
       padding-right: 1rem;
     }
-  }
-
-  &.post--chat {
-    flex: 0 1 44rem;
-    align-items: center;
-
-    margin-left: auto;
-    margin-right: auto;
-    padding: 0;
-
-    background-color: transparent;
-  }
-
-  &.post--none {
-    flex-flow: column wrap;
-    align-items: flex-start;
-    justify-content: center;
-
-    width: 100%;
-    min-height: 60vh;
-    padding: 2rem 0;
-
-    background-color: transparent;
-  }
-
-  @media screen and (max-width: 767px) {
-    padding: 1rem;
   }
 }

@@ -73,27 +73,3 @@ if(!function_exists('the_lead')) :
         return $output;
     }
 endif;
-
-
-if(!function_exists('the_sidebar')) :
-    /**
-     * Public function using on templates to show sidebar with before and after
-     *
-     * @since 1.3
-     */
-    function the_sidebar($id, $before = '', $after = '', $echo = true) {
-        $sidebar = Knife_Widget_Handler::get_sidebar($id);
-
-        if((string) $sidebar === '') {
-            return;
-        }
-
-        $output = $before . $sidebar . $after;
-
-        if($echo === true) {
-            echo $output;
-        }
-
-        return $output;
-    }
-endif;

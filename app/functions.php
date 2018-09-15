@@ -231,10 +231,11 @@ add_filter('post_class', function($classes, $class) {
     $type = get_post_type();
 
     if(post_type_supports($type, 'post-formats')) {
-        $type = get_post_format();
+        $type = get_post_format() ? : 'standard';
     }
 
     $class[] = 'post--' . $type;
+    $class[] = 'js-mediator-article';
 
     return $class;
 }, 10, 2);

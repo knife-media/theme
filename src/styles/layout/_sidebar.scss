@@ -10,12 +10,18 @@
 
   .sidebar__widgets {
     display: flex;
+    flex-flow: column wrap;
+    flex: 1 1 auto;
+  }
+
+  .sidebar__related {
+    display: flex;
+    flex-flow: column wrap;
+    flex: 0 0 auto;
   }
 
   @media screen and (max-width: 1023px) {
-    flex-flow: row wrap;
     flex: 1 1 auto;
-    justify-content: space-between;
 
     max-width: $width-content;
     padding-left: 0;

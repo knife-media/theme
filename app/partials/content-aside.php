@@ -9,59 +9,70 @@
 ?>
 
 <article <?php post_class('post'); ?> id="post-<?php the_ID(); ?>">
-    <header class="post__header">
-        <?php
-            the_info(
-                '<div class="post__header-meta meta">', '</div>',
-                ['author', 'date', 'category', 'type']
-            );
+    <div class="entry-header">
+        <div class="entry-header__inner">
+            <?php
+                the_info(
+                    '<div class="entry-header__meta meta">', '</div>',
+                    ['author', 'date', 'category', 'type']
+                );
 
-            the_title(
-                '<h1 class="post__header-title">',
-                '</h1>'
-            );
+                the_title(
+                    '<h1 class="entry-header__title">',
+                    '</h1>'
+                );
 
-            the_lead(
-                '<div class="post__header-excerpt custom">',
-                '</div>'
-            );
+                the_lead(
+                    '<div class="entry-header__excerpt">',
+                    '</div>'
+                );
 
-            the_share(
-                '<div class="post__header-share share">', '</div>',
-                __('Share aside — top', 'knife-theme')
-            );
-        ?>
-    </header>
-
-    <div class="post__content custom">
-        <?php the_content(); ?>
+                the_share(
+                    '<div class="entry-header__share share">', '</div>',
+                    __('Share aside — top', 'knife-theme')
+                );
+            ?>
+        </div>
     </div>
 
-    <footer class="post__footer">
+    <div class="entry-content js-mediator-article">
         <?php
-            wp_link_pages([
-                'before' => '<div class="post__footer-nav refers">',
-                'after' => '</div>',
-                'next_or_number' => 'next',
-                'nextpagelink' => __('Следующая страница', 'knife-theme'),
-                'previouspagelink' => __('Назад', 'knife-theme')
-            ]);
-
-            the_share(
-                '<div class="post__footer-share share">', '</div>',
-                __('Share aside — bottom', 'knife-theme'), true
-            );
-
-            the_tags(
-                '<div class="post__footer-tags refers">',
-                null, '</div>'
-            );
-
-            the_sidebar(
-                'knife-post-widgets',
-                '<div class="post__footer-widgets">',
-                '</div>'
-            );
+            the_content();
         ?>
-    </footer>
+    </div>
+
+    <?php if(comments_open()) : ?>
+        <div class="entry-board">
+            <?php
+                printf(
+                    '<button class="button">%s</button>',
+                    __('Комментарии', 'knife-media')
+                );
+            ?>
+        </div>
+    <?php endif; ?>
+
+    <div class="entry-footer">
+        <div class="entry-footer__inner">
+            <?php
+                the_tags(
+                    '<div class="entry-footer__tags refers">',
+                    null, '</div>'
+                );
+
+                the_share(
+                    '<div class="entry-footer__share share">', '</div>',
+                    __('Share aside — bottom', 'knife-theme'), true
+                );
+            ?>
+        </div>
+    </div>
+
+    <?php if(is_active_sidebar('knife-inside')) : ?>
+        <div class="entry-widgets">
+            <?php
+                dynamic_sidebar('knife-inside');
+            ?>
+        </div>
+    <?php endif; ?>
 </article>

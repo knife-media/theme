@@ -18,7 +18,7 @@ get_header(); ?>
     ?>
 </div>
 
-<div class="content">
+<div class="wrapper">
     <?php
         $stories = new WP_Query([
             'post_type' => 'story',
@@ -29,7 +29,7 @@ get_header(); ?>
         if($stories->have_posts()) :
             while($stories->have_posts()) : $stories->the_post();
 
-                get_template_part('partials/iterate', 'story');
+                get_template_part('partials/loop', 'story');
 
             endwhile;
 

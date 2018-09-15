@@ -1,0 +1,75 @@
+.entry-footer {
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  position: relative;
+
+  width: 100%;
+  padding: 0 1rem;
+
+  color: $color-text;
+  background-color: $color-white;
+
+  transform: translate3d(0,0,0);
+
+  .entry-footer__inner {
+    display: block;
+
+    width: 100%;
+    max-width: $width-content;
+  }
+
+  .entry-footer__tags {
+    margin: 1.5rem -2rem;
+
+    .refers__link {
+      margin-right: 2rem;
+      line-height: 2rem;
+
+      &:before {
+        content: "#";
+
+        padding-right: .125rem;
+        font-size: 1rem;
+        color: rgba(0, 0, 0, .9);
+      }
+
+      @media screen and (max-width: 479px) {
+        margin-right: 1.5rem;
+      }
+    }
+  }
+
+  .entry-footer__share {
+    justify-content: space-between;
+
+    margin: 1.5rem -2rem;
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+
+    background-color: $color-sheet;
+
+    .share__link {
+      flex: 1 1 auto;
+    }
+  }
+
+  .entry-footer__widgets {
+    margin-left: -2rem;
+    margin-right: -2rem;
+
+    .relap-knife_media__top-container {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+
+    .relap-knife_media__block-title {
+      font-size: 1.125rem;
+    }
+
+    .widget-feature {
+      width: calc(100% + 4rem);
+      margin: 1.5rem -2rem 0;
+    }
+  }
+}

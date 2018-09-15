@@ -1,7 +1,7 @@
 .content {
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-between;
+  justify-content: center;
   position: relative;
 
   width: 100%;
@@ -11,24 +11,8 @@
   padding-left: 1rem;
   padding-right: 1rem;
 
-  &.content--news {
-    max-width: $width-news;
-
-    @media screen and (max-width: 1023px) {
-      max-width: $width-tablet;
-    }
-  }
-
-  &.content--post {
-    justify-content: center;
-
-    @media screen and (max-width: 1023px) {
-      max-width: 100%;
-    }
-  }
-
   @media screen and (max-width: 1023px) {
-    max-width: $width-tablet;
+    max-width: 100%;
   }
 
   @media screen and (max-width: 479px) {

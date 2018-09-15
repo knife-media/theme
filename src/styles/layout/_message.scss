@@ -1,0 +1,43 @@
+.message {
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  flex: 1 1 auto;
+  position: relative;
+
+  flex-flow: column wrap;
+  align-items: flex-start;
+  justify-content: center;
+
+  width: 100%;
+  min-height: 60vh;
+  padding: 2rem 0;
+
+  background-color: transparent;
+
+  .message__title {
+    display: block;
+
+    width: 100%;
+    margin-bottom: 1.5rem;
+
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.075;
+    letter-spacing: .5px;
+
+    @media screen and (max-width: 767px) {
+      margin-bottom: .75rem;
+      font-size: 1.625rem;
+      line-height: 1.125;
+    }
+  }
+
+  .message__content {
+    display: block;
+
+    width: 100%;
+    font-size: 1.125rem;
+    font-weight: 500;
+  }
+}

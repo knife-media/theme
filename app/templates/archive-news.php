@@ -9,24 +9,24 @@
 
 get_header(); ?>
 
-<div class="content content--news">
+<div class="wrapper">
    <?php
         if(have_posts()) :
             while(have_posts()) : the_post();
 
-                get_template_part('partials/iterate', 'news');
+                get_template_part('partials/loop', 'news');
 
             endwhile;
         else :
 
-            get_template_part('partials/content', 'none');
+            get_template_part('message');
 
         endif;
     ?>
 </div>
 
 <?php if(have_posts() && get_next_posts_link()) : ?>
-    <nav class="navigation navigation--news">
+    <nav class="navigation">
         <?php
             next_posts_link(__('Больше новостей', 'knife-theme'));
         ?>

@@ -4,23 +4,17 @@
   align-items: center;
   position: relative;
 
-  width: auto;
-  max-width: none;
-  margin-top: 1rem;
-  margin-bottom: 2rem;
-
-  p {
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
+  width: $width-content;
+  max-width: 100%;
 
   .figure__caption {
-    width: 100%;
+    width: $width-content;
+    max-width: 100%;
     margin: 0 auto;
-    padding: .75rem 0;
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+
     text-align: left;
-    max-width: $width-content;
 
     @media screen and (max-width: 767px) {
       padding-top: .5rem;
@@ -29,169 +23,46 @@
   }
 
   &.figure--full {
+    align-items: flex-start;
     width: auto;
-    max-width: 100%;
-
-    @media screen and (max-width: 767px) {
-      margin-left: 0;
-      margin-right: 0;
-    }
   }
 
   &.figure--embed {
     align-items: flex-start;
 
     width: $width-content;
-    max-width: 100%;
-    margin-bottom: 1rem;
+  }
 
-    & > * {
-      width: 100%;
+  &.figure--quote {
+    width: $width-content;
+
+    blockquote {
+      width: calc(100% + 4rem);
+      max-width: calc(#{$width-content} + 4rem);
     }
   }
 
+
   &.figure--inner {
     width: $width-content;
-    max-width: 100%;
 
-    & > * {
+    img {
       width: 100%;
     }
   }
 
   &.figure--outer {
     width: calc(100% + 2rem);
+    max-width: none;
     margin-left: -1rem;
     margin-right: -1rem;
 
-    & > * {
+    img {
       width: 100%;
     }
-  }
 
-  &.figure--select {
-    width: calc(100% + 2rem);
-    margin-left: -1rem;
-    margin-right: -1rem;
-
-    padding: 1.5rem 1rem;
-
-    background-color: $color-sheet;
-
-    p {
-      font-size: 1.375rem;
-      font-weight: 500;
-      line-height: 1.25;
-
-      @media screen and (max-width: 767px) {
-        font-size: 1.125rem;
-        line-height: 1.5;
-      }
+    .figure__caption {
+      max-width: calc(100% - 2rem);
     }
-
-    @media screen and (max-width: 767px) {
-      padding: 1rem;
-    }
-  }
-
-  &.figure--quote {
-    align-items: flex-start;
-
-    width: calc(100% + 4rem);
-    max-width: calc(#{$width-content} + 4rem);
-    margin-left: -2rem;
-    margin-right: -2rem;
-    padding: 1.25rem 2rem;
-
-    font-size: 1rem;
-
-    background-color: $color-sheet;
-
-    .figure__author {
-      margin-bottom: 1rem;
-
-      font-size: 1rem;
-      font-weight: 500;
-      font-style: normal;
-      color: $color-text;
-      text-align: left;
-
-      strong {
-        display: block;
-
-        line-height: 1.5;
-        font-size: 1.25rem;
-      }
-    }
-
-    @media screen and (max-width: 767px) {
-      font-size: .9375rem;
-    }
-  }
-
-  &.figure--fact {
-    align-items: flex-start;
-
-    width: calc(100% + 4rem);
-    max-width: calc(#{$width-content} + 4rem);
-    margin-left: -2rem;
-    margin-right: -2rem;
-    padding: 1.25rem 2rem;
-
-    font-size: 1.25rem;
-    font-weight: 500;
-    line-height: 1.5;
-    background-color: $color-sheet;
-
-    .figure__info {
-      display: block;
-
-      margin-bottom: .5rem;
-      font-size: 7.5rem;
-      line-height: 1;
-
-      @media screen and (max-width: 767px) {
-        font-size: 5rem;
-      }
-    }
-
-    .figure__source {
-      display: block;
-
-      width: calc(#{$width-content} + 4rem);
-      margin: 1.25rem -2rem 0 -2rem;
-      padding: 1.25rem 2rem 0;
-
-      font-size: .8125rem;
-      font-weight: 500;
-      font-style: normal;
-      color: $color-text;
-      text-align: left;
-
-      border-top: solid 2px $color-white;
-
-      a {
-        color: $color-text;
-
-        border-bottom: solid 1px $color-text;
-
-        &:hover {
-          color: $color-primary;
-
-          border-bottom-color: transparent;
-        }
-      }
-    }
-
-    @media screen and (max-width: 767px) {
-      font-size: 1.125rem;
-      line-height: 1.5;
-    }
-  }
-
-  @media screen and (max-width: 767px) {
-    margin-top: .5rem;
-    margin-bottom: 1rem;
   }
 }
-

@@ -19,7 +19,7 @@ add_shortcode('card', function($atts, $content = null) {
     }
 
     $html = sprintf(
-        '<div class="post__card">%s</div>',
+        '<div class="entry-content">%s</div>',
         do_shortcode(force_balance_tags($content))
     );
 
