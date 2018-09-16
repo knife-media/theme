@@ -30,9 +30,11 @@
     </div>
 
     <div class="entry-content">
-        <?php
-            the_content();
-        ?>
+        <div class="entry-content__inner">
+            <?php
+                the_content();
+            ?>
+        </div>
     </div>
 
     <div class="entry-footer">

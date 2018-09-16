@@ -35,10 +35,12 @@
         </div>
     </div>
 
-    <div class="entry-content">
-        <?php
-            the_content();
-        ?>
+    <div class="entry-content article">
+        <div class="entry-content__inner">
+            <?php
+                the_content();
+            ?>
+        </div>
     </div>
 
     <?php if(comments_open()) : ?>

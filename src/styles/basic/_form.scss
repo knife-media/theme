@@ -1,8 +1,6 @@
 .form {
-  display: flex;
-  flex-flow: column wrap;
+  display: block;
   position: relative;
-  align-items: flex-start;
 
   width: 100%;
 
@@ -11,7 +9,7 @@
     position: relative;
 
     width: 100%;
-    margin: .625rem 0;
+    margin-bottom: 1rem;
 
     border: none;
 
@@ -65,7 +63,6 @@
     justify-content: center;
 
     width: 100%;
-    margin: .625rem 0;
 
     .form__control-button {
       display: block;

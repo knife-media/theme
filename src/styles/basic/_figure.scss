@@ -4,7 +4,7 @@
   align-items: center;
   position: relative;
 
-  width: $width-content;
+  width: auto;
   max-width: 100%;
 
   .figure__caption {
@@ -24,12 +24,11 @@
 
   &.figure--full {
     align-items: flex-start;
-    width: auto;
+    max-width: $width-content;
   }
 
   &.figure--embed {
     align-items: flex-start;
-
     width: $width-content;
   }
 
@@ -41,7 +40,6 @@
       max-width: calc(#{$width-content} + 4rem);
     }
   }
-
 
   &.figure--inner {
     width: $width-content;

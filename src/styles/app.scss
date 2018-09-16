@@ -1,6 +1,7 @@
 @import "define/reset";
 @import "define/setup";
 
+@import "basic/article";
 @import "basic/fonts";
 @import "basic/icons";
 @import "basic/toggle";
@@ -38,7 +39,6 @@
 @import "entry/header";
 @import "entry/content";
 @import "entry/board";
-@import "entry/form";
 @import "entry/footer";
 
 @import "widgets/units";

@@ -35,10 +35,12 @@
         </div>
     </div>
 
-    <div class="entry-content js-mediator-article">
-        <?php
-            the_content();
-        ?>
+    <div class="entry-content">
+        <div class="entry-content__inner article">
+            <?php
+                the_content();
+            ?>
+        </div>
     </div>
 
     <?php if(comments_open()) : ?>

@@ -1,7 +1,8 @@
 (function() {
   // Check slider element and options meta
-  if(typeof knife_user_form === 'undefined')
+  if(typeof knife_user_form === 'undefined') {
     return false;
+  }
 
 
   // Declare global elements
@@ -9,8 +10,9 @@
 
   // Create single form field
   var createField = function(key, field, form) {
-    if(typeof field.element === 'undefined')
+    if(typeof field.element === 'undefined') {
       return null;
+    }
 
     var element = document.createElement(field.element);
     element.classList.add('form__field-' + field.element);
@@ -80,8 +82,9 @@
   var requestEvent = function(stop) {
     loader.classList.remove('icon--loop');
 
-    if(typeof stop === 'undefined' || stop === true)
+    if(typeof stop === 'undefined' || stop === true) {
       return submit.removeAttribute('disabled', '');
+    }
 
     loader.classList.remove('icon--alert', 'icon--done');
     loader.classList.add('icon--loop');
@@ -138,13 +141,15 @@
     request.onload = function() {
       requestEvent(true);
 
-      if(request.status !== 200)
+      if(request.status !== 200) {
         return displayWarning();
+      }
 
       var response = JSON.parse(request.responseText);
 
-      if(response.success)
+      if(response.success) {
         return displaySuccess(response.data);
+      }
 
       return displayWarning(response.data);
     }
@@ -157,8 +162,9 @@
 
   // Get option from global settings
   var getOption = function(option, def) {
-    if(knife_user_form.hasOwnProperty(option))
+    if(knife_user_form.hasOwnProperty(option)) {
       return knife_user_form[option];
+    }
 
     return def || '';
   }
@@ -169,8 +175,9 @@
     var fields = knife_user_form.fields;
 
     for(var key in fields) {
-      if(!fields.hasOwnProperty(key))
+      if(!fields.hasOwnProperty(key)) {
         continue;
+      }
 
       createField(key, fields[key], form);
     }
@@ -179,12 +186,16 @@
   }
 
   // Find post element
-  var post = document.querySelector('.post');
+  var post = document.querySelector('.entry-content');
+
+  var wrap = document.createElement('div');
+  wrap.classList.add('entry-content__form');
+  post.appendChild(wrap);
 
   var form = document.createElement('form');
-  form.classList.add('post__form', 'form', 'form--club');
+  form.classList.add('form', 'form--club');
   form.addEventListener('submit', submitForm);
-  post.appendChild(form);
+  wrap.appendChild(form);
 
   return createForm(form);
 })();

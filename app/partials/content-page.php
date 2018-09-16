@@ -10,8 +10,10 @@
 
 <article <?php post_class('post'); ?> id="post-<?php the_ID(); ?>">
     <div class="entry-content">
-        <?php
-            the_content();
-        ?>
+        <div class="entry-content__inner article">
+            <?php
+                the_content();
+            ?>
+        </div>
     </div>
 </article>

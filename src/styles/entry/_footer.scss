@@ -1,7 +1,5 @@
 .entry-footer {
-  display: flex;
-  flex-flow: column wrap;
-  align-items: center;
+  display: block;
   position: relative;
 
   width: 100%;
@@ -17,6 +15,7 @@
 
     width: 100%;
     max-width: $width-content;
+    margin: 0 auto;
   }
 
   .entry-footer__tags {
