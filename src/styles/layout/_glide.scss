@@ -2,7 +2,7 @@
   display: flex;
   position: relative;
   visibility: visible;
-  z-index: -1;
+  z-index: 1;
 
   width: 100%;
   height: calc(100vh - 4rem);
@@ -125,36 +125,6 @@
       margin-left: 0;
       margin-right: 0;
       padding: .5rem 0;
-    }
-
-    .glide__slide-excerpt {
-      display: block;
-
-      width: 100%;
-
-      font-size: 1rem;
-      font-weight: 700;
-
-      p {
-        margin-bottom: 1rem;
-
-        @media screen and (max-width: 479px) {
-          margin-bottom: .75rem;
-          font-size: .875rem;
-          font-weight: 500;
-        }
-      }
-
-      a {
-        color: $color-light;
-        transition: border .25s;
-
-        border-bottom: solid 1px $color-light;
-
-        &:hover {
-          border-bottom-color: transparent;
-        }
-      }
     }
 
     .glide__slide-title {

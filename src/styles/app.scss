@@ -1,16 +1,18 @@
 @import "define/reset";
 @import "define/setup";
 
-@import "basic/article";
 @import "basic/fonts";
 @import "basic/icons";
 @import "basic/toggle";
 @import "basic/social";
 @import "basic/menu";
 @import "basic/meta";
-@import "basic/refers";
+@import "basic/title";
+@import "basic/excerpt";
 @import "basic/share";
+@import "basic/tags";
 @import "basic/figure";
+@import "basic/author";
 @import "basic/outbound";
 @import "basic/button";
 @import "basic/backdrop";
@@ -29,6 +31,7 @@
 @import "layout/footer";
 @import "layout/topline";
 @import "layout/post";
+@import "layout/refers";
 @import "layout/search";
 @import "layout/push";
 @import "layout/glide";
@@ -37,9 +40,8 @@
 @import "layout/news";
 
 @import "entry/header";
-@import "entry/content";
-@import "entry/board";
 @import "entry/footer";
+@import "entry/content";
 
 @import "widgets/units";
 @import "widgets/single";

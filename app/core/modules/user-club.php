@@ -236,25 +236,31 @@ class Knife_User_Club {
 
     /**
      * Insert link to author on single club post
+     *
+     * @version 1.4
      */
     public static function insert_author_link($content) {
         if(!is_singular(self::$slug) || !in_the_loop()) {
             return $content;
         }
 
-        $user_url = get_the_author_meta('user_url');
+        if($custom_url = get_the_author_meta('user_url')) {
+            $author_url = sprintf('<a class="author author--club" href="%3$s" target="_blank"><strong>%1$s </strong>%2$s</a>',
+                get_the_author(),
+                esc_html(get_the_author_meta('description')),
+                esc_url($custom_url)
+            );
 
-        if(empty($user_url)) {
-            $user_url = get_author_posts_url(get_the_author_meta('ID'));
+            return $author_url . $content;
         }
 
-        $outbound = sprintf('<a class="outbound" href="%3$s" target="_blank"><p class="outbound__author">%1$s </p><p>%2$s</p></a>',
+        $author_url = sprintf('<a class="author author--club" href="%3$s"><strong>%1$s </strong>%2$s</a>',
             get_the_author(),
             esc_html(get_the_author_meta('description')),
-            esc_url($user_url)
+            esc_url(get_author_posts_url(get_the_author_meta('ID')))
         );
 
-        return $outbound . $content;
+        return $author_url . $content;
     }
 
 

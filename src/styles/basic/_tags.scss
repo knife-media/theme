@@ -1,19 +1,24 @@
-.refers {
+.tags {
   display: flex;
   flex-flow: row wrap;
   align-items: center;
 
-  padding: .75rem 2rem;
-
-  background-color: $color-sheet;
-
-  .refers__link {
+  .tags__link {
     display: inline;
 
+    margin-right: 2rem;
     font-size: 1.125rem;
     font-weight: 700;
-    line-height: 1.25;
+    line-height: 2rem;
     letter-spacing: .25px;
+
+    &:before {
+      content: "#";
+
+      padding-right: .125rem;
+      font-size: 1rem;
+      color: rgba(0, 0, 0, .9);
+    }
 
     em {
       font-family: $font-serif;
@@ -21,29 +26,12 @@
     }
 
     @media screen and (max-width: 479px) {
+      margin-right: 1.5rem;
       font-size: 1rem;
     }
   }
 
-  .refers__title {
-    cursor: default;
-
-    width: 100%;
-    padding: 1rem 2rem;
-
-    font-size: 1.125rem;
-    font-weight: 400;
-    line-height: 1.25;
-    letter-spacing: .25px;
-
-    background-color: $color-sheet;
-
-    @media screen and (max-width: 479px) {
-      font-size: 1.125rem;
-    }
-  }
-
-  .refers__item {
+  .tags__item {
     display: block;
 
     width: 100%;

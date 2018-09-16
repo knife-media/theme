@@ -1,0 +1,29 @@
+.excerpt {
+  display: block;
+
+  -moz-osx-font-smoothing: auto;
+  -webkit-font-smoothing: auto;
+
+  p {
+    margin-bottom: 1rem;
+    line-height: 1.5;
+    font-size: 1.125rem;
+    font-weight: 500;
+    letter-spacing: .25px;
+
+    @media screen and (max-width: 767px) {
+      margin-bottom: .5rem;
+      font-size: 1rem;
+    }
+  }
+
+  a {
+    color: $color-primary;
+    border-bottom: 1px solid $color-primary;
+
+    &:hover {
+      filter: brightness(150%);
+      border-bottom-color: transparent;
+    }
+  }
+}

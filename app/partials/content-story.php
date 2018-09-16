@@ -27,11 +27,6 @@
                             '</h1>'
                         );
 
-                        the_lead(
-                            '<div class="glide__slide-excerpt">',
-                            '</div>'
-                        );
-
                         the_share(
                             '<div class="glide__slide-share share">', '</div>',
                             __('Share story — first', 'knife-theme')
@@ -42,4 +37,3 @@
         </div>
     </article>
 </div>
-

@@ -1,7 +1,8 @@
 (function() {
   // Check if backdrop options exist
-  if(typeof knife_backdrop === 'undefined')
+  if(typeof knife_backdrop === 'undefined') {
     return false;
+  }
 
   // Create element
   var backdrop = document.createElement('div');

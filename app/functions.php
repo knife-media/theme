@@ -359,7 +359,7 @@ add_filter('the_content', function($content) {
 
 // Fix the_tags output
 add_filter('the_tags', function($tags) {
-    return str_replace('href="', 'class="refers__link" href="', $tags);
+    return str_replace('href="', 'class="tags__link" href="', $tags);
 }, 10, 1);
 
 

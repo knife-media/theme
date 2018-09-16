@@ -1,0 +1,36 @@
+.author {
+  display: block;
+  position: relative;
+
+  padding: 1.25rem 2rem;
+  text-decoration: none;
+
+  color: $color-white;
+  background-color: $color-primary;
+
+  strong {
+    display: block;
+
+    margin-bottom: .5rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.125;
+
+    @media screen and (max-width: 767px) {
+      font-size: 1.25rem;
+      line-height: 1.375;
+    }
+  }
+
+  &.author--club {
+    color: $color-text;
+    background-color: $color-club;
+
+    border-bottom: none;
+    border-radius: 5px;
+
+    &:hover {
+      filter: brightness(110%);
+    }
+  }
+}

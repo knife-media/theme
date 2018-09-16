@@ -5,9 +5,6 @@
   justify-content: flex-start;
   user-select: none;
 
-  min-width: 100%;
-  padding: .5rem 2rem;
-
   .share__link {
     display: flex;
     align-items: center;
@@ -15,7 +12,7 @@
     position: relative;
 
     margin-right: .5rem;
-    padding: .375rem .375rem;
+    padding: .375rem;
     color: $color-white;
     background: $color-black;
 
@@ -91,7 +88,5 @@
 
   @media screen and (max-width: 767px) {
     flex-flow: row wrap;
-
-    padding: 1rem 2rem;
   }
 }

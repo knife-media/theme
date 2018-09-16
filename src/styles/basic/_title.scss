@@ -1,0 +1,26 @@
+.title {
+  display: block;
+
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.075;
+  letter-spacing: .5px;
+
+  em {
+    font-family: $font-serif;
+    font-weight: 400;
+  }
+
+  @media screen and (max-width: 1023px) {
+    margin-bottom: .75rem;
+    font-size: 2rem;
+    line-height: 1.125;
+  }
+
+  @media screen and (max-width: 767px) {
+    margin-bottom: 1rem;
+
+    font-size: 1.625rem;
+    line-height: 1.25;
+  }
+}

@@ -8,6 +8,8 @@
     display: inline-block;
     cursor: pointer;
 
+    border-bottom: none;
+
     &:after {
       content: "•";
       display: inline-block;

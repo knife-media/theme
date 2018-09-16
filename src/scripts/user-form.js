@@ -188,14 +188,10 @@
   // Find post element
   var post = document.querySelector('.entry-content');
 
-  var wrap = document.createElement('div');
-  wrap.classList.add('entry-content__form');
-  post.appendChild(wrap);
-
   var form = document.createElement('form');
   form.classList.add('form', 'form--club');
   form.addEventListener('submit', submitForm);
-  wrap.appendChild(form);
+  post.appendChild(form);
 
   return createForm(form);
 })();
