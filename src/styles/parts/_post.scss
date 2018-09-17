@@ -5,15 +5,14 @@
   flex: 1 1 42.25rem;
   position: relative;
 
-  margin-top: 1rem;
   overflow: hidden;
+
+  & > :first-child {
+    margin-top: 1rem;
+  }
 
   &.post--page {
     flex: 1 1 auto;
-
-    .entry-content {
-      padding-top: 2rem;
-    }
   }
 
   &.post--aside {
@@ -23,14 +22,6 @@
   &.post--chat {
     flex: 0 1 44rem;
     align-items: center;
-
-    .entry-header {
-      padding-bottom: 2rem;
-
-      @media screen and (max-width: 767px) {
-        padding-bottom: 1rem;
-      }
-    }
 
     .entry-content {
       margin-top: 1rem;

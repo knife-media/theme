@@ -42,10 +42,7 @@ class Knife_Custom_Background {
      */
     public static function load_module() {
         // Add background form fields
-        add_action('admin_init', [__CLASS__, 'add_fields']);
-
-        // Enqueue scripts only on admin screen
-        add_action('admin_enqueue_scripts', [__CLASS__, 'add_assets']);
+        add_action('admin_init', [__CLASS__, 'add_options_fields']);
 
         // Update Customizer
         add_action('customize_register', [__CLASS__, 'update_customizer']);
@@ -60,11 +57,14 @@ class Knife_Custom_Background {
      *
      * @since 1.4
      */
-    public static function add_fields() {
+    public static function add_options_fields() {
         foreach(self::$taxes as $tax) {
-            add_action("{$tax}_edit_form_fields", [__CLASS__, 'print_row'], 10, 2);
-            add_action("edited_{$tax}", [__CLASS__, 'save_meta']);
+            add_action("{$tax}_edit_form_fields", [__CLASS__, 'print_options_row'], 10, 2);
+            add_action("edited_{$tax}", [__CLASS__, 'save_options_meta']);
         }
+
+        // Enqueue scripts only on admin screen
+        add_action('admin_enqueue_scripts', [__CLASS__, 'add_options_assets']);
     }
 
 
@@ -118,7 +118,7 @@ class Knife_Custom_Background {
     /**
      * Enqueue assets to term edit screen only
      */
-    public static function add_assets($hook) {
+    public static function add_options_assets($hook) {
         $screen = get_current_screen()->taxonomy;
 
         if($hook !== 'term.php' || !in_array($screen, self::$taxes)) {
@@ -135,29 +135,29 @@ class Knife_Custom_Background {
         wp_enqueue_style('wp-color-picker');
 
         // Insert admin scripts
-        wp_enqueue_script('knife-custom-background', $include . '/scripts/custom-background.js', ['jquery', 'wp-color-picker'], $version);
+        wp_enqueue_script('knife-background-options', $include . '/scripts/background-options.js', ['jquery', 'wp-color-picker'], $version);
 
         $options = [
             'choose' => __('Выберите фоновое изображение', 'knife-theme')
         ];
 
-        wp_localize_script('knife-custom-background', 'knife_custom_background', $options);
+        wp_localize_script('knife-background-options', 'knife_background_options', $options);
     }
 
 
     /**
      * Display custom background options row
      */
-    public static function print_row($term, $taxonomy) {
+    public static function print_options_row($term, $taxonomy) {
         $include = get_template_directory() . '/core/include';
 
-        include_once($include . '/templates/custom-background.php');
+        include_once($include . '/templates/background-options.php');
     }
 
     /**
      * Save image meta
      */
-    public static function save_meta($term_id) {
+    public static function save_options_meta($term_id) {
         if(!current_user_can('edit_term', $term_id)) {
             return;
         }
@@ -201,7 +201,7 @@ class Knife_Custom_Background {
             }
 
             // Loop over all tax terms
-            foreach(wp_get_post_terms(get_queried_object_id(), $tax) as $term) {
+            foreach(get_the_terms(get_queried_object_id(), $tax) as $term) {
                 if($background = get_term_meta($term->term_id, self::$meta, true)) {
                     break 2;
                 }

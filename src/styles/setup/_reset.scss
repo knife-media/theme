@@ -32,8 +32,8 @@ time, mark, audio, video, input, select, textarea, button {
 a {
   color: inherit;
   text-decoration: none;
-  transition: .25s;
-  transition: transform 0s;
+
+  transition: filter .25s;
 
   cursor: pointer;
   outline: none;

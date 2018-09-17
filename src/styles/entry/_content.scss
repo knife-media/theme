@@ -4,7 +4,7 @@
   flex: 1 1 auto;
 
   width: 100%;
-  padding: .5rem 1rem 2rem;
+  padding: 0 1rem 2rem;
 
   line-height: 1.65;
   font-size: 1rem;
@@ -41,6 +41,8 @@
 
   a {
     color: $color-primary;
+    transition: border .125s;
+
     border-bottom: 1px solid $color-primary;
 
     &:hover {

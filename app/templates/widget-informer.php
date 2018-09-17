@@ -10,7 +10,7 @@
 ?>
 
 <a class="widget-informer__inner" href="<?php echo esc_url($instance['link']); ?>" target="_blank" style="<?php echo implode('; ', $styles); ?>">
-    <div class="widget-informer__content" style="">
+    <div class="widget-informer__content">
         <?php
             printf(
                 '<p class="widget-informer__content-title">%s</p>',

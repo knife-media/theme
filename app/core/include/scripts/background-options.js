@@ -37,7 +37,7 @@ jQuery(document).ready(function($) {
     }
 
     frame = wp.media({
-      title: knife_custom_background.choose,
+      title: knife_background_options.choose,
       multiple: false
     });
 
