@@ -8,7 +8,7 @@
 
 get_header(); ?>
 
-<div class="content">
+<div class="block-content">
     <?php
         while(have_posts()) : the_post();
 

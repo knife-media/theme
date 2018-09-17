@@ -1,0 +1,63 @@
+.tagline-title {
+  display: inline-block;
+  cursor: default;
+
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: transparent;
+
+  background: linear-gradient(90deg, #fbcb34, #ed4f71);
+  background-clip: text;
+  -webkit-background-clip: text;
+
+  &:first-letter {
+    text-transform: uppercase;
+  }
+
+  &.tagline-title--author {
+    background: linear-gradient(90deg, #7ce568, #67e3d6);
+    background-clip: text;
+    -webkit-background-clip: text;
+  }
+
+  &.tagline-title--club {
+    font-size: 4.875rem;
+    line-height: 1.25;
+    color: $color-white;
+    background: none;
+
+    @media screen and (max-width: 1023px) {
+      font-size: 3.75rem;
+    }
+
+    @media screen and (max-width: 479px) {
+      font-size: 2.5rem;
+    }
+  }
+
+  &.tagline-title--category {
+    font-size: 10rem;
+    line-height: 1;
+
+    @media screen and (max-width: 1299px) {
+      font-size: 7.5rem;
+    }
+
+    @media screen and (max-width: 1023px) {
+      font-size: 3.75rem;
+    }
+
+    @media screen and (max-width: 479px) {
+      font-size: 2.5rem;
+    }
+  }
+
+  @media screen and (max-width: 1023px) {
+    font-size: 2.5rem;
+  }
+
+  @media screen and (max-width: 767px) {
+    font-size: 1.875rem;
+  }
+}

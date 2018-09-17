@@ -1,55 +1,54 @@
-@import "define/reset";
-@import "define/setup";
+// Define width vars
+$width-content: 40rem;
+$width-tablet: 42rem;
+$width-site: 80rem;
 
-@import "basic/fonts";
-@import "basic/icons";
-@import "basic/toggle";
-@import "basic/social";
-@import "basic/menu";
-@import "basic/meta";
-@import "basic/title";
-@import "basic/excerpt";
-@import "basic/share";
-@import "basic/tags";
-@import "basic/figure";
-@import "basic/author";
-@import "basic/outbound";
-@import "basic/button";
-@import "basic/backdrop";
-@import "basic/form";
-@import "basic/select";
-@import "basic/comments";
+// Define font vars
+$font-regular: "Formular", sans-serif;
+$font-serif: "PT Serif", serif;
 
-@import "layout/header";
-@import "layout/content";
-@import "layout/message";
-@import "layout/wrapper";
-@import "layout/caption";
-@import "layout/feature";
-@import "layout/navigation";
-@import "layout/sidebar";
-@import "layout/footer";
-@import "layout/topline";
-@import "layout/post";
-@import "layout/refers";
-@import "layout/search";
-@import "layout/push";
-@import "layout/glide";
-@import "layout/unit";
-@import "layout/story";
-@import "layout/news";
+// Define color vars
+$color-black: #000000;
+$color-white: #ffffff;
+$color-primary: #1e488f;
+$color-text: #111111;
+$color-light: #7ab9f9;
+$color-sheet: #faf9f3;
+$color-success: #78bb13;
+$color-alert: #ab0f0f;
+$color-club: #eaa728;
 
-@import "entry/header";
-@import "entry/footer";
-@import "entry/content";
 
-@import "widgets/units";
-@import "widgets/single";
-@import "widgets/informer";
-@import "widgets/details";
-@import "widgets/recent";
-@import "widgets/story";
-@import "widgets/script";
-@import "widgets/club";
-@import "widgets/transparent";
-@import "widgets/televisor";
+// Setup default styles
+@import "setup/*.scss";
+
+body {
+  display: block;
+
+  color: $color-white;
+  background-color: $color-black;
+  line-height: 1.4;
+  font-weight: normal;
+  font-family: $font-regular;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Basic element styles
+@import "basic/*.scss";
+
+// Parts components styles
+@import "parts/*.scss";
+
+// Import block layouts
+@import "block/*.scss";
+
+// Import entry styles
+@import "entry/*.scss";
+
+// Import widgets styles
+@import "widgets/*.scss";
+
+// Import tagline caption styles
+@import "tagline/*.scss";

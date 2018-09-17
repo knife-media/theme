@@ -9,7 +9,7 @@
 
 get_header(); ?>
 
-<div class="wrapper">
+<div class="block-wrapper">
     <?php
         get_template_part('partials/message');
     ?>

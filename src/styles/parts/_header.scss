@@ -1,18 +1,34 @@
-.topline {
+.header {
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   position: relative;
+  z-index: 5;
 
   width: 100%;
-  height: 4rem;
 
-  transition: height .25s;
-  transform: translate3d(0, 0, 0);
+  color: $color-text;
+  background-color: $color-white;
 
+  .header__inner {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
 
-  .topline__logo {
+    width: 100%;
+    height: 4rem;
+    max-width: $width-site;
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+    transition: height .25s;
+    transform: translate3d(0, 0, 0);
+  }
+
+  .header__logo {
     display: flex;
     position: relative;
     flex-flow: row nowrap;
@@ -21,11 +37,11 @@
 
     background-color: $color-white;
 
-    .topline__logo-link {
+    .header__logo-link {
       display: block;
     }
 
-    .topline__logo-image {
+    .header__logo-image {
       display: block;
 
       width: 6.25rem;
@@ -48,7 +64,7 @@
     }
   }
 
-  .topline__nav {
+  .header__nav {
     display: flex;
     flex-flow: row nowrap;
     flex-basis: 100%;
@@ -58,7 +74,7 @@
 
     width: 100%;
 
-    .topline__nav-social {
+    .header__nav-social {
       padding-right: 1.5rem;
 
       @media screen and (max-width: 1023px) {
@@ -72,7 +88,7 @@
       }
     }
 
-    .topline__nav-menu {
+    .header__nav-menu {
       display: flex;
       flex-flow: row nowrap;
       align-items: center;
@@ -101,7 +117,7 @@
 
       transform: translateY(-100%);
 
-      &.topline__nav--expand {
+      &.header__nav--expand {
         opacity: 1;
         transform: translateY(0);
         transition: transform .25s;
@@ -109,14 +125,14 @@
     }
   }
 
-  .topline__button {
+  .header__button {
     position: relative;
     z-index: 15;
 
     outline: none;
     cursor: pointer;
 
-    &.topline__button--menu {
+    &.header__button--menu {
       display: none;
 
       height: 1.25rem;
@@ -132,7 +148,7 @@
       }
     }
 
-    &.topline__button--search {
+    &.header__button--search {
       display: flex;
       justify-content: center;
 

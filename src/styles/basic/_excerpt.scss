@@ -11,6 +11,10 @@
     font-weight: 500;
     letter-spacing: .25px;
 
+    &:last-child {
+      margin-bottom: 0;
+    }
+
     @media screen and (max-width: 767px) {
       margin-bottom: .5rem;
       font-size: 1rem;

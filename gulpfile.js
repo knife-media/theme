@@ -2,6 +2,7 @@ var gulp      = require('gulp');
 var sass      = require('gulp-sass');
 var concat    = require('gulp-concat');
 var cleanCss  = require('gulp-clean-css');
+var sassGlob  = require('gulp-sass-glob');
 var uglify    = require('gulp-uglify');
 var plumber   = require('gulp-plumber');
 var prefix    = require('gulp-autoprefixer');
@@ -14,6 +15,7 @@ var path = {
 gulp.task('styles', function() {
   gulp.src([path.source + '/styles/app.scss'])
     .pipe(plumber())
+    .pipe(sassGlob())
     .pipe(sass({errLogToConsole: true}))
     .pipe(prefix({browsers: ['ie >= 10', 'ff >= 30', 'chrome >= 34', 'safari >= 7', 'opera >= 23', 'ios >= 7', 'android >= 4.4']}))
     .pipe(concat('styles.min.css'))

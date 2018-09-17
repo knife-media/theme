@@ -1,12 +1,14 @@
-.navigation {
+.block-wrapper {
   display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-around;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
 
   width: 100%;
   max-width: $width-site;
 
-  margin: 1rem auto 0;
+  margin: 0 auto;
   padding-left: 1rem;
   padding-right: 1rem;
 

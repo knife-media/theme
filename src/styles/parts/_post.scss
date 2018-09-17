@@ -12,7 +12,6 @@
     flex: 1 1 auto;
 
     .entry-content {
-      width: 100%;
       padding-top: 2rem;
     }
   }
@@ -26,16 +25,16 @@
     align-items: center;
 
     .entry-header {
-      padding: 2rem;
+      padding-bottom: 2rem;
 
       @media screen and (max-width: 767px) {
-        padding: 1rem;
+        padding-bottom: 1rem;
       }
     }
 
     .entry-content {
       margin-top: 1rem;
-      padding: 2rem;
+      padding-top: 2rem;
 
       .figure--outer {
         width: calc(100% + 4rem);
@@ -44,7 +43,7 @@
       }
 
       @media screen and (max-width: 767px) {
-        padding: 1rem;
+        padding-top: 1rem;
       }
     }
 

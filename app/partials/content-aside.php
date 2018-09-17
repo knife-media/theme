@@ -40,6 +40,15 @@
     </div>
 
     <div class="entry-footer">
+        <?php
+            if(comments_open()) {
+                printf(
+                    '<button class="button">%s</button>',
+                    __('Комментарии', 'knife-media')
+                );
+            }
+        ?>
+
         <div class="refers">
             <?php
                 the_tags(

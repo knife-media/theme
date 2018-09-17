@@ -1,6 +1,7 @@
 html {
   box-sizing: border-box;
 }
+
 *, *:before, *:after {
   box-sizing: inherit;
 }
@@ -27,31 +28,72 @@ time, mark, audio, video, input, select, textarea, button {
   box-sizing: border-box;
 }
 
-// HTML5 display-role reset for older browsers
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: .25s;
+  transition: transform 0s;
+
+  cursor: pointer;
+  outline: none;
+
+  time {
+    cursor: pointer;
+  }
+}
+
+button {
+  background-color: transparent;
+  transition: .25s;
+
+  cursor: pointer;
+  outline: none;
+
+  &[disabled] {
+    pointer-events: none;
+  }
+}
+
+input {
+  background-color: transparent;
+
+  outline: none;
+}
+
+time {
+  cursor: default;
+}
+
+img {
   display: block;
+
+  max-width: 100%;
+  height: auto;
 }
-body {
-  line-height: 1;
-}
+
 ol, ul {
   list-style: none;
 }
+
 blockquote, q {
   quotes: none;
 }
+
 blockquote:before, blockquote:after,
 q:before, q:after {
   content: '';
   content: none;
 }
+
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
-a {
-  outline: none;
+
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
 }
 
 .screen-reader-text {
@@ -87,4 +129,12 @@ a {
   line-height: normal;
   text-decoration: none;
   background-color: #eee;
+}
+
+::selection {
+  background-color: #ffff00;
+}
+
+::placeholder {
+  color: grey;
 }

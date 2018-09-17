@@ -24,14 +24,14 @@ add_filter('the_content', function($content) {
         return $content;
     }
 
-    $file = wp_upload_dir();
+    $upload_dir = wp_upload_dir();
 
-    $link = sprintf(
-        '<a class="outbound outbound--skyeng" href="%2$s" target="_blank"><p class="outbound__promo">%1$s</p><img class="outbound__image" src="%3$s" alt=""></a>',
+    $promo_link = sprintf(
+        '<a class="promo promo--skyeng" href="%2$s" target="_blank">%1$s <img src="%3$s" alt=""></a>',
         __('<strong>Хотите выучить английский, <br>но никак не решитесь? </strong>Skyeng дарит бесплатное первое занятие', 'knife-theme'),
         esc_url('https://skyeng.ru/go/knife'),
-        esc_url($file['baseurl'] . '/2018/08/skyeng-logo.png')
+        esc_url($upload_dir['baseurl'] . '/2018/08/skyeng-logo.png')
     );
 
-    return $content . $link;
+    return $content . $promo_link;
 });

@@ -12,6 +12,11 @@
     display: flex;
     flex-flow: column wrap;
     flex: 1 1 auto;
+
+    & > :last-child {
+      position: sticky;
+      top: 1rem;
+    }
   }
 
   .sidebar__related {
@@ -25,5 +30,11 @@
 
     max-width: $width-content;
     padding-left: 0;
+  }
+}
+
+body.admin-bar {
+  .sidebar .sidebar__widgets > :last-child {
+    top: 3rem;
   }
 }

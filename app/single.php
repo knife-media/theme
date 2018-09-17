@@ -10,14 +10,14 @@
 get_header(); ?>
 
 <?php if(is_active_sidebar('knife-feature')) : ?>
-    <div class="feature">
+    <div class="block-feature">
         <?php
             dynamic_sidebar('knife-feature');
         ?>
     </div>
 <?php endif; ?>
 
-<div class="content">
+<div class="block-content">
     <?php
         while(have_posts()) : the_post();
 

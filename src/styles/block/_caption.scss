@@ -1,0 +1,15 @@
+.block-caption {
+  display: block;
+  position: relative;
+
+  width: 100%;
+  max-width: $width-site;
+
+  margin: 1rem auto 0;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  @media screen and (max-width: 1023px) {
+    max-width: $width-tablet;
+  }
+}

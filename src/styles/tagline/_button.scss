@@ -1,0 +1,30 @@
+.tagline-button {
+  display: block;
+  cursor: default;
+
+  margin: 1.5rem 0 .75rem;
+  max-width: 54rem;
+
+  .button {
+    width: auto;
+
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: 0;
+    text-transform: none;
+
+    color: $color-white;
+
+    border-radius: 5px;
+  }
+
+  &.tagline-button--club {
+    .button {
+      background-color: $color-club;
+
+      border-color: $color-club;
+    }
+  }
+}
+

@@ -8,7 +8,7 @@
  */
 get_header(); ?>
 
-<div class="glide">
+<div class="block-fullsize">
     <?php
         while(have_posts()) : the_post();
 
@@ -18,7 +18,7 @@ get_header(); ?>
     ?>
 </div>
 
-<div class="wrapper">
+<div class="block-wrapper">
     <?php
         $stories = new WP_Query([
             'post_type' => 'story',
@@ -38,7 +38,7 @@ get_header(); ?>
     ?>
 </div>
 
-<nav class="navigation">
+<nav class="block-navigate">
     <?php
         printf('<a class="button" href="%2$s">%1$s</a>',
             __('Все истории', 'knife-theme'),

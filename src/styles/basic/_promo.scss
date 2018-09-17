@@ -1,0 +1,67 @@
+.promo {
+  display: block;
+  position: relative;
+
+  width: 100%;
+  padding: 1.25rem 2rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.375;
+  text-decoration: none;
+
+  color: $color-white;
+  background-color: $color-primary;
+
+  border-radius: 5px;
+
+  &.promo--club {
+    color: $color-text;
+    background-color: $color-club;
+
+    border: none;
+
+    &:hover {
+      filter: brightness(120%);
+    }
+  }
+
+  &.promo--skyeng {
+    padding-right: 7rem;
+    font-size: 1.625rem;
+    font-weight: 400;
+    line-height: 1.25;
+
+    color: $color-white;
+    background: linear-gradient(to bottom, #3f76ea 0%, #3e71e0 100%);
+
+    border: none;
+
+    strong {
+      display: block;
+
+      font-weight: 700;
+    }
+
+    img {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+
+      width: 60px;
+      height: auto;
+    }
+
+    &:hover {
+      filter: brightness(120%);
+    }
+
+    @media screen and (max-width: 767px) {
+      font-size: 1.25rem;
+      line-height: 1.375;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    font-size: 1.125rem;
+  }
+}

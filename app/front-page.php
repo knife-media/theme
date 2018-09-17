@@ -14,7 +14,7 @@
 get_header(); ?>
 
 <?php if(is_active_sidebar('knife-feature')) : ?>
-    <div class="feature">
+    <div class="block-feature">
         <?php
             dynamic_sidebar('knife-feature');
         ?>
@@ -22,13 +22,13 @@ get_header(); ?>
 <?php endif; ?>
 
 <?php if(is_active_sidebar('knife-frontal')) : ?>
-    <div class="wrapper">
+    <div class="block-wrapper">
         <?php
             dynamic_sidebar('knife-frontal');
         ?>
     </div>
 
-    <nav class="navigation">
+    <nav class="block-navigate">
         <?php
             printf('<a class="button" href="%2$s">%1$s</a>',
                 __('Больше статей', 'knife-theme'),

@@ -1,18 +1,17 @@
-.content {
+.block-navigate {
   display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
-  position: relative;
+  flex-flow: row nowrap;
+  justify-content: space-around;
 
   width: 100%;
   max-width: $width-site;
 
-  margin: 0 auto;
+  margin: 1rem auto 0;
   padding-left: 1rem;
   padding-right: 1rem;
 
   @media screen and (max-width: 1023px) {
-    max-width: 100%;
+    max-width: $width-tablet;
   }
 
   @media screen and (max-width: 479px) {

@@ -34,6 +34,18 @@ class Knife_Special_Projects {
     public static function load_module() {
         // Register taxonomy
         add_action('after_setup_theme', [__CLASS__, 'register_taxonomy']);
+
+        // Update archive caption title
+        add_filter('get_the_archive_title', [__CLASS__, 'update_archive_title'], 15);
+
+
+        add_filter('single_post_title', function($title, $post) {
+            if(in_the_loop()) {
+                return '<div class="caption">' . $title . '</div>';
+            }
+
+            return $title;
+        }, 10, 2);
     }
 
 
@@ -67,6 +79,23 @@ class Knife_Special_Projects {
             'rewrite'               => ['slug' => self::$slug],
         ]);
     }
+
+
+    /**
+     * Update special post archive caption title
+     *
+     * @since 1.4
+     */
+    public static function update_archive_title($title) {
+        if(is_tax(self::$slug)) {
+            $title = sprintf('<h1 class="tagline-title tagline-title--%2$s">%1$s</h1>',
+                single_term_title('', false), esc_attr(self::$slug)
+            );
+        }
+
+        return $title;
+    }
+
 }
 
 

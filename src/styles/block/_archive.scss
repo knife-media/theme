@@ -1,9 +1,8 @@
-.wrapper {
+.block-archive {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
   position: relative;
-  z-index: 1;
 
   width: 100%;
   max-width: $width-site;

@@ -32,16 +32,16 @@
 </noscript>
 
 <header class="header">
-    <div class="header__topline topline">
-         <button class="topline__button topline__button--menu toggle toggle--menu" id="toggle-menu" role="button">
+    <div class="header__inner">
+         <button class="header__button header__button--menu toggle toggle--menu" id="toggle-menu" role="button">
             <span class="toggle__line"></span>
              <span class="toggle__line"></span>
              <span class="toggle__line"></span>
         </button>
 
-        <div class="topline__logo">
-            <a class="topline__logo-link" href="<?php echo esc_url(home_url('/')); ?>">
-                <svg class="topline__logo-image" fill="#000000" x="0" y="0" viewBox="0 0 111 31.8" xml:space="preserve">
+        <div class="header__logo">
+            <a class="header__logo-link" href="<?php echo esc_url(home_url('/')); ?>">
+                <svg class="header__logo-image" fill="#000000" x="0" y="0" viewBox="0 0 111 31.8" xml:space="preserve">
                     <g>
                         <path d="M27.4,0.6v30.7h-8V19.1H8v12.2H0V0.6h8v11.4h11.4V0.6H27.4z"/>
                         <path d="M63.4,15.9C63.4,25,58,31.8,48,31.8c-9.9,0-15.4-6.8-15.4-15.9C32.7,6.8,38.1,0,48,0
@@ -53,7 +53,7 @@
             </a>
         </div>
 
-        <nav class="topline__nav">
+        <nav class="header__nav">
             <?php
                 if(has_nav_menu('main')) :
                     wp_nav_menu([
@@ -61,7 +61,7 @@
                         'depth' => 1,
                         'echo' => true,
                         'items_wrap' => '<ul class="menu">%3$s</ul>',
-                        'container_class' => 'topline__nav-menu'
+                        'container_class' => 'header__nav-menu'
                     ]);
                 endif;
 
@@ -71,13 +71,13 @@
                         'depth' => 1,
                         'echo' => true,
                         'items_wrap' => '<ul class="social">%3$s</ul>',
-                        'container_class' => 'topline__nav-social'
+                        'container_class' => 'header__nav-social'
                     ]);
                 endif;
             ?>
         </nav>
 
-        <button class="topline__button topline__button--search toggle toggle--search" id="toggle-search" role="button">
+        <button class="header__button header__button--search toggle toggle--search" id="toggle-search" role="button">
              <span class="toggle__line"></span>
              <span class="toggle__line"></span>
             <span class="toggle__icon icon icon--search"></span>

@@ -95,8 +95,11 @@ class Knife_User_Club {
         add_action('draft_to_pending', [__CLASS__, 'notify_review']);
         add_action('auto-draft_to_pending', [__CLASS__, 'notify_review']);
 
-        // Add user post type to author archive
+        // Add clup post type to author archive
         add_action('pre_get_posts', [__CLASS__, 'update_author_archive'], 12);
+
+        // Add club post type to tags archive
+        add_action('pre_get_posts', [__CLASS__, 'update_tags_archive'], 12);
 
         // Prepend author meta to content
         add_filter('the_content', [__CLASS__, 'insert_author_link']);
@@ -133,16 +136,18 @@ class Knife_User_Club {
 
 
             foreach($roles as $name => $can_edit) {
-                if(!$role = get_role($name))
+                if(!$role = get_role($name)) {
                     continue;
+                }
 
                 $role->add_cap('read');
                 $role->add_cap('read_club_item');
                 $role->add_cap('edit_club_item');
                 $role->add_cap('edit_club_items');
 
-                if($can_edit === false)
+                if($can_edit === false) {
                     continue;
+                }
 
                 $role->add_cap('read_private static_club_items');
                 $role->add_cap('edit_others_club_items');
@@ -192,6 +197,7 @@ class Knife_User_Club {
             'has_archive'           => true,
             'exclude_from_search'   => false,
             'publicly_queryable'    => true,
+            'taxonomies'            => ['post_tag'],
             'capability_type'       => ['club_item', 'club_items'],
             'map_meta_cap'          => true
         ]);
@@ -205,7 +211,7 @@ class Knife_User_Club {
         $options = get_option(self::$option);
 
         if(is_post_type_archive(self::$slug) && array_key_exists('button_link', $options)) {
-            $button = sprintf('<div class="caption__button caption__button--club"><a class="button" href="%2$s">%1$s</a></div>',
+            $button = sprintf('<div class="tagline-button tagline-button--club"><a class="button" href="%2$s">%1$s</a></div>',
                 __('Присоединиться', 'knife-theme'),
                 esc_url($options['button_link'])
             );
@@ -224,13 +230,12 @@ class Knife_User_Club {
      */
     public static function update_archive_title($title) {
         if(is_post_type_archive(self::$slug)) {
-            $title = sprintf('<h1 class="caption__title caption__title--club">%s</h1>',
+            $title = sprintf('<h1 class="tagline-title tagline-title--club">%s</h1>',
                 post_type_archive_title('', false)
             );
         }
 
         return $title;
-
     }
 
 
@@ -280,12 +285,12 @@ class Knife_User_Club {
             return $content;
         }
 
-        $link = sprintf('<a class="outbound outbound--footer" href="%2$s"><p class="outbound__promo">%1$s</p></a>',
+        $promo_link = sprintf('<a class="promo promo--club" href="%2$s">%1$s</a>',
             __('Вы тоже можете писать в Клуб «Ножа»!<br> Попробуйте, это бесплатно и совершенно не страшно.', 'knife-theme'),
             esc_url($options['button_link'])
         );
 
-        return $content . $link;
+        return $content . $promo_link;
     }
 
 
@@ -294,6 +299,26 @@ class Knife_User_Club {
      */
     public static function update_author_archive($query) {
         if(!is_admin() && is_author() && $query->is_main_query()) {
+            $types = $query->get('post_type');
+
+            if(!is_array($types)) {
+                $types = ['post'];
+            }
+
+            $types[] = self::$slug;
+
+            $query->set('post_type', $types);
+        }
+    }
+
+
+    /**
+     * Append to tags archive loop club posts
+     *
+     * @since 1.4
+     */
+    public static function update_tags_archive($query) {
+        if(!is_admin() && $query->is_tag() && $query->is_main_query()) {
             $types = $query->get('post_type');
 
             if(!is_array($types)) {
