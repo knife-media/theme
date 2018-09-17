@@ -57,7 +57,7 @@
 
                 the_share(
                     '<div class="entry-footer__share share">', '</div>',
-                    __('Share post — bottom', 'knife-theme'), true
+                    __('Share post — bottom', 'knife-theme')
                 );
             ?>
         </div>

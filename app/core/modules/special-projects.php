@@ -160,8 +160,8 @@ class Knife_Special_Projects {
         $meta = [];
 
         foreach($_REQUEST[self::$meta] as $key => $value) {
-            if((string) $value !== '') {
-                $meta[$key] = $value;
+            if(!empty($value)) {
+                $meta[$key] = sanitize_hex_color($value);
             }
         }
 

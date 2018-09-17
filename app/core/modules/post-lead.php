@@ -79,9 +79,9 @@ class Knife_Post_Lead {
 
 
     /**
-     * Get post meta
+     * Get lead post meta
      */
-    public static function get_meta($post = 0, $lead = '') {
+    public static function get_lead($post = 0, $lead = '') {
         if(!$post = get_post($post)) {
             return $lead;
         }
