@@ -91,12 +91,13 @@
       count: function (id, count) {
         document.getElementById('share-vkontakte').outerHTML = '';
 
-        if(typeof count === 'undefined' || !count)
+        if(typeof count === 'undefined' || !count) {
           return;
+        }
 
         var links = document.querySelectorAll('.share .share__link--vkontakte');
 
-                for(var i = 0; i < links.length; i++) {
+        for(var i = 0; i < links.length; i++) {
           var child = document.createElement("span");
           child.className = 'share__count';
           child.innerHTML = count;
@@ -111,8 +112,9 @@
     Share: function (data) {
       document.getElementById('share-facebook').outerHTML = '';
 
-      if(typeof data.share === 'undefined' || !data.share.share_count)
+      if(typeof data.share === 'undefined' || !data.share.share_count) {
         return;
+      }
 
       var links = document.querySelectorAll('.share .share__link--facebook');
 

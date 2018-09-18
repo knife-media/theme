@@ -1,13 +1,15 @@
 (function() {
-  var popup = document.querySelector('.search');
-  var search = document.getElementById('toggle-search');
+  var search = document.querySelector('.search');
+  var toggle = document.getElementById('toggle-search');
 
-  if(search === null)
+  if(toggle === null) {
     return false;
+  }
 
   // Check if search id and template defined
-  if(popup === null || typeof knife_search_id === 'undefined')
-    return search.classList.add('toggle--hidden');
+  if(search === null || typeof knife_search_id === 'undefined') {
+    return toggle.classList.add('toggle--hidden');
+  }
 
   var holder = 'search-gcse';
   var detect = 'gsc-results';
@@ -15,8 +17,9 @@
   var view = null;
 
   var pushResults = function() {
-    if(document.readyState !== 'complete')
+    if(document.readyState !== 'complete') {
       return google.setOnLoadCallback(pushResults, true);
+    }
 
     // Render results to holder element
     google.search.cse.element.render({
@@ -42,8 +45,9 @@
 
     view = new observer(function(mutations) {
       for (var i = 0; i < mutations.length; ++i) {
-        if (!mutations[i].target.classList.contains(detect))
+        if (!mutations[i].target.classList.contains(detect)) {
           continue;
+        }
 
         return cloneResults();
       }
@@ -61,7 +65,7 @@
     fake.style.display = 'none';
 
     // Append fake div to base selector
-    popup.appendChild(fake);
+    search.appendChild(fake);
 
     // Prepare gcse callback
     window.__gcse = {
@@ -123,8 +127,9 @@
       }
 
       for(var i = 0; i < source.length; i++) {
-        if(!source[i].querySelector('a.gs-title') || !source[i].querySelector('.gs-snippet'))
+        if(!source[i].querySelector('a.gs-title') || !source[i].querySelector('.gs-snippet')) {
           return false;
+        }
 
         appendResults(source[i]);
       }
@@ -132,15 +137,47 @@
   }
 
 
-  // Init google cse on search layer open
-  search.addEventListener('click', function(e) {
+  // Open search layer on toggle click
+  toggle.addEventListener('click', function(e) {
     e.preventDefault();
 
-    if(this.classList.contains('toggle--expand'))
-      return false;
+    var input = document.getElementById('search-input');
 
-    if(typeof window.__gcse === 'undefined')
-      return initCSE(knife_search_id);
+    // Blur search input
+    input.blur();
+
+    // If user opens search form
+    if(!document.querySelector('.search').classList.contains('search--expand')) {
+      var offset = document.querySelector('.header').offsetTop - window.pageYOffset;
+
+      // Init CSE on first open
+      if(typeof window.__gcse === 'undefined') {
+        initCSE(knife_search_id);
+      }
+
+      // Avoid banner size
+      if(offset > 0) {
+        document.querySelector('.search').style.paddingTop = offset + 'px';
+      }
+
+      // Focus search input
+      input.focus();
+    }
+
+    search.classList.toggle('search--expand');
+    document.body.classList.toggle('is-search');
+
+    return this.classList.toggle('toggle--expand');
   });
+
+
+  // Close search on ESC
+  window.addEventListener('keydown', function(e) {
+    e = e || window.event;
+
+    if(e.keyCode === 27 && search.classList.contains('search--expand')) {
+      return toggle.click();
+    }
+  }, true);
 
 })();
