@@ -11,7 +11,13 @@
   toggle.addEventListener('click', function(e) {
     e.preventDefault();
 
+    // Close search layer if opened
+    if(document.body.classList.contains('is-search')) {
+      document.getElementById('toggle-search').click();
+    }
+
     navbar.classList.toggle('header__nav--expand');
+    document.body.classList.toggle('is-navbar');
 
     return this.classList.toggle('toggle--expand');
   });

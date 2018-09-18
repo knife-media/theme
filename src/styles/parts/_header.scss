@@ -117,11 +117,11 @@
       background-color: $color-primary;
 
       transform: translateY(-100%);
+      transition: transform .25s;
 
       &.header__nav--expand {
         opacity: 1;
         transform: translateY(0);
-        transition: transform .25s;
       }
     }
   }

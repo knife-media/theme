@@ -146,8 +146,16 @@
     // Blur search input
     input.blur();
 
+    // Close navbar if opened
+    if(document.body.classList.contains('is-navbar')) {
+      document.getElementById('toggle-menu').click();
+    }
+
+    search.classList.toggle('search--expand');
+    document.body.classList.toggle('is-search');
+
     // If user opens search form
-    if(!search.classList.contains('search--expand')) {
+    if(search.classList.contains('search--expand')) {
       var offset = document.querySelector('.header').offsetTop - window.pageYOffset;
 
       // Init CSE on first open
@@ -163,9 +171,6 @@
       // Focus search input
       input.focus();
     }
-
-    search.classList.toggle('search--expand');
-    document.body.classList.toggle('is-search');
 
     return this.classList.toggle('toggle--expand');
   });
