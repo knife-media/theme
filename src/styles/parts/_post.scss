@@ -13,6 +13,14 @@
 
   &.post--page {
     flex: 1 1 auto;
+
+    & > * {
+      padding: 2rem 1rem;
+
+      @media screen and (max-width: 767px) {
+        padding: 1rem;
+      }
+    }
   }
 
   &.post--aside {
@@ -23,23 +31,13 @@
     flex: 0 1 44rem;
     align-items: center;
 
-    .entry-content {
+    & > * {
       margin-top: 1rem;
-      padding-top: 2rem;
-
-      .figure--outer {
-        width: calc(100% + 4rem);
-        margin-left: -2rem;
-        margin-right: -2rem;
-      }
+      padding: 2rem 1rem;
 
       @media screen and (max-width: 767px) {
-        padding-top: 1rem;
+        padding: 1rem;
       }
-    }
-
-    .entry-footer {
-      margin-top: 1rem;
     }
   }
 }

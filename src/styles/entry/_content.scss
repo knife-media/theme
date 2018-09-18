@@ -4,7 +4,7 @@
   flex: 1 1 auto;
 
   width: 100%;
-  padding: 0 1rem 2rem;
+  padding: 1rem 1rem 2rem;
 
   line-height: 1.65;
   font-size: 1rem;
@@ -259,13 +259,10 @@
 
   .button {
     width: auto;
-    font-weight: 400;
-    font-size: 1rem;
-    text-transform: none;
-    letter-spacing: .5px;
-    line-height: 1;
-
     color: $color-white;
+
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
   }
 
   @media screen and (max-width: 767px) {

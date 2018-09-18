@@ -51,8 +51,8 @@ class Knife_Special_Projects {
         // Update archive caption title
         add_filter('get_the_archive_title', [__CLASS__, 'update_archive_title'], 15);
 
-        // Update single entry caption title
-        add_filter('single_post_title', [__CLASS__, 'update_single_title'], 15);
+        // Add archive title on single with special tax
+        add_filter('get_the_archive_title', [__CLASS__, 'update_single_title'], 20);
     }
 
 
@@ -211,11 +211,7 @@ class Knife_Special_Projects {
      * @since 1.4
      */
     public static function update_single_title($title) {
-        if(!is_single() || !in_the_loop()) {
-            return $title;
-        }
-
-        if(has_term('', self::$slug)) {
+        if(is_single() && has_term('', self::$slug)) {
             $terms = get_the_terms(get_queried_object_id(), self::$slug);
 
             // Check only first term

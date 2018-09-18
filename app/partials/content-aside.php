@@ -12,22 +12,22 @@
     <div class="entry-header">
         <?php
             the_info(
-                '<div class="meta">', '</div>',
+                '<div class="entry-header__meta meta">', '</div>',
                 ['author', 'date', 'category', 'type']
             );
 
             the_title(
-                '<h1 class="title">',
+                '<h1 class="entry-header__title">',
                 '</h1>'
             );
 
             the_lead(
-                '<div class="excerpt">',
+                '<div class="entry-header__excerpt excerpt">',
                 '</div>'
             );
 
             the_share(
-                '<div class="share">', '</div>',
+                '<div class="entry-header__share share">', '</div>',
                 __('Share aside — top', 'knife-theme')
             );
         ?>
@@ -43,23 +43,31 @@
         <?php
             if(comments_open()) {
                 printf(
-                    '<button class="button">%s</button>',
+                    '<button class="entry-footer__button button">%s</button>',
                     __('Комментарии', 'knife-media')
                 );
             }
         ?>
 
-        <div class="refers">
+        <div class="entry-footer__inner">
             <?php
                 the_tags(
-                    '<div class="tags">', null, '</div>'
+                    '<div class="entry-footer__tags tags">', null, '</div>'
                 );
 
                 the_share(
-                    '<div class="share">', '</div>',
-                    __('Share aside — bottom', 'knife-theme'), true
+                    '<div class="entry-footer__share share">', '</div>',
+                    __('Share aside — bottom', 'knife-theme')
                 );
             ?>
         </div>
     </div>
+
+    <?php if(get_the_archive_title()) : ?>
+        <div class="entry-caption">
+            <?php
+                the_archive_title();
+            ?>
+        </div>
+    <?php endif; ?>
 </article>

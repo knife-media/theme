@@ -3,7 +3,7 @@
   position: relative;
 
   width: 100%;
-  padding: 2rem 1rem 0;
+  padding: 2rem 1rem .5rem;
 
   color: $color-text;
   background-color: $color-white;
@@ -22,6 +22,10 @@
 
   & > :first-child {
     margin-top: 0;
+  }
+
+  & > :last-child {
+    margin-bottom: 0;
   }
 
   .entry-header__meta {

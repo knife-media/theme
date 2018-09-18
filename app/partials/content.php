@@ -43,7 +43,7 @@
         <?php
             if(comments_open()) {
                 printf(
-                    '<button class="entry-footer__button button">%s</button>',
+                    '<button class="entry-footer__button button" id="load-comments">%s</button>',
                     __('Комментарии', 'knife-media')
                 );
             }
@@ -63,11 +63,13 @@
         </div>
     </div>
 
-    <div class="entry-caption">
-        <?php
-            single_post_title();
-        ?>
-    </div>
+    <?php if(get_the_archive_title()) : ?>
+        <div class="entry-caption">
+            <?php
+                the_archive_title();
+            ?>
+        </div>
+    <?php endif; ?>
 </article>
 
 <?php get_sidebar(); ?>
