@@ -6,6 +6,19 @@
 
   .entry-footer__button {
     margin: 1rem 0;
+
+    strong {
+      display: inline-block;
+      margin-left: .5rem;
+
+      &:before {
+        content: "•";
+        display: inline-block;
+
+        margin-right: .5rem;
+        font-size: .8125rem;
+      }
+    }
   }
 
   .entry-footer__inner {

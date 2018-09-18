@@ -1,12 +1,11 @@
 <?php
 /**
-* Google custom search engine
+* Hypercomments handler
 *
-* Set google custom search app id and posts count settings
+* Set Hypercomments script options
 *
 * @package knife-theme
-* @since 1.2
-* @version 1.4
+* @since 1.4
 */
 
 
@@ -14,23 +13,21 @@ if (!defined('WPINC')) {
     die;
 }
 
-class Knife_Google_Search {
+class Knife_Comments_Loader {
     /**
      * Option to store search settings
      *
      * @access  private
      * @var     string
      */
-    private static $option = 'knife_search_id';
+    private static $option = 'knife_comments_id';
 
 
     /**
      * Init function instead of constructor
-     *
-     * @since 1.4
      */
     public static function load_module() {
-        // Include Google Custom Search js sdk
+        // Pass Hypercomments id to js
         add_action('wp_enqueue_scripts', [__CLASS__, 'inject_object'], 12);
 
         // Plugin settings
@@ -39,30 +36,26 @@ class Knife_Google_Search {
 
 
     /**
-     * Include app id for Google Custom Search API to knife-theme js script
+     * Pass Hypercomments id to js
      */
     public static function inject_object() {
-        $search_id = get_theme_mod(self::$option);
+        $comments_id = get_theme_mod(self::$option);
 
-        if(!empty($search_id)) {
-            wp_localize_script('knife-theme', 'knife_search_id', $search_id);
+        if(!empty($comments_id)) {
+            wp_localize_script('knife-theme', 'knife_comments_id', $comments_id);
         }
     }
 
 
     /**
-     * Save GCSE id to theme option
-     *
-     * Replace old settings controls within options page
-     *
-     * @since 1.4
+     * Save Hypercomments id to theme option
      */
     public static function add_customize_setting($wp_customize) {
         $wp_customize->add_setting(self::$option);
 
         $wp_customize->add_control(new WP_Customize_Control($wp_customize,
             self::$option, [
-                 'label'      => __('Google Custom Search ID', 'knife-theme'),
+                 'label'      => __('Hypercomments ID', 'knife-theme'),
                  'section'    => 'title_tagline'
              ]
         ));
@@ -74,4 +67,4 @@ class Knife_Google_Search {
 /**
  * Load current module environment
  */
-Knife_Google_Search::load_module();
+Knife_Comments_Loader::load_module();

@@ -492,6 +492,9 @@ require get_template_directory() . '/core/modules/push-service.php';
 // Custom search engine settings
 require get_template_directory() . '/core/modules/google-search.php';
 
+// Hypercomments settings
+require get_template_directory() . '/core/modules/comments-loader.php';
+
 // Custom background handler
 require get_template_directory() . '/core/modules/custom-background.php';
 

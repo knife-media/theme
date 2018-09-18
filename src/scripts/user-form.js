@@ -1,3 +1,9 @@
+/**
+ * User requests form
+ *
+ * @since 1.3
+ */
+
 (function() {
   // Check slider element and options meta
   if(typeof knife_user_form === 'undefined') {
