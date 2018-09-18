@@ -147,7 +147,7 @@
     input.blur();
 
     // If user opens search form
-    if(!document.querySelector('.search').classList.contains('search--expand')) {
+    if(!search.classList.contains('search--expand')) {
       var offset = document.querySelector('.header').offsetTop - window.pageYOffset;
 
       // Init CSE on first open
