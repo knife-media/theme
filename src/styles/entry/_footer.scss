@@ -40,6 +40,14 @@
     }
   }
 
+  .entry-footer__comments {
+    display: block;
+
+    height: 0;
+    overflow: hidden;
+    transition: height .5s;
+  }
+
   .entry-footer__tags {
     padding: .75rem 2rem;
   }

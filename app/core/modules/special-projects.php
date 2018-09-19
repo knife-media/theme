@@ -211,7 +211,11 @@ class Knife_Special_Projects {
      * @since 1.4
      */
     public static function update_single_title($title) {
-        if(is_single() && has_term('', self::$slug)) {
+        if(!is_single()) {
+            return $title;
+        }
+
+        if(has_term('', self::$slug)) {
             $terms = get_the_terms(get_queried_object_id(), self::$slug);
 
             // Check only first term
