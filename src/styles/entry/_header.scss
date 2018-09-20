@@ -9,6 +9,7 @@
   background-color: $color-white;
 
   transform: translate3d(0, 0, 0,);
+  will-change: transform;
 
   & > * {
     width: $width-content;

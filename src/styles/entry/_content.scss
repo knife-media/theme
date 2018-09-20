@@ -15,6 +15,7 @@
   background-color: $color-white;
 
   transform: translate3d(0, 0, 0);
+  will-change: transform;
 
   -moz-osx-font-smoothing: auto;
   -webkit-font-smoothing: auto;

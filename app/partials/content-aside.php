@@ -43,7 +43,7 @@
         <?php
             if(comments_open()) {
                 printf(
-                    '<button class="entry-footer__button button">%s</button>',
+                    '<button class="entry-footer__button button" id="load-comments">%s</button>',
                     __('Комментарии', 'knife-media')
                 );
             }
