@@ -50,13 +50,7 @@
   button.addEventListener('click', function(e) {
     e.preventDefault();
 
-    var height = 0;
-
-    if(!document.body.classList.contains('is-comments')) {
-      height = widget.scrollHeight;
-    }
-
-    document.body.classList.toggle('is-comments');
-    return widget.style.height = height + 'px';
+    widget.classList.toggle('comments--expand');
+    widget.style.height = widget.scrollHeight + 'px';
   });
 })();

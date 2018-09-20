@@ -35,26 +35,36 @@
       width: 100%;
       max-width: calc(#{$width-content} + 4rem);
       margin: 1.5rem auto;
+      padding: .75rem 2rem;
 
       background-color: $color-sheet;
+
+      @media screen and (max-width: 767px) {
+        margin: 1rem auto;
+        padding: .75rem 1rem;
+      }
     }
   }
 
   .entry-footer__comments {
-    display: block;
+    display: none;
 
     height: 0;
+    padding: 0 1rem;
     overflow: hidden;
     transition: height .5s;
-  }
 
-  .entry-footer__tags {
-    padding: .75rem 2rem;
+    &.comments--expand {
+      display: block;
+    }
+
+    @media screen and (max-width: 767px) {
+      padding: 0;
+    }
   }
 
   .entry-footer__share {
     justify-content: space-between;
-    padding: .75rem 2rem;
 
     .share__link {
       flex: 1 1 auto;

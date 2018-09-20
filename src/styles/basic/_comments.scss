@@ -2,13 +2,14 @@
   display: block;
 
   width: 100%;
-  padding-left: 1rem;
-  padding-right: 1rem;
-
   background-color: $color-sheet;
 
   .hcc {
     font-family: $font-regular, sans-serif;
+  }
+
+  .hc__right {
+    padding: 0 16px;
   }
 
   .hc__menu__comment {
@@ -17,6 +18,10 @@
 
   .hc__menu__line {
     display: none;
+  }
+
+  .hc__reply__box__textarea {
+    padding-right: 9px
   }
 
   .hc__form__send {
