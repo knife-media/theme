@@ -16,13 +16,6 @@
   _hcwp = window._hcwp || [];
 
   _hcwp.push({
-    widget: "Bloggerstream",
-    widget_id: knife_comments_id,
-    selector: "#load-comments",
-    label: button.textContent + "<strong>{%COUNT%}</strong>"
-  });
-
-  _hcwp.push({
     widget: "Stream",
     widget_id: knife_comments_id
   });
@@ -51,6 +44,5 @@
     e.preventDefault();
 
     widget.classList.toggle('comments--expand');
-    widget.style.height = widget.scrollHeight + 'px';
   });
 })();

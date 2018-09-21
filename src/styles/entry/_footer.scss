@@ -38,6 +38,7 @@
       padding: .75rem 2rem;
 
       background-color: $color-sheet;
+      animation: fade-in .5s;
 
       @media screen and (max-width: 767px) {
         margin: 1rem auto;
@@ -49,10 +50,7 @@
   .entry-footer__comments {
     display: none;
 
-    height: 0;
     padding: 0 1rem;
-    overflow: hidden;
-    transition: height .5s;
 
     &.comments--expand {
       display: block;
