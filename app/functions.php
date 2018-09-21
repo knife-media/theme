@@ -222,7 +222,7 @@ add_filter('body_class', function($wp_classes, $extra_classes) {
         $classes[] = 'is-page';
     }
 
-    if(is_singular('post') {
+    if(is_singular('post')) {
         if(has_post_format()) {
             $classes[] = 'is-' . get_post_format();
         } else {
