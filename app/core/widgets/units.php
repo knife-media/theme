@@ -148,7 +148,7 @@ class Knife_Widget_Units extends WP_Widget {
             '<p><label for="%1$s">%3$s</label> <input class="tiny-text" id="%1$s" name="%2$s" type="number" min="2" max="10" value="%4$s"> <small>%5$s</small></p>',
             esc_attr($this->get_field_id('posts_per_page')),
             esc_attr($this->get_field_name('posts_per_page')),
-            __('Колиечство записей:', 'knife-theme'),
+            __('Количество записей:', 'knife-theme'),
             esc_attr($instance['posts_per_page']),
             __('(от 2 до 10)', 'knife-theme')
         );

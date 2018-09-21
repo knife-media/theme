@@ -202,20 +202,8 @@ add_action('wp_footer', function() {
 add_filter('body_class', function($wp_classes, $extra_classes) {
     $classes = [];
 
-    if(is_front_page()) {
-        $classes[] = 'is-front';
-    }
-
-    if(is_singular('post') && !has_post_format()) {
-        $classes[] = 'is-post';
-    }
-
-    if(is_singular('post') && has_post_format()) {
-        $classes[] = 'is-' . get_post_format();
-    }
-
-    if(is_singular('page') && !is_front_page()) {
-        $classes[] = 'is-page';
+    if(is_single()) {
+        $classes[] = 'is-single';
     }
 
     if(is_archive()) {
@@ -224,6 +212,22 @@ add_filter('body_class', function($wp_classes, $extra_classes) {
 
     if(is_admin_bar_showing()) {
         $classes[] = 'is-adminbar';
+    }
+
+    if(is_front_page()) {
+        $classes[] = 'is-front';
+    }
+
+    if(is_singular('page') && !is_front_page()) {
+        $classes[] = 'is-page';
+    }
+
+    if(is_singular('post') {
+        if(has_post_format()) {
+            $classes[] = 'is-' . get_post_format();
+        } else {
+            $classes[] = 'is-post';
+        }
     }
 
     return $classes;
