@@ -12,7 +12,7 @@ var path = {
   assets: 'app/assets/'
 }
 
-gulp.task('styles', function() {
+gulp.task('styles', function(done) {
   gulp.src([path.source + '/styles/app.scss'])
     .pipe(plumber())
     .pipe(sassGlob())
@@ -21,14 +21,18 @@ gulp.task('styles', function() {
     .pipe(concat('styles.min.css'))
     .pipe(cleanCss({compatibility: 'ie8'}))
     .pipe(gulp.dest(path.assets))
+
+  done();
 })
 
-gulp.task('scripts', function() {
+gulp.task('scripts', function(done) {
   gulp.src([path.source + '/scripts/*.js'])
     .pipe(plumber())
     .pipe(uglify())
     .pipe(concat('scripts.min.js'))
     .pipe(gulp.dest(path.assets))
+
+  done();
 })
 
 gulp.task('vendor', function() {
@@ -52,7 +56,7 @@ gulp.task('fonts', function() {
 })
 
 gulp.task('watch', function() {
-  gulp.watch(path.source + '/**/*', ['styles', 'scripts']);
+  gulp.watch('./src/**/*', gulp.series('styles', 'scripts'));
 })
 
-gulp.task('default', ['styles', 'scripts', 'vendor', 'images', 'fonts', 'watch', 'video']);
+gulp.task('default', gulp.parallel('styles', 'scripts', 'vendor', 'images', 'fonts', 'video', 'watch'));

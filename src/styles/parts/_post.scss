@@ -14,7 +14,7 @@
   &.post--page {
     flex: 1 1 auto;
 
-    & > * {
+    .entry-content {
       padding: 2rem 1rem;
 
       @media screen and (max-width: 767px) {
@@ -33,6 +33,10 @@
 
     & > * {
       margin-top: 1rem;
+    }
+
+    .entry-header,
+    .entry-content {
       padding: 2rem 1rem;
 
       @media screen and (max-width: 767px) {

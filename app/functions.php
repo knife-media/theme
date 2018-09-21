@@ -202,15 +202,19 @@ add_action('wp_footer', function() {
 add_filter('body_class', function($wp_classes, $extra_classes) {
     $classes = [];
 
-    if(is_front_page())
-        $classes[] = 'is-home';
+    if(is_front_page()) {
+        $classes[] = 'is-front';
+    }
 
-    // TODO: remove after moving cards to post type #34
-    if(is_singular('post') && !has_post_format('chat')) {
+    if(is_singular('post') && !has_post_format()) {
         $classes[] = 'is-post';
     }
 
-    if(is_singular('page')) {
+    if(is_singular('post') && has_post_format()) {
+        $classes[] = 'is-' . get_post_format();
+    }
+
+    if(is_singular('page') && !is_front_page()) {
         $classes[] = 'is-page';
     }
 
@@ -219,7 +223,7 @@ add_filter('body_class', function($wp_classes, $extra_classes) {
     }
 
     if(is_admin_bar_showing()) {
-        $classes[] = 'admin-bar';
+        $classes[] = 'is-adminbar';
     }
 
     return $classes;
@@ -323,20 +327,6 @@ add_filter('gettext_with_context', function($translation, $text, $context, $doma
 
     return str_replace(array_keys($names), array_values($names), $text);
 }, 10, 4);
-
-
-// We need to wrap the content with card tag if it in chat post format
-add_filter('the_content', function($content) {
-    if(get_post_format() !== 'chat') {
-        return $content;
-    }
-
-    if(has_shortcode($content, 'card')) {
-        return $content;
-    }
-
-    return '<div class="post__card">' . $content . '</div>';
-});
 
 
 // Remove annoying [...] in excerpts
