@@ -60,6 +60,8 @@
                     __('Share aside — bottom', 'knife-theme')
                 );
             ?>
+
+            <script id="8lFRgIJDfYd9YGBg">if (window.relap) window.relap.ar('8lFRgIJDfYd9YGBg');</script>
         </div>
     </div>
 
