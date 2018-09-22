@@ -12,6 +12,11 @@
 
   color: $color-white;
 
+  .widget-single__inner {
+    display: block;
+    width: 100%;
+  }
+
   .widget-single__head {
     display: block;
     position: absolute;
