@@ -12,37 +12,46 @@
     return false;
   }
 
-
-  _hcwp = window._hcwp || [];
-
-  _hcwp.push({
-    widget: "Stream",
-    widget_id: knife_comments_id
-  });
+  var loadComments = function(label) {
+    _hcwp = window._hcwp || [];
 
 
-  // Add comments widget to entry-footer
-  var widget = document.createElement('div');
-  widget.classList.add('entry-footer__comments', 'comments');
-  widget.id = 'hypercomments_widget';
-  var i = document.querySelector('.entry-footer__inner');
-  i.insertBefore(widget, i.firstChild);
+    var widget = document.createElement('div');
+    widget.classList.add('entry-footer__comments');
+    widget.id = 'hypercomments_widget';
+    var i = document.querySelector('.entry-footer__inner');
+    i.insertBefore(widget, i.firstChild);
 
 
-  // Append js script
-  var script = document.createElement("script");
-  script.type = "text/javascript";
-  script.async = true;
-  script.src = "https://w.hypercomments.com/widget/hc/" + knife_comments_id + "/ru/widget.js";
+    _hcwp.push({
+      widget: "Stream",
+      widget_id: knife_comments_id,
+      callback: function(app, init) {
+        button.innerHTML = label;
+        widget.classList.add('comments');
+      }
+    });
 
-  var s = document.getElementsByTagName("script")[0];
-  s.parentNode.insertBefore(script, s.nextSibling);
+    // Append js script
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.async = true;
+    script.src = "https://w.hypercomments.com/widget/hc/" + knife_comments_id + "/ru/widget.js";
+
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(script, s.nextSibling);
+  }
 
 
   // Toggle comments on load button click
   button.addEventListener('click', function(e) {
     e.preventDefault();
 
-    widget.classList.toggle('comments--expand');
+    var label = button.textContent;
+    button.innerHTML = '<span class="icon icon--loop"></span>';
+
+//    if(document.getElementById('hypercomments_widget')
+
+    return loadComments(label);
   });
 })();
