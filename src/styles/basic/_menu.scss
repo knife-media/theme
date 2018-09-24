@@ -76,10 +76,12 @@
     }
 
     @media screen and (max-width: 1199px) {
+      margin: .125rem;
       font-size: 1rem;
     }
 
     @media screen and (max-width: 1023px) {
+      margin: .25rem;
       font-size: .875rem;
     }
   }

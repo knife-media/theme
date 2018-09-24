@@ -25,6 +25,7 @@
                 $related = new WP_Query([
                     'post_type' => 'post',
                     'post__not_in' => [$post->ID],
+                    'category__not_in' => 620,
                     'posts_per_page' => 2
                 ]);
 

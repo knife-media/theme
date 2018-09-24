@@ -12,6 +12,11 @@
 
   color: $color-white;
 
+  .widget-single__inner {
+    display: block;
+    width: 100%;
+  }
+
   .widget-single__head {
     display: block;
     position: absolute;
@@ -58,8 +63,7 @@
     z-index: -1;
 
     width: 100%;
-    height: 100%;
-    margin-top: 1px;
+    height: calc(100% + 1px);
     padding: 0;
     overflow: hidden;
 
@@ -75,7 +79,7 @@
       height: 100%;
 
       object-fit: cover;
-      object-position: center;
+      object-position: right;
 
       transition: opacity .25s;
 

@@ -18,7 +18,7 @@
       },
       "attrs": [],
       "properties": {
-        "order": 151,
+        "order": 477,
         "id": 13,
         "name": "next",
         "prevSize": 32,
@@ -45,7 +45,7 @@
       },
       "attrs": [],
       "properties": {
-        "order": 152,
+        "order": 478,
         "id": 14,
         "name": "prev",
         "prevSize": 32,
@@ -74,7 +74,7 @@
         {}
       ],
       "properties": {
-        "order": 153,
+        "order": 479,
         "id": 0,
         "name": "odnoklassniki",
         "prevSize": 32,
@@ -103,7 +103,7 @@
         {}
       ],
       "properties": {
-        "order": 154,
+        "order": 480,
         "id": 1,
         "name": "notify",
         "prevSize": 32,
@@ -132,7 +132,7 @@
         {}
       ],
       "properties": {
-        "order": 155,
+        "order": 481,
         "id": 2,
         "name": "search",
         "prevSize": 32,
@@ -161,7 +161,7 @@
         {}
       ],
       "properties": {
-        "order": 156,
+        "order": 482,
         "id": 3,
         "name": "vkontakte",
         "prevSize": 32,
@@ -190,7 +190,7 @@
         {}
       ],
       "properties": {
-        "order": 157,
+        "order": 483,
         "id": 4,
         "name": "facebook",
         "prevSize": 32,
@@ -219,7 +219,7 @@
         {}
       ],
       "properties": {
-        "order": 158,
+        "order": 484,
         "id": 5,
         "name": "instagram",
         "prevSize": 32,
@@ -248,7 +248,7 @@
         {}
       ],
       "properties": {
-        "order": 159,
+        "order": 485,
         "id": 6,
         "name": "twitter",
         "prevSize": 32,
@@ -277,7 +277,7 @@
         {}
       ],
       "properties": {
-        "order": 160,
+        "order": 486,
         "id": 7,
         "name": "telegram",
         "prevSize": 32,
@@ -286,6 +286,35 @@
       "setIdx": 1,
       "setId": 4,
       "iconIdx": 9
+    },
+    {
+      "icon": {
+        "paths": [
+          "M442.095 3.721c-169.802 23.001-319.535 132.82-393.725 288.416-22.099 46.453-38.11 100.799-44.875 152.889-4.51 34.501-4.51 99.445 0 133.948 22.099 169.577 128.084 317.28 281.876 393.049 72.611 35.855 142.968 51.865 226.628 51.865s154.017-16.010 226.628-51.865c137.104-67.65 237.227-193.029 272.405-341.634 12.854-54.345 16.687-129.212 9.471-185.362-22.099-169.577-128.084-317.28-281.876-393.049-50.963-25.030-103.955-41.266-159.654-48.483-33.149-4.285-104.182-4.059-136.879 0.225zM391.357 197.426c30.894 10.599 59.081 20.746 62.915 22.55s59.758 21.648 124.252 43.748l117.26 40.365 0.676 56.15 0.451 56.375-121.77 105.76c-66.974 58.179-121.77 106.888-121.77 108.24s54.345 21.197 120.643 43.973l120.643 41.493v55.699c0 30.894-0.902 55.924-2.030 55.924-3.157 0-119.064-40.139-123.574-42.845-2.255-1.353-56.826-20.52-121.319-42.62l-117.26-40.365-0.676-56.15-0.451-56.375 121.77-105.76c66.974-58.179 121.77-106.888 121.77-108.24s-54.345-21.197-120.643-43.973l-120.643-41.493v-55.924c0-30.668 0.902-55.699 1.804-55.699 1.128 0 27.060 8.569 57.954 19.168z"
+        ],
+        "attrs": [
+          {}
+        ],
+        "isMulticolor": false,
+        "isMulticolor2": false,
+        "grid": 16,
+        "tags": [
+          "zen"
+        ]
+      },
+      "attrs": [
+        {}
+      ],
+      "properties": {
+        "order": 476,
+        "id": 18,
+        "prevSize": 32,
+        "code": 59663,
+        "name": "zen"
+      },
+      "setIdx": 1,
+      "setId": 4,
+      "iconIdx": 10
     },
     {
       "icon": {
@@ -308,7 +337,7 @@
         {}
       ],
       "properties": {
-        "order": 161,
+        "order": 487,
         "id": 8,
         "prevSize": 32,
         "code": 59649,
@@ -316,7 +345,7 @@
       },
       "setIdx": 1,
       "setId": 4,
-      "iconIdx": 10
+      "iconIdx": 11
     },
     {
       "icon": {
@@ -339,7 +368,7 @@
         {}
       ],
       "properties": {
-        "order": 162,
+        "order": 488,
         "id": 9,
         "name": "right",
         "prevSize": 32,
@@ -347,7 +376,7 @@
       },
       "setIdx": 1,
       "setId": 4,
-      "iconIdx": 11
+      "iconIdx": 12
     },
     {
       "icon": {
@@ -371,7 +400,7 @@
         {}
       ],
       "properties": {
-        "order": 163,
+        "order": 489,
         "id": 10,
         "name": "loop",
         "prevSize": 32,
@@ -379,7 +408,7 @@
       },
       "setIdx": 1,
       "setId": 4,
-      "iconIdx": 12
+      "iconIdx": 13
     },
     {
       "icon": {
@@ -404,7 +433,7 @@
         {}
       ],
       "properties": {
-        "order": 164,
+        "order": 490,
         "id": 11,
         "prevSize": 32,
         "code": 59659,
@@ -412,7 +441,7 @@
       },
       "setIdx": 1,
       "setId": 4,
-      "iconIdx": 13
+      "iconIdx": 14
     },
     {
       "icon": {
@@ -436,7 +465,7 @@
         {}
       ],
       "properties": {
-        "order": 165,
+        "order": 491,
         "id": 12,
         "name": "done",
         "prevSize": 32,
@@ -444,7 +473,7 @@
       },
       "setIdx": 1,
       "setId": 4,
-      "iconIdx": 14
+      "iconIdx": 15
     }
   ],
   "height": 1024,
@@ -466,7 +495,7 @@
       "metadata": {
         "fontFamily": "knife-icons",
         "majorVersion": 1,
-        "minorVersion": 0,
+        "minorVersion": 5,
         "fontURL": "https://knife.media",
         "license": "MIT",
         "licenseURL": "https://opensource.org/licenses/MIT",
@@ -487,7 +516,9 @@
       "classSelector": ".icon",
       "includeMetadata": false,
       "cssVars": false,
-      "cssVarsFormat": "scss"
+      "cssVarsFormat": "scss",
+      "noie8": true,
+      "ie7": false
     },
     "imagePref": {
       "prefix": "icon-",

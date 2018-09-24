@@ -7,6 +7,10 @@
   width: auto;
   max-width: 100%;
 
+  & > * {
+    max-width: 100%;
+  }
+
   .figure__caption {
     width: $width-content;
     max-width: 100%;
