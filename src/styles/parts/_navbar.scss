@@ -60,6 +60,8 @@
 
 body.is-navbar {
   @media screen and (max-width: 1023px) {
+    overflow: hidden;
+
     &:after {
       content: "";
       position: fixed;
