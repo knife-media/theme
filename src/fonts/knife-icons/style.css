@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'knife-icons';
   src:
-    url('fonts/knife-icons/knife-icons.ttf?n6slqm') format('truetype'),
-    url('fonts/knife-icons/knife-icons.woff?n6slqm') format('woff'),
-    url('fonts/knife-icons/knife-icons.svg?n6slqm#knife-icons') format('svg');
+    url('fonts/knife-icons.ttf?n6slqm') format('truetype'),
+    url('fonts/knife-icons.woff?n6slqm') format('woff'),
+    url('fonts/knife-icons.svg?n6slqm#knife-icons') format('svg');
   font-weight: normal;
   font-style: normal;
 }
