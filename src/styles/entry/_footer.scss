@@ -41,12 +41,15 @@
   }
 
   .entry-footer__comments {
+    display: none;
+
     padding: 0 1rem;
     opacity: 0;
-    transition: opacity 1s;
 
     &.comments {
-      opacity: 1;
+      display: block;
+
+      animation: fade-in .5s linear forwards;
     }
 
     @media screen and (max-width: 767px) {

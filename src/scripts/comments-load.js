@@ -12,25 +12,27 @@
     return false;
   }
 
-  var loadComments = function(label) {
+  // Declare global variables
+  var widget = null;
+
+  // Widget first load
+  var loadWidget = function(callback) {
     _hcwp = window._hcwp || [];
-
-
-    var widget = document.createElement('div');
-    widget.classList.add('entry-footer__comments');
-    widget.id = 'hypercomments_widget';
-    var i = document.querySelector('.entry-footer__inner');
-    i.insertBefore(widget, i.firstChild);
-
 
     _hcwp.push({
       widget: "Stream",
       widget_id: knife_comments_id,
-      callback: function(app, init) {
-        button.innerHTML = label;
-        widget.classList.add('comments');
-      }
+      callback: callback
     });
+
+    widget = document.createElement('div');
+    widget.classList.add('entry-footer__comments');
+    widget.id = 'hypercomments_widget';
+
+    var footer = button.nextElementSibling;
+    if(footer !== null) {
+      footer.insertBefore(widget, footer.firstChild);
+    }
 
     // Append js script
     var script = document.createElement("script");
@@ -47,11 +49,17 @@
   button.addEventListener('click', function(e) {
     e.preventDefault();
 
-    var label = button.textContent;
-    button.innerHTML = '<span class="icon icon--loop"></span>';
+    // If widget not loaded yet
+    if(widget === null) {
+      var label = button.textContent;
+      button.innerHTML = '<span class="icon icon--loop"></span>';
 
-//    if(document.getElementById('hypercomments_widget')
+      return loadWidget(function() {
+        button.innerHTML = label;
+        widget.classList.add('comments');
+      });
+    }
 
-    return loadComments(label);
+    return widget.classList.toggle('comments');
   });
 })();
