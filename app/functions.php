@@ -487,7 +487,10 @@ require get_template_directory() . '/core/modules/push-service.php';
 require get_template_directory() . '/core/modules/google-search.php';
 
 // Hypercomments settings
-require get_template_directory() . '/core/modules/comments-loader.php';
+require get_template_directory() . '/core/modules/comments-load.php';
+
+// Relap links settings
+require get_template_directory() . '/core/modules/relap-links.php';
 
 // Custom background handler
 require get_template_directory() . '/core/modules/custom-background.php';

@@ -34,8 +34,9 @@ class Knife_Theme_Filters {
      */
     public static function update_archive_item($post, $query) {
         $size = function($current, $found) use (&$args) {
-            if($found < 3 || $current % 5 === 3 || $current % 5 === 4)
+            if($found < 3 || $current % 5 === 3 || $current % 5 === 4) {
                 return 'double';
+            }
 
             return 'triple';
         };

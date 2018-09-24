@@ -14,12 +14,15 @@
 
   .widget-club__head {
     display: flex;
+    align-items: center;
+    align-self: flex-start;
     position: relative;
     cursor: pointer;
     z-index: 2;
 
     width: 100%;
-    padding: .725rem 1.25rem;
+    height: 2rem;
+    padding: 0 1.25rem;
 
     font-size: .5625rem;
     font-weight: 700;

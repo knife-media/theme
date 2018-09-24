@@ -40,16 +40,28 @@
     }
   }
 
+  .entry-footer__relap {
+    padding: 0 2rem;
+    background-color: transparent;
+
+    .relap-knife_media__top-container {
+      animation: fade-in .25s linear forwards;
+    }
+
+    @media screen and (max-width: 767px) {
+      padding: 0;
+    }
+  }
+
   .entry-footer__comments {
     display: none;
 
     padding: 0 1rem;
-    opacity: 0;
 
     &.comments {
       display: block;
 
-      animation: fade-in .5s linear forwards;
+      animation: fade-in .25s linear forwards;
     }
 
     @media screen and (max-width: 767px) {

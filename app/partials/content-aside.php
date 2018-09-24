@@ -60,10 +60,6 @@
                     __('Share aside — bottom', 'knife-theme')
                 );
             ?>
-
-            <div class="entry-footer__relap relap">
-                <script id="8lFRgIJDfYd9YGBg">if (window.relap) window.relap.ar('8lFRgIJDfYd9YGBg');</script>
-            </div>
         </div>
     </div>
 

@@ -13,14 +13,14 @@ if (!defined('WPINC')) {
     die;
 }
 
-class Knife_Comments_Loader {
+class Knife_Comments_Load {
     /**
      * Option to store search settings
      *
      * @access  private
      * @var     string
      */
-    private static $option = 'knife_comments_id';
+    private static $comments_id = 'knife_comments_id';
 
 
     /**
@@ -39,7 +39,7 @@ class Knife_Comments_Loader {
      * Pass Hypercomments id to js
      */
     public static function inject_object() {
-        $comments_id = get_theme_mod(self::$option);
+        $comments_id = get_theme_mod(self::$comments_id);
 
         if(!empty($comments_id)) {
             wp_localize_script('knife-theme', 'knife_comments_id', $comments_id);
@@ -51,10 +51,10 @@ class Knife_Comments_Loader {
      * Save Hypercomments id to theme option
      */
     public static function add_customize_setting($wp_customize) {
-        $wp_customize->add_setting(self::$option);
+        $wp_customize->add_setting(self::$comments_id);
 
         $wp_customize->add_control(new WP_Customize_Control($wp_customize,
-            self::$option, [
+            self::$comments_id, [
                  'label'      => __('Hypercomments ID', 'knife-theme'),
                  'section'    => 'title_tagline'
              ]
@@ -67,4 +67,4 @@ class Knife_Comments_Loader {
 /**
  * Load current module environment
  */
-Knife_Comments_Loader::load_module();
+Knife_Comments_Load::load_module();

@@ -35,13 +35,11 @@
     }
 
     // Append js script
-    var script = document.createElement("script");
-    script.type = "text/javascript";
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
     script.async = true;
-    script.src = "https://w.hypercomments.com/widget/hc/" + knife_comments_id + "/ru/widget.js";
-
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(script, s.nextSibling);
+    script.src = 'https://w.hypercomments.com/widget/hc/' + knife_comments_id + '/ru/widget.js';
+    document.head.appendChild(script);
   }
 
 
