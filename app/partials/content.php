@@ -39,28 +39,28 @@
         ?>
     </div>
 
-    <div class="entry-footer">
-        <?php
-            if(comments_open()) {
-                printf(
-                    '<button class="entry-footer__button button" id="load-comments">%s</button>',
-                    __('Комментарии', 'knife-media')
-                );
-            }
-        ?>
-
-        <div class="entry-footer__inner">
+    <?php if(comments_open()) : ?>
+        <div class="entry-comments">
             <?php
-                the_tags(
-                    '<div class="entry-footer__tags tags">', null, '</div>'
-                );
-
-                the_share(
-                    '<div class="entry-footer__share share">', '</div>',
-                    __('Share post — bottom', 'knife-theme')
+                printf(
+                    '<button class="entry-comments__button button" id="load-comments">%s</button>',
+                    __('Комментарии', 'knife-media')
                 );
             ?>
         </div>
+    <?php endif; ?>
+
+    <div class="entry-footer">
+        <?php
+            the_tags(
+                '<div class="entry-footer__tags tags">', null, '</div>'
+            );
+
+            the_share(
+                '<div class="entry-footer__share share">', '</div>',
+                __('Share post — bottom', 'knife-theme')
+            );
+        ?>
     </div>
 
     <?php if(get_the_archive_title()) : ?>

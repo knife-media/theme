@@ -3,40 +3,24 @@
   position: relative;
 
   width: 100%;
+  overflow: hidden;
 
-  .entry-footer__button {
-    margin: 1rem 0;
+  color: $color-text;
+  background-color: $color-white;
 
-    .icon--loop {
-      display: block;
+  will-change: transform;
 
-      line-height: 1.125;
-      animation: rotate .5s linear infinite;
-    }
-  }
-
-  .entry-footer__inner {
-    display: block;
-    position: relative;
-
+  & > * {
     width: 100%;
-    overflow: hidden;
+    max-width: calc(#{$width-content} + 4rem);
+    margin: 1.5rem auto;
+    padding: .75rem 2rem;
 
-    color: $color-text;
-    background-color: $color-white;
+    background-color: $color-sheet;
 
-    & > * {
-      width: 100%;
-      max-width: calc(#{$width-content} + 4rem);
-      margin: 1.5rem auto;
-      padding: .75rem 2rem;
-
-      background-color: $color-sheet;
-
-      @media screen and (max-width: 767px) {
-        margin: 1rem auto;
-        padding: .75rem 1rem;
-      }
+    @media screen and (max-width: 767px) {
+      margin: 1rem auto;
+      padding: .5rem 1rem;
     }
   }
 
@@ -45,27 +29,15 @@
     background-color: transparent;
 
     .relap-knife_media__top-container {
-      animation: fade-in .25s linear forwards;
+      animation: fade-in .5s linear forwards;
+    }
+
+    .relap-knife_media__top-container {
+      margin-top: 0 !important;
     }
 
     @media screen and (max-width: 767px) {
-      padding: 0;
-    }
-  }
-
-  .entry-footer__comments {
-    display: none;
-
-    padding: 0 1rem;
-
-    &.comments {
-      display: block;
-
-      animation: fade-in .25s linear forwards;
-    }
-
-    @media screen and (max-width: 767px) {
-      padding: 0;
+      padding: 0 1rem;
     }
   }
 

@@ -13,7 +13,7 @@
   }
 
   // Declare global variables
-  var widget = null;
+  var comments = null;
 
   // Widget first load
   var loadWidget = function(callback) {
@@ -25,14 +25,16 @@
       callback: callback
     });
 
-    widget = document.createElement('div');
-    widget.classList.add('entry-footer__comments');
-    widget.id = 'hypercomments_widget';
+    // Create comments outer element
+    var widget = document.createElement('div');
+    widget.classList.add('entry-comments__widget');
+    button.parentNode.appendChild(widget);
 
-    var footer = button.nextElementSibling;
-    if(footer !== null) {
-      footer.insertBefore(widget, footer.firstChild);
-    }
+    // Create comments widget with hypercomments id
+    comments = document.createElement('div');
+    comments.id = 'hypercomments_widget';
+    comments.classList.add('comments');
+    widget.appendChild(comments);
 
     // Append js script
     var script = document.createElement('script');
@@ -47,17 +49,17 @@
   button.addEventListener('click', function(e) {
     e.preventDefault();
 
-    // If widget not loaded yet
-    if(widget === null) {
+    // If comments not loaded yet
+    if(comments === null) {
       var label = button.textContent;
       button.innerHTML = '<span class="icon icon--loop"></span>';
 
       return loadWidget(function() {
         button.innerHTML = label;
-        widget.classList.add('comments');
+        comments.classList.add('comments--expand');
       });
     }
 
-    return widget.classList.toggle('comments');
+    return comments.classList.toggle('comments--expand');
   });
 })();

@@ -39,13 +39,11 @@
     </div>
 
     <div class="entry-footer">
-        <div class="entry-footer__inner">
-            <?php
-                the_share(
-                    '<div class="entry-footer__share share">', '</div>',
-                    __('Share select — bottom', 'knife-theme')
-                );
-            ?>
-        </div>
+        <?php
+            the_share(
+                '<div class="entry-footer__share share">', '</div>',
+                __('Share select — bottom', 'knife-theme')
+            );
+        ?>
     </div>
 </article>

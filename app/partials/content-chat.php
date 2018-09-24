@@ -38,18 +38,16 @@
     ?>
 
     <div class="entry-footer">
-        <div class="entry-footer__inner">
-            <?php
-                the_tags(
-                    '<div class="entry-footer__tags tags">', null, '</div>'
-                );
+        <?php
+            the_tags(
+                '<div class="entry-footer__tags tags">', null, '</div>'
+            );
 
-                the_share(
-                    '<div class="entry-footer__share share">', '</div>',
-                    __('Share cards — bottom', 'knife-theme')
-                );
-            ?>
-        </div>
+            the_share(
+                '<div class="entry-footer__share share">', '</div>',
+                __('Share cards — bottom', 'knife-theme')
+            );
+        ?>
     </div>
 
     <?php if(get_the_archive_title()) : ?>
