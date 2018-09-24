@@ -8,7 +8,6 @@
 ?>
 
 <div class="news">
-
     <div class="news__item">
         <footer class="news__footer">
             <?php
@@ -25,5 +24,4 @@
             ?>
         </footer>
     </div>
-
 </div>
