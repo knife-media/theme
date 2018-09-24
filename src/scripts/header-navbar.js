@@ -1,6 +1,6 @@
 (function() {
   var toggle = document.getElementById('toggle-menu');
-  var navbar = document.querySelector('.header__nav');
+  var navbar = document.querySelector('.navbar');
 
   if(toggle === null) {
     return false;
@@ -16,7 +16,7 @@
       document.getElementById('toggle-search').click();
     }
 
-    navbar.classList.toggle('header__nav--expand');
+    navbar.classList.toggle('navbar--expand');
     document.body.classList.toggle('is-navbar');
 
     return this.classList.toggle('toggle--expand');
@@ -27,7 +27,7 @@
   window.addEventListener('keydown', function(e) {
     e = e || window.event;
 
-    if(e.keyCode === 27 && navbar.classList.contains('header__nav--expand')) {
+    if(e.keyCode === 27 && navbar.classList.contains('navbar--expand')) {
       return toggle.click();
     }
   }, true);

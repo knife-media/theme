@@ -53,7 +53,7 @@
             </a>
         </div>
 
-        <nav class="header__nav">
+        <nav class="header__navbar navbar">
             <?php
                 if(has_nav_menu('main')) :
                     wp_nav_menu([
@@ -61,7 +61,7 @@
                         'depth' => 1,
                         'echo' => true,
                         'items_wrap' => '<ul class="menu">%3$s</ul>',
-                        'container_class' => 'header__nav-menu'
+                        'container_class' => 'navbar__menu'
                     ]);
                 endif;
 
@@ -71,7 +71,7 @@
                         'depth' => 1,
                         'echo' => true,
                         'items_wrap' => '<ul class="social">%3$s</ul>',
-                        'container_class' => 'header__nav-social'
+                        'container_class' => 'navbar__social'
                     ]);
                 endif;
             ?>
