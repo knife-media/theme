@@ -19,14 +19,14 @@
         </div>
     <?php endif; ?>
 
-    <?php if(is_single()) : ?>
+    <?php if(is_singular('post')) : ?>
         <div class="sidebar__related">
             <?php
                 $related = new WP_Query([
                     'post_type' => 'post',
                     'post__not_in' => [$post->ID],
-                    'category__not_in' => 620,
-                    'posts_per_page' => 2
+                    'posts_per_page' => 2,
+                    'query_type' => 'related'
                 ]);
 
                 if($related->have_posts()) :

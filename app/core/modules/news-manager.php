@@ -6,7 +6,7 @@
 *
 * @package knife-theme
 * @since 1.3
-* @version 1.4
+* @version 1.5
 */
 
 if (!defined('WPINC')) {
@@ -35,9 +35,6 @@ class Knife_News_Manager {
      * Init function instead of constructor
      */
     public static function load_module() {
-        // Apply theme hooks
-        add_action('after_setup_theme', [__CLASS__, 'setup_actions']);
-
         // Include news archive template
         add_filter('archive_template', [__CLASS__, 'include_archive']);
 
@@ -51,21 +48,9 @@ class Knife_News_Manager {
         add_filter('disable_categories_dropdown', '__return_true', 'post');
         add_action('restrict_manage_posts', [__CLASS__, 'print_dropdown'], 'post');
         add_action('parse_query', [__CLASS__, 'process_dropdown']);
-    }
 
-
-    /**
-     * Setup theme hooks
-     */
-    public static function setup_actions() {
-        // Remove promo from news content
-        add_filter('the_content', function($content) {
-            if(in_category(self::$news_id)) {
-                remove_filter('the_content', ['Knife_User_Club', 'insert_post_promo']);
-            }
-
-            return $content;
-        }, 9);
+        // Update related posts in sidebar
+        add_action('pre_get_posts', [__CLASS__, 'update_related']);
     }
 
 
@@ -82,6 +67,22 @@ class Knife_News_Manager {
         }
 
         return $template;
+    }
+
+
+    /**
+     * Update related posts in sidebar
+     *
+     * @since 1.5
+     */
+    public static function update_related($query) {
+        if($query->get('query_type') === 'related') {
+            $query->set('category__not_in', [self::$news_id]);
+
+            if(in_category(self::$slug)) {
+                $query->set('posts_per_page', 1);
+            }
+        }
     }
 
 
