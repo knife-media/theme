@@ -3,10 +3,11 @@
  * Promo filters
  *
  * Filters and actions using for upgrading templates only for promo purpose
- * For example: we can set custom background for certain post here
+ * For example: we can hide certain post from rss
  *
  * @package knife-theme
  * @since 1.4
+ * @version 1.5
  */
 
 
@@ -34,4 +35,20 @@ add_filter('the_content', function($content) {
     );
 
     return $content . $promo_link;
+});
+
+
+/**
+ * Remove getting-older post from rss
+ *
+ * @since 1.5
+ */
+add_action('pre_get_posts', function($query) {
+    if($query->is_feed && $query->is_main_query()) {
+        $post_id = url_to_postid('getting-older');
+
+        if($post_id > 0) {
+            $query->set('post__not_in', [$post_id]);
+        }
+    }
 });
