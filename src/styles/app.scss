@@ -17,6 +17,7 @@ $color-sheet: #faf9f3;
 $color-success: #78bb13;
 $color-alert: #ab0f0f;
 $color-club: #eaa728;
+$color-mark: #fae596;
 
 
 // Setup default styles
@@ -34,6 +35,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: none;
+}
+
+::placeholder {
+  color: grey;
 }
 
 // Basic element styles

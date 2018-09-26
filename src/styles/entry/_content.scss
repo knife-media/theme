@@ -68,6 +68,11 @@
     font-weight: 700;
   }
 
+  mark {
+    padding: 2px;
+    background-color: $color-mark;
+  }
+
   sub {
     vertical-align: sub;
     font-size: smaller;
@@ -245,7 +250,7 @@
 
   blockquote {
     padding: 1.25rem 2rem;
-    background-color: $color-sheet;
+    background-color: $color-mark;
 
     & > * {
       margin-bottom: 1rem;

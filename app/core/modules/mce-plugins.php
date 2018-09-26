@@ -6,7 +6,7 @@
 *
 * @package knife-theme
 * @since 1.2
-* @version 1.4
+* @version 1.5
 */
 
 
@@ -34,14 +34,12 @@ class Knife_MCE_Plugins {
      * Init tinymce plugins
      */
     public static function init_mce() {
-        if(get_user_option('rich_editing') !== 'true') {
-            return;
+        if(get_user_option('rich_editing') === 'true') {
+            add_filter('mce_buttons', [__CLASS__, 'register_buttons']);
+            add_filter('mce_external_plugins', [__CLASS__, 'add_plugins']);
+
+            add_action('admin_enqueue_scripts', [__CLASS__, 'add_scripts']);
         }
-
-        add_filter('mce_buttons', [__CLASS__, 'register_buttons']);
-        add_filter('mce_external_plugins', [__CLASS__, 'add_plugins']);
-
-        add_action('admin_enqueue_scripts', [__CLASS__, 'add_scripts']);
     }
 
 
@@ -67,6 +65,7 @@ class Knife_MCE_Plugins {
         $include = get_template_directory_uri() . '/core/include';
 
         $plugins['pushbutton'] = $include . '/scripts/mce-pushbutton.js';
+        $plugins['markbutton'] = $include . '/scripts/mce-markbutton.js';
 
         return $plugins;
     }
@@ -76,7 +75,7 @@ class Knife_MCE_Plugins {
      * Register buttons in editor panel
      */
     public static function register_buttons($buttons) {
-        array_push($buttons, 'pushbutton');
+        array_push($buttons, 'pushbutton', 'markbutton');
 
         return $buttons;
     }
