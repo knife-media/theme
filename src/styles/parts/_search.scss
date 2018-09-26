@@ -29,7 +29,6 @@
 
     @media screen and (max-width: 767px) {
       padding-top: 7.5rem;
-      padding-bottom: 4rem;
     }
   }
 
@@ -114,5 +113,15 @@
 }
 
 body.is-search {
+  position: fixed;
+  left: 0;
+
+  width: 100%;
   overflow: hidden;
+
+  #wpadminbar {
+    @media screen and (max-width: 600px) {
+      top: -46px;
+    }
+  }
 }
