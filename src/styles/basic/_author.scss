@@ -7,6 +7,7 @@
 
   color: $color-white;
   background-color: $color-primary;
+  transition: filter .25s;
 
   strong {
     display: block;
@@ -28,7 +29,6 @@
 
     border-bottom: none;
     border-radius: 5px;
-
     &:hover {
       filter: brightness(110%);
     }
