@@ -4,7 +4,7 @@
   flex: 1 1 auto;
 
   width: 100%;
-  padding: 1rem 1rem 2rem;
+  padding: 1rem 1rem 4rem;
 
   line-height: 1.65;
   font-size: 1rem;
@@ -274,6 +274,7 @@
   }
 
   @media screen and (max-width: 767px) {
+    padding-bottom: 2rem;
     font-size: .9375rem;
   }
 }

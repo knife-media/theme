@@ -28,8 +28,12 @@
     display: none;
   }
 
+  .hc__showmore {
+    margin-bottom: 20px;
+  }
+
   .hc__form__send {
-    padding: .5rem 1.25rem;
+    padding: 8px 20px;
     background-color: $color-primary;
     box-shadow: none;
 
