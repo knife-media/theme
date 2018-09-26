@@ -12,7 +12,7 @@
         <?php
             the_info(
                 '<div class="widget-club__content-meta meta">', '</div>',
-                ['author', 'date']
+                ['author']
             );
 
             printf(
