@@ -1,9 +1,8 @@
 .entry-comments {
-  display: block;
+  display: flex;
   position: relative;
 
   width: 100%;
-  overflow: hidden;
 
   .entry-comments__button {
     margin: 1rem 0;
