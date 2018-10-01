@@ -165,6 +165,25 @@ class Knife_Post_Info {
 
 
     /**
+     * Get post head as primary tag
+     */
+    private static function info_head() {
+        $tags = get_the_tags();
+
+        if(!isset($tags[0])) {
+            return false;
+        }
+
+        $output = sprintf('<a class="head" href="%2$s">%1$s</a>',
+            esc_html($tags[0]->name),
+            esc_url(get_tag_link($tags[0]->term_id))
+        );
+
+        return $output;
+    }
+
+
+    /**
      * Get post labels
      */
     private static function info_label() {

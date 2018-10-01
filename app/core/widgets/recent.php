@@ -50,7 +50,7 @@ class Knife_Widget_Recent extends WP_Widget {
             echo $args['before_widget'];
 
             printf(
-                '<a class="widget-recent__head" href="%2$s">%1$s</a>',
+                '<a class="widget-recent__head head" href="%2$s">%1$s</a>',
                 __('Новости', 'knife-theme'),
                 esc_url(get_category_link($instance['filter']))
             );

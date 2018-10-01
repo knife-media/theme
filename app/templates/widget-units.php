@@ -12,7 +12,7 @@
         <?php
             the_info(
                 '<div class="unit__head">', '</div>',
-                ['tag']
+                ['head']
             );
         ?>
 

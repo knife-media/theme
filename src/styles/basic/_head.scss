@@ -1,0 +1,20 @@
+.head {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+
+  height: 2rem;
+  padding: 0 1.25rem;
+
+  font-size: .5625rem;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: $color-white;
+  background-color: $color-primary;
+
+  &:hover {
+    filter: brightness(120%);
+  }
+}

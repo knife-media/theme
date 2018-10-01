@@ -6,34 +6,10 @@
   margin-top: 1rem;
 
   .unit__head {
-    display: block;
     position: absolute;
     top: 0;
     left: 0;
     z-index: 2;
-
-    .meta {
-      font-size: .5625rem;
-      font-weight: 700;
-      line-height: 1;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: $color-white;
-      background-color: $color-primary;
-
-      .meta__link {
-        display: flex;
-        cursor: pointer;
-        align-items: center;
-
-        height: 2rem;
-        padding: 0 1.25rem;
-
-        &:hover {
-          filter: brightness(120%);
-        }
-      }
-    }
   }
 
   .unit__image {

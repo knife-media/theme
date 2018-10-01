@@ -11,7 +11,7 @@
     <?php
         the_info(
             '<div class="widget-single__head">', '</div>',
-            ['tag']
+            ['head']
         );
     ?>
 

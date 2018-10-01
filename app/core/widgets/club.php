@@ -53,7 +53,7 @@ class Knife_Widget_Club extends WP_Widget {
         if($query->have_posts()) {
             echo $args['before_widget'];
 
-            printf('<a class="widget-club__head" href="%2$s">%1$s</a>',
+            printf('<a class="widget-club__head head" href="%2$s">%1$s</a>',
                 esc_html($instance['title']),
                 esc_url(get_post_type_archive_link('club'))
             );

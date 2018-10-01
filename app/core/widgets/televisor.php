@@ -247,7 +247,7 @@ class Knife_Widget_Televisor extends WP_Widget {
             echo '<div class="widget-recent">';
 
             printf(
-                '<a class="widget-recent__head" href="%2$s">%1$s</a>',
+                '<a class="widget-recent__head head" href="%2$s">%1$s</a>',
                 __('Новости', 'knife-theme'),
                 esc_url(get_category_link($instance['filter']))
             );
