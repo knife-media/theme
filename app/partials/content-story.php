@@ -19,7 +19,7 @@
                     <div class="glide__slide-content">
                         <?php
                             the_info(
-                                '<div class="glide__slide-meta meta">', '</div>',
+                                '<div class="glide__slide-info">', '</div>',
                                 ['author', 'date']
                             );
 

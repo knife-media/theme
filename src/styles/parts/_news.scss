@@ -54,27 +54,30 @@
     }
   }
 
-  .news__meta {
+  .news__info {
     display: block;
 
     width: 100%;
     margin-top: 1rem;
 
-    font-size: .5625rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: .5px;
+    .meta {
+      font-size: .5625rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
 
-    .meta__link {
-      position: relative;
+      .meta__link {
+        position: relative;
+        z-index: 2;
 
-      @media screen and (max-width: 767px) {
-        &:nth-child(3):after {
-          display: none;
-        }
+        @media screen and (max-width: 767px) {
+          &:nth-child(3):after {
+            display: none;
+          }
 
-        &:nth-child(n+4) {
-          display: none;
+          &:nth-child(n+4) {
+            display: none;
+          }
         }
       }
     }

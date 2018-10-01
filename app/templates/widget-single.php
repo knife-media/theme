@@ -10,7 +10,7 @@
 <div class="widget-single__inner">
     <?php
         the_info(
-            '<div class="widget-single__head meta">', '</div>',
+            '<div class="widget-single__head">', '</div>',
             ['tag']
         );
     ?>
@@ -33,8 +33,8 @@
             );
 
             the_info(
-                '<div class="widget-single__content-meta meta">', '</div>',
-                ['author', 'date']
+                '<div class="widget-single__content-info">', '</div>',
+                ['author', 'date', 'label']
             );
         ?>
     </div>

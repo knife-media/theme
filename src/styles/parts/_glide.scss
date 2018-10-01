@@ -102,14 +102,17 @@
     width: 100%;
     height: 100%;
 
-    .glide__slide-meta {
+    .glide__slide-info {
       width: 100%;
       max-width: 40rem;
       padding-bottom: 1rem;
-      color: $color-white;
 
-      .meta__link {
-        transition: none;
+      .meta {
+        color: $color-white;
+
+        .meta__link {
+          transition: none;
+        }
       }
 
       @media screen and (max-width: 767px) {

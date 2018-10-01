@@ -1,0 +1,20 @@
+.label {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+
+  margin-left: 1rem;
+  font-size: 1.125rem;
+  line-height: 1;
+
+  .label__item {
+    display: block;
+    cursor: default;
+
+    margin-right: .25rem;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}

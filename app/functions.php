@@ -450,6 +450,9 @@ require get_template_directory() . '/core/modules/story-manager.php';
 // Select post type
 require get_template_directory() . '/core/modules/select-links.php';
 
+// Custom labels posts taxonomy settings
+require get_template_directory() . '/core/modules/label-posts.php';
+
 // Special projects taxonomy settings
 require get_template_directory() . '/core/modules/special-projects.php';
 
@@ -491,6 +494,9 @@ require get_template_directory() . '/core/modules/comments-load.php';
 
 // Relap links settings
 require get_template_directory() . '/core/modules/relap-links.php';
+
+// Enable terms emojis for default and custom taxonomies
+require get_template_directory() . '/core/modules/terms-emoji.php';
 
 // Custom background handler
 require get_template_directory() . '/core/modules/custom-background.php';

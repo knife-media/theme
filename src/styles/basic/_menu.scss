@@ -64,14 +64,16 @@
     }
 
     &.menu__item--club {
-      color: $color-white;
-      background-color: $color-club;
+      .menu__item-link {
+        color: $color-white;
+        background-color: $color-club;
 
-      border: solid 1px $color-club;
-      border-radius: 3px;
+        border: solid 1px $color-club;
+        border-radius: 3px;
 
-      &:hover {
-        filter: brightness(120%);
+        &:hover {
+          filter: brightness(120%);
+        }
       }
     }
 

@@ -31,8 +31,8 @@
                 );
 
                 the_info(
-                    '<div class="unit__content-meta meta">', '</div>',
-                    ['author', 'date']
+                    '<div class="unit__content-info">', '</div>',
+                    ['author', 'date', 'label']
                 );
             ?>
         </div>

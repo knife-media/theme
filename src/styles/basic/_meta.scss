@@ -1,12 +1,14 @@
 .meta {
+  display: block;
+
   color: $color-primary;
   font-size: .8125rem;
   font-weight: 500;
   letter-spacing: .25px;
 
-  .meta__link {
+  & > * {
     display: inline-block;
-    cursor: pointer;
+    white-space: nowrap;
 
     border-bottom: none;
 
@@ -20,50 +22,63 @@
       font-size: .5625rem;
     }
 
-    &:last-child {
-      flex: 1;
-    }
-
     &:last-child:after {
       display: none;
     }
+  }
+
+  .meta__link {
+    cursor: pointer;
 
     &:hover {
       filter: brightness(150%);
     }
-
-    &.meta__link--club {
-      position: absolute;
-
-      padding: .125rem .375rem;
-      color: $color-white;
-      background-color: $color-club;
-      transform: translateY(-.125rem);
-
-      border-radius: 3px;
-
-      &:hover {
-        filter: brightness(120%);
-      }
-    }
   }
 
   .meta__item {
-    display: inline-block;
     cursor: default;
+  }
+
+  .meta__club {
+    padding: .125rem .375rem;
+    color: $color-white;
+    background-color: $color-club;
+
+    border-radius: 3px;
+
+    &:hover {
+      filter: brightness(120%);
+    }
+  }
+
+  .meta__label {
+    display: flex;
+    order: 2;
+
+    margin-left: auto;
 
     &:after {
-      content: "•";
-      display: inline-block;
-
-      margin-left: .5rem;
-      margin-right: .5rem;
-
-      font-size: .5625rem;
+      display: none;
     }
 
-    &:last-child:after {
-      display: none;
+    &:before {
+      content: "";
+    }
+
+    & ~ :last-child {
+      margin-right: 6rem;
+    }
+  }
+
+  .meta__emoji {
+    display: flex;
+
+    margin-right: .5rem;
+    line-height: 1;
+    font-size: 1.25rem;
+
+    &:last-child {
+      margin-right: 0;
     }
   }
 }

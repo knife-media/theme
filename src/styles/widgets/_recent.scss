@@ -24,20 +24,22 @@
     color: $color-text;
     background-color: $color-white;
 
-    .widget-recent__content-meta {
+    .widget-recent__content-info {
       display: block;
 
       width: 100%;
-      color: $color-primary;
 
-      font-size: .5625rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .5px;
+      .meta {
+        font-size: .5625rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+        color: $color-primary;
 
-      .meta__link {
-        position: relative;
-        z-index: 2;
+        .meta__link {
+          position: relative;
+          z-index: 2;
+        }
       }
     }
 

@@ -6,7 +6,7 @@
 *
 * @package knife-theme
 * @since 1.3
-* @version 1.4
+* @version 1.5
 */
 
 
@@ -84,6 +84,7 @@ class Knife_Special_Projects {
             'show_in_nav_menus'     => true,
             'query_var'             => true,
             'rewrite'               => ['slug' => self::$slug],
+            'meta_box_cb'           => [__CLASS__, 'print_metabox']
         ]);
     }
 
@@ -140,6 +141,18 @@ class Knife_Special_Projects {
 
         // Insert admin scripts
         wp_enqueue_script('knife-special-options', $include . '/scripts/special-options.js', ['jquery', 'wp-color-picker'], $version);
+    }
+
+
+    /**
+     * Add custom taxonomy metabox without tabs and add-new feature
+     *
+     * @since 1.5
+     */
+    public static function print_metabox($post, $box) {
+        $include = get_template_directory() . '/core/include';
+
+        include_once($include . '/templates/special-metabox.php');
     }
 
 

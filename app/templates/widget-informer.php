@@ -20,7 +20,7 @@
             if(!empty($instance['sticker'])) {
                 printf(
                     '<img class="widget-informer__content-sticker" src="%1$s" alt="%2$s">',
-                    esc_url($instance['sticker']), esc_attr($instance['title'])
+                    esc_url($instance['sticker']), sanitize_text_field($instance['title'])
                 );
             }
         ?>

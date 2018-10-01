@@ -55,17 +55,20 @@
       padding: 1rem 0;
     }
 
-    .widget-club__content-meta {
+    .widget-club__content-info {
       margin-bottom: 1rem;
-      color: $color-text;
 
-      .meta__link {
-        position: relative;
-        z-index: 2;
-      }
+      .meta {
+        color: $color-text;
 
-      a:hover {
-        opacity: .75;
+        .meta__link {
+          position: relative;
+          z-index: 2;
+
+          &:hover {
+            opacity: .75;
+          }
+        }
       }
     }
 

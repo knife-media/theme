@@ -11,7 +11,7 @@
     <div class="widget-club__content">
         <?php
             the_info(
-                '<div class="widget-club__content-meta meta">', '</div>',
+                '<div class="widget-club__content-info">', '</div>',
                 ['author']
             );
 

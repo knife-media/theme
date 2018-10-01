@@ -10,7 +10,7 @@
 <div class="widget-recent__content">
     <?php
         the_info(
-            '<div class="widget-recent__content-meta meta">', '</div>',
+            '<div class="widget-recent__content-info">', '</div>',
             ['time', 'tag'], true
         );
 

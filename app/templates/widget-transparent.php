@@ -12,7 +12,7 @@
         if(!empty($image)) {
             printf(
                 '<img class="widget-transparent__sticker" src="%1$s" alt="%2$s">',
-                esc_url($image), esc_attr(get_the_title())
+                esc_url($image), sanitize_text_field(get_the_title())
             );
         }
     ?>
@@ -20,14 +20,13 @@
     <div class="widget-transparent__content">
         <?php
             the_info(
-                '<div class="widget-transparent__content-meta meta">', '</div>',
+                '<div class="widget-transparent__content-info">', '</div>',
                 ['author', 'date']
             );
 
             printf(
                 '<a class="widget-transparent__content-link" href="%2$s">%1$s</a>',
-                get_the_title(),
-                esc_url(get_permalink())
+                get_the_title(), esc_url(get_permalink())
             );
         ?>
     </div>

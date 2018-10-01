@@ -18,7 +18,7 @@
                 );
 
                 the_info(
-                    '<div class="news__meta meta">', '</div>',
+                    '<div class="news__info">', '</div>',
                     ['time', 'date', 'tags']
                 );
             ?>

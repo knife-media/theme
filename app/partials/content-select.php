@@ -11,8 +11,8 @@
     <div class="entry-header">
         <?php
             the_info(
-                '<div class="entry-header__meta meta">', '</div>',
-                ['author', 'date', 'category', 'type']
+                '<div class="entry-header__info">', '</div>',
+                ['author', 'date', 'category']
             );
 
             the_title(
@@ -21,7 +21,7 @@
             );
 
             the_lead(
-                '<div class="entry-header__excerpt excerpt">',
+                '<div class="entry-header__lead">',
                 '</div>'
             );
 

@@ -25,4 +25,12 @@ get_header(); ?>
     ?>
 </div>
 
+<?php if(have_posts() && get_next_posts_link()) : ?>
+    <nav class="block-navigate">
+        <?php
+            next_posts_link(__('Больше статей', 'knife-theme'));
+        ?>
+    </nav>
+<?php endif; ?>
+
 <?php get_footer();

@@ -49,7 +49,8 @@ class Knife_Widget_Transparent extends WP_Widget {
             echo $args['before_widget'];
 
             if(!empty($instance['title']) && !empty($instance['link'])) {
-                printf('<div class="widget-transparent__head meta"><a class="meta__link" href="%2$s">%1$s</a></div>',
+                printf(
+                    '<div class="widget-transparent__head"><div class="meta"><a class="meta__link" href="%2$s">%1$s</a></div></div>',
                     esc_html($instance['title']), esc_url($instance['link'])
                 );
             }

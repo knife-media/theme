@@ -6,6 +6,7 @@
 *
 * @package knife-theme
 * @since 1.3
+* @version 1.5
 */
 
 if (!defined('WPINC')) {
@@ -17,14 +18,29 @@ class Knife_Post_Info {
      * Common method to output posts info meta
      */
     public static function get_info($options = [], $output = '') {
-        foreach($options as $option) {
+        $meta = array_intersect($options, ['club', 'author', 'date', 'tag', 'tags', 'time', 'category']);
+        $items = [];
+
+        foreach($meta as $option) {
             $method = 'info_' . $option;
 
-            if(!method_exists(__CLASS__, $method)) {
-                continue;
+            if(method_exists(__CLASS__, $method)) {
+                $items[] = self::$method();
             }
+        }
 
-            $output = $output . self::$method();
+        if(count($items) > 0) {
+            $output = $output . sprintf('<div class="meta">%s</div>',
+                implode('', $items)
+            );
+        }
+
+        foreach(array_diff($options, $meta) as $option) {
+            $method = 'info_' . $option;
+
+            if(method_exists(__CLASS__, $method)) {
+                $output = $output . self::$method();
+            }
         }
 
         return $output;
@@ -50,7 +66,7 @@ class Knife_Post_Info {
         $cats = get_the_category();
 
         if(empty($cats[0])) {
-            return;
+            return false;
         }
 
         $output = sprintf('<a class="meta__link" href="%2$s">%1$s</a>',
@@ -88,33 +104,13 @@ class Knife_Post_Info {
 
 
     /**
-     * Get post type info
-     */
-    private static function info_type() {
-        $type = get_post_type(get_the_ID());
-
-        if(in_array($type, ['post', 'page', 'attachmenet'])) {
-            return;
-        }
-
-        $output = sprintf('<a class="meta__link meta__link--%3$s" href="%2$s">%1$s</a>',
-            esc_html(get_post_type_object($type)->labels->name),
-            esc_url(get_post_type_archive_link($type)),
-            esc_attr($type)
-        );
-
-        return $output;
-    }
-
-
-    /**
      * Get primary post tag info
      */
     private static function info_tag() {
         $tags = get_the_tags();
 
         if(!isset($tags[0])) {
-            return;
+            return false;
         }
 
         $output = sprintf('<a class="meta__link" href="%2$s">%1$s</a>',
@@ -144,6 +140,53 @@ class Knife_Post_Info {
                 );
             }
         }
+
+        return $output;
+    }
+
+
+    /**
+     * Get post type info
+     */
+    private static function info_club() {
+        $type = get_post_type(get_the_ID());
+
+        if($type !== 'club') {
+            return false;
+        }
+
+        $output = sprintf('<a class="meta__club" href="%2$s">%1$s</a>',
+            esc_html(get_post_type_object($type)->labels->name),
+            esc_url(get_post_type_archive_link($type))
+        );
+
+        return $output;
+    }
+
+
+    /**
+     * Get post labels
+     */
+    private static function info_label() {
+        $labels = get_the_terms(get_the_ID(), 'label');
+
+        if($labels === false) {
+            return false;
+        }
+
+        $links = [];
+
+        foreach($labels as $label) {
+            $emoji = get_term_meta($label->term_id, '_knife-term-emoji', true);
+
+            $links[] = sprintf('<span class="label__item">%s</span>',
+                esc_html($emoji)
+            );
+        }
+
+        $output = sprintf('<div class="label">%s</div>',
+            implode('', $links)
+        );
 
         return $output;
     }
