@@ -105,7 +105,13 @@ class Knife_Menu_Upgrade {
             $classes[] = 'social__item';
         }
 
-        return array_merge($classes, (array) get_post_meta($item->ID, '_menu_item_classes', true));
+        foreach((array) get_post_meta($item->ID, '_menu_item_classes', true) as $class) {
+            if(!empty($class)) {
+                $classes[] = $class;
+            }
+        }
+
+        return $classes;
     }
 
 
@@ -150,7 +156,7 @@ class Knife_Menu_Upgrade {
             'target' => '',
             'attr_title' => '',
             'description' => '',
-            'classes' => ['menu__item--separator'],
+            'classes' => ['--separator'],
             'xfn' => '',
         ];
 
