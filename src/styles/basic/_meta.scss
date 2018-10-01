@@ -40,9 +40,12 @@
   }
 
   .meta__club {
+    position: absolute;
+
     padding: .125rem .375rem;
     color: $color-white;
     background-color: $color-club;
+    transform: translateY(-.125rem);
 
     border-radius: 3px;
 

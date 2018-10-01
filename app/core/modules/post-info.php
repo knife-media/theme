@@ -179,8 +179,10 @@ class Knife_Post_Info {
         foreach($labels as $label) {
             $emoji = get_term_meta($label->term_id, '_knife-term-emoji', true);
 
-            $links[] = sprintf('<span class="label__item">%s</span>',
-                esc_html($emoji)
+            $links[] = sprintf('<a class="label__link" href="%2$s" title="%3$s">%1$s</a>',
+                esc_html($emoji),
+                esc_url(get_term_link($label->term_id)),
+                sanitize_text_field($label->name)
             );
         }
 

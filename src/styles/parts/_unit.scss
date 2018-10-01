@@ -4,7 +4,6 @@
 
   width: 100%;
   margin-top: 1rem;
-  overflow: hidden;
 
   .unit__head {
     display: block;
@@ -140,6 +139,11 @@
           position: relative;
           z-index: 2;
         }
+      }
+
+      .label {
+        position: relative;
+        z-index: 2;
       }
     }
 
