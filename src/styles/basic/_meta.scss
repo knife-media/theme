@@ -10,8 +10,6 @@
     display: inline-block;
     white-space: nowrap;
 
-    border-bottom: none;
-
     &:after {
       content: "•";
       display: inline-block;
@@ -29,6 +27,7 @@
 
   .meta__link {
     cursor: pointer;
+    border-bottom: none;
 
     &:hover {
       filter: brightness(150%);

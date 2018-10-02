@@ -268,7 +268,7 @@ class Knife_Select_Links {
             setup_postdata($post);
 
             $meta = the_info(
-                '<div class="select__meta meta">', '</div>',
+                '<div class="select__info">', '</div>',
                 ['author', 'date'], false
             );
 
