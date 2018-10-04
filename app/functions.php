@@ -498,6 +498,9 @@ require get_template_directory() . '/core/modules/relap-links.php';
 // Enable terms emojis for default and custom taxonomies
 require get_template_directory() . '/core/modules/terms-emoji.php';
 
+// Show similar posts grouped by common tags inside single template
+require get_template_directory() . '/core/modules/similar-posts.php';
+
 // Custom background handler
 require get_template_directory() . '/core/modules/custom-background.php';
 
