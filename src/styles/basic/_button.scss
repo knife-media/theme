@@ -19,4 +19,8 @@
   &:hover {
     filter: brightness(125%);
   }
+
+  @media screen and (max-width: 767px) {
+    font-size: .9375rem;
+  }
 }
