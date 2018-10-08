@@ -37,10 +37,10 @@ class Knife_Similar_Posts {
      */
     public static function inject_object() {
         if(is_singular('post')) {
-            $similar_posts = self::get_similar(get_queried_object_id());
+            $similar = self::get_similar(get_queried_object_id());
 
-            if($similar_posts > 0) {
-                wp_localize_script('knife-theme', 'knife_similar_posts', $similar_posts);
+            if($similar > 0) {
+                wp_localize_script('knife-theme', 'knife_similar_posts', $similar);
             }
         }
     }
@@ -52,7 +52,7 @@ class Knife_Similar_Posts {
      * Using get_the_tags function to retrieve terms with primary tag first
      */
     private static function get_similar($post_id) {
-        $similar = wp_cache_get($post_id, self::$cache);
+        $similar = false;// wp_cache_get($post_id, self::$cache);
 
         if($similar !== false) {
             return $similar;
@@ -61,45 +61,59 @@ class Knife_Similar_Posts {
         $similar = [];
 
         // Get given post tags
-        $the_terms = wp_list_pluck(get_the_tags($post_id), 'term_id');
+        if($post_terms = get_the_tags($post_id)) {
+            $the_terms = wp_list_pluck($post_terms, 'term_id');
 
-        // Get posts with primary tag
-        $the_posts = get_posts([
-            'posts_per_page' => -1,
-            'tag_id' => $the_terms[0],
-            'post__not_in' => [$post_id],
-            'post_status' => 'publish',
-            'ignore_sticky_posts' => true
-        ]);
+            // Get posts with primary tag
+            $the_posts = get_posts([
+                'posts_per_page' => -1,
+                'tag_id' => $the_terms[0],
+                'post__not_in' => [$post_id],
+                'post_status' => 'publish',
+                'ignore_sticky_posts' => true
+            ]);
 
-        foreach(wp_list_pluck($the_posts, 'ID') as $id) {
-            $similar[$id] = 0;
+            $related = [];
 
-            foreach(get_the_terms($id, 'post_tag') as $tag) {
-                if(in_array($tag->term_id, $the_terms)) {
-                    $similar[$id] = $similar[$id] + 1;
+            foreach(wp_list_pluck($the_posts, 'ID') as $id) {
+                $related[$id] = 0;
+
+                foreach(get_the_terms($id, 'post_tag') as $tag) {
+                    if(in_array($tag->term_id, $the_terms)) {
+                        $reated[$id] = $related[$id] + 1;
+                    }
                 }
+            }
+
+            // Sort by tags count
+            arsort($related);
+
+            // Get first 5 elements
+            $related = array_slice($related, 0, 5, true);
+
+            foreach($related as $id => $count) {
+                $relate_items = [
+                    'title' => get_the_title($id),
+                    'link' => get_permalink($id)
+                ];
+
+                $relate_terms = get_the_tags($id);
+
+                if(is_array($relate_terms)) {
+                    $relate_term = end($relate_terms);
+
+                    if($relate_emoji = get_term_meta($relate_term->term_id, '_knife-term-emoji', true)) {
+                        $relate_items['emoji'] = $relate_emoji;
+                    }
+                }
+
+                $similar[] = $relate_items;
             }
         }
 
-        // Sort by tags count
-        arsort($similar);
+        wp_cache_set($post_id, $similar, self::$cache);
 
-        $i = 0;
-
-        $data = [];
-        foreach($similar as $p => $c) {
-            $data[] = [
-                'title' => get_the_title($p),
-                'emoji' => get_term_meta($the_terms[0], '_knife-term-emoji', true),
-                'link' => get_permalink($p)
-            ];
-            if($i++ > 5)
-                break;
-        }
-
-        print_r($data);
-        die;
+        return $similar;
     }
 }
 

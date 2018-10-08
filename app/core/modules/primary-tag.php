@@ -108,6 +108,10 @@ class Knife_Primary_Tag {
     public static function sort_tags($items) {
         global $post;
 
+        if(!is_array($items)) {
+            return $items;
+        }
+
         if($primary = get_post_meta($post->ID, self::$meta, true)) {
             $sorted = [];
 
