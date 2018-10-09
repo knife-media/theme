@@ -74,7 +74,6 @@
         wrap.appendChild(kicker);
       })();
 
-
       // Append media
       (function(){
         if(typeof item.image === 'undefined' || typeof item.ratio === 'undefined') {
@@ -88,7 +87,6 @@
 
         slide.appendChild(image);
       })();
-
 
       // Append entry
       (function(){
