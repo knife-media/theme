@@ -171,7 +171,6 @@
 
     @media screen and (max-width: 767px) {
       padding-left: 1.5rem;
-      font-size: .875rem;
     }
   }
 
@@ -247,8 +246,7 @@
   }
 
   blockquote {
-    padding: 1.25rem 2rem;
-    background-color: $color-mark;
+    padding: 1rem;
 
     & > * {
       margin-bottom: 1rem;

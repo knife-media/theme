@@ -37,10 +37,14 @@
 
   &.figure--quote {
     width: $width-content;
+    margin-top: 0;
+    margin-bottom: 1rem;
 
     blockquote {
-      width: calc(100% + 4rem);
-      max-width: calc(#{$width-content} + 4rem);
+      width: calc(100% + 2rem);
+      max-width: calc(#{$width-content} + 2rem);
+
+      background-color: lighten(desaturate($color-mark, 20), 10);
     }
   }
 

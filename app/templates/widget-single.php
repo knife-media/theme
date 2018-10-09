@@ -34,7 +34,7 @@
 
             the_info(
                 '<div class="widget-single__content-info">', '</div>',
-                ['author', 'date', 'label']
+                ['author', 'label']
             );
         ?>
     </div>

@@ -15,10 +15,10 @@
     flex: 1 1 auto;
 
     .entry-content {
-      padding: 2rem 1rem;
+      padding-top: 2rem;
 
       @media screen and (max-width: 767px) {
-        padding: 1rem;
+        padding-top: 1rem;
       }
     }
   }

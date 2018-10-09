@@ -160,7 +160,7 @@ class Knife_Header_Meta {
 
 
     private static function archive_meta($meta = []) {
-        $cover = get_template_directory_uri() . '/assets/images/poster-default.png';
+        $cover = get_template_directory_uri() . '/assets/images/poster-feature.png';
 
         $meta[] = sprintf('<meta name="description" content="%s">',
             get_bloginfo('description')
