@@ -36,7 +36,7 @@ class Knife_Similar_Posts {
      * Inject similar posts data
      */
     public static function inject_object() {
-        if(is_singular('post')) {
+        if(is_singular('post') && !in_category('news')) {
             $similar = self::get_similar(get_queried_object_id());
 
             if($similar > 0) {
