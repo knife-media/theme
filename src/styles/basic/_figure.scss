@@ -33,6 +33,14 @@
   &.figure--embed {
     align-items: flex-start;
     width: $width-content;
+
+    .instagram-media {
+      min-width: auto !important;
+    }
+
+    .twitter-tweet {
+      min-width: auto !important;
+    }
   }
 
   &.figure--quote {

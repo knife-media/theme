@@ -6,7 +6,7 @@
 *
 * @package knife-theme
 * @since 1.2
-* @version 1.4
+* @version 1.5
 */
 
 if (!defined('WPINC')) {
@@ -40,6 +40,8 @@ class Knife_Embed_Filters {
 
     /**
      * Remove multiple js script from embeds and insert single with enqueue
+     *
+     * @since 1.5
      */
     public static function instagram_script($cache, $url, $attr, $post_id) {
         if(!preg_match('#https?://(www\.)?instagr(\.am|am\.com)/p/.*#i', $url)) {
@@ -48,7 +50,7 @@ class Knife_Embed_Filters {
 
         wp_enqueue_script('instagram-embed', 'https://www.instagram.com/embed.js', [], null, true);
 
-        return str_replace('<script async defer src="//www.instagram.com/embed.js"></script>', '', $cache);
+        return str_replace('<script async src="//www.instagram.com/embed.js"></script>', '', $cache);
     }
 
 
@@ -56,11 +58,11 @@ class Knife_Embed_Filters {
      * Add async and defer atts to instagram loader tag
      */
     public static function instagram_loader($tag, $handle, $src) {
-        if ($handle !== 'instagram-embed') {
+        if($handle !== 'instagram-embed') {
             return $tag;
         }
 
-        return str_replace('<script', '<script async defer', $tag);
+        return str_replace('<script', '<script async ', $tag);
     }
 }
 

@@ -6,7 +6,7 @@
 *
 * @package knife-theme
 * @since 1.2
-* @version 1.4
+* @version 1.5
 */
 
 
@@ -35,6 +35,15 @@ class Knife_Yandex_Zen {
     * Current post enclosure array
     */
     private static $enclosure = null;
+
+    /**
+     * Checkbox save nonce
+     *
+     * @since   1.5
+     * @access  private static
+     * @var     string
+     */
+    private static $nonce = 'knife-yandex-nonce';
 
 
     /**
@@ -75,6 +84,8 @@ class Knife_Yandex_Zen {
             __('Исключить запись из Яндекс.Дзен', 'knife-theme'),
             checked($exclude, 1, false)
         );
+
+        wp_nonce_field('checkbox', self::$nonce);
     }
 
 
@@ -82,7 +93,11 @@ class Knife_Yandex_Zen {
      * Save feed post meta
      */
     public static function save_meta($post_id) {
-        if(get_post_type($post_id) !== 'post') {
+        if(!isset($_REQUEST[self::$nonce])) {
+            return;
+        }
+
+        if(!wp_verify_nonce($_REQUEST[self::$nonce], 'checkbox')) {
             return;
         }
 

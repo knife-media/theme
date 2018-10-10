@@ -6,7 +6,7 @@
 *
 * @package knife-theme
 * @since 1.2
-* @version 1.4
+* @version 1.5
 */
 
 
@@ -32,6 +32,16 @@ class Knife_Post_Lead {
     * @var     array
     */
     private static $type = ['post', 'club', 'select'];
+
+
+    /**
+     * Lead save nonce
+     *
+     * @since   1.5
+     * @access  private static
+     * @var     string
+     */
+    private static $nonce = 'knife-lead-nonce';
 
 
     /**
@@ -75,6 +85,8 @@ class Knife_Post_Lead {
             'editor_height' => 100,
             'drag_drop_upload' => false
         ]);
+
+        wp_nonce_field('textarea', self::$nonce);
     }
 
 
@@ -100,6 +112,14 @@ class Knife_Post_Lead {
      */
     public static function save_meta($post_id) {
         if(!in_array(get_post_type($post_id), self::$type)) {
+            return;
+        }
+
+        if(!isset($_REQUEST[self::$nonce])) {
+            return;
+        }
+
+        if(!wp_verify_nonce($_REQUEST[self::$nonce], 'textarea')) {
             return;
         }
 

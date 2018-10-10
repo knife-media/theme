@@ -6,7 +6,7 @@
 *
 * @package knife-theme
 * @since 1.2
-* @version 1.4
+* @version 1.5
 */
 
 
@@ -32,6 +32,16 @@ class Knife_Post_Tagline {
     * @var     array
     */
     private static $type = ['post', 'club'];
+
+
+    /**
+     * Tagline save nonce
+     *
+     * @since   1.5
+     * @access  private static
+     * @var     string
+     */
+    private static $nonce = 'knife-tagline-nonce';
 
 
     /**
@@ -96,6 +106,8 @@ class Knife_Post_Tagline {
             esc_attr(self::$meta),
             __('Подзаголовок', 'knife-theme')
         );
+
+        wp_nonce_field('input', self::$nonce);
     }
 
 
@@ -146,6 +158,14 @@ class Knife_Post_Tagline {
      */
     public static function save_meta($post_id) {
         if(!in_array(get_post_type($post_id), self::$type)) {
+            return;
+        }
+
+        if(!isset($_REQUEST[self::$nonce])) {
+            return;
+        }
+
+        if(!wp_verify_nonce($_REQUEST[self::$nonce], 'input')) {
             return;
         }
 
