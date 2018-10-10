@@ -15,6 +15,7 @@
             $stories[] = ['entry' => '', 'media' => ''];
         }
 
+        wp_nonce_field('metabox', self::$nonce);
     ?>
 
 

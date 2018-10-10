@@ -6,7 +6,7 @@
 *
 * @package knife-theme
 * @since 1.3
-* @version 1.4
+* @version 1.5
 */
 
 
@@ -54,6 +54,16 @@ class Knife_User_Club {
      * @var     string
      */
     private static $option = 'knife-user-settings';
+
+
+    /**
+     * Checkbox save nonce
+     *
+     * @since   1.5
+     * @access  private static
+     * @var     string
+     */
+    private static $nonce = 'knife-user-form-nonce';
 
 
     /**
@@ -484,6 +494,8 @@ class Knife_User_Club {
             __('Добавить форму заявки в клуб', 'knife-theme'),
             checked($form, 1, false)
         );
+
+        wp_nonce_field('checkbox', self::$nonce);
     }
 
 
@@ -491,7 +503,11 @@ class Knife_User_Club {
      * Save feed post meta
      */
     public static function save_meta($post_id) {
-        if(get_post_type($post_id) !== 'page') {
+        if(!isset($_REQUEST[self::$nonce])) {
+            return;
+        }
+
+        if(!wp_verify_nonce($_REQUEST[self::$nonce], 'checkbox')) {
             return;
         }
 

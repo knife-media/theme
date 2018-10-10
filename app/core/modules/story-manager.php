@@ -6,7 +6,7 @@
 *
 * @package knife-theme
 * @since 1.3
-* @version 1.4
+* @version 1.5
 */
 
 if (!defined('WPINC')) {
@@ -42,6 +42,16 @@ class Knife_Story_Manager {
      * @var     string
      */
     private static $opts = ['background', 'shadow', 'blur'];
+
+
+    /**
+     * Metabox save nonce
+     *
+     * @since   1.5
+     * @access  private static
+     * @var     string
+     */
+    private static $nonce = 'knife-story-nonce';
 
 
     /*
@@ -288,6 +298,14 @@ class Knife_Story_Manager {
      */
     public static function save_meta($post_id) {
         if(get_post_type($post_id) !== self::$slug) {
+            return;
+        }
+
+        if(!isset($_REQUEST[self::$nonce])) {
+            return;
+        }
+
+        if(!wp_verify_nonce($_REQUEST[self::$nonce], 'metabox')) {
             return;
         }
 

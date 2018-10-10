@@ -33,6 +33,9 @@ class Knife_Select_Links {
 
     /**
      * Unique nonce string using for ajax referer check
+     *
+     * @access  private static
+     * @var     string
      */
     private static $nonce = 'knife-select-nonce';
 
@@ -145,7 +148,6 @@ class Knife_Select_Links {
      * Update content with custom links
      */
     public static function update_content($content) {
-
         if(!is_singular(self::$slug) || !in_the_loop()) {
             return $content;
         }
@@ -205,6 +207,8 @@ class Knife_Select_Links {
 
     /**
      * Save post options
+     *
+     * TODO: verify nonce
      */
     public static function save_metabox($post_id) {
         if(get_post_type($post_id) !== self::$slug) {

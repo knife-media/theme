@@ -6,7 +6,7 @@
 *
 * @package knife-theme
 * @since 1.3
-* @version 1.4
+* @version 1.5
 */
 
 
@@ -90,14 +90,12 @@ class Knife_Primary_Tag {
         }
 
         // Save meta
-        if(empty($_REQUEST[self::$meta])) {
-            return delete_post_meta($post_id, self::$meta);
-        }
+        if(isset($_REQUEST[self::$meta])) {
+            $term = get_term_by('name', $_REQUEST[self::$meta], 'post_tag');
 
-        $term = get_term_by('name', $_REQUEST[self::$meta], 'post_tag');
-
-        if($term && $term->term_id > 0) {
-            update_post_meta($post_id, self::$meta, $term->term_id);
+            if($term && $term->term_id > 0) {
+                update_post_meta($post_id, self::$meta, $term->term_id);
+            }
         }
     }
 
