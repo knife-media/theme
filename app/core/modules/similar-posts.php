@@ -54,7 +54,7 @@ class Knife_Similar_Posts {
      * Using get_the_tags function to retrieve terms with primary tag first
      */
     private static function get_similar($post_id) {
-        $similar = false;// wp_cache_get($post_id, self::$cache);
+        $similar = wp_cache_get($post_id, self::$cache);
 
         if($similar !== false) {
             return $similar;
@@ -98,7 +98,7 @@ class Knife_Similar_Posts {
                     'title' => get_the_title($id),
                     'link' => get_permalink($id),
                     'emoji' => '🍌',
-                    'head' => __('Читайте также', 'knife-theme')
+                    'head' => __('Читайте также:', 'knife-theme')
                 ];
 
                 $relate_terms = get_the_tags($id);

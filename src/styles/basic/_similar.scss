@@ -19,6 +19,11 @@
     padding: 0 .25rem;
     font-size: 2.875rem;
     line-height: 1;
+
+    @media screen and (max-width: 479px) {
+      margin-right: .5rem;
+      font-size: 2rem;
+    }
   }
 
   .similar__item {
@@ -26,11 +31,15 @@
 
     .similar__item-head {
       margin-bottom: .5rem;
-      font-size: .8125rem;
+      font-size: .75rem;
       font-weight: 700;
       text-transform: uppercase;
 
       color: $color-primary;
+
+      @media screen and (max-width: 479px) {
+        font-size: .625rem;
+      }
     }
 
     .similar__item-link {
@@ -50,6 +59,19 @@
         width: 100%;
         height: 100%;
       }
+
+      @media screen and (max-width: 767px) {
+        font-size: 1rem;
+        font-weight: 500;
+      }
+
+      @media screen and (max-width: 479px) {
+        font-size: .9375rem;
+      }
     }
+  }
+
+  @media screen and (max-width: 479px) {
+    padding: .5rem;
   }
 }

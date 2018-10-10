@@ -11,7 +11,7 @@
   /**
    * Check if similar posts exist
    */
-  if(typeof knife_similar_posts === 'undefined' || knife_similar_posts.length < 1) {
+  if(typeof knife_similar_posts === 'undefined') {
     return false;
   }
 
@@ -95,6 +95,10 @@
   var range = Math.floor(post.children.length / 3);
 
   for(var i = 0, start = 0; i < 2; i++) {
+    if(typeof similar[i] === 'undefined') {
+      continue;
+    }
+
     for(var e = range; e < post.children.length - 5; e++) {
       var relative = post.children[e];
 
