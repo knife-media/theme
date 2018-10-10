@@ -36,10 +36,20 @@
 
     .instagram-media {
       min-width: auto !important;
+      opacity: 0;
+
+      &.instagram-media-rendered {
+        opacity: 1;
+      }
     }
 
     .twitter-tweet {
       min-width: auto !important;
+      opacity: 0;
+
+      &.twitter-tweet-rendered {
+        opacity: 1;
+      }
     }
   }
 
