@@ -2,19 +2,27 @@ jQuery(document).ready(function($) {
   /**
    * Remove editor on metabox sort start
    */
-  $('.meta-box-sortables').on('sortstart', function() {
-    $(this).find('.wp-editor-area[id]').each(function() {
-      tinymce.EditorManager.execCommand('mceRemoveEditor', true, $(this).attr('id'));
+  $('.meta-box-sortables').on('sortstart', function(e, ui) {
+    $(ui.item).find('.wp-editor-area[id]').each(function() {
+      var editor = $(this).attr('id');
+
+      if($(this).parents('.tmce-active').length) {
+        tinymce.EditorManager.execCommand('mceRemoveEditor', true, editor);
+      }
     });
   });
 
 
   /**
-   * Recreated editor on metabox sort stop
+   * Recreate editor on metabox sort stop
    */
-  jQuery('.meta-box-sortables').on('sortstop', function() {
-    $(this).find('.wp-editor-area[id]').each(function() {
-      tinymce.EditorManager.execCommand('mceAddEditor', true, $(this).attr('id'));
+  jQuery('.meta-box-sortables').on('sortstop', function(e, ui) {
+    $(ui.item).find('.wp-editor-area[id]').each(function() {
+      var editor = $(this).attr('id');
+
+      if($(this).parents('.tmce-active').length) {
+        tinymce.EditorManager.execCommand('mceAddEditor', true, editor);
+      }
     });
   });
 });
