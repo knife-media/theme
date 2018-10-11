@@ -1,0 +1,78 @@
+.widget-select {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-self: flex-start;
+  position: relative;
+
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0 0 1rem 1rem;
+  overflow: hidden;
+
+  background-color: #eee;
+
+  .widget-select__head {
+    position: relative;
+    z-index: 2;
+
+    width: calc(100% + 2rem);
+    margin-left: -1rem;
+
+    color: $color-white;
+    background-color: $color-select;
+  }
+
+  .widget-select__inner {
+    display: flex;
+    position: relative;
+
+    width: calc(100% / 4 - 1rem);
+    margin: 1rem 1rem 0 0;
+
+    @media screen and (max-width: 1023px) {
+      width: calc(100% / 2 - 1rem);
+    }
+
+    @media screen and (max-width: 479px) {
+      width: calc(100% - 1rem);
+    }
+  }
+
+  .widget-select__link {
+    display: block;
+
+    width: 100%;
+    padding: 0 1rem 2rem;
+
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+
+    color: $color-select;
+    background-color: $color-white;
+
+    transition: color .25s, background .25s;
+
+    strong {
+      display: block;
+
+      font-size: 10rem;
+      font-weight: 400;
+      line-height: 1;
+
+      @media screen and (max-width: 767px) {
+        font-size: 6rem;
+      }
+    }
+
+    &:hover {
+      color: $color-white;
+      background-color: $color-select;
+    }
+
+    @media screen and (max-width: 767px) {
+      font-size: 1.25rem;
+    }
+  }
+}

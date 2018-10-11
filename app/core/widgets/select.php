@@ -1,25 +1,24 @@
 <?php
 /**
- * Story widget
+ * Select widget
  *
- * 4 stories in a row
+ * 4 select in a row
  *
  * @package knife-theme
- * @since 1.3
- * @version 1.4
+ * @since 1.5
  */
 
 
-class Knife_Widget_Story extends WP_Widget {
+class Knife_Widget_Select extends WP_Widget {
 
     public function __construct() {
         $widget_ops = [
-            'classname' => 'story',
-            'description' => __('Выводит полосу из историй в виде карточек.', 'knife-theme'),
+            'classname' => 'select',
+            'description' => __('Выводит блок из 4 последних подборок.', 'knife-theme'),
             'customize_selective_refresh' => true
         ];
 
-        parent::__construct('knife_widget_story', __('[НОЖ] Истории', 'knife-theme'), $widget_ops);
+        parent::__construct('knife_widget_select', __('[НОЖ] Подборки', 'knife-theme'), $widget_ops);
     }
 
 
@@ -43,19 +42,24 @@ class Knife_Widget_Story extends WP_Widget {
         $query = new WP_Query([
             'post_status' => 'publish',
             'ignore_sticky_posts' => 1,
-            'post_type' => 'story',
-            'offset' => $instance['offset'],
-            'posts_per_page' => $instance['posts_per_page']
+            'post_type' => 'select',
+            'posts_per_page' => $instance['posts_per_page'],
+            'offset' => $instance['offset']
         ]);
 
 
-        if($query->have_posts() && $query->found_posts >= $instance['posts_per_page']) {
+        if($query->have_posts()) {
             echo $args['before_widget'];
+
+            printf('<a class="widget-select__head head" href="%2$s">%1$s</a>',
+                esc_html($instance['title']),
+                esc_url(get_post_type_archive_link('select'))
+            );
 
             while($query->have_posts()) {
                 $query->the_post();
 
-                include(get_template_directory() . '/templates/widget-story.php');
+                include(get_template_directory() . '/templates/widget-select.php');
             }
 
             wp_reset_query();
@@ -136,5 +140,5 @@ class Knife_Widget_Story extends WP_Widget {
  * It is time to register widget
  */
 add_action('widgets_init', function() {
-    register_widget('Knife_Widget_Story');
+    register_widget('Knife_Widget_Select');
 });

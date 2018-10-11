@@ -6,6 +6,7 @@
 *
 * @package knife-theme
 * @since 1.4
+* @version 1.5
 */
 
 if (!defined('WPINC')) {
@@ -71,6 +72,9 @@ class Knife_Select_Links {
         // Add scripts to admin page
         add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
 
+        // Update title with strong number
+        add_filter('the_title', [__CLASS__, 'select_title'], 10, 2);
+
         // Filter content to show custom links
         add_filter('the_content', [__CLASS__, 'update_content']);
     }
@@ -118,6 +122,24 @@ class Knife_Select_Links {
         }
 
         return $template;
+    }
+
+
+    /**
+     * Filter the select title
+     *
+     * @since 1.5
+     */
+    public static function select_title($title, $post_id) {
+        if(!is_admin()) {
+            $words = explode(' ', ltrim($title));
+
+            if(is_numeric($words[0])) {
+                $title = "<strong>{$words[0]}</strong> " . implode(' ', array_slice($words, 1));
+            }
+        }
+
+        return $title;
     }
 
 
