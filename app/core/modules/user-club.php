@@ -194,7 +194,7 @@ class Knife_User_Club {
             ],
             'label'                 => __('Клуб', 'knife-theme'),
             'description'           => __('Клуб — это сообщество друзей «Ножа», <br>которым есть что сказать.', 'knife-theme'),
-            'supports'              => ['title', 'thumbnail', 'revisions', 'editor', 'excerpt', 'author'],
+            'supports'              => ['title', 'thumbnail', 'revisions', 'editor', 'excerpt', 'author', 'comments'],
             'hierarchical'          => false,
             'public'                => true,
             'show_ui'               => true,
