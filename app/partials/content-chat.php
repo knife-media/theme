@@ -12,7 +12,7 @@
     <div class="entry-header">
         <?php
             the_info(
-                '<div class="entry-header__head">', '</div>',
+                '<div class="entry-header__info">', '</div>',
                 ['author', 'date', 'category', 'club', 'label']
             );
 
