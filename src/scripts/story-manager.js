@@ -21,7 +21,7 @@
    *
    * @link https://github.com/glidejs/glide/issues/224
    */
-  if(story.querySelectorAll('.glide__slide').length === 0) {
+  if(story.querySelectorAll('.glide__slide').length < 1) {
     return false;
   }
 
@@ -74,7 +74,6 @@
         wrap.appendChild(kicker);
       })();
 
-
       // Append media
       (function(){
         if(typeof item.image === 'undefined' || typeof item.ratio === 'undefined') {
@@ -88,7 +87,6 @@
 
         slide.appendChild(image);
       })();
-
 
       // Append entry
       (function(){
