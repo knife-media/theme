@@ -72,7 +72,15 @@ class Knife_Similar_Posts {
                 'tag_id' => $the_terms[0],
                 'post__not_in' => [$post_id],
                 'post_status' => 'publish',
-                'ignore_sticky_posts' => true
+                'ignore_sticky_posts' => true,
+                'tax_query' => [
+                    [
+                        'taxonomy' => 'category',
+                        'field'    => 'slug',
+                        'terms'    => ['news'],
+                        'operator' => 'NOT IN'
+                    ]
+                ]
             ]);
 
             $related = [];
@@ -82,10 +90,11 @@ class Knife_Similar_Posts {
 
                 foreach(get_the_terms($id, 'post_tag') as $tag) {
                     if(in_array($tag->term_id, $the_terms)) {
-                        $reated[$id] = $related[$id] + 1;
+                        $related[$id] = $related[$id] + 1;
                     }
                 }
             }
+
 
             // Sort by tags count
             arsort($related);
@@ -97,7 +106,7 @@ class Knife_Similar_Posts {
                 $relate_items = [
                     'title' => get_the_title($id),
                     'link' => get_permalink($id),
-                    'emoji' => '🍌',
+                    'count' => $count,
                     'head' => __('Читайте также:', 'knife-theme')
                 ];
 
