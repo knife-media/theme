@@ -20,7 +20,7 @@
   }
 
   if(options.block.length > 1) {
-    widget = document.createElement('div');
+    var widget = document.createElement('div');
     widget.classList.add('entry-footer__relap');
     widget.innerHTML = '<script id="' + options.block + '"></script>';
     document.querySelector('.entry-footer').appendChild(widget);
