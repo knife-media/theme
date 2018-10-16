@@ -34,10 +34,10 @@ class Knife_Primary_Tag {
         // Enqueue scripts only admin side
         add_action('admin_enqueue_scripts', [__CLASS__, 'add_assets']);
 
-        // save meta on save post
+        // Save meta on save post
         add_action('save_post', [__CLASS__, 'save_meta'], 15);
 
-        // move primary tag to first position
+        // Move primary tag to first position
         add_filter('get_the_tags', [__CLASS__, 'sort_tags']);
     }
 
@@ -105,6 +105,10 @@ class Knife_Primary_Tag {
      */
     public static function sort_tags($items) {
         global $post;
+
+        if(!is_array($items)) {
+            return $items;
+        }
 
         if($primary = get_post_meta($post->ID, self::$meta, true)) {
             $sorted = [];

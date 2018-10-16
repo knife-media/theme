@@ -40,12 +40,10 @@
 
   a {
     color: $color-primary;
-    transition: filter .25s, border .25s;
 
     border-bottom: 1px solid $color-primary;
 
     &:hover {
-      filter: brightness(150%);
       border-bottom-color: transparent;
     }
   }
@@ -86,7 +84,6 @@
   h1, h2, h3 {
     margin-top: 2.5rem;
     font-weight: 400;
-    line-height: 1.125;
     letter-spacing: .5px;
 
     @media screen and (max-width: 767px) {
@@ -98,7 +95,6 @@
   h4, h5, h6 {
     font-weight: 400;
     letter-spacing: .25px;
-    line-height: 1.25;
 
     @media screen and (max-width: 767px) {
       margin-bottom: .5rem;
@@ -107,6 +103,7 @@
 
   h1 {
     font-size: 2.25rem;
+    line-height: 1.125;
 
     @media screen and (max-width: 767px) {
       font-size: 1.625rem;
@@ -115,6 +112,7 @@
 
   h2 {
     font-size: 1.75rem;
+    line-height: 1.125;
 
     @media screen and (max-width: 767px) {
       font-size: 1.5rem;
@@ -123,6 +121,7 @@
 
   h3 {
     font-size: 1.5rem;
+    line-height: 1.25;
 
     @media screen and (max-width: 767px) {
       font-size: 1.375rem;
@@ -131,6 +130,7 @@
 
   h4 {
     font-size: 1.375rem;
+    line-height: 1.25;
 
     @media screen and (max-width: 767px) {
       font-size: 1.125rem;
@@ -140,6 +140,7 @@
   h5 {
     margin-bottom: 0;
     font-size: 1.125rem;
+    line-height: 1.25;
 
     @media screen and (max-width: 767px) {
       font-size: 1rem;
@@ -187,7 +188,6 @@
   table {
     display: block;
 
-    width: 100%;
     overflow-y: hidden;
 
     tbody {

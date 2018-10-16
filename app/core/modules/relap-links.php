@@ -1,8 +1,8 @@
 <?php
 /**
-* Hypercomments handler
+* Relap links
 *
-* Set Hypercomments script options
+* Set relap links options
 *
 * @package knife-theme
 * @since 1.5
