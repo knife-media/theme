@@ -1,10 +1,9 @@
 <?php
 /**
- * Story archive template
+ * Select archive template
  *
  * @package knife-theme
- * @since 1.3
- * @version 1.4
+ * @since 1.5
  */
 get_header(); ?>
 
@@ -13,7 +12,7 @@ get_header(); ?>
         if(have_posts()) :
             while(have_posts()) : the_post();
 
-                get_template_part('partials/loop', 'story');
+                get_template_part('partials/loop', 'select');
 
             endwhile;
         else :

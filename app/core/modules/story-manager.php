@@ -61,10 +61,10 @@ class Knife_Story_Manager {
         // Register story post type
         add_action('after_setup_theme', [__CLASS__, 'register_story']);
 
-        // Include news archive template
+        // Include story single template
         add_filter('single_template', [__CLASS__, 'include_single']);
 
-        // Include news archive template
+        // Include story archive template
         add_filter('archive_template', [__CLASS__, 'include_archive']);
 
         // Insert admin side assets

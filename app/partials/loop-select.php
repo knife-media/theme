@@ -1,6 +1,6 @@
 <?php
 /**
- * Select widget template
+ * Select archive loop partial template
  *
  * @package knife-theme
  * @since 1.5

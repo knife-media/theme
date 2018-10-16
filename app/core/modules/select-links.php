@@ -57,8 +57,11 @@ class Knife_Select_Links {
         // Register select post type
         add_action('init', [__CLASS__, 'register_type']);
 
-        // Change single post type template path
+        // Include select single template
         add_action('single_template', [__CLASS__, 'include_single']);
+
+        // Include select archive template
+        add_filter('archive_template', [__CLASS__, 'include_archive']);
 
         // Add select metabox
         add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
@@ -106,6 +109,24 @@ class Knife_Select_Links {
             'exclude_from_search'   => false,
             'publicly_queryable'    => true
         ]);
+    }
+
+
+    /**
+     * Include archive story template
+     *
+     * @since 1.5
+     */
+    public static function include_archive($template) {
+        if(is_post_type_archive(self::$slug)) {
+            $new_template = locate_template(['templates/archive-select.php']);
+
+            if(!empty($new_template)) {
+                return $new_template;
+            }
+        }
+
+        return $template;
     }
 
 
@@ -269,10 +290,6 @@ class Knife_Select_Links {
 
                 if(!empty($value)) {
                     $meta[$i][$key] = sanitize_text_field($value);
-
-                    if($key === 'link') {
-                        $meta[$i]['post'] = url_to_postid($value);
-                    }
                 }
             }
         }
@@ -288,18 +305,6 @@ class Knife_Select_Links {
      */
     private static function get_item($item, $content = '', $meta = '') {
         global $post;
-
-        if(intval($item['post']) > 0) {
-            $post = get_post($item['post']);
-            setup_postdata($post);
-
-            $meta = the_info(
-                '<div class="select__info">', '</div>',
-                ['author', 'date'], false
-            );
-
-            wp_reset_postdata();
-        }
 
         $link = sprintf('<a class="select__link" href="%2$s">%1$s</a>',
             esc_html($item['text'] ?? ''), esc_url($item['link'] ?? '')
