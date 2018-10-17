@@ -44,14 +44,11 @@ class Knife_Widget_Informer extends WP_Widget {
         if(!empty($instance['title']) && !empty($instance['link'])) {
             echo $args['before_widget'];
 
-            $styles = [
-                'color: ' . $instance['color'],
-                'background-color: ' . $instance['background']
-            ];
+            $post_id = url_to_postid($instance['link']);
+            $options = $this->get_attributes($instance, $post_id);
 
-            if(empty($instance['sticker'])) {
-                $post_id = url_to_postid($instance['link']);
-                $sticker = get_post_meta($post_id, '_knife-sticker', true);
+            if(empty($instance['sticker']) && $post_id > 0) {
+                $instance['sticker'] = get_post_meta($post_id, '_knife-sticker', true);
             }
 
             include(get_template_directory() . '/templates/widget-informer.php');
@@ -144,6 +141,36 @@ class Knife_Widget_Informer extends WP_Widget {
             esc_attr($instance['background'])
         );
     }
+
+
+    /**
+     * Generate link attributes
+     */
+    private function get_attributes($instance, $post_id, $attributes = []) {
+        $options = [
+            'href' => esc_url($instance['link']),
+            'target' => '_blank',
+            'data-action' => __('Informer click', 'knife-theme'),
+            'data-label' => $instance['link']
+        ];
+
+        $options['style'] = implode('; ', [
+            'color: ' . $instance['color'],
+            'background-color: ' . $instance['background']
+        ]);
+
+        if($post_id > 0) {
+            unset($options['target']);
+            $options['data-label'] = get_post_field('post_name', $post_id);
+        }
+
+        foreach($options as $key => $value) {
+            $attributes[] = $key . '="' . esc_attr($value) . '"';
+        }
+
+        return $attributes;
+    }
+
 }
 
 

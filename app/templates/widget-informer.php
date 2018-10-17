@@ -1,15 +1,16 @@
 <?php
 /**
- * Feature widget template
+ * Informer widget template
  *
- * Feature is an important single post with feature meta
+ * Informer is an important single post with feature meta
  *
  * @package knife-theme
  * @since 1.4
+ * @version 1.5
  */
 ?>
 
-<a class="widget-informer__inner" href="<?php echo esc_url($instance['link']); ?>" target="_blank" style="<?php echo implode('; ', $styles); ?>">
+<a class="widget-informer__inner" <?php echo implode(' ', $options); ?>>
     <div class="widget-informer__content">
         <?php
             printf(
