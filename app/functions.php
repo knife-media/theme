@@ -509,6 +509,9 @@ require get_template_directory() . '/core/modules/comments-load.php';
 // Relap links settings
 require get_template_directory() . '/core/modules/relap-links.php';
 
+// Yandex RTB loader
+require get_template_directory() . '/core/modules/yandex-rtb.php';
+
 // Enable terms emojis for default and custom taxonomies
 require get_template_directory() . '/core/modules/terms-emoji.php';
 

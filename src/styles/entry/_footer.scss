@@ -25,6 +25,9 @@
   }
 
   .entry-footer__relap {
+    display: block;
+    position: relative;
+
     padding: 0 2rem;
     background-color: transparent;
 
@@ -47,5 +50,11 @@
     .share__link {
       flex: 1 1 auto;
     }
+  }
+
+  .entry-footer__rtb {
+    position: relative;
+
+    overflow: hidden;
   }
 }
