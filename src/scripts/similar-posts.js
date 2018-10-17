@@ -85,6 +85,24 @@
     link.innerHTML = similar.title;
     item.appendChild(link);
 
+    // Append gtm action to similar link
+    (function() {
+      if(typeof similar.action === 'undefined') {
+        return false;
+      }
+
+      link.setAttribute('data-action', similar.action);
+    })();
+
+    // Append gtm label to similar link
+    (function() {
+      if(typeof similar.label === 'undefined') {
+        return false;
+      }
+
+      link.setAttribute('data-label', similar.label);
+    })();
+
     relative.parentNode.insertBefore(wrap, relative.nextSibling);
   }
 

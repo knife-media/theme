@@ -34,11 +34,9 @@ class Knife_Similar_Posts {
 
     /**
      * Inject similar posts data
-     *
-     * TODO: remove post format condition after cards post type release
      */
     public static function inject_object() {
-        if(is_singular('post') && !in_category('news') && !has_post_format('chat')) {
+        if(is_singular('post') && !in_category('news')) {
             $similar = self::get_similar(get_queried_object_id());
 
             if($similar > 0) {
@@ -106,8 +104,10 @@ class Knife_Similar_Posts {
                 $relate_items = [
                     'title' => get_the_title($id),
                     'link' => get_permalink($id),
-                    'count' => $count,
-                    'head' => __('Читайте также:', 'knife-theme')
+                    'label' => get_post_field('post_name', $id),
+                    'action' => __('Similar click', 'knife-theme'),
+                    'head' => __('Читайте также:', 'knife-theme'),
+                    'count' => $count
                 ];
 
                 $relate_terms = get_the_tags($id);
