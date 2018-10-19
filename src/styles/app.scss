@@ -50,6 +50,8 @@ body {
 // Import block layouts
 @import "block/*.scss";
 
+@import "embed/*.scss";
+
 // Import entry styles
 @import "entry/*.scss";
 

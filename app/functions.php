@@ -136,19 +136,6 @@ add_filter('image_send_to_editor', function($html, $id, $caption, $title, $align
 }, 10, 9);
 
 
-// Default embed width
-add_filter('embed_defaults', function() {
-    return ['width' => 640, 'height' => 525];
-});
-
-
-add_filter('embed_oembed_html', function($html, $url, $attr) {
-    $html = '<figure class="figure figure--embed">' . $html . '</figure>';
-
-    return $html;
-}, 10, 3);
-
-
 // Remove fcking emojis and wordpress meta for security reasons
 add_action('init', function() {
     remove_action('wp_head', 'print_emoji_detection_script', 7);
