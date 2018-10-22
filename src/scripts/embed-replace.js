@@ -17,7 +17,11 @@
         iframe.setAttribute( "allowfullscreen", "" );
         iframe.setAttribute( "src", "https://www.youtube.com/embed/"+ this.dataset.embed +"?rel=0&showinfo=0&autoplay=1" );
 
-        this.appendChild(iframe)
+        while (this.firstChild) {
+          this.removeChild(this.firstChild);
+        }
+
+        this.appendChild(iframe);
     });
   };
 

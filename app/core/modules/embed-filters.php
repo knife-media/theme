@@ -115,10 +115,13 @@ class Knife_Embed_Filters {
             }
 
             $result = sprintf(
-                '<a class="embed-youtube" href="%1$s" target="_blank" data-embed="%2$s" style="background-image: url(%3$s)"></a>',
-                esc_url($url),
+                '<div class="embed-youtube" data-embed="%1$s">%2$s</div>',
                 esc_attr($match[1]),
-                esc_url($preview)
+                sprintf(
+                    '<a href="%1$s" target="_blank" style="background-image: url(%2$s)"></a>',
+                    esc_url($url),
+                    esc_url($preview)
+                )
             );
         }
 
