@@ -4,6 +4,7 @@
  *
  * @package knife-theme
  * @since 1.1
+ * @version 1.5
  */
 
 ?><!DOCTYPE html>
@@ -30,6 +31,12 @@
 <noscript>
     <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KZ7MHM" style="display:none;"></iframe>
 </noscript>
+
+<?php if(is_active_sidebar('knife-upper')) : ?>
+    <div class="block-upper">
+        <?php dynamic_sidebar('knife-upper'); ?>
+    </div>
+<?php endif; ?>
 
 <header class="header">
     <div class="header__inner">

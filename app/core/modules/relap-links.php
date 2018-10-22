@@ -80,7 +80,6 @@ class Knife_Relap_Links {
              ]
         ));
     }
-
 }
 
 

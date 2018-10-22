@@ -52,9 +52,7 @@
 
          <div class="footer__copy">
             <?php
-                if(is_active_sidebar('knife-footer')) :
-                    dynamic_sidebar('knife-footer');
-                endif;
+                echo get_theme_mod('footer-description', '');
             ?>
         </div>
 
