@@ -280,7 +280,7 @@ class Knife_Hidden_Widgets {
 
         if($page_children) {
             printf(
-                '<label><input type="checkbox" id="include_children" name="conditions[page_children][]" value="has" %1$s />%2$s</label>',
+                '<label class="condition-children"><input type="checkbox" id="include_children" name="conditions[page_children][]" value="has" %1$s />%2$s</label>',
                 checked($has_children, true, false),
                 __('Включить вложенные', 'knife-theme')
             );
@@ -335,7 +335,7 @@ class Knife_Hidden_Widgets {
 
                 if(!isset($_POST['widget-conditions-visible'])) {
                     printf('<a href="#" class="button display-options">%s</a>',
-                        '<span class="dashicons dashicons-visibility"></span>'
+                        '<span class="dashicons dashicons-admin-tools"></span>'
                     );
                 }
             ?>
@@ -370,7 +370,7 @@ class Knife_Hidden_Widgets {
                         ]);
                     ?>
                         <div class="condition">
-                            <div class="selection alignleft">
+                            <div class="selection">
                                 <select class="conditions-rule-major" name="conditions[rules_major][]">
                                     <?php
                                         printf(
@@ -429,9 +429,13 @@ class Knife_Hidden_Widgets {
                             <div class="condition-control">
                                 <span class="condition-conjunction"><?php _e('или', 'knife-theme'); ?></span>
 
-                                <div class="actions alignright">
-                                    <a href="#" class="add-condition">+</a> |
-                                    <a href="#" class="delete-condition">&cross;</a>
+                                <div class="actions">
+                                    <a href="#" class="add-condition">
+                                        <span class="dashicons dashicons-plus-alt"></span>
+                                    </a>
+                                    <a href="#" class="delete-condition">
+                                        <span class="dashicons dashicons-dismiss"></span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
