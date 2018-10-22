@@ -449,6 +449,9 @@ require get_template_directory() . '/core/modules/widget-handler.php';
 // Theme filters
 require get_template_directory() . '/core/modules/theme-filters.php';
 
+// Widget visibility handler
+require get_template_directory() . '/core/modules/hidden-widgets.php';
+
 // Upgrade theme menus
 require get_template_directory() . '/core/modules/menu-upgrade.php';
 
