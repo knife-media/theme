@@ -70,10 +70,10 @@ class Knife_Widget_Handler {
         ]);
 
         register_sidebar([
-            'name'          => __('Шапка сайта', 'knife-theme'),
-            'id'            => 'knife-upper',
+            'name'          => __('Баннер в шапке', 'knife-theme'),
+            'id'            => 'knife-poster',
             'description'   => __('Добавленные виджеты появятся над главным меню.', 'knife-theme'),
-            'before_widget' => '<div class="widget-%2$s widget-%2$s--upper">',
+            'before_widget' => '<div class="widget-%2$s widget-%2$s--poster">',
             'after_widget'  => '</div>'
         ]);
 

@@ -13,12 +13,10 @@
   width: 100%;
   height: 100vh;
   overflow: auto;
-  opacity: 0;
 
   background-color: rgba(0, 0, 0, .95);
 
   transform: translate3d(0, 0, 0);
-  transition: opacity .25s;
 
   -webkit-overflow-scrolling: touch;
 
@@ -107,8 +105,6 @@
   &.search--expand {
     z-index: 4;
     visibility: visible;
-
-    opacity: 1;
   }
 }
 

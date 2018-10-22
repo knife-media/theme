@@ -7,8 +7,8 @@
  */
 ?>
 
-<footer class="footer">
-    <div class="footer__inner">
+<div class="block-bottom">
+    <footer class="footer">
 
         <div class="footer__logo">
             <a class="footer__logo-link" href="<?php echo esc_url(home_url('/')); ?>">
@@ -56,8 +56,8 @@
             ?>
         </div>
 
-    </div>
-</footer>
+    </footer>
+</div>
 
 <?php wp_footer(); ?>
 </body>
