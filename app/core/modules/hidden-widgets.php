@@ -34,10 +34,18 @@ class Knife_Hidden_Widgets {
 
         // Set frontend actions
         if(!is_admin() && !in_array($GLOBALS['pagenow'], ['wp-login.php', 'wp-register.php'])) {
-            add_filter('widget_display_callback', [__CLASS__, 'filter_widget']);
-            add_filter('sidebars_widgets', [__CLASS__, 'sidebars_widgets']);
-            add_action('template_redirect', [__CLASS__, 'template_redirect']);
+            add_action('init', [__CLASS__, 'init']);
         }
+    }
+
+
+    /**
+     * Set frontend actions on init
+     */
+    public static function init() {
+        add_filter('widget_display_callback', [__CLASS__, 'filter_widget']);
+        add_filter('sidebars_widgets', [__CLASS__, 'sidebars_widgets']);
+        add_action('template_redirect', [__CLASS__, 'template_redirect']);
     }
 
 
@@ -517,7 +525,7 @@ class Knife_Hidden_Widgets {
 
                 // New multi widget (WP_Widget)
                 if(!is_null($widget_number)) {
-                    if(isset($settings[$id_base][$widget_number])&& false === self::filter_widget($settings[$id_base][$widget_number])) {
+                    if(isset($settings[$id_base][$widget_number]) && false === self::filter_widget($settings[$id_base][$widget_number])) {
                         unset($widget_areas[$widget_area][$position]);
                     }
                 }
@@ -575,13 +583,13 @@ class Knife_Hidden_Widgets {
             if(isset($condition_result_cache[ $condition_key ])) {
                 $condition_result = $condition_result_cache[ $condition_key ];
             } else {
-                switch($rule['major']){
+                switch($rule['major']) {
                      case 'page':
                         // Previously hardcoded post type options.
                         if ('post' == $rule['minor']) {
                             $rule['minor'] = 'post_type-post';
                         }
-                        else if(! $rule['minor']) {
+                        else if(!$rule['minor']) {
                             $rule['minor'] = 'post_type-page';
                         }
 
@@ -612,17 +620,17 @@ class Knife_Hidden_Widgets {
 
                             default:
                                 if(substr($rule['minor'], 0, 10) == 'post_type-') {
-                                    $condition_result = is_singular( substr($rule['minor'], 10));
+                                    $condition_result = is_singular(substr($rule['minor'], 10)) && !is_front_page();
                                 } elseif($rule['minor'] == get_option('page_for_posts')) {
                                     // If $rule['minor'] is a page ID which is also the posts page
                                     $condition_result = $wp_query->is_posts_page;
                                 } else {
                                     // $rule['minor'] is a page ID
-                                    $condition_result = is_page() &&($rule['minor'] == get_the_ID());
+                                    $condition_result = is_page() && ($rule['minor'] == get_the_ID());
 
                                     // Check if $rule['minor'] is parent of page ID
-                                    if(!$condition_result && isset($rule['has_children'])&& $rule['has_children']) {
-                                        $condition_result = wp_get_post_parent_id( get_the_ID()) == $rule['minor'];
+                                    if(!$condition_result && isset($rule['has_children']) && $rule['has_children']) {
+                                        $condition_result = wp_get_post_parent_id(get_the_ID()) == $rule['minor'];
                                     }
                                 }
                             break;

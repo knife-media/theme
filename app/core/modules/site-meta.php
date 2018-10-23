@@ -44,11 +44,16 @@ class Knife_Site_Meta {
     public static function add_customize_setting($wp_customize) {
         $wp_customize->add_setting(self::$footer_description);
 
-        $wp_customize->add_control(new WP_Customize_Control($wp_customize,
+        $wp_customize->add_section('knife_footer', [
+            'title' => __('Подвал сайта','knife-theme'),
+            'priority' => 160,
+        ]);
+
+        $wp_customize->add_control(new WP_Customize_Code_Editor_Control($wp_customize,
             self::$footer_description, [
                  'label' => __('Описание в подвале', 'knife-theme'),
-                 'section' => 'title_tagline',
-                 'type' => 'textarea',
+                 'section' => 'knife_footer',
+                 'code_type' => 'text/html',
                  'priority' => 10
              ]
         ));

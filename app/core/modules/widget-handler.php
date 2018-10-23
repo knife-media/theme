@@ -6,7 +6,7 @@
 *
 * @package knife-theme
 * @since 1.2
-* @version 1.4
+* @version 1.5
 */
 
 
@@ -146,12 +146,8 @@ class Knife_Widget_Handler {
     public static function include_widgets() {
         $include = get_template_directory() . '/core/widgets/';
 
-        $widgets = [
-            'story', 'club', 'script', 'televisor', 'recent', 'units', 'single', 'informer', 'details', 'transparent'
-        ];
-
-        foreach($widgets as $id) {
-            include_once($include . $id . '.php');
+        foreach(glob($include . "/*.php") as $widget) {
+            include_once($include . basename($widget));
         }
     }
 
