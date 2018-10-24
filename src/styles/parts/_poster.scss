@@ -3,3 +3,15 @@
   position: relative;
   z-index: 6;
 }
+
+body.is-navbar {
+  .poster {
+    display: none;
+  }
+}
+
+body.is-search {
+  .poster {
+    display: none;
+  }
+}
