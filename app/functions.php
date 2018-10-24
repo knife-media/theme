@@ -436,6 +436,9 @@ require get_template_directory() . '/core/modules/widget-handler.php';
 // Theme filters
 require get_template_directory() . '/core/modules/theme-filters.php';
 
+// Widget visibility handler
+require get_template_directory() . '/core/modules/hidden-widgets.php';
+
 // Upgrade theme menus
 require get_template_directory() . '/core/modules/menu-upgrade.php';
 
@@ -460,8 +463,8 @@ require get_template_directory() . '/core/modules/special-projects.php';
 // Login screen custom styles
 require get_template_directory() . '/core/modules/access-screen.php';
 
-// Custom header meta for social networks and search engines
-require get_template_directory() . '/core/modules/header-meta.php';
+// Custom site meta and footer description
+require get_template_directory() . '/core/modules/site-meta.php';
 
 // Customize default wordpress embed code
 require get_template_directory() . '/core/modules/embed-filters.php';

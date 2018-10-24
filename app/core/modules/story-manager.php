@@ -209,6 +209,8 @@ class Knife_Story_Manager {
     public static function register_story() {
         register_post_type(self::$slug, [
             'labels'                    => [
+                'name'                  => __('Истории', 'knife-theme'),
+                'singular_name'         => __('История', 'knife-theme'),
                 'menu_name'             => __('Истории', 'knife-theme'),
                 'name_admin_bar'        => __('Историю', 'knife-theme'),
                 'parent_item_colon'     => __('Родительская история:', 'knife-theme'),

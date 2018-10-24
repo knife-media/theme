@@ -1,0 +1,82 @@
+.widget-conditional-hide {
+  display: none;
+}
+
+.widget-conditional .widget-conditional-inner {
+  background: #F9F9F9;
+  padding: 12px 10px 0;
+
+  border: 1px solid #DFDFDF;
+}
+
+.widget-conditional {
+  margin-bottom: 12px;
+}
+
+.widget-conditional .conditions{
+  margin-bottom: 10px;
+}
+
+.widget-conditional .condition {
+  position: relative;
+  margin-top: 10px;
+}
+
+.widget-conditional .condition select {
+  width: 100%;
+  margin-bottom: 3px;
+}
+
+.widget-conditional .condition-top select {
+  width: auto;
+}
+
+.widget-conditional .condition-control {
+  margin-top: 10px;
+}
+
+.widget-conditional .selection {
+  margin-right: 60px;
+}
+
+.widget-conditional .conditions-rule-has-children {
+  display: block;
+}
+
+.widget-conditional .condition-children {
+  display: block;
+  margin-top: 8px;
+}
+
+.widget-conditional .condition .actions {
+  position: absolute;
+  right: 0;
+  top: 8px;
+}
+
+.widget-conditional .condition-control a {
+  text-decoration: none;
+  box-shadow: none;
+}
+
+.widget-conditional .condition-control .dashicons {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  color: #333;
+}
+
+.widget-conditional .condition-control .dashicons-dismiss {
+  color: #a00;
+}
+
+.widget-conditional .condition:last-child .condition-conjunction {
+  display: none;
+}
+
+.wp-core-ui .button.display-options {
+  margin-right: 5px;
+  padding-top: 3px;
+  color: #777;
+  text-decoration: none;
+}
