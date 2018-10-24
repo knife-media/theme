@@ -16,6 +16,10 @@
     font-size: 1.125rem;
   }
 
+  .hc__message  {
+    margin-bottom: 24px;
+  }
+
   .hc__menu__line {
     display: none;
   }
@@ -57,6 +61,15 @@
     padding: 2px 0;
 
     div {
+      line-height: 20px;
+    }
+  }
+
+  .hc__message__popup {
+    height: 65px !important;
+
+    .hc__message__popup__item {
+      padding: 1px 12px;
       line-height: 20px;
     }
   }
