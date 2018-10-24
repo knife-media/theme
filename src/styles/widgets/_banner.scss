@@ -4,7 +4,7 @@
 
   width: 100%;
 
-  a {
+  .widget-banner__link {
     display: block;
     position: relative;
 
@@ -12,10 +12,19 @@
 
     img {
       display: block;
-      position: relative;
 
       max-width: 100%;
       margin: 0 auto;
+    }
+
+    &:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      width: 100%;
+      height: 100%;
     }
   }
 

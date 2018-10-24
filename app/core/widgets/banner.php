@@ -30,31 +30,28 @@ class Knife_Widget_Banner extends WP_Widget {
             'title'   => '',
             'image' => '',
             'link' => '',
+            'campaign' => '',
             'background' => '',
             'styles' => ''
         ];
 
-        $settings = [];
         $instance = wp_parse_args((array) $instance, $defaults);
 
-        if(strlen($instance['background']) > 0) {
-            $settings[] = 'background-color: ' . $instance['background'];
+        if(!empty($instance['image']) && !empty($instance['link'])) {
+            echo $args['before_widget'];
+
+            printf('<a class="widget-banner__link" %1$s>%2$s</a>',
+                implode(" ", $this->get_attributes($instance)),
+
+                sprintf('<img src="%1$s" alt="%2$s" style="%3$s">',
+                    esc_url($instance['image']),
+                    esc_attr($instance['title']),
+                    esc_attr($instance['styles'])
+                )
+            );
+
+            echo $args['after_widget'];
         }
-
-        echo $args['before_widget'];
-
-        printf('<a href="%1$s" target="_blank" style="%2$s">%3$s</a>',
-            esc_url($instance['link']),
-            implode(" ", $settings),
-
-            sprintf('<img src="%1$s" alt="%2$s" style="%3$s">',
-                esc_url($instance['image']),
-                esc_attr($instance['title']),
-                esc_attr($instance['styles'])
-            )
-        );
-
-        echo $args['after_widget'];
     }
 
 
@@ -66,6 +63,7 @@ class Knife_Widget_Banner extends WP_Widget {
             'title'   => '',
             'image' => '',
             'link' => '',
+            'campaign' => '',
             'background' => '',
             'styles' => ''
         ];
@@ -111,6 +109,15 @@ class Knife_Widget_Banner extends WP_Widget {
         );
 
         printf(
+            '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"><small>%5$s</small></p>',
+            esc_attr($this->get_field_id('campaign')),
+            esc_attr($this->get_field_name('campaign')),
+            __('Название кампании:', 'knife-theme'),
+            esc_attr($instance['campaign']),
+            __('Событиe в Google Analytics на латинице', 'knife-theme')
+        );
+
+        printf(
             '<p><label for="%1$s">%3$s</label><input class="color-picker" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
             esc_attr($this->get_field_id('background')),
             esc_attr($this->get_field_name('background')),
@@ -129,11 +136,42 @@ class Knife_Widget_Banner extends WP_Widget {
         $instance['title'] = sanitize_text_field($new_instance['title']);
         $instance['link'] = esc_url($new_instance['link']);
         $instance['image'] = esc_url($new_instance['image']);
+        $instance['campaign'] = sanitize_text_field($new_instance['campaign']);
         $instance['styles'] = sanitize_text_field($new_instance['styles']);
         $instance['background'] = sanitize_hex_color($new_instance['background']);
 
         return $instance;
     }
+
+
+    /**
+     * Generate link attributes
+     */
+    private function get_attributes($instance, $attributes = []) {
+        $options = [
+            'href' => esc_url($instance['link']),
+            'target' => '_blank'
+        ];
+
+        if(strlen($instance['campaign']) > 0) {
+            $options['data-banner'] = esc_attr(
+                $instance['campaign']
+            );
+        }
+
+        if(strlen($instance['background']) > 0) {
+            $options['style'] = esc_attr(
+                'background-color: ' . $instance['background']
+            );
+        }
+
+        foreach($options as $key => $value) {
+            $attributes[] = $key . '="' . esc_attr($value) . '"';
+        }
+
+        return $attributes;
+    }
+
 }
 
 
