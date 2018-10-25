@@ -32,6 +32,9 @@ class Knife_Embed_Filters {
 
         // YouTube preloader
         add_filter('pre_oembed_result', [__CLASS__, 'update_youtube_embed'], 10, 2);
+
+        // Vimeo preloader
+        add_filter('pre_oembed_result', [__CLASS__, 'update_vimeo_embed'], 10, 2);
     }
 
 
@@ -115,6 +118,52 @@ class Knife_Embed_Filters {
             }
 
             $result = sprintf(
+                '<div class="embed embed--youtube" data-embed="%1$s">%2$s</div>',
+                esc_attr($match[1]),
+/*              sprintf(
+                    '<a class="embed__dummy" href="%1$s" target="_blank" style="background-image: url(%2$s)"></a>',
+                    esc_url($url),
+                    esc_url($preview)
+                )
+ */
+                '<div class="embed__loader"><span class="embed__loader-bounce"></span></div>'
+            );
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * Update Vimeo html to show preloader
+     *
+     * @since 1.5
+     */
+    public static function update_vimeo_embed($result, $url) {
+        if(preg_match('%https?://(?:.+\.)?vimeo\.com/([\d]+).*%i', $url, $match)) {
+
+            $request = wp_remote_get("https://vimeo.com/api/v2/video/{$match[1]}.json");
+
+            if(is_wp_error( $request ) ) {
+                return false; // Bail early
+            }
+$body = wp_remote_retrieve_body( $request );
+$data = json_decode( $body );
+
+
+            $preview = "https://img.youtube.com/vi/{$match[1]}/default.jpg";
+
+            foreach(['maxresdefault', 'hqdefault', 'mqdefault'] as $size) {
+                $response = wp_remote_head("https://img.youtube.com/vi/{$match[1]}/{$size}.jpg");
+
+                if(wp_remote_retrieve_response_code($response) === 200) {
+                    $preview = "https://img.youtube.com/vi/{$match[1]}/{$size}.jpg";
+
+                    break;
+                }
+            }
+
+            $result = sprintf(
                 '<div class="embed-youtube" data-embed="%1$s">%2$s</div>',
                 esc_attr($match[1]),
                 sprintf(
@@ -127,6 +176,7 @@ class Knife_Embed_Filters {
 
         return $result;
     }
+
 }
 
 
