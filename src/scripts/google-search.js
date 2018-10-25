@@ -185,7 +185,7 @@
 
     document.body.classList.toggle('is-search');
 
-    if(!document.body.classList.contains('is-search')) {
+    if(document.body.classList.contains('is-search')) {
       if(typeof window.__gcse === 'undefined') {
         initCSE(knife_search_id);
       }
