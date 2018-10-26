@@ -146,7 +146,7 @@ class Knife_Embed_Filters {
      * @since 1.5
      */
     public static function update_vimeo_embed($result, $url) {
-        if(preg_match('%https?://(?:.+\.)?vimeo\.com/([\d]+).*%i', $url, $match)) {
+        if(preg_match('%https?://(?:.+\.)?vimeo\.com/(?:video/)?([\d]+).*%i', $url, $match)) {
             $request = wp_remote_get("https://vimeo.com/api/v2/video/{$match[1]}.json");
             $preview = '';
 
