@@ -43,7 +43,7 @@
   /**
    * Create similar block
    */
-  var appendSimilar = function(relative, similar) {
+  function appendSimilar(relative, similar) {
     if(typeof similar.link === 'undefined' || typeof similar.title === 'undefined') {
       return false;
     }

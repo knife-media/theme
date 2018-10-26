@@ -77,7 +77,23 @@
 
   &.embed--youtube .embed__dummy {
     &:after {
-      background-image: url('images/youtube-logo.svg');
+      background-image: url('images/youtube-button.svg');
+      background-size: 4.25rem 3rem;
+      background-repeat: no-repeat;
+      background-position: center;
+
+      opacity: .85;
+      transition: opacity .25s;
+    }
+
+    &:hover:after {
+      opacity: 1;
+    }
+  }
+
+  &.embed--vimeo .embed__dummy {
+    &:after {
+      background-image: url('images/vimeo-button.svg');
       background-size: 4.25rem 3rem;
       background-repeat: no-repeat;
       background-position: center;

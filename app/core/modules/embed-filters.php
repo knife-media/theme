@@ -43,8 +43,13 @@ class Knife_Embed_Filters {
      *
      * @since 1.5
      */
-    public static function set_defaults() {
-        return ['width' => 640, 'height' => 525];
+    public static function set_defaults($defaults) {
+        $defaults = [
+            'width' => 640,
+            'height' => 525
+        ];
+
+        return $defaults;
     }
 
 
@@ -119,14 +124,15 @@ class Knife_Embed_Filters {
 
             $result = sprintf(
                 '<div class="embed embed--youtube" data-embed="%1$s">%2$s</div>',
-                esc_attr($match[1]),
-/*              sprintf(
+                sprintf(
+                    'https://www.youtube.com/embed/%s?rel=0&showinfo=0&autoplay=1',
+                    esc_attr($match[1])
+                ),
+                sprintf(
                     '<a class="embed__dummy" href="%1$s" target="_blank" style="background-image: url(%2$s)"></a>',
                     esc_url($url),
                     esc_url($preview)
                 )
- */
-                '<div class="embed__loader"><span class="embed__loader-bounce"></span></div>'
             );
         }
 
@@ -141,33 +147,29 @@ class Knife_Embed_Filters {
      */
     public static function update_vimeo_embed($result, $url) {
         if(preg_match('%https?://(?:.+\.)?vimeo\.com/([\d]+).*%i', $url, $match)) {
-
             $request = wp_remote_get("https://vimeo.com/api/v2/video/{$match[1]}.json");
+            $preview = '';
 
-            if(is_wp_error( $request ) ) {
-                return false; // Bail early
-            }
-$body = wp_remote_retrieve_body( $request );
-$data = json_decode( $body );
+            if(!is_wp_error($request)) {
+                $meta = json_decode(wp_remote_retrieve_body($request));
 
+                foreach(['thumbnail_large', 'thumbnail_medium', 'thumbnail_small'] as $size) {
+                    if(isset($meta[0]->$size)) {
+                        $preview = $meta[0]->$size;
 
-            $preview = "https://img.youtube.com/vi/{$match[1]}/default.jpg";
-
-            foreach(['maxresdefault', 'hqdefault', 'mqdefault'] as $size) {
-                $response = wp_remote_head("https://img.youtube.com/vi/{$match[1]}/{$size}.jpg");
-
-                if(wp_remote_retrieve_response_code($response) === 200) {
-                    $preview = "https://img.youtube.com/vi/{$match[1]}/{$size}.jpg";
-
-                    break;
+                        break;
+                    }
                 }
             }
 
             $result = sprintf(
-                '<div class="embed-youtube" data-embed="%1$s">%2$s</div>',
-                esc_attr($match[1]),
+                '<div class="embed embed--vimeo" data-embed="%1$s">%2$s</div>',
                 sprintf(
-                    '<a href="%1$s" target="_blank" style="background-image: url(%2$s)"></a>',
+                    'https://player.vimeo.com/video/%s?byline=0&autoplay=1',
+                    esc_attr($match[1])
+                ),
+                sprintf(
+                    '<a class="embed__dummy" href="%1$s" target="_blank" style="background-image: url(%2$s)"></a>',
                     esc_url($url),
                     esc_url($preview)
                 )

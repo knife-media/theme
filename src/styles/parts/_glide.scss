@@ -397,6 +397,10 @@
         height: 4px;
         margin: 0 .5rem;
       }
+
+      @media screen and (max-width: 479px) {
+        margin: 0 .25rem;
+      }
     }
   }
 
