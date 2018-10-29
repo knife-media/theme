@@ -23,6 +23,8 @@
     background-position: center;
     background-size: cover;
 
+    border-bottom: none;
+
     &:before,
     &:after {
       content: '';

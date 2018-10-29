@@ -122,11 +122,24 @@ class Knife_Embed_Filters {
                 }
             }
 
+            $params = [
+                'rel' => 0,
+                'showinfo' => 0,
+                'autoplay' => 1
+            ];
+
+            wp_parse_str(wp_parse_url($url, PHP_URL_QUERY), $query);
+
+            if(isset($query['t'])) {
+                $params['start'] = $query['t'];
+            }
+
             $result = sprintf(
                 '<div class="embed embed--youtube" data-embed="%1$s">%2$s</div>',
                 sprintf(
-                    'https://www.youtube.com/embed/%s?rel=0&showinfo=0&autoplay=1',
-                    esc_attr($match[1])
+                    'https://www.youtube.com/embed/%1$s?%2$s',
+                    esc_attr($match[1]),
+                    build_query($params)
                 ),
                 sprintf(
                     '<a class="embed__dummy" href="%1$s" target="_blank" style="background-image: url(%2$s)"></a>',
