@@ -35,6 +35,9 @@ class Knife_Embed_Filters {
 
         // Vimeo preloader
         add_filter('pre_oembed_result', [__CLASS__, 'update_vimeo_embed'], 10, 2);
+
+        // Replace custom video preloaders in feeds
+        add_filter('the_content_feed', [__CLASS__, 'replace_embeds'], 9);
     }
 
 
@@ -190,6 +193,22 @@ class Knife_Embed_Filters {
         }
 
         return $result;
+    }
+
+
+    /**
+     * Replace custom video preloaders in feeds
+     *
+     * @since 1.5
+     */
+    public static function replace_embeds($content) {
+        $content = preg_replace(
+            '~<figure.*?>\s*<div.+?data-embed="(.+?)".+?</figure>~si',
+            '<iframe src="$1" frameborder="0"></iframe>',
+            $content
+        );
+
+        return $content;
     }
 
 }
