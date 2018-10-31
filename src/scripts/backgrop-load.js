@@ -10,7 +10,7 @@
 
   // Set footer element color
   if(typeof knife_backdrop.color !== 'undefined') {
-    document.querySelector('.footer').style.backgroundColor = '#' + knife_backdrop.color;
+    document.querySelector('.block-bottom').style.backgroundColor = '#' + knife_backdrop.color;
   }
 
   // Apply element if image is not set
