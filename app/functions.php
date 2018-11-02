@@ -439,6 +439,20 @@ add_action('admin_menu', function() {
 });
 
 
+// Change wp_die errors status code for logged-in users
+add_filter('wp_die_handler', function($handler) {
+    if(is_user_logged_in()) {
+        $handler = function($message, $title, $args = []) {
+            $args['response'] = 200;
+
+            _default_wp_die_handler($message, $title, $args);
+        };
+    }
+
+    return $handler;
+});
+
+
 // Add custom theme widgets from common hanlder
 require get_template_directory() . '/core/modules/widget-handler.php';
 
