@@ -112,7 +112,7 @@
    */
   var range = Math.floor(post.children.length / 3);
 
-  for(var i = 0, start = 0; i < 2; i++) {
+  for(var i = 0; i < 2; i++) {
     if(typeof similar[i] === 'undefined') {
       continue;
     }
