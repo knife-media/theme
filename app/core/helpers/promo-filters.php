@@ -7,7 +7,7 @@
  *
  * @package knife-theme
  * @since 1.4
- * @version 1.5
+ * @version 1.6
  */
 
 
@@ -52,3 +52,17 @@ add_action('pre_get_posts', function($query) {
         }
     }
 });
+
+
+/**
+ * Add custom body class to posts with promo tag
+ *
+ * @since 1.6
+ */
+add_filter('body_class', function($classes = []) {
+    if(is_single() && has_tag('promo')) {
+        $classes[] = 'is-promo';
+    }
+
+    return $classes;
+}, 11, 1);
