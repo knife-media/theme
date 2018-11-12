@@ -80,7 +80,7 @@ class Knife_News_Manager {
             $query->set('category__not_in', [self::$news_id]);
 
             if(in_category(self::$slug)) {
-                $query->set('posts_per_page', 1);
+                $query->set('post__in', [0]);
             }
         }
     }

@@ -1,0 +1,34 @@
+.widget-banner {
+  display: block;
+  position: relative;
+
+  width: 100%;
+
+  .widget-banner__link {
+    display: block;
+    position: relative;
+
+    width: 100%;
+
+    img {
+      display: block;
+
+      max-width: 100%;
+      margin: 0 auto;
+    }
+
+    &:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &.widget-banner--sidebar {
+    margin-top: 1rem;
+  }
+}

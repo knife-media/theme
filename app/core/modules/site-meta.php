@@ -1,10 +1,9 @@
 <?php
 /**
-* Add required social meta to blog header
+* Add custom site header meta and footer description
 *
 * @package knife-theme
-* @since 1.2
-* @version 1.4
+* @since 1.5
 */
 
 
@@ -13,18 +12,51 @@ if (!defined('WPINC')) {
 }
 
 
-class Knife_Header_Meta {
+class Knife_Site_Meta {
     /**
-     * Use this method instead of constructor to avoid multiple hook setting
+     * Option to store footer description
      *
-     * @since 1.4
+     * @access  private
+     * @var     string
+     */
+    private static $footer_description = 'footer-description';
+
+
+    /**
+     * Init function instead of constructor
      */
     public static function load_module() {
         add_action('wp_head', [__CLASS__, 'add_meta'], 5);
         add_action('wp_head', [__CLASS__, 'add_icon'], 4);
         add_action('wp_head', [__CLASS__, 'add_mediator'], 6);
 
+        // Add custom theme lang attributes
         add_filter('language_attributes', [__CLASS__, 'add_xmlns']);
+
+        // Add footer description field to customizer
+        add_action('customize_register', [__CLASS__, 'add_customize_setting']);
+    }
+
+
+    /**
+     * Footer description option
+     */
+    public static function add_customize_setting($wp_customize) {
+        $wp_customize->add_setting(self::$footer_description);
+
+        $wp_customize->add_section('knife_footer', [
+            'title' => __('Подвал сайта','knife-theme'),
+            'priority' => 160,
+        ]);
+
+        $wp_customize->add_control(new WP_Customize_Code_Editor_Control($wp_customize,
+            self::$footer_description, [
+                 'label' => __('Описание в подвале', 'knife-theme'),
+                 'section' => 'knife_footer',
+                 'code_type' => 'text/html',
+                 'priority' => 10
+             ]
+        ));
     }
 
 
@@ -60,7 +92,6 @@ class Knife_Header_Meta {
      * Add mediator tags to singular templates
      *
      * @link https://mediator.media/ru/install/
-     * @since 1.4
      */
     public static function add_mediator() {
         if(!is_singular()) {
@@ -244,4 +275,4 @@ class Knife_Header_Meta {
 /**
  * Load current module environment
  */
-Knife_Header_Meta::load_module();
+Knife_Site_Meta::load_module();

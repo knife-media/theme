@@ -1,25 +1,12 @@
 .footer {
   display: flex;
-  flex-flow: row nowrap;
-  justify-content: center;
+  flex-flow: row wrap;
 
   width: 100%;
-  margin-top: 2rem;
-  padding: 2rem 0;
-
-  .footer__inner {
-    display: flex;
-    flex-flow: row wrap;
-
-    width: 100%;
-    max-width: $width-site;
-    padding-left: 1rem;
-    padding-right: 1rem;
-
-    @media screen and (max-width: 1023px) {
-      max-width: $width-tablet;
-    }
-  }
+  max-width: $width-site;
+  margin: 2rem 0;
+  padding-left: 1rem;
+  padding-right: 1rem;
 
   .footer__copy {
     display: block;
@@ -139,6 +126,7 @@
   }
 
   @media screen and (max-width: 1023px) {
-    padding: 1rem 0;
+    max-width: $width-tablet;
+    margin: 1rem 0;
   }
 }

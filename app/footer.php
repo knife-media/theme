@@ -7,8 +7,8 @@
  */
 ?>
 
-<footer class="footer">
-    <div class="footer__inner">
+<div class="block-bottom">
+    <footer class="footer">
 
         <div class="footer__logo">
             <a class="footer__logo-link" href="<?php echo esc_url(home_url('/')); ?>">
@@ -52,14 +52,12 @@
 
          <div class="footer__copy">
             <?php
-                if(is_active_sidebar('knife-footer')) :
-                    dynamic_sidebar('knife-footer');
-                endif;
+                echo get_theme_mod('footer-description', '');
             ?>
         </div>
 
-    </div>
-</footer>
+    </footer>
+</div>
 
 <?php wp_footer(); ?>
 </body>

@@ -90,7 +90,7 @@ class Knife_Select_Links {
         register_post_type(self::$slug, [
             'labels'                => [
                 'name'              => __('Подборки', 'knife-theme'),
-                'singular_name'     => __('Запись в подборку', 'knife-theme'),
+                'singular_name'     => __('Подборка', 'knife-theme'),
                 'add_new'           => __('Добавить запись', 'knife-theme'),
                 'menu_name'         => __('Подборки', 'knife-theme')
             ],

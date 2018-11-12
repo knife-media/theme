@@ -1,0 +1,46 @@
+figure {
+  margin: 0;
+}
+
+.embed {
+  position: relative;
+
+  width: 500px;
+  height: 280px;
+  max-width: 100%;
+}
+
+.embed__dummy {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.embed__dummy:after {
+  content: "\f522";
+  display: flex;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  top: 50%;
+  left: 50%;
+  box-sizing: border-box;
+
+  width: 4rem;
+  height: 4rem;
+  padding-left: .25rem;
+  line-height: 1;
+
+  font-size: 2rem;
+  font-family: 'dashicons';
+  color: #fff;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, .5);
+
+  border-radius: 50%;
+}

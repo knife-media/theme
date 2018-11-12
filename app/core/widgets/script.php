@@ -2,16 +2,19 @@
 /**
  * Script widget
  *
- * Widget for banners and custom html code
+ * Widget custom html code
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.4
+ * @version 1.5
  */
 
 
 class Knife_Widget_Script extends WP_Widget {
 
+    /**
+     * Sets up a new custom script widget
+     */
     public function __construct() {
         $widget_ops = [
             'classname' => 'script',
@@ -19,17 +22,17 @@ class Knife_Widget_Script extends WP_Widget {
             'customize_selective_refresh' => true
         ];
 
-        parent::__construct('knife_theme_script', __('[НОЖ] HTML-код', 'knife-theme'), $widget_ops);
+        $control_ops = [
+            'width'  => 400,
+            'height' => 350
+        ];
+
+        parent::__construct('knife_theme_script', __('[НОЖ] HTML-код', 'knife-theme'), $widget_ops, $control_ops);
     }
 
 
-     /**
+    /**
      * Outputs the content of the widget.
-     *
-     * @see WP_Widget::widget()
-     *
-     * @param array args  The array of form elements
-     * @param array instance The current instance of the widget
      */
     public function widget($args, $instance) {
         $defaults = [
@@ -45,10 +48,6 @@ class Knife_Widget_Script extends WP_Widget {
 
     /**
      * Back-end widget form.
-     *
-     * @see WP_Widget::form()
-     *
-     * @param array $instance Previously saved values from database.
      */
     function form($instance) {
         $defaults = [
@@ -81,13 +80,6 @@ class Knife_Widget_Script extends WP_Widget {
 
     /**
      * Sanitize widget form values as they are saved.
-     *
-     * @see WP_Widget::update()
-     *
-     * @param array $new_instance Values just sent to be saved.
-     * @param array $old_instance Previously saved values from database.
-     *
-     * @return array Updated safe values to be saved.
      */
     public function update($new_instance, $old_instance) {
         $instance = $old_instance;

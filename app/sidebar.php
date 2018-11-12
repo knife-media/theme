@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.4
+ * @version 1.5
  */
 ?>
 
@@ -26,6 +26,7 @@
                     'post_type' => 'post',
                     'post__not_in' => [$post->ID],
                     'posts_per_page' => 2,
+                    'ignore_sticky_posts' => 1,
                     'query_type' => 'related'
                 ]);
 

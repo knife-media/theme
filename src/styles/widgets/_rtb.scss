@@ -1,0 +1,10 @@
+.widget-rtb {
+  display: none;
+
+  &.widget-rtb--rendered {
+    display: flex;
+    flex-flow: column wrap;
+
+    animation: fade-in .5s linear forwards;
+  }
+}

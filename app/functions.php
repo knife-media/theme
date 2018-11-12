@@ -136,17 +136,13 @@ add_filter('image_send_to_editor', function($html, $id, $caption, $title, $align
 }, 10, 9);
 
 
-// Default embed width
-add_filter('embed_defaults', function() {
-    return ['width' => 640, 'height' => 525];
+// Add editor custom styles
+add_action('admin_enqueue_scripts', function() {
+    $version = wp_get_theme()->get('Version');
+
+    // Insert custom editor styles
+    add_editor_style('/core/include/styles/editor-styles.css', [], $version);
 });
-
-
-add_filter('embed_oembed_html', function($html, $url, $attr) {
-    $html = '<figure class="figure figure--embed">' . $html . '</figure>';
-
-    return $html;
-}, 10, 3);
 
 
 // Remove fcking emojis and wordpress meta for security reasons
@@ -443,11 +439,28 @@ add_action('admin_menu', function() {
 });
 
 
+// Change wp_die errors status code for logged-in users
+add_filter('wp_die_handler', function($handler) {
+    if(is_user_logged_in()) {
+        $handler = function($message, $title, $args = []) {
+            $args['response'] = 200;
+
+            _default_wp_die_handler($message, $title, $args);
+        };
+    }
+
+    return $handler;
+});
+
+
 // Add custom theme widgets from common hanlder
 require get_template_directory() . '/core/modules/widget-handler.php';
 
 // Theme filters
 require get_template_directory() . '/core/modules/theme-filters.php';
+
+// Widget visibility handler
+require get_template_directory() . '/core/modules/hidden-widgets.php';
 
 // Upgrade theme menus
 require get_template_directory() . '/core/modules/menu-upgrade.php';
@@ -473,8 +486,8 @@ require get_template_directory() . '/core/modules/special-projects.php';
 // Login screen custom styles
 require get_template_directory() . '/core/modules/access-screen.php';
 
-// Custom header meta for social networks and search engines
-require get_template_directory() . '/core/modules/header-meta.php';
+// Custom site meta and footer description
+require get_template_directory() . '/core/modules/site-meta.php';
 
 // Customize default wordpress embed code
 require get_template_directory() . '/core/modules/embed-filters.php';
@@ -508,6 +521,9 @@ require get_template_directory() . '/core/modules/comments-load.php';
 
 // Relap links settings
 require get_template_directory() . '/core/modules/relap-links.php';
+
+// Yandex RTB loader
+require get_template_directory() . '/core/modules/yandex-rtb.php';
 
 // Enable terms emojis for default and custom taxonomies
 require get_template_directory() . '/core/modules/terms-emoji.php';

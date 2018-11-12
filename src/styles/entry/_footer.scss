@@ -18,6 +18,8 @@
 
     background-color: $color-sheet;
 
+    will-change: transform;
+
     @media screen and (max-width: 767px) {
       margin: 1rem auto;
       padding: .5rem 1rem;
@@ -25,6 +27,9 @@
   }
 
   .entry-footer__relap {
+    display: block;
+    position: relative;
+
     padding: 0 2rem;
     background-color: transparent;
 
@@ -47,5 +52,11 @@
     .share__link {
       flex: 1 1 auto;
     }
+  }
+
+  .entry-footer__rtb {
+    position: relative;
+
+    overflow: hidden;
   }
 }

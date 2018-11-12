@@ -25,11 +25,6 @@ class Knife_Widget_Details extends WP_Widget {
 
     /**
      * Outputs the content of the widget.
-     *
-     * @see WP_Widget::widget()
-     *
-     * @param array args  The array of form elements
-     * @param array instance The current instance of the widget
      */
     public function widget($args, $instance) {
         $defaults = [
@@ -72,10 +67,6 @@ class Knife_Widget_Details extends WP_Widget {
 
     /**
      * Back-end widget form.
-     *
-     * @see WP_Widget::form()
-     *
-     * @param array $instance Previously saved values from database.
      */
     function form($instance) {
         $defaults = [
@@ -140,13 +131,6 @@ class Knife_Widget_Details extends WP_Widget {
 
     /**
      * Sanitize widget form values as they are saved.
-     *
-     * @see WP_Widget::update()
-     *
-     * @param array $new_instance Values just sent to be saved.
-     * @param array $old_instance Previously saved values from database.
-     *
-     * @return array Updated safe values to be saved.
      */
     public function update($new_instance, $old_instance) {
 

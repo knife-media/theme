@@ -6,17 +6,36 @@
     return false;
   }
 
-  // Check if search id and template defined
+  /**
+   * Check if search id and template defined
+   */
   if(search === null || typeof knife_search_id === 'undefined') {
     return toggle.classList.add('toggle--hidden');
   }
 
+
+  /**
+   * Element id to push CSE results
+   */
   var holder = 'search-gcse';
+
+
+  /**
+   * Class to observe in search results
+   */
   var detect = 'gsc-results';
 
+
+  /**
+   * Reset observer variable
+   */
   var view = null;
 
-  var pushResults = function() {
+
+  /**
+   * Callback for Google CSE init script
+   */
+  function pushResults() {
     if(document.readyState !== 'complete') {
       return google.setOnLoadCallback(pushResults, true);
     }
@@ -57,7 +76,10 @@
   }
 
 
-  var initCSE = function(gcse_id) {
+  /**
+   * Init Google CSE script
+   */
+  function initCSE(gcse_id) {
     // Create fake div for google results
     var fake = document.createElement("div");
 
@@ -84,7 +106,10 @@
   }
 
 
-  var cloneResults = function() {
+  /**
+   * Clone results from fake CSE element to custom search-results
+   */
+  function cloneResults() {
     var result = document.getElementById('search-results');
     var source = document.getElementById(holder).querySelectorAll('.gs-result');
 
@@ -94,7 +119,7 @@
     }
 
     if(document.getElementById('search-input').value.length > 0) {
-      var appendResults = function(source) {
+      function appendResults(source) {
         var data = {
           link: source.querySelector('a.gs-title').href,
           head: source.querySelector('a.gs-title').textContent,
@@ -137,7 +162,9 @@
   }
 
 
-  // Open search layer on toggle click
+  /**
+   * Open search layer on toggle click
+   */
   toggle.addEventListener('click', function(e) {
     e.preventDefault();
 
@@ -146,37 +173,32 @@
     // Blur search input
     input.blur();
 
+    var expand = document.body.classList.contains('is-search');
+
     // Close navbar if opened
     if(document.body.classList.contains('is-navbar')) {
       document.getElementById('toggle-menu').click();
     }
 
     search.classList.toggle('search--expand');
+    toggle.classList.toggle('toggle--expand');
+
     document.body.classList.toggle('is-search');
 
-    // If user opens search form
-    if(search.classList.contains('search--expand')) {
-      var offset = document.querySelector('.header').offsetTop - window.pageYOffset;
-
-      // Init CSE on first open
+    if(document.body.classList.contains('is-search')) {
       if(typeof window.__gcse === 'undefined') {
         initCSE(knife_search_id);
-      }
-
-      // Avoid banner size
-      if(offset > 0) {
-        document.querySelector('.search').style.paddingTop = offset + 'px';
       }
 
       // Focus search input
       input.focus();
     }
-
-    return this.classList.toggle('toggle--expand');
   });
 
 
-  // Close search on ESC
+  /**
+   * Close search on ESC
+   */
   window.addEventListener('keydown', function(e) {
     e = e || window.event;
 

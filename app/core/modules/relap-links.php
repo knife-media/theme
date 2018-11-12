@@ -36,7 +36,7 @@ class Knife_Relap_Links {
      * Init function instead of constructor
      */
     public static function load_module() {
-        // Pass Hypercomments id to js
+        // Pass Relap links options to js
         add_action('wp_enqueue_scripts', [__CLASS__, 'inject_object'], 12);
 
         // Plugin settings
@@ -80,7 +80,6 @@ class Knife_Relap_Links {
              ]
         ));
     }
-
 }
 
 

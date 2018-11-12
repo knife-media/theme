@@ -43,7 +43,7 @@
   /**
    * Create similar block
    */
-  var appendSimilar = function(relative, similar) {
+  function appendSimilar(relative, similar) {
     if(typeof similar.link === 'undefined' || typeof similar.title === 'undefined') {
       return false;
     }
@@ -85,6 +85,24 @@
     link.innerHTML = similar.title;
     item.appendChild(link);
 
+    // Append gtm action to similar link
+    (function() {
+      if(typeof similar.action === 'undefined') {
+        return false;
+      }
+
+      link.setAttribute('data-action', similar.action);
+    })();
+
+    // Append gtm label to similar link
+    (function() {
+      if(typeof similar.label === 'undefined') {
+        return false;
+      }
+
+      link.setAttribute('data-label', similar.label);
+    })();
+
     relative.parentNode.insertBefore(wrap, relative.nextSibling);
   }
 
@@ -94,7 +112,7 @@
    */
   var range = Math.floor(post.children.length / 3);
 
-  for(var i = 0, start = 0; i < 2; i++) {
+  for(var i = 0; i < 2; i++) {
     if(typeof similar[i] === 'undefined') {
       continue;
     }

@@ -1,0 +1,111 @@
+.embed {
+  display: block;
+  position: relative;
+
+  width: 100%;
+  padding-top: 56.25%;
+  background-color: $color-black;
+
+  border: none;
+
+  & > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+
+    width: 100%;
+    height: 100%;
+  }
+
+  .embed__dummy {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+
+    border-bottom: none;
+
+    &:before,
+    &:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      width: 100%;
+      height: 100%;
+    }
+
+    &:before {
+      background-color: rgba(0, 0, 0, .5);
+    }
+  }
+
+  .embed__loader {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    width: 4rem;
+    height: auto;
+    margin-left: -2rem;
+
+    &:after,
+    &:before,
+    .embed__loader-bounce {
+      width: 8px;
+      height: 8px;
+
+      background-color: $color-white;
+      border-radius: 50%;
+
+      transform: scale(0);
+      animation: loader 1s infinite;
+      animation-delay: .125s;
+    }
+
+    &:after {
+      content: '';
+      animation-delay: .25s;
+    }
+
+    &:before {
+      content: '';
+      animation-delay: 0s;
+    }
+  }
+
+  &.embed--youtube .embed__dummy {
+    &:after {
+      background-image: url('images/youtube-button.svg');
+      background-size: 4.25rem 3rem;
+      background-repeat: no-repeat;
+      background-position: center;
+
+      opacity: .85;
+      transition: opacity .25s;
+    }
+
+    &:hover:after {
+      opacity: 1;
+    }
+  }
+
+  &.embed--vimeo .embed__dummy {
+    &:after {
+      background-image: url('images/vimeo-button.svg');
+      background-size: 4.25rem 3rem;
+      background-repeat: no-repeat;
+      background-position: center;
+
+      opacity: .85;
+      transition: opacity .25s;
+    }
+
+    &:hover:after {
+      opacity: 1;
+    }
+  }
+}

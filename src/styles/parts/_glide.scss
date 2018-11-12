@@ -347,6 +347,10 @@
           border-bottom-color: transparent;
         }
       }
+
+      .embed a {
+        border-bottom: none;
+      }
     }
   }
 
@@ -396,6 +400,10 @@
         width: 4px;
         height: 4px;
         margin: 0 .5rem;
+      }
+
+      @media screen and (max-width: 479px) {
+        margin: 0 .25rem;
       }
     }
   }

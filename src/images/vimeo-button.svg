@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 100 66" fill="#00adef">
+   <path d="M88,0 L12,0 C5.373,0 0,5.373 0,12 L0,54 C0,60.627 5.373,66 12,66 L88,66 C94.627,66 100,60.627 100,54 L100,12 C100,5.373 94.627,0 88,0 L88,0 Z M42,45.802 L42,18.913 L65.287,32.358 L42,45.802 L42,45.802 Z"></path> <polygon fill="#FFFFFF" transform="translate(54.000000, 32.500000) rotate(90.000000) translate(-54.000000, -32.500000) " points="54 20.5 67.5 44.5 40.5 44.5"></polygon>
+</svg>

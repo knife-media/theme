@@ -10,7 +10,7 @@
 
 <tr class="form-field hide-if-no-js">
     <th scope="row" valign="top">
-        <label><?php _e('Цвет фона', 'knife-theme') ?></label>
+        <label><?php _e('Цвет подвала', 'knife-theme') ?></label>
     </th>
 
     <td>

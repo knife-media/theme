@@ -6,7 +6,7 @@
 *
 * @package knife-theme
 * @since 1.2
-* @version 1.4
+* @version 1.5
 */
 
 
@@ -56,7 +56,7 @@ class Knife_Widget_Handler {
         register_sidebar([
             'name'          => __('Главная страница', 'knife-theme'),
             'id'            => 'knife-frontal',
-            'description'   => __('Добавленные виджеты появятся на главной странице под телевизором, если он не пуст.', 'knife-theme'),
+            'description'   => __('Добавленные виджеты появятся на главной странице.', 'knife-theme'),
             'before_widget' => '<div class="widget-%2$s">',
             'after_widget'  => '</div>'
         ]);
@@ -70,26 +70,19 @@ class Knife_Widget_Handler {
         ]);
 
         register_sidebar([
-            'name'          => __('Подвал сайта', 'knife-theme'),
-            'id'            => 'knife-footer',
-            'description'   => __('Добавленные виджеты появятся справа в футере.', 'knife-theme'),
-            'before_widget' => '<aside class="widget-%2$s">',
-            'after_widget'  => '</aside>'
-        ]);
-
-        register_sidebar([
-            'name'          => __('Сайдбар на внутренних', 'knife-theme'),
-            'id'            => 'knife-sidebar',
-            'description'   => __('Добавленные виджеты появятся в сайдбаре внутри постов.', 'knife-theme'),
-            'before_widget' => '<div class="widget-%2$s widget-%2$s--sidebar">',
+            'name'          => __('Баннер в шапке', 'knife-theme'),
+            'id'            => 'knife-poster',
+            'description'   => __('Добавленные виджеты появятся над главным меню.', 'knife-theme'),
+            'before_widget' => '<div class="widget-%2$s widget-%2$s--poster">',
             'after_widget'  => '</div>'
         ]);
 
+
         register_sidebar([
-            'name'          => __('Виджеты под записью', 'knife-theme'),
-            'id'            => 'knife-inside',
-            'description'   => __('Добавленные виджеты появятся в под записью на внутренних страницах.', 'knife-theme'),
-            'before_widget' => '<div class="widget-%2$s widget-%2$s--inside">',
+            'name'          => __('Сайдбар', 'knife-theme'),
+            'id'            => 'knife-sidebar',
+            'description'   => __('Добавленные виджеты появятся в сайдбаре внутри постов.', 'knife-theme'),
+            'before_widget' => '<div class="widget-%2$s widget-%2$s--sidebar">',
             'after_widget'  => '</div>'
         ]);
     }
@@ -153,12 +146,8 @@ class Knife_Widget_Handler {
     public static function include_widgets() {
         $include = get_template_directory() . '/core/widgets/';
 
-        $widgets = [
-            'story', 'select', 'club', 'script', 'televisor', 'recent', 'units', 'single', 'informer', 'details', 'transparent'
-        ];
-
-        foreach($widgets as $id) {
-            include_once($include . $id . '.php');
+        foreach(glob($include . "/*.php") as $widget) {
+            include_once($include . basename($widget));
         }
     }
 

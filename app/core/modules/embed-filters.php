@@ -21,17 +21,57 @@ class Knife_Embed_Filters {
      * @since 1.3
      */
     public static function load_module() {
+        // Common filters
+        add_filter('embed_defaults', [__CLASS__, 'set_defaults']);
+        add_filter('embed_oembed_html', [__CLASS__, 'append_markup'], 12, 3);
+
         // Instagram update
-        add_filter('oembed_providers', [__CLASS__, 'instagram_api']);
-        add_filter('embed_oembed_html', [__CLASS__, 'instagram_script'], 10, 4);
-        add_filter('script_loader_tag', [__CLASS__, 'instagram_loader'], 10, 3);
+        add_filter('oembed_providers', [__CLASS__, 'hide_instagram_caption']);
+        add_filter('embed_oembed_html', [__CLASS__, 'move_instagram_script'], 10, 4);
+        add_filter('script_loader_tag', [__CLASS__, 'update_instagram_loader'], 10, 3);
+
+        // YouTube preloader
+        add_filter('pre_oembed_result', [__CLASS__, 'update_youtube_embed'], 10, 2);
+
+        // Vimeo preloader
+        add_filter('pre_oembed_result', [__CLASS__, 'update_vimeo_embed'], 10, 2);
+
+        // Replace custom video preloaders in feeds
+        add_filter('the_content_feed', [__CLASS__, 'replace_embeds'], 9);
+    }
+
+
+    /**
+     * Set default embed sizes
+     *
+     * @since 1.5
+     */
+    public static function set_defaults($defaults) {
+        $defaults = [
+            'width' => 640,
+            'height' => 525
+        ];
+
+        return $defaults;
+    }
+
+
+    /**
+     * Append figure wrapper to embeds
+     *
+     * @since 1.5
+     */
+    public static function append_markup($html, $url, $attr) {
+        $html = '<figure class="figure figure--embed">' . $html . '</figure>';
+
+        return $html;
     }
 
 
     /**
      * Remove instagram embeds caption
      */
-    public static function instagram_api($providers) {
+    public static function hide_instagram_caption($providers) {
         $providers['#https?://(www\.)?instagr(\.am|am\.com)/p/.*#i'] = array('https://api.instagram.com/oembed?hidecaption=true', true);
 
         return $providers;
@@ -43,27 +83,134 @@ class Knife_Embed_Filters {
      *
      * @since 1.5
      */
-    public static function instagram_script($cache, $url, $attr, $post_id) {
-        if(!preg_match('#https?://(www\.)?instagr(\.am|am\.com)/p/.*#i', $url)) {
-            return $cache;
+    public static function move_instagram_script($cache, $url, $attr, $post_id) {
+        if(preg_match('#https?://(www\.)?instagr(\.am|am\.com)/p/.*#i', $url)) {
+            wp_enqueue_script('instagram-embed', 'https://www.instagram.com/embed.js', [], null, true);
+
+            $cache = str_replace('<script async src="//www.instagram.com/embed.js"></script>', '', $cache);
         }
 
-        wp_enqueue_script('instagram-embed', 'https://www.instagram.com/embed.js', [], null, true);
-
-        return str_replace('<script async src="//www.instagram.com/embed.js"></script>', '', $cache);
+        return $cache;
     }
 
 
     /**
      * Add async and defer atts to instagram loader tag
      */
-    public static function instagram_loader($tag, $handle, $src) {
-        if($handle !== 'instagram-embed') {
-            return $tag;
+    public static function update_instagram_loader($tag, $handle, $src) {
+        if($handle === 'instagram-embed') {
+            $tag = str_replace('<script', '<script async ', $tag);
         }
 
-        return str_replace('<script', '<script async ', $tag);
+        return $tag;
     }
+
+
+    /**
+     * Update YouTube html to show preloader
+     *
+     * @since 1.5
+     */
+    public static function update_youtube_embed($result, $url) {
+        if(preg_match('%(?:youtube\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $url, $match)) {
+            $preview = "https://img.youtube.com/vi/{$match[1]}/default.jpg";
+
+            foreach(['maxresdefault', 'hqdefault', 'mqdefault'] as $size) {
+                $response = wp_remote_head("https://img.youtube.com/vi/{$match[1]}/{$size}.jpg");
+
+                if(wp_remote_retrieve_response_code($response) === 200) {
+                    $preview = "https://img.youtube.com/vi/{$match[1]}/{$size}.jpg";
+
+                    break;
+                }
+            }
+
+            $params = [
+                'rel' => 0,
+                'showinfo' => 0,
+                'autoplay' => 1
+            ];
+
+            wp_parse_str(wp_parse_url($url, PHP_URL_QUERY), $query);
+
+            if(isset($query['t'])) {
+                $params['start'] = $query['t'];
+            }
+
+            $result = sprintf(
+                '<div class="embed embed--youtube" data-embed="%1$s">%2$s</div>',
+                sprintf(
+                    'https://www.youtube.com/embed/%1$s?%2$s',
+                    esc_attr($match[1]),
+                    build_query($params)
+                ),
+                sprintf(
+                    '<a class="embed__dummy" href="%1$s" target="_blank" style="background-image: url(%2$s)"></a>',
+                    esc_url($url),
+                    esc_url($preview)
+                )
+            );
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * Update Vimeo html to show preloader
+     *
+     * @since 1.5
+     */
+    public static function update_vimeo_embed($result, $url) {
+        if(preg_match('%https?://(?:.+\.)?vimeo\.com/(?:video/)?([\d]+).*%i', $url, $match)) {
+            $request = wp_remote_get("https://vimeo.com/api/v2/video/{$match[1]}.json");
+            $preview = '';
+
+            if(!is_wp_error($request)) {
+                $meta = json_decode(wp_remote_retrieve_body($request));
+
+                foreach(['thumbnail_large', 'thumbnail_medium', 'thumbnail_small'] as $size) {
+                    if(isset($meta[0]->$size)) {
+                        $preview = $meta[0]->$size;
+
+                        break;
+                    }
+                }
+            }
+
+            $result = sprintf(
+                '<div class="embed embed--vimeo" data-embed="%1$s">%2$s</div>',
+                sprintf(
+                    'https://player.vimeo.com/video/%s?byline=0&autoplay=1',
+                    esc_attr($match[1])
+                ),
+                sprintf(
+                    '<a class="embed__dummy" href="%1$s" target="_blank" style="background-image: url(%2$s)"></a>',
+                    esc_url($url),
+                    esc_url($preview)
+                )
+            );
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * Replace custom video preloaders in feeds
+     *
+     * @since 1.5
+     */
+    public static function replace_embeds($content) {
+        $content = preg_replace(
+            '~<figure.*?>\s*<div.+?data-embed="(.+?)".+?</figure>~si',
+            '<iframe src="$1" frameborder="0"></iframe>',
+            $content
+        );
+
+        return $content;
+    }
+
 }
 
 
