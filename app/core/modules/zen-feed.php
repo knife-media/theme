@@ -6,7 +6,7 @@
 *
 * @package knife-theme
 * @since 1.2
-* @version 1.5
+* @version 1.6
 */
 
 
@@ -16,22 +16,27 @@ if (!defined('WPINC')) {
 
 class Knife_Yandex_Zen {
 
-    /**
-    * Exclude post item meta
+   /**
+    * Exclude from feed post meta
     */
-    private static $meta = '_knife-yandex-zen';
+    private static $meta_exclude = '_knife-zen-exclude';
 
-    /**
+   /**
+    * Republish post meta
+    */
+    private static $meta_publish = '_knife-zen-publish';
+
+   /**
     * Feed slug and template name
     */
     private static $slug = 'zen';
 
-    /**
+   /**
     * Content allowed tags
     */
     private static $tags = ['<br>','<p>','<h2>','<h3>','<h4>','<h5>','<h6>','<ul>','<ol>','<li>','<img>','<figcaption>','<figure>','<b>','<strong>','<i>','<em>'];
 
-    /**
+   /**
     * Current post enclosure array
     */
     private static $enclosure = null;
@@ -43,7 +48,7 @@ class Knife_Yandex_Zen {
      * @access  private static
      * @var     string
      */
-    private static $nonce = 'knife-yandex-nonce';
+    private static $nonce = 'knife-zen-nonce';
 
 
     /**
@@ -55,35 +60,51 @@ class Knife_Yandex_Zen {
         add_action('init', [__CLASS__, 'init_feeds']);
         add_action('wp', [__CLASS__, 'add_hooks']);
 
-        // Alter feed main query loop
-        add_action('pre_get_posts', [__CLASS__, 'update_query']);
-
         // Update zen feed meta on save post
         add_action('save_post', [__CLASS__, 'save_meta']);
 
-        // Feature post meta
-        add_action('post_submitbox_misc_actions', [__CLASS__, 'print_checkbox']);
+        // Post metabox
+        add_action('add_meta_boxes', [__CLASS__, 'add_metabox'], 9);
+
+        // Ajax handler
+        add_action('wp_ajax_knife_zen_publish', [__CLASS__, 'zen_publish']);
     }
 
 
     /**
-     * Prints checkbox in post publish action section
+     * Add zen publish metabox
+     *
+     * @since 1.6
      */
-    public static function print_checkbox() {
-        $post_id = get_the_ID();
+    public static function add_metabox() {
+        add_meta_box('knife-zen-metabox',
+            __('Яндекс.Дзен', 'knife-theme'),
+            [__CLASS__, 'display_metabox'],
+            ['post'], 'side', 'default'
+        );
+    }
 
-        if(get_post_type($post_id) !== 'post') {
-            return;
-        }
 
-        $exclude = get_post_meta($post_id, self::$meta, true);
+    /**
+     * Display zen metabox
+     *
+     * @since 1.6
+     */
+    public static function display_metabox() {
+        $exclude = get_post_meta(get_the_ID(), self::$meta_exclude, true);
 
         printf(
-            '<div class="misc-pub-section misc-pub-section-last"><label><input type="checkbox" name="%1$s" class="checkbox"%3$s> %2$s</label></div>',
-            esc_attr(self::$meta),
-            __('Исключить запись из Яндекс.Дзен', 'knife-theme'),
+            '<p><label><input type="checkbox" name="%1$s" class="checkbox"%3$s> %2$s</label></p>',
+            esc_attr(self::$meta_exclude),
+            __('Исключить запись из ленты', 'knife-theme'),
             checked($exclude, 1, false)
         );
+
+        printf(
+            '<div><button class="button">%s</button><span class="spinner"></span></div>',
+            __('Перевыпустить запись', 'knife-theme')
+        );
+
 
         wp_nonce_field('checkbox', self::$nonce);
     }
@@ -109,11 +130,11 @@ class Knife_Yandex_Zen {
             return;
         }
 
-        if(empty($_REQUEST[self::$meta])) {
-            return delete_post_meta($post_id, self::$meta);
+        if(empty($_REQUEST[self::$meta_exclude])) {
+            return delete_post_meta($post_id, self::$meta_exclude);
         }
 
-        return update_post_meta($post_id, self::$meta, 1);
+        return update_post_meta($post_id, self::$meta_exclude, 1);
     }
 
 
@@ -146,26 +167,22 @@ class Knife_Yandex_Zen {
 
 
     /**
-    * Update posts query
-    */
-    public static function update_query($query) {
-        if($query->is_main_query() && $query->is_feed() && self::$slug === $query->get('feed')) {
-            $query->set('posts_per_rss', 50);
-            $query->set('post_type', 'post');
-            $query->set('post_status', 'publish');
-
-            $query->set('meta_query', [[
-                'key' => self::$meta,
-                'compare' => 'NOT EXISTS'
-            ]]);
-        }
-    }
-
-
-    /**
-    * Init template feed
+    * Init template feed using custom query
+    *
+    * @version 1.6
     */
     public static function add_feed() {
+        global $post, $wpdb;
+
+        $query = "SELECT SQL_CALC_FOUND_ROWS p.*, IFNULL(m2.meta_value, p.post_date) as d
+            FROM {$wpdb->posts} p
+            LEFT JOIN {$wpdb->postmeta} m1 ON (p.ID = m1.post_id AND m1.meta_key = '" . self::$meta_exclude . "')
+            LEFT JOIN {$wpdb->postmeta} m2 ON (p.ID = m2.post_id AND m2.meta_key = '" . self::$meta_publish . "')
+            WHERE p.post_type = 'post' AND p.post_status = 'publish' AND m1.post_id IS NULL
+            GROUP BY p.ID ORDER BY d DESC LIMIT 0, 50";
+
+        $posts = $wpdb->get_results($query, OBJECT);
+
         require get_template_directory() . '/core/include/feeds/' . self::$slug . '.php';
     }
 
