@@ -66,8 +66,30 @@ class Knife_Yandex_Zen {
         // Post metabox
         add_action('add_meta_boxes', [__CLASS__, 'add_metabox'], 9);
 
-        // Ajax handler
-        add_action('wp_ajax_knife_zen_publish', [__CLASS__, 'zen_publish']);
+        // Admin side assets
+        add_action('admin_enqueue_scripts', [__CLASS__, 'add_assets']);
+    }
+
+
+    /**
+     * Enqueue assets to admin post screen only
+     */
+    public static function add_assets($hook) {
+        if(!in_array($hook, ['post.php', 'post-new.php'])) {
+            return;
+        }
+
+        $post_id = get_the_ID();
+
+        if(get_post_type($post_id) !== 'post') {
+            return;
+        }
+
+        $version = wp_get_theme()->get('Version');
+        $include = get_template_directory_uri() . '/core/include';
+
+        // insert admin scripts
+        wp_enqueue_script('knife-zen-feed', $include . '/scripts/zen-feed.js', ['jquery'], $version);
     }
 
 
@@ -91,22 +113,9 @@ class Knife_Yandex_Zen {
      * @since 1.6
      */
     public static function display_metabox() {
-        $exclude = get_post_meta(get_the_ID(), self::$meta_exclude, true);
+        $include = get_template_directory() . '/core/include';
 
-        printf(
-            '<p><label><input type="checkbox" name="%1$s" class="checkbox"%3$s> %2$s</label></p>',
-            esc_attr(self::$meta_exclude),
-            __('Исключить запись из ленты', 'knife-theme'),
-            checked($exclude, 1, false)
-        );
-
-        printf(
-            '<div><button class="button">%s</button><span class="spinner"></span></div>',
-            __('Перевыпустить запись', 'knife-theme')
-        );
-
-
-        wp_nonce_field('checkbox', self::$nonce);
+        include_once($include . '/templates/zen-metabox.php');
     }
 
 
@@ -118,7 +127,7 @@ class Knife_Yandex_Zen {
             return;
         }
 
-        if(!wp_verify_nonce($_REQUEST[self::$nonce], 'checkbox')) {
+        if(!wp_verify_nonce($_REQUEST[self::$nonce], 'fieldset')) {
             return;
         }
 
@@ -130,11 +139,19 @@ class Knife_Yandex_Zen {
             return;
         }
 
-        if(empty($_REQUEST[self::$meta_exclude])) {
-            return delete_post_meta($post_id, self::$meta_exclude);
+        // Save publish meta if not empty
+        if(!empty($_REQUEST[self::$meta_publish])) {
+            update_post_meta($post_id, self::$meta_publish, sanitize_text_field($_REQUEST[self::$meta_publish]));
+        } else {
+            delete_post_meta($post_id, self::$meta_publish);
         }
 
-        return update_post_meta($post_id, self::$meta_exclude, 1);
+        // Save exclude meta if not empty
+        if(!empty($_REQUEST[self::$meta_exclude])) {
+            update_post_meta($post_id, self::$meta_exclude, 1);
+        } else {
+            delete_post_meta($post_id, self::$meta_exclude);
+        }
     }
 
 
@@ -146,10 +163,10 @@ class Knife_Yandex_Zen {
             return;
         }
 
-        // remove post content unwanted tags
+        // Remove post content unwanted tags
         add_filter('the_content_feed', [__CLASS__, 'clear_content']);
 
-        // add post category and enclosure after content
+        // Add post category and enclosure after content
         add_action('rss2_item', [__CLASS__, 'insert_category']);
         add_action('rss2_item', [__CLASS__, 'insert_enclosure']);
 
@@ -174,12 +191,12 @@ class Knife_Yandex_Zen {
     public static function add_feed() {
         global $post, $wpdb;
 
-        $query = "SELECT SQL_CALC_FOUND_ROWS p.*, IFNULL(m2.meta_value, p.post_date) as d
+        $query = "SELECT SQL_CALC_FOUND_ROWS p.*, IFNULL(m2.meta_value, p.post_date_gmt) as zen_date
             FROM {$wpdb->posts} p
             LEFT JOIN {$wpdb->postmeta} m1 ON (p.ID = m1.post_id AND m1.meta_key = '" . self::$meta_exclude . "')
             LEFT JOIN {$wpdb->postmeta} m2 ON (p.ID = m2.post_id AND m2.meta_key = '" . self::$meta_publish . "')
             WHERE p.post_type = 'post' AND p.post_status = 'publish' AND m1.post_id IS NULL
-            GROUP BY p.ID ORDER BY d DESC LIMIT 0, 50";
+            GROUP BY p.ID ORDER BY zen_date DESC LIMIT 0, 50";
 
         $posts = $wpdb->get_results($query, OBJECT);
 
