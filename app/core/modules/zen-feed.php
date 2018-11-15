@@ -16,29 +16,29 @@ if (!defined('WPINC')) {
 
 class Knife_Yandex_Zen {
 
-   /**
-    * Exclude from feed post meta
-    */
+    /**
+     * Exclude from feed post meta
+     */
     private static $meta_exclude = '_knife-zen-exclude';
 
-   /**
-    * Republish post meta
-    */
+    /**
+     * Republish post meta
+     */
     private static $meta_publish = '_knife-zen-publish';
 
-   /**
-    * Feed slug and template name
-    */
+    /**
+     * Feed slug and template name
+     */
     private static $slug = 'zen';
 
-   /**
-    * Content allowed tags
-    */
+    /**
+     * Content allowed tags
+     */
     private static $tags = ['<br>','<p>','<h2>','<h3>','<h4>','<h5>','<h6>','<ul>','<ol>','<li>','<img>','<figcaption>','<figure>','<b>','<strong>','<i>','<em>'];
 
-   /**
-    * Current post enclosure array
-    */
+    /**
+     * Current post enclosure array
+     */
     private static $enclosure = null;
 
     /**
@@ -156,38 +156,42 @@ class Knife_Yandex_Zen {
 
 
     /**
-    * Update custom feed template
-    */
+     * Update custom feed template
+     */
     public static function add_hooks() {
-        if(!is_feed(self::$slug)) {
-            return;
+        if(is_feed(self::$slug)) {
+            // Remove post content unwanted tags
+            add_filter('the_content_feed', [__CLASS__, 'clear_content'], 10);
+
+            // Add excerpt except news
+            add_filter('the_content_feed', [__CLASS__, 'prepend_excerpt'], 12);
+
+            // Upgrade post author with coauthors plugin
+            add_filter('the_author', [__CLASS__, 'upgrade_author']);
+
+            // Add post category and enclosure after content
+            add_action('rss2_item', [__CLASS__, 'insert_category']);
+            add_action('rss2_item', [__CLASS__, 'insert_enclosure']);
+
+            // update rss2 head with atom link
+            add_action('rss2_head', [__CLASS__, 'update_head']);
         }
-
-        // Remove post content unwanted tags
-        add_filter('the_content_feed', [__CLASS__, 'clear_content']);
-
-        // Add post category and enclosure after content
-        add_action('rss2_item', [__CLASS__, 'insert_category']);
-        add_action('rss2_item', [__CLASS__, 'insert_enclosure']);
-
-        // update rss2 head with atom link
-        add_action('rss2_head', [__CLASS__, 'update_head']);
     }
 
 
     /**
-    * Register new feed endpoint
-    */
+     * Register new feed endpoint
+     */
     public static function init_feeds() {
         add_feed(self::$slug, [__CLASS__, 'add_feed']);
     }
 
 
     /**
-    * Init template feed using custom query
-    *
-    * @version 1.6
-    */
+     * Init template feed using custom query
+     *
+     * @version 1.6
+     */
     public static function add_feed() {
         global $post, $wpdb;
 
@@ -205,16 +209,16 @@ class Knife_Yandex_Zen {
 
 
     /**
-    * Add atom self link
-    */
+     * Add atom self link
+     */
     public static function update_head() {
         printf('<atom:link href="%s" rel="self" type="application/rss+xml" />', get_feed_link(self::$slug));
     }
 
 
     /**
-    * Upgrade content tag
-    */
+     * Upgrade content tag
+     */
     public static function clear_content($content) {
         $content = self::add_images($content);
 
@@ -227,8 +231,36 @@ class Knife_Yandex_Zen {
 
 
     /**
-    * Add post content images
-    */
+     * Prepend excerpt to post content (except news)
+     *
+     * @since 1.6
+     */
+    public static function prepend_excerpt($content) {
+        if(!in_category('news') && has_excerpt()) {
+            $content = apply_filters('the_excerpt', get_the_excerpt()) . $content;
+        }
+
+        return $content;
+    }
+
+
+    /**
+     * Update author using coauthors function if the plugin activated
+     *
+     * @since 1.6
+     */
+    public static function upgrade_author($author) {
+        if(function_exists('coauthors')) {
+            $author = coauthors(', ', ', ', null, null, false);
+        }
+
+        return $author;
+    }
+
+
+    /**
+     * Add post content images
+     */
     public static function add_images($content) {
         preg_match_all('~<img.+?src="(.+?)"~is', $content, $images, PREG_PATTERN_ORDER);
 
@@ -245,8 +277,8 @@ class Knife_Yandex_Zen {
 
 
     /**
-    * Add post thumbnail to enclosure list
-    */
+     * Add post thumbnail to enclosure list
+     */
     public static function add_thumbnail() {
         global $post;
 
@@ -257,8 +289,8 @@ class Knife_Yandex_Zen {
 
 
     /**
-    * Insert post categories
-    */
+     * Insert post categories
+     */
     public static function insert_category() {
         foreach(get_the_category() as $category) {
             printf('<category>%s</category>', esc_html($category->cat_name));
@@ -267,10 +299,10 @@ class Knife_Yandex_Zen {
 
 
     /**
-    * Insert enclosure to content
-    *
-    * @link https://yandex.ru/support/zen/publishers/rss-modify.html#publication
-    */
+     * Insert enclosure to content
+     *
+     * @link https://yandex.ru/support/zen/publishers/rss-modify.html#publication
+     */
     public static function insert_enclosure() {
         self::add_thumbnail();
 
@@ -281,8 +313,8 @@ class Knife_Yandex_Zen {
 
 
     /**
-    * Strip tags, scripts and styles
-    */
+     * Strip tags, scripts and styles
+     */
     private static function strip_tags($string, $allowable_tags = null) {
         $string = preg_replace('#<(script|style)[^>]*?>.*?</\\1>#si', '', $string);
         $string = strip_tags($string, implode(',', $allowable_tags));
@@ -292,8 +324,8 @@ class Knife_Yandex_Zen {
 
 
     /**
-    * Remove unwanted content
-    */
+     * Remove unwanted content
+     */
     private static function clear_xml($string) {
         $string = preg_replace('/[\r\n]+/', "\n", $string);
         $string = preg_replace('/[ \t]+/', ' ', $string);
