@@ -44,3 +44,13 @@ figure {
 
   border-radius: 50%;
 }
+
+.figure--quote {
+  margin: 10px 0;
+  padding: 10px 20px;
+  background: #f6eecd;
+}
+
+blockquote {
+  margin: 0;
+}
