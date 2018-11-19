@@ -66,7 +66,7 @@ class Knife_MCE_Plugins {
 
         $plugins['pushbutton'] = $include . '/scripts/mce-pushbutton.js';
         $plugins['markbutton'] = $include . '/scripts/mce-markbutton.js';
-        $plugins['quote'] = $include . '/scripts/mce-blockquote.js';
+        $plugins['quote'] = $include . '/scripts/mce-blockquote.js?nocache';
 
         return $plugins;
     }
