@@ -66,11 +66,11 @@ jQuery(document).ready(function($) {
   var appendItem = function(link, text) {
     var item = box.find('.knife-select-item:first').clone();
 
-    item.find('.item-text > h1').html(text);
-    item.find('.item-text > input').val(text);
+    item.find('p.item-text').html(text);
+    item.find('input.item-text').val(text);
 
-    item.find('.item-link > a').html(link).attr('href', link);
-    item.find('.item-link > input').val(link);
+    item.find('a.item-link').html(link).attr('href', link);
+    item.find('input.item-link').val(link);
 
     box.find('.knife-select-items').append(item);
 

@@ -74,7 +74,7 @@ class Knife_Story_Manager {
         add_action('add_meta_boxes', [__CLASS__, 'add_metabox'], 1);
 
         // Save story meta
-        add_action('save_post', [__CLASS__, 'save_meta']);
+        add_action('save_post', [__CLASS__, 'save_metabox']);
 
         // Add user post type to author archive
         add_action('pre_get_posts', [__CLASS__, 'update_author_archive'], 12);
@@ -145,6 +145,9 @@ class Knife_Story_Manager {
 
         // Insert scripts for dynaimc wp_editor
         wp_enqueue_editor();
+
+        // Insert wp media scripts
+        wp_enqueue_media();
 
         // Insert admin styles
         wp_enqueue_style('knife-story-manager', $include . '/styles/story-manager.css', [], $version);
@@ -298,7 +301,7 @@ class Knife_Story_Manager {
     /**
      * Save post options
      */
-    public static function save_meta($post_id) {
+    public static function save_metabox($post_id) {
         if(get_post_type($post_id) !== self::$slug) {
             return;
         }

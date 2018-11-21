@@ -48,7 +48,7 @@
     </div>
 
     <div class="box box--actions">
-        <button class="actions__add button"><?php _e('Добавить слайд в историю'); ?></button>
+        <button class="actions__add button"><?php _e('Добавить слайд в историю', 'knife-theme'); ?></button>
     </div>
 
     <div class="box box--options">

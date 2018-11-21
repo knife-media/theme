@@ -477,6 +477,9 @@ require get_template_directory() . '/core/modules/story-manager.php';
 // Select post type
 require get_template_directory() . '/core/modules/select-links.php';
 
+// Generator post type
+require get_template_directory() . '/core/modules/random-generator.php';
+
 // Custom labels posts taxonomy settings
 require get_template_directory() . '/core/modules/label-posts.php';
 

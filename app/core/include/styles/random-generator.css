@@ -1,0 +1,141 @@
+#knife-generator-box .box {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-start;
+}
+
+#knife-generator-box .box--items {
+    margin: 6px -12px -12px;
+    padding: 15px;
+    border-top: 1px solid #eee;
+}
+
+#knife-generator-box .manage {
+  box-sizing: border-box;
+}
+
+#knife-generator-box .manage--poster {
+  width: 40%;
+  max-width: 360px;
+  padding-right: 20px;
+}
+
+@media screen and (max-width: 1023px) {
+  #knife-generator-box .manage--poster {
+    order: 2;
+    width: 100%;
+    padding-right: 0;
+  }
+}
+
+#knife-generator-box .manage--general {
+  display: flex;
+  flex-flow: row wrap;
+  box-sizing: border-box;
+
+  width: 60%;
+}
+
+@media screen and (max-width: 1023px) {
+  #knife-generator-box .manage--general {
+    width: 100%;
+  }
+}
+
+#knife-generator-box .manage__option {
+  display: block;
+  width: 100%;
+  margin: 5px 0;
+}
+
+#knife-generator-box .manage__color {
+  display: block;
+  width: 50%;
+  margin: 5px 0 0;
+}
+
+@media screen and (max-width: 479px) {
+  #knife-generator-box .manage__color {
+    width: 100%;
+  }
+}
+
+#knife-generator-box .manage__option > p {
+  display: block;
+  margin: 2px 0;
+}
+
+#knife-generator-box .manage__color > p {
+  display: block;
+  margin: 5px 0;
+}
+
+#knife-generator-box .manage__option input[type="text"] {
+  width: 100%;
+}
+
+#knife-generator-box .manage__poster {
+    display: flex;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+
+    margin: 10px 0;
+    padding-top: calc(100% / 1.5);
+
+    width: 100%;
+  }
+
+  #knife-generator-box .manage__poster-image {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+  }
+
+  #knife-generator-box .manage__poster-blank {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    align-items: center;
+    justify-content: center;
+
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+    transition: border .5s;
+
+    border: dashed 2px #ddd;
+  }
+    #knife-generator-box .manage__poster-blank--error {
+      border-color: #a00;
+    }
+
+  #knife-generator-box .manage__poster-blank:hover {
+    transition: border .2s;
+
+    border-color: #0073aa;
+  }
+
+  #knife-generator-box .manage__poster-image + .manage__poster-blank {
+    z-index: 3;
+
+    width: 100%;
+    height: 100%;
+
+    text-indent: -9999rem;
+
+    border: none;
+  }
+
