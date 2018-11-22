@@ -202,7 +202,7 @@ class Knife_Random_Generator {
 
 
         // Update items meta
-//        self::update_items(self::$meta . '-items', $post_id);
+        self::update_items(self::$meta_catalog, $post_id);
     }
 
 
@@ -225,13 +225,10 @@ class Knife_Random_Generator {
 
                 if(!empty($value)) {
                     $meta[$i][$key] = sanitize_text_field($value);
-
-                    if($key === 'link') {
-                        $meta[$i]['post'] = url_to_postid($value);
-                    }
                 }
             }
         }
+
 
         foreach($meta as $item) {
             add_post_meta($post_id, $query, $item);

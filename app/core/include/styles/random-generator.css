@@ -1,12 +1,16 @@
 #knife-generator-box .box {
-  display: flex;
-  flex-flow: row wrap;
-  align-items: flex-start;
+  display: block;
 }
 
-#knife-generator-box .box--items {
-    margin: 6px -12px -12px;
-    padding: 15px;
+#knife-generator-box .box--manage {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+#knife-generator-box .box--catalog {
+    margin: 6px 0 0;
+    padding: 0;
     border-top: 1px solid #eee;
 }
 
@@ -14,17 +18,16 @@
   box-sizing: border-box;
 }
 
-#knife-generator-box .manage--poster {
-  width: 40%;
-  max-width: 360px;
-  padding-right: 20px;
+#knife-generator-box .manage--colors {
+  display: flex;
+  flex-flow: row wrap;
+  flex: 1;
+  min-width: 300px;
 }
 
 @media screen and (max-width: 1023px) {
-  #knife-generator-box .manage--poster {
-    order: 2;
-    width: 100%;
-    padding-right: 0;
+  #knife-generator-box .manage--colors {
+    flex: 1 1 100%;
   }
 }
 
@@ -32,13 +35,14 @@
   display: flex;
   flex-flow: row wrap;
   box-sizing: border-box;
+  flex: 1;
 
-  width: 60%;
+  margin-right: 5%;
 }
 
 @media screen and (max-width: 1023px) {
   #knife-generator-box .manage--general {
-    width: 100%;
+    flex: 1 1 100%;
   }
 }
 
@@ -67,75 +71,156 @@
 
 #knife-generator-box .manage__color > p {
   display: block;
-  margin: 5px 0;
+  margin: 4px 0;
 }
 
 #knife-generator-box .manage__option input[type="text"] {
   width: 100%;
 }
 
-#knife-generator-box .manage__poster {
-    display: flex;
+
+#knife-generator-box .item {
+  display: flex;
+  flex-flow: column wrap;
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+
+  margin: 15px 0;
+  padding: 5px 330px 5px 10px;
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}
+
+@media screen and (max-width: 1023px) {
+  #knife-generator-box .item {
+    padding: 10px;
+  }
+}
+
+#knife-generator-box .item .dashicons-trash {
+  position: absolute;
+  right: 0;
+  bottom: 2px;
+  cursor: pointer;
+
+  font-size: 18px;
+  line-height: 1;
+  color: #a00;
+}
+
+#knife-generator-box .item__option {
+  flex: 1;
+  margin: 5px 0;
+}
+
+#knife-generator-box .item__option > p {
+  margin: 2px 0;
+}
+
+#knife-generator-box .item__option input {
+  display: block;
+  width: 100%;
+}
+
+#knife-generator-box .item__option textarea {
+  display: block;
+  width: 100%;
+  height: 115px;
+}
+
+#knife-generator-box .item__poster {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+@media screen and (max-width: 1023px) {
+  #knife-generator-box .item__poster {
     position: relative;
-    cursor: pointer;
-    overflow: hidden;
-
-    margin: 10px 0;
-    padding-top: calc(100% / 1.5);
-
-    width: 100%;
-  }
-
-  #knife-generator-box .manage__poster-image {
-    display: block;
-    position: absolute;
     top: 0;
-    left: 0;
-    z-index: 2;
+    right: 0;
+    order: 2;
 
+    margin-top: 10px;
+  }
+}
+
+#knife-generator-box .item__poster-figure {
+  display: flex;
+  position: relative;
+  cursor: pointer;
+
+  width: 300px;
+  height: 150px;
+  margin: 0 0 10px 0;
+  overflow: hidden;
+}
+@media screen and (max-width: 1023px) {
+  #knife-generator-box .item__poster-figure {
     width: 100%;
-    height: 100%;
+  }
+}
 
-    object-fit: cover;
-    object-position: center;
+#knife-generator-box .item__poster-image {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+}
+
+#knife-generator-box .item__poster-generate {
+  margin-right: 5px;
+}
+
+#knife-generator-box .item__poster-settings {
+  margin-right: 5px;
+}
+
+#knife-generator-box .item__poster-blank {
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  align-items: center;
+  justify-content: center;
+
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+  transition: border .5s;
+
+  border: dashed 2px #ddd;
+}
+  #knife-generator-box .item__poster-blank--error {
+    border-color: #a00;
   }
 
-  #knife-generator-box .manage__poster-blank {
-    display: flex;
-    position: absolute;
-    top: 0;
-    left: 0;
-    align-items: center;
-    justify-content: center;
+#knife-generator-box .item__poster-blank:hover {
+  transition: border .2s;
 
-    width: calc(100% - 4px);
-    height: calc(100% - 4px);
+  border-color: #0073aa;
+}
 
-    text-align: center;
-    color: #666;
-    font-size: 14px;
-    transition: border .5s;
+#knife-generator-box .item__poster-image + .item__poster-blank {
+  z-index: 3;
 
-    border: dashed 2px #ddd;
-  }
-    #knife-generator-box .manage__poster-blank--error {
-      border-color: #a00;
-    }
+  width: 100%;
+  height: 100%;
 
-  #knife-generator-box .manage__poster-blank:hover {
-    transition: border .2s;
+  text-indent: -9999rem;
 
-    border-color: #0073aa;
-  }
-
-  #knife-generator-box .manage__poster-image + .manage__poster-blank {
-    z-index: 3;
-
-    width: 100%;
-    height: 100%;
-
-    text-indent: -9999rem;
-
-    border: none;
-  }
+  border: none;
+}
 
