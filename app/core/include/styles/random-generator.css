@@ -6,12 +6,15 @@
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
+  margin: 25px -12px -12px;
+  padding: 15px;
+  background: #f5f5f5;
+  border-top: 1px solid #ddd;
 }
 
 #knife-generator-box .box--catalog {
-    margin: 6px 0 0;
+    margin: 0;
     padding: 0;
-    border-top: 1px solid #eee;
 }
 
 #knife-generator-box .manage {
@@ -29,6 +32,13 @@
   #knife-generator-box .manage--colors {
     flex: 1 1 100%;
   }
+}
+
+#knife-generator-box .manage--layers {
+  display: block;
+
+  width: 100%;
+  margin-top: 10px;
 }
 
 #knife-generator-box .manage--general {
@@ -74,32 +84,51 @@
   margin: 4px 0;
 }
 
+
 #knife-generator-box .manage__option input[type="text"] {
+  display: block;
+
   width: 100%;
 }
 
-
-#knife-generator-box .item {
-  display: flex;
-  flex-flow: column wrap;
+#knife-generator-box .catalog {
+  display: block;
   position: relative;
   box-sizing: border-box;
-  width: 100%;
 
+  width: 100%;
   margin: 15px 0;
-  padding: 5px 330px 5px 10px;
   background: #f5f5f5;
+
   border: 1px solid #ddd;
   border-radius: 3px;
 }
 
+#knife-generator-box .option {
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+}
+
+#knife-generator-box .option--general {
+  width: 100%;
+  padding: 10px 330px 10px 10px;
+}
+
 @media screen and (max-width: 1023px) {
-  #knife-generator-box .item {
+  #knife-generator-box .option--general {
     padding: 10px;
   }
 }
 
-#knife-generator-box .item .dashicons-trash {
+#knife-generator-box .option--advanced {
+  display: none;
+
+  width: 100%;
+  padding: 0 10px 10px;
+}
+
+#knife-generator-box .option .dashicons-trash {
   position: absolute;
   right: 0;
   bottom: 2px;
@@ -110,60 +139,82 @@
   color: #a00;
 }
 
-#knife-generator-box .item__option {
-  flex: 1;
-  margin: 5px 0;
+#knife-generator-box .option__general {
+  margin-top: 10px;
+  width: 100%;
 }
 
-#knife-generator-box .item__option > p {
+#knife-generator-box .option__general:first-child {
+  margin-top: 0;
+}
+
+#knife-generator-box .option__general > p {
   margin: 2px 0;
 }
 
-#knife-generator-box .item__option input {
+#knife-generator-box .option__general input {
   display: block;
   width: 100%;
 }
 
-#knife-generator-box .item__option textarea {
+#knife-generator-box .option__general textarea {
   display: block;
   width: 100%;
-  height: 115px;
+  height: 122px;
+  min-height: 122px;
 }
 
-#knife-generator-box .item__poster {
+#knife-generator-box .option__layers > p {
+  display: block;
+  margin: 5px 0;
+}
+
+#knife-generator-box .option__layers textarea {
+  display: block;
+
+  width: 100%;
+  height: 160px;
+
+  font: normal 12px/1.5 monospace;
+}
+
+#knife-generator-box .option__layers-default {
+  margin-top: 5px;
+}
+
+#knife-generator-box .option__relative {
   position: absolute;
   top: 10px;
   right: 10px;
 }
 
 @media screen and (max-width: 1023px) {
-  #knife-generator-box .item__poster {
+  #knife-generator-box .option__relative {
     position: relative;
     top: 0;
     right: 0;
-    order: 2;
 
     margin-top: 10px;
   }
 }
 
-#knife-generator-box .item__poster-figure {
+#knife-generator-box .option__relative-poster {
   display: flex;
   position: relative;
   cursor: pointer;
 
   width: 300px;
-  height: 150px;
+  height: 158px;
   margin: 0 0 10px 0;
   overflow: hidden;
 }
 @media screen and (max-width: 1023px) {
-  #knife-generator-box .item__poster-figure {
+  #knife-generator-box .option__relative-poster {
     width: 100%;
   }
 }
 
-#knife-generator-box .item__poster-image {
+#knife-generator-box .option__relative-image {
   display: block;
   position: absolute;
   top: 0;
@@ -173,19 +224,19 @@
   width: 100%;
   height: 100%;
 
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
 }
 
-#knife-generator-box .item__poster-generate {
+#knife-generator-box .option__relative-generate {
   margin-right: 5px;
 }
 
-#knife-generator-box .item__poster-settings {
-  margin-right: 5px;
+#knife-generator-box .option__relative-spinner {
+  float: none;
 }
 
-#knife-generator-box .item__poster-blank {
+#knife-generator-box .option__relative-blank {
   display: flex;
   position: absolute;
   top: 0;
@@ -203,17 +254,17 @@
 
   border: dashed 2px #ddd;
 }
-  #knife-generator-box .item__poster-blank--error {
+  #knife-generator-box .option__relative-blank--error {
     border-color: #a00;
   }
 
-#knife-generator-box .item__poster-blank:hover {
+#knife-generator-box .option__relative-blank:hover {
   transition: border .2s;
 
   border-color: #0073aa;
 }
 
-#knife-generator-box .item__poster-image + .item__poster-blank {
+#knife-generator-box .option__relative-image + .option__relative-blank {
   z-index: 3;
 
   width: 100%;

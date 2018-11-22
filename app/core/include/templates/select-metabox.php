@@ -35,21 +35,21 @@
             <div class="knife-select-item <?php echo ($i === 0) ? 'hidden' : ''; ?>">
                 <?php
                     printf('<p class="item-text">%s</p>',
-                        esc_html($item['text']) ?? ''
+                        esc_html($item['text'] ?? '')
                     );
 
                     printf('<a class="item-link" href="%1$s" target="_blank">%1$s</a>',
-                        esc_url($item['link']) ?? ''
+                        esc_url($item['link'] ?? '')
                     );
 
                     printf('<input class="item-text" name="%s[][text]" value="%s" type="hidden">',
                         esc_attr(self::$meta_items),
-                        esc_attr($item['text']) ?? ''
+                        esc_attr($item['text'] ?? '')
                     );
 
                     printf('<input class="item-link" name="%s[][link]" value="%s" type="hidden">',
                         esc_attr(self::$meta_items),
-                        esc_attr($item['link']) ?? ''
+                        esc_attr($item['link'] ?? '')
                     );
                 ?>
                 <span class="dashicons dashicons-menu"></span>

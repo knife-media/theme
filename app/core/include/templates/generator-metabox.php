@@ -11,6 +11,90 @@
         wp_nonce_field('metabox', self::$nonce);
     ?>
 
+    <div class="box box--catalog">
+    <?php foreach($catalog as $i => $item) : ?>
+        <div class="catalog">
+            <div class="option option--general">
+                <div class="option__general">
+                    <strong><?php _e('Заголовок', 'knife-theme'); ?></strong>
+
+                    <p>
+                        <?php
+                            printf('<input class="option__general-caption" type="text" name="%s[][caption]" value="%s">',
+                                esc_attr(self::$meta_catalog),
+                                esc_attr($item['caption'] ?? '')
+                            );
+                        ?>
+                    </p>
+                </div>
+
+                <div class="option__general">
+                    <strong><?php _e('Описание', 'knife-theme'); ?></strong>
+
+                    <p>
+                        <?php
+                            printf('<textarea class="option__general-description" name="%s[][description]">%s</textarea>',
+                                esc_attr(self::$meta_catalog),
+                                esc_attr($item['description'] ?? '')
+                            );
+                        ?>
+                    </p>
+                </div>
+
+                <div class="option__relative">
+                    <figure class="option__relative-poster">
+                        <?php if(!empty($item['poster'])) : ?>
+                            <img class="option__relative-image" src="<?php echo $item['poster']; ?>" alt="">
+                        <?php endif; ?>
+
+                        <figcaption class="option__relative-blank">
+                            <?php _e('Выбрать изображение для постера', 'knife-theme'); ?>
+                        </figcaption>
+
+                        <?php
+                            printf('<input class="option__relative-media" type="hidden" name="%s[][poster]" value="%s">',
+                                esc_attr(self::$meta_catalog),
+                                esc_attr($item['poster'] ?? '')
+                            );
+
+                            printf('<input class="option__relative-attachment" type="hidden" name="%s[][attachment]" value="%s">',
+                                esc_attr(self::$meta_catalog),
+                                esc_attr($item['attachment'] ?? '')
+                            );
+                        ?>
+                    </figure>
+
+                    <?php
+                        printf('<button class="option__relative-generate button" type="button">%s</button>',
+                            __('Сгенерировать', 'knife-theme')
+                        );
+
+                        printf('<button class="option__relative-settings button" disabled type="button">%s</button>',
+                            __('Настройки', 'knife-theme')
+                        );
+                    ?>
+
+                    <span class="option__relative-spinner spinner"></span>
+                    <span class="dashicons dashicons-trash"></span>
+                </div>
+            </div>
+
+            <div class="option option--advanced">
+                <div class="option__layers">
+                </div>
+            </div>
+        </div>
+        <?php endforeach; ?>
+    </div>
+
+    <div class="box box--actions">
+        <?php
+            printf('<button class="actions__add button">%s</button>',
+                __('Добавить элемент', 'knife-theme')
+            );
+        ?>
+    </div>
+
     <div class="box box--manage">
         <div class="manage manage--general">
             <div class="manage__option">
@@ -20,7 +104,7 @@
                     <?php
                         printf('<input type="text" name="%s[button_text]" value="%s">',
                             esc_attr(self::$meta_options),
-                            esc_attr($options['button_text']) ?? __('Сгенерировать', 'knife-theme')
+                            esc_attr($options['button_text'] ?? __('Сгенерировать', 'knife-theme'))
                         );
                     ?>
                 </p>
@@ -33,7 +117,7 @@
                     <?php
                         printf('<input type="text" name="%s[button_repeat]" value="%s">',
                             esc_attr(self::$meta_options),
-                            esc_attr($options['button_repeat']) ?? __('Попробовать другой', 'knife-theme')
+                            esc_attr($options['button_repeat'] ?? __('Попробовать другой', 'knife-theme'))
                         );
                     ?>
                 </p>
@@ -48,7 +132,7 @@
                     <?php
                         printf('<input type="hidden" name="%s[page_background]" value="%s">',
                             esc_attr(self::$meta_options),
-                            esc_attr($options['page_background']) ?? '#ffffff'
+                            esc_attr($options['page_background'] ?? '#ffffff')
                         );
                     ?>
                 </p>
@@ -61,7 +145,7 @@
                     <?php
                         printf('<input type="hidden" name="%s[page_color]" value="%s">',
                             esc_attr(self::$meta_options),
-                            esc_attr($options['page_color']) ?? '#000000'
+                            esc_attr($options['page_color'] ?? '#000000')
                         );
                     ?>
                 </p>
@@ -75,7 +159,7 @@
                     <?php
                         printf('<input type="hidden" name="%s[button_background]" value="%s">',
                             esc_attr(self::$meta_options),
-                            esc_attr($options['button_background']) ?? ''
+                            esc_attr($options['button_background'] ?? '')
                         );
                     ?>
                 </p>
@@ -94,65 +178,5 @@
                 </p>
             </div>
         </div>
-    </div>
-
-    <div class="box box--catalog">
-    <?php foreach($catalog as $i => $item) : ?>
-        <div class="item">
-            <div class="item__poster">
-                <figure class="item__poster-figure">
-                    <?php if(!empty($item['poster'])) : ?>
-                        <img class="item__poster-image" src="<?php echo $item['poster']; ?>" alt="">
-                    <?php endif; ?>
-
-                    <figcaption class="item__poster-blank">
-                        <?php _e('Выбрать изображение для постера', 'knife-theme'); ?>
-                    </figcaption>
-
-                    <?php
-                        printf('<input class="item__poster-media" type="hidden" name="%s[][poster]" value="%s">',
-                            esc_attr(self::$meta_catalog),
-                            esc_attr($item['poster'] ?? '')
-                        );
-                    ?>
-                </figure>
-
-                <button class="item__poster-generate button" type="button"><?php _e('Сгенерировать', 'knife-theme'); ?></button>
-                <button class="item__poster-settings button" type="button" disabled ><?php _e('Настройки', 'knife-theme'); ?></button>
-
-                <span class="dashicons dashicons-trash"></span>
-            </div>
-
-            <div class="item__option">
-                <strong><?php _e('Заголовок', 'knife-theme'); ?></strong>
-
-                <p>
-                    <?php
-                        printf('<input type="text" name="%s[][title]" value="%s">',
-                            esc_attr(self::$meta_catalog),
-                            esc_attr($item['title'] ?? '')
-                        );
-                    ?>
-                </p>
-            </div>
-
-            <div class="item__option">
-                <strong><?php _e('Описание', 'knife-theme'); ?></strong>
-
-                <p>
-                    <?php
-                        printf('<textarea name="%s[][description]">%s</textarea>',
-                            esc_attr(self::$meta_catalog),
-                            esc_attr($item['description'] ?? '')
-                        );
-                    ?>
-                </p>
-            </div>
-        </div>
-        <?php endforeach; ?>
-    </div>
-
-    <div class="box box--actions">
-        <button class="actions__add button"><?php _e('Добавить элемент', 'knife-theme'); ?></button>
     </div>
 </div>
