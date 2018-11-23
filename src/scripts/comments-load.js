@@ -7,15 +7,24 @@
 (function() {
   var button = document.getElementById('load-comments');
 
-  // Check if hypercomments id and load button defined
+
+  /**
+   * Check if hypercomments id and load button defined
+   */
   if(button === null || typeof knife_comments_id === 'undefined') {
     return false;
   }
 
-  // Declare global variables
+
+  /**
+   * Declare global variables
+   */
   var comments = null;
 
-  // Widget first load
+
+  /**
+   * Widget first load
+   */
   var loadWidget = function(callback) {
     _hcwp = window._hcwp || [];
 
@@ -45,7 +54,9 @@
   }
 
 
-  // Toggle comments on load button click
+  /**
+   * Toggle comments on load button click
+   */
   button.addEventListener('click', function(e) {
     e.preventDefault();
 

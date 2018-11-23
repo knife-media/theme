@@ -21,12 +21,12 @@ class Knife_Share_Buttons {
     public static function get_buttons($action, $output = '') {
         $buttons = [
             'vkontakte' => [
-                'link' => 'http://vk.com/share.php?url=%1$s&text=%2$s',
+                'link' => 'https://vk.com/share.php?url=%1$s&text=%2$s',
                 'text' => __('Поделиться', 'knife-theme')
             ],
 
              'facebook' => [
-                'link' => 'http://www.facebook.com/sharer/sharer.php?u=%1$s',
+                'link' => 'https://www.facebook.com/sharer/sharer.php?u=%1$s',
                 'text' => __('Пошерить', 'knife-theme')
             ],
 

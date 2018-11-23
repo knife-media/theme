@@ -23,6 +23,15 @@ class Knife_Random_Generator {
 
 
     /**
+     * Generator share query var
+     *
+     * @access  private
+     * @var     string
+     */
+    private static $query_var = 'share';
+
+
+    /**
      * Unique nonce string
      *
      * @access  private static
@@ -50,12 +59,12 @@ class Knife_Random_Generator {
 
 
     /**
-     * Unique meta to store generator catalog
+     * Unique meta to store generator items
      *
      * @access  private
      * @var     string
      */
-    private static $meta_catalog = '_knife-generator-catalog';
+    private static $meta_items = '_knife-generator-items';
 
 
     /**
@@ -74,6 +83,15 @@ class Knife_Random_Generator {
         // Register select post type
         add_action('init', [__CLASS__, 'register_type']);
 
+        // Add rewrite url for sharing
+        add_action('init', [__CLASS__, 'add_share_rule']);
+
+        // Add share query tag
+        add_action('query_vars', [__CLASS__, 'append_share_var']);
+
+        // Redirect to custom generated template if share query var exists
+        add_action('template_redirect', [__CLASS__, 'redirect_share']);
+
         // Change single post type template path
         add_action('single_template', [__CLASS__, 'include_single']);
 
@@ -88,6 +106,9 @@ class Knife_Random_Generator {
 
         // Create poster
         add_action('wp_ajax_' . self::$action, [__CLASS__, 'create_poster']);
+
+        // Include generator options
+        add_action('wp_enqueue_scripts', [__CLASS__, 'inject_generator'], 12);
     }
 
 
@@ -96,27 +117,117 @@ class Knife_Random_Generator {
      */
     public static function register_type() {
         register_post_type(self::$slug, [
-            'labels'                => [
-                'name'              => __('Генератор', 'knife-theme'),
-                'singular_name'     => __('Генератор', 'knife-theme'),
-                'add_new'           => __('Добавить генератор', 'knife-theme'),
-                'menu_name'         => __('Генераторы', 'knife-theme')
+            'labels'                    => [
+                'name'                  => __('Генератор', 'knife-theme'),
+                'singular_name'         => __('Генератор', 'knife-theme'),
+                'add_new'               => __('Добавить генератор', 'knife-theme'),
+                'menu_name'             => __('Генераторы', 'knife-theme'),
+                'all_items'             => __('Все генераторы', 'knife-theme'),
+                'add_new_item'          => __('Добавить новый генератор', 'knife-theme'),
+                'new_item'              => __('Новый генератор', 'knife-theme'),
+                'edit_item'             => __('Редактировать генератор', 'knife-theme'),
+                'update_item'           => __('Обновить генератор', 'knife-theme'),
+                'view_item'             => __('Просмотреть генератор', 'knife-theme'),
+                'view_items'            => __('Просмотреть подборки', 'knife-theme'),
+                'search_items'          => __('Искать генератор', 'knife-theme'),
+                'insert_into_item'      => __('Добавить в генератор', 'knife-theme')
             ],
             'label'                 => __('Генератор', 'knife-theme'),
-            'supports'              => ['title', 'thumbnail', 'excerpt'],
+            'supports'              => ['title', 'thumbnail', 'excerpt', 'comments'],
+            'taxonomies'            => ['post_tag'],
             'hierarchical'          => false,
             'public'                => true,
             'show_ui'               => true,
             'show_in_menu'          => true,
             'menu_position'         => 12,
             'menu_icon'             => 'dashicons-feedback',
-            'show_in_admin_bar'     => false,
+            'show_in_admin_bar'     => true,
             'show_in_nav_menus'     => true,
             'can_export'            => true,
             'has_archive'           => false,
             'exclude_from_search'   => true,
             'publicly_queryable'    => true
         ]);
+    }
+
+
+    /**
+     * Add rewrite sharing parameter to post type url
+     *
+     * Mask: /%post-type%/%post-name%/%item-number%/
+     */
+    public static function add_share_rule() {
+        add_rewrite_rule(
+            sprintf('%s/([^/]+)/([^/]+)/?$',
+                self::$slug
+            ),
+
+            sprintf(
+                'index.php?post_type=%1$s&%1$s=$matches[1]&%2$s=$matches[2]',
+                self::$slug,
+                self::$query_var
+            ),
+
+            'top'
+        );
+    }
+
+
+    /**
+     * Append share query tag to availible query vars
+     */
+    public static function append_share_var($query_vars) {
+        $query_vars[] = self::$query_var;
+
+        return $query_vars;
+    }
+
+
+    /**
+     * Include generator meta options and items
+     *
+     * TODO: remake permalink
+     */
+    public static function inject_generator() {
+        if(!is_singular(self::$slug)) {
+            return;
+        }
+
+        $post_id = get_the_ID();
+        $options = get_post_meta($post_id, self::$meta_options, true);
+        $options['url'] = get_permalink($post_id);
+
+        $items = self::retrieve_items($post_id);
+
+        // Add generator options object
+        wp_localize_script('knife-theme', 'knife_generator_options', $options);
+
+        // Add generator options object
+        wp_localize_script('knife-theme', 'knife_generator_items', $items);
+    }
+
+
+    /**
+     * Redirect to custom generated template if share query var exists
+     *
+     * TODO: Remake items
+     */
+    public static function redirect_share() {
+        if(is_singular(self::$slug) && get_query_var('share')) {
+            $post_id = get_the_ID();
+
+            $items = self::retrieve_items($post_id, true);
+            $share = absint(get_query_var('share'));
+
+            if($share > 0 && count($items) >= $share) {
+                $options = $items[$share - 1];
+
+                $include = get_template_directory() . '/core/include';
+                include_once($include . '/templates/generator-share.php');
+
+                exit;
+            }
+        }
     }
 
 
@@ -255,7 +366,7 @@ class Knife_Random_Generator {
 
 
         // Update items meta
-        self::update_items(self::$meta_catalog, $post_id);
+        self::update_items(self::$meta_items, $post_id);
     }
 
 
@@ -289,6 +400,36 @@ class Knife_Random_Generator {
 
 
     /**
+     * Retrieve items within meta to show as object
+     *
+     * TODO: Remake validations
+     */
+    private static function retrieve_items($post_id, $raw = false, $items = []) {
+        foreach(get_post_meta($post_id, self::$meta_items) as $meta) {
+            if(!isset($meta['description'], $meta['caption'], $meta['poster'])) {
+                continue;
+            }
+
+            if($raw === true) {
+                $items[] = [
+                    'description' => $meta['description'],
+                    'caption' => $meta['caption'],
+                    'poster' => $meta['poster']
+                ];
+            } else {
+                $items[] = [
+                    'description' => apply_filters('the_content', $meta['description']),
+                    'caption' => esc_html($meta['caption']),
+                    'poster' => esc_url($meta['poster'])
+                ];
+            }
+        }
+
+        return $items;
+    }
+
+
+    /**
      * Generate image using PHPImage class
      */
     private static function generate_image($image, $caption, $post_id) {
@@ -311,7 +452,7 @@ class Knife_Random_Generator {
             $poster->setTextColor([255, 255, 255]);
             $poster->textBox(mb_strtoupper($caption), [
                 'x' => 48,
-                'y' => 275,
+                'y' => 290,
                 'width' => 1000,
                 'fontSize' => 64
             ]);

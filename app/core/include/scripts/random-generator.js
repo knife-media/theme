@@ -19,41 +19,41 @@ jQuery(document).ready(function($) {
 
 
   // Show loader
-  var toggleLoader = function(catalog) {
-    var spinner = catalog.find('.option__relative-spinner');
+  var toggleLoader = function(item) {
+    var spinner = item.find('.option__relative-spinner');
 
     spinner.toggleClass('is-active')
 
     if(spinner.hasClass('is-active')) {
-      return catalog.find('.option__relative-generate').prop('disabled', true);
+      return item.find('.option__relative-generate').prop('disabled', true);
     }
 
-    return catalog.find('.option__relative-generate').prop('disabled', false);
+    return item.find('.option__relative-generate').prop('disabled', false);
   }
 
 
   // Generate poster using ajax
-  var createPoster = function(catalog) {
+  var createPoster = function(item) {
     var data = {
       'action': knife_random_generator.action,
       'nonce': knife_random_generator.nonce,
       'post_id': knife_random_generator.post,
-      'caption': catalog.find('.option__general-caption').val(),
-      'attachment': catalog.find('.option__relative-attachment').val()
+      'caption': item.find('.option__general-caption').val(),
+      'attachment': item.find('.option__relative-attachment').val()
     }
 
     var xhr = $.ajax({method: 'POST', url: ajaxurl, data: data}, 'json');
 
     xhr.done(function(answer) {
-      toggleLoader(catalog);
+      toggleLoader(item);
 
       if(answer.success && answer.data.length > 1) {
-        catalog.find('.option__relative-media').val(answer.data);
-        catalog.find('.option__relative-image').attr('src', answer.data);
+        item.find('.option__relative-media').val(answer.data);
+        item.find('.option__relative-image').attr('src', answer.data);
       }
     });
 
-    return toggleLoader(catalog);
+    return toggleLoader(item);
   }
 
 
@@ -90,11 +90,11 @@ jQuery(document).ready(function($) {
   });
 
 
-  // Add new catalog item
+  // Add new item
   box.on('click', '.actions__add', function(e) {
     e.preventDefault();
 
-    var last = box.find('.catalog').last();
+    var last = box.find('.item').last();
     var copy = last.clone();
 
     // Clear input values
@@ -110,17 +110,17 @@ jQuery(document).ready(function($) {
   });
 
 
-  // Remove catalog item
+  // Remove item
   box.on('click', '.option .dashicons-trash', function(e) {
     e.preventDefault();
 
-    var catalog = $(this).closest('.catalog');
+    var item = $(this).closest('.item');
 
-    if(box.find('.catalog').length === 1) {
+    if(box.find('.item').length === 1) {
       box.find('.actions__add').trigger('click');
     }
 
-    return catalog.remove();
+    return item.remove();
   });
 
 
@@ -128,14 +128,14 @@ jQuery(document).ready(function($) {
   box.on('click', '.option__relative-generate', function(e) {
     e.preventDefault();
 
-    var catalog = $(this).closest('.catalog');
-    var blank = catalog.find('.option__relative-blank');
+    var item = $(this).closest('.item');
+    var blank = item.find('.option__relative-blank');
 
-    if(catalog.find('.option__relative-image').length < 1) {
+    if(item.find('.option__relative-image').length < 1) {
       return blinkClass(blank, 'option__relative-blank--error');
     }
 
-    return createPoster(catalog);
+    return createPoster(item);
   });
 
 
@@ -143,9 +143,9 @@ jQuery(document).ready(function($) {
   box.on('click', '.option__relative-settings', function(e) {
     e.preventDefault();
 
-    var catalog = $(this).closest('.catalog');
+    var item = $(this).closest('.item');
 
-    return catalog.find('.option--advanced').slideToggle();
+    return item.find('.option--advanced').slideToggle();
   });
 
 

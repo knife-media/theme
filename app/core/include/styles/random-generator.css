@@ -5,6 +5,7 @@
 #knife-generator-box .box--manage {
   display: flex;
   flex-flow: row wrap;
+  align-items: flex-start;
   justify-content: space-between;
   margin: 25px -12px -12px;
   padding: 15px;
@@ -12,7 +13,7 @@
   border-top: 1px solid #ddd;
 }
 
-#knife-generator-box .box--catalog {
+#knife-generator-box .box--items {
     margin: 0;
     padding: 0;
 }
@@ -24,14 +25,8 @@
 #knife-generator-box .manage--colors {
   display: flex;
   flex-flow: row wrap;
-  flex: 1;
-  min-width: 300px;
-}
-
-@media screen and (max-width: 1023px) {
-  #knife-generator-box .manage--colors {
-    flex: 1 1 100%;
-  }
+  flex: 1 1 480px;
+  max-width: 100%;
 }
 
 #knife-generator-box .manage--layers {
@@ -45,9 +40,10 @@
   display: flex;
   flex-flow: row wrap;
   box-sizing: border-box;
-  flex: 1;
+  align-items: flex-start;
+  flex: 1 1 auto;
 
-  margin-right: 5%;
+  margin-right: 30px;
 }
 
 @media screen and (max-width: 1023px) {
@@ -76,12 +72,17 @@
 
 #knife-generator-box .manage__option > p {
   display: block;
-  margin: 2px 0;
+  margin: 4px 0;
 }
 
 #knife-generator-box .manage__color > p {
   display: block;
   margin: 4px 0;
+}
+
+#knife-generator-box .wp-picker-holder {
+  position: absolute;
+  z-index: 100;
 }
 
 
@@ -91,7 +92,7 @@
   width: 100%;
 }
 
-#knife-generator-box .catalog {
+#knife-generator-box .item {
   display: block;
   position: relative;
   box-sizing: border-box;
@@ -204,8 +205,8 @@
   cursor: pointer;
 
   width: 300px;
-  height: 158px;
   margin: 0 0 10px 0;
+  padding-top: 52.5%;
   overflow: hidden;
 }
 @media screen and (max-width: 1023px) {

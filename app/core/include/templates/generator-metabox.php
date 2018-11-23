@@ -5,15 +5,19 @@
         // Generator options
         $options = get_post_meta($post_id, self::$meta_options, true);
 
-        // Generator catalog items
-        $catalog = get_post_meta($post_id, self::$meta_catalog);
+        // Generator items
+        $items = get_post_meta($post_id, self::$meta_items);
+
+        if(count($items) < 1) {
+            array_push($items, ['caption' => '', 'description' => '']);
+        }
 
         wp_nonce_field('metabox', self::$nonce);
     ?>
 
-    <div class="box box--catalog">
-    <?php foreach($catalog as $i => $item) : ?>
-        <div class="catalog">
+    <div class="box box--items">
+    <?php foreach($items as $i => $item) : ?>
+        <div class="item">
             <div class="option option--general">
                 <div class="option__general">
                     <strong><?php _e('Заголовок', 'knife-theme'); ?></strong>
@@ -21,7 +25,7 @@
                     <p>
                         <?php
                             printf('<input class="option__general-caption" type="text" name="%s[][caption]" value="%s">',
-                                esc_attr(self::$meta_catalog),
+                                esc_attr(self::$meta_items),
                                 esc_attr($item['caption'] ?? '')
                             );
                         ?>
@@ -34,7 +38,7 @@
                     <p>
                         <?php
                             printf('<textarea class="option__general-description" name="%s[][description]">%s</textarea>',
-                                esc_attr(self::$meta_catalog),
+                                esc_attr(self::$meta_items),
                                 esc_attr($item['description'] ?? '')
                             );
                         ?>
@@ -53,12 +57,12 @@
 
                         <?php
                             printf('<input class="option__relative-media" type="hidden" name="%s[][poster]" value="%s">',
-                                esc_attr(self::$meta_catalog),
+                                esc_attr(self::$meta_items),
                                 esc_attr($item['poster'] ?? '')
                             );
 
                             printf('<input class="option__relative-attachment" type="hidden" name="%s[][attachment]" value="%s">',
-                                esc_attr(self::$meta_catalog),
+                                esc_attr(self::$meta_items),
                                 esc_attr($item['attachment'] ?? '')
                             );
                         ?>
@@ -130,7 +134,7 @@
 
                 <p>
                     <?php
-                        printf('<input type="hidden" name="%s[page_background]" value="%s">',
+                        printf('<input type="text" name="%s[page_background]" value="%s">',
                             esc_attr(self::$meta_options),
                             esc_attr($options['page_background'] ?? '#ffffff')
                         );
@@ -143,7 +147,7 @@
 
                 <p>
                     <?php
-                        printf('<input type="hidden" name="%s[page_color]" value="%s">',
+                        printf('<input type="text" name="%s[page_color]" value="%s">',
                             esc_attr(self::$meta_options),
                             esc_attr($options['page_color'] ?? '#000000')
                         );
@@ -157,7 +161,7 @@
 
                 <p>
                     <?php
-                        printf('<input type="hidden" name="%s[button_background]" value="%s">',
+                        printf('<input type="text" name="%s[button_background]" value="%s">',
                             esc_attr(self::$meta_options),
                             esc_attr($options['button_background'] ?? '')
                         );
@@ -170,7 +174,7 @@
 
                 <p>
                     <?php
-                        printf('<input type="hidden" name="%s[button_color]" value="%s">',
+                        printf('<input type="text" name="%s[button_color]" value="%s">',
                             esc_attr(self::$meta_options),
                             esc_attr($options['button_color'] ?? '')
                         );

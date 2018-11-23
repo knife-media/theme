@@ -32,6 +32,15 @@ class Knife_Relap_Links {
     private static $relap_block = 'knife_relap_block';
 
 
+   /**
+    * Post types relap availible
+    *
+    * @access  private
+    * @var     array
+    */
+    private static $type = ['post', 'generator'];
+
+
     /**
      * Init function instead of constructor
      */
@@ -48,7 +57,7 @@ class Knife_Relap_Links {
      * Pass Relap links options to js
      */
     public static function inject_object() {
-        if(is_singular('post')) {
+        if(is_singular(self::$type)) {
             $relap_options = [
                 'token' => get_theme_mod(self::$relap_token),
                 'block' => get_theme_mod(self::$relap_block)

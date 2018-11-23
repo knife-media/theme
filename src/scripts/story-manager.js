@@ -5,7 +5,7 @@
  */
 
 (function() {
-  var story = document.querySelector('.glide');
+  var story = document.getElementById('glide');
 
 
   /**
@@ -125,7 +125,7 @@
     var share = slides[0].querySelector('.share');
 
     if(share === null) {
-      return false
+      return false;
     }
 
     var clone = share.cloneNode(true);
