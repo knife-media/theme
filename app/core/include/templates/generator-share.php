@@ -7,7 +7,6 @@
     <meta property="og:site_name" content="Нож" />
     <meta property="og:locale" content="ru_RU" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="<?php the_permalink($post_id) ?>" />
     <meta property="og:title" content="<?php echo esc_attr($options['caption']); ?>" />
     <meta property="og:description" content="<?php echo esc_attr($options['description']); ?>" />
     <meta property="og:image" content="<?php echo esc_attr($options['poster']); ?>" />
@@ -19,7 +18,6 @@
     <meta property="twitter:title" content="<?php echo esc_attr($options['caption']); ?>" />
     <meta property="twitter:description" content="<?php echo esc_attr($options['description']); ?>" />
     <meta property="twitter:image" content="<?php echo esc_attr($options['poster']); ?>" />
-    <meta property="twitter:url" content="<?php the_permalink($post_id) ?>" />
     <meta property="vk:image" content="<?php echo esc_attr($options['poster']); ?>" />
 
     <title><?php echo esc_attr($options['caption']); ?></title>
