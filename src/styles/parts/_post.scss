@@ -31,7 +31,9 @@
     }
 
     .entry-comments {
-      margin: 0;
+      .entry-comments__button {
+        margin: 0;
+      }
 
       .entry-comments__widget .comments {
         max-width: calc(#{$width-wide} + 4rem);
