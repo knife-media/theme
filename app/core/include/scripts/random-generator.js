@@ -37,20 +37,38 @@ jQuery(document).ready(function($) {
     var data = {
       'action': knife_random_generator.action,
       'nonce': knife_random_generator.nonce,
-      'post_id': knife_random_generator.post,
+      'post_id': knife_random_generator.post_id,
       'caption': item.find('.option__general-caption').val(),
       'attachment': item.find('.option__relative-attachment').val()
     }
 
+    item.find('.option__relative-message').html('').hide();
+
     var xhr = $.ajax({method: 'POST', url: ajaxurl, data: data}, 'json');
 
     xhr.done(function(answer) {
-      toggleLoader(item);
-
-      if(answer.success && answer.data.length > 1) {
+      if(answer.data.length > 1 && answer.success === true) {
         item.find('.option__relative-media').val(answer.data);
         item.find('.option__relative-image').attr('src', answer.data);
+
+        return toggleLoader(item);
       }
+
+      if(answer.data.length > 1 && answer.success === false) {
+        item.find('.option__relative-message').html(answer.data).show();
+
+        return toggleLoader(item);
+      }
+
+      item.find('.option__relative-message').html(knife_random_generator.error).show();
+
+      return toggleLoader(item);
+    });
+
+    xhr.error(function() {
+      toggleLoader(item);
+
+      item.find('.option__relative-message').html(knife_random_generator.error).show();
     });
 
     return toggleLoader(item);

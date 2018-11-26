@@ -317,14 +317,14 @@ class Knife_Random_Generator {
         wp_enqueue_script('knife-random-generator', $include . '/scripts/random-generator.js', ['jquery', 'wp-color-picker'], $version);
 
         $options = [
+            'post_id' => absint($post_id),
             'action' => esc_attr(self::$action),
             'nonce' => wp_create_nonce(self::$nonce),
-            'post' => absint($post_id),
-            'choose' => __('Выберите изображение постера', 'knife-theme')
+            'choose' => __('Выберите изображение постера', 'knife-theme'),
+            'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
         ];
 
         wp_localize_script('knife-random-generator', 'knife_random_generator', $options);
-
     }
 
 

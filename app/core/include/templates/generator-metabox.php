@@ -44,7 +44,9 @@
                         ?>
                     </p>
                 </div>
+            </div>
 
+            <div class="option option--relative">
                 <div class="option__relative">
                     <figure class="option__relative-poster">
                         <?php if(!empty($item['poster'])) : ?>
@@ -67,6 +69,8 @@
                             );
                         ?>
                     </figure>
+
+                    <p class="option__relative-message">Ошибка генерации: No font file set!</p>
 
                     <?php
                         printf('<button class="option__relative-generate button" type="button">%s</button>',
