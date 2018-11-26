@@ -30,7 +30,7 @@
    * Create Glide instance with custom options
    */
   var glide = new Glide('.glide', {
-    gap: 0, rewind: false, touchAngle: 30,
+    gap: 0, rewind: false, touchAngle: 60, swipeThreshold: 60,
     dragThreshold: false,
     breakpoints: {
       767: {
