@@ -43,6 +43,22 @@
 
 
   /**
+   * Create bounce loader
+   */
+  function createLoader(embed) {
+    var loader = document.createElement('div');
+    loader.classList.add('entry-generator__loader');
+    embed.appendChild(loader);
+
+    var bounce = document.createElement('span');
+    bounce.classList.add('entry-generator__loader-bounce');
+    loader.appendChild(bounce);
+
+    return loader;
+  }
+
+
+  /**
    * Set color options
    */
   (function() {
