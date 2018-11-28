@@ -192,9 +192,10 @@ class Knife_Random_Generator {
             $options = get_post_meta($post_id, self::$meta_options, true);
 
             if(class_exists('Knife_Share_Buttons')) {
-                $options['share'] = Knife_Share_Buttons::get_object($post_id,
-                    __('Share generator — results', 'knife-theme')
-                );
+                $options = array_merge($options, [
+                    'permalink' => get_permalink($post_id),
+                    'share_links' => Knife_Share_Buttons::get_settings($post_id)
+                ]);
             }
 
             // Add generator options object

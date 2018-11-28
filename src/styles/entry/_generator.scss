@@ -1,5 +1,7 @@
 .entry-generator {
-  display: block;
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
   position: relative;
 
   width: 100%;
@@ -13,17 +15,17 @@
   & > * {
     width: $width-wide;
     max-width: 100%;
-    margin: 2.5rem auto;
+    margin-top: 2.5rem;
 
     transition: opacity .5s;
 
     @media screen and (max-width: 767px) {
-      margin: 1.5rem auto;
+      margin-top: 1.5rem;
     }
   }
 
   .entry-generator__share {
-    display: none;
+    display: flex;
     flex: 0 0 auto;
   }
 

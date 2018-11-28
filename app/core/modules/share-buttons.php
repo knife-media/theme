@@ -50,27 +50,11 @@ class Knife_Share_Buttons {
 
 
     /**
-     * Return social share buttons object
-     *
-     * @since 1.6
-     */
-    public static function get_object($post_id, $action, $object = []) {
-        $object = [
-            'url' => get_permalink($post_id),
-            'action' => esc_attr($action),
-            'settings' => self::get_settings()
-        ];
-
-        return $object;
-    }
-
-
-    /**
      * Return pre-defined buttons settings
      *
      * @since 1.6
      */
-    private static function get_settings() {
+    public static function get_settings() {
         $settings = [
             'vkontakte' => [
                 'link' => 'https://vk.com/share.php?url=%1$s&text=%2$s',

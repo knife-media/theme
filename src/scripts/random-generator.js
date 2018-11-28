@@ -43,23 +43,42 @@
 
 
   /**
-   * Replace sharing buttons
+   * Replace share links
    */
-  function replaceSharing(set) {
-    set = set + 1;
-    var link = knife_generator_options.url + set + '/';
-
-    var networks = {
-      vkontakte: 'https://vk.com/share.php?url=' + encodeURIComponent(link)  + '&text=' + encodeURIComponent(item.caption),
-      facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(link),
-      telegram: 'https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent(item.caption),
-      twitter: 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(item.caption) + '&url=' + encodeURIComponent(link)
+  function replaceShare(caption, index) {
+    // Check generator share links
+    if(typeof knife_generator_options.share_links === 'undefined') {
+      return false;
     }
 
-    generator.querySelector('.entry-generator__share .share__link--vkontakte').setAttribute('href', networks.vkontakte);
-    generator.querySelector('.entry-generator__share .share__link--facebook').setAttribute('href', networks.facebook);
-    generator.querySelector('.entry-generator__share .share__link--telegram').setAttribute('href', networks.telegram);
-    generator.querySelector('.entry-generator__share .share__link--twitter').setAttribute('href', networks.twitter);
+    // Check generator permalink
+    if(typeof knife_generator_options.permalink === 'undefined') {
+      return false;
+    }
+
+    var buttons = generator.querySelectorAll('.share > .share__link');
+
+    var matches = [
+      knife_generator_options.permalink.replace(/\/?$/, '/') + index + '/', caption
+    ];
+
+    for(var i = 0, link; button = buttons[i]; i++) {
+      var label = button.getAttribute('data-label');
+
+      if(typeof knife_generator_options.share_links[label] === 'undefined') {
+        continue;
+      }
+
+      var options = knife_generator_options.share_links[label];
+
+      button.href = options.link.replace(/%([\d])\$s/g, function(match, i) {
+        return encodeURIComponent(matches[i - 1]);
+      });
+    }
+
+    if(window.shareButtons === 'function') {
+      window.shareButtons();
+    }
   }
 
 
@@ -131,9 +150,13 @@
   start.addEventListener('click', function(e) {
     e.preventDefault();
 
+    var rand = Math.floor(Math.random() * items.length);
+    var item = items[rand];
 
-    var set = Math.floor(Math.random() * items.length);
-    var item = items[set];
+    replaceShare(item.caption, rand);
+    return;
+
+//    return generator.share([1, 2]);
 
 
     var poster = new Image();
