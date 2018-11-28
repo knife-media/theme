@@ -40,10 +40,9 @@
   }
 
   var image = new Image();
-
-  image.onload = function() {
+  image.addEventListener('load', function() {
     document.body.appendChild(backdrop);
-  }
+  });
 
   return image.src = knife_backdrop.image;
 })();

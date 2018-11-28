@@ -43,19 +43,38 @@
 
 
   /**
-   * Create bounce loader
+   * Replace sharing buttons
    */
-  function createLoader(embed) {
+  function replaceSharing(set) {
+    set = set + 1;
+    var link = knife_generator_options.url + set + '/';
+
+    var networks = {
+      vkontakte: 'https://vk.com/share.php?url=' + encodeURIComponent(link)  + '&text=' + encodeURIComponent(item.caption),
+      facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(link),
+      telegram: 'https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent(item.caption),
+      twitter: 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(item.caption) + '&url=' + encodeURIComponent(link)
+    }
+
+    generator.querySelector('.entry-generator__share .share__link--vkontakte').setAttribute('href', networks.vkontakte);
+    generator.querySelector('.entry-generator__share .share__link--facebook').setAttribute('href', networks.facebook);
+    generator.querySelector('.entry-generator__share .share__link--telegram').setAttribute('href', networks.telegram);
+    generator.querySelector('.entry-generator__share .share__link--twitter').setAttribute('href', networks.twitter);
+  }
+
+
+  /**
+   * Create loader
+   */
+  (function() {
     var loader = document.createElement('div');
     loader.classList.add('entry-generator__loader');
-    embed.appendChild(loader);
+    generator.insertBefore(loader, generator.firstChild);
 
     var bounce = document.createElement('span');
     bounce.classList.add('entry-generator__loader-bounce');
     loader.appendChild(bounce);
-
-    return loader;
-  }
+  })();
 
 
   /**
@@ -108,11 +127,28 @@
 
   /**
    * Generate button click
-   *
-   * TODO: remake share and add animations
    */
   start.addEventListener('click', function(e) {
     e.preventDefault();
+
+
+    var set = Math.floor(Math.random() * items.length);
+    var item = items[set];
+
+
+    var poster = new Image();
+    poster.setAttribute('src', item.poster);
+
+
+    poster.addEventListener('load', function() {
+      poster.classList.add('entry-generator__poster');
+//      loader.parentNode.removeChild(loader);
+//      generator.insertBefore(poster, generator.firstChild);
+    });
+
+
+    generator.classList.add('entry-generator--loader');
+    return;
 
     var set = Math.floor(Math.random() * items.length);
     var item = items[set];
@@ -149,20 +185,5 @@
         poster.setAttribute('alt', item.caption);
       }
     }
-
-    set = set + 1;
-    var link = knife_generator_options.url + set + '/';
-
-    var networks = {
-      vkontakte: 'https://vk.com/share.php?url=' + encodeURIComponent(link)  + '&text=' + encodeURIComponent(item.caption),
-      facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(link),
-      telegram: 'https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent(item.caption),
-      twitter: 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(item.caption) + '&url=' + encodeURIComponent(link)
-    }
-
-    generator.querySelector('.entry-generator__share .share__link--vkontakte').setAttribute('href', networks.vkontakte);
-    generator.querySelector('.entry-generator__share .share__link--facebook').setAttribute('href', networks.facebook);
-    generator.querySelector('.entry-generator__share .share__link--telegram').setAttribute('href', networks.telegram);
-    generator.querySelector('.entry-generator__share .share__link--twitter').setAttribute('href', networks.twitter);
   });
 })();

@@ -1,29 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta charset="utf-8">
-    <meta name="description" content="<?php echo esc_attr($options['description']); ?>">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="<?php echo esc_attr($description); ?>">
+    <meta name="author" content="">
 
-    <meta property="og:site_name" content="Нож" />
-    <meta property="og:locale" content="ru_RU" />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="<?php echo esc_attr($options['caption']); ?>" />
-    <meta property="og:description" content="<?php echo esc_attr($options['description']); ?>" />
-    <meta property="og:image" content="<?php echo esc_attr($options['poster']); ?>" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:site" content="@knife_media" />
-    <meta property="twitter:creator" content="@knife_media" />
-    <meta property="twitter:title" content="<?php echo esc_attr($options['caption']); ?>" />
-    <meta property="twitter:description" content="<?php echo esc_attr($options['description']); ?>" />
-    <meta property="twitter:image" content="<?php echo esc_attr($options['poster']); ?>" />
-    <meta property="vk:image" content="<?php echo esc_attr($options['poster']); ?>" />
+    <meta property="og:title" content="<?php echo esc_attr($caption); ?>">
+    <meta property="og:site_name" content="НОЖ">
+    <meta property="og:description" content="<?php echo esc_attr($description); ?>">
+    <meta property="og:image" content="<?php echo esc_attr($poster); ?>">
+    <meta property="og:image:width" content="800">
+    <meta property="og:image:height" content="420">
 
-    <title><?php echo esc_attr($options['caption']); ?></title>
+    <meta name="twitter:card" content="photo">
+    <meta name="twitter:site" content="@knife_media">
+    <meta name="twitter:creator" content="@knife_media">
+    <meta name="twitter:title" content="<?php echo esc_attr($caption); ?>">
+    <meta name="twitter:image" content="<?php echo esc_attr($poster); ?>">
+    <meta name="twitter:url" content="">
+
+    <title><?php echo esc_attr($caption); ?></title>
 </head>
 <body>
-    <script>
+    <script type="text/javascript">
         window.location.href = '<?php the_permalink($post_id) ?>';
     </script>
 </body>

@@ -15,11 +15,6 @@
                 '</h1>'
             );
 
-            the_share(
-                '<div class="entry-generator__share share">', '</div>',
-                __('Share generator — results', 'knife-theme')
-            );
-
             the_lead(
                 '<div class="entry-generator__content">',
                 '</div>'

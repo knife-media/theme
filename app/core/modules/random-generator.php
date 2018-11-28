@@ -185,42 +185,39 @@ class Knife_Random_Generator {
 
     /**
      * Include generator meta options and items
-     *
-     * TODO: remake permalink
      */
     public static function inject_generator() {
-        if(!is_singular(self::$slug)) {
-            return;
+        if(is_singular(self::$slug)) {
+            $post_id = get_the_ID();
+            $options = get_post_meta($post_id, self::$meta_options, true);
+
+            if(class_exists('Knife_Share_Buttons')) {
+                $options['share'] = Knife_Share_Buttons::get_object($post_id,
+                    __('Share generator — results', 'knife-theme')
+                );
+            }
+
+            // Add generator options object
+            wp_localize_script('knife-theme', 'knife_generator_options', $options);
+
+            // Add generator items
+            wp_localize_script('knife-theme', 'knife_generator_items', self::retrieve_items($post_id));
         }
-
-        $post_id = get_the_ID();
-        $options = get_post_meta($post_id, self::$meta_options, true);
-        $options['url'] = get_permalink($post_id);
-
-        $items = self::retrieve_items($post_id);
-
-        // Add generator options object
-        wp_localize_script('knife-theme', 'knife_generator_options', $options);
-
-        // Add generator options object
-        wp_localize_script('knife-theme', 'knife_generator_items', $items);
     }
 
 
     /**
      * Redirect to custom generated template if share query var exists
-     *
-     * TODO: Remake items
      */
     public static function redirect_share() {
         if(is_singular(self::$slug) && get_query_var('share')) {
             $post_id = get_the_ID();
 
+            $share = absint(get_query_var('share')) - 1;
             $items = self::retrieve_items($post_id, true);
-            $share = absint(get_query_var('share'));
 
-            if($share > 0 && count($items) >= $share) {
-                $options = $items[$share - 1];
+            if($share >= 0 && count($items) > $share) {
+                extract($items[$share]);
 
                 $include = get_template_directory() . '/core/include';
                 include_once($include . '/templates/generator-share.php');
@@ -401,28 +398,26 @@ class Knife_Random_Generator {
 
     /**
      * Retrieve items within meta to show as object
-     *
-     * TODO: Remake validations
      */
     private static function retrieve_items($post_id, $raw = false, $items = []) {
+        $options = ['description', 'caption', 'poster'];
+
         foreach(get_post_meta($post_id, self::$meta_items) as $meta) {
-            if(!isset($meta['description'], $meta['caption'], $meta['poster'])) {
+            if(array_diff_key(array_flip($options), $meta)) {
                 continue;
             }
 
-            if($raw === true) {
-                $items[] = [
-                    'description' => $meta['description'],
-                    'caption' => $meta['caption'],
-                    'poster' => $meta['poster']
-                ];
-            } else {
+            if($raw === false) {
                 $items[] = [
                     'description' => apply_filters('the_content', $meta['description']),
                     'caption' => esc_html($meta['caption']),
                     'poster' => esc_url($meta['poster'])
                 ];
+
+                continue;
             }
+
+            $items[] = $meta;
         }
 
         return $items;
