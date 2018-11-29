@@ -27,19 +27,13 @@
   /**
    * Items copy array
    */
-  var items = knife_generator_items;
+  var items = knife_generator_items.slice(0);
 
 
   /**
    * Start button element
    */
   var start = null;
-
-
-  /**
-   * Set to true after first launch
-   */
-  var repeat = false;
 
 
   /**
@@ -97,7 +91,7 @@
 
 
   /**
-   * Set color options
+   * Set generator start options
    */
   (function() {
     // Set background color
@@ -153,60 +147,66 @@
     var rand = Math.floor(Math.random() * items.length);
     var item = items[rand];
 
-    replaceShare(item.caption, rand);
-    return;
+    items.splice(rand, 1);
 
-//    return generator.share([1, 2]);
+    // Reset items array if it is already empty
+    if(items.length < 1) {
+      items = knife_generator_items.slice(0);
+    }
 
 
-    var poster = new Image();
-    poster.setAttribute('src', item.poster);
+    // Check selected item has poster
+    if(typeof item.poster === 'undefined') {
+      return false;
+    }
 
+    // Check selected item has caption
+    if(typeof item.caption === 'undefined') {
+      return false;
+    }
+
+    // Update generator repeat button text
+    if(typeof knife_generator_options.button_repeat !== 'undefined') {
+      start.textContent = knife_generator_options.button_repeat;
+    }
+
+    // Update generator share buttons
+    if(generator.querySelector('.entry-generator__share')) {
+      replaceShare(item.caption, rand);
+    }
+
+
+    var content = generator.querySelector('.entry-generator__content');
+
+    if(content === null) {
+      var content = document.createElement('div');
+      content.classList.add('entry-generator__content');
+      generator.insertBefore(content, generator.lastChild);
+    }
+
+    content.innerHTML = (typeof item.description === 'undefined') ? '' : item.description;
+
+
+    var poster = generator.querySelector('.entry-generator__poster');
+
+    if(poster !== null) {
+      poster.parentNode.removeChild(poster);
+    }
+
+    poster = new Image();
+
+    poster.classList.add('entry-generator__poster');
+    generator.insertBefore(poster, generator.firstChild);
 
     poster.addEventListener('load', function() {
-      poster.classList.add('entry-generator__poster');
-//      loader.parentNode.removeChild(loader);
-//      generator.insertBefore(poster, generator.firstChild);
+      setTimeout(function() {
+        generator.classList.remove('entry-generator--loader');
+      }, 600);
     });
 
+    poster.setAttribute('alt', item.caption);
+    poster.setAttribute('src', item.poster);
 
-    generator.classList.add('entry-generator--loader');
-    return;
-
-    var set = Math.floor(Math.random() * items.length);
-    var item = items[set];
-
-    if(repeat === false) {
-      generator.querySelector('.entry-generator__share').style.display = 'flex';
-
-      var title = generator.querySelector('.entry-generator__title');
-      title.parentNode.removeChild(title);
-
-      if(typeof knife_generator_options.button_repeat !== 'undefined') {
-        start.textContent = knife_generator_options.button_repeat;
-      }
-
-      repeat = true;
-    }
-
-    if(typeof item.description !== 'undefined') {
-      generator.querySelector('.entry-generator__content').innerHTML = item.description;
-    }
-
-    if(typeof item.poster !== 'undefined') {
-      var poster = generator.querySelector('.entry-generator__poster');
-
-      if(poster === null) {
-        poster = new Image();
-        poster.classList.add('entry-generator__poster');
-        generator.insertBefore(poster, generator.firstChild);
-      }
-
-      poster.setAttribute('src', item.poster);
-
-      if(typeof item.caption !== 'undefined') {
-        poster.setAttribute('alt', item.caption);
-      }
-    }
+    generator.classList.add('entry-generator--loader', 'entry-generator--results');
   });
 })();
