@@ -162,7 +162,7 @@ class Knife_Select_Links {
             return $content;
         }
 
-        $items = get_post_meta(get_the_ID(), self::$meta);
+        $items = get_post_meta(get_the_ID(), self::$meta_items);
 
         foreach($items as $item) {
             $content = self::get_item($item, $content);
