@@ -231,7 +231,7 @@ class Knife_Story_Manager {
                 'not_found_in_trash'    => __('В корзине ничего не найдено', 'knife-theme')
             ],
             'label'                 => __('Истории', 'knife-theme'),
-            'description'           => __('Слайды с интерактивными историями', 'knife-theme'),
+            'description'           => __('Лучшие фото-истории интернета', 'knife-theme'),
             'supports'              => ['title', 'thumbnail', 'revisions', 'excerpt', 'author'],
             'hierarchical'          => true,
             'public'                => true,

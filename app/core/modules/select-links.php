@@ -98,6 +98,7 @@ class Knife_Select_Links {
 
             ],
             'label'                 => __('Подборка', 'knife-theme'),
+            'description'           => __('Читай лучшее в подборках на Ноже', 'knife-theme'),
             'supports'              => ['title', 'thumbnail', 'revisions', 'excerpt', 'author'],
             'hierarchical'          => false,
             'public'                => true,
