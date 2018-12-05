@@ -104,7 +104,7 @@ class Knife_Select_Links {
             'public'                => true,
             'show_ui'               => true,
             'show_in_menu'          => true,
-            'menu_position'         => 6,
+            'menu_position'         => 7,
             'menu_icon'             => 'dashicons-images-alt',
             'show_in_admin_bar'     => true,
             'show_in_nav_menus'     => true,

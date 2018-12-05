@@ -80,7 +80,7 @@ class Knife_Random_Generator {
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public static function load_module() {
-        // Register select post type
+        // Register generator post type
         add_action('init', [__CLASS__, 'register_type']);
 
         // Add rewrite url for sharing
@@ -95,7 +95,7 @@ class Knife_Random_Generator {
         // Change single post type template path
         add_action('single_template', [__CLASS__, 'include_single']);
 
-        // Add select metabox
+        // Add generator metabox
         add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
 
         // Save metabox
@@ -113,7 +113,7 @@ class Knife_Random_Generator {
 
 
     /**
-     * Register select post type
+     * Register generator post type
      */
     public static function register_type() {
         register_post_type(self::$slug, [
@@ -230,7 +230,7 @@ class Knife_Random_Generator {
 
 
     /**
-     * Include single select template
+     * Include single generator template
      */
     public static function include_single($template) {
         if(is_singular(self::$slug)) {
@@ -278,7 +278,7 @@ class Knife_Random_Generator {
 
 
     /**
-     * Add select metabox
+     * Add generator metabox
      */
     public static function add_metabox() {
         add_meta_box('knife-generator-metabox', __('Настройки генератора'), [__CLASS__, 'display_metabox'], self::$slug, 'normal', 'high');
@@ -327,7 +327,7 @@ class Knife_Random_Generator {
 
 
     /**
-     * Display select link metabox
+     * Display generator link metabox
      */
     public static function display_metabox($post, $box) {
         $include = get_template_directory() . '/core/include';
@@ -369,14 +369,14 @@ class Knife_Random_Generator {
 
 
     /**
-     * Update select items meta from post-metabox
+     * Update generator items meta from post-metabox
      */
     private static function update_items($query, $post_id, $meta = [], $i = 0) {
         if(empty($_REQUEST[$query])) {
             return;
         }
 
-        // Delete select post meta to create it again below
+        // Delete generator post meta to create it again below
         delete_post_meta($post_id, $query);
 
         foreach($_REQUEST[$query] as $item) {
