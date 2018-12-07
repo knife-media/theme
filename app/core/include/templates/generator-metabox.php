@@ -97,7 +97,7 @@
 
     <div class="box box--actions">
         <?php
-            printf('<button class="actions__add button">%s</button>',
+            printf('<button class="actions__add button" type="button">%s</button>',
                 __('Добавить элемент', 'knife-theme')
             );
         ?>

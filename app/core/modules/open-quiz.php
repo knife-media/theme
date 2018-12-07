@@ -70,6 +70,9 @@ class Knife_Open_Quiz {
 
         // Save metabox
         add_action('save_post', [__CLASS__, 'save_metabox']);
+
+        // Add scripts to admin page
+        add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
     }
 
 
@@ -137,6 +140,9 @@ class Knife_Open_Quiz {
         $version = wp_get_theme()->get('Version');
         $include = get_template_directory_uri() . '/core/include';
 
+        // Insert scripts for dynaimc wp_editor
+        wp_enqueue_editor();
+
         // Insert wp media scripts
         wp_enqueue_media();
 
@@ -144,9 +150,7 @@ class Knife_Open_Quiz {
         wp_enqueue_style('knife-random-generator', $include . '/styles/open-quiz.css', [], $version);
 
         // Insert admin scripts
-        wp_enqueue_script('knife-random-generator', $include . '/scripts/open-quiz.js', ['jquery'], $version);
-
-        wp_localize_script('knife-open-quiz', 'knife_open_quiz', $options);
+        wp_enqueue_script('knife-random-generator', $include . '/scripts/open-quiz.js', ['jquery', 'jquery-ui-sortable'], $version);
     }
 
 

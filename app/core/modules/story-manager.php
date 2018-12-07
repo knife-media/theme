@@ -68,7 +68,7 @@ class Knife_Story_Manager {
         add_filter('archive_template', [__CLASS__, 'include_archive']);
 
         // Insert admin side assets
-        add_action('admin_enqueue_scripts', [__CLASS__, 'add_assets']);
+        add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
 
         // Story post metabox
         add_action('add_meta_boxes', [__CLASS__, 'add_metabox'], 1);
@@ -83,7 +83,7 @@ class Knife_Story_Manager {
         add_action('pre_get_posts', [__CLASS__, 'update_count']);
 
         // Insert vendor scripts and styles
-        add_action('wp_enqueue_scripts', [__CLASS__, 'enqueue_assets'], 9);
+        add_action('wp_enqueue_scripts', [__CLASS__, 'inject_dependences'], 9);
 
         // Include slider options
         add_action('wp_enqueue_scripts', [__CLASS__, 'inject_stories'], 12);
@@ -129,7 +129,7 @@ class Knife_Story_Manager {
     /**
      * Enqueue assets to admin post screen only
      */
-    public static function add_assets($hook) {
+    public static function enqueue_assets($hook) {
         if(!in_array($hook, ['post.php', 'post-new.php'])) {
             return;
         }
@@ -166,16 +166,14 @@ class Knife_Story_Manager {
     /**
      * Enqueue glide vendor script
      */
-    public static function enqueue_assets() {
-        if(!is_singular(self::$slug)) {
-            return;
+    public static function inject_dependences() {
+        if(is_singular(self::$slug)) {
+            $version = '3.2.4';
+            $include = get_template_directory_uri() . '/assets';
+
+            // Enqueue swiper js to bottom
+            wp_enqueue_script('glide', $include . '/vendor/glide.min.js', [], $version, true);
         }
-
-        $version = '3.2.4';
-        $include = get_template_directory_uri() . '/assets';
-
-        // Enqueue swiper js to bottom
-        wp_enqueue_script('glide', $include . '/vendor/glide.min.js', [], $version, true);
     }
 
 
@@ -183,26 +181,24 @@ class Knife_Story_Manager {
      * Include slider story meta options
      */
     public static function inject_stories() {
-        if(!is_singular(self::$slug)) {
-            return;
+        if(is_singular(self::$slug)) {
+            $post_id = get_the_ID();
+            $stories = self::convert_stories($post_id);
+
+            $options = [];
+
+            foreach(self::$opts as $item) {
+                $options[$item] = get_post_meta($post_id, self::$meta . "-{$item}", true);
+            }
+
+            $options['action'] = __('Share story — last', 'knife-media');
+
+            // Add stories options object
+            wp_localize_script('knife-theme', 'knife_story_options', $options);
+
+            // Add stories items
+            wp_localize_script('knife-theme', 'knife_story_stories', $stories);
         }
-
-        $post_id = get_the_ID();
-        $stories = self::convert_stories($post_id);
-
-        $options = [];
-
-        foreach(self::$opts as $item) {
-            $options[$item] = get_post_meta($post_id, self::$meta . "-{$item}", true);
-        }
-
-        $options['action'] = __('Share story — last', 'knife-media');
-
-        // Add stories options object
-        wp_localize_script('knife-theme', 'knife_story_options', $options);
-
-        // Add stories items
-        wp_localize_script('knife-theme', 'knife_story_stories', $stories);
     }
 
 
