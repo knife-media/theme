@@ -40,7 +40,6 @@
     var loader = createLoader(embed);
 
     iframe.setAttribute('frameborder', '0');
-    iframe.setAttribute('allowfullscreen', '');
     iframe.setAttribute('src', embed.dataset.embed);
 
     iframe.addEventListener('load', function() {
