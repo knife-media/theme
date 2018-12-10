@@ -25,6 +25,15 @@ class Knife_Primary_Tag {
     private static $meta = 'primary-tag';
 
 
+   /**
+    * Post types primary tag availible
+    *
+    * @access  private
+    * @var     array
+    */
+    private static $type = ['post', 'generator'];
+
+
     /**
      * Use this method instead of constructor to avoid multiple hook setting
      *
@@ -52,7 +61,7 @@ class Knife_Primary_Tag {
 
         $post_id = get_the_ID();
 
-        if(get_post_type($post_id) !== 'post') {
+        if(!in_array(get_post_type($post_id), self::$type)) {
             return;
         }
 
@@ -81,6 +90,10 @@ class Knife_Primary_Tag {
      * Save post options
      */
     public static function save_meta($post_id) {
+        if(!in_array(get_post_type($post_id), self::$type)) {
+            return;
+        }
+
         if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return;
         }

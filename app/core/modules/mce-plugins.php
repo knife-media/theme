@@ -66,6 +66,7 @@ class Knife_MCE_Plugins {
 
         $plugins['pushbutton'] = $include . '/scripts/mce-pushbutton.js';
         $plugins['markbutton'] = $include . '/scripts/mce-markbutton.js';
+        $plugins['quote'] = $include . '/scripts/mce-blockquote.js?nocache';
 
         return $plugins;
     }
@@ -75,7 +76,11 @@ class Knife_MCE_Plugins {
      * Register buttons in editor panel
      */
     public static function register_buttons($buttons) {
-        array_push($buttons, 'pushbutton', 'markbutton');
+        array_push($buttons, 'pushbutton', 'markbutton', 'quote');
+
+        if(($key = array_search('blockquote', $buttons)) !== false) {
+            unset($buttons[$key]);
+        }
 
         return $buttons;
     }

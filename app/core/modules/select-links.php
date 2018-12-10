@@ -24,15 +24,6 @@ class Knife_Select_Links {
 
 
     /**
-     * Unique meta using for saving post data
-     *
-     * @access  private
-     * @var     string
-     */
-    private static $meta = '_knife-select';
-
-
-    /**
      * Unique nonce string using for ajax referer check
      *
      * @access  private static
@@ -48,6 +39,15 @@ class Knife_Select_Links {
     * @var     string
     */
     private static $action = 'knife-select-title';
+
+
+    /**
+     * Unique meta using for saving post data
+     *
+     * @access  private
+     * @var     string
+     */
+    private static $meta_items = '_knife-select-items';
 
 
     /**
@@ -88,13 +88,24 @@ class Knife_Select_Links {
      */
     public static function register_type() {
         register_post_type(self::$slug, [
-            'labels'                => [
-                'name'              => __('Подборки', 'knife-theme'),
-                'singular_name'     => __('Подборка', 'knife-theme'),
-                'add_new'           => __('Добавить запись', 'knife-theme'),
-                'menu_name'         => __('Подборки', 'knife-theme')
+            'labels'                    => [
+                'name'                  => __('Подборки', 'knife-theme'),
+                'singular_name'         => __('Подборка', 'knife-theme'),
+                'add_new'               => __('Добавить подборку', 'knife-theme'),
+                'menu_name'             => __('Подборки', 'knife-theme'),
+                'all_items'             => __('Все подборки', 'knife-theme'),
+                'add_new_item'          => __('Добавить новую подборку', 'knife-theme'),
+                'new_item'              => __('Новая подборка', 'knife-theme'),
+                'edit_item'             => __('Редактировать подборку', 'knife-theme'),
+                'update_item'           => __('Обновить подборку', 'knife-theme'),
+                'view_item'             => __('Просмотреть подборку', 'knife-theme'),
+                'view_items'            => __('Просмотреть подборки', 'knife-theme'),
+                'search_items'          => __('Искать подборку', 'knife-theme'),
+                'insert_into_item'      => __('Добавить в подборку', 'knife-theme'),
+
             ],
             'label'                 => __('Подборка', 'knife-theme'),
+            'description'           => __('Читай лучшее в подборках на Ноже', 'knife-theme'),
             'supports'              => ['title', 'thumbnail', 'revisions', 'excerpt', 'author'],
             'hierarchical'          => false,
             'public'                => true,
@@ -195,7 +206,7 @@ class Knife_Select_Links {
             return $content;
         }
 
-        $items = get_post_meta(get_the_ID(), self::$meta . '-items');
+        $items = get_post_meta(get_the_ID(), self::$meta_items);
 
         foreach($items as $item) {
             $content = self::get_item($item, $content);
@@ -267,7 +278,7 @@ class Knife_Select_Links {
         }
 
         // Update items meta
-        self::update_items(self::$meta . '-items', $post_id);
+        self::update_items(self::$meta_items, $post_id);
     }
 
 

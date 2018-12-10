@@ -45,8 +45,8 @@ class Knife_News_Manager {
         add_action('pre_get_posts', [__CLASS__, 'update_count']);
 
         // Set custom categories dropdown
-        add_filter('disable_categories_dropdown', '__return_true', 'post');
-        add_action('restrict_manage_posts', [__CLASS__, 'print_dropdown'], 'post');
+        add_filter('disable_categories_dropdown', '__return_true');
+        add_action('restrict_manage_posts', [__CLASS__, 'print_dropdown']);
         add_action('parse_query', [__CLASS__, 'process_dropdown']);
 
         // Update related posts in sidebar
@@ -109,22 +109,24 @@ class Knife_News_Manager {
     /**
      * Print custom categories dropdown
      */
-    public static function print_dropdown() {
-        $values = [
-            __('Все записи', 'knife-theme') => 0,
-            __('Только новости', 'knife-theme') => self::$slug,
-            __('Без новостей', 'knife-theme') => 'other'
-        ];
+    public static function print_dropdown($post_type) {
+        if($post_type === 'post') {
+            $values = [
+                __('Все записи', 'knife-theme') => 0,
+                __('Только новости', 'knife-theme') => self::$slug,
+                __('Без новостей', 'knife-theme') => 'other'
+            ];
 
-        $current = $_GET['cat'] ?? '';
+            $current = $_GET['cat'] ?? '';
 
-        print '<select name="cat">';
+            print '<select name="cat">';
 
-        foreach($values as $label => $value) {
-            printf('<option value="%s"%s>%s</option>', $value, $value == $current ? ' selected="selected"' : '', $label);
+            foreach($values as $label => $value) {
+                printf('<option value="%s"%s>%s</option>', $value, $value == $current ? ' selected="selected"' : '', $label);
+            }
+
+            print '</select>';
         }
-
-        print '</select>';
     }
 
 

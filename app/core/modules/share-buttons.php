@@ -6,6 +6,7 @@
 *
 * @package knife-theme
 * @since 1.3
+* @version 1.6
 */
 
 
@@ -16,32 +17,12 @@ if (!defined('WPINC')) {
 
 class Knife_Share_Buttons {
     /**
-     * Prints social share buttons template
+     * Print social share buttons template
      */
     public static function get_buttons($action, $output = '') {
-        $buttons = [
-            'vkontakte' => [
-                'link' => 'http://vk.com/share.php?url=%1$s&text=%2$s',
-                'text' => __('Поделиться', 'knife-theme')
-            ],
+        $settings = self::get_settings();
 
-             'facebook' => [
-                'link' => 'http://www.facebook.com/sharer/sharer.php?u=%1$s',
-                'text' => __('Пошерить', 'knife-theme')
-            ],
-
-            'telegram' => [
-                'link' => 'https://t.me/share/url?url=%1$s&text=%2$s',
-                'text' => __('Репостнуть', 'knife-theme')
-            ],
-
-            'twitter' => [
-                'link' => 'https://twitter.com/intent/tweet?text=%2$s&url=%1$s',
-                'text' => __('Твитнуть', 'knife-theme')
-            ]
-        ];
-
-        foreach($buttons as $network => $data) {
+        foreach($settings as $network => $data) {
             $text = sprintf(
                 '<span class="icon icon--%2$s"></span><span class="share__text">%1$s</span>',
                 esc_html($data['text']), $network
@@ -65,5 +46,37 @@ class Knife_Share_Buttons {
         }
 
         return $output;
+    }
+
+
+    /**
+     * Return pre-defined buttons settings
+     *
+     * @since 1.6
+     */
+    public static function get_settings() {
+        $settings = [
+            'vkontakte' => [
+                'link' => 'https://vk.com/share.php?url=%1$s&text=%2$s',
+                'text' => __('Поделиться', 'knife-theme')
+            ],
+
+            'facebook' => [
+                'link' => 'https://www.facebook.com/sharer/sharer.php?u=%1$s',
+                'text' => __('Пошерить', 'knife-theme')
+            ],
+
+            'telegram' => [
+                'link' => 'https://t.me/share/url?url=%1$s&text=%2$s',
+                'text' => __('Репостнуть', 'knife-theme')
+            ],
+
+            'twitter' => [
+                'link' => 'https://twitter.com/intent/tweet?url=%1$s&text=%2$s',
+                'text' => __('Твитнуть', 'knife-theme')
+            ]
+        ];
+
+        return $settings;
     }
 }

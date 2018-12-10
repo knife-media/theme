@@ -5,7 +5,7 @@
  */
 
 (function() {
-  var story = document.querySelector('.glide');
+  var story = document.getElementById('glide');
 
 
   /**
@@ -30,7 +30,7 @@
    * Create Glide instance with custom options
    */
   var glide = new Glide('.glide', {
-    gap: 0, rewind: false, touchAngle: 30,
+    gap: 0, rewind: false, touchAngle: 60, swipeThreshold: 60,
     dragThreshold: false,
     breakpoints: {
       767: {
@@ -125,7 +125,7 @@
     var share = slides[0].querySelector('.share');
 
     if(share === null) {
-      return false
+      return false;
     }
 
     var clone = share.cloneNode(true);
@@ -141,7 +141,9 @@
 
     slide.querySelector('.glide__slide-content').appendChild(clone);
 
-    return window.shareButtons();
+    if(window.shareButtons === 'function') {
+      window.shareButtons();
+    }
   });
 
 

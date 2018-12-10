@@ -5,42 +5,25 @@
   width: 100%;
   overflow: hidden;
 
-  .entry-comments__button {
-    margin: 1rem 0;
+  background-color: $color-white;
 
-    .icon--loop {
-      display: block;
-
-      line-height: 1.125;
-      animation: rotate .5s linear infinite;
-    }
-  }
-
-  .entry-comments__widget {
-    display: block;
+  .comments {
+    display: none;
 
     width: 100%;
-    overflow: hidden;
-    background-color: $color-white;
+    max-width: calc(40rem + 4rem);
+    margin: 1.5rem auto 0;
+    padding: 0 1rem;
 
-    .comments {
-      display: none;
+    &.comments--expand {
+      display: block;
 
-      width: 100%;
-      max-width: calc(40rem + 4rem);
-      margin: 1.5rem auto 0;
-      padding: 0 1rem;
+      animation: fade-in .5s linear forwards;
+    }
 
-      &.comments--expand {
-        display: block;
-
-        animation: fade-in .5s linear forwards;
-      }
-
-      @media screen and (max-width: 767px) {
-        margin-top: 1rem;
-        padding: 0;
-      }
+    @media screen and (max-width: 767px) {
+      margin-top: 1rem;
+      padding: 0;
     }
   }
 }

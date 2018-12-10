@@ -7,7 +7,7 @@
  */
 ?>
 
-<div class="glide">
+<div class="glide" id="glide">
     <div class="glide__loader">
         <span class="glide__loader-bounce"></span>
     </div>

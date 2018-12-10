@@ -12,6 +12,7 @@
   transition-property: border, background;
 
   border: solid 1px #ddd;
+  box-shadow: none;
 }
 
 #knife-select-box .knife-select-manage input.warning {
@@ -54,8 +55,12 @@
   border-radius 3px;
 }
 
-#knife-select-box .knife-select-item h1 {
+#knife-select-box .knife-select-item .item-text {
+  margin: 0;
+  padding: 9px 0 4px 0;
   font-size: 20px;
+  font-weight: 400;
+  line-height: 29px;
 }
 
 #knife-select-box .knife-select-item .dashicons {

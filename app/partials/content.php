@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.4
+ * @version 1.6
  */
 ?>
 
@@ -41,12 +41,7 @@
 
     <?php if(comments_open()) : ?>
         <div class="entry-comments">
-            <?php
-                printf(
-                    '<button class="entry-comments__button button" id="load-comments">%s</button>',
-                    __('Комментарии', 'knife-media')
-                );
-            ?>
+            <div class="comments" id="hypercomments_widget"></div>
         </div>
     <?php endif; ?>
 

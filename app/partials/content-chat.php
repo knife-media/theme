@@ -37,6 +37,12 @@
         the_content();
     ?>
 
+    <?php if(comments_open()) : ?>
+        <div class="entry-comments">
+            <div class="comments" id="hypercomments_widget"></div>
+        </div>
+    <?php endif; ?>
+
     <div class="entry-footer">
         <?php
             the_tags(

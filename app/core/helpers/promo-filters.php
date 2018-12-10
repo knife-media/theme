@@ -39,22 +39,6 @@ add_filter('the_content', function($content) {
 
 
 /**
- * Remove getting-older post from rss
- *
- * @since 1.5
- */
-add_action('pre_get_posts', function($query) {
-    if($query->is_feed && $query->is_main_query()) {
-        $post_id = url_to_postid('getting-older');
-
-        if($post_id > 0) {
-            $query->set('post__not_in', [$post_id]);
-        }
-    }
-});
-
-
-/**
  * Add custom body class to posts with promo tag
  *
  * @since 1.6

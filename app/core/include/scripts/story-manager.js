@@ -1,5 +1,7 @@
 jQuery(document).ready(function($) {
-  if (typeof wp.media === 'undefined') return;
+  if (typeof wp === 'undefined' || typeof wp.media === 'undefined') {
+    return false;
+  }
 
   var box = $('#knife-story-box');
 

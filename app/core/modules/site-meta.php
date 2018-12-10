@@ -4,6 +4,7 @@
 *
 * @package knife-theme
 * @since 1.5
+* @version 1.6
 */
 
 
@@ -26,9 +27,15 @@ class Knife_Site_Meta {
      * Init function instead of constructor
      */
     public static function load_module() {
-        add_action('wp_head', [__CLASS__, 'add_meta'], 5);
-        add_action('wp_head', [__CLASS__, 'add_icon'], 4);
-        add_action('wp_head', [__CLASS__, 'add_mediator'], 6);
+        add_action('wp_head', [__CLASS__, 'add_header_icons'], 4);
+        add_action('wp_head', [__CLASS__, 'add_seo_tags'], 4);
+
+        add_action('wp_head', [__CLASS__, 'add_og_tags'], 5);
+        add_action('wp_head', [__CLASS__, 'add_twitter_tags'], 5);
+        add_action('wp_head', [__CLASS__, 'add_facebook_tags'], 5);
+        add_action('wp_head', [__CLASS__, 'add_vk_tags'], 5);
+
+        add_action('wp_head', [__CLASS__, 'add_mediator_meta'], 6);
 
         // Add custom theme lang attributes
         add_filter('language_attributes', [__CLASS__, 'add_xmlns']);
@@ -60,31 +67,39 @@ class Knife_Site_Meta {
     }
 
 
-    public static function add_icon() {
-        $meta = [];
-
-        $path = get_template_directory_uri() . '/assets/images';
-
-        $meta[] = sprintf('<link rel="icon" type="image/png" sizes="32x32" href="%s" />',
-            $path . '/icon-32.png'
-        );
-
-         $meta[] = sprintf('<link rel="icon" type="image/png" sizes="192x192" href="%s" />',
-            $path . '/icon-192.png'
-        );
-
-        $meta[] = sprintf('<link rel="apple-touch-icon" sizes="180x180" href="%s" />',
-            $path . '/icon-180.png'
-        );
-
-        foreach($meta as $tag) {
-            echo "$tag\n";
-        }
+    /**
+     * Add og xmlns
+     */
+    public static function add_xmlns($output) {
+        return 'prefix="og: http://ogp.me/ns#" ' . $output;
     }
 
 
-    public static function add_xmlns($output) {
-        return 'prefix="og: http://ogp.me/ns#" ' . $output;
+    /**
+     * Add header static icons
+     */
+    public static function add_header_icons() {
+        $meta = [];
+        $path = get_template_directory_uri() . '/assets/images';
+
+        $meta[] = sprintf(
+            '<link rel="icon" type="image/png" sizes="32x32" href="%s" />',
+            esc_url($path . '/icon-32.png')
+        );
+
+        $meta[] = sprintf(
+            '<link rel="icon" type="image/png" sizes="192x192" href="%s" />',
+            esc_url($path . '/icon-192.png')
+        );
+
+        $meta[] = sprintf(
+            '<link rel="apple-touch-icon" sizes="180x180" href="%s" />',
+            esc_url($path . '/icon-180.png')
+        );
+
+        foreach($meta as $tag) {
+            echo $tag . PHP_EOL;
+        }
     }
 
 
@@ -93,181 +108,261 @@ class Knife_Site_Meta {
      *
      * @link https://mediator.media/ru/install/
      */
-    public static function add_mediator() {
-        if(!is_singular()) {
-            return;
-        }
-
-        global $post;
-
+    public static function add_mediator_meta() {
         $meta = [];
 
-        // Add post author to meta
-        if(function_exists('get_coauthors')) {
-            foreach(get_coauthors() as $author) {
-                $meta[] = sprintf('<meta name="mediator_author" content="%s" />', $author->display_name);
+        if(is_singular() && !is_page()) {
+            if(function_exists('get_coauthors')) {
+                foreach(get_coauthors() as $author) {
+                    $meta[] = sprintf(
+                        '<meta name="mediator_author" content="%s" />',
+                        esc_attr($author->display_name)
+                    );
+                }
+            }
+
+            foreach(wp_get_post_tags(get_queried_object_id()) as $term) {
+                $meta[] = sprintf(
+                    '<meta name="mediator_theme" content="%s" />',
+                    esc_attr($term->name)
+                );
+            }
+
+            $meta[] = sprintf(
+                '<meta name="mediator_published_time" content="%s" />',
+                substr_replace(get_the_time('c'), '', -3, 1)
+            );
+        }
+
+        return self::print_tags($meta);
+    }
+
+
+    /**
+     * Add seo tags
+     */
+    public static function add_seo_tags() {
+        $meta = [];
+
+        if(is_front_page()) {
+            $meta[] = sprintf(
+                '<meta name="description" content="%s">',
+                esc_attr(get_bloginfo('description'))
+            );
+        }
+
+        if(is_singular() && !is_front_page()) {
+            $object_id = get_queried_object_id();
+
+            if(has_excerpt($object_id)) {
+                $meta[] = sprintf(
+                    '<meta name="description" content="%s">',
+                    esc_attr(strip_tags(get_the_excerpt($object_id)))
+                );
             }
         }
 
-        // Add post terms to meta
-        foreach(wp_get_post_tags($post->ID) as $term) {
-            $meta[] = sprintf('<meta name="mediator_theme" content="%s" />', $term->name);
+        if(is_archive()) {
+            $object_type = get_queried_object();
+
+            if(!empty($object_type->description)) {
+                $meta[] = sprintf(
+                    '<meta name="description" content="%s">',
+                    esc_attr($object_type->description)
+                );
+            }
         }
 
-        // Add published time to meta
-        $meta[] = sprintf('<meta name="mediator_published_time" content="%s" />', substr_replace(get_the_time('c'), '', -3, 1));
-
-        // Print mediator custom meta
-        foreach($meta as $tag) {
-            echo "$tag\n";
-        }
+        return self::print_tags($meta);
     }
 
 
-    public static function add_meta() {
-        $meta = self::common_meta();
-
-        $meta = (is_singular() && !is_front_page()) ? self::single_meta($meta) : self::archive_meta($meta);
-
-        foreach($meta as $tag) {
-            echo "$tag\n";
-        }
-    }
-
-
-    private static function single_meta($meta = []) {
-        $post_id = get_queried_object_id();
-
-        $cover = self::get_cover($post_id);
-
-        $meta[] = sprintf('<meta name="description" content="%s">',
-            get_the_excerpt($post_id)
-        );
-
-        $meta[] = '<meta property="og:type" content="article" />';
-
-        $meta[] = sprintf('<meta property="og:url" content="%s" />',
-            get_permalink()
-        );
-
-        $meta[] = sprintf('<meta property="og:title" content="%s" />',
-            strip_tags(get_the_title())
-        );
-
-        $meta[] = sprintf('<meta property="og:description" content="%s" />',
-            get_the_excerpt($post_id)
-        );
-
-        $meta[] = sprintf('<meta property="og:image" content="%s" />',
-            esc_url($cover[0])
-        );
-
-        $meta[] = sprintf('<meta property="og:image:width" content="%s" />',
-            esc_attr($cover[1])
-        );
-
-        $meta[] = sprintf('<meta property="og:image:height" content="%s" />',
-            esc_attr($cover[2])
-        );
-
-        $meta[] = sprintf('<meta property="twitter:title" content="%s" />',
-            strip_tags(get_the_title())
-        );
-
-        $meta[] = sprintf('<meta property="twitter:description" content="%s" />',
-            get_the_excerpt($post_id)
-        );
-
-        $meta[] = sprintf('<meta property="twitter:image" content="%s" />',
-            esc_url($cover[0])
-        );
-
-        $meta[] = sprintf('<meta property="vk:image" content="%s" />',
-            esc_url($cover[0])
-        );
-
-         return $meta;
-    }
-
-
-    private static function archive_meta($meta = []) {
-        $cover = get_template_directory_uri() . '/assets/images/poster-feature.png';
-
-        $meta[] = sprintf('<meta name="description" content="%s">',
-            get_bloginfo('description')
-        );
-
-        $meta[] = '<meta property="og:type" content="website" />';
-
-        $meta[] = sprintf('<meta property="og:url" content="%s" />',
-            esc_url(home_url('/'))
-        );
-
-        $meta[] = sprintf('<meta property="og:title" content="%s" />',
-            get_bloginfo('name')
-        );
-
-        $meta[] = sprintf('<meta property="og:description" content="%s" />',
-            get_bloginfo('description')
-        );
-
-        $meta[] = sprintf('<meta property="og:image" content="%s" />',
-            esc_url($cover)
-        );
-
-        $meta[] = '<meta property="og:image:width" content="1200" />';
-
-        $meta[] = '<meta property="og:image:height" content="800" />';
-
-        $meta[] = sprintf('<meta property="twitter:title" content="%s" />',
-            get_bloginfo('name')
-        );
-
-        $meta[] = sprintf('<meta property="twitter:description" content="%s" />',
-            get_bloginfo('description')
-        );
-
-        $meta[] = sprintf('<meta property="twitter:image" content="%s" />',
-            esc_url($cover)
-        );
-
-        $meta[] = sprintf('<meta property="vk:image" content="%s" />',
-            esc_url($cover)
-        );
-
-        return $meta;
-    }
-
-
-    private static function common_meta($meta = []) {
-        $meta[] = '<meta property="fb:app_id" content="1281081571902073" />';
-
-        $meta[] = '<meta name="twitter:card" content="summary_large_image" />';
-
-        $meta[] = '<meta name="twitter:site" content="@knife_media" />';
-
-        $meta[] = '<meta name="twitter:creator" content="@knife_media" />';
+    /**
+     * Add og tags
+     *
+     * @link https://developers.facebook.com/docs/sharing/webmasters
+     */
+    public static function add_og_tags() {
+        $meta = [];
+        $social_image = self::get_social_image();
 
         $meta[] = sprintf(
-            '<meta property="og:site_name" content="%s" />', get_bloginfo('name')
+            '<meta property="og:site_name" content="%s">',
+            esc_attr(get_bloginfo('name'))
         );
 
-         $meta[] = sprintf(
-            '<meta property="og:locale" content="%s" />', get_locale()
+        $meta[] = sprintf(
+             '<meta property="og:locale" content="%s">',
+             esc_attr(get_locale())
         );
 
-        return $meta;
+        $meta[] = sprintf(
+            '<meta property="og:image" content="%s">',
+            esc_attr($social_image[0])
+        );
+
+        $meta[] = sprintf(
+            '<meta property="og:image:width" content="%s">',
+            esc_attr($social_image[1])
+        );
+
+        $meta[] = sprintf(
+            '<meta property="og:image:height" content="%s">',
+            esc_attr($social_image[2])
+        );
+
+        if(is_post_type_archive()) {
+            $meta[] = sprintf(
+                '<meta property="og:url" content="%s">',
+                esc_url(get_post_type_archive_link(get_post_type()))
+            );
+        }
+
+        if(is_tax() || is_category() || is_tag()) {
+            $meta[] = sprintf(
+                '<meta property="og:url" content="%s">',
+                esc_url(get_term_link(get_queried_object()->term_id))
+            );
+        }
+
+        if(is_front_page()) {
+            $meta[] = sprintf(
+                '<meta property="og:url" content="%s">',
+                esc_url(home_url('/'))
+            );
+
+            $meta[] = sprintf(
+                '<meta property="og:title" content="%s">',
+                esc_attr(get_bloginfo('title'))
+            );
+
+            $meta[] = sprintf(
+                '<meta property="og:description" content="%s">',
+                esc_attr(get_bloginfo('description'))
+            );
+        }
+
+        if(is_singular() && !is_front_page()) {
+            $object_id = get_queried_object_id();
+
+            array_push($meta, '<meta property="og:type" content="article">');
+
+            $meta[] = sprintf(
+                '<meta property="og:url" content="%s">',
+                esc_url(get_permalink($object_id))
+            );
+
+            $meta[] = sprintf(
+                '<meta property="og:title" content="%s">',
+                esc_attr(strip_tags(get_the_title($object_id)))
+            );
+
+            if(has_excerpt($object_id)) {
+                $meta[] = sprintf(
+                    '<meta property="og:description" content="%s">',
+                    esc_attr(strip_tags(get_the_excerpt($object_id)))
+                );
+            }
+        }
+
+        if(is_archive()) {
+            $object_type = get_queried_object();
+
+            $meta[] = sprintf(
+                '<meta property="og:title" content="%s">',
+                esc_attr(wp_get_document_title())
+            );
+
+            if(!empty($object_type->description)) {
+                $meta[] = sprintf(
+                    '<meta property="og:description" content="%s">',
+                    esc_attr($object_type->description)
+                );
+            }
+        }
+
+        return self::print_tags($meta);
     }
 
 
-    private static function get_cover($post_id) {
-        $social = get_post_meta($post_id, '_social-image', true);
+    /**
+     * Add twitter tags
+     *
+     * Note: we shouldn't duplicate og tags
+     *
+     * @link https://developer.twitter.com/en/docs/tweets/optimize-with-cards/guides/getting-started.html
+     */
+    public static function add_twitter_tags() {
+        $meta = [
+            '<meta name="twitter:card" content="summary">',
+            '<meta name="twitter:site" content="@knife_media">'
+        ];
 
-        if(empty($social)) {
-            return wp_get_attachment_image_src(get_post_thumbnail_id($post_id), 'outer');
+        return self::print_tags($meta);
+    }
+
+
+    /**
+     * Add facebook additional tag
+     */
+    public static function add_facebook_tags() {
+        $meta = [
+            '<meta property="fb:app_id" content="1281081571902073">',
+            '<meta property="fb:page_id" content="518169241541755">'
+        ];
+
+        return self::print_tags($meta);
+    }
+
+
+    /**
+     * Add vk image
+     */
+    public static function add_vk_tags() {
+        $meta = [];
+        $social_image = self::get_social_image();
+
+        $meta[] = sprintf(
+            '<meta property="vk:image" content="%s">',
+            esc_attr($social_image[0])
+        );
+
+        return self::print_tags($meta);
+    }
+
+
+    /**
+     * Get social image cover
+     */
+    private static function get_social_image() {
+        if(is_singular() && has_post_thumbnail()) {
+            $object_id = get_queried_object_id();
+
+            // Custom social image storing via social-image plugin in post meta
+            $social_image = get_post_meta($object_id, '_social-image', true);
+
+            if(empty($social_image)) {
+                return wp_get_attachment_image_src(get_post_thumbnail_id($object_id), 'outer');
+            }
+
+            return [$social_image, 1024, 512];
         }
 
-        return [$social, 1024, 512];
+        $social_image = get_template_directory_uri() . '/assets/images/poster-feature.png';
+
+        return [$social_image, 1200, 630];
+    }
+
+
+    /**
+     * Print tags if not empty array
+     */
+    private static function print_tags($meta) {
+        if(count($meta) > 0) {
+            foreach($meta as $tag) {
+                echo $tag . PHP_EOL;
+            }
+        }
     }
 }
 

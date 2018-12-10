@@ -23,8 +23,16 @@
     }
   }
 
-  &.post--aside {
+  &.post--generator {
     flex: 1 1 auto;
+
+    .entry-footer > * {
+      max-width: calc(#{$width-wide} + 4rem);
+    }
+
+    .entry-comments > * {
+      max-width: calc(#{$width-wide} + 4rem);
+    }
   }
 
   &.post--chat {
@@ -35,13 +43,20 @@
       margin-top: 1rem;
     }
 
-    .entry-header,
-    .entry-content {
+    .entry-comments + .entry-footer {
+      margin-top: 0;
+    }
+
+    .entry-header, .entry-content {
       padding: 2rem 1rem;
 
       @media screen and (max-width: 767px) {
         padding: 1.5rem 1rem;
       }
     }
+  }
+
+  &.post--aside {
+    flex: 1 1 auto;
   }
 }
