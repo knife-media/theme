@@ -41,12 +41,7 @@
 
     <?php if(comments_open()) : ?>
         <div class="entry-comments">
-            <?php
-                printf(
-                    '<button class="entry-comments__button button" id="load-comments">%s</button>',
-                    __('Комментарии', 'knife-media')
-                );
-            ?>
+            <div class="comments" id="hypercomments_widget"></div>
         </div>
     <?php endif; ?>
 

@@ -30,14 +30,8 @@
       max-width: calc(#{$width-wide} + 4rem);
     }
 
-    .entry-comments {
-      .entry-comments__button {
-        margin: 0;
-      }
-
-      .entry-comments__widget .comments {
-        max-width: calc(#{$width-wide} + 4rem);
-      }
+    .entry-comments > * {
+      max-width: calc(#{$width-wide} + 4rem);
     }
   }
 
@@ -47,6 +41,10 @@
 
     & > * {
       margin-top: 1rem;
+    }
+
+    .entry-comments + .entry-footer {
+      margin-top: 0;
     }
 
     .entry-header, .entry-content {
