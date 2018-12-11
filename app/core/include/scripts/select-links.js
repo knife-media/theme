@@ -1,27 +1,26 @@
 jQuery(document).ready(function($) {
-  var box = $("#knife-select-box");
-
-  var set = {
-    'link': box.find('.input-link'),
-    'text': box.find('.input-text'),
-    'button': box.find('.button-append'),
-    'loader': box.find('.spinner')
+  if(typeof wp === 'undefined' || typeof wp.media === 'undefined') {
+    return false;
   }
 
+  var box = $("#knife-select-box");
+
+
   // Sort items
-  box.find('.knife-select-items').sortable({
-    items: '.knife-select-item',
+  box.find('.box--items').sortable({
+    items: '.item',
     handle: '.dashicons-menu',
-    placeholder: 'knife-select-dump',
+    placeholder: 'dump',
     axis: 'y'
   }).disableSelection();
 
 
   // Show loader
   var toggleLoader = function() {
-    set.button.toggleClass('disabled');
-    set.loader.toggleClass('is-active');
+    box.find('.option__button').toggleClass('disabled');
+    box.find('.option .spinner').toggleClass('is-active');
   }
+
 
   // Add class for short time
   var blinkClass = function(element, cl) {
@@ -29,6 +28,7 @@ jQuery(document).ready(function($) {
       element.removeClass(cl).dequeue();
     });
   }
+
 
   // Get post title by link
   var getTitle = function(link) {
@@ -42,6 +42,8 @@ jQuery(document).ready(function($) {
 
     xhr.done(function(answer) {
       toggleLoader();
+      console.log(answer);
+      return;
 
       if(answer.success && answer.data.length > 1) {
         set.text.val(answer.data);
@@ -64,7 +66,7 @@ jQuery(document).ready(function($) {
 
   // Append item
   var appendItem = function(link, text) {
-    var item = box.find('.knife-select-item:first').clone();
+    var item = box.find('.item:first').clone();
 
     item.find('p.item-text').html(text);
     item.find('input.item-text').val(text);
@@ -79,42 +81,42 @@ jQuery(document).ready(function($) {
 
 
   // Add new item click
-  box.on('click', '.knife-select-manage .button', function(e) {
+  box.on('click', '.option__button--append', function(e) {
     e.preventDefault();
 
-    var input = {
-      'link': set.link.val(),
-      'text': set.text.val()
+    var options = {
+      link: box.find('.option__input--link'),
+      title: box.find('.option__input--title')
     }
 
-    if(input.link.length < 1) {
-      return blinkClass(set.link, 'warning');
+    if(options.link.val().length < 1) {
+      return blinkClass(options.link, 'option__input--warning');
     }
 
-    if(input.text.length < 1) {
-      return getTitle(input.link);
+    if(options.title.val().length < 1) {
+      return getTitle(options.title);
     }
 
-    set.link.val('');
-    set.text.val('');
+    options.link.val('');
+    options.title.val('');
 
-    return appendItem(input.link, input.text);
+    return appendItem(options);
   });
 
 
   // Prevent sending post form on input enter
-  box.on('keypress', '.knife-select-manage input', function(e) {
+  box.on('keypress', '.option__input', function(e) {
     if (e.which == 13 || e.keyCode == 13) {
       e.preventDefault();
 
-      return set.button.trigger('click');
+      return box.find('.option__button--append').trigger('click');
     }
   });
 
 
   // Remove item
-  box.on('click', '.knife-select-items .dashicons-trash', function(e) {
-    var item = $(this).closest('.knife-select-item');
+  box.on('click', '.item .dashicons-trash', function(e) {
+    var item = $(this).closest('.item');
 
     return item.remove();
   });

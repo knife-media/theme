@@ -1,13 +1,13 @@
 <?php
 /**
-* Selection type
-*
-* Custom post type for manual articles select
-*
-* @package knife-theme
-* @since 1.4
-* @version 1.5
-*/
+ * Selection type
+ *
+ * Custom post type for manual articles select
+ *
+ * @package knife-theme
+ * @since 1.4
+ * @version 1.6
+ */
 
 if (!defined('WPINC')) {
     die;
@@ -70,7 +70,7 @@ class Knife_Select_Links {
         add_action('save_post', [__CLASS__, 'save_metabox']);
 
         // Get postid by url
-        add_action('wp_ajax_' . self::$action, [__CLASS__, 'get_title']);
+        add_action('wp_ajax_' . self::$action, [__CLASS__, 'get_post_by_url']);
 
         // Add scripts to admin page
         add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
@@ -101,12 +101,11 @@ class Knife_Select_Links {
                 'view_item'             => __('Просмотреть подборку', 'knife-theme'),
                 'view_items'            => __('Просмотреть подборки', 'knife-theme'),
                 'search_items'          => __('Искать подборку', 'knife-theme'),
-                'insert_into_item'      => __('Добавить в подборку', 'knife-theme'),
-
+                'insert_into_item'      => __('Добавить в подборку', 'knife-theme')
             ],
             'label'                 => __('Подборка', 'knife-theme'),
             'description'           => __('Читай лучшее в подборках на Ноже', 'knife-theme'),
-            'supports'              => ['title', 'thumbnail', 'revisions', 'excerpt', 'author'],
+            'supports'              => ['title', 'thumbnail', 'revisions', 'excerpt', 'author', 'comments'],
             'hierarchical'          => false,
             'public'                => true,
             'show_ui'               => true,
@@ -178,7 +177,7 @@ class Knife_Select_Links {
     /**
      * Get postid by url using admin side ajax
      */
-    public static function get_title() {
+    public static function get_post_by_url() {
         check_admin_referer(self::$nonce, 'nonce');
 
         if(isset($_POST['link'])) {
@@ -188,9 +187,13 @@ class Knife_Select_Links {
             $post_id = url_to_postid($link);
 
             if($post_id > 0) {
-                $title = get_the_title($post_id);
+                $data = [
+                    'title' => get_the_title($post_id),
+                    'poster' => strval(get_the_post_thumbnail_url($post_id)),
+                    'attachment' => get_post_thumbnail_id($post_id)
+                ];
 
-                wp_send_json_success($title);
+                wp_send_json_success($data);
             }
         }
 
@@ -240,6 +243,9 @@ class Knife_Select_Links {
 
         $version = wp_get_theme()->get('Version');
         $include = get_template_directory_uri() . '/core/include';
+
+        // Insert wp media scripts
+        wp_enqueue_media();
 
         // Insert admin styles
         wp_enqueue_style('knife-select-links', $include . '/styles/select-links.css', [], $version);

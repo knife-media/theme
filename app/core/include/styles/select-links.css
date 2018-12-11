@@ -1,30 +1,46 @@
-#knife-select-box .knife-select-manage {
-  margin-bottom: 20px;
+#knife-select-box .box {
+  display: block;
+  position: relative;
 }
 
-#knife-select-box .knife-select-manage .spinner {
+#knife-select-box .option {
+  margin: 13px 0;
+}
+
+#knife-select-box .option--buttons {
+  margin: 16px 0;
+}
+
+#knife-select-box .option .spinner {
   float: none;
+
+  margin-left: 0;
 }
 
-#knife-select-box .knife-select-manage input {
+#knife-select-box .option .option__input {
+  display: block;
+
+  width: 100%;
   line-height: 1.5;
   transition: .5s;
   transition-property: border, background;
+  box-shadow: none;
 
   border: solid 1px #ddd;
-  box-shadow: none;
 }
 
-#knife-select-box .knife-select-manage input.warning {
+#knife-select-box .option .option__input--warning {
   background: rgba(170, 0, 0, .15);
 
   border: solid 1px #a00;
 }
 
-#knife-select-box .knife-select-items {
-  display: block;
-  position: relative;
+#knife-select-box .option .option__button {
+  margin-right: 10px;
+}
 
+
+#knife-select-box .box--items {
   margin: 0 -12px -12px;
   overflow: hidden;
   background: #f1f1f1;
@@ -32,7 +48,7 @@
   border-top: solid 1px #ddd;
 }
 
-#knife-select-box .knife-select-item {
+#knife-select-box .item {
   position: relative;
 
   min-height: 50px;
@@ -44,7 +60,7 @@
   border-radius: 2px;
 }
 
-#knife-select-box .knife-select-dump {
+#knife-select-box .dump {
   display: block;
   box-sizing: border-box;
 
@@ -55,7 +71,7 @@
   border-radius 3px;
 }
 
-#knife-select-box .knife-select-item .item-text {
+#knife-select-box .item .item__text {
   margin: 0;
   padding: 9px 0 4px 0;
   font-size: 20px;
@@ -63,19 +79,19 @@
   line-height: 29px;
 }
 
-#knife-select-box .knife-select-item .dashicons {
+#knife-select-box .item .dashicons {
   position: absolute;
   right: 5px;
 
   font-size: 16px;
 }
 
-#knife-select-box .knife-select-item .dashicons-menu {
+#knife-select-box .item .dashicons-menu {
   top: 5px;
   cursor: move;
 }
 
-#knife-select-box .knife-select-item .dashicons-trash {
+#knife-select-box .item .dashicons-trash {
   bottom: 5px;
   cursor: pointer;
 
