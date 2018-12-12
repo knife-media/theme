@@ -252,6 +252,13 @@ class Knife_Select_Links {
 
         // Insert admin scripts
         wp_enqueue_script('knife-select-links', $include . '/scripts/select-links.js', ['jquery', 'jquery-ui-sortable'], $version);
+
+        $options = [
+            'choose' => __('Выберите изображение постера', 'knife-theme'),
+            'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
+        ];
+
+        wp_localize_script('knife-select-links', 'knife_select_links', $options);
     }
 
 
@@ -324,7 +331,7 @@ class Knife_Select_Links {
         global $post;
 
         $link = sprintf('<a class="select__link" href="%2$s">%1$s</a>',
-            esc_html($item['text'] ?? ''), esc_url($item['link'] ?? '')
+            esc_html($item['title'] ?? ''), esc_url($item['link'] ?? '')
         );
 
         $select = sprintf('<div class="select">%s</div>',
