@@ -4,6 +4,8 @@
 
         // Upgrade with default vaules
         array_unshift($items, ['title' => '', 'link' => '']);
+
+        wp_nonce_field('metabox', self::$nonce);
     ?>
 
     <div class="box box--manage">

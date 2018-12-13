@@ -205,14 +205,12 @@ class Knife_Select_Links {
      * Update content with custom links
      */
     public static function update_content($content) {
-        if(!is_singular(self::$slug) || !in_the_loop()) {
-            return $content;
-        }
+        if(is_singular(self::$slug) && in_the_loop()) {
+            $items = get_post_meta(get_the_ID(), self::$meta_items);
 
-        $items = get_post_meta(get_the_ID(), self::$meta_items);
-
-        foreach($items as $item) {
-            $content = self::get_item($item, $content);
+            foreach($items as $item) {
+                $content = self::get_item($item, $content);
+            }
         }
 
         return $content;
@@ -274,11 +272,17 @@ class Knife_Select_Links {
 
     /**
      * Save post options
-     *
-     * TODO: verify nonce
      */
     public static function save_metabox($post_id) {
         if(get_post_type($post_id) !== self::$slug) {
+            return;
+        }
+
+        if(!isset($_REQUEST[self::$nonce])) {
+            return;
+        }
+
+        if(!wp_verify_nonce($_REQUEST[self::$nonce], 'metabox')) {
             return;
         }
 
