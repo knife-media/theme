@@ -9,34 +9,29 @@
 ?>
 
 <article <?php post_class('post'); ?> id="post-<?php the_ID(); ?>">
-    <div class="entry-header">
+    <div class="entry-select">
         <?php
-            the_info(
-                '<div class="entry-header__info">', '</div>',
-                ['author', 'date', 'category']
-            );
-
             the_title(
-                '<h1 class="entry-header__title">',
+                '<h1 class="entry-select__title">',
                 '</h1>'
             );
 
             the_lead(
-                '<div class="entry-header__lead">',
+                '<div class="entry-select__lead">',
                 '</div>'
             );
 
             the_share(
-                '<div class="entry-header__share share">', '</div>',
+                '<div class="entry-select__share share">', '</div>',
                 __('Share select — top', 'knife-theme')
             );
         ?>
-    </div>
 
-    <div class="entry-content">
-        <?php
-            the_content();
-        ?>
+        <div class="entry-select__units">
+            <?php
+                the_content();
+            ?>
+        </div>
     </div>
 
     <?php if(comments_open()) : ?>

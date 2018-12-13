@@ -59,7 +59,11 @@ class Knife_Widget_Select extends WP_Widget {
             while($query->have_posts()) {
                 $query->the_post();
 
-                include(get_template_directory() . '/templates/widget-select.php');
+                printf(
+                    '<a class="widget-select__link" href="%2$s">%1$s</a>',
+                    get_the_title(),
+                    esc_url(get_permalink())
+                );
             }
 
             wp_reset_query();
