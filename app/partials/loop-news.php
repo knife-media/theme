@@ -14,7 +14,7 @@
                 printf(
                     '<a class="news__link" href="%2$s">%1$s</a>',
                     the_title('<p class="news__title">', '</p>', false),
-                    get_permalink()
+                    esc_url(get_permalink())
                 );
 
                 the_info(

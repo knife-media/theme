@@ -1,12 +1,13 @@
 <?php
 /**
-* Selection type
-*
-* Custom post type for manual articles select
-*
-* @package knife-theme
-* @since 1.4
-*/
+ * Selection type
+ *
+ * Custom post type for manual articles select
+ *
+ * @package knife-theme
+ * @since 1.4
+ * @version 1.6
+ */
 
 if (!defined('WPINC')) {
     die;
@@ -56,8 +57,14 @@ class Knife_Select_Links {
         // Register select post type
         add_action('init', [__CLASS__, 'register_type']);
 
-        // Change single post type template path
+        // Include select single template
         add_action('single_template', [__CLASS__, 'include_single']);
+
+        // Include select archive template
+        add_filter('archive_template', [__CLASS__, 'include_archive']);
+
+        // Don't show empty archive
+        add_action('template_redirect', [__CLASS__, 'redirect_empty_archive']);
 
         // Add select metabox
         add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
@@ -66,10 +73,16 @@ class Knife_Select_Links {
         add_action('save_post', [__CLASS__, 'save_metabox']);
 
         // Get postid by url
-        add_action('wp_ajax_' . self::$action, [__CLASS__, 'get_title']);
+        add_action('wp_ajax_' . self::$action, [__CLASS__, 'get_post_by_url']);
 
         // Add scripts to admin page
         add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
+
+        // Change posts count on select archive
+        add_action('pre_get_posts', [__CLASS__, 'update_count']);
+
+        // Update title with strong number
+        add_filter('the_title', [__CLASS__, 'select_title'], 10, 2);
 
         // Filter content to show custom links
         add_filter('the_content', [__CLASS__, 'update_content']);
@@ -94,12 +107,11 @@ class Knife_Select_Links {
                 'view_item'             => __('Просмотреть подборку', 'knife-theme'),
                 'view_items'            => __('Просмотреть подборки', 'knife-theme'),
                 'search_items'          => __('Искать подборку', 'knife-theme'),
-                'insert_into_item'      => __('Добавить в подборку', 'knife-theme'),
-
+                'insert_into_item'      => __('Добавить в подборку', 'knife-theme')
             ],
             'label'                 => __('Подборка', 'knife-theme'),
             'description'           => __('Читай лучшее в подборках на Ноже', 'knife-theme'),
-            'supports'              => ['title', 'thumbnail', 'revisions', 'excerpt', 'author'],
+            'supports'              => ['title', 'thumbnail', 'revisions', 'excerpt', 'author', 'comments'],
             'hierarchical'          => false,
             'public'                => true,
             'show_ui'               => true,
@@ -113,6 +125,24 @@ class Knife_Select_Links {
             'exclude_from_search'   => false,
             'publicly_queryable'    => true
         ]);
+    }
+
+
+    /**
+     * Include archive story template
+     *
+     * @since 1.5
+     */
+    public static function include_archive($template) {
+        if(is_post_type_archive(self::$slug)) {
+            $new_template = locate_template(['templates/archive-select.php']);
+
+            if(!empty($new_template)) {
+                return $new_template;
+            }
+        }
+
+        return $template;
     }
 
 
@@ -133,9 +163,40 @@ class Knife_Select_Links {
 
 
     /**
+     * Redirect empty archive
+     *
+     * @since 1.6
+     */
+    public static function redirect_empty_archive() {
+        if(is_post_type_archive(self::$slug) && !have_posts()) {
+            wp_redirect(home_url(), 302);
+            exit;
+        }
+    }
+
+
+    /**
+     * Filter the select title
+     *
+     * @since 1.5
+     */
+    public static function select_title($title, $post_id) {
+        if(!is_admin()) {
+            $words = explode(' ', ltrim($title));
+
+            if(is_numeric($words[0])) {
+                $title = "<strong>{$words[0]}</strong> " . implode(' ', array_slice($words, 1));
+            }
+        }
+
+        return $title;
+    }
+
+
+    /**
      * Get postid by url using admin side ajax
      */
-    public static function get_title() {
+    public static function get_post_by_url() {
         check_admin_referer(self::$nonce, 'nonce');
 
         if(isset($_POST['link'])) {
@@ -145,9 +206,13 @@ class Knife_Select_Links {
             $post_id = url_to_postid($link);
 
             if($post_id > 0) {
-                $title = get_the_title($post_id);
+                $data = [
+                    'title' => get_the_title($post_id),
+                    'poster' => strval(get_the_post_thumbnail_url($post_id)),
+                    'attachment' => get_post_thumbnail_id($post_id)
+                ];
 
-                wp_send_json_success($title);
+                wp_send_json_success($data);
             }
         }
 
@@ -159,17 +224,27 @@ class Knife_Select_Links {
      * Update content with custom links
      */
     public static function update_content($content) {
-        if(!is_singular(self::$slug) || !in_the_loop()) {
-            return $content;
-        }
+        if(is_singular(self::$slug) && in_the_loop()) {
+            $units = get_post_meta(get_the_ID(), self::$meta_items);
 
-        $items = get_post_meta(get_the_ID(), self::$meta_items);
-
-        foreach($items as $item) {
-            $content = self::get_item($item, $content);
+            foreach($units as $unit) {
+                $content = self::append_unit($unit, $content);
+            }
         }
 
         return $content;
+    }
+
+
+    /**
+     * Change posts_per_page for select archive template
+     *
+     * @since 1.6
+     */
+    public static function update_count($query) {
+        if($query->is_main_query() && $query->is_post_type_archive(self::$slug)) {
+            $query->set('posts_per_page', 24);
+        }
     }
 
 
@@ -198,11 +273,21 @@ class Knife_Select_Links {
         $version = wp_get_theme()->get('Version');
         $include = get_template_directory_uri() . '/core/include';
 
+        // Insert wp media scripts
+        wp_enqueue_media();
+
         // Insert admin styles
         wp_enqueue_style('knife-select-links', $include . '/styles/select-links.css', [], $version);
 
         // Insert admin scripts
         wp_enqueue_script('knife-select-links', $include . '/scripts/select-links.js', ['jquery', 'jquery-ui-sortable'], $version);
+
+        $options = [
+            'choose' => __('Выберите изображение постера', 'knife-theme'),
+            'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
+        ];
+
+        wp_localize_script('knife-select-links', 'knife_select_links', $options);
     }
 
 
@@ -218,11 +303,17 @@ class Knife_Select_Links {
 
     /**
      * Save post options
-     *
-     * TODO: verify nonce
      */
     public static function save_metabox($post_id) {
         if(get_post_type($post_id) !== self::$slug) {
+            return;
+        }
+
+        if(!isset($_REQUEST[self::$nonce])) {
+            return;
+        }
+
+        if(!wp_verify_nonce($_REQUEST[self::$nonce], 'metabox')) {
             return;
         }
 
@@ -258,10 +349,6 @@ class Knife_Select_Links {
 
                 if(!empty($value)) {
                     $meta[$i][$key] = sanitize_text_field($value);
-
-                    if($key === 'link') {
-                        $meta[$i]['post'] = url_to_postid($value);
-                    }
                 }
             }
         }
@@ -273,32 +360,35 @@ class Knife_Select_Links {
 
 
     /**
-     * Get select item from meta
+     * Get select unit from meta
      */
-    private static function get_item($item, $content = '', $meta = '') {
-        global $post;
+    private static function append_unit($attributes, $content = '') {
+        $required = ['attachment', 'link', 'title'];
 
-        if(intval($item['post']) > 0) {
-            $post = get_post($item['post']);
-            setup_postdata($post);
-
-            $meta = the_info(
-                '<div class="select__info">', '</div>',
-                ['author', 'date'], false
-            );
-
-            wp_reset_postdata();
+        // Not append unit if at least one required attribute is empty
+        if(array_diff_key(array_flip($required), $attributes)) {
+            return $content;
         }
 
-        $link = sprintf('<a class="select__link" href="%2$s">%1$s</a>',
-            esc_html($item['text'] ?? ''), esc_url($item['link'] ?? '')
+        $unit = sprintf(
+            '<div class="unit"><div class="unit__inner">%s</div></div>',
+
+            sprintf(
+                '<div class="unit__image">%s</div><div class="unit__content">%s</div>',
+
+                wp_get_attachment_image($attributes['attachment'], 'double', false,
+                    ['class' => 'unit__image-thumbnail']
+                ),
+
+                sprintf(
+                    '<a class="unit__content-link" href="%1$s">%2$s</a>',
+                    esc_url($attributes['link']),
+                    esc_html($attributes['title'])
+                )
+            )
         );
 
-        $select = sprintf('<div class="select">%s</div>',
-            $meta . $link
-        );
-
-        return $content . $select;
+        return $content . $unit;
     }
 }
 

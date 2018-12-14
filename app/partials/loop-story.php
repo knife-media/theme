@@ -18,9 +18,9 @@
         <div class="story__content">
             <?php
                 printf(
-                    '<a class="story__content-link" href="%2$s">%1$s</a>',
-                    get_the_title(),
-                    esc_url(get_permalink())
+                    '<a class="story__content-link" href="%1$s">%2$s</a>',
+                    esc_url(get_permalink()),
+                    get_the_title()
                 );
             ?>
         </div>

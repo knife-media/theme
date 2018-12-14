@@ -1,27 +1,30 @@
 jQuery(document).ready(function($) {
-  var box = $("#knife-select-box");
-
-  var set = {
-    'link': box.find('.input-link'),
-    'text': box.find('.input-text'),
-    'button': box.find('.button-append'),
-    'loader': box.find('.spinner')
+  if(typeof wp === 'undefined' || typeof wp.media === 'undefined') {
+    return false;
   }
 
+  var box = $("#knife-select-box");
+
+
+  // Link input field
+  var input = box.find('.manage__input');
+
+
   // Sort items
-  box.find('.knife-select-items').sortable({
-    items: '.knife-select-item',
+  box.find('.box--items').sortable({
+    items: '.item',
     handle: '.dashicons-menu',
-    placeholder: 'knife-select-dump',
+    placeholder: 'dump',
     axis: 'y'
   }).disableSelection();
 
 
   // Show loader
   var toggleLoader = function() {
-    set.button.toggleClass('disabled');
-    set.loader.toggleClass('is-active');
+    box.find('.manage__button').toggleClass('disabled');
+    box.find('.manage__spinner').toggleClass('is-active');
   }
+
 
   // Add class for short time
   var blinkClass = function(element, cl) {
@@ -30,91 +33,121 @@ jQuery(document).ready(function($) {
     });
   }
 
-  // Get post title by link
-  var getTitle = function(link) {
-    var data = {
-      'action': box.data('action'),
-      'nonce': box.data('nonce'),
-      'link': link
-    }
-
-    var xhr = $.ajax({method: 'POST', url: ajaxurl, data: data}, 'json');
-
-    xhr.done(function(answer) {
-      toggleLoader();
-
-      if(answer.success && answer.data.length > 1) {
-        set.text.val(answer.data);
-
-        return set.button.trigger('click');
-      }
-
-      return blinkClass(set.text, 'warning');
-    });
-
-    xhr.error(function() {
-      toggleLoader();
-
-      return blinkClass(set.text, 'warning');
-    });
-
-    return toggleLoader();
-  }
-
 
   // Append item
-  var appendItem = function(link, text) {
-    var item = box.find('.knife-select-item:first').clone();
+  var appendItem = function(object) {
+    var item = box.find('.item:first').clone();
 
-    item.find('p.item-text').html(text);
-    item.find('input.item-text').val(text);
+    box.find('.item:first').after(item);
 
-    item.find('a.item-link').html(link).attr('href', link);
-    item.find('input.item-link').val(link);
+    if(object.hasOwnProperty('title')) {
+      item.find('.option__title').val(object.title);
+    }
 
-    box.find('.knife-select-items').append(item);
+    if(object.hasOwnProperty('attachment') && object.attachment) {
+      item.find('.option__attachment').val(object.attachment);
+
+      if(object.hasOwnProperty('poster') && object.poster) {
+        showcase = $('<img />', {class: 'option__image', src: object.poster});
+        showcase.prependTo(item.find('.option--poster'));
+      }
+    }
+
+    item.find('.option__link').val(input.val());
+    input.attr('value', '');
 
     return item.removeClass('hidden');
   }
 
 
   // Add new item click
-  box.on('click', '.knife-select-manage .button', function(e) {
+  box.on('click', '.manage__append', function(e) {
     e.preventDefault();
 
-    var input = {
-      'link': set.link.val(),
-      'text': set.text.val()
+    if(input.val().length === 0) {
+      return blinkClass(input, 'manage__input--warning');
     }
 
-    if(input.link.length < 1) {
-      return blinkClass(set.link, 'warning');
+    var data = {
+      'action': box.data('action'),
+      'nonce': box.data('nonce'),
+      'link': input.val()
     }
 
-    if(input.text.length < 1) {
-      return getTitle(input.link);
-    }
+    var xhr = $.ajax({method: 'POST', url: ajaxurl, data: data}, 'json');
 
-    set.link.val('');
-    set.text.val('');
+    xhr.always(function(answer, status) {
+      toggleLoader();
 
-    return appendItem(input.link, input.text);
+      var object = {};
+
+      if(status === 'success' && answer.success) {
+        object = answer.data;
+      }
+
+      return appendItem(object);
+    });
+
+    return toggleLoader();
+  });
+
+
+  // Choose custom poster
+  box.on('click', '.option--poster', function(e) {
+    var poster = $(this);
+
+    // Open default wp.media image frame
+    var frame = wp.media({
+      title: knife_select_links.choose,
+      multiple: false
+    });
+
+
+    // On open frame select current attachment
+    frame.on('open',function() {
+      var selection = frame.state().get('selection');
+      var attachment = poster.find('.option__attachment').val();
+
+      return selection.add(wp.media.attachment(attachment));
+    });
+
+
+    // On image select
+    frame.on('select', function() {
+      var selection = frame.state().get('selection').first().toJSON();
+
+      poster.find('.option__attachment').val(selection.id);
+
+      if(typeof selection.sizes.thumbnail !== 'undefined') {
+        selection = selection.sizes.thumbnail;
+      }
+
+      if(poster.find('img').length > 0) {
+        return poster.find('img').attr('src', selection.url);
+      }
+
+      var showcase = $('<img />', {class: 'option__image', src: selection.url});
+
+      return showcase.prependTo(poster);
+    });
+
+    return frame.open();
   });
 
 
   // Prevent sending post form on input enter
-  box.on('keypress', '.knife-select-manage input', function(e) {
-    if (e.which == 13 || e.keyCode == 13) {
+  box.on('keypress', '.option__input', function(e) {
+    if(e.which == 13 || e.keyCode == 13) {
       e.preventDefault();
 
-      return set.button.trigger('click');
+      return box.find('.option__button--append').trigger('click');
     }
   });
 
 
   // Remove item
-  box.on('click', '.knife-select-items .dashicons-trash', function(e) {
-    var item = $(this).closest('.knife-select-item');
+  box.on('click', '.item .dashicons-trash', function(e) {
+    var item = $(this).closest('.item');
 
     return item.remove();
   });

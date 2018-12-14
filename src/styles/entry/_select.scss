@@ -1,0 +1,134 @@
+.entry-select {
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  position: relative;
+
+  width: 100%;
+  padding: 2rem;
+
+  color: $color-black;
+  background-color: $color-white;
+
+  border-top: solid 12px $color-select;
+
+  & > * {
+    width: $width-wide;
+    max-width: 100%;
+    margin-top: 2rem;
+
+    @media screen and (max-width: 767px) {
+      width: $width-content;
+      margin-top: 1rem;
+    }
+  }
+
+  .entry-select__title {
+    display: block;
+
+    margin-top: 0;
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: .5px;
+
+    strong {
+      display: block;
+
+      font-size: 10rem;
+      font-weight: 500;
+      line-height: .875;
+      color: $color-select;
+
+      transform: translateX(-.025em);
+
+      @media screen and (max-width: 767px) {
+        font-size: 6rem;
+      }
+    }
+
+    @media screen and (max-width: 1023px) {
+      font-size: 3rem;
+    }
+
+    @media screen and (max-width: 767px) {
+      font-size: 1.625rem;
+      line-height: 1.25;
+    }
+  }
+
+  .entry-select__lead {
+    display: block;
+
+    overflow: hidden;
+
+    p {
+      margin-bottom: 1rem;
+      line-height: 1.375;
+      font-size: 1.25rem;
+      font-weight: 500;
+      letter-spacing: .25px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      @media screen and (max-width: 767px) {
+        margin-bottom: .5rem;
+        line-height: 1.5;
+        font-size: 1.125rem;
+      }
+    }
+
+    a {
+      color: $color-primary;
+      border-bottom: 1px solid $color-primary;
+
+      &:hover {
+        border-bottom-color: transparent;
+      }
+    }
+  }
+
+  .entry-select__share {
+    flex: 0 0 auto;
+  }
+
+  .entry-select__units {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+
+    margin-top: 1rem;
+
+    .unit {
+      width: calc(50% - .5rem);
+      box-shadow: 0 0 20px 1px rgba(0, 0, 0, .125);
+      transition: box-shadow .25s;
+
+      .unit__image {
+        z-index: 0;
+      }
+
+      .unit__content {
+        min-height: 7.5rem;
+      }
+
+      &:hover {
+        box-shadow: 0 0 20px 1px rgba(0, 0, 0, .25);
+      }
+
+      @media screen and (max-width: 767px) {
+        width: 100%;
+      }
+    }
+
+    @media screen and (max-width: 767px) {
+      margin-top: 0;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    padding: 1rem;
+  }
+}

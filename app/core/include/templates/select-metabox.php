@@ -3,55 +3,70 @@
         $items = get_post_meta(get_the_ID(), self::$meta_items);
 
         // Upgrade with default vaules
-        array_unshift($items, [
-            'text' => '',
-            'link' => ''
-        ]);
+        array_unshift($items, ['title' => '', 'link' => '']);
+
+        wp_nonce_field('metabox', self::$nonce);
     ?>
 
-    <div class="knife-select-manage">
-        <p>
-            <label>
-                <strong><?php _e('Ссылка на статью или произвольный URL', 'knife-theme') ?></strong>
-                <input class="input-link widefat" type="text" value="">
-            </label>
-        </p>
+    <div class="box box--manage">
+        <div class="manage">
+            <strong><?php _e('Ссылка на статью или произвольный URL', 'knife-theme') ?></strong>
+            <input class="manage__input" type="text" value="">
+        </div>
 
-        <p>
-            <label>
-                <strong><?php _e('Текст ссылки', 'knife-theme') ?></strong>
-                <input class="input-text widefat" type="text" value="" placeholder="<?php _e('По умолчанию заголовок статьи', 'knife-theme'); ?>">
-            </label>
-        </p>
+        <div class="manage">
+            <?php
+                printf('<button class="manage__append button" type="button">%s</button>',
+                    __('Добавить', 'knife-theme')
+                );
+            ?>
 
-        <fieldset>
-            <a class="button button-append" href="#select-append"><?php _e('Добавить', 'knife-theme'); ?></a>
-            <span class="spinner"></span>
-        </fieldset>
+            <span class="manage__spinner spinner"></span>
+        </div>
     </div>
 
-    <div class="knife-select-items">
+    <div class="box box--items">
         <?php foreach($items as $i => $item) : ?>
-            <div class="knife-select-item <?php echo ($i === 0) ? 'hidden' : ''; ?>">
-                <?php
-                    printf('<p class="item-text">%s</p>',
-                        esc_html($item['text'] ?? '')
-                    );
+            <div class="item <?php echo ($i === 0) ? 'hidden' : ''; ?>">
+                <div class="option">
+                    <strong><?php _e('Ссылка с карточки', 'knife-theme') ?></strong>
 
-                    printf('<a class="item-link" href="%1$s" target="_blank">%1$s</a>',
-                        esc_url($item['link'] ?? '')
-                    );
+                    <?php
+                        printf('<input class="option__link" name="%s[][link]" value="%s" type="text">',
+                            esc_attr(self::$meta_items),
+                            esc_attr($item['link'] ?? '')
+                        );
+                    ?>
+                </div>
 
-                    printf('<input class="item-text" name="%s[][text]" value="%s" type="hidden">',
-                        esc_attr(self::$meta_items),
-                        esc_attr($item['text'] ?? '')
-                    );
+                <div class="option">
+                    <strong><?php _e('Заголовок карточки', 'knife-theme') ?></strong>
 
-                    printf('<input class="item-link" name="%s[][link]" value="%s" type="hidden">',
-                        esc_attr(self::$meta_items),
-                        esc_attr($item['link'] ?? '')
-                    );
-                ?>
+                    <?php
+                        printf('<textarea class="option__title" name="%s[][title]">%s</textarea>',
+                            esc_attr(self::$meta_items),
+                            esc_attr($item['title'] ?? '')
+                        );
+                    ?>
+                </div>
+
+                <figure class="option option--poster">
+                    <?php
+                        if(!empty($item['attachment'])) {
+                            echo wp_get_attachment_image($item['attachment'], 'thumbnail', false, ['class' => 'option__image']);
+                        }
+
+                        printf('<figcaption class="option__blank">%s</figcaption>',
+                            __('Выбрать изображение', 'knife-theme')
+                        );
+
+                        printf('<input class="option__attachment" type="hidden" name="%s[][attachment]" value="%s">',
+                            esc_attr(self::$meta_items),
+                            esc_attr($item['attachment'] ?? '')
+                        );
+                    ?>
+                </figure>
+
                 <span class="dashicons dashicons-menu"></span>
                 <span class="dashicons dashicons-trash"></span>
             </div>
