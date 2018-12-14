@@ -4,29 +4,32 @@
  *
  * @package knife-theme
  * @since 1.5
+ * @version 1.6
  */
 get_header(); ?>
 
 <div class="block-wrapper">
-   <?php
-        if(have_posts()) :
+    <div class="select">
+        <div class="select__head head">
+            <span><?php _e('Все подборки', 'knife-theme'); ?></span>
+        </div>
+
+        <?php
             while(have_posts()) : the_post();
-
-                get_template_part('partials/loop', 'select');
-
+                printf(
+                    '<a class="select__link" href="%1$s">%2$s</a>',
+                    esc_url(get_permalink()),
+                    get_the_title()
+                );
             endwhile;
-        else :
-
-            get_template_part('partials/message');
-
-        endif;
-    ?>
+        ?>
+    </div>
 </div>
 
-<?php if(have_posts() && get_next_posts_link()) : ?>
+<?php if(get_next_posts_link()) : ?>
     <nav class="block-navigate">
         <?php
-            next_posts_link(__('Больше историй', 'knife-theme'));
+            next_posts_link(__('Больше подборок', 'knife-theme'));
         ?>
     </nav>
 <?php endif; ?>

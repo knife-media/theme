@@ -63,6 +63,9 @@ class Knife_Select_Links {
         // Include select archive template
         add_filter('archive_template', [__CLASS__, 'include_archive']);
 
+        // Don't show empty archive
+        add_action('template_redirect', [__CLASS__, 'redirect_empty_archive']);
+
         // Add select metabox
         add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
 
@@ -74,6 +77,9 @@ class Knife_Select_Links {
 
         // Add scripts to admin page
         add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
+
+        // Change posts count on select archive
+        add_action('pre_get_posts', [__CLASS__, 'update_count']);
 
         // Update title with strong number
         add_filter('the_title', [__CLASS__, 'select_title'], 10, 2);
@@ -157,6 +163,19 @@ class Knife_Select_Links {
 
 
     /**
+     * Redirect empty archive
+     *
+     * @since 1.6
+     */
+    public static function redirect_empty_archive() {
+        if(is_post_type_archive(self::$slug) && !have_posts()) {
+            wp_redirect(home_url(), 302);
+            exit;
+        }
+    }
+
+
+    /**
      * Filter the select title
      *
      * @since 1.5
@@ -206,14 +225,26 @@ class Knife_Select_Links {
      */
     public static function update_content($content) {
         if(is_singular(self::$slug) && in_the_loop()) {
-            $items = get_post_meta(get_the_ID(), self::$meta_items);
+            $units = get_post_meta(get_the_ID(), self::$meta_items);
 
-            foreach($items as $item) {
-                $content = self::get_item($item, $content);
+            foreach($units as $unit) {
+                $content = self::append_unit($unit, $content);
             }
         }
 
         return $content;
+    }
+
+
+    /**
+     * Change posts_per_page for select archive template
+     *
+     * @since 1.6
+     */
+    public static function update_count($query) {
+        if($query->is_main_query() && $query->is_post_type_archive(self::$slug)) {
+            $query->set('posts_per_page', 24);
+        }
     }
 
 
@@ -329,20 +360,35 @@ class Knife_Select_Links {
 
 
     /**
-     * Get select item from meta
+     * Get select unit from meta
      */
-    private static function get_item($item, $content = '', $meta = '') {
-        global $post;
+    private static function append_unit($attributes, $content = '') {
+        $required = ['attachment', 'link', 'title'];
 
-        $link = sprintf('<a class="select__link" href="%2$s">%1$s</a>',
-            esc_html($item['title'] ?? ''), esc_url($item['link'] ?? '')
+        // Not append unit if at least one required attribute is empty
+        if(array_diff_key(array_flip($required), $attributes)) {
+            return $content;
+        }
+
+        $unit = sprintf(
+            '<div class="unit"><div class="unit__inner">%s</div></div>',
+
+            sprintf(
+                '<div class="unit__image">%s</div><div class="unit__content">%s</div>',
+
+                wp_get_attachment_image($attributes['attachment'], 'double', false,
+                    ['class' => 'unit__image-thumbnail']
+                ),
+
+                sprintf(
+                    '<a class="unit__content-link" href="%1$s">%2$s</a>',
+                    esc_url($attributes['link']),
+                    esc_html($attributes['title'])
+                )
+            )
         );
 
-        $select = sprintf('<div class="select">%s</div>',
-            $meta . $link
-        );
-
-        return $content . $select;
+        return $content . $unit;
     }
 }
 

@@ -23,7 +23,7 @@
             <?php
                 printf(
                     '<a class="unit__content-link" href="%1$s">%2$s</a>',
-                    esc_html(get_permalink()),
+                    esc_url(get_permalink()),
                     get_the_title()
                 );
 

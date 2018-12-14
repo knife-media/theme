@@ -1,6 +1,5 @@
 .head {
   display: flex;
-  cursor: pointer;
   align-items: center;
 
   height: 2rem;
@@ -14,7 +13,8 @@
   color: $color-white;
   background-color: $color-primary;
 
-  &:hover {
+  @at-root a#{&}:hover {
+    cursor: pointer;
     filter: brightness(120%);
   }
 }
