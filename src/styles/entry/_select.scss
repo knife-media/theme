@@ -99,10 +99,12 @@
     flex-flow: row wrap;
     justify-content: space-between;
 
-    margin-top: 1rem;
+    margin-bottom: -1rem;
 
     .unit {
       width: calc(50% - .5rem);
+      margin: 0 0 1rem 0;
+
       box-shadow: 0 0 20px 1px rgba(0, 0, 0, .125);
       transition: box-shadow .25s;
 
@@ -121,10 +123,6 @@
       @media screen and (max-width: 767px) {
         width: 100%;
       }
-    }
-
-    @media screen and (max-width: 767px) {
-      margin-top: 0;
     }
   }
 
