@@ -33,4 +33,8 @@
       filter: brightness(110%);
     }
   }
+
+  @media screen and (max-width: 767px) {
+    padding: 1rem;
+  }
 }
