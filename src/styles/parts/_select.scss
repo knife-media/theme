@@ -45,15 +45,16 @@
     strong {
       display: block;
 
-      margin-bottom: .25rem;
-      font-size: 10rem;
+      margin: .25rem 0 .5rem;
+      font-size: 12rem;
       font-weight: 500;
       line-height: .875;
 
       transform: translateX(-.025em);
 
       @media screen and (max-width: 767px) {
-        font-size: 6rem;
+        font-size: 7rem;
+        margin: 0 0 .25rem;
       }
     }
 
