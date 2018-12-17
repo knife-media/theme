@@ -6,6 +6,7 @@
  *
  * @package knife-theme
  * @since 1.5
+ * @version 1.7
  */
 
 
@@ -32,7 +33,8 @@ class Knife_Widget_Banner extends WP_Widget {
             'link' => '',
             'campaign' => '',
             'background' => '',
-            'styles' => ''
+            'styles' => '',
+            'visibility' => 'default'
         ];
 
         $instance = wp_parse_args((array) $instance, $defaults);
@@ -40,8 +42,9 @@ class Knife_Widget_Banner extends WP_Widget {
         if(!empty($instance['image']) && !empty($instance['link'])) {
             echo $args['before_widget'];
 
-            printf('<a class="widget-banner__link" %1$s>%2$s</a>',
-                implode(" ", $this->get_attributes($instance)),
+            printf('<a class="%1$s" %2$s>%3$s</a>',
+                $this->get_classes($instance, 'widget-banner__link'),
+                $this->get_attributes($instance),
 
                 sprintf('<img src="%1$s" alt="%2$s" style="%3$s">',
                     esc_url($instance['image']),
@@ -65,7 +68,8 @@ class Knife_Widget_Banner extends WP_Widget {
             'link' => '',
             'campaign' => '',
             'background' => '',
-            'styles' => ''
+            'styles' => '',
+            'visibility' => 'default'
         ];
 
         $instance = wp_parse_args((array) $instance, $defaults);
@@ -98,6 +102,14 @@ class Knife_Widget_Banner extends WP_Widget {
             esc_attr($this->get_field_name('link')),
             __('Ссылка с баннера', 'knife-theme'),
             esc_attr($instance['link'])
+        );
+
+        printf(
+            '<p><label for="%1$s">%3$s</label><select class="widefat" id="%1$s" name="%2$s">%4$s</select></p>',
+            esc_attr($this->get_field_id('visibility')),
+            esc_attr($this->get_field_name('visibility')),
+            __('Видимость баннера:', 'knife-theme'),
+            $this->show_visibility_options($instance['visibility'])
         );
 
         printf(
@@ -139,6 +151,7 @@ class Knife_Widget_Banner extends WP_Widget {
         $instance['campaign'] = sanitize_text_field($new_instance['campaign']);
         $instance['styles'] = sanitize_text_field($new_instance['styles']);
         $instance['background'] = sanitize_hex_color($new_instance['background']);
+        $instance['visibility'] = sanitize_text_field($new_instance['visibility']);
 
         return $instance;
     }
@@ -169,9 +182,48 @@ class Knife_Widget_Banner extends WP_Widget {
             $attributes[] = $key . '="' . esc_attr($value) . '"';
         }
 
-        return $attributes;
+        return implode(' ', $attributes);
     }
 
+
+    /**
+     * Generate link classes using default value
+     *
+     * @since 1.7
+     */
+    private function get_classes($instance, $default) {
+        $classes[] = $default;
+
+        if($instance['visibility'] !== 'default') {
+            $classes[] = "{$default}--{$instance['visibility']}";
+        }
+
+        return implode(' ', $classes);
+    }
+
+
+
+    /**
+     * Show visibility options in visibility select setting
+     *
+     * @since 1.7
+     */
+    private function show_visibility_options($selected, $options = '') {
+        $labels = [
+            'default' => __('Отображать везде', 'knife-theme'),
+            'mobile' => __('Только мобильный', 'knife-theme'),
+            'desktop' => __('Только десктоп', 'knife-theme')
+        ];
+
+        foreach($labels as $name => $title) {
+            $options = $options . sprintf(
+                '<option value="%1$s"%3$s>%2$s</option>', $name, $title,
+                selected($selected, $name, false)
+            );
+        }
+
+        return $options;
+    }
 }
 
 
