@@ -1,6 +1,6 @@
 <?php
 /**
- * Story loop template without sidebar
+ * Story archive template
  *
  * @package knife-theme
  * @since 1.3

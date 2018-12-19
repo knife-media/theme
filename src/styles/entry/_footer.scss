@@ -8,8 +8,6 @@
   color: $color-text;
   background-color: $color-white;
 
-  will-change: transform;
-
   & > * {
     width: 100%;
     max-width: calc(#{$width-content} + 4rem);

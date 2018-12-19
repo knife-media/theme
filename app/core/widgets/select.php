@@ -1,30 +1,35 @@
 <?php
 /**
- * Story widget
+ * Select widget
  *
- * 4 stories in a row
+ * 4 select in a row
  *
  * @package knife-theme
- * @since 1.3
- * @version 1.4
+ * @since 1.5
+ * @version 1.6
  */
 
 
-class Knife_Widget_Story extends WP_Widget {
+class Knife_Widget_Select extends WP_Widget {
 
     public function __construct() {
         $widget_ops = [
-            'classname' => 'story',
-            'description' => __('Выводит полосу из историй в виде карточек.', 'knife-theme'),
+            'classname' => 'select',
+            'description' => __('Выводит блок из 4 последних подборок.', 'knife-theme'),
             'customize_selective_refresh' => true
         ];
 
-        parent::__construct('knife_widget_story', __('[НОЖ] Истории', 'knife-theme'), $widget_ops);
+        parent::__construct('knife_widget_select', __('[НОЖ] Подборки', 'knife-theme'), $widget_ops);
     }
 
 
     /**
      * Outputs the content of the widget.
+     *
+     * @see WP_Widget::widget()
+     *
+     * @param array args  The array of form elements
+     * @param array instance The current instance of the widget
      */
     public function widget($args, $instance) {
         $defaults = [
@@ -38,22 +43,16 @@ class Knife_Widget_Story extends WP_Widget {
         $query = new WP_Query([
             'post_status' => 'publish',
             'ignore_sticky_posts' => 1,
-            'post_type' => 'story',
-            'offset' => $instance['offset'],
-            'posts_per_page' => $instance['posts_per_page']
+            'post_type' => 'select',
+            'posts_per_page' => $instance['posts_per_page'],
+            'offset' => $instance['offset']
         ]);
 
-
-        if($query->have_posts() && $query->found_posts >= $instance['posts_per_page']) {
+        if($query->have_posts()) {
             echo $args['before_widget'];
 
-            while($query->have_posts()) {
-                $query->the_post();
+            include(get_template_directory() . '/templates/widget-select.php');
 
-                include(get_template_directory() . '/templates/widget-story.php');
-            }
-
-            wp_reset_query();
             echo $args['after_widget'];
         }
     }
@@ -61,6 +60,13 @@ class Knife_Widget_Story extends WP_Widget {
 
     /**
      * Sanitize widget form values as they are saved.
+     *
+     * @see WP_Widget::update()
+     *
+     * @param array $new_instance Values just sent to be saved.
+     * @param array $old_instance Previously saved values from database.
+     *
+     * @return array Updated safe values to be saved.
      */
     public function update($new_instance, $old_instance) {
         $instance = $old_instance;
@@ -74,6 +80,10 @@ class Knife_Widget_Story extends WP_Widget {
 
     /**
      * Back-end widget form.
+     *
+     * @see WP_Widget::form()
+     *
+     * @param array $instance Previously saved values from database.
      */
     public function form($instance) {
         $defaults = [
@@ -91,7 +101,7 @@ class Knife_Widget_Story extends WP_Widget {
             esc_attr($this->get_field_name('title')),
             __('Заголовок:', 'knife-theme'),
             esc_attr($instance['title']),
-            __('Не будет отображаться на странице', 'knife-theme')
+            __('Отобразится на странице в лейбле', 'knife-theme')
         );
 
         // Posts count
@@ -113,6 +123,25 @@ class Knife_Widget_Story extends WP_Widget {
             esc_attr($instance['offset'])
         );
     }
+
+
+    /**
+     * Show select links
+     */
+    private function show_links($query) {
+        while($query->have_posts()) {
+            $query->the_post();
+
+            printf(
+                '<a class="select__link" href="%1$s">%2$s</a>',
+                esc_url(get_permalink()),
+                get_the_title()
+            );
+        }
+
+        wp_reset_query();
+    }
+
 }
 
 
@@ -120,5 +149,5 @@ class Knife_Widget_Story extends WP_Widget {
  * It is time to register widget
  */
 add_action('widgets_init', function() {
-    register_widget('Knife_Widget_Story');
+    register_widget('Knife_Widget_Select');
 });

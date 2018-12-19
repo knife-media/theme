@@ -1,3 +1,12 @@
+<?php
+/**
+ * Televisor widget template
+ *
+ * @package knife-theme
+ * @since 1.4
+ */
+?>
+
 <div class="widget-televisor__inner">
     <div class="widget-televisor__content">
         <?php

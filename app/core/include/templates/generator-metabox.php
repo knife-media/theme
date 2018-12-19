@@ -8,6 +8,7 @@
         // Generator items
         $items = get_post_meta($post_id, self::$meta_items);
 
+        // Add default values if empty items
         if(count($items) < 1) {
             array_push($items, ['caption' => '', 'description' => '']);
         }
