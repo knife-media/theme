@@ -14,6 +14,7 @@ jQuery(document).ready(function($) {
     items: '.item',
     handle: '.item__field-drag',
     placeholder: 'dump',
+    axis: 'y'
   }).disableSelection();
 
 
@@ -241,7 +242,7 @@ jQuery(document).ready(function($) {
 
 
   // reinit wp editor on drag
-  box.on("sortstop", function(event, ui) {
+  box.on('sortstop', function(event, ui) {
     return editor(ui.item);
   });
 

@@ -12,7 +12,8 @@ jQuery(document).ready(function($) {
   // Sort items
   box.sortable({
     items: '.item',
-    handle: '.dashicons-menu'
+    handle: '.dashicons-menu',
+    axis: 'y'
   }).disableSelection();
 
 
@@ -41,7 +42,7 @@ jQuery(document).ready(function($) {
   }
 
   // Reinit wp editor on drag
-  box.on("sortstop", function(event, ui) {
+  box.on('sortstop', function(event, ui) {
     return editor(ui.item);
   });
 
