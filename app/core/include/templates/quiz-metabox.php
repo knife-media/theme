@@ -15,31 +15,95 @@
         wp_nonce_field('metabox', self::$nonce);
     ?>
 
+    <div class="box box--manage">
+
+    </div>
+
     <div class="box box--items">
         <div class="item">
-            <div class="option option--manage">
-                <span class="dashicons dashicons-menu"></span>
-                <span class="dashicons dashicons-trash"></span>
+            <div class="item__question question">
+                <?php
+                    printf('<p class="question__title">%s<span>1</span></p>',
+                        __('Вопрос #', 'knife-theme')
+                    );
+
+                    printf('<textarea class="question__field wp-editor-area" name="%s[][question]">%s</textarea>',
+                        esc_attr(self::$meta_items),
+                        esc_attr($item['question'] ?? '')
+                    );
+                ?>
             </div>
 
-            <div class="option option--general">
-                <div class="option__general">
+            <div class="item__answer answer">
+                <div class="answer__choice">
                     <?php
-                        printf('<textarea class="option__general-question wp-editor-area" name="%s[][question]">%s</textarea>',
+                        printf('<p class="answer__choice-title">%s</p>',
+                            __('Вариант ответа', 'knife-theme')
+                        );
+
+                        printf('<textarea class="answer__choice-field wp-editor-area" name="%s[][choice]">%s</textarea>',
                             esc_attr(self::$meta_items),
-                            esc_attr($item['question'] ?? '')
+                            esc_attr($item['choice'] ?? '')
                         );
                     ?>
                 </div>
+
+                <div class="answer__message">
+                    <?php
+                        printf('<p class="answer__message-title">%s</p>',
+                            __('Текст после ответа', 'knife-theme')
+                        );
+
+                        printf('<textarea class="answer__message-field wp-editor-area" name="%s[][message]">%s</textarea>',
+                            esc_attr(self::$meta_items),
+                            esc_attr($item['message'] ?? '')
+                        );
+                    ?>
+                </div>
+
+                <div class="answer__options">
+                    <?php
+                        printf('<p class="answer__options-title">%s</p>',
+                            __('Настройки ответа', 'knife-theme')
+                        );
+
+                        printf('<input class="answer__options-points" name="%s[][points]" value="%s">',
+                            esc_attr(self::$meta_items),
+                            esc_attr($item['points'] ?? '')
+                        );
+                    ?>
+                </div>
+
+                <span class="dashicons dashicons-trash"></span>
+                <span class="dashicons dashicons-editor-expand"></span>
+            </div>
+
+            <div class="item__manage">
+                <?php
+                    printf('<button class="item__manage-add button" type="button">%s</button>',
+                        __('Добавить ответ', 'knife-theme')
+                    );
+
+                    printf('<button class="item__manage-move button" type="button">%s</button>',
+                        __('Поднять выше', 'knife-theme')
+                    );
+
+                    printf('<button class="item__manage-remove button" type="button">%s</button>',
+                        __('Удалить вопрос', 'knife-theme')
+                    );
+                ?>
             </div>
         </div>
     </div>
 
     <div class="box box--actions">
         <?php
-            printf('<button class="actions__add button" type="button">%s</button>',
-                __('Добавить элемент', 'knife-theme')
+            printf('<button class="actions__add button button-primary" type="button">%s</button>',
+                __('Добавить вопрос', 'knife-theme')
             );
         ?>
+    </div>
+
+    <div class="box box--results">
     </div>
 </div>
