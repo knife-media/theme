@@ -12,7 +12,7 @@ jQuery(document).ready(function($) {
   /**
    * Toggle background
    */
-  var toggleBackground = function() {
+  function toggleBackground() {
     var src = image.find('input').val();
 
     image.find('img').remove();

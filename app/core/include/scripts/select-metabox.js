@@ -26,7 +26,7 @@ jQuery(document).ready(function($) {
   /**
    * Show loader
    */
-  var toggleLoader = function() {
+  function toggleLoader() {
     box.find('.manage__button').toggleClass('disabled');
     box.find('.manage__spinner').toggleClass('is-active');
   }
@@ -35,7 +35,7 @@ jQuery(document).ready(function($) {
   /**
    * Add class for short time
    */
-  var blinkClass = function(element, cl) {
+  function blinkClass(element, cl) {
     element.addClass(cl).delay(600).queue(function(){
       element.removeClass(cl).dequeue();
     });
@@ -45,7 +45,7 @@ jQuery(document).ready(function($) {
   /**
    * Append item
    */
-  var appendItem = function(object) {
+  function appendItem(object) {
     var item = box.find('.item:first').clone();
     box.find('.item:first').after(item);
 

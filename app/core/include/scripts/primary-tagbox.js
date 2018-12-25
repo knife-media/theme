@@ -14,7 +14,7 @@ jQuery(document).ready(function($) {
   /**
    * Parse tags
    */
-  var parseTags = function() {
+  function parseTags() {
     var thetags = box.find('.the-tags').val();
 
     if($('#knife-primary-tag').length) {

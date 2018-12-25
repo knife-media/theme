@@ -13,7 +13,7 @@ jQuery(document).ready(function($) {
   /**
    * Add class for short time
    */
-  var blinkClass = function(element, cl) {
+  function blinkClass(element, cl) {
     element.addClass(cl).delay(500).queue(function(){
       element.removeClass(cl).dequeue();
     });
@@ -23,7 +23,7 @@ jQuery(document).ready(function($) {
   /**
    * Show loader
    */
-  var toggleLoader = function(item) {
+  function toggleLoader(item) {
     var spinner = item.find('.option__relative-spinner');
 
     spinner.toggleClass('is-active')
@@ -39,7 +39,7 @@ jQuery(document).ready(function($) {
   /**
    * Generate poster using ajax
    */
-  var createPoster = function(item) {
+  function createPoster(item) {
     var data = {
       'action': knife_generator_metabox.action,
       'nonce': knife_generator_metabox.nonce,

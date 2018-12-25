@@ -10,7 +10,7 @@ jQuery(document).ready(function($) {
   /**
    * Toggle spinner on upload
    */
-  var toggleLoader = function() {
+  function toggleLoader() {
     box.find('.button').toggleClass('disabled');
     box.find('.spinner').toggleClass('is-active');
 
@@ -21,7 +21,7 @@ jQuery(document).ready(function($) {
   /**
    * Show notice on upload
    */
-  var showNotice = function(data) {
+  function showNotice(data) {
     var notice = $('<div />', {
       "class": "notice notice-error",
       "html": "<p>" + data + "</p>"
