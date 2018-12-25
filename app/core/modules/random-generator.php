@@ -6,6 +6,7 @@
 *
 * @package knife-theme
 * @since 1.6
+* @version 1.7
 */
 
 if (!defined('WPINC')) {
@@ -309,10 +310,10 @@ class Knife_Random_Generator {
         wp_enqueue_style('wp-color-picker');
 
         // Insert admin styles
-        wp_enqueue_style('knife-random-generator', $include . '/styles/random-generator.css', [], $version);
+        wp_enqueue_style('knife-generator-metabox', $include . '/styles/generator-metabox.css', [], $version);
 
         // Insert admin scripts
-        wp_enqueue_script('knife-random-generator', $include . '/scripts/random-generator.js', ['jquery', 'wp-color-picker'], $version);
+        wp_enqueue_script('knife-generator-metabox', $include . '/scripts/generator-metabox.js', ['jquery', 'wp-color-picker'], $version);
 
         $options = [
             'post_id' => absint($post_id),
@@ -322,7 +323,7 @@ class Knife_Random_Generator {
             'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
         ];
 
-        wp_localize_script('knife-random-generator', 'knife_random_generator', $options);
+        wp_localize_script('knife-generator-metabox', 'knife_generator_metabox', $options);
     }
 
 
@@ -385,7 +386,7 @@ class Knife_Random_Generator {
                     $i++;
                 }
 
-                if(!empty($value)) {
+                if(strlen($value) > 0) {
                     $meta[$i][$key] = sanitize_text_field($value);
                 }
             }
@@ -446,7 +447,12 @@ class Knife_Random_Generator {
 
             $poster->setFont(get_template_directory() . '/assets/fonts/formular/formular-black.ttf');
             $poster->setTextColor([255, 255, 255]);
-            $poster->textBox(mb_strtoupper($caption), [
+
+            if(function_exists('mb_strtoupper')) {
+                $caption = mb_strtoupper($caption);
+            }
+
+            $poster->textBox($caption, [
                 'x' => 48,
                 'y' => 290,
                 'width' => 1000,

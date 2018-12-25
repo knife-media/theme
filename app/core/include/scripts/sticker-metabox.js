@@ -1,33 +1,48 @@
 jQuery(document).ready(function($) {
-  if (typeof wp.media === 'undefined') return;
+  if(typeof wp === 'undefined' || typeof wp.media === 'undefined') {
+    return false;
+  }
 
   var frame;
   var box = $("#knife-sticker-box");
 
-  var wait = function() {
+
+  /**
+   * Toggle spinner on upload
+   */
+  var toggleLoader = function() {
     box.find('.button').toggleClass('disabled');
     box.find('.spinner').toggleClass('is-active');
 
     box.find('.notice').remove();
   }
 
-  var notice = function(data) {
-    var status = $('<div />', {
+
+  /**
+   * Show notice on upload
+   */
+  var showNotice = function(data) {
+    var notice = $('<div />', {
       "class": "notice notice-error",
       "html": "<p>" + data + "</p>"
     });
 
-    return status.prependTo(box);
+    return notice.prependTo(box);
   }
 
+
+  /**
+   * Upload sticker action
+   */
   box.on('click', '#knife-sticker-upload', function(e) {
     e.preventDefault();
 
-    if(frame)
+    if(frame) {
       return frame.open();
+    }
 
     frame = wp.media({
-      title: knife_post_sticker.choose,
+      title: knife_sticker_metabox.choose,
       multiple: false
     });
 
@@ -43,25 +58,31 @@ jQuery(document).ready(function($) {
       var xhr = $.ajax({method: 'POST', url: box.data('ajaxurl'), data: data}, 'json');
 
       xhr.done(function(answer) {
-        wait();
+        toggleLoader();
 
-        if(answer.success === false)
-          return notice(answer.data);
+        if(answer.success === false) {
+          return showNotice(answer.data);
+        }
 
-        if(box.find('#knife-sticker-image').length > 0)
+        if(box.find('#knife-sticker-image').length > 0) {
           return box.find('#knife-sticker-image').attr('src', answer.data);
+        }
 
         var img = $('<img />', {id: 'knife-sticker-image', src: answer.data});
 
         return img.prependTo(box);
       });
 
-      return wait();
+      return toggleLoader();
     });
 
     return frame.open();
   });
 
+
+  /**
+   * Delete sticker action
+   */
   box.on('click' , '#knife-sticker-delete', function(e) {
     e.preventDefault();
 
@@ -73,14 +94,15 @@ jQuery(document).ready(function($) {
     var xhr = $.ajax({method: 'POST', url: box.data('ajaxurl'), data: data}, 'json');
 
     xhr.done(function(answer) {
-      wait();
+      toggleLoader();
 
-      if(answer.success === false)
-        return notice(answer.data);
+      if(answer.success === false) {
+        return showNotice(answer.data);
+      }
 
       return box.find('#knife-sticker-image').remove();
     });
 
-    return wait();
+    return toggleLoader();
   });
 });

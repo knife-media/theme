@@ -9,7 +9,10 @@ jQuery(document).ready(function($) {
   var color = $('.knife-background-color');
 
 
-  function toggle() {
+  /**
+   * Toggle background
+   */
+  var toggleBackground = function() {
     var src = image.find('input').val();
 
     image.find('img').remove();
@@ -26,11 +29,15 @@ jQuery(document).ready(function($) {
   }
 
 
-  // Define color input as colorpicker
+  /**
+   * Define color input as colorpicker
+   */
   color.find('input').wpColorPicker();
 
 
-  // Process select image button click
+  /**
+   * Process select image button click
+   */
   image.on('click', 'button.select', function(e) {
     e.preventDefault();
 
@@ -48,22 +55,27 @@ jQuery(document).ready(function($) {
 
       image.find('input').val(attachment.url);
 
-      return toggle();
+      return toggleBackground();
     });
 
     return frame.open();
   });
 
 
-  // Delete image on link clicking
+  /**
+   * Delete image on link clicking
+   */
   image.on('click', 'button.remove', function(e) {
     e.preventDefault();
 
     image.find('input').val('');
 
-    return toggle();
+    return toggleBackground();
   });
 
 
-  return toggle();
+  /**
+   * Launch toggle on load
+   */
+  return toggleBackground();
 });

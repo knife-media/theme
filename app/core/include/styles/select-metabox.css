@@ -43,6 +43,7 @@
 }
 
 #knife-select-box .item {
+  display: block;
   position: relative;
   box-sizing: border-box;
 
@@ -53,6 +54,10 @@
 
   border: solid 1px #ddd;
   border-radius: 2px;
+}
+
+#knife-select-box .item--hidden {
+  display: none;
 }
 
 @media screen and (max-width: 1023px) {

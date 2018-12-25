@@ -5,11 +5,15 @@ jQuery(document).ready(function($) {
 
   var box = $('#knife-story-box');
 
-  // use this variable as storage for current editor id
-  box.data('items', 0);
+  /**
+   * Use this variable as storage for current editor id
+   */
+  box.data('editor', 1);
 
 
-  // sort items
+  /**
+   * Sort items
+   */
   box.sortable({
     items: '.item',
     handle: '.item__field-drag',
@@ -17,41 +21,23 @@ jQuery(document).ready(function($) {
   }).disableSelection();
 
 
-  // clear item
-  var clear = function() {
-    var item = box.find('.item').first().clone()
+  /**
+   * Create wp.editor using item element
+   */
+  function createEditor(el) {
+    var textarea = el.find('.item__entry');
+    var editorId = textarea.attr('id');
 
-    // clear input values
-    item.find('.item__entry').val('');
-    item.find('.item__media').val('');
+    if(typeof editorId === 'undefined') {
+      editorId = 'knife-story-editor-' + box.data('editor');
+      textarea.attr('id', editorId);
 
-    // destroy image tag
-    item.find('.item__image').remove();
-
-    return item;
-  }
-
-
-  // create virtual item element
-  var dummy = clear();
-
-
-  // create wp.editor using item element
-  var editor = function(el) {
-    var text = el.find('.item__entry');
-    var edit = text.attr('id');
-
-    if(typeof edit === 'undefined') {
-      edit = 'knife-story-text-' + box.data('items');
-      text.attr('id', edit);
-
-      box.data().items++;
-    }
-    else {
-      wp.editor.remove(edit);
+      box.data().editor++;
+    } else {
+      wp.editor.remove(editorId);
     }
 
-    wp.editor.initialize(edit, {
+    wp.editor.initialize(editorId, {
       tinymce: true,
       quicktags: true,
       mediaButtons: false,
@@ -63,44 +49,43 @@ jQuery(document).ready(function($) {
   }
 
 
-  // add class for short time
-  var dimmer = function(element, cl) {
+  /**
+   * Add class for short time
+   */
+  function blinkClass(element, cl) {
     element.addClass(cl).delay(500).queue(function(){
       element.removeClass(cl).dequeue();
     });
   }
 
 
-  // display image
-  var display = function(parent, link, image) {
-    // change src if image already exists
-    if(parent.find('img').length > 0)
+  /**
+   * Display image
+   */
+  function displayImage(parent, link, image) {
+    // Change src if image already exists
+    if(parent.find('img').length > 0) {
       return parent.find('img').attr('src', link);
+    }
 
-    // otherwise create new image
+    // Otherwise create new image
     var showcase = $('<img />', {class: image, src: link});
 
     return showcase.prependTo(parent);
   }
 
 
-  // set image shadow on load
-  var shadow = function(cl) {
-    var blank = box.find('.option__background-blank');
-    var shade = parseInt(box.find(cl).val()) / 100;
-
-    blank.css('background-color', 'rgba(0, 0, 0, ' + shade + ')');
-  }
-
-
-  var media = function(item) {
-    // open default wp.media image frame
+  /**
+   * Update media image
+   */
+  function updateMedia(item) {
+    // Open default wp.media image frame
     var frame = wp.media({
-      title: knife_story_manager.choose,
+      title: knife_story_metabox.choose,
       multiple: false
     });
 
-    // on open frame select current attachment
+    // On open frame select current attachment
     frame.on('open',function() {
       var selection = frame.state().get('selection');
       var attachment = item.find('.item__media').val();
@@ -108,92 +93,100 @@ jQuery(document).ready(function($) {
       return selection.add(wp.media.attachment(attachment));
     });
 
-    // on image select
+    // On image select
     frame.on('select', function() {
       var selection = frame.state().get('selection').first().toJSON();
 
       item.find('.item__media').val(selection.id);
 
-      if(typeof selection.sizes.thumbnail !== 'undefined')
+      if(typeof selection.sizes.thumbnail !== 'undefined') {
         selection = selection.sizes.thumbnail;
+      }
 
-      // show preview
-      display(item, selection.url, 'item__image');
+      // Show preview
+      displayImage(item, selection.url, 'item__image');
     });
 
     return frame.open();
   }
 
 
-  // delete or clear item
+  /**
+   * Delete or clear item
+   */
   box.on('click', '.item__field-trash', function(e) {
     e.preventDefault();
 
-    var item = $(this).closest('.item');
+    $(this).closest('.item').remove();
 
-    if(box.find('.item').length === 1)
+    if(box.find('.item').length === 1) {
       box.find('.actions__add').trigger('click');
-
-    return item.remove();
+    }
   });
 
 
-  // add image to item
+  /**
+   * Add image to item
+   */
   box.on('click', '.item__image', function(e) {
     e.preventDefault();
 
     var item = $(this).closest('.item');
-
-    return media(item);
+    return updateMedia(item);
   });
 
 
-  // update item image on click
+  /**
+   * Update item image on click
+   */
   box.on('click', '.item__field-image', function(e) {
     e.preventDefault();
 
     var item = $(this).closest('.item');
-
-    return media(item);
+    return updateMedia(item);
   });
 
 
-  // remove item image on click
+  /**
+   * Remove item image on click
+   */
   box.on('click', '.item__field-clear', function(e) {
     e.preventDefault();
 
     var item = $(this).closest('.item');
 
-    // clear input values
+    // Clear input values
     item.find('.item__media').val('');
 
-    // destroy image tag
+    // Destroy image tag
     item.find('.item__image').remove();
   });
 
 
-  // add story background
+  /**
+   * Add story background
+   */
   box.on('click', '.option__background', function(e) {
     e.preventDefault();
 
     var background = box.find('.option__background');
 
-    // open default wp.media image frame
+    // Open default wp.media image frame
     var frame = wp.media({
-      title: knife_story_manager.choose,
+      title: knife_story_metabox.choose,
       multiple: false
     });
 
-    // on image select
+    // On image select
     frame.on('select', function() {
       var selection = frame.state().get('selection').first().toJSON();
 
       background.find('.option__background-media').val(selection.url);
 
-      // show preview
-      display(background, selection.url, 'option__background-image');
+      // Show preview
+      displayImage(background, selection.url, 'option__background-image');
 
-      // set shadow on image creation
+      // Set shadow on image creation
       box.find('.option__range').trigger('change');
     });
 
@@ -201,37 +194,45 @@ jQuery(document).ready(function($) {
   });
 
 
-  // add new item
+  /**
+   * Add new item
+   */
   box.on('click', '.actions__add', function(e) {
     e.preventDefault();
 
-    var last = box.find('.item').last(),
-      copy = dummy.clone();
+    var item = box.find('.item:first').clone();
 
-    last.after(copy);
+    item.removeClass('item--hidden');
+    box.find('.item:last').after(item);
 
-    return editor(copy);
+    return createEditor(item);
   });
 
 
-  // shadow range
+  /**
+   * Shadow range
+   */
   box.on('change', '.option__range--shadow', function(e) {
     var blank = box.find('.option__background-blank');
     var shade = parseInt($(this).val()) / 100;
 
-    if(box.find('.option__background-image').length < 1)
-      return dimmer(blank, 'option__background-blank--error');
+    if(box.find('.option__background-image').length < 1) {
+      return blinkClass(blank, 'option__background-blank--error');
+    }
 
     blank.css('background-color', 'rgba(0, 0, 0, ' + shade + ')');
   });
 
 
-  // blur range
+  /**
+   * Blur range
+   */
   box.on('change', '.option__range--blur', function(e) {
     var blank = box.find('.option__background-blank');
 
-    if(box.find('.option__background-image').length < 1)
-      return dimmer(blank, 'option__background-blank--error');
+    if(box.find('.option__background-image').length < 1) {
+      return blinkClass(blank, 'option__background-blank--error');
+    }
 
     var image = box.find('.option__background-image');
 
@@ -240,17 +241,36 @@ jQuery(document).ready(function($) {
 
 
 
-  // reinit wp editor on drag
-  box.on("sortstop", function(event, ui) {
-    return editor(ui.item);
+  /**
+   * Reinit wp editor on drag
+   */
+  box.on('sortstop', function(event, ui) {
+    return createEditor(ui.item);
   });
 
 
-  // init wp editors
+  /**
+   * Init wp editors
+   */
   box.find('.item').each(function(i, el) {
-    return editor($(this));
+    var item = $(this);
+
+    if(!item.hasClass('item--hidden')) {
+      createEditor(item);
+    }
   });
 
 
-  return box.find('.option__range').trigger('change');
+  /**
+   * Set background range on load
+   */
+  box.find('.option__range').trigger('change');
+
+
+  /**
+   * Show at least one item box on load
+   */
+  if(box.find('.item').length === 1) {
+    box.find('.actions__add').trigger('click');
+  }
 });

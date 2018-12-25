@@ -6,7 +6,7 @@
 *
 * @package knife-theme
 * @since 1.3
-* @version 1.5
+* @version 1.7
 */
 
 
@@ -69,7 +69,7 @@ class Knife_Primary_Tag {
         $include = get_template_directory_uri() . '/core/include';
 
         // insert admin scripts
-        wp_enqueue_script('knife-primary-tag', $include . '/scripts/primary-tag.js', ['jquery'], $version);
+        wp_enqueue_script('knife-primary-tagbox', $include . '/scripts/primary-tagbox.js', ['jquery'], $version);
 
         $options = [
             'howto' => __('Выберите главную метку поста. Она отобразится на карточке', 'knife-theme')
@@ -82,7 +82,7 @@ class Knife_Primary_Tag {
             $options['primary'] = $term->name;
         }
 
-        wp_localize_script('knife-primary-tag', 'knife_primary_tag', $options);
+        wp_localize_script('knife-primary-tagbox', 'knife_primary_tagbox', $options);
     }
 
 

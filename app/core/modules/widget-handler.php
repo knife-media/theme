@@ -6,7 +6,7 @@
 *
 * @package knife-theme
 * @since 1.2
-* @version 1.5
+* @version 1.7
 */
 
 
@@ -22,6 +22,16 @@ class Knife_Widget_Handler {
     * @var      string
     */
     private static $nonce = 'knife-widget-nonce';
+
+
+    /**
+    * Ajax action
+    *
+    * @access  private static
+    * @var     string
+    * @since   1.7
+    */
+    private static $action = 'knife-widget-terms';
 
 
     /**
@@ -45,7 +55,7 @@ class Knife_Widget_Handler {
         add_filter('widget_title', '__return_empty_string');
 
         // ajax terms handler
-        add_action('wp_ajax_knife_widget_terms', [__CLASS__, 'ajax_terms']);
+        add_action('wp_ajax_' . self::$action, [__CLASS__, 'ajax_terms']);
     }
 
 
@@ -129,14 +139,15 @@ class Knife_Widget_Handler {
             wp_enqueue_script('underscore');
         }
 
-        wp_enqueue_script('knife-widget-handler', $include . '/scripts/widget-handler.js', ['jquery'], $version);
+        wp_enqueue_script('knife-widget-screen', $include . '/scripts/widget-screen.js', ['jquery'], $version);
 
         $options = [
+            'action' => esc_attr(self::$action),
             'nonce' => wp_create_nonce(self::$nonce),
             'choose' => __('Выберите обложку', 'knife-theme')
         ];
 
-        wp_localize_script('knife-widget-handler', 'knife_widget_handler', $options);
+        wp_localize_script('knife-widget-screen', 'knife_widget_screen', $options);
     }
 
 

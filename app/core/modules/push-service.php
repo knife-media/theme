@@ -1,13 +1,13 @@
 <?php
 /**
-* Push notifications
-*
-* Use OneSignal as push sender service
-*
-* @package knife-theme
-* @since 1.2
-* @version 1.4
-*/
+ * Push notifications
+ *
+ * Use OneSignal as push sender service
+ *
+ * @package knife-theme
+ * @since 1.2
+ * @version 1.7
+ */
 
 if (!defined('WPINC')) {
     die;
@@ -78,7 +78,7 @@ class Knife_Push_Service {
         $version = wp_get_theme()->get('Version');
         $include = get_template_directory_uri() . '/core/include';
 
-        wp_enqueue_script('knife-push-service', $include . '/scripts/push-service.js', [], $version);
+        wp_enqueue_script('knife-push-metabox', $include . '/scripts/push-metabox.js', [], $version);
     }
 
 
@@ -289,16 +289,19 @@ class Knife_Push_Service {
     public static function send_push() {
         $post_id = $_POST['post'];
 
-        if(empty($post_id))
+        if(empty($post_id)) {
             wp_send_json_error(__("Неверный ID записи", 'knife-theme'));
+        }
 
         $opts = get_option(self::$option);
 
-        if(empty($opts['appid']) || empty($opts['rest']))
+        if(empty($opts['appid']) || empty($opts['rest'])) {
             wp_send_json_error(__("Необходимо заполнить опции на странице настроек", 'knife-theme'));
+        }
 
-        if(empty($opts['segments']))
+        if(empty($opts['segments'])) {
             $opts['segments'] = 'All';
+        }
 
         parse_str($opts['utm'], $args);
 
@@ -337,8 +340,9 @@ class Knife_Push_Service {
 
         $answer = json_decode($response);
 
-        if(!isset($answer->id))
+        if(!isset($answer->id)) {
             wp_send_json_error(__("Пуш не отправлен. Что-то пошло не так", 'knife-theme'));
+        }
 
         update_post_meta($post_id, self::$meta, $answer->id);
 
@@ -351,4 +355,3 @@ class Knife_Push_Service {
  * Load module
  */
 Knife_Push_Service::load_module();
-

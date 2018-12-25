@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.4
- * @version 1.6
+ * @version 1.7
  */
 
 if (!defined('WPINC')) {
@@ -277,17 +277,19 @@ class Knife_Select_Links {
         wp_enqueue_media();
 
         // Insert admin styles
-        wp_enqueue_style('knife-select-links', $include . '/styles/select-links.css', [], $version);
+        wp_enqueue_style('knife-select-metabox', $include . '/styles/select-metabox.css', [], $version);
 
         // Insert admin scripts
-        wp_enqueue_script('knife-select-links', $include . '/scripts/select-links.js', ['jquery', 'jquery-ui-sortable'], $version);
+        wp_enqueue_script('knife-select-metabox', $include . '/scripts/select-metabox.js', ['jquery', 'jquery-ui-sortable'], $version);
 
         $options = [
+            'action' => esc_attr(self::$action),
+            'nonce' => wp_create_nonce(self::$nonce),
             'choose' => __('Выберите изображение постера', 'knife-theme'),
             'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
         ];
 
-        wp_localize_script('knife-select-links', 'knife_select_links', $options);
+        wp_localize_script('knife-select-metabox', 'knife_select_metabox', $options);
     }
 
 

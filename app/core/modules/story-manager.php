@@ -6,7 +6,7 @@
 *
 * @package knife-theme
 * @since 1.3
-* @version 1.5
+* @version 1.7
 */
 
 if (!defined('WPINC')) {
@@ -150,16 +150,16 @@ class Knife_Story_Manager {
         wp_enqueue_media();
 
         // Insert admin styles
-        wp_enqueue_style('knife-story-manager', $include . '/styles/story-manager.css', [], $version);
+        wp_enqueue_style('knife-story-metabox', $include . '/styles/story-metabox.css', [], $version);
 
         // Insert admin scripts
-        wp_enqueue_script('knife-story-manager', $include . '/scripts/story-manager.js', ['jquery', 'jquery-ui-sortable'], $version);
+        wp_enqueue_script('knife-story-metabox', $include . '/scripts/story-metabox.js', ['jquery', 'jquery-ui-sortable'], $version);
 
         $options = [
             'choose' => __('Выберите фоновое изображение', 'knife-theme')
         ];
 
-        wp_localize_script('knife-story-manager', 'knife_story_manager', $options);
+        wp_localize_script('knife-story-metabox', 'knife_story_metabox', $options);
     }
 
 
@@ -365,12 +365,14 @@ class Knife_Story_Manager {
                     $i++;
                 }
 
-                if($key === 'entry') {
-                    $meta[$i][$key] = wp_kses_post($value);
-                }
+                if(strlen($value) > 0) {
+                    if($key === 'entry') {
+                        $meta[$i][$key] = wp_kses_post($value);
+                    }
 
-                if($key === 'media') {
-                    $meta[$i][$key] = absint($value);
+                    if($key === 'media') {
+                        $meta[$i][$key] = absint($value);
+                    }
                 }
             }
         }
