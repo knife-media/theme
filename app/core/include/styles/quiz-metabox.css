@@ -43,6 +43,27 @@
   border: 1px solid #ddd;
   border-radius: 3px;
 }
+  #knife-quiz-box .item .dashicons-editor-expand {
+    position: absolute;
+    right: 8px;
+    top: 10px;
+    cursor: pointer;
+
+    font-size: 18px;
+    line-height: 1;
+    color: #777;
+  }
+
+  #knife-quiz-box .item .dashicons-trash {
+    position: absolute;
+    right: 8px;
+    bottom: 10px;
+    cursor: pointer;
+
+    font-size: 18px;
+    line-height: 1;
+    color: #a00;
+  }
 
 
 /**
@@ -67,15 +88,39 @@
   }
 
   #knife-quiz-box .question__field {
-    display: block;
+    display: none;
 
     width: 100%;
     height: 122px;
     min-height: 122px;
   }
 
+  #knife-quiz-box .question__shortcut {
+    display: block;
+
+    min-height: 15px;
+    margin: 0;
+    padding: 5px 0;
+  }
+
   #knife-quiz-box .question .mce-edit-area {
     padding: 2px 0 3px;
+  }
+
+  #knife-quiz-box .question .wp-editor-wrap {
+    display: none;
+  }
+
+  #knife-quiz-box .item--expand .item__question .wp-editor-wrap {
+    display: block;
+  }
+
+  #knife-quiz-box .item--expand .question__field {
+    display: block;
+  }
+
+  #knife-quiz-box .item--expand .question__shortcut {
+    display: none;
   }
 
 
@@ -83,11 +128,11 @@
  * Item answer
  */
 #knife-quiz-box .answer {
-  display: block;
+  display: none;
   position: relative;
 
   margin: 10px 0;
-  padding: 5px 30px 10px 10px;
+  padding: 5px 10px 10px;
   background-color: #e5e5e5;
 
   border: solid 1px #ccc;
@@ -173,26 +218,8 @@
     border: none;
   }
 
-  #knife-quiz-box .item__answer .dashicons-editor-expand {
-    position: absolute;
-    right: 5px;
-    top: 10px;
-    cursor: pointer;
-
-    font-size: 18px;
-    line-height: 1;
-    color: #777;
-  }
-
-  #knife-quiz-box .item__answer .dashicons-trash {
-    position: absolute;
-    right: 5px;
-    bottom: 10px;
-    cursor: pointer;
-
-    font-size: 18px;
-    line-height: 1;
-    color: #a00;
+  #knife-quiz-box .item--expand .item__answer {
+    display: block;
   }
 
 
@@ -200,7 +227,7 @@
  * Item manage
  */
 #knife-quiz-box .item__manage {
-  display: block;
+  display: none;
 
   width: 100%;
   margin: 10px 0;
@@ -211,5 +238,9 @@
 
   #knife-quiz-box .item:first-child .item__manage-move {
     display: none;
+  }
+
+  #knife-quiz-box .item--expand .item__manage {
+    display: block;
   }
 

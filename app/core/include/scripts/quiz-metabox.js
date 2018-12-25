@@ -37,6 +37,13 @@ jQuery(document).ready(function($) {
 
 
   /**
+   * Expand and collapse item
+   */
+  var toggleItem = function(el) {
+  }
+
+
+  /**
    * Init question wp editors
    */
   box.find('.question').each(function(i, el) {
@@ -69,4 +76,34 @@ jQuery(document).ready(function($) {
     return updateEditor($(this), 'answer--loaded', options);
   });
 
+
+  /**
+   * Collapse questions on load
+   */
+  box.on('click', '.item__toggle', function(e) {
+    e.preventDefault();
+
+    var item = $(this).closest('.item');
+
+    if(item.hasClass('item--expand') && typeof tinyMCE !== 'undefined') {
+      tinyMCE.triggerSave();
+
+      var field = item.find('.question__field');
+      var value = $(field.val()).text();
+
+      item.find('.question__shortcut').text(value);
+    }
+
+    return item.toggleClass('item--expand');
+  });
+
+
+  /**
+   * Add new question
+   */
+  box.on('click', '.actions__add', function(e) {
+    e.preventDefault();
+
+
+  });
 });

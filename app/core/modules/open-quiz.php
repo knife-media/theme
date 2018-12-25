@@ -147,10 +147,10 @@ class Knife_Open_Quiz {
         wp_enqueue_media();
 
         // Insert admin styles
-        wp_enqueue_style('knife-random-generator', $include . '/styles/open-quiz.css', [], $version);
+        wp_enqueue_style('knife-random-generator', $include . '/styles/quiz-metabox.css', [], $version);
 
         // Insert admin scripts
-        wp_enqueue_script('knife-random-generator', $include . '/scripts/open-quiz.js', ['jquery', 'jquery-ui-sortable'], $version);
+        wp_enqueue_script('knife-random-generator', $include . '/scripts/quiz-metabox.js', ['jquery', 'jquery-ui-sortable'], $version);
     }
 
 
