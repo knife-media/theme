@@ -34,7 +34,7 @@ class Knife_Yandex_Zen {
     /**
      * Content allowed tags
      */
-    private static $tags = ['<br>','<p>','<h2>','<h3>','<h4>','<h5>','<h6>','<ul>','<ol>','<li>','<img>','<figcaption>','<figure>','<b>','<strong>','<i>','<em>'];
+    private static $tags = ['<br>','<p>','<h2>','<h3>','<h4>','<h5>','<h6>','<ul>','<ol>','<li>','<img>','<figcaption>','<figure>','<b>','<strong>','<i>','<em>', '<mark>'];
 
     /**
      * Current post enclosure array
@@ -273,18 +273,6 @@ class Knife_Yandex_Zen {
 
 
     /**
-     * Add post thumbnail to enclosure list
-     */
-    public static function add_thumbnail() {
-        global $post;
-
-        if(empty(self::$enclosure) && has_post_thumbnail($post->ID)) {
-            self::$enclosure[] = get_the_post_thumbnail_url($post->ID, 'outer');
-        }
-    }
-
-
-    /**
      * Insert post categories
      */
     public static function insert_category() {
@@ -300,7 +288,11 @@ class Knife_Yandex_Zen {
      * @link https://yandex.ru/support/zen/publishers/rss-modify.html#publication
      */
     public static function insert_enclosure() {
-        self::add_thumbnail();
+        global $post;
+
+        if(empty(self::$enclosure) && has_post_thumbnail($post->ID)) {
+            self::$enclosure[] = get_the_post_thumbnail_url($post->ID, 'outer');
+        }
 
         foreach(self::$enclosure as $image) {
             printf('<enclosure url="%s" type="%s" />', esc_url($image), wp_check_filetype($image)['type']);

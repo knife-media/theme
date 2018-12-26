@@ -538,7 +538,10 @@ require get_template_directory() . '/core/modules/custom-background.php';
 require get_template_directory() . '/core/modules/mce-plugins.php';
 
 // Add custom Yandex.Zen feed template
-require get_template_directory() . '/core/modules/zen-feed.php';
+require get_template_directory() . '/core/modules/yandex-zen.php';
+
+// Add custom Yandex.Turbo feed template
+require get_template_directory() . '/core/modules/yandex-turbo.php';
 
 
 
