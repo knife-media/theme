@@ -11,40 +11,45 @@
             $options[$item] = get_post_meta($post_id, self::$meta . "-{$item}", true);
         }
 
-        if(count($stories) < 1) {
-            $stories[] = ['entry' => '', 'media' => ''];
-        }
+        // Upgrade with default vaules
+        array_unshift($stories, ['entry' => '', 'media' => '']);
 
         wp_nonce_field('metabox', self::$nonce);
     ?>
 
 
     <div class="box box--items">
-    <?php foreach($stories as $i => $story) : ?>
-        <div class="item">
-            <?php
-                if(!empty($story['media'])) {
-                    printf('<img class="item__image" src="%s" alt="">', wp_get_attachment_thumb_url($story['media']));
-                }
 
-                printf('<input class="item__media" type="hidden" name="%1$s" value="%2$s">',
-                    self::$meta . '-stories[][media]', $story['media'] ?? ''
-                );
+        <?php foreach($stories as $i => $story) : ?>
+            <div class="item <?php echo ($i === 0) ? 'item--hidden' : ''; ?>">
+                <?php
+                    if(!empty($story['media'])) {
+                        printf('<img class="item__image" src="%s" alt="">',
+                            wp_get_attachment_thumb_url($story['media'])
+                        );
+                    }
 
-                printf('<textarea class="item__entry" name="%1$s">%2$s</textarea>',
-                    self::$meta . '-stories[][entry]', $story['entry'] ?? ''
-                );
-            ?>
+                    printf('<input class="item__media" type="hidden" name="%1$s" value="%2$s">',
+                        self::$meta . '-stories[][media]',
+                        esc_attr($story['media'] ?? '')
+                    );
 
-            <div class="item__field">
-                <span class="item__field-drag"></span>
-                <span class="item__field-image" title="<?php _e('Добавить медиафайл', 'knife-theme'); ?>"></span>
-                <span class="item__field-clear" title="<?php _e('Удалить медиафайл', 'knife-theme'); ?>"></span>
+                    printf('<textarea class="item__entry" name="%1$s">%2$s</textarea>',
+                        self::$meta . '-stories[][entry]',
+                        esc_attr($story['entry'] ?? '')
+                    );
+                ?>
 
-                <span class="item__field-trash" title="<?php _e('Удалить слайд', 'knife-theme'); ?>"></span>
+                <div class="item__field">
+                    <span class="item__field-drag"></span>
+                    <span class="item__field-image" title="<?php _e('Добавить медиафайл', 'knife-theme'); ?>"></span>
+                    <span class="item__field-clear" title="<?php _e('Удалить медиафайл', 'knife-theme'); ?>"></span>
+
+                    <span class="item__field-trash" title="<?php _e('Удалить слайд', 'knife-theme'); ?>"></span>
+                </div>
             </div>
-        </div>
-    <?php endforeach; ?>
+        <?php endforeach; ?>
+
     </div>
 
     <div class="box box--actions">

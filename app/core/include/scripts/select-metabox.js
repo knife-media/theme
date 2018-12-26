@@ -6,11 +6,15 @@ jQuery(document).ready(function($) {
   var box = $("#knife-select-box");
 
 
-  // Link input field
+  /**
+   * Link input field
+   */
   var input = box.find('.manage__input');
 
 
-  // Sort items
+  /**
+   * Sort items
+   */
   box.find('.box--items').sortable({
     items: '.item',
     handle: '.dashicons-menu',
@@ -19,25 +23,30 @@ jQuery(document).ready(function($) {
   }).disableSelection();
 
 
-  // Show loader
-  var toggleLoader = function() {
+  /**
+   * Show loader
+   */
+  function toggleLoader() {
     box.find('.manage__button').toggleClass('disabled');
     box.find('.manage__spinner').toggleClass('is-active');
   }
 
 
-  // Add class for short time
-  var blinkClass = function(element, cl) {
+  /**
+   * Add class for short time
+   */
+  function blinkClass(element, cl) {
     element.addClass(cl).delay(600).queue(function(){
       element.removeClass(cl).dequeue();
     });
   }
 
 
-  // Append item
-  var appendItem = function(object) {
+  /**
+   * Append item
+   */
+  function appendItem(object) {
     var item = box.find('.item:first').clone();
-
     box.find('.item:first').after(item);
 
     if(object.hasOwnProperty('title')) {
@@ -56,11 +65,13 @@ jQuery(document).ready(function($) {
     item.find('.option__link').val(input.val());
     input.attr('value', '');
 
-    return item.removeClass('hidden');
+    return item.removeClass('item--hidden');
   }
 
 
-  // Add new item click
+  /**
+   * Add new item click
+   */
   box.on('click', '.manage__append', function(e) {
     e.preventDefault();
 
@@ -69,8 +80,8 @@ jQuery(document).ready(function($) {
     }
 
     var data = {
-      'action': box.data('action'),
-      'nonce': box.data('nonce'),
+      'action': knife_select_metabox.action,
+      'nonce': knife_select_metabox.nonce,
       'link': input.val()
     }
 
@@ -92,13 +103,15 @@ jQuery(document).ready(function($) {
   });
 
 
-  // Choose custom poster
+  /**
+   * Choose custom poster
+   */
   box.on('click', '.option--poster', function(e) {
     var poster = $(this);
 
     // Open default wp.media image frame
     var frame = wp.media({
-      title: knife_select_links.choose,
+      title: knife_select_metabox.choose,
       multiple: false
     });
 
@@ -135,17 +148,21 @@ jQuery(document).ready(function($) {
   });
 
 
-  // Prevent sending post form on input enter
-  box.on('keypress', '.option__input', function(e) {
+  /**
+   * Prevent sending post form on input enter
+   */
+  box.on('keypress', '.manage__input', function(e) {
     if(e.which == 13 || e.keyCode == 13) {
       e.preventDefault();
 
-      return box.find('.option__button--append').trigger('click');
+      return box.find('.manage__append').trigger('click');
     }
   });
 
 
-  // Remove item
+  /**
+   * Remove item
+   */
   box.on('click', '.item .dashicons-trash', function(e) {
     var item = $(this).closest('.item');
 

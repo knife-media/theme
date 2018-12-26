@@ -3,23 +3,27 @@ jQuery(document).ready(function($) {
     return false;
   }
 
-  if(typeof knife_random_generator === 'undefined') {
+  if(typeof knife_generator_metabox === 'undefined') {
     return false;
   }
 
   var box = $('#knife-generator-box');
 
 
-  // Add class for short time
-  var blinkClass = function(element, cl) {
+  /**
+   * Add class for short time
+   */
+  function blinkClass(element, cl) {
     element.addClass(cl).delay(500).queue(function(){
       element.removeClass(cl).dequeue();
     });
   }
 
 
-  // Show loader
-  var toggleLoader = function(item) {
+  /**
+   * Show loader
+   */
+  function toggleLoader(item) {
     var spinner = item.find('.option__relative-spinner');
 
     spinner.toggleClass('is-active')
@@ -32,12 +36,14 @@ jQuery(document).ready(function($) {
   }
 
 
-  // Generate poster using ajax
-  var createPoster = function(item) {
+  /**
+   * Generate poster using ajax
+   */
+  function createPoster(item) {
     var data = {
-      'action': knife_random_generator.action,
-      'nonce': knife_random_generator.nonce,
-      'post_id': knife_random_generator.post_id,
+      'action': knife_generator_metabox.action,
+      'nonce': knife_generator_metabox.nonce,
+      'post_id': knife_generator_metabox.post_id,
       'caption': item.find('.option__general-caption').val(),
       'attachment': item.find('.option__relative-attachment').val()
     }
@@ -60,7 +66,7 @@ jQuery(document).ready(function($) {
         return toggleLoader(item);
       }
 
-      item.find('.option__relative-message').html(knife_random_generator.error).show();
+      item.find('.option__relative-message').html(knife_generator_metabox.error).show();
 
       return toggleLoader(item);
     });
@@ -68,14 +74,16 @@ jQuery(document).ready(function($) {
     xhr.error(function() {
       toggleLoader(item);
 
-      item.find('.option__relative-message').html(knife_random_generator.error).show();
+      item.find('.option__relative-message').html(knife_generator_metabox.error).show();
     });
 
     return toggleLoader(item);
   }
 
 
-  // Add generator poster
+  /**
+   * Add generator poster
+   */
   box.on('click', '.option__relative-poster', function(e) {
     e.preventDefault();
 
@@ -83,7 +91,7 @@ jQuery(document).ready(function($) {
 
     // Open default wp.media image frame
     var frame = wp.media({
-      title: knife_random_generator.choose,
+      title: knife_generator_metabox.choose,
       multiple: false
     });
 
@@ -108,41 +116,36 @@ jQuery(document).ready(function($) {
   });
 
 
-  // Add new item
+  /**
+   * Add new item
+   */
   box.on('click', '.actions__add', function(e) {
     e.preventDefault();
 
-    var last = box.find('.item').last();
-    var copy = last.clone();
+    var item = box.find('.item:first').clone();
+    box.find('.item:last').after(item);
 
-    // Clear input values
-    copy.find('.option__general-caption').val('');
-    copy.find('.option__general-description').val('');
-
-    // Destroy image tag
-    copy.find('.option__relative-image').remove();
-    copy.find('.option__relative-media').val('');
-    copy.find('.option__relative-attachment').val('');
-
-    last.after(copy);
+    return item.removeClass('item--hidden');
   });
 
 
-  // Remove item
+  /**
+   * Remove item
+   */
   box.on('click', '.option .dashicons-trash', function(e) {
     e.preventDefault();
 
-    var item = $(this).closest('.item');
+    $(this).closest('.item').remove();
 
     if(box.find('.item').length === 1) {
       box.find('.actions__add').trigger('click');
     }
-
-    return item.remove();
   });
 
 
-  // Generate button click
+  /**
+   * Generate button click
+   */
   box.on('click', '.option__relative-generate', function(e) {
     e.preventDefault();
 
@@ -157,7 +160,9 @@ jQuery(document).ready(function($) {
   });
 
 
-  // Settings button click
+  /**
+   * Settings button click
+   */
   box.on('click', '.option__relative-settings', function(e) {
     e.preventDefault();
 
@@ -167,6 +172,16 @@ jQuery(document).ready(function($) {
   });
 
 
-  // Set text color input as colorpicker
+  /**
+   * Set text color input as colorpicker
+   */
   box.find('.manage__color input').wpColorPicker();
+
+
+  /**
+   * Show at least one item box on load
+   */
+  if(box.find('.item').length === 1) {
+    box.find('.actions__add').trigger('click');
+  }
 });

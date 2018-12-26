@@ -1,4 +1,4 @@
-<div id="knife-generator-box">
+<div id="knife-generator-box" class="hide-if-no-js">
     <?php
         $post_id = get_the_ID();
 
@@ -8,92 +8,92 @@
         // Generator items
         $items = get_post_meta($post_id, self::$meta_items);
 
-        // Add default values if empty items
-        if(count($items) < 1) {
-            array_push($items, ['caption' => '', 'description' => '']);
-        }
+        // Upgrade with default vaules
+        array_unshift($items, ['caption' => '', 'description' => '']);
 
         wp_nonce_field('metabox', self::$nonce);
     ?>
 
     <div class="box box--items">
-    <?php foreach($items as $i => $item) : ?>
-        <div class="item">
-            <div class="option option--general">
-                <div class="option__general">
-                    <strong><?php _e('Заголовок', 'knife-theme'); ?></strong>
 
-                    <p>
+        <?php foreach($items as $i => $item) : ?>
+            <div class="item <?php echo ($i === 0) ? 'item--hidden' : ''; ?>">
+                <div class="option option--general">
+                    <div class="option__general">
+                        <strong><?php _e('Заголовок', 'knife-theme'); ?></strong>
+
+                        <p>
+                            <?php
+                                printf('<input class="option__general-caption" type="text" name="%s[][caption]" value="%s">',
+                                    esc_attr(self::$meta_items),
+                                    esc_attr($item['caption'] ?? '')
+                                );
+                            ?>
+                        </p>
+                    </div>
+
+                    <div class="option__general">
+                        <strong><?php _e('Описание', 'knife-theme'); ?></strong>
+
+                        <p>
+                            <?php
+                                printf('<textarea class="option__general-description" name="%s[][description]">%s</textarea>',
+                                    esc_attr(self::$meta_items),
+                                    esc_attr($item['description'] ?? '')
+                                );
+                            ?>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="option option--relative">
+                    <div class="option__relative">
+                        <figure class="option__relative-poster">
+                            <?php if(!empty($item['poster'])) : ?>
+                                <img class="option__relative-image" src="<?php echo $item['poster']; ?>" alt="">
+                            <?php endif; ?>
+
+                            <figcaption class="option__relative-blank">
+                                <?php _e('Выбрать изображение для постера', 'knife-theme'); ?>
+                            </figcaption>
+
+                            <?php
+                                printf('<input class="option__relative-media" type="hidden" name="%s[][poster]" value="%s">',
+                                    esc_attr(self::$meta_items),
+                                    esc_attr($item['poster'] ?? '')
+                                );
+
+                                printf('<input class="option__relative-attachment" type="hidden" name="%s[][attachment]" value="%s">',
+                                    esc_attr(self::$meta_items),
+                                    esc_attr($item['attachment'] ?? '')
+                                );
+                            ?>
+                        </figure>
+
+                        <p class="option__relative-message">Ошибка генерации: No font file set!</p>
+
                         <?php
-                            printf('<input class="option__general-caption" type="text" name="%s[][caption]" value="%s">',
-                                esc_attr(self::$meta_items),
-                                esc_attr($item['caption'] ?? '')
+                            printf('<button class="option__relative-generate button" type="button">%s</button>',
+                                __('Сгенерировать', 'knife-theme')
+                            );
+
+                            printf('<button class="option__relative-settings button" disabled type="button">%s</button>',
+                                __('Настройки', 'knife-theme')
                             );
                         ?>
-                    </p>
+
+                        <span class="option__relative-spinner spinner"></span>
+                        <span class="dashicons dashicons-trash"></span>
+                    </div>
                 </div>
 
-                <div class="option__general">
-                    <strong><?php _e('Описание', 'knife-theme'); ?></strong>
-
-                    <p>
-                        <?php
-                            printf('<textarea class="option__general-description" name="%s[][description]">%s</textarea>',
-                                esc_attr(self::$meta_items),
-                                esc_attr($item['description'] ?? '')
-                            );
-                        ?>
-                    </p>
+                <div class="option option--advanced">
+                    <div class="option__layers">
+                    </div>
                 </div>
             </div>
-
-            <div class="option option--relative">
-                <div class="option__relative">
-                    <figure class="option__relative-poster">
-                        <?php if(!empty($item['poster'])) : ?>
-                            <img class="option__relative-image" src="<?php echo $item['poster']; ?>" alt="">
-                        <?php endif; ?>
-
-                        <figcaption class="option__relative-blank">
-                            <?php _e('Выбрать изображение для постера', 'knife-theme'); ?>
-                        </figcaption>
-
-                        <?php
-                            printf('<input class="option__relative-media" type="hidden" name="%s[][poster]" value="%s">',
-                                esc_attr(self::$meta_items),
-                                esc_attr($item['poster'] ?? '')
-                            );
-
-                            printf('<input class="option__relative-attachment" type="hidden" name="%s[][attachment]" value="%s">',
-                                esc_attr(self::$meta_items),
-                                esc_attr($item['attachment'] ?? '')
-                            );
-                        ?>
-                    </figure>
-
-                    <p class="option__relative-message">Ошибка генерации: No font file set!</p>
-
-                    <?php
-                        printf('<button class="option__relative-generate button" type="button">%s</button>',
-                            __('Сгенерировать', 'knife-theme')
-                        );
-
-                        printf('<button class="option__relative-settings button" disabled type="button">%s</button>',
-                            __('Настройки', 'knife-theme')
-                        );
-                    ?>
-
-                    <span class="option__relative-spinner spinner"></span>
-                    <span class="dashicons dashicons-trash"></span>
-                </div>
-            </div>
-
-            <div class="option option--advanced">
-                <div class="option__layers">
-                </div>
-            </div>
-        </div>
         <?php endforeach; ?>
+
     </div>
 
     <div class="box box--actions">

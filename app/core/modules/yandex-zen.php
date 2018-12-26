@@ -6,7 +6,7 @@
 *
 * @package knife-theme
 * @since 1.2
-* @version 1.6
+* @version 1.7
 */
 
 
@@ -34,7 +34,7 @@ class Knife_Yandex_Zen {
     /**
      * Content allowed tags
      */
-    private static $tags = ['<br>','<p>','<h2>','<h3>','<h4>','<h5>','<h6>','<ul>','<ol>','<li>','<img>','<figcaption>','<figure>','<b>','<strong>','<i>','<em>'];
+    private static $tags = ['<br>','<p>','<h2>','<h3>','<h4>','<h5>','<h6>','<ul>','<ol>','<li>','<img>','<figcaption>','<figure>','<b>','<strong>','<i>','<em>', '<mark>'];
 
     /**
      * Current post enclosure array
@@ -88,8 +88,8 @@ class Knife_Yandex_Zen {
         $version = wp_get_theme()->get('Version');
         $include = get_template_directory_uri() . '/core/include';
 
-        // insert admin scripts
-        wp_enqueue_script('knife-zen-feed', $include . '/scripts/zen-feed.js', ['jquery'], $version);
+        // Insert admin scripts
+        wp_enqueue_script('knife-zen-metabox', $include . '/scripts/zen-metabox.js', ['jquery'], $version);
     }
 
 
@@ -99,11 +99,7 @@ class Knife_Yandex_Zen {
      * @since 1.6
      */
     public static function add_metabox() {
-        add_meta_box('knife-zen-metabox',
-            __('Яндекс.Дзен', 'knife-theme'),
-            [__CLASS__, 'display_metabox'],
-            ['post'], 'side', 'default'
-        );
+        add_meta_box('knife-zen-metabox', __('Яндекс.Дзен', 'knife-theme'), [__CLASS__, 'display_metabox'], ['post'], 'side', 'default');
     }
 
 
@@ -277,18 +273,6 @@ class Knife_Yandex_Zen {
 
 
     /**
-     * Add post thumbnail to enclosure list
-     */
-    public static function add_thumbnail() {
-        global $post;
-
-        if(empty(self::$enclosure) && has_post_thumbnail($post->ID)) {
-            self::$enclosure[] = get_the_post_thumbnail_url($post->ID, 'outer');
-        }
-    }
-
-
-    /**
      * Insert post categories
      */
     public static function insert_category() {
@@ -304,7 +288,11 @@ class Knife_Yandex_Zen {
      * @link https://yandex.ru/support/zen/publishers/rss-modify.html#publication
      */
     public static function insert_enclosure() {
-        self::add_thumbnail();
+        global $post;
+
+        if(empty(self::$enclosure) && has_post_thumbnail($post->ID)) {
+            self::$enclosure[] = get_the_post_thumbnail_url($post->ID, 'outer');
+        }
 
         foreach(self::$enclosure as $image) {
             printf('<enclosure url="%s" type="%s" />', esc_url($image), wp_check_filetype($image)['type']);

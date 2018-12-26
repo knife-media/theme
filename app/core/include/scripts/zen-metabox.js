@@ -1,6 +1,9 @@
 jQuery(document).ready(function($) {
   var box = $("#knife-zen-box");
 
+  /**
+   * Set current time
+   */
   box.on('click', 'a', function(e) {
     e.preventDefault();
 

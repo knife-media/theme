@@ -1,5 +1,7 @@
 (function($) {
-  // Widget colorpicker
+  /**
+   * Widget colorpicker
+   */
   $(document).ready(function() {
     var initColorPicker = function(widget) {
       widget.find('.color-picker').wpColorPicker({
@@ -23,7 +25,9 @@
   });
 
 
-  // Widget cover image
+  /**
+   * Widget cover image
+   */
   $(document).on('click', '.knife-widget-image', function(e) {
     e.preventDefault();
 
@@ -31,7 +35,7 @@
     var block = widget.find('.knife-widget-image').parent();
 
     var frame = wp.media({
-      title: knife_widget_handler.choose,
+      title: knife_widget_screen.choose,
       multiple: false
     });
 
@@ -61,14 +65,16 @@
   });
 
 
-  // Widget taxonomy handler
+  /**
+   * Widget taxonomy handler
+   */
   $(document).on('change', '.knife-widget-taxonomy', function() {
     var list = $(this).closest('.widget-content').find('.knife-widget-termlist');
 
     var data = {
-      action: 'knife_widget_terms',
-      filter: jQuery(this).val(),
-      nonce: knife_widget_handler.nonce
+      action: knife_widget_screen.action,
+      nonce: knife_widget_screen.nonce,
+      filter: jQuery(this).val()
     }
 
     $.post(ajaxurl, data, function(response) {

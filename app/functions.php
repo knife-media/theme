@@ -516,9 +516,6 @@ require get_template_directory() . '/core/modules/primary-tag.php';
 // Insert lead metabox to admin post screen
 require get_template_directory() . '/core/modules/post-lead.php';
 
-// Send push notifications service
-require get_template_directory() . '/core/modules/push-service.php';
-
 // Custom search engine settings
 require get_template_directory() . '/core/modules/google-search.php';
 
@@ -544,7 +541,10 @@ require get_template_directory() . '/core/modules/custom-background.php';
 require get_template_directory() . '/core/modules/mce-plugins.php';
 
 // Add custom Yandex.Zen feed template
-require get_template_directory() . '/core/modules/zen-feed.php';
+require get_template_directory() . '/core/modules/yandex-zen.php';
+
+// Add custom Yandex.Turbo feed template
+require get_template_directory() . '/core/modules/yandex-turbo.php';
 
 
 

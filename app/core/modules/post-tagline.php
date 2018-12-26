@@ -6,7 +6,7 @@
 *
 * @package knife-theme
 * @since 1.2
-* @version 1.5
+* @version 1.7
 */
 
 
@@ -83,7 +83,7 @@ class Knife_Post_Tagline {
         $include = get_template_directory_uri() . '/core/include';
 
         // insert admin styles
-        wp_enqueue_style('knife-post-tagline', $include . '/styles/post-tagline.css', [], $version);
+        wp_enqueue_style('knife-tagline-input', $include . '/styles/tagline-input.css', [], $version);
     }
 
 

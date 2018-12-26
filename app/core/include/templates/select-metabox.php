@@ -1,4 +1,4 @@
-<div id="knife-select-box" data-action="<?php echo esc_attr(self::$action); ?>" data-nonce="<?php echo wp_create_nonce(self::$nonce); ?>">
+<div id="knife-select-box" class="hide-if-no-js">
     <?php
         $items = get_post_meta(get_the_ID(), self::$meta_items);
 
@@ -26,8 +26,9 @@
     </div>
 
     <div class="box box--items">
+
         <?php foreach($items as $i => $item) : ?>
-            <div class="item <?php echo ($i === 0) ? 'hidden' : ''; ?>">
+            <div class="item <?php echo ($i === 0) ? 'item--hidden' : ''; ?>">
                 <div class="option">
                     <strong><?php _e('Ссылка с карточки', 'knife-theme') ?></strong>
 
@@ -71,5 +72,6 @@
                 <span class="dashicons dashicons-trash"></span>
             </div>
         <?php endforeach; ?>
+
     </div>
 </div>

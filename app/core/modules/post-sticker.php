@@ -6,7 +6,7 @@
 *
 * @package knife-theme
 * @since 1.2
-* @version 1.4
+* @version 1.7
 */
 
 
@@ -59,16 +59,16 @@ class Knife_Post_Sticker {
         $include = get_template_directory_uri() . '/core/include';
 
         // insert admin styles
-        wp_enqueue_style('knife-post-sticker', $include . '/styles/post-sticker.css', [], $version);
+        wp_enqueue_style('knife-sticker-metabox', $include . '/styles/sticker-metabox.css', [], $version);
 
         // insert admin scripts
-        wp_enqueue_script('knife-post-sticker', $include . '/scripts/post-sticker.js', ['jquery'], $version);
+        wp_enqueue_script('knife-sticker-metabox', $include . '/scripts/sticker-metabox.js', ['jquery'], $version);
 
         $options = [
             'choose' => __('Выберите изображение для стикера', 'knife-theme')
         ];
 
-        wp_localize_script('knife-post-sticker', 'knife_post_sticker', $options);
+        wp_localize_script('knife-sticker-metabox', 'knife_sticker_metabox', $options);
     }
 
 
@@ -112,8 +112,9 @@ class Knife_Post_Sticker {
         $image->resize(150, 150, true);
         $image->save($file['dir'], 'image/png');
 
-        if(is_wp_error($image))
+        if(is_wp_error($image)) {
             wp_send_json_error($image->get_error_message());
+        }
 
         $meta = update_post_meta($post_id, self::$meta, $file['url']);
 
