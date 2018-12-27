@@ -6,7 +6,7 @@
 *
 * @package knife-theme
 * @since 1.2
-* @version 1.5
+* @version 1.7
 */
 
 if (!defined('WPINC')) {
@@ -27,8 +27,6 @@ class Knife_Embed_Filters {
 
         // Instagram update
         add_filter('oembed_providers', [__CLASS__, 'hide_instagram_caption']);
-        add_filter('embed_oembed_html', [__CLASS__, 'move_instagram_script'], 10, 4);
-        add_filter('script_loader_tag', [__CLASS__, 'update_instagram_loader'], 10, 3);
 
         // YouTube preloader
         add_filter('pre_oembed_result', [__CLASS__, 'update_youtube_embed'], 10, 2);
@@ -37,7 +35,7 @@ class Knife_Embed_Filters {
         add_filter('pre_oembed_result', [__CLASS__, 'update_vimeo_embed'], 10, 2);
 
         // Replace custom video preloaders in feeds
-        add_filter('the_content_feed', [__CLASS__, 'replace_embeds'], 9);
+        add_filter('the_content_feed', [__CLASS__, 'replace_embeds'], 5);
     }
 
 
@@ -62,7 +60,9 @@ class Knife_Embed_Filters {
      * @since 1.5
      */
     public static function append_markup($html, $url, $attr) {
-        $html = '<figure class="figure figure--embed">' . $html . '</figure>';
+        if(!is_feed()) {
+            $html = '<figure class="figure figure--embed">' . $html . '</figure>';
+        }
 
         return $html;
     }
@@ -75,34 +75,6 @@ class Knife_Embed_Filters {
         $providers['#https?://(www\.)?instagr(\.am|am\.com)/p/.*#i'] = array('https://api.instagram.com/oembed?hidecaption=true', true);
 
         return $providers;
-    }
-
-
-    /**
-     * Remove multiple js script from embeds and insert single with enqueue
-     *
-     * @since 1.5
-     */
-    public static function move_instagram_script($cache, $url, $attr, $post_id) {
-        if(preg_match('#https?://(www\.)?instagr(\.am|am\.com)/p/.*#i', $url)) {
-            wp_enqueue_script('instagram-embed', 'https://www.instagram.com/embed.js', [], null, true);
-
-            $cache = str_replace('<script async src="//www.instagram.com/embed.js"></script>', '', $cache);
-        }
-
-        return $cache;
-    }
-
-
-    /**
-     * Add async and defer atts to instagram loader tag
-     */
-    public static function update_instagram_loader($tag, $handle, $src) {
-        if($handle === 'instagram-embed') {
-            $tag = str_replace('<script', '<script async ', $tag);
-        }
-
-        return $tag;
     }
 
 
@@ -203,7 +175,7 @@ class Knife_Embed_Filters {
      */
     public static function replace_embeds($content) {
         $content = preg_replace(
-            '~<figure.*?>\s*<div.+?data-embed="(.+?)".+?</figure>~si',
+            '~<div class="embed\s.+?"\s+data-embed="([^"]+)".+?</div>~is',
             '<iframe src="$1" frameborder="0"></iframe>',
             $content
         );
