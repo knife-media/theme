@@ -74,8 +74,7 @@ class Knife_Post_Lead {
 
         wp_editor($lead, 'knife-lead-editor', [
             'media_buttons' => false,
-            'textarea_name' =>
-            self::$meta,
+            'textarea_name' => self::$meta,
             'teeny' => true,
             'tinymce' => true,
             'tinymce' => [

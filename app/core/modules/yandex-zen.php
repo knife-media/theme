@@ -159,8 +159,8 @@ class Knife_Yandex_Zen {
             // Remove post content unwanted tags
             add_filter('the_content_feed', [__CLASS__, 'clear_content'], 10);
 
-            // Add excerpt except news
-            add_filter('the_content_feed', [__CLASS__, 'prepend_excerpt'], 12);
+            // Prepend lead if exists
+            add_filter('the_content_feed', [__CLASS__, 'prepend_lead'], 12);
 
             // Upgrade post author with coauthors plugin
             add_filter('the_author', [__CLASS__, 'upgrade_author']);
@@ -258,9 +258,13 @@ class Knife_Yandex_Zen {
      *
      * @since 1.6
      */
-    public static function prepend_excerpt($content) {
-        if(!in_category('news') && has_excerpt()) {
-            $content = apply_filters('the_excerpt', get_the_excerpt()) . $content;
+    public static function prepend_lead($content) {
+        if(method_exists('Knife_Post_Lead', 'get_lead')) {
+            $post_lead = Knife_Post_Lead::get_lead();
+
+            if(strlen($post_lead) > 0) {
+                $content = $post_lead . $content;
+            }
         }
 
         return $content;
