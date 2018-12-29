@@ -86,8 +86,12 @@ class Knife_Yandex_Turbo {
      */
     public static function clear_content($content) {
         // Remove tabs and break lines
-        $content = preg_replace('/[\r\n]+/', "\n", $content);
-        $content = preg_replace('/[\t]+/', '', $content);
+        $content = preg_replace('~[\r\n]+~', "\n", $content);
+        $content = preg_replace('~[\t]+~', '', $content);
+        $content = preg_replace('~\s+~', ' ', $content);
+
+        // Remove invalid Char value 3
+        $content = preg_replace('~[\x{0003}]+~', ' ', $content);
 
         $content = force_balance_tags($content);
 

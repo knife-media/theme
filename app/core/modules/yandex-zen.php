@@ -169,8 +169,11 @@ class Knife_Yandex_Zen {
             add_action('rss2_item', [__CLASS__, 'insert_category']);
             add_action('rss2_item', [__CLASS__, 'insert_enclosure']);
 
-            // update rss2 head with atom link
+            // Update rss2 head with atom link
             add_action('rss2_head', [__CLASS__, 'update_head']);
+
+            // Remove unused images attributes
+            add_filter('wp_get_attachment_image_attributes', [__CLASS__, 'image_attributes'], 10, 3);
         }
     }
 
@@ -185,18 +188,25 @@ class Knife_Yandex_Zen {
 
     /**
      * Init template feed using custom query
-     *
-     * @version 1.6
      */
     public static function add_feed() {
         global $post, $wpdb;
+
+        $paged = intval(get_query_var('paged', 1));
+
+        if($paged < 1) {
+            $paged = 1;
+        }
+
+        $limit = 50;
+        $offset = $limit * ($paged - 1);
 
         $query = "SELECT SQL_CALC_FOUND_ROWS p.*, IFNULL(m2.meta_value, p.post_date_gmt) as zen_date
             FROM {$wpdb->posts} p
             LEFT JOIN {$wpdb->postmeta} m1 ON (p.ID = m1.post_id AND m1.meta_key = '" . self::$meta_exclude . "')
             LEFT JOIN {$wpdb->postmeta} m2 ON (p.ID = m2.post_id AND m2.meta_key = '" . self::$meta_publish . "')
             WHERE p.post_type = 'post' AND p.post_status = 'publish' AND m1.post_id IS NULL
-            GROUP BY p.ID ORDER BY zen_date DESC LIMIT 0, 50";
+            GROUP BY p.ID ORDER BY zen_date DESC LIMIT {$offset}, {$limit}";
 
         $posts = $wpdb->get_results($query, OBJECT);
 
@@ -218,11 +228,28 @@ class Knife_Yandex_Zen {
     public static function clear_content($content) {
         $content = self::add_images($content);
 
-        $content = self::strip_tags($content, self::$tags);
-        $content = self::clear_xml($content);
+        // Remove unavailible tags
+        $content = preg_replace('#<(script|style)[^>]*?>.*?</\\1>#si', '', $content);
+        $content = strip_tags($content, implode(',', self::$tags));
 
+        // Remove tabs and break lines
+        $content = preg_replace('~[\r\n]+~', "\n", $content);
+        $content = preg_replace('~[ \t]+~', ' ', $content);
+        $content = preg_replace('~\s+~', ' ', $content);
 
-        return $content;
+        // Remove all embeds
+        $content = preg_replace('~<figure\s+?class="figure\s+?figure--embed">.+?</figure>~si', '', $content);
+
+        // Remove invalid Char value 3
+        $content = preg_replace('~[\x{0003}]+~', ' ', $content);
+
+        // Remove style and class attributes
+        $content = preg_replace('~\s+?style="[^"]+"~', '', $content);
+        $content = preg_replace('~\s+?class="[^"]+"~', '', $content);
+
+        $content = force_balance_tags($content);
+
+        return trim($content);
     }
 
 
@@ -301,41 +328,17 @@ class Knife_Yandex_Zen {
 
 
     /**
-     * Strip tags, scripts and styles
+     * Remove unused image attributes
+     *
+     * @since 1.7
      */
-    private static function strip_tags($string, $allowable_tags = null) {
-        $string = preg_replace('#<(script|style)[^>]*?>.*?</\\1>#si', '', $string);
-        $string = strip_tags($string, implode(',', $allowable_tags));
+    public static function image_attributes($attr, $attachment, $size) {
+        unset($attr['srcset']);
+        unset($attr['sizes']);
 
-        return $string;
+        return $attr;
     }
 
-
-    /**
-     * Remove unwanted content
-     */
-    private static function clear_xml($string) {
-        $string = preg_replace('/[\r\n]+/', "\n", $string);
-        $string = preg_replace('/[ \t]+/', ' ', $string);
-
-        $string = preg_replace('~<figure\s+?class="figure\s+?figure--embed">.+?</figure>~si', '', $string);
-
-        $string = preg_replace('/ style="[^"]+"/', '', $string);
-        $string = preg_replace('/ srcset="[^"]+"/', '', $string);
-        $string = preg_replace('/ sizes="[^"]+"/', '', $string);
-        $string = preg_replace('/ class="[^"]+"/', '', $string);
-        $string = preg_replace('/\s+/', ' ', $string);
-        $string = preg_replace('/<[^\/>]*><\/[^>]*>/', '', $string);
-
-        $string = str_replace('&hellip;', '...', $string);
-        $string = str_replace('&nbsp;', ' ', $string);
-        $string = str_replace('> <', '><', $string);
-        $string = str_replace(PHP_EOL, '', $string);
-
-        $string = force_balance_tags($string);
-
-        return trim($string);
-    }
 }
 
 
