@@ -195,6 +195,12 @@ add_action('wp_enqueue_scripts', function() {
 }, 11);
 
 
+// We don't use gutenberg for now so it would be better to remove useless styles
+add_action('wp_print_styles', function() {
+    wp_dequeue_style('wp-block-library');
+}, 11);
+
+
 // Remove site icon controls from admin customizer
 add_action('customize_register', function($wp_customize) {
      $wp_customize->remove_control('site_icon');
