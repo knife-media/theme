@@ -22,12 +22,6 @@ class Knife_Yandex_Turbo {
 
 
     /**
-     * Content allowed tags
-     */
-    private static $tags = ['<br>','<p>', '<h1>','<h2>','<h3>','<h4>','<h5>','<h6>','<ul>','<ol>','<li>','<img>', 'iframe', '<figcaption>','<figure>','<b>','<strong>','<i>','<em>', '<mark>', '<sup>', '<sub>'];
-
-
-    /**
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public static function load_module() {
@@ -91,17 +85,13 @@ class Knife_Yandex_Turbo {
      * Upgrade content tag
      */
     public static function clear_content($content) {
-        $content = strip_tags($content, implode(',', self::$tags));
+        // Remove tabs and break lines
+        $content = preg_replace('~[\r\n]+~', "\n", $content);
+        $content = preg_replace('~[\t]+~', '', $content);
+        $content = preg_replace('~\s+~', ' ', $content);
 
-        // Remove script and styles insertions
-        $cotnent = preg_replace('~<(script|style)[^>]*?>.*?</\\1>~si', '', $content);
-
-        // Remove all class attributes
-        $content = preg_replace('~\s+class="[^"]+"~is', '', $content);
-
-        // Remove tabs and brak lines
-        $content = preg_replace('/[\r\n]+/', "\n", $content);
-        $content = preg_replace('/[\t]+/', '', $content);
+        // Remove invalid Char value 3
+        $content = preg_replace('~[\x{0003}]+~', ' ', $content);
 
         $content = force_balance_tags($content);
 
