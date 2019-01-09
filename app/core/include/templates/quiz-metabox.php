@@ -8,9 +8,8 @@
         // Quiz items
         $items = get_post_meta($post_id, self::$meta_items);
 
-        if(count($items) < 1) {
-            array_push($items, ['caption' => '', 'description' => '']);
-        }
+        // Upgrade with default vaules
+        array_unshift($items, ['question' => '']);
 
         wp_nonce_field('metabox', self::$nonce);
     ?>
@@ -20,65 +19,54 @@
     </div>
 
     <div class="box box--items">
+
         <?php foreach($items as $i => $item) : ?>
-            <div class="item <?php echo ($i === 0) ? 'hidden' : ''; ?>">
-                <div class="item__question question">
-                    <?php
-                        printf('<p class="question__title">%s<span>1</span></p>',
-                            __('Вопрос #', 'knife-theme')
-                        );
+            <div class="item">
+                <?php
+                    printf('<p class="item__title">%s<span>%d</span></p>',
+                        __('Вопрос #', 'knife-theme'),
+                        absint($i)
+                    );
 
-                        printf('<textarea class="question__field wp-editor-area" name="%s[][question]">%s</textarea>',
-                            esc_attr(self::$meta_items),
-                            esc_attr($item['question'] ?? '')
-                        );
+                    printf('<p class="item__question"><textarea class="wp-editor-area" name="%2$s[%1$d][question]">%3$s</textarea></p>',
+                        absint($i),
+                        esc_attr(self::$meta_items),
+                        esc_attr($item['question'] ?? '')
+                    );
 
-                        printf('<p class="question__shortcut">%s</p>',
-                            wp_strip_all_tags($item['question'] ?? '', true)
-                        );
-                    ?>
-                </div>
+                    $answers = $item['answers'] ?? [];
 
-                <div class="item__answer answer">
-                    <div class="answer__choice">
+                    // Upgrade with default values
+                    array_unshift($answers, array_fill_keys(['choice', 'image', 'message'], ''));
+                ?>
+
+                <?php foreach($answers as $j => $answer) : ?>
+                    <div class="item__answer answer">
                         <?php
-                            printf('<p class="answer__choice-title">%s</p>',
-                                __('Вариант ответа', 'knife-theme')
+                            printf(
+                                '<div class="answer__choice"><label>%2$s</label><textarea class="wp-editor-area" name="%3$s">%1$s</textarea></div>',
+                                esc_attr($answer['choice'] ?? ''),
+                                __('Вариант ответа', 'knife-theme'),
+
+                                sprintf('%s[%d][answers][][choice]',
+                                    self::$meta_items,
+                                    absint($i)
+                                )
                             );
 
-                            printf('<textarea class="answer__choice-field wp-editor-area" name="%s[][choice]">%s</textarea>',
-                                esc_attr(self::$meta_items),
-                                esc_attr($item['choice'] ?? '')
+                            printf(
+                                '<div class="answer__message"><label>%2$s</label><textarea class="wp-editor-area" name="%3$s">%1$s</textarea></div>',
+                                esc_attr($answer['message'] ?? ''),
+                                __('Текст после ответа', 'knife-theme'),
+
+                                sprintf('%s[%d][answers][][message]',
+                                    self::$meta_items,
+                                    absint($i)
+                                )
                             );
                         ?>
                     </div>
-
-                    <div class="answer__message">
-                        <?php
-                            printf('<p class="answer__message-title">%s</p>',
-                                __('Текст после ответа', 'knife-theme')
-                            );
-
-                            printf('<textarea class="answer__message-field wp-editor-area" name="%s[][message]">%s</textarea>',
-                                esc_attr(self::$meta_items),
-                                esc_attr($item['message'] ?? '')
-                            );
-                        ?>
-                    </div>
-
-                    <div class="answer__options">
-                        <?php
-                            printf('<p class="answer__options-title">%s</p>',
-                                __('Настройки ответа', 'knife-theme')
-                            );
-
-                            printf('<input class="answer__options-points" name="%s[][points]" value="%s">',
-                                esc_attr(self::$meta_items),
-                                esc_attr($item['points'] ?? '')
-                            );
-                        ?>
-                    </div>
-                </div>
+                <?php endforeach; ?>
 
                 <div class="item__manage">
                     <?php
@@ -86,8 +74,9 @@
                             __('Добавить ответ', 'knife-theme')
                         );
 
-                        printf('<button class="item__manage-move button" type="button">%s</button>',
-                            __('Поднять выше', 'knife-theme')
+                        printf('<button class="item__manage-toggle button" type="button" data-toggle="%s">%s</button>',
+                            __('Свернуть ответы', 'knife-theme'),
+                            __('Развернуть ответы', 'knife-theme')
                         );
 
                         printf('<button class="item__manage-manage button" type="button" disabled>%s</button>',
@@ -96,10 +85,11 @@
                     ?>
                 </div>
 
-                <span class="item__remove dashicons dashicons-trash"></span>
-                <span class="item__toggle dashicons dashicons-editor-expand"></span>
+                <span class="dashicons dashicons-trash" title="<?php _e('Удалить вопрос', 'knife-theme'); ?>"></span>
+                <span class="dashicons dashicons-arrow-up-alt" title="<?php _e('Поднять выше', 'knife-theme'); ?>"></span>
             </div>
         <?php endforeach; ?>
+
     </div>
 
     <div class="box box--actions">

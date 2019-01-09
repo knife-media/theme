@@ -188,11 +188,45 @@ class Knife_Open_Quiz {
             return;
         }
 
-        update_post_meta($post_id, self::$meta_options, $_REQUEST[self::$meta_options]);
 
+        // Update options
+        if(isset($_REQUEST[self::$meta_options])) {
+            update_post_meta($post_id, self::$meta_options, $_REQUEST[self::$meta_options]);
+        }
 
         // Update items meta
         self::update_items(self::$meta_items, $post_id);
+    }
+
+
+    /**
+     * Update quiz items meta from post-metabox
+     */
+    private static function update_items($query, $post_id, $meta = [], $i = 0) {
+//        print_r($_REQUEST[$query]);
+//        die;
+        if(empty($_REQUEST[$query])) {
+            return;
+        }
+
+        // Delete quiz post meta to create it again below
+        delete_post_meta($post_id, $query);
+
+        foreach($_REQUEST[$query] as $item) {
+            foreach($item as $key => $value) {
+                if(isset($meta[$i]) && array_key_exists($key, $meta[$i])) {
+                    $i++;
+                }
+
+                if(strlen($value) > 0) {
+                    $meta[$i][$key] = wp_kses_post($value);
+                }
+            }
+        }
+
+        foreach($meta as $item) {
+            add_post_meta($post_id, $query, $item);
+        }
     }
 }
 

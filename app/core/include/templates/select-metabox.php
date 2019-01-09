@@ -28,7 +28,7 @@
     <div class="box box--items">
 
         <?php foreach($items as $i => $item) : ?>
-            <div class="item <?php echo ($i === 0) ? 'item--hidden' : ''; ?>">
+            <div class="item<?php echo ($i === 0) ? ' item--hidden' : ''; ?>">
                 <div class="option">
                     <strong><?php _e('Ссылка с карточки', 'knife-theme') ?></strong>
 

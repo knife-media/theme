@@ -361,8 +361,11 @@ class Knife_Random_Generator {
             return;
         }
 
-        update_post_meta($post_id, self::$meta_options, $_REQUEST[self::$meta_options]);
 
+        // Update options
+        if(isset($_REQUEST[self::$meta_options])) {
+            update_post_meta($post_id, self::$meta_options, $_REQUEST[self::$meta_options]);
+        }
 
         // Update items meta
         self::update_items(self::$meta_items, $post_id);

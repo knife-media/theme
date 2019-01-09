@@ -17,7 +17,7 @@
     <div class="box box--items">
 
         <?php foreach($items as $i => $item) : ?>
-            <div class="item <?php echo ($i === 0) ? 'item--hidden' : ''; ?>">
+            <div class="item<?php echo ($i === 0) ? ' item--hidden' : ''; ?>">
                 <div class="option option--general">
                     <div class="option__general">
                         <strong><?php _e('Заголовок', 'knife-theme'); ?></strong>

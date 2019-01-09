@@ -21,7 +21,7 @@
     <div class="box box--items">
 
         <?php foreach($stories as $i => $story) : ?>
-            <div class="item <?php echo ($i === 0) ? 'item--hidden' : ''; ?>">
+            <div class="item<?php echo ($i === 0) ? ' item--hidden' : ''; ?>">
                 <?php
                     if(!empty($story['media'])) {
                         printf('<img class="item__image" src="%s" alt="">',
