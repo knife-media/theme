@@ -259,7 +259,7 @@ class Knife_Extra_Feeds {
      */
     private static function remove_tags($content) {
         $allowed_tags = [
-            '<br>','<p>','<h2>','<h3>','<h4>','<h5>','<h6>','<ul>','<a>','<ol>','<li>','<img>','<figcaption>','<figure>','<b>','<strong>','<i>','<em>','<mark>'
+            '<br>','<p>','<h2>','<h3>','<h4>','<h5>','<h6>','<ul>','<a>','<ol>','<li>','<img>','<blockquote>','<figcaption>','<figure>','<b>','<strong>','<i>','<em>','<mark>'
         ];
 
         // Remove unwanted tags
