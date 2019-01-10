@@ -1,12 +1,14 @@
 <?php
 /**
-* Yandex.Zen feed template
+* Extra feeds
 *
-* Add custom Yandex.Zen feed template
+* Add custom feeds templates
 *
 * @package knife-theme
 * @since 1.2
 * @version 1.7
+* @link https://yandex.ru/support/news/feed.html
+* @link https://yandex.ru/support/zen/website/rss-modify.html
 */
 
 
@@ -14,32 +16,24 @@ if (!defined('WPINC')) {
     die;
 }
 
-class Knife_Yandex_Zen {
+class Knife_Extra_Feeds {
+    /**
+     * Exclude post from Yandex.Zen meta
+     */
+    private static $zen_exclude = '_knife-zen-exclude';
+
 
     /**
-     * Exclude from feed post meta
+     * Republish Yandex.Zen meta
      */
-    private static $meta_exclude = '_knife-zen-exclude';
+    private static $zen_publish = '_knife-zen-publish';
 
-    /**
-     * Republish post meta
-     */
-    private static $meta_publish = '_knife-zen-publish';
-
-    /**
-     * Feed slug and template name
-     */
-    private static $slug = 'zen';
-
-    /**
-     * Content allowed tags
-     */
-    private static $tags = ['<br>','<p>','<h2>','<h3>','<h4>','<h5>','<h6>','<ul>','<ol>','<li>','<img>','<figcaption>','<figure>','<b>','<strong>','<i>','<em>', '<mark>'];
 
     /**
      * Current post enclosure array
      */
     private static $enclosure = null;
+
 
     /**
      * Checkbox save nonce
@@ -48,7 +42,7 @@ class Knife_Yandex_Zen {
      * @access  private static
      * @var     string
      */
-    private static $nonce = 'knife-zen-nonce';
+    private static $nonce = 'knife-feed-nonce';
 
 
     /**
@@ -57,10 +51,16 @@ class Knife_Yandex_Zen {
      * @since 1.4
      */
     public static function load_module() {
+        // Init custom feeds
         add_action('init', [__CLASS__, 'init_feeds']);
-        add_action('wp', [__CLASS__, 'add_hooks']);
 
-        // Update zen feed meta on save post
+        // Upgrade custom feeds with hooks
+        add_action('wp', [__CLASS__, 'upgrade_feeds']);
+
+        // Alter feed main query loop
+        add_action('pre_get_posts', [__CLASS__, 'update_query']);
+
+        // Update feed meta on save post
         add_action('save_post', [__CLASS__, 'save_meta']);
 
         // Post metabox
@@ -89,7 +89,7 @@ class Knife_Yandex_Zen {
         $include = get_template_directory_uri() . '/core/include';
 
         // Insert admin scripts
-        wp_enqueue_script('knife-zen-metabox', $include . '/scripts/zen-metabox.js', ['jquery'], $version);
+        wp_enqueue_script('knife-feed-metabox', $include . '/scripts/feed-metabox.js', ['jquery'], $version);
     }
 
 
@@ -99,19 +99,19 @@ class Knife_Yandex_Zen {
      * @since 1.6
      */
     public static function add_metabox() {
-        add_meta_box('knife-zen-metabox', __('Яндекс.Дзен', 'knife-theme'), [__CLASS__, 'display_metabox'], ['post'], 'side', 'default');
+        add_meta_box('knife-feed-metabox', __('Яндекс RSS', 'knife-theme'), [__CLASS__, 'display_metabox'], ['post'], 'side', 'default');
     }
 
 
     /**
-     * Display zen metabox
+     * Display feed metabox
      *
      * @since 1.6
      */
     public static function display_metabox() {
         $include = get_template_directory() . '/core/include';
 
-        include_once($include . '/templates/zen-metabox.php');
+        include_once($include . '/templates/feed-metabox.php');
     }
 
 
@@ -136,28 +136,42 @@ class Knife_Yandex_Zen {
         }
 
         // Save publish meta if not empty
-        if(!empty($_REQUEST[self::$meta_publish])) {
-            update_post_meta($post_id, self::$meta_publish, sanitize_text_field($_REQUEST[self::$meta_publish]));
+        if(!empty($_REQUEST[self::$zen_publish])) {
+            update_post_meta($post_id, self::$zen_publish, sanitize_text_field($_REQUEST[self::$zen_publish]));
         } else {
-            delete_post_meta($post_id, self::$meta_publish);
+            delete_post_meta($post_id, self::$zen_publish);
         }
 
         // Save exclude meta if not empty
-        if(!empty($_REQUEST[self::$meta_exclude])) {
-            update_post_meta($post_id, self::$meta_exclude, 1);
+        if(!empty($_REQUEST[self::$zen_exclude])) {
+            update_post_meta($post_id, self::$zen_exclude, 1);
         } else {
-            delete_post_meta($post_id, self::$meta_exclude);
+            delete_post_meta($post_id, self::$zen_exclude);
         }
     }
 
 
     /**
-     * Update custom feed template
+     * Register new feeds endpoint
      */
-    public static function add_hooks() {
-        if(is_feed(self::$slug)) {
+    public static function init_feeds() {
+        // Add Yandex.Zen feed
+        add_feed('zen', [__CLASS__, 'add_zen_feed']);
+
+        // Add Yandex.Turbo feed
+        add_feed('turbo', [__CLASS__, 'add_turbo_feed']);
+    }
+
+
+    /**
+     * Upgrade custom feeds template
+     *
+     * @since 1.7
+     */
+    public static function upgrade_feeds() {
+        if(is_feed(['zen', 'turbo'])) {
             // Remove post content unwanted tags
-            add_filter('the_content_feed', [__CLASS__, 'clear_content'], 10);
+            add_filter('the_content_feed', [__CLASS__, 'clean_content'], 11);
 
             // Prepend lead if exists
             add_filter('the_content_feed', [__CLASS__, 'prepend_lead'], 12);
@@ -165,31 +179,49 @@ class Knife_Yandex_Zen {
             // Upgrade post author with coauthors plugin
             add_filter('the_author', [__CLASS__, 'upgrade_author']);
 
+            // Remove unused images attributes
+            add_filter('wp_get_attachment_image_attributes', [__CLASS__, 'image_attributes'], 10, 3);
+        }
+
+        // Only for Yandex.Zen feed
+        if(is_feed('zen')) {
+            // Remove embeds
+            add_filter('embed_oembed_html', [__CLASS__, 'remove_embeds'], 15, 3);
+
+            // Calculate post images
+            add_filter('the_content_feed', [__CLASS__, 'add_images'], 9);
+
+            // Remove unwanted tags
+            add_filter('the_content_feed', [__CLASS__, 'remove_tags'], 10);
+
             // Add post category and enclosure after content
             add_action('rss2_item', [__CLASS__, 'insert_category']);
             add_action('rss2_item', [__CLASS__, 'insert_enclosure']);
-
-            // Update rss2 head with atom link
-            add_action('rss2_head', [__CLASS__, 'update_head']);
-
-            // Remove unused images attributes
-            add_filter('wp_get_attachment_image_attributes', [__CLASS__, 'image_attributes'], 10, 3);
         }
     }
 
 
     /**
-     * Register new feed endpoint
-     */
-    public static function init_feeds() {
-        add_feed(self::$slug, [__CLASS__, 'add_feed']);
+    * Update main posts query loop
+    *
+    * @since 1.7
+    */
+    public static function update_query($query) {
+        // Only for Yandex.Turbo feed
+        if($query->is_main_query() && $query->is_feed() && $query->get('feed') === 'turbo') {
+            $query->set('posts_per_rss', 50);
+            $query->set('post_type', 'post');
+            $query->set('post_status', 'publish');
+        }
     }
 
 
     /**
-     * Init template feed using custom query
+     * Init Yandex.Zen template feed using custom query
+     *
+     * @since 1.7
      */
-    public static function add_feed() {
+    public static function add_zen_feed() {
         global $post, $wpdb;
 
         $paged = intval(get_query_var('paged', 1));
@@ -203,53 +235,80 @@ class Knife_Yandex_Zen {
 
         $query = "SELECT SQL_CALC_FOUND_ROWS p.*, IFNULL(m2.meta_value, p.post_date_gmt) as zen_date
             FROM {$wpdb->posts} p
-            LEFT JOIN {$wpdb->postmeta} m1 ON (p.ID = m1.post_id AND m1.meta_key = '" . self::$meta_exclude . "')
-            LEFT JOIN {$wpdb->postmeta} m2 ON (p.ID = m2.post_id AND m2.meta_key = '" . self::$meta_publish . "')
+            LEFT JOIN {$wpdb->postmeta} m1 ON (p.ID = m1.post_id AND m1.meta_key = '" . self::$zen_exclude . "')
+            LEFT JOIN {$wpdb->postmeta} m2 ON (p.ID = m2.post_id AND m2.meta_key = '" . self::$zen_publish . "')
             WHERE p.post_type = 'post' AND p.post_status = 'publish' AND m1.post_id IS NULL
             GROUP BY p.ID ORDER BY zen_date DESC LIMIT {$offset}, {$limit}";
 
         $posts = $wpdb->get_results($query, OBJECT);
 
-        require get_template_directory() . '/core/include/feeds/' . self::$slug . '.php';
+        require get_template_directory() . '/core/include/feeds/yandex-zen.php';
     }
 
 
     /**
-     * Add atom self link
+     * Init Yandex.Turbo template feed
+     *
+     * @since 1.7
      */
-    public static function update_head() {
-        printf('<atom:link href="%s" rel="self" type="application/rss+xml" />', get_feed_link(self::$slug));
+    public static function add_turbo_feed() {
+        require get_template_directory() . '/core/include/feeds/yandex-turbo.php';
     }
 
 
     /**
-     * Upgrade content tag
+     * Clean content tag
+     *
+     * @since 1.7
      */
-    public static function clear_content($content) {
-        $content = self::add_images($content);
-
-        // Remove unavailible tags
-        $content = preg_replace('#<(script|style)[^>]*?>.*?</\\1>#si', '', $content);
-        $content = strip_tags($content, implode(',', self::$tags));
-
-        // Remove tabs and break lines
+    public static function clean_content($content) {
         $content = preg_replace('~[\r\n]+~', "\n", $content);
         $content = preg_replace('~[ \t]+~', ' ', $content);
         $content = preg_replace('~\s+~', ' ', $content);
 
+        // Remove invalid Char value 3
+        $content = preg_replace('~[\x{0003}]+~', ' ', $content);
+
+        // Balances tags of content
+        $content = force_balance_tags($content);
+
+        return trim($content);
+    }
+
+
+    /**
+     * Remove unused rss tags
+     *
+     * @since 1.7
+     */
+    public static function remove_tags($content) {
+        $allowed_tags = [
+            '<br>','<p>','<h2>','<h3>','<h4>','<h5>','<h6>','<ul>','<a>','<ol>','<li>','<img>','<figcaption>','<figure>','<b>','<strong>','<i>','<em>','<mark>'
+        ];
+
+        // Remove unwanted tags
+        $content = preg_replace('#<(script|style)[^>]*?>.*?</\\1>#si', '', $content);
+        $content = strip_tags($content, implode(',', $allowed_tags));
+
         // Remove all embeds
         $content = preg_replace('~<figure\s+?class="figure\s+?figure--embed">.+?</figure>~si', '', $content);
 
-        // Remove invalid Char value 3
-        $content = preg_replace('~[\x{0003}]+~', ' ', $content);
 
         // Remove style and class attributes
         $content = preg_replace('~\s+?style="[^"]+"~', '', $content);
         $content = preg_replace('~\s+?class="[^"]+"~', '', $content);
 
-        $content = force_balance_tags($content);
+        return $content;
+    }
 
-        return trim($content);
+
+    /**
+     * Remove embeds
+     */
+    public static function remove_embeds($html, $url, $attr) {
+        $html = sprintf('<a href="%1$s" target="_blank">%1$s</a>', esc_url($url));
+
+        return $html;
     }
 
 
@@ -349,4 +408,4 @@ class Knife_Yandex_Zen {
 /**
  * Load current module environment
  */
-Knife_Yandex_Zen::load_module();
+Knife_Extra_Feeds::load_module();

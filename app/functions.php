@@ -543,11 +543,8 @@ require get_template_directory() . '/core/modules/custom-background.php';
 // TinyMCE extending plugins
 require get_template_directory() . '/core/modules/mce-plugins.php';
 
-// Add custom Yandex.Zen feed template
-require get_template_directory() . '/core/modules/yandex-zen.php';
-
-// Add custom Yandex.Turbo feed template
-require get_template_directory() . '/core/modules/yandex-turbo.php';
+// Add custom feeds
+require get_template_directory() . '/core/modules/extra-feeds.php';
 
 
 

@@ -1,5 +1,5 @@
 jQuery(document).ready(function($) {
-  var box = $("#knife-zen-box");
+  var box = $("#knife-feed-box");
 
   /**
    * Set current time
@@ -11,14 +11,14 @@ jQuery(document).ready(function($) {
     var publish = $(this).data('publish');
 
     if(typeof publish !== 'undefined') {
-      $('#knife-zen-publish').val(publish);
+      $('#knife-feed-publish').val(publish);
     }
 
     // Put datetime to adminside page
     var display = $(this).data('display');
 
     if(typeof display !== 'undefined') {
-      $('#knife-zen-display').html(display);
+      $('#knife-feed-display').html(display);
     }
   });
 });
