@@ -36,10 +36,6 @@
    * Callback for Google CSE init script
    */
   function pushResults() {
-    if(document.readyState !== 'complete') {
-      return google.setOnLoadCallback(pushResults, true);
-    }
-
     // Render results to holder element
     google.search.cse.element.render({
       gname: holder,
