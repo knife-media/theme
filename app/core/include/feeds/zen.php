@@ -59,11 +59,7 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
                         apply_filters('the_excerpt_rss', get_the_excerpt())
                     );
 
-                    $content = get_the_content_feed();
-
-                    // Remove break lines and spaces
-                    $content = self::clean_content($content);
-
+                    $content = self::get_filtered_content();
 
                     // Store images for enclosure
                     $enclosure = self::get_images($content, get_the_ID());
@@ -74,7 +70,7 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
                     // Print yandex:full-text
                     printf(
                         '<content:encoded><![CDATA[%s]]></content:encoded>',
-                        $content
+                        self::clean_content($content)
                     );
 
                     // Insert category

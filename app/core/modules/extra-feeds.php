@@ -59,9 +59,6 @@ class Knife_Extra_Feeds {
         // Remove unused images attributes
         add_filter('wp_get_attachment_image_attributes', [__CLASS__, 'image_attributes'], 10, 3);
 
-        // Update embed html for feeds
-        add_filter('embed_oembed_html', [__CLASS__, 'update_embeds'], 15, 3);
-
         // Update feed meta on save post
         add_action('save_post', [__CLASS__, 'save_meta']);
 
@@ -212,14 +209,30 @@ class Knife_Extra_Feeds {
 
 
     /**
-     * Update embeds for feeds
+     * Replace embed html with links
      */
-    public static function update_embeds($html, $url, $attr) {
+    public static function replace_embeds($html, $url, $attr) {
         if(is_feed()) {
             $html = sprintf('<a href="%1$s" target="_blank">%1$s</a>', esc_url($url));
         }
 
         return $html;
+    }
+
+
+    /**
+     * Custom filtered post content
+     */
+    private static function get_filtered_content() {
+        // Replace embed html with links
+        add_filter('embed_oembed_html', [__CLASS__, 'replace_embeds'], 15, 3);
+
+        $content = get_the_content_feed();
+
+        // Remove filter immediately after content get
+        remove_filter('embed_oembed_html', [__CLASS__, 'replace_embeds'], 15, 3);
+
+        return $content;
     }
 
 
@@ -260,6 +273,9 @@ class Knife_Extra_Feeds {
         // Remove style and class attributes
         $content = preg_replace('~\s+?style="[^"]+"~', '', $content);
         $content = preg_replace('~\s+?class="[^"]+"~', '', $content);
+
+        // Clean markup
+        $content = str_replace('<p></p>', '', $content);
 
         return $content;
     }

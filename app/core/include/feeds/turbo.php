@@ -25,12 +25,14 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
                 <link><?php the_permalink_rss(); ?></link>
                 <title><?php the_title_rss(); ?></title>
                 <author><?php the_author(); ?></author>
-                <pubDate><?php echo mysql2date('D, d M Y H:i:s +0000', get_post_time('Y-m-d H:i:s', true), false); ?></pubDate>
                 <?php
-                    $content = get_the_content_feed();
+                    // Print publish date
+                    printf(
+                        '<pubDate>%s</pubDate>',
+                        mysql2date('D, d M Y H:i:s +0000', get_post_time('Y-m-d H:i:s', true), false)
+                    );
 
-                    // Remove break lines and spaces
-                    $content = self::clean_content($content);
+                    $turbo = get_the_content_feed();
 
                     // Custom header for turbo content
                     if(has_post_thumbnail()) {
@@ -48,8 +50,8 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
 
                     // Print turbo:content
                     printf(
-                        '<turbo:content>><![CDATA[%s]]></turbo:content>',
-                        $header . $content
+                        '<turbo:content><![CDATA[%s]]></turbo:content>',
+                        $header . self::clean_content($turbo)
                     );
                 ?>
             </item>

@@ -38,10 +38,7 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
                         apply_filters('the_excerpt_rss', get_the_excerpt())
                     );
 
-                    $content = get_the_content_feed();
-
-                    // Remove break lines and spaces
-                    $content = self::clean_content($content);
+                    $turbo = get_the_content_feed();
 
                     // Custom header for turbo content
                     if(has_post_thumbnail()) {
@@ -57,11 +54,7 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
                         );
                     }
 
-                    // Print turbo:content
-                    printf(
-                        '<turbo:content><![CDATA[%s]]></turbo:content>',
-                        $header . $content
-                    );
+                    $content = self::get_filtered_content();
 
                     // Store images for enclosure
                     $enclosure = self::get_images($content, get_the_ID());
@@ -69,10 +62,17 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
                     // Remove unwanted tags
                     $content = self::remove_tags($content);
 
+
+                    // Print turbo:content
+                    printf(
+                        '<turbo:content><![CDATA[%s]]></turbo:content>',
+                        $header . self::clean_content($turbo)
+                    );
+
                     // Print yandex:full-text
                     printf(
                         '<yandex:full-text><![CDATA[%s]]></yandex:full-text>',
-                        $content
+                        self::clean_content($content)
                     );
 
                     // Insert category
