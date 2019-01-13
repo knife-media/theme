@@ -147,10 +147,19 @@ class Knife_Open_Quiz {
         wp_enqueue_media();
 
         // Insert admin styles
-        wp_enqueue_style('knife-random-generator', $include . '/styles/quiz-metabox.css', [], $version);
+        wp_enqueue_style('knife-quiz-metabox', $include . '/styles/quiz-metabox.css', [], $version);
 
         // Insert admin scripts
-        wp_enqueue_script('knife-random-generator', $include . '/scripts/quiz-metabox.js', ['jquery', 'jquery-ui-sortable'], $version);
+        wp_enqueue_script('knife-quiz-metabox', $include . '/scripts/quiz-metabox.js', ['jquery', 'jquery-ui-sortable'], $version);
+
+        $options = [
+            'post_id' => absint($post_id),
+            'meta_items' => esc_attr(self::$meta_items),
+            'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
+        ];
+
+        wp_localize_script('knife-quiz-metabox', 'knife_quiz_metabox', $options);
+
     }
 
 
@@ -203,8 +212,6 @@ class Knife_Open_Quiz {
      * Update quiz items meta from post-metabox
      */
     private static function update_items($query, $post_id, $meta = [], $i = 0) {
-//        print_r($_REQUEST[$query]);
-//        die;
         if(empty($_REQUEST[$query])) {
             return;
         }
@@ -213,18 +220,6 @@ class Knife_Open_Quiz {
         delete_post_meta($post_id, $query);
 
         foreach($_REQUEST[$query] as $item) {
-            foreach($item as $key => $value) {
-                if(isset($meta[$i]) && array_key_exists($key, $meta[$i])) {
-                    $i++;
-                }
-
-                if(strlen($value) > 0) {
-                    $meta[$i][$key] = wp_kses_post($value);
-                }
-            }
-        }
-
-        foreach($meta as $item) {
             add_post_meta($post_id, $query, $item);
         }
     }

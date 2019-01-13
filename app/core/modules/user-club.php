@@ -705,7 +705,7 @@ class Knife_User_Club {
 
 
     /**
-     * Create request byt template
+     * Create request by template
      */
     private static function create_request($fields, $request) {
         extract($fields);

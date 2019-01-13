@@ -2,7 +2,7 @@
  * Box styles
  */
 #knife-quiz-box .box {
-  display: block;
+  display: none;
 }
 
 #knife-quiz-box .box--manage {
@@ -26,6 +26,10 @@
   border-top: 1px solid #ddd;
 }
 
+#knife-quiz-box .box--expand {
+  display: block;
+}
+
 
 /**
  * Item styles
@@ -43,6 +47,7 @@
   border: 1px solid #ddd;
   border-radius: 3px;
 }
+
   #knife-quiz-box .item:first-child {
     display: none;
   }
@@ -73,7 +78,7 @@
     padding: 2px 0 3px;
   }
 
-  #knife-quiz-box .item .dashicons-arrow-up-alt {
+  #knife-quiz-box .item__change {
     position: absolute;
     right: 8px;
     top: 10px;
@@ -84,10 +89,10 @@
     color: #777;
   }
 
-  #knife-quiz-box .item .dashicons-trash {
+  #knife-quiz-box .item__delete {
     position: absolute;
     right: 8px;
-    bottom: 10px;
+    bottom: 8px;
     cursor: pointer;
 
     font-size: 18px;
@@ -95,107 +100,122 @@
     color: #a00;
   }
 
-  #knife-quiz-box .item:nth-child(2) .dashicons-arrow-up-alt {
+  @media screen and (max-width: 782px) {
+    #knife-quiz-box .item .item__delete {
+      bottom: 16px;
+    }
+  }
+
+  #knife-quiz-box .item:nth-child(2) .item__change {
     display: none;
   }
 
 
 /**
- * Item answer
+ * Item answers
  */
-#knife-quiz-box .answer {
+#knife-quiz-box .item__answers {
   display: none;
   position: relative;
+}
 
-  margin: 10px 0;
-  padding: 5px 10px 10px;
+  #knife-quiz-box .item__answers--expand {
+    display: block;
+  }
+
+
+/**
+ * Single answer
+ */
+#knife-quiz-box .answer {
+  display: flex;
+  position: relative;
+  flex-flow: row wrap;
+
+  margin: 15px 0;
+  padding: 10px;
   background-color: #e5e5e5;
 
   border: solid 1px #ccc;
   border-radius: 2px;
 }
+
   #knife-quiz-box .answer:first-child {
     display: none;
   }
 
-  #knife-quiz-box .answer--expand {
-    display: block;
-  }
-
-  #knife-quiz-box .answer__choice {
+  #knife-quiz-box .answer__text {
     display: block;
     position: relative;
 
-    min-height: 40px;
-    margin: 0 0 15px;
+    margin: 0 0 10px;
   }
 
-  #knife-quiz-box .answer__choice > label {
-    position: relative;
+  #knife-quiz-box .answer__text:last-child {
+    margin-bottom: 0;
+  }
 
-    margin: 0;
+  #knife-quiz-box .answer__text > span {
+    cursor: default;
     font-weight: 600;
   }
 
-  #knife-quiz-box .answer__choice > textarea {
+  #knife-quiz-box .answer__text > textarea {
     display: block;
 
     width: 100%;
-    height: 80px;
+    height: 50px;
+    min-height: 50px;
+    margin-top: 3px;
+
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    border: none;
   }
 
-  #knife-quiz-box .answer__message {
+  #knife-quiz-box .answer__data {
     display: block;
-    position: relative;
-
-    min-height: 40px;
-    margin: 0 0 15px;
-  }
-
-  #knife-quiz-box .answer__message > label {
-    position: relative;
-
-    margin: 0;
-    font-weight: 600;
-  }
-
-  #knife-quiz-box .answer__message > textarea {
-    display: block;
-
-    width: 100%;
-    height: 80px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-  }
-
-  #knife-quiz-box .answer--loaded .answer__choice-title {
-    position: absolute;
-    top: 10px;
-  }
-
-  #knife-quiz-box .answer--loaded .answer__message-title {
-    position: absolute;
-    top: 10px;
+    flex: 1;
   }
 
   #knife-quiz-box .answer__options {
     display: block;
-    position: relative;
+    flex: 0 1 200px;
+
+    padding: 10px 0 0 20px;
+    margin-left: 20px;
+
+    border-left: solid 1px rgba(0, 0, 0, 0.1);
   }
 
-  #knife-quiz-box .answer__options-title {
+  #knife-quiz-box .answer__points {
     display: block;
+    position: relative;
 
-    margin: 0 0 2px;
+    margin: 10px 0;
+  }
+
+  #knife-quiz-box .answer__points > span {
+    cursor: default;
     font-weight: 600;
   }
 
-  #knife-quiz-box .answer__options-points {
+  #knife-quiz-box .answer__points > input {
+    display: inline-block;
+
     width: 50px;
-    padding: 4px 2px;
+    margin-top: 2px;
+    margin-right: 10px;
+    padding: 4px 6px;
 
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     border: none;
+  }
+
+  #knife-quiz-box .answer__delete {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
   }
 
 
@@ -204,9 +224,11 @@
  */
 #knife-quiz-box .item__manage {
   display: block;
+  box-sizing: border-box;
 
   width: 100%;
   margin: 10px 0;
+  padding-right: 20px;
 }
   #knife-quiz-box .item__manage > button {
     margin-right: 8px;
