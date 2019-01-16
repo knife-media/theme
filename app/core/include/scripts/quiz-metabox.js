@@ -155,7 +155,7 @@ jQuery(document).ready(function($) {
   /**
    * Image append
    */
-  function appendImage(poster, attachment, media, thumbnail) {
+  function appendImage(poster, attachment, thumbnail, media) {
     if(typeof knife_quiz_metabox.choose === 'undefined') {
       return alert(knife_quiz_metabox.error);
     }
@@ -170,7 +170,7 @@ jQuery(document).ready(function($) {
     // On open frame select current attachment
     frame.on('open', function() {
       var selection = frame.state().get('selection');
-      var current = poster.find('.' + attachment).val();
+      var current = poster.find(attachment).val();
 
       return selection.add(wp.media.attachment(current));
     });
@@ -181,9 +181,13 @@ jQuery(document).ready(function($) {
       var selection = frame.state().get('selection').first().toJSON();
 
       // Set hidden inputs values
-      poster.find('.' + media).val(selection.url);
-      poster.find('.' + attachment).val(selection.id);
+      if(typeof media !== 'undefuned') {
+        poster.find(media).val(selection.url);
+      }
 
+      poster.find(attachment).val(selection.id);
+
+      // Set thumbnail as selection if exists
       if(thumbnail && typeof selection.sizes.thumbnail !== 'undefined') {
         selection = selection.sizes.thumbnail;
       }
@@ -192,7 +196,7 @@ jQuery(document).ready(function($) {
         return poster.find('img').attr('src', selection.url);
       }
 
-      var showcase = $('<img />', {src: selection.url, class: media});
+      var showcase = $('<img />', {src: selection.url});
 
       return showcase.prependTo(poster);
     });
@@ -348,12 +352,12 @@ jQuery(document).ready(function($) {
   /**
    * Choose answer image
    */
-  box.on('click', '.answer__poster', function() {
+  box.on('click', '.answer__poster', function(e) {
     e.preventDefault();
 
     var poster = $(this);
 
-    return appendImage(poster, 'answer__poster-attachment', 'answer__poster-media', true);
+    return appendImage(poster, '.answer__poster-attachment', true);
   });
 
 
@@ -419,7 +423,7 @@ jQuery(document).ready(function($) {
 
     var poster = $(this);
 
-    return appendImage(poster, 'result__image-attachment', 'result__image-media', false);
+    return appendImage(poster, '.result__image-attachment', false, '.result__image-media');
   });
 
 

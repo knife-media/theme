@@ -123,8 +123,8 @@
                         <div class="answer">
                             <figure class="answer__poster">
                                 <?php
-                                    if(!empty($answer['poster'])) {
-                                        echo wp_get_attachment_image($answer['poster'], 'thumbnail', ['answer__poster-media']);
+                                    if(!empty($answer['attachment'])) {
+                                        echo wp_get_attachment_image($answer['attachment'], 'thumbnail');
                                     }
 
                                     printf(
@@ -133,8 +133,8 @@
                                     );
 
                                     printf(
-                                        '<input class="answer__poster-attachment" type="hidden" data-answer="poster" value="%s">',
-                                        esc_attr($answer['poster'] ?? '')
+                                        '<input class="answer__poster-attachment" type="hidden" data-answer="attachment" value="%s">',
+                                        esc_attr($answer['attachment'] ?? '')
                                     );
                                 ?>
                             </figure>
@@ -270,19 +270,19 @@
                 <div class="result__image">
                     <figure class="result__image-poster">
                         <?php
-                            if(!empty($result['poster'])) {
-                                printf('<img class="result__image-media" src="%s" alt="">', esc_url($result['poster']));
+                            if(!empty($result['media'])) {
+                                printf('<img src="%s" alt="">', esc_url($result['media']));
                             }
 
                             printf('<figcaption class="result__image-caption">%s</figcaption>',
                                 __('Выбрать изображение для постера', 'knife-theme')
                             );
 
-                            printf('<input type="hidden" data-result="poster" value="%s">',
-                                esc_attr($result['poster'] ?? '')
+                            printf('<input class="result__image-media" type="hidden" data-result="media" value="%s">',
+                                esc_attr($result['media'] ?? '')
                             );
 
-                            printf('<input type="hidden" data-result="attachment" value="%s">',
+                            printf('<input class="result__image-attachment" type="hidden" data-result="attachment" value="%s">',
                                 esc_attr($result['attachment'] ?? '')
                             );
                         ?>
