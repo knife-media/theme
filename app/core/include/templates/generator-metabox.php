@@ -70,7 +70,7 @@
                             ?>
                         </figure>
 
-                        <p class="option__relative-message">Ошибка генерации: No font file set!</p>
+                        <p class="option__relative-message"></p>
 
                         <?php
                             printf('<button class="option__relative-generate button" type="button">%s</button>',

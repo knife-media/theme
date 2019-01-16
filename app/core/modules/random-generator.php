@@ -35,7 +35,7 @@ class Knife_Random_Generator {
     /**
      * Unique nonce string
      *
-     * @access  private static
+     * @access  private
      * @var     string
      */
     private static $nonce = 'knife-generator-nonce';
@@ -44,7 +44,7 @@ class Knife_Random_Generator {
    /**
     * Ajax action
     *
-    * @access  private static
+    * @access  private
     * @var     string
     */
     private static $action = 'knife-generator-create';

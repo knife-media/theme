@@ -59,6 +59,15 @@ class Knife_Open_Quiz {
 
 
     /**
+     * Unique meta to store quiz results
+     *
+     * @access  private
+     * @var     string
+     */
+    private static $meta_results = '_knife-quiz-results';
+
+
+    /**
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public static function load_module() {
@@ -66,7 +75,7 @@ class Knife_Open_Quiz {
         add_action('init', [__CLASS__, 'register_type']);
 
         // Add quiz metabox
-        add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
+        add_action('add_meta_boxes', [__CLASS__, 'add_metabox'], 10);
 
         // Save metabox
         add_action('save_post', [__CLASS__, 'save_metabox']);
@@ -155,6 +164,8 @@ class Knife_Open_Quiz {
         $options = [
             'post_id' => absint($post_id),
             'meta_items' => esc_attr(self::$meta_items),
+            'meta_results' => esc_attr(self::$meta_results),
+            'choose' => __('Выберите изображение ответа', 'knife-theme'),
             'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
         ];
 

@@ -31,7 +31,7 @@ class Knife_Post_Lead {
     * @access  private
     * @var     array
     */
-    private static $type = ['post', 'club', 'select', 'generator'];
+    private static $type = ['post', 'club', 'select', 'generator', 'quiz'];
 
 
     /**
@@ -54,7 +54,7 @@ class Knife_Post_Lead {
         add_action('save_post', [__CLASS__, 'save_meta']);
 
         // Add lead-text metabox
-        add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
+        add_action('add_meta_boxes', [__CLASS__, 'add_metabox'], 11);
     }
 
 
@@ -62,7 +62,7 @@ class Knife_Post_Lead {
      * Add lead-text metabox
      */
     public static function add_metabox() {
-        add_meta_box('knife-lead-metabox', __('Лид текст'), [__CLASS__, 'print_metabox'], self::$type, 'normal', 'low');
+        add_meta_box('knife-lead-metabox', __('Лид текст'), [__CLASS__, 'print_metabox'], self::$type, 'normal', 'high');
     }
 
 

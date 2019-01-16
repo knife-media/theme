@@ -121,7 +121,13 @@
   color: #666;
   font-size: 14px;
 
+  transition: border .5s;
+
   border: dashed 2px #ddd;
+}
+
+#knife-select-box .option__blank:hover {
+  border-color: #0073aa;
 }
 
 #knife-select-box .option__image {
