@@ -68,22 +68,17 @@
         <div class="manage">
             <?php
                 printf(
-                    '<p class="manage__title">%s</p>',
-                    __('Отображение шаблона записи', 'knife-theme')
-                );
-
-                printf(
-                    '<p class="manage__check"><label><input disabled type="checkbox" name="%1$s[below]" value="1"%2$s>%3$s</label></p>',
-                    esc_attr(self::$meta_options),
-                    checked(isset($options['below']), true, false),
-                    __('Отображать вопросы друг под другом', 'knife-theme')
-                );
-
-                printf(
                     '<p class="manage__input"><strong>%3$s</strong><input type="text" name="%1$s[button_text]" value="%2$s"></p>',
                     esc_attr(self::$meta_options),
                     esc_attr($options['button_text'] ?? __('Начать тест', 'knife-theme')),
                     __('Текст на кнопке', 'knife-theme')
+                );
+
+                printf(
+                    '<p class="manage__input"><strong>%3$s</strong><input type="text" name="%1$s[button_next]" value="%2$s"></p>',
+                    esc_attr(self::$meta_options),
+                    esc_attr($options['button_next'] ?? __('Следующий вопрос', 'knife-theme')),
+                    __('Текст на кнопке следующего вопроса', 'knife-theme')
                 );
 
                 printf(
@@ -187,11 +182,6 @@
                             __('Свернуть ответы', 'knife-theme'),
                             __('Развернуть ответы', 'knife-theme')
                         );
-
-                        printf(
-                            '<button class="item__manage-options button" type="button" disabled>%s</button>',
-                            __('Настройки', 'knife-theme')
-                        );
                     ?>
                 </div>
 
@@ -219,10 +209,10 @@
                 );
 
                 printf(
-                    '<p class="summary__check"><label><input disabled type="checkbox" name="%1$s[eachtext]" value="1"%2$s>%3$s</label></p>',
+                    '<p class="summary__check"><label><input data-summary="common" type="checkbox" name="%1$s[common]" value="1"%2$s>%3$s</label></p>',
                     esc_attr(self::$meta_options),
-                    checked(isset($options['eachtext']), true, false),
-                    __('Отдельный текст для каждого результата', 'knife-theme')
+                    checked(isset($options['common']), true, false),
+                    __('Общий текст для всех результатов', 'knife-theme')
                 );
 
                 printf(
@@ -251,6 +241,15 @@
     <div class="box box--results">
         <?php foreach($results as $i => $result) : ?>
             <div class="result">
+                <div class="result__message">
+                    <?php
+                        printf(
+                            '<textarea class="wp-editor-area" data-result="message">%s</textarea>',
+                            esc_attr($result['message'] ?? '')
+                        );
+                    ?>
+                </div>
+
                 <div class="result__share">
                     <?php
                         printf(
@@ -294,13 +293,20 @@
                         printf('<button class="result__image-generate button" type="button">%s</button>',
                             __('Сгенерировать', 'knife-theme')
                         );
-
-                        printf('<button class="result__image-settings button" disabled type="button">%s</button>',
-                            __('Настройки', 'knife-theme')
-                        );
                     ?>
 
                     <span class="result__image-spinner spinner"></span>
+                </div>
+
+                <div class="result__options">
+                    <?php
+                        printf(
+                            '<div class="result__options-scores"><strong>%2$s</strong><input type="number" data-result="scores" value="%1$s"><strong>%3$s</strong></div>',
+                            esc_attr($answer['scrores'] ?? 0),
+                            __('Показывать результат, начиная с', 'knife-theme'),
+                            __('баллов или правильных ответов', 'knife-theme')
+                        );
+                    ?>
                 </div>
 
 

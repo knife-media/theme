@@ -194,7 +194,7 @@
 
     max-width: 100%;
     height: 150px;
-    margin: 0 15px 15px 0;
+    margin: 0 10px 15px 0;
     overflow: hidden;
   }
 
@@ -310,6 +310,14 @@
     cursor: pointer;
   }
 
+  @media screen and (max-width: 782px) {
+    #knife-quiz-box .answer__delete {
+      top: auto;
+      bottom: 18px;
+      right: 8px;
+    }
+  }
+
 
 /**
  * Answer modificators
@@ -334,16 +342,22 @@
   display: flex;
 }
 
-#knife-quiz-box .answer--poster:not(.answer--message) .answer__options {
-  flex: 1 1 200px;
-  flex-flow: column wrap;
-  justify-content: center;
+@media screen and (min-width: 1200px) {
+  #knife-quiz-box .answer--poster .answer__poster {
+    margin-right: 15px;
+  }
 
-  margin: 0 10px 15px 0;
-  padding: 0 0 0 15px;
+  #knife-quiz-box .answer--poster:not(.answer--message) .answer__options {
+    flex: 1 1 200px;
+    flex-flow: column wrap;
+    justify-content: center;
 
-  border-top: none;
-  border-left: solid 1px rgba(0, 0, 0, 0.1);
+    margin: 0 10px 15px 0;
+    padding: 0 0 0 15px;
+
+    border-top: none;
+    border-left: solid 1px rgba(0, 0, 0, 0.1);
+  }
 }
 
 
@@ -352,9 +366,9 @@
  */
 #knife-quiz-box .manage {
   display: block;
-  flex: 1;
+  flex: 1 1 350px;
 
-  padding: 15px;
+  margin: 15px 15px 10px;
 }
   #knife-quiz-box .manage__title {
     display: block;
@@ -381,6 +395,7 @@
   #knife-quiz-box .manage__input {
     display: block;
     margin: 0 0 10px;
+    padding-bottom: 1px;
   }
     #knife-quiz-box .manage__input strong {
       display: block;
@@ -392,6 +407,12 @@
       width: 80%;
     }
 
+    @media screen and (max-width: 782px) {
+      #knife-quiz-box .manage__input input {
+        width: 100%;
+      }
+    }
+
 
 /**
  * Summary styles
@@ -400,7 +421,7 @@
   display: block;
   flex: 1;
 
-  padding: 15px;
+  margin: 15px 15px 10px;
 }
   #knife-quiz-box .summary__title {
     display: block;
@@ -413,11 +434,18 @@
   }
 
   #knife-quiz-box .summary__text {
-    display: block;
+    display: none;
     margin: 25px 0 10px;
   }
     #knife-quiz-box .summary__text:last-child {
       margin-bottom: 0;
+    }
+
+    #knife-quiz-box .summary__text textarea {
+      display: block;
+
+      width: 100%;
+      height: 100px;
     }
 
   #knife-quiz-box .summary__check {
@@ -432,6 +460,10 @@
   #knife-quiz-box .summary__check input[type="checkbox"] {
     margin-right: 8px;
   }
+
+#knife-quiz-box .summary--common .summary__text {
+  display: block;
+}
 
 
 /**
@@ -461,9 +493,9 @@
 
 #knife-quiz-box .result__share {
   display: block;
-  flex: 1;
+  flex: 1 1 auto;
 
-  padding: 10px;
+  margin: 10px;
 }
   #knife-quiz-box .result__share-title {
     display: block;
@@ -495,16 +527,22 @@
 
 #knife-quiz-box .result__image {
   display: block;
-  flex: 0;
+  flex: 1 1 100%;
 
-  padding: 10px;
+  margin: 10px;
 }
+  @media screen and (min-width: 1200px) {
+    #knife-quiz-box .result__image {
+      flex: 0 1 300px;
+    }
+  }
+
   #knife-quiz-box .result__image-poster {
     display: flex;
     position: relative;
     cursor: pointer;
 
-    width: 300px;
+    width: 100%;
     max-width: 100%;
     margin: 0 0 10px 0;
     padding-top: 52.5%;
@@ -583,10 +621,65 @@
 #knife-quiz-box .result__delete {
   position: absolute;
   right: 8px;
-  bottom: 13px;
+  bottom: 12px;
   cursor: pointer;
 
   font-size: 18px;
   line-height: 1;
   color: #a00;
+}
+
+
+#knife-quiz-box .result__message {
+  display: block;
+  flex: 1 1 100%;
+
+  margin: 10px;
+  padding-bottom: 20px;
+
+  border-bottom: 1px solid #ddd;
+}
+  #knife-quiz-box .result__message textarea {
+    display: block;
+
+    width: 100%;
+    height: 100px;
+  }
+
+
+#knife-quiz-box .result__options {
+  display: block;
+  flex: 1 1 100%;
+
+  margin: 10px;
+  padding-top: 10px;
+
+  border-top: 1px solid #ddd;
+}
+
+  #knife-quiz-box .result__options-scores {
+    display: flex;
+    flex: row wrap;
+    align-items: center;
+  }
+
+  #knife-quiz-box .result__options-scores input {
+    display: inline-block;
+
+    width: 50px;
+    margin: 0 8px;
+  }
+
+  @media screen and (max-width: 782px) {
+    #knife-quiz-box .result__options-scores input {
+      margin-left: 0;
+    }
+
+    #knife-quiz-box .result__options-scores strong:first-child {
+      display: none;
+    }
+  }
+
+#knife-quiz-box .result--common .result__message {
+  display: none;
 }

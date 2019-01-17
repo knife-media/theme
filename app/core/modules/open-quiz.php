@@ -165,12 +165,11 @@ class Knife_Open_Quiz {
             'post_id' => absint($post_id),
             'meta_items' => esc_attr(self::$meta_items),
             'meta_results' => esc_attr(self::$meta_results),
-            'choose' => __('Выберите изображение ответа', 'knife-theme'),
+            'choose' => __('Выберите изображение', 'knife-theme'),
             'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
         ];
 
         wp_localize_script('knife-quiz-metabox', 'knife_quiz_metabox', $options);
-
     }
 
 
@@ -216,22 +215,49 @@ class Knife_Open_Quiz {
 
         // Update items meta
         self::update_items(self::$meta_items, $post_id);
+
+        // Update results meta
+        self::update_results(self::$meta_results, $post_id);
     }
 
 
     /**
      * Update quiz items meta from post-metabox
      */
-    private static function update_items($query, $post_id, $meta = [], $i = 0) {
-        if(empty($_REQUEST[$query])) {
-            return;
-        }
-
+    private static function update_items($query, $post_id) {
         // Delete quiz post meta to create it again below
         delete_post_meta($post_id, $query);
 
         foreach($_REQUEST[$query] as $item) {
-            add_post_meta($post_id, $query, $item);
+            // Filter answer array
+            if(isset($item['answer']) && is_array($item['answer'])) {
+                foreach($item['answer'] as $i => &$answer) {
+                    // Remove answer if empty
+                    if((bool) array_filter($answer) === false) {
+                        unset($item['answer'][$i]);
+                    }
+                }
+            }
+
+            // Add post meta if not empty
+            if(array_filter($item)) {
+                add_post_meta($post_id, $query, wp_kses_post_deep($item));
+            }
+        }
+    }
+
+
+    /**
+     * Update quiz results meta from post-metabox
+     */
+    private static function update_results($query, $post_id) {
+        // Delete quiz post meta to create it again below
+        delete_post_meta($post_id, $query);
+
+        foreach($_REQUEST[$query] as $result) {
+            if(array_filter($result)) {
+                add_post_meta($post_id, $query, wp_kses_post_deep($result));
+            }
         }
     }
 }

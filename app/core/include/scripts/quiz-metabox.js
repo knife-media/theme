@@ -219,12 +219,39 @@ jQuery(document).ready(function($) {
 
 
   /**
+   *
+   */
+  function toggleSummary(option) {
+    // Toggle common option
+    if(option.data('summary') === 'common') {
+      option.closest('.summary').toggleClass('summary--common',
+        option.is(':checked')
+      );
+
+      box.find('.result').toggleClass('result--common',
+        option.is(':checked')
+      );
+    }
+  }
+
+
+  /**
    * Manage checkbox answer trigger
    */
   box.on('change', '.manage input[data-manage-answer]', function() {
     var option = $(this);
 
     return toggleAnswer(option);
+  });
+
+
+  /**
+   * Summary checkbox trigger
+   */
+  box.on('change', '.summary input[data-summary]', function() {
+    var option = $(this);
+
+    return toggleSummary(option);
   });
 
 
@@ -467,6 +494,15 @@ jQuery(document).ready(function($) {
 
       // Toggle answer class using option
       toggleAnswer(option);
+    });
+
+
+    // Set summary classes
+    box.find('.summary input[data-summary]').each(function() {
+      var option = $(this);
+
+      // Toggle summary class
+      toggleSummary(option);
     });
 
 
