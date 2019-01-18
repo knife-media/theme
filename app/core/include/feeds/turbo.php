@@ -25,26 +25,35 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
                 <link><?php the_permalink_rss(); ?></link>
                 <title><?php the_title_rss(); ?></title>
                 <author><?php the_author(); ?></author>
-                <pubDate><?php echo mysql2date('D, d M Y H:i:s +0000', get_post_time('Y-m-d H:i:s', true), false); ?></pubDate>
-                <turbo:content>
-                    <![CDATA[
-                        <header>
-                            <?php
-                                if(has_post_thumbnail()) {
-                                    printf('<figure><img src="%s"></figure>',
-                                        get_the_post_thumbnail_url(get_the_ID(), 'outer')
-                                    );
-                                }
-                            ?>
+                <?php
+                    // Print publish date
+                    printf(
+                        '<pubDate>%s</pubDate>',
+                        mysql2date('D, d M Y H:i:s +0000', get_post_time('Y-m-d H:i:s', true), false)
+                    );
 
-                            <h1><?php the_title_rss(); ?></h1>
-                        </header>
+                    $turbo = get_the_content_feed();
 
-                        <?php the_content_feed(); ?>
-                    ]]>
-                </turbo:content>
+                    // Custom header for turbo content
+                    if(has_post_thumbnail()) {
+                        $header = sprintf(
+                            '<header><figure><img src="%s"></figure><h1>%s</h1></header>',
+                            get_the_post_thumbnail_url(get_the_ID(), 'outer'),
+                            get_the_title_rss()
+                        );
+                    } else {
+                        $header = sprintf(
+                            '<header><h1>%s</h1></header>',
+                            get_the_title_rss()
+                        );
+                    }
 
-                <?php do_action('rss2_item'); ?>
+                    // Print turbo:content
+                    printf(
+                        '<turbo:content><![CDATA[%s]]></turbo:content>',
+                        $header . self::clean_content($turbo)
+                    );
+                ?>
             </item>
         <?php endwhile; ?>
     </channel>

@@ -1,19 +1,19 @@
-<div id="knife-zen-box">
+<div id="knife-feed-box">
     <?php
-        $exclude = get_post_meta(get_the_ID(), self::$meta_exclude, true);
-        $publish = get_post_meta(get_the_ID(), self::$meta_publish, true);
+        $zen_publish = get_post_meta(get_the_ID(), self::$zen_publish, true);
+        $zen_exclude = get_post_meta(get_the_ID(), self::$zen_exclude, true);
 
-        $zendate = get_the_date("Y-m-d H:i:s", get_the_ID());
+        $zen_date = get_the_date("Y-m-d H:i:s", get_the_ID());
 
-        if(strlen($publish) > 0) {
-            $zendate = get_date_from_gmt($publish);
+        if(strlen($zen_publish) > 0) {
+            $zen_date = get_date_from_gmt($zen_publish);
         }
 
         printf(
             '<p><label><input type="checkbox" name="%1$s" class="checkbox"%3$s> %2$s</label></p>',
-            esc_attr(self::$meta_exclude),
-            __('Исключить запись из ленты', 'knife-theme'),
-            checked($exclude, 1, false)
+            esc_attr(self::$zen_exclude),
+            __('Исключить из Яндекс.Дзен', 'knife-theme'),
+            checked($zen_exclude, 1, false)
         );
     ?>
 
@@ -23,8 +23,8 @@
             <?php _e('Републикация:', 'knife-theme'); ?>
         </span>
 
-        <b id="knife-zen-display" class="publish-time">
-            <?php echo date("d.m.Y G:i", strtotime($zendate)); ?>
+        <b id="knife-feed-display" class="publish-time">
+            <?php echo date("d.m.Y G:i", strtotime($zen_date)); ?>
         </b>
     </div>
 
@@ -47,9 +47,9 @@
 
     <?php
         printf(
-            '<input id="knife-zen-publish" type="hidden" name="%1$s" value="%2$s">',
-            esc_attr(self::$meta_publish),
-            esc_attr($publish)
+            '<input id="knife-feed-publish" type="hidden" name="%1$s" value="%2$s">',
+            esc_attr(self::$zen_publish),
+            esc_attr($zen_publish)
         );
 
         wp_nonce_field('fieldset', self::$nonce);

@@ -1,6 +1,8 @@
 <?php
 /**
- * Yandex.Zen feed
+ * Yandex.News feed
+ *
+ * @since 1.7
  */
 
 header('Content-Type: ' . feed_content_type('rss-http') . '; charset=' . get_option('blog_charset'), true);
@@ -8,9 +10,9 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
 ?>
 
 <rss version="2.0"
-     xmlns:content="http://purl.org/rss/1.0/modules/content/"
-     xmlns:dc="http://purl.org/dc/elements/1.1/"
-     xmlns:atom="http://www.w3.org/2005/Atom">
+    xmlns:yandex="http://news.yandex.ru"
+    xmlns:media="http://search.yahoo.com/mrss/"
+    xmlns:turbo="http://turbo.yandex.ru">
     <channel>
         <title><?php bloginfo_rss('name'); ?></title>
         <link><?php bloginfo_rss('url'); ?></link>
@@ -18,39 +20,16 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
         <language><?php bloginfo_rss('language'); ?></language>
         <?php do_action('rss2_head'); ?>
 
-        <?php
-            global $post, $wpdb;
-
-            $paged = intval(get_query_var('paged', 1));
-
-            if($paged < 1) {
-                $paged = 1;
-            }
-
-            $limit = 50;
-            $offset = $limit * ($paged - 1);
-
-            $query = "SELECT SQL_CALC_FOUND_ROWS p.*, IFNULL(m2.meta_value, p.post_date_gmt) as zen_date
-                FROM {$wpdb->posts} p
-                LEFT JOIN {$wpdb->postmeta} m1 ON (p.ID = m1.post_id AND m1.meta_key = '" . self::$zen_exclude . "')
-                LEFT JOIN {$wpdb->postmeta} m2 ON (p.ID = m2.post_id AND m2.meta_key = '" . self::$zen_publish . "')
-                WHERE p.post_type = 'post' AND p.post_status = 'publish' AND m1.post_id IS NULL
-                GROUP BY p.ID ORDER BY zen_date DESC LIMIT {$offset}, {$limit}";
-
-            $posts = $wpdb->get_results($query, OBJECT);
-        ?>
-
-        <?php foreach($posts as $post) : setup_postdata($post); ?>
-            <item>
-                <title><?php the_title_rss(); ?></title>
+        <?php while(have_posts()) : the_post(); ?>
+            <item turbo="true">
                 <link><?php the_permalink_rss(); ?></link>
-                <guid><?php the_guid(); ?></guid>
+                <title><?php the_title_rss(); ?></title>
                 <author><?php the_author(); ?></author>
                 <?php
                     // Print publish date
                     printf(
                         '<pubDate>%s</pubDate>',
-                        mysql2date('D, d M Y H:i:s +0000', $post->zen_date, false)
+                        mysql2date('D, d M Y H:i:s +0000', get_post_time('Y-m-d H:i:s', true), false)
                     );
 
                     // Print description
@@ -58,6 +37,22 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
                         '<description><![CDATA[%s]]></description>',
                         apply_filters('the_excerpt_rss', get_the_excerpt())
                     );
+
+                    $turbo = get_the_content_feed();
+
+                    // Custom header for turbo content
+                    if(has_post_thumbnail()) {
+                        $header = sprintf(
+                            '<header><figure><img src="%s"></figure><h1>%s</h1></header>',
+                            get_the_post_thumbnail_url(get_the_ID(), 'outer'),
+                            get_the_title_rss()
+                        );
+                    } else {
+                        $header = sprintf(
+                            '<header><h1>%s</h1></header>',
+                            get_the_title_rss()
+                        );
+                    }
 
                     $content = self::get_filtered_content();
 
@@ -67,9 +62,16 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
                     // Remove unwanted tags
                     $content = self::remove_tags($content);
 
+
+                    // Print turbo:content
+                    printf(
+                        '<turbo:content><![CDATA[%s]]></turbo:content>',
+                        $header . self::clean_content($turbo)
+                    );
+
                     // Print yandex:full-text
                     printf(
-                        '<content:encoded><![CDATA[%s]]></content:encoded>',
+                        '<yandex:full-text><![CDATA[%s]]></yandex:full-text>',
                         self::clean_content($content)
                     );
 
@@ -84,6 +86,6 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
                     }
                 ?>
             </item>
-        <?php endforeach; ?>
+        <?php endwhile; ?>
     </channel>
 </rss>

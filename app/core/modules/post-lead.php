@@ -6,7 +6,7 @@
 *
 * @package knife-theme
 * @since 1.2
-* @version 1.5
+* @version 1.7
 */
 
 
@@ -54,7 +54,10 @@ class Knife_Post_Lead {
         add_action('save_post', [__CLASS__, 'save_meta']);
 
         // Add lead-text metabox
-        add_action('add_meta_boxes', [__CLASS__, 'add_metabox'], 11);
+        add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
+
+        // Prepend lead to feeds content
+        add_filter('the_content_feed', [__CLASS__, 'upgrade_feeds'], 12);
     }
 
 
@@ -104,6 +107,23 @@ class Knife_Post_Lead {
 
         return $lead;
     }
+
+
+    /**
+     * Prepend lead to feed content
+     *
+     * @since 1.7
+     */
+    public static function upgrade_feeds($content) {
+        $post_lead = self::get_lead();
+
+        if(strlen($post_lead) > 0) {
+            $content = $post_lead . $content;
+        }
+
+        return $content;
+    }
+
 
     /**
      * Save post options
