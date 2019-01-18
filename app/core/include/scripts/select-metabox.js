@@ -64,8 +64,6 @@ jQuery(document).ready(function($) {
 
     item.find('.option__link').val(input.val());
     input.attr('value', '');
-
-    return item.removeClass('item--hidden');
   }
 
 

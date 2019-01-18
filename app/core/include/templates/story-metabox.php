@@ -12,7 +12,7 @@
         }
 
         // Upgrade with default vaules
-        array_unshift($stories, ['entry' => '', 'media' => '']);
+        array_unshift($stories, []);
 
         wp_nonce_field('metabox', self::$nonce);
     ?>
@@ -21,7 +21,7 @@
     <div class="box box--items">
 
         <?php foreach($stories as $i => $story) : ?>
-            <div class="item<?php echo ($i === 0) ? ' item--hidden' : ''; ?>">
+            <div class="item">
                 <?php
                     if(!empty($story['media'])) {
                         printf('<img class="item__image" src="%s" alt="">',

@@ -174,7 +174,7 @@
   border-radius: 3px;
 }
 
-#knife-story-box .item--hidden {
+#knife-story-box .item:first-child {
   display: none;
 }
 

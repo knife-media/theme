@@ -42,6 +42,7 @@ jQuery(document).ready(function($) {
       'action': knife_generator_metabox.action,
       'nonce': knife_generator_metabox.nonce,
       'post_id': knife_generator_metabox.post_id,
+
       'caption': item.find('.option__general-caption').val(),
       'attachment': item.find('.option__relative-attachment').val()
     }
@@ -122,8 +123,6 @@ jQuery(document).ready(function($) {
 
     var item = box.find('.item:first').clone();
     box.find('.item:last').after(item);
-
-    return item.removeClass('item--hidden');
   });
 
 

@@ -3,7 +3,7 @@
         $items = get_post_meta(get_the_ID(), self::$meta_items);
 
         // Upgrade with default vaules
-        array_unshift($items, ['title' => '', 'link' => '']);
+        array_unshift($items, []);
 
         wp_nonce_field('metabox', self::$nonce);
     ?>
@@ -28,7 +28,7 @@
     <div class="box box--items">
 
         <?php foreach($items as $i => $item) : ?>
-            <div class="item<?php echo ($i === 0) ? ' item--hidden' : ''; ?>">
+            <div class="item">
                 <div class="option">
                     <strong><?php _e('Ссылка с карточки', 'knife-theme') ?></strong>
 

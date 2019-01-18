@@ -268,8 +268,8 @@
                         );
 
                         printf(
-                            '<p class="result__share-title"><strong>%2$s</strong><input type="text" data-result="title" value="%1$s"></p>',
-                            esc_attr($result['title'] ?? ''),
+                            '<p class="result__share-heading"><strong>%2$s</strong><input type="text" data-result="heading" value="%1$s"></p>',
+                            esc_attr($result['heading'] ?? ''),
                             __('Заголовок результата', 'knife-theme')
                         );
 
@@ -294,12 +294,12 @@
                             );
 
                             printf(
-                                '<input class="result__image-media" type="hidden" data-result="media" value="%s">',
+                                '<input type="hidden" data-result="media" value="%s">',
                                 esc_attr($result['media'] ?? '')
                             );
 
                             printf(
-                                '<input class="result__image-attachment" type="hidden" data-result="attachment" value="%s">',
+                                '<input type="hidden" data-result="attachment" value="%s">',
                                 esc_attr($result['attachment'] ?? '')
                             );
                         ?>

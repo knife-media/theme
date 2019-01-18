@@ -202,8 +202,6 @@ jQuery(document).ready(function($) {
     e.preventDefault();
 
     var item = box.find('.item:first').clone();
-
-    item.removeClass('item--hidden');
     box.find('.item:last').after(item);
 
     return createEditor(item);
@@ -252,12 +250,10 @@ jQuery(document).ready(function($) {
   /**
    * Init wp editors
    */
-  box.find('.item').each(function(i, el) {
+  box.find('.item:not(:first)').each(function(i, el) {
     var item = $(this);
 
-    if(!item.hasClass('item--hidden')) {
-      createEditor(item);
-    }
+    return createEditor(item);
   });
 
 

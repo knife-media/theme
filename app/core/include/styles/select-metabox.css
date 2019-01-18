@@ -56,7 +56,7 @@
   border-radius: 2px;
 }
 
-#knife-select-box .item--hidden {
+#knife-select-box .item:first-child {
   display: none;
 }
 

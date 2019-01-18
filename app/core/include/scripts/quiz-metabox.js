@@ -52,9 +52,25 @@ jQuery(document).ready(function($) {
       'action': knife_quiz_metabox.action,
       'nonce': knife_quiz_metabox.nonce,
       'post_id': knife_quiz_metabox.post_id,
-      'caption': result.find('.option__general-caption').val(),
-      'attachment': result.find('.option__relative-attachment').val()
     }
+
+    // Add required poster fields
+    $.each(['heading', 'description', 'attachment'], function(i, v) {
+      data[v] = result.find('[data-result="' + v + '"]').val();
+    });
+
+    // Add achievment poster info if need
+    if(result.hasClass('result--achievment')) {
+      $.each(['achievment', 'from', 'to'], function(i, v) {
+        data[v] = result.find('[data-result="' + v + '"]').val();
+      });
+    }
+
+    // Add quiz title if exists
+    if($("#title").length > 0) {
+      data.title = $('#title').val();
+    }
+
 
     result.find('.result__warning').html('').hide();
 
@@ -62,7 +78,7 @@ jQuery(document).ready(function($) {
 
     xhr.done(function(answer) {
       if(answer.data.length > 1 && answer.success === true) {
-        result.find('.result__image-media').val(answer.data);
+        result.find('[data-result="media"]').val(answer.data);
         result.find('.result__image-poster > img').attr('src', answer.data);
 
         return toggleLoader(result);
@@ -598,8 +614,10 @@ jQuery(document).ready(function($) {
     // Init summary editors
     updateEditor(box.find('.summary'));
 
-
     // Show items
     box.find('.box--items').addClass('box--expand');
+
+    // Show results
+    box.find('.box--results').addClass('box--expand');
   })();
 });

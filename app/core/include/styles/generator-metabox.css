@@ -110,7 +110,7 @@
   border-radius: 3px;
 }
 
-#knife-generator-box .item--hidden {
+#knife-generator-box .item:first-child {
   display: none;
 }
 
