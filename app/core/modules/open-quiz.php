@@ -128,7 +128,7 @@ class Knife_Open_Quiz {
             ],
             'label'                 => __('Тесты', 'knife-theme'),
             'supports'              => ['title', 'thumbnail', 'excerpt', 'comments'],
-            'taxonomies'            => ['post_tag'],
+            'taxonomies'            => ['post_tag', 'category'],
             'hierarchical'          => false,
             'public'                => true,
             'show_ui'               => true,

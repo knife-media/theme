@@ -73,13 +73,12 @@ class Knife_Post_Lead {
         $lead = get_post_meta($post->ID, self::$meta, true);
 
         wp_editor($lead, 'knife-lead-editor', [
-            'media_buttons' => false,
+            'media_buttons' => true,
             'textarea_name' => self::$meta,
             'teeny' => true,
             'tinymce' => true,
             'tinymce' => [
-                'toolbar1' => 'bold,italic,link',
-                'block_formats' => 'Paragraph=p;Heading 2=h2;Heading 3=h3;Heading 4=h4'
+                'toolbar1' => 'bold,italic,link'
             ],
             'editor_height' => 100,
             'drag_drop_upload' => false

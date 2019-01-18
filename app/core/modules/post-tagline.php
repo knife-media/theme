@@ -31,7 +31,7 @@ class Knife_Post_Tagline {
     * @access  private
     * @var     array
     */
-    private static $type = ['post', 'club'];
+    private static $type = ['post', 'club', 'quiz'];
 
 
     /**
