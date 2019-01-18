@@ -42,12 +42,12 @@ class Knife_Random_Generator {
 
 
    /**
-    * Ajax action
+    * Poster ajax action
     *
     * @access  private
     * @var     string
     */
-    private static $action = 'knife-generator-create';
+    private static $action = 'knife-generator-poster';
 
 
     /**

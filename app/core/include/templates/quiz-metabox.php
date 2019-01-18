@@ -29,21 +29,21 @@
                 );
 
                 printf(
-                    '<p class="manage__check"><label><input data-manage-answer="poster" type="checkbox" name="%1$s[image]" value="1"%2$s>%3$s</label></p>',
+                    '<p class="manage__check"><label><input data-manage="poster" type="checkbox" name="%1$s[image]" value="1"%2$s>%3$s</label></p>',
                     esc_attr(self::$meta_options),
                     checked(isset($options['image']), true, false),
                     __('Использовать изображения в качестве ответов', 'knife-theme')
                 );
 
                 printf(
-                    '<p class="manage__check"><label><input data-manage-answer="points" type="checkbox" name="%1$s[points]" value="1"%2$s>%3$s</label></p>',
+                    '<p class="manage__check"><label><input data-manage="points" type="checkbox" name="%1$s[points]" value="1"%2$s>%3$s</label></p>',
                     esc_attr(self::$meta_options),
                     checked(isset($options['points']), true, false),
                     __('Разные баллы за каждый ответ', 'knife-theme')
                 );
 
                 printf(
-                    '<p class="manage__check"><label><input data-manage-answer="message" type="checkbox" name="%1$s[message]" value="1"%2$s>%3$s</label></p>',
+                    '<p class="manage__check"><label><input data-manage="message" type="checkbox" name="%1$s[message]" value="1"%2$s>%3$s</label></p>',
                     esc_attr(self::$meta_options),
                     checked(isset($options['message']), true, false),
                     __('Показывать сообщение после ответа на вопрос', 'knife-theme')
@@ -60,7 +60,7 @@
                     '<p class="manage__check"><label><input type="checkbox" name="%1$s[subtitle]" value="1"%2$s>%3$s</label></p>',
                     esc_attr(self::$meta_options),
                     checked(isset($options['subtitle']), true, false),
-                    __('Отображать правильно/неправильно в заголовке ответа', 'knife-theme')
+                    __('Отображать правильно/неправильно в ответе', 'knife-theme')
                 );
             ?>
         </div>
@@ -216,6 +216,13 @@
                 );
 
                 printf(
+                    '<p class="summary__check"><label><input data-summary="achievment" type="checkbox" name="%1$s[achievment]" value="1"%2$s>%3$s</label></p>',
+                    esc_attr(self::$meta_options),
+                    checked(isset($options['achievment']), true, false),
+                    __('Показывать количество набранных ответов', 'knife-theme')
+                );
+
+                printf(
                     '<p class="summary__check"><label><input type="checkbox" name="%1$s[noshare]" value="1"%2$s>%3$s</label></p>',
                     esc_attr(self::$meta_options),
                     checked(isset($options['noshare']), true, false),
@@ -239,6 +246,7 @@
     </div>
 
     <div class="box box--results">
+
         <?php foreach($results as $i => $result) : ?>
             <div class="result">
                 <div class="result__message">
@@ -253,6 +261,13 @@
                 <div class="result__share">
                     <?php
                         printf(
+                            '<p class="result__share-achievment"><strong>%2$s</strong><input type="text" data-result="achievment" value="%1$s" placeholder="%3$s"></p>',
+                            esc_attr($result['achievment'] ?? ''),
+                            __('Результат', 'knife-theme'),
+                            __('% из 10', 'knife-theme')
+                        );
+
+                        printf(
                             '<p class="result__share-title"><strong>%2$s</strong><input type="text" data-result="title" value="%1$s"></p>',
                             esc_attr($result['title'] ?? ''),
                             __('Заголовок результата', 'knife-theme')
@@ -261,7 +276,7 @@
                         printf(
                             '<p class="result__share-description"><strong>%2$s</strong><textarea data-result="description">%1$s</textarea></p>',
                             esc_attr($result['description'] ?? ''),
-                            __('Описание результата', 'knife-theme')
+                            __('Описание', 'knife-theme')
                         );
                     ?>
                 </div>
@@ -273,38 +288,49 @@
                                 printf('<img src="%s" alt="">', esc_url($result['media']));
                             }
 
-                            printf('<figcaption class="result__image-caption">%s</figcaption>',
+                            printf(
+                                '<figcaption class="result__image-caption">%s</figcaption>',
                                 __('Выбрать изображение для постера', 'knife-theme')
                             );
 
-                            printf('<input class="result__image-media" type="hidden" data-result="media" value="%s">',
+                            printf(
+                                '<input class="result__image-media" type="hidden" data-result="media" value="%s">',
                                 esc_attr($result['media'] ?? '')
                             );
 
-                            printf('<input class="result__image-attachment" type="hidden" data-result="attachment" value="%s">',
+                            printf(
+                                '<input class="result__image-attachment" type="hidden" data-result="attachment" value="%s">',
                                 esc_attr($result['attachment'] ?? '')
                             );
                         ?>
                     </figure>
 
-                    <p class="result__image-message"></p>
+                    <div class="result__image-footer">
+                        <?php
+                            printf(
+                                '<button class="result__image-generate button" type="button">%s</button>',
+                                __('Сгенерировать', 'knife-theme')
+                            );
+                        ?>
 
-                    <?php
-                        printf('<button class="result__image-generate button" type="button">%s</button>',
-                            __('Сгенерировать', 'knife-theme')
-                        );
-                    ?>
-
-                    <span class="result__image-spinner spinner"></span>
+                        <span class="result__image-spinner spinner"></span>
+                    </div>
                 </div>
 
-                <div class="result__options">
+                <p class="result__warning"></p>
+
+                <div class="result__scores">
                     <?php
                         printf(
-                            '<div class="result__options-scores"><strong>%2$s</strong><input type="number" data-result="scores" value="%1$s"><strong>%3$s</strong></div>',
-                            esc_attr($answer['scrores'] ?? 0),
-                            __('Показывать результат, начиная с', 'knife-theme'),
-                            __('баллов или правильных ответов', 'knife-theme')
+                            __('Показывать с %s по %s баллов или правильных ответов', 'knife-theme'),
+
+                            sprintf('<input type="number" data-result="from" value="%s">',
+                                esc_attr($result['from'] ?? 0)
+                            ),
+
+                            sprintf('<input type="number" data-result="to" value="%s">',
+                                esc_attr($result['to'] ?? 0)
+                            )
                         );
                     ?>
                 </div>
@@ -313,6 +339,7 @@
                 <span class="result__delete dashicons dashicons-trash" title="<?php _e('Удалить результат', 'knife-theme'); ?>"></span>
             </div>
         <?php endforeach; ?>
+
     </div>
 
     <div class="box box--actions">

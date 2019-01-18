@@ -21,6 +21,75 @@ jQuery(document).ready(function($) {
 
 
   /**
+   * Add class for short time
+   */
+  function blinkClass(element, cl) {
+    element.addClass(cl).delay(500).queue(function(){
+      element.removeClass(cl).dequeue();
+    });
+  }
+
+
+  /**
+   * Show generate loader
+   */
+  function toggleLoader(result) {
+    var spinner = result.find('.result__image-spinner');
+
+    spinner.toggleClass('is-active');
+
+    return result.find('.result__image-generate').prop('disabled',
+      result.hasClass('is-active')
+    );
+  }
+
+
+  /**
+   * Generate poster using ajax
+   */
+  function createPoster(result) {
+    var data = {
+      'action': knife_quiz_metabox.action,
+      'nonce': knife_quiz_metabox.nonce,
+      'post_id': knife_quiz_metabox.post_id,
+      'caption': result.find('.option__general-caption').val(),
+      'attachment': result.find('.option__relative-attachment').val()
+    }
+
+    result.find('.result__warning').html('').hide();
+
+    var xhr = $.ajax({method: 'POST', url: ajaxurl, data: data}, 'json');
+
+    xhr.done(function(answer) {
+      if(answer.data.length > 1 && answer.success === true) {
+        result.find('.result__image-media').val(answer.data);
+        result.find('.result__image-poster > img').attr('src', answer.data);
+
+        return toggleLoader(result);
+      }
+
+      if(answer.data.length > 1 && answer.success === false) {
+        result.find('.result__warning').html(answer.data).show();
+
+        return toggleLoader(result);
+      }
+
+      result.find('.result__warning').html(knife_quiz_metabox.error).show();
+
+      return toggleLoader(result);
+    });
+
+    xhr.error(function() {
+      toggleLoader(result);
+
+      result.find('.result__warning').html(knife_quiz_metabox.error).show();
+    });
+
+    return toggleLoader(result);
+  }
+
+
+  /**
    * Update wp.editor using editorId
    */
   function updateEditor(el) {
@@ -210,7 +279,7 @@ jQuery(document).ready(function($) {
    */
   function toggleAnswer(option) {
     // Get new answer class
-    var toggle = 'answer--' + option.data('manage-answer');
+    var toggle = 'answer--' + option.data('manage');
 
     box.find('.answer').toggleClass(toggle,
       option.is(':checked')
@@ -219,16 +288,19 @@ jQuery(document).ready(function($) {
 
 
   /**
-   *
+   * Toggle result class by option
    */
-  function toggleSummary(option) {
-    // Toggle common option
+  function toggleResult(option) {
+    // Toggle result class
+    var toggle = 'result--' + option.data('summary');
+
+    box.find('.result').toggleClass(toggle,
+      option.is(':checked')
+    );
+
+    // Toggle summary block
     if(option.data('summary') === 'common') {
       option.closest('.summary').toggleClass('summary--common',
-        option.is(':checked')
-      );
-
-      box.find('.result').toggleClass('result--common',
         option.is(':checked')
       );
     }
@@ -238,7 +310,7 @@ jQuery(document).ready(function($) {
   /**
    * Manage checkbox answer trigger
    */
-  box.on('change', '.manage input[data-manage-answer]', function() {
+  box.on('change', '.manage input[data-manage]', function() {
     var option = $(this);
 
     return toggleAnswer(option);
@@ -251,7 +323,7 @@ jQuery(document).ready(function($) {
   box.on('change', '.summary input[data-summary]', function() {
     var option = $(this);
 
-    return toggleSummary(option);
+    return toggleResult(option);
   });
 
 
@@ -455,6 +527,23 @@ jQuery(document).ready(function($) {
 
 
   /**
+   * Generate button click
+   */
+  box.on('click', '.result__image-generate', function(e) {
+    e.preventDefault();
+
+    var result = $(this).closest('.result');
+    var caption = result.find('.result__image-caption');
+
+    if(result.find('.result__image-poster > img').length < 1) {
+      return blinkClass(caption, 'result__image-caption--error');
+    }
+
+    return createPoster(result);
+  });
+
+
+  /**
    * Onload set up
    */
   (function() {
@@ -489,7 +578,7 @@ jQuery(document).ready(function($) {
 
 
     // Set answer classes
-    box.find('.manage input[data-manage-answer]').each(function() {
+    box.find('.manage input[data-manage]').each(function() {
       var option = $(this);
 
       // Toggle answer class using option
@@ -502,7 +591,7 @@ jQuery(document).ready(function($) {
       var option = $(this);
 
       // Toggle summary class
-      toggleSummary(option);
+      toggleResult(option);
     });
 
 

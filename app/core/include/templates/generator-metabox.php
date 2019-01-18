@@ -19,31 +19,21 @@
         <?php foreach($items as $i => $item) : ?>
             <div class="item<?php echo ($i === 0) ? ' item--hidden' : ''; ?>">
                 <div class="option option--general">
-                    <div class="option__general">
-                        <strong><?php _e('Заголовок', 'knife-theme'); ?></strong>
+                    <?php
+                        printf(
+                            '<p class="option__general"><strong>%3$s</strong><input class="option__general-caption" type="text" name="%1$s[][caption]" value="%2$s"></p>',
+                            esc_attr(self::$meta_items),
+                            esc_attr($item['caption'] ?? ''),
+                            __('Заголовок', 'knife-theme')
+                        );
 
-                        <p>
-                            <?php
-                                printf('<input class="option__general-caption" type="text" name="%s[][caption]" value="%s">',
-                                    esc_attr(self::$meta_items),
-                                    esc_attr($item['caption'] ?? '')
-                                );
-                            ?>
-                        </p>
-                    </div>
-
-                    <div class="option__general">
-                        <strong><?php _e('Описание', 'knife-theme'); ?></strong>
-
-                        <p>
-                            <?php
-                                printf('<textarea class="option__general-description" name="%s[][description]">%s</textarea>',
-                                    esc_attr(self::$meta_items),
-                                    esc_attr($item['description'] ?? '')
-                                );
-                            ?>
-                        </p>
-                    </div>
+                        printf(
+                            '<p class="option__general"><strong>%3$s</strong><textarea class="option__general-description" name="%1$s[][description]">%2$s</textarea></p>',
+                            esc_attr(self::$meta_items),
+                            esc_attr($item['description'] ?? ''),
+                            __('Описание', 'knife-theme')
+                        );
+                    ?>
                 </div>
 
                 <div class="option option--relative">
@@ -70,7 +60,7 @@
                             ?>
                         </figure>
 
-                        <p class="option__relative-message"></p>
+                        <p class="option__relative-warning"></p>
 
                         <?php
                             printf('<button class="option__relative-generate button" type="button">%s</button>',
@@ -84,11 +74,6 @@
 
                         <span class="option__relative-spinner spinner"></span>
                         <span class="dashicons dashicons-trash"></span>
-                    </div>
-                </div>
-
-                <div class="option option--advanced">
-                    <div class="option__layers">
                     </div>
                 </div>
             </div>
