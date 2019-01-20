@@ -26,6 +26,12 @@
 
   .hc__reply__box__textarea {
     padding-right: 9px;
+    font-size: .875rem;
+
+    @media screen and (max-width: 479px) {
+      font-size: 16px;
+      line-height: 1;
+    }
   }
 
   .hc__footer {

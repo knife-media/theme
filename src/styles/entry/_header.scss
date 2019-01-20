@@ -11,10 +11,10 @@
   & > * {
     width: $width-content;
     max-width: 100%;
-    margin: 1.5rem auto;
+    margin: 1.5rem auto 0;
 
     @media screen and (max-width: 767px) {
-      margin: 1rem auto;
+      margin: 1rem auto 0;
     }
   }
 
@@ -22,9 +22,6 @@
     margin-top: 0;
   }
 
-  & > :last-child {
-    margin-bottom: 0;
-  }
 
   .entry-header__info {
     display: flex;
@@ -60,12 +57,8 @@
     -moz-osx-font-smoothing: auto;
     -webkit-font-smoothing: auto;
 
-    p {
+    & > * {
       margin-bottom: 1rem;
-      line-height: 1.5;
-      font-size: 1.125rem;
-      font-weight: 500;
-      letter-spacing: .25px;
 
       &:last-child {
         margin-bottom: 0;
@@ -73,6 +66,16 @@
 
       @media screen and (max-width: 767px) {
         margin-bottom: .5rem;
+      }
+    }
+
+    p {
+      line-height: 1.5;
+      font-size: 1.125rem;
+      font-weight: 500;
+      letter-spacing: .25px;
+
+      @media screen and (max-width: 767px) {
         font-size: 1rem;
       }
     }

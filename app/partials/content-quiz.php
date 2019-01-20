@@ -22,7 +22,7 @@
 
             the_share(
                 '<div class="entry-quiz__share share">', '</div>',
-                __('Share quiz — results', 'knife-theme')
+                __('Share quiz — top', 'knife-theme')
             );
 
             the_lead(
@@ -46,7 +46,7 @@
 
             the_share(
                 '<div class="entry-footer__share share">', '</div>',
-                __('Share generator — bottom', 'knife-theme')
+                __('Share quiz — bottom', 'knife-theme')
             );
         ?>
     </div>

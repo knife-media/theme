@@ -68,6 +68,23 @@
     }
   }
 
+  &.post--quiz {
+    flex: 0 1 44rem;
+    align-items: center;
+
+    & > * {
+      margin-top: 1rem;
+    }
+
+    .entry-comments, .entry-footer {
+      background-color: transparent;
+    }
+
+    .entry-comments + .entry-footer {
+      margin-top: 0;
+    }
+  }
+
   &.post--aside {
     flex: 1 1 auto;
   }

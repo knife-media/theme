@@ -79,9 +79,11 @@ class Knife_Post_Lead {
             'media_buttons' => true,
             'textarea_name' => self::$meta,
             'teeny' => true,
-            'tinymce' => true,
             'tinymce' => [
-                'toolbar1' => 'bold,italic,link'
+                'toolbar1' => 'link'
+            ],
+            'quicktags' => [
+                'buttons' => 'link'
             ],
             'editor_height' => 100,
             'drag_drop_upload' => false

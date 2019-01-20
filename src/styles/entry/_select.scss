@@ -1,7 +1,5 @@
 .entry-select {
-  display: flex;
-  flex-flow: column wrap;
-  align-items: center;
+  display: block;
   position: relative;
 
   width: 100%;
@@ -15,18 +13,21 @@
   & > * {
     width: $width-wide;
     max-width: 100%;
-    margin-top: 2rem;
+    margin: 2rem auto 0;
 
     @media screen and (max-width: 767px) {
       width: $width-content;
-      margin-top: 1rem;
+      margin: 1rem auto 0;
     }
+  }
+
+  & > :first-child {
+    margin-top: 0;
   }
 
   .entry-select__title {
     display: block;
 
-    margin-top: 0;
     font-size: 3.5rem;
     font-weight: 700;
     line-height: 1;
@@ -61,13 +62,15 @@
     display: block;
 
     overflow: hidden;
+    -moz-osx-font-smoothing: auto;
+    -webkit-font-smoothing: auto;
 
-    p {
-      margin-bottom: 1rem;
-      line-height: 1.375;
-      font-size: 1.25rem;
-      font-weight: 500;
-      letter-spacing: .25px;
+    & > * {
+      margin: 1rem 0;
+
+      &:first-child {
+        margin-top: 0;
+      }
 
       &:last-child {
         margin-bottom: 0;
@@ -75,8 +78,17 @@
 
       @media screen and (max-width: 767px) {
         margin-bottom: .5rem;
-        line-height: 1.5;
-        font-size: 1.125rem;
+      }
+    }
+
+    p {
+      line-height: 1.5;
+      font-size: 1.125rem;
+      font-weight: 500;
+      letter-spacing: .25px;
+
+      @media screen and (max-width: 767px) {
+        font-size: 1rem;
       }
     }
 
@@ -86,6 +98,16 @@
 
       &:hover {
         border-bottom-color: transparent;
+      }
+    }
+
+    figure {
+      width: $width-wide;
+      max-width: 100%;
+      margin: 2rem 0;
+
+      @media screen and (max-width: 767px) {
+        margin: 1rem 0;
       }
     }
   }

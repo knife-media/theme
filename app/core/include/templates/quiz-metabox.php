@@ -29,17 +29,22 @@
                 );
 
                 printf(
-                    '<p class="manage__check"><label><input data-manage="poster" type="checkbox" name="%1$s[image]" value="1"%2$s>%3$s</label></p>',
+                    '<p class="manage__check"><label><input type="checkbox" name="%1$s[random]" value="1"%2$s>%3$s</label></p>',
                     esc_attr(self::$meta_options),
-                    checked(isset($options['image']), true, false),
-                    __('Использовать изображения в качестве ответов', 'knife-theme')
+                    checked(isset($options['random']), true, false),
+                    __('Показывать вопросы в случайном порядке', 'knife-theme')
                 );
 
                 printf(
-                    '<p class="manage__check"><label><input data-manage="points" type="checkbox" name="%1$s[points]" value="1"%2$s>%3$s</label></p>',
+                    '<p class="manage__title">%s</p>',
+                    __('Пареметры ответов', 'knife-theme')
+                );
+
+                printf(
+                    '<p class="manage__check"><label><input data-manage="poster" type="checkbox" name="%1$s[attachment]" value="1"%2$s>%3$s</label></p>',
                     esc_attr(self::$meta_options),
-                    checked(isset($options['points']), true, false),
-                    __('Разные баллы за каждый ответ', 'knife-theme')
+                    checked(isset($options['attachment']), true, false),
+                    __('Использовать изображения в качестве ответов', 'knife-theme')
                 );
 
                 printf(
@@ -50,17 +55,17 @@
                 );
 
                 printf(
+                    '<p class="manage__check"><label><input data-manage="points" type="checkbox" name="%1$s[points]" value="1"%2$s>%3$s</label></p>',
+                    esc_attr(self::$meta_options),
+                    checked(isset($options['points']), true, false),
+                    __('Разные баллы за каждый ответ', 'knife-theme')
+                );
+
+                printf(
                     '<p class="manage__check"><label><input type="checkbox" name="%1$s[shuffle]" value="1"%2$s>%3$s</label></p>',
                     esc_attr(self::$meta_options),
                     checked(isset($options['shuffle']), true, false),
                     __('Перемешать ответы на вопросы', 'knife-theme')
-                );
-
-                printf(
-                    '<p class="manage__check"><label><input type="checkbox" name="%1$s[subtitle]" value="1"%2$s>%3$s</label></p>',
-                    esc_attr(self::$meta_options),
-                    checked(isset($options['subtitle']), true, false),
-                    __('Отображать правильно/неправильно в ответе', 'knife-theme')
                 );
             ?>
         </div>
@@ -68,17 +73,24 @@
         <div class="manage">
             <?php
                 printf(
-                    '<p class="manage__input"><strong>%3$s</strong><input type="text" name="%1$s[button_text]" value="%2$s"></p>',
+                    '<p class="manage__input"><strong>%3$s</strong><input type="text" name="%1$s[button_start]" value="%2$s"></p>',
                     esc_attr(self::$meta_options),
-                    esc_attr($options['button_text'] ?? __('Начать тест', 'knife-theme')),
-                    __('Текст на кнопке', 'knife-theme')
+                    esc_attr($options['button_start'] ?? __('Начать тест', 'knife-theme')),
+                    __('Текст на кнопке старта', 'knife-theme')
                 );
 
                 printf(
                     '<p class="manage__input"><strong>%3$s</strong><input type="text" name="%1$s[button_next]" value="%2$s"></p>',
                     esc_attr(self::$meta_options),
-                    esc_attr($options['button_next'] ?? __('Следующий вопрос', 'knife-theme')),
+                    esc_attr($options['button_next'] ?? __('Продолжить', 'knife-theme')),
                     __('Текст на кнопке следующего вопроса', 'knife-theme')
+                );
+
+                printf(
+                    '<p class="manage__input"><strong>%3$s</strong><input type="text" name="%1$s[button_last]" value="%2$s"></p>',
+                    esc_attr(self::$meta_options),
+                    esc_attr($options['button_last'] ?? __('Посмотреть результаты', 'knife-theme')),
+                    __('Текст на кнопке последнего вопроса', 'knife-theme')
                 );
 
                 printf(
@@ -106,7 +118,7 @@
                         esc_attr($item['question'] ?? '')
                     );
 
-                    $answers = $item['answer'] ?? [];
+                    $answers = $item['answers'] ?? [];
 
                     // Upgrade with default values
                     array_unshift($answers, array_fill_keys([], ''));
@@ -209,10 +221,10 @@
                 );
 
                 printf(
-                    '<p class="summary__check"><label><input data-summary="common" type="checkbox" name="%1$s[common]" value="1"%2$s>%3$s</label></p>',
+                    '<p class="summary__check"><label><input data-summary="details" type="checkbox" name="%1$s[details]" value="1"%2$s>%3$s</label></p>',
                     esc_attr(self::$meta_options),
-                    checked(isset($options['common']), true, false),
-                    __('Общий текст для всех результатов', 'knife-theme')
+                    checked(isset($options['details']), true, false),
+                    __('Показывать отдельное описание для каждого результата', 'knife-theme')
                 );
 
                 printf(
@@ -237,6 +249,13 @@
                 );
 
                 printf(
+                    '<p class="summary__check"><label><input data-summary="promo" type="checkbox" name="%1$s[promo]" value="1"%2$s>%3$s</label></p>',
+                    esc_attr(self::$meta_options),
+                    checked(isset($options['promo']), true, false),
+                    __('Добавить общий рекламный текст под результатом', 'knife-theme')
+                );
+
+                printf(
                     '<p class="summary__text"><textarea class="wp-editor-area" name="%1$s[remark]">%2$s</textarea></p>',
                     esc_attr(self::$meta_options),
                     esc_attr($options['remark'] ?? '')
@@ -249,11 +268,11 @@
 
         <?php foreach($results as $i => $result) : ?>
             <div class="result">
-                <div class="result__message">
+                <div class="result__details">
                     <?php
                         printf(
-                            '<textarea class="wp-editor-area" data-result="message">%s</textarea>',
-                            esc_attr($result['message'] ?? '')
+                            '<textarea class="wp-editor-area" data-result="details">%s</textarea>',
+                            esc_attr($result['details'] ?? '')
                         );
                     ?>
                 </div>

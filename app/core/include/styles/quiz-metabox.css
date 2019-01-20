@@ -372,21 +372,24 @@
   display: block;
   flex: 1 1 350px;
 
-  margin: 15px 15px 10px;
+  margin: 15px 15px 5px;
 }
   #knife-quiz-box .manage__title {
     display: block;
 
     width: 100%;
-    margin: 0 0 10px;
+    margin: 20px 0 10px;
     font-size: 13px;
     font-weight: 600;
     color: #333;
   }
+    #knife-quiz-box .manage__title:first-child {
+      margin-top: 0;
+    }
 
   #knife-quiz-box .manage__check {
     display: block;
-    margin: 0 0 10px;
+    margin: 0 0 12px;
   }
     #knife-quiz-box .manage__check label {
       user-select: none;
@@ -399,7 +402,6 @@
   #knife-quiz-box .manage__input {
     display: block;
     margin: 0 0 10px;
-    padding-bottom: 1px;
   }
     #knife-quiz-box .manage__input strong {
       display: block;
@@ -425,7 +427,7 @@
   display: block;
   flex: 1;
 
-  margin: 15px 15px 10px;
+  margin: 15px 15px 5px;
 }
   #knife-quiz-box .summary__title {
     display: block;
@@ -441,9 +443,6 @@
     display: none;
     margin: 25px 0 10px;
   }
-    #knife-quiz-box .summary__text:last-child {
-      margin-bottom: 0;
-    }
 
     #knife-quiz-box .summary__text textarea {
       display: block;
@@ -454,7 +453,7 @@
 
   #knife-quiz-box .summary__check {
     display: block;
-    margin: 0 0 10px;
+    margin: 0 0 12px;
   }
 
   #knife-quiz-box .summary__check label {
@@ -465,7 +464,7 @@
     margin-right: 8px;
   }
 
-#knife-quiz-box .summary--common .summary__text {
+#knife-quiz-box .summary--promo .summary__text {
   display: block;
 }
 
@@ -660,8 +659,8 @@
 }
 
 
-#knife-quiz-box .result__message {
-  display: block;
+#knife-quiz-box .result__details {
+  display: none;
   flex: 1 1 100%;
 
   margin: 10px;
@@ -669,7 +668,7 @@
 
   border-bottom: 1px solid #ddd;
 }
-  #knife-quiz-box .result__message textarea {
+  #knife-quiz-box .result__details textarea {
     display: block;
 
     width: 100%;
@@ -698,8 +697,8 @@
     font-weight: 400;
   }
 
-#knife-quiz-box .result--common .result__message {
-  display: none;
+#knife-quiz-box .result--details .result__details {
+  display: block;
 }
 
 #knife-quiz-box .result--achievment .result__share-achievment {

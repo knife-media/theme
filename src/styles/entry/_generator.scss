@@ -1,7 +1,5 @@
 .entry-generator {
-  display: flex;
-  flex-flow: column wrap;
-  align-items: center;
+  display: block;
   position: relative;
 
   width: 100%;
@@ -15,10 +13,10 @@
   & > * {
     width: $width-wide;
     max-width: 100%;
-    margin-top: 2.5rem;
+    margin: 2.5rem auto;
 
     @media screen and (max-width: 767px) {
-      margin-top: 1.5rem;
+      margin: 1.5rem auto;
     }
   }
 
@@ -102,12 +100,12 @@
 
     overflow: hidden;
 
-    p {
-      margin-bottom: 1rem;
-      line-height: 1.5;
-      font-size: 1.125rem;
-      font-weight: 500;
-      letter-spacing: .25px;
+    & > * {
+      margin: 1rem 0;
+
+      &:first-child {
+        margin-top: 0;
+      }
 
       &:last-child {
         margin-bottom: 0;
@@ -115,6 +113,16 @@
 
       @media screen and (max-width: 767px) {
         margin-bottom: .5rem;
+      }
+    }
+
+    p {
+      line-height: 1.5;
+      font-size: 1.125rem;
+      font-weight: 500;
+      letter-spacing: .25px;
+
+      @media screen and (max-width: 767px) {
         font-size: 1rem;
       }
     }
@@ -125,6 +133,16 @@
 
       &:hover {
         border-bottom-color: transparent;
+      }
+    }
+
+    figure {
+      width: $width-content;
+      max-width: 100%;
+      margin: 2rem 0;
+
+      @media screen and (max-width: 767px) {
+        margin: 1rem 0;
       }
     }
   }

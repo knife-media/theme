@@ -5,7 +5,7 @@
 * Custom post type for quiz
 *
 * @package knife-theme
-* @since 1.6
+* @since 1.7
 */
 
 if (!defined('WPINC')) {
@@ -92,6 +92,9 @@ class Knife_Open_Quiz {
         // Register quiz post type
         add_action('init', [__CLASS__, 'register_type']);
 
+        // Change single post type template path
+        add_action('single_template', [__CLASS__, 'include_single']);
+
         // Add quiz metabox
         add_action('add_meta_boxes', [__CLASS__, 'add_metabox'], 10);
 
@@ -103,6 +106,9 @@ class Knife_Open_Quiz {
 
         // Create result poster
         add_action('wp_ajax_' . self::$action, [__CLASS__, 'create_poster']);
+
+        // Include quiz options
+        add_action('wp_enqueue_scripts', [__CLASS__, 'inject_quiz'], 12);
     }
 
 
@@ -142,6 +148,53 @@ class Knife_Open_Quiz {
             'exclude_from_search'   => true,
             'publicly_queryable'    => true
         ]);
+    }
+
+
+    /**
+     * Include quiz meta options, items and results
+     */
+    public static function inject_quiz() {
+        if(is_singular(self::$slug)) {
+            $post_id = get_the_ID();
+            $options = get_post_meta($post_id, self::$meta_options, true);
+
+            // Add quiz items
+            wp_localize_script('knife-theme', 'knife_quiz_items',
+                self::retrieve_items($post_id, $options)
+            );
+
+            // Add quiz results
+            wp_localize_script('knife-theme', 'knife_quiz_results',
+                self::retrieve_results($post_id, $options)
+            );
+
+            if(class_exists('Knife_Share_Buttons')) {
+                $options = array_merge($options, [
+                    'permalink' => get_permalink($post_id),
+                    'share_links' => Knife_Share_Buttons::get_settings($post_id)
+                ]);
+            }
+
+            // Add quiz options object
+            wp_localize_script('knife-theme', 'knife_quiz_options', $options);
+        }
+    }
+
+
+    /**
+     * Include single quiz template
+     */
+    public static function include_single($template) {
+        if(is_singular(self::$slug)) {
+            $new_template = locate_template(['templates/single-quiz.php']);
+
+            if(!empty($new_template)) {
+                return $new_template;
+            }
+        }
+
+        return $template;
     }
 
 
@@ -220,6 +273,7 @@ class Knife_Open_Quiz {
             'nonce' => wp_create_nonce(self::$nonce),
             'meta_items' => esc_attr(self::$meta_items),
             'meta_results' => esc_attr(self::$meta_results),
+            'editor' => wp_default_editor(),
             'choose' => __('Выберите изображение', 'knife-theme'),
             'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
         ];
@@ -285,11 +339,11 @@ class Knife_Open_Quiz {
 
         foreach($_REQUEST[$query] as $item) {
             // Filter answer array
-            if(isset($item['answer']) && is_array($item['answer'])) {
-                foreach($item['answer'] as $i => &$answer) {
+            if(isset($item['answers']) && is_array($item['answers'])) {
+                foreach($item['answers'] as $i => &$answer) {
                     // Remove answer if empty
                     if((bool) array_filter($answer) === false) {
-                        unset($item['answer'][$i]);
+                        unset($item['answers'][$i]);
                     }
                 }
             }
@@ -314,6 +368,103 @@ class Knife_Open_Quiz {
                 add_post_meta($post_id, $query, wp_kses_post_deep($result));
             }
         }
+    }
+
+
+    /**
+     * Retrieve items within meta to show as object
+     */
+    private static function retrieve_items($post_id, $options, $items = []) {
+        // Loop through items
+        foreach(get_post_meta($post_id, self::$meta_items) as $meta) {
+
+            // Skip item if required field is empty
+            foreach(['question', 'answers'] as $field) {
+                if(empty($meta[$field])) {
+                    continue 2;
+                }
+            }
+
+            $answers = [];
+
+            foreach($meta['answers'] as $i => $fields) {
+                if($answer = self::get_answer($fields, $options)) {
+                    $answers[] = $answer;
+                }
+            }
+
+            if(count($answers) > 0) {
+                $items[] = [
+                    'question' => apply_filters('the_content', $meta['question']),
+                    'answers' => $answers
+                ];
+            }
+        }
+
+        return $items;
+    }
+
+
+    /**
+     * Retrieve results within meta to show as object
+     */
+    private static function retrieve_results($post_id, $options, $results = []) {
+        return $results;
+    }
+
+
+    /**
+     * Helper to get answer using options
+     */
+    private static function get_answer($fields, $options, $answer = []) {
+        // Set choice
+        if(empty($options['attachment'])) {
+            if(empty($fields['choice'])) {
+                return false;
+            }
+
+            $answer['choice'] = wp_kses_post($fields['choice']);
+        }
+
+        // Set attachment
+        if(!empty($options['attachment'])) {
+            if(empty($fields['attachment'])) {
+                return false;
+            }
+
+            $attachment = wp_get_attachment_image_url($fields['attachment'], 'inner');
+
+            if($attachment === false) {
+                return false;
+            }
+
+            $answer['attachment'] = esc_url($attachment);
+        }
+
+        // Set binary option
+        if(empty($options['points']) && isset($fields['binary'])) {
+            $answer['binary'] = 1;
+        }
+
+        // Set points
+        if(!empty($options['points'])) {
+            if(!isset($fields['points'])) {
+                return false;
+            }
+
+            $answer['points'] = absint($fields['points']);
+        }
+
+        // Set message if required
+        if(!empty($options['message'])) {
+            if(empty($fields['message'])) {
+                return false;
+            }
+
+            $answer['message'] = wp_kses_post($fields['message']);
+        }
+
+        return $answer;
     }
 
 

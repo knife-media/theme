@@ -203,7 +203,9 @@ class Knife_Random_Generator {
             wp_localize_script('knife-theme', 'knife_generator_options', $options);
 
             // Add generator items
-            wp_localize_script('knife-theme', 'knife_generator_items', self::retrieve_items($post_id));
+            wp_localize_script('knife-theme', 'knife_generator_items',
+                self::retrieve_items($post_id)
+            );
         }
     }
 

@@ -109,13 +109,8 @@ jQuery(document).ready(function($) {
    * Update wp.editor using editorId
    */
   function updateEditor(el) {
-    var options = {
-      tinymce: true,
-      quicktags: true,
-      mediaButtons: true,
-      tinymce: {
-        toolbar1: 'bold,italic,link'
-      }
+    if(typeof knife_quiz_metabox.choose === 'undefined') {
+      knife_quiz_metabox.editor = 'html';
     }
 
     $.each(el.find('.wp-editor-area'), function(i, editor) {
@@ -131,7 +126,20 @@ jQuery(document).ready(function($) {
         wp.editor.remove(editorId);
       }
 
-      wp.editor.initialize(editorId, options);
+      wp.editor.initialize(editorId, {
+        tinymce: {
+          toolbar1: 'link',
+          init_instance_callback: function() {
+            if(window.tinymce && window.switchEditors) {
+              window.switchEditors.go(editorId, knife_quiz_metabox.editor);
+            }
+          }
+        },
+        quicktags: {
+          buttons: 'link'
+        },
+        mediaButtons: true
+      });
     });
   }
 
@@ -194,7 +202,7 @@ jQuery(document).ready(function($) {
         // Create name attribute
         var name = meta_items;
 
-        $.each([number, 'answer', i, data], function(i, v) {
+        $.each([number, 'answers', i, data], function(i, v) {
           name = name + '[' + v + ']';
         });
 
@@ -315,8 +323,8 @@ jQuery(document).ready(function($) {
     );
 
     // Toggle summary block
-    if(option.data('summary') === 'common') {
-      option.closest('.summary').toggleClass('summary--common',
+    if(option.data('summary') === 'promo') {
+      option.closest('.summary').toggleClass('summary--promo',
         option.is(':checked')
       );
     }
