@@ -299,9 +299,9 @@ jQuery(document).ready(function($) {
 
 
   /**
-   * Toggle answer class by option
+   * Toggle manage options
    */
-  function toggleAnswer(option) {
+  function toggleManage(option) {
     // Get new answer class
     var toggle = 'answer--' + option.data('manage');
 
@@ -312,22 +312,28 @@ jQuery(document).ready(function($) {
 
 
   /**
-   * Toggle result class by option
+   * Toggle summary options
    */
-  function toggleResult(option) {
-    // Toggle result class
+  function toggleSummary(option) {
     var toggle = 'result--' + option.data('summary');
 
     box.find('.result').toggleClass(toggle,
       option.is(':checked')
     );
+  }
 
-    // Toggle summary block
-    if(option.data('summary') === 'promo') {
-      option.closest('.summary').toggleClass('summary--promo',
-        option.is(':checked')
-      );
-    }
+
+  /**
+   * Toggle details options
+   */
+  function toggleDetails(option) {
+    box.find('.result').toggleClass('result--details',
+      option.data('details') === 'result' && option.is(':checked')
+    );
+
+    box.find('.remark').toggleClass('remark--details',
+      option.data('details') === 'remark' && option.is(':checked')
+    );
   }
 
 
@@ -337,7 +343,7 @@ jQuery(document).ready(function($) {
   box.on('change', '.manage input[data-manage]', function() {
     var option = $(this);
 
-    return toggleAnswer(option);
+    return toggleManage(option);
   });
 
 
@@ -347,7 +353,17 @@ jQuery(document).ready(function($) {
   box.on('change', '.summary input[data-summary]', function() {
     var option = $(this);
 
-    return toggleResult(option);
+    return toggleSummary(option);
+  });
+
+
+  /**
+   * Details radio trigger
+   */
+  box.on('change', '.summary input[data-details]', function() {
+    var option = $(this);
+
+    return toggleDetails(option);
   });
 
 
@@ -601,12 +617,11 @@ jQuery(document).ready(function($) {
     });
 
 
-    // Set answer classes
+    // Set manage classes
     box.find('.manage input[data-manage]').each(function() {
       var option = $(this);
 
-      // Toggle answer class using option
-      toggleAnswer(option);
+      toggleManage(option);
     });
 
 
@@ -614,13 +629,20 @@ jQuery(document).ready(function($) {
     box.find('.summary input[data-summary]').each(function() {
       var option = $(this);
 
-      // Toggle summary class
-      toggleResult(option);
+      toggleSummary(option);
+    });
+
+
+    // Set details classes
+    box.find('.summary input[data-details]:checked').each(function() {
+      var option = $(this);
+
+      toggleDetails(option);
     });
 
 
     // Init summary editors
-    updateEditor(box.find('.summary'));
+    updateEditor(box.find('.remark'));
 
     // Show items
     box.find('.box--items').addClass('box--expand');

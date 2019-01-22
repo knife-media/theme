@@ -409,6 +409,31 @@ class Knife_Open_Quiz {
      * Retrieve results within meta to show as object
      */
     private static function retrieve_results($post_id, $options, $results = []) {
+        // Loop through results
+        foreach(get_post_meta($post_id, self::$meta_results) as $meta) {
+            $result = [];
+
+            if(empty($options['details'])) {
+                $options['details'] = 'none';
+            }
+
+            if($options['details'] === 'result' && !empty($meta['details'])) {
+                $result['details'] = apply_filters('the_content', $meta['details']);
+            }
+
+            if($options['details'] === 'remark' && !empty($options['remark'])) {
+                $result['details'] = apply_filters('the_content', $options['remark']);
+            }
+
+            for($i = (int) $meta['from']; $i <= (int) $meta['to']; $i++) {
+                $results[$i][] = $result;
+            }
+
+            print_r($meta);
+        }
+        print_r($results);
+        die;
+
         return $results;
     }
 
@@ -452,7 +477,7 @@ class Knife_Open_Quiz {
                 return false;
             }
 
-            $answer['points'] = absint($fields['points']);
+            $answer['points'] = (int) $fields['points'];
         }
 
         // Set message if required

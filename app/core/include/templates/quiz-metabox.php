@@ -5,6 +5,10 @@
         // Quiz options
         $options = get_post_meta($post_id, self::$meta_options, true);
 
+        if(!isset($options['details'])) {
+            $options['details'] = 'none';
+        }
+
         // Quiz items
         $items = get_post_meta($post_id, self::$meta_items);
 
@@ -221,13 +225,6 @@
                 );
 
                 printf(
-                    '<p class="summary__check"><label><input data-summary="details" type="checkbox" name="%1$s[details]" value="1"%2$s>%3$s</label></p>',
-                    esc_attr(self::$meta_options),
-                    checked(isset($options['details']), true, false),
-                    __('Показывать отдельное описание для каждого результата', 'knife-theme')
-                );
-
-                printf(
                     '<p class="summary__check"><label><input data-summary="achievment" type="checkbox" name="%1$s[achievment]" value="1"%2$s>%3$s</label></p>',
                     esc_attr(self::$meta_options),
                     checked(isset($options['achievment']), true, false),
@@ -242,21 +239,50 @@
                 );
 
                 printf(
-                    '<p class="summary__check"><label><input type="checkbox" name="%1$s[norepeat]" value="1"%2$s>%3$s</label></p>',
+                    '<p class="summary__check"><label><input type="checkbox" name="%1$s[repeat]" value="1"%2$s>%3$s</label></p>',
                     esc_attr(self::$meta_options),
-                    checked(isset($options['norepeat']), true, false),
-                    __('Спрятать кнопку повтора прохождения', 'knife-theme')
+                    checked(isset($options['repeat']), true, false),
+                    __('Скрыть кнопку повтороного прохождения', 'knife-theme')
+                );
+            ?>
+        </div>
+
+        <div class="summary">
+            <?php
+                printf(
+                    '<p class="summary__title">%s</p>',
+                    __('Параметры отображения текста', 'knife-theme')
                 );
 
                 printf(
-                    '<p class="summary__check"><label><input data-summary="promo" type="checkbox" name="%1$s[promo]" value="1"%2$s>%3$s</label></p>',
+                    '<p class="summary__radio"><label><input data-details="none" type="radio" name="%1$s[details]" value="none"%2$s>%3$s</label></p>',
                     esc_attr(self::$meta_options),
-                    checked(isset($options['promo']), true, false),
-                    __('Добавить общий рекламный текст под результатом', 'knife-theme')
+                    checked($options['details'], 'none', false),
+                    __('Не показывать текст под постером', 'knife-theme')
                 );
 
                 printf(
-                    '<p class="summary__text"><textarea class="wp-editor-area" name="%1$s[remark]">%2$s</textarea></p>',
+                    '<p class="summary__radio"><label><input data-details="remark" type="radio" name="%1$s[details]" value="remark"%2$s>%3$s</label></p>',
+                    esc_attr(self::$meta_options),
+                    checked($options['details'], 'remark', false),
+                    __('Общий текст для всех результатов', 'knife-theme')
+                );
+
+                printf(
+                    '<p class="summary__radio"><label><input data-details="result" type="radio" name="%1$s[details]" value="result"%2$s>%3$s</label></p>',
+                    esc_attr(self::$meta_options),
+                    checked($options['details'], 'result', false),
+                    __('Отдельное описание для каждого результата', 'knife-theme')
+                );
+            ?>
+        </div>
+    </div>
+
+    <div class="box box--remark">
+        <div class="remark">
+            <?php
+                printf(
+                    '<p class="remark__text"><textarea class="wp-editor-area" name="%1$s[remark]">%2$s</textarea></p>',
                     esc_attr(self::$meta_options),
                     esc_attr($options['remark'] ?? '')
                 );
@@ -303,18 +329,13 @@
                 <div class="result__image">
                     <figure class="result__image-poster">
                         <?php
-                            if(!empty($result['media'])) {
-                                printf('<img src="%s" alt="">', esc_url($result['media']));
+                            if(!empty($result['posters'][0])) {
+                                printf('<img src="%s" alt="">', esc_url($result['posters'][0]));
                             }
 
                             printf(
                                 '<figcaption class="result__image-caption">%s</figcaption>',
                                 __('Выбрать изображение для постера', 'knife-theme')
-                            );
-
-                            printf(
-                                '<input type="hidden" data-result="media" value="%s">',
-                                esc_attr($result['media'] ?? '')
                             );
 
                             printf(
@@ -330,6 +351,11 @@
                                 '<button class="result__image-generate button" type="button">%s</button>',
                                 __('Сгенерировать', 'knife-theme')
                             );
+
+                            printf(
+                                '<button class="result__image-manual button" type="button">%s</button>',
+                                __('Добавить вручную', 'knife-theme')
+                            );
                         ?>
 
                         <span class="result__image-spinner spinner"></span>
@@ -337,6 +363,19 @@
                 </div>
 
                 <p class="result__warning"></p>
+
+                <div class="result__posters">
+                    <?php
+                        $posters = $result['posters'] ?? [];
+
+                        foreach($posters as $score => $poster) {
+                            printf(
+                                '<p class="poster"><strong>%1$d</strong><input type="input" data-poster="%1$d" value="%2$s"></p>',
+                                intval($score), esc_url($poster)
+                            );
+                        }
+                    ?>
+                </div>
 
                 <div class="result__scores">
                     <?php

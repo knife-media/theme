@@ -175,9 +175,23 @@
       }
     }
 
-    if(index === total && knife_quiz_options.hasOwnProperty('button_last')) {
+    if(index === total) {
+      if(typeof knife_quiz_results === 'undefined') {
+        return button.
+      }
+
+
+      && knife_quiz_options.hasOwnProperty('button_last')) {
       button.textContent = knife_quiz_options.button_last;
     }
+  }
+
+
+  /**
+   * Show results
+   */
+  function showResults() {
+    console.log(scores);
   }
 
 
@@ -210,6 +224,16 @@
       knife_quiz_items.sort(function() {
         return 0.5 - Math.random()
       });
+    }
+  })();
+
+
+  /**
+   * Prepare results
+   */
+  (function() {
+    if(typeof knife_quiz_results !== 'object') {
+      knife_quiz_results = [];
     }
   })();
 
