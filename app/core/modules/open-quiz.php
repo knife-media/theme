@@ -334,6 +334,10 @@ class Knife_Open_Quiz {
      * Update quiz items meta from post-metabox
      */
     private static function update_items($query, $post_id) {
+        if(empty($_REQUEST[$query])) {
+            return;
+        }
+
         // Delete quiz post meta to create it again below
         delete_post_meta($post_id, $query);
 
@@ -360,13 +364,15 @@ class Knife_Open_Quiz {
      * Update quiz results meta from post-metabox
      */
     private static function update_results($query, $post_id) {
+        if(empty($_REQUEST[$query])) {
+            return;
+        }
+
         // Delete quiz post meta to create it again below
         delete_post_meta($post_id, $query);
 
         foreach($_REQUEST[$query] as $result) {
-            if(array_filter($result)) {
-                add_post_meta($post_id, $query, wp_kses_post_deep($result));
-            }
+            add_post_meta($post_id, $query, wp_kses_post_deep($result));
         }
     }
 

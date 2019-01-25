@@ -743,6 +743,38 @@
     height: 100px;
   }
 
+#knife-quiz-box .result__posters {
+  display: none;
+
+  width: 100%;
+  margin: 10px 10px 5px;
+
+  border-top: 1px solid #ddd;
+}
+  #knife-quiz-box .result__posters-field {
+    display: block;
+
+    width: 100%;
+    margin: 15px 0 0;
+  }
+  @media screen and (min-width: 1200px) {
+    #knife-quiz-box .result__posters-field {
+      width: calc(100% - 320px);
+    }
+  }
+
+  #knife-quiz-box .result__posters-field strong {
+    display: block;
+
+    margin-bottom: 5px;
+  }
+
+  #knife-quiz-box .result__posters-field input {
+    display: block;
+
+    width: 100%;
+  }
+
 
 #knife-quiz-box .result__scores {
   display: flex;
@@ -766,6 +798,10 @@
   }
 
 #knife-quiz-box .result--details .result__details {
+  display: block;
+}
+
+#knife-quiz-box .result--posters .result__posters {
   display: block;
 }
 

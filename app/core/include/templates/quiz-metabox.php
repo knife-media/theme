@@ -294,6 +294,12 @@
 
         <?php foreach($results as $i => $result) : ?>
             <div class="result">
+                <?php
+                    if(empty($result['posters']) || !is_array($result['posters'])) {
+                        $result['posters'] = [''];
+                    }
+                ?>
+
                 <div class="result__details">
                     <?php
                         printf(
@@ -329,8 +335,10 @@
                 <div class="result__image">
                     <figure class="result__image-poster">
                         <?php
-                            if(!empty($result['posters'][0])) {
-                                printf('<img src="%s" alt="">', esc_url($result['posters'][0]));
+                            //list($poster) = $result['posters'];
+
+                            if(!empty($poster)) {
+                                printf('<img src="%s" alt="">', esc_url($poster));
                             }
 
                             printf(
@@ -354,7 +362,7 @@
 
                             printf(
                                 '<button class="result__image-manual button" type="button">%s</button>',
-                                __('Добавить вручную', 'knife-theme')
+                                __('Показать постеры', 'knife-theme')
                             );
                         ?>
 
@@ -366,12 +374,15 @@
 
                 <div class="result__posters">
                     <?php
-                        $posters = $result['posters'] ?? [];
-
-                        foreach($posters as $score => $poster) {
+                        foreach($result['posters'] as $score => $poster) {
                             printf(
-                                '<p class="poster"><strong>%1$d</strong><input type="input" data-poster="%1$d" value="%2$s"></p>',
-                                intval($score), esc_url($poster)
+                                '<p class="result__posters-field"><strong>%1$s</strong><input type="text" data-poster="%3$d" value="%2$s"></p>',
+
+                                sprintf(
+                                    __('Постер для результата: <span>%d</span>', 'knife-theme'), (int) $score
+                                ),
+
+                                esc_url($poster ?? ''), (int) $score
                             );
                         }
                     ?>

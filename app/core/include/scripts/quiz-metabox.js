@@ -38,9 +38,63 @@ jQuery(document).ready(function($) {
 
     spinner.toggleClass('is-active');
 
-    return result.find('.result__image-generate').prop('disabled',
+    result.find('.result__image-generate').prop('disabled',
       result.hasClass('is-active')
     );
+  }
+
+
+  /**
+   * Update poster fields
+   */
+  function updatePosters(result, posters) {
+    var points = {};
+
+    $.each(['from', 'to'], function(i, v) {
+      points[v] = result.find('[data-result="' + v + '"]').val();
+    });
+
+    // Collect all results posters by points
+    if(typeof posters === 'undefined') {
+      posters = {};
+
+      result.find('input[data-poster]').each(function() {
+        var score = $(this).data('poster');
+
+        posters[score] = $(this).val();
+      });
+    }
+
+    // Clone first field
+    var clone = result.find('.result__posters-field:first').clone();
+
+    if(points.from > points.to) {
+      return false;
+    }
+
+    // Clear posters to recreate them below
+    result.find('.result__posters').empty();
+
+    for(var i = points.from; i <= points.to; i++) {
+      var field = clone.clone();
+
+      // Set points in title
+      field.find('span').text(i);
+
+      // Set input attributes
+      field.find('input').attr({
+        'value': '',
+        'data-poster': i
+      });
+
+      if(posters.hasOwnProperty(i)) {
+        field.find('input').val(posters[i]);
+      }
+
+      result.find('.result__posters').append(field);
+    }
+
+    sortPosters(result);
   }
 
 
@@ -167,7 +221,7 @@ jQuery(document).ready(function($) {
         // Create name attribute
         var name = meta_items + '[' + i + ']';
 
-        return $(this).attr('name', name + '[' + data + ']');
+        $(this).attr('name', name + '[' + data + ']');
       });
 
       item.data('number', i);
@@ -202,11 +256,11 @@ jQuery(document).ready(function($) {
         // Create name attribute
         var name = meta_items;
 
-        $.each([number, 'answers', i, data], function(i, v) {
+        $.each([number, 'answers', i, data], function(j, v) {
           name = name + '[' + v + ']';
         });
 
-        return $(this).attr('name', name);
+        $(this).attr('name', name);
       });
     });
   }
@@ -235,13 +289,44 @@ jQuery(document).ready(function($) {
         // Create name attribute
         var name = meta_results + '[' + i + ']';
 
-        return $(this).attr('name', name + '[' + data + ']');
+        $(this).attr('name', name + '[' + data + ']');
       });
+
+      result.data('number', i);
     });
 
     if(typeof callback === 'function') {
       return callback();
     }
+  }
+
+
+  /**
+   * Update posters order
+   */
+  function sortPosters(result) {
+    if(typeof knife_quiz_metabox.meta_results === 'undefined') {
+      return alert(knife_quiz_metabox.error);
+    }
+
+    var meta_results = knife_quiz_metabox.meta_results;
+
+    // Get item number
+    var number = result.data('number');
+
+    // Loop through answers fields
+    result.find('[data-poster]').each(function() {
+      var data = $(this).data('poster');
+
+      // Create name attribute
+      var name = meta_results;
+
+      $.each([number, 'posters', data], function(i, v) {
+        name = name + '[' + v + ']';
+      });
+
+      $(this).attr('name', name);
+    });
   }
 
 
@@ -294,7 +379,7 @@ jQuery(document).ready(function($) {
       return showcase.prependTo(poster);
     });
 
-    return frame.open();
+    frame.open();
   }
 
 
@@ -378,8 +463,7 @@ jQuery(document).ready(function($) {
     // Insert after last item
     box.find('.item:last').after(item);
 
-    // Sort questions and update editor
-    return sortQuestions(function() {
+    sortQuestions(function() {
       updateEditor(item);
     });
   });
@@ -400,9 +484,14 @@ jQuery(document).ready(function($) {
 
     var prev = item.prev().insertAfter(item);
 
-    // Sort questions and update editor
-    return sortQuestions(function() {
-      updateEditor(prev);
+    sortQuestions(function() {
+      // Sort answers
+      box.find('.item:not(:first)').each(function(i) {
+        sortAnswers($(this));
+      });
+
+      // Update item editor
+      updateEditor(item);
     });
   });
 
@@ -415,13 +504,17 @@ jQuery(document).ready(function($) {
 
     var item = $(this).closest('.item');
 
-    // Remove item
-    item.remove();
+    sortQuestions(function() {
+      // Sort answers
+      box.find('.item:not(:first)').each(function(i) {
+        sortAnswers($(this));
+      });
 
-    // Sort questions and update editor
-    return sortQuestions(function() {
+      // Update item editor
       updateEditor(item);
     });
+
+    item.remove();
   });
 
 
@@ -446,7 +539,7 @@ jQuery(document).ready(function($) {
       item.find('.item__manage-toggle').trigger('click');
     }
 
-    return sortAnswers(item);
+    sortAnswers(item);
   });
 
 
@@ -466,7 +559,7 @@ jQuery(document).ready(function($) {
       item.find('.answer').length <= 1
     );
 
-    return sortAnswers(item);
+    sortAnswers(item);
   });
 
 
@@ -496,25 +589,7 @@ jQuery(document).ready(function($) {
 
     var poster = $(this);
 
-    return appendImage(poster, '.answer__poster-attachment', true);
-  });
-
-
-  /**
-   * Remove question
-   */
-  box.on('click', '.item__delete', function(e) {
-    e.preventDefault();
-
-    var item = $(this).closest('.item');
-
-    // Remove item
-    item.remove();
-
-    // Sort questions and update editor
-    return sortQuestions(function() {
-      updateEditor(item);
-    });
+    appendImage(poster, '.answer__poster-attachment', true);
   });
 
 
@@ -529,8 +604,13 @@ jQuery(document).ready(function($) {
     // Insert after last item
     box.find('.result:last').after(result);
 
-    // Sort questions and update editor
-    return sortResults(function() {
+    sortResults(function() {
+      // Sort posters
+      box.find('.result:not(:first)').each(function(i) {
+        sortPosters($(this));
+      });
+
+      // Update item editor
       updateEditor(result);
     });
   });
@@ -544,13 +624,17 @@ jQuery(document).ready(function($) {
 
     var result = $(this).closest('.result');
 
-    // Remove item
-    result.remove();
+    sortResults(function() {
+      // Sort posters
+      box.find('.result:not(:first)').each(function(i) {
+        sortPosters($(this));
+      });
 
-    // Sort questions and update editor
-    return sortResults(function() {
+      // Update item editor
       updateEditor(result);
     });
+
+    result.remove();
   });
 
 
@@ -562,7 +646,7 @@ jQuery(document).ready(function($) {
 
     var poster = $(this);
 
-    return appendImage(poster, '.result__image-attachment', false, '.result__image-media');
+    appendImage(poster, '.result__image-attachment', false, '.result__image-media');
   });
 
 
@@ -579,7 +663,27 @@ jQuery(document).ready(function($) {
       return blinkClass(caption, 'result__image-caption--error');
     }
 
-    return createPoster(result);
+    createPoster(result);
+  });
+
+
+  /**
+   * Show posters fields
+   */
+  box.on('click', '.result__image-manual', function(e) {
+    e.preventDefault();
+
+    var result = $(this).closest('.result');
+
+    if(result.find('.result__posters').children().length === 0) {
+      return alert(knife_quiz_metabox.error);
+    }
+
+    if(!result.hasClass('result--posters')) {
+      updatePosters(result);
+    }
+
+    result.toggleClass('result--posters');
   });
 
 
@@ -611,6 +715,9 @@ jQuery(document).ready(function($) {
       box.find('.result:not(:first)').each(function(i) {
         var result = $(this);
 
+        // Sort posters
+        sortPosters(result);
+
         // Update editor
         updateEditor(result);
       });
@@ -641,7 +748,7 @@ jQuery(document).ready(function($) {
     });
 
 
-    // Init summary editors
+    // Init remark editor
     updateEditor(box.find('.remark'));
 
     // Show items
