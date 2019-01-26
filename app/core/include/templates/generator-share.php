@@ -5,7 +5,6 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="<?php echo esc_attr($description); ?>">
-    <meta name="author" content="">
 
     <meta property="og:title" content="<?php echo esc_attr($caption); ?>">
     <meta property="og:site_name" content="НОЖ">

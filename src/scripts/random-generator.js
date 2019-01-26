@@ -25,15 +25,15 @@
 
 
   /**
-   * Items copy array
+   * Define items as empty object
    */
-  var items = knife_generator_items.slice(0);
+  var items = {};
 
 
   /**
    * Start button element
    */
-  var start = null;
+  var button = null;
 
 
   /**
@@ -50,14 +50,14 @@
       return false;
     }
 
-    var buttons = generator.querySelectorAll('.share > .share__link');
+    var links = generator.querySelectorAll('.share > .share__link');
 
     var matches = [
       knife_generator_options.permalink.replace(/\/?$/, '/') + index + '/', caption
     ];
 
-    for(var i = 0, link; button = buttons[i]; i++) {
-      var label = button.getAttribute('data-label');
+    for(var i = 0, link; link = links[i]; i++) {
+      var label = link.getAttribute('data-label');
 
       if(typeof knife_generator_options.share_links[label] === 'undefined') {
         continue;
@@ -65,7 +65,7 @@
 
       var options = knife_generator_options.share_links[label];
 
-      button.href = options.link.replace(/%([\d])\$s/g, function(match, i) {
+      link.href = options.link.replace(/%([\d])\$s/g, function(match, i) {
         return encodeURIComponent(matches[i - 1]);
       });
     }
@@ -91,7 +91,7 @@
 
 
   /**
-   * Set generator start options
+   * Set generator button options
    */
   (function() {
     // Set background color
@@ -119,21 +119,21 @@
     wrapper.classList.add('entry-generator__button');
     generator.appendChild(wrapper);
 
-    // Create start button
-    start = document.createElement('button');
-    start.classList.add('button');
-    start.setAttribute('type', 'button');
-    start.textContent = knife_generator_options.button_text;
-    wrapper.appendChild(start);
+    // Create button button
+    button = document.createElement('button');
+    button.classList.add('button');
+    button.setAttribute('type', 'button');
+    button.textContent = knife_generator_options.button_text;
+    wrapper.appendChild(button);
 
     // Set button color
     if(typeof knife_generator_options.button_background !== 'undefined') {
-      start.style.backgroundColor = knife_generator_options.button_background;
+      button.style.backgroundColor = knife_generator_options.button_background;
     }
 
     // Set button text color
     if(typeof knife_generator_options.button_color !== 'undefined') {
-      start.style.color = knife_generator_options.button_color;
+      button.style.color = knife_generator_options.button_color;
     }
   })();
 
@@ -141,19 +141,11 @@
   /**
    * Generate button click
    */
-  start.addEventListener('click', function(e) {
+  button.addEventListener('click', function(e) {
     e.preventDefault();
 
-    var rand = Math.floor(Math.random() * items.length);
-    var item = items[rand];
-
-    items.splice(rand, 1);
-
-    // Reset items array if it is already empty
-    if(items.length < 1) {
-      items = knife_generator_items.slice(0);
-    }
-
+    var rand = Math.floor(Math.random() * knife_generator_items.length);
+    var item = knife_generator_items[rand];
 
     // Check selected item has poster
     if(typeof item.poster === 'undefined') {
@@ -167,12 +159,12 @@
 
     // Update generator repeat button text
     if(typeof knife_generator_options.button_repeat !== 'undefined') {
-      start.textContent = knife_generator_options.button_repeat;
+      button.textContent = knife_generator_options.button_repeat;
     }
 
     // Update generator share buttons
     if(generator.querySelector('.entry-generator__share')) {
-      replaceShare(item.caption, rand);
+      replaceShare(item.caption, rand + 1);
     }
 
 
