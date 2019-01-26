@@ -335,10 +335,12 @@
                 <div class="result__image">
                     <figure class="result__image-poster">
                         <?php
-                            //list($poster) = $result['posters'];
+                            foreach($result['posters'] as $poster) {
+                                if(!empty($poster)) {
+                                    printf('<img src="%s" alt="">', esc_url($poster));
+                                }
 
-                            if(!empty($poster)) {
-                                printf('<img src="%s" alt="">', esc_url($poster));
+                                break;
                             }
 
                             printf(
@@ -368,24 +370,30 @@
 
                         <span class="result__image-spinner spinner"></span>
                     </div>
+
+                    <div class="result__image-warning"></div>
                 </div>
 
-                <p class="result__warning"></p>
-
                 <div class="result__posters">
-                    <?php
-                        foreach($result['posters'] as $score => $poster) {
-                            printf(
-                                '<p class="result__posters-field"><strong>%1$s</strong><input type="text" data-poster="%3$d" value="%2$s"></p>',
 
-                                sprintf(
-                                    __('Постер для результата: <span>%d</span>', 'knife-theme'), (int) $score
-                                ),
+                    <?php foreach($result['posters'] as $score => $poster) : ?>
+                        <p class="poster">
+                            <?php
+                                printf(
+                                    '<strong class="poster__title">%1$s <span>%2$d</span></strong>',
+                                    __('Постер для результата:', 'knife-theme'), (int) $score
+                                );
 
-                                esc_url($poster ?? ''), (int) $score
-                            );
-                        }
-                    ?>
+                                printf(
+                                    '<input class="poster__field" type="text" data-poster="%2$d" value="%1$s">',
+                                    esc_url($poster ?? ''), (int) $score
+                                );
+                            ?>
+
+                            <span class="poster__display dashicons dashicons-visibility"></span>
+                        </p>
+                    <?php endforeach; ?>
+
                 </div>
 
                 <div class="result__scores">

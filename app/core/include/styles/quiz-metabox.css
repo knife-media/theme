@@ -751,30 +751,6 @@
 
   border-top: 1px solid #ddd;
 }
-  #knife-quiz-box .result__posters-field {
-    display: block;
-
-    width: 100%;
-    margin: 15px 0 0;
-  }
-  @media screen and (min-width: 1200px) {
-    #knife-quiz-box .result__posters-field {
-      width: calc(100% - 320px);
-    }
-  }
-
-  #knife-quiz-box .result__posters-field strong {
-    display: block;
-
-    margin-bottom: 5px;
-  }
-
-  #knife-quiz-box .result__posters-field input {
-    display: block;
-
-    width: 100%;
-  }
-
 
 #knife-quiz-box .result__scores {
   display: flex;
@@ -812,3 +788,47 @@
 #knife-quiz-box .result--achievment .result__image-manual {
   display: block;
 }
+
+
+/**
+ * Poster styles
+ */
+#knife-quiz-box .poster {
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+
+  width: 100%;
+  margin: 15px 0 0;
+  padding-right: 25px;
+}
+  @media screen and (min-width: 1200px) {
+    #knife-quiz-box .poster {
+      width: calc(100% - 295px);
+    }
+  }
+
+  #knife-quiz-box .poster__title {
+    display: block;
+
+    margin-bottom: 5px;
+  }
+
+  #knife-quiz-box .poster__field {
+    display: block;
+
+    width: 100%;
+  }
+
+  #knife-quiz-box .poster__display {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    cursor: pointer;
+
+    font-size: 16px;
+    color: #666;
+  }
+
+

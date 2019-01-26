@@ -176,13 +176,14 @@
     }
 
     if(index === total) {
+      /*
       if(typeof knife_quiz_results === 'undefined') {
-        return button.
       }
 
 
       && knife_quiz_options.hasOwnProperty('button_last')) {
       button.textContent = knife_quiz_options.button_last;
+      */
     }
   }
 
