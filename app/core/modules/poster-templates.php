@@ -18,9 +18,9 @@ class Knife_Poster_Templates {
      */
     public static function get_templates() {
         $templates = [
-            'large_title' => __('Только крупный заголовок', 'knife-theme'),
             'single_head' => __('Однострочный заголовок и описание', 'knife-theme'),
-            'strong_head' => __('Многострочный заголовок и описание', 'knife-theme')
+            'strong_head' => __('Многострочный заголовок и описание', 'knife-theme'),
+            'large_title' => __('Только крупный заголовок', 'knife-theme')
         ];
 
         return $templates;
@@ -37,12 +37,20 @@ class Knife_Poster_Templates {
             'echo' => true
         ]);
 
+        $templates = self::get_templates();
+
         $options = [];
-        foreach(self::get_templates() as $template => $label) {
+        foreach($templates as $template => $label) {
             $options[] = sprintf('<option value="%1$s"%3$s>%2$s</option>',
                 esc_attr($template), esc_html($label),
                 selected($args['selected'], $template, false)
             );
+        }
+
+        if(!array_key_exists($args['selected'], $templates)) {
+            array_unshift($options, sprintf('<option disabled selected value="">%s</option>',
+                __('Выберите шаблон генератора', 'knife-theme')
+            ));
         }
 
         $attributes = [];
@@ -138,12 +146,18 @@ class Knife_Poster_Templates {
 
 
     /**
-     * Generate result multiline poster
+     * Generate strong head poster
      */
     private static function _strong_head($i, $image, $options, $filename) {
         $poster = new PHPImage();
         $poster->setDimensionsFromImage($image)->draw($image);
         $poster->resize(1200, 630, true);
+
+        // Change brightness and contrast
+        $filter = $poster->getResource();
+        imagefilter($filter, IMG_FILTER_CONTRAST, 35);
+        imagefilter($filter, IMG_FILTER_BRIGHTNESS, -85);
+        $poster->setResource($filter);
 
         $poster->setFont(get_template_directory() . '/assets/fonts/formular/formular-medium.ttf');
 
@@ -156,7 +170,83 @@ class Knife_Poster_Templates {
         // Draw description
         if(!empty($options['description'])) {
             $poster->textBox($options['description'], [
-                'x' => 48, 'y' => 440, 'width' => 950, 'height' => 120, 'fontSize' => 24
+                'x' => 48, 'y' => 445, 'width' => 950, 'height' => 120, 'fontSize' => 24
+            ]);
+        }
+
+
+        $titles = [];
+
+        if(!empty($options['title'])) {
+            $titles[] = wp_specialchars_decode($options['title']);
+        }
+
+        if(!empty($options['tagline'])) {
+            $titles[] = wp_specialchars_decode($options['tagline']);
+        }
+
+        // Draw quiz title
+        if(count($titles) > 0) {
+            $poster->rectangle(50, 230, 950, 1, [255, 255, 255]);
+
+            $poster->textBox(implode(' ', $titles), [
+                'x' => 48, 'y' => 160, 'width' => 950, 'height' => 200, 'fontSize' => 24
+            ]);
+        }
+
+
+        $heading = [];
+
+        if(strlen($options['achievment']) > 0) {
+            $heading[] = str_replace('%', $i, $options['achievment']);
+        }
+
+        if(!empty($options['heading'])) {
+            $heading[] = wp_specialchars_decode($options['heading']);
+        }
+
+        // Draw heading
+        if(count($heading) > 0) {
+            $poster->setLineHeight(1.125);
+            $poster->setFont(get_template_directory() . '/assets/fonts/formular/formular-bold.ttf');
+
+            $poster->textBox(implode(' ', $heading), [
+                'x' => 48, 'y' => 280, 'width' => 950, 'height' => 160, 'fontSize' => 52
+            ]);
+        }
+
+        $poster->snapshot($options['basedir'] . $filename);
+
+        return $options['baseurl'] . $filename;
+    }
+
+
+    /**
+     * Generate single head poster
+     */
+    private static function _single_head($i, $image, $options, $filename) {
+        $poster = new PHPImage();
+        $poster->setDimensionsFromImage($image)->draw($image);
+        $poster->resize(1200, 630, true);
+
+        // Change brightness and contrast
+        $filter = $poster->getResource();
+        imagefilter($filter, IMG_FILTER_CONTRAST, 35);
+        imagefilter($filter, IMG_FILTER_BRIGHTNESS, -85);
+        $poster->setResource($filter);
+
+        $poster->setFont(get_template_directory() . '/assets/fonts/formular/formular-medium.ttf');
+
+        // Draw site name
+        $poster->text('knife.media', [
+            'x' => 48, 'y' => 40, 'fontSize' => 16
+        ]);
+
+
+        // Draw description
+        if(!empty($options['description'])) {
+            $poster->textBox($options['description'], [
+                'x' => 48, 'y' => 380, 'width' => 950, 'height' => 120, 'fontSize' => 24
             ]);
         }
 
@@ -197,7 +287,7 @@ class Knife_Poster_Templates {
             $poster->setFont(get_template_directory() . '/assets/fonts/formular/formular-bold.ttf');
 
             $poster->textBox(implode(' ', $heading), [
-                'x' => 48, 'y' => 280, 'width' => 950, 'height' => 160, 'fontSize' => 52
+                'x' => 48, 'y' => 280, 'width' => 950, 'height' => 80, 'fontSize' => 52
             ]);
         }
 
@@ -205,4 +295,58 @@ class Knife_Poster_Templates {
 
         return $options['baseurl'] . $filename;
     }
+
+
+    /**
+     * Generate large title poster
+     */
+    private static function _large_title($i, $image, $options, $filename) {
+        $poster = new PHPImage();
+        $poster->setDimensionsFromImage($image)->draw($image);
+        $poster->resize(1200, 630, true);
+
+        $poster->setFont(get_template_directory() . '/assets/fonts/formular/formular-medium.ttf');
+
+        // Draw site name
+        $poster->text('knife.media', [
+            'x' => 48, 'y' => 60, 'fontSize' => 20
+        ]);
+
+
+        $titles = [];
+
+        if(!empty($options['title'])) {
+            $titles[] = wp_specialchars_decode($options['title']);
+        }
+
+        if(!empty($options['tagline'])) {
+            $titles[] = wp_specialchars_decode($options['tagline']);
+        }
+
+        // Draw quiz title
+        if(count($titles) > 0) {
+            $poster->textBox(implode(' ', $titles), [
+                'x' => 48, 'y' => 105, 'width' => 950, 'height' => 200, 'fontSize' => 20
+            ]);
+        }
+
+
+        // Draw heading
+        if(!empty($options['heading'])) {
+            $poster->setFont(get_template_directory() . '/assets/fonts/formular/formular-black.ttf');
+
+            if(function_exists('mb_strtoupper')) {
+                $options['heading'] = mb_strtoupper($options['heading']);
+            }
+
+            $poster->textBox($options['heading'], [
+                'x' => 48, 'y' => 290, 'width' => 950, 'fontSize' => 64
+            ]);
+        }
+
+        $poster->snapshot($options['basedir'] . $filename);
+
+        return $options['baseurl'] . $filename;
+    }
+
 }

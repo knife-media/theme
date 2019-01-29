@@ -21,14 +21,14 @@
                 <div class="option option--general">
                     <?php
                         printf(
-                            '<p class="option__general"><strong>%3$s</strong><input class="option__general-caption" type="text" name="%1$s[][caption]" value="%2$s"></p>',
+                            '<p class="option__general"><strong>%3$s</strong><input type="text" data-item="heading" name="%1$s[][heading]" value="%2$s"></p>',
                             esc_attr(self::$meta_items),
-                            esc_attr($item['caption'] ?? ''),
+                            esc_attr($item['heading'] ?? ''),
                             __('Заголовок', 'knife-theme')
                         );
 
                         printf(
-                            '<p class="option__general"><strong>%3$s</strong><textarea class="option__general-description" name="%1$s[][description]">%2$s</textarea></p>',
+                            '<p class="option__general"><strong>%3$s</strong><textarea data-item="description" name="%1$s[][description]">%2$s</textarea></p>',
                             esc_attr(self::$meta_items),
                             esc_attr($item['description'] ?? ''),
                             __('Описание', 'knife-theme')
@@ -39,41 +39,57 @@
                 <div class="option option--relative">
                     <div class="option__relative">
                         <figure class="option__relative-poster">
-                            <?php if(!empty($item['poster'])) : ?>
-                                <img class="option__relative-image" src="<?php echo $item['poster']; ?>" alt="">
-                            <?php endif; ?>
-
-                            <figcaption class="option__relative-blank">
-                                <?php _e('Выбрать изображение для постера', 'knife-theme'); ?>
-                            </figcaption>
-
                             <?php
-                                printf('<input class="option__relative-media" type="hidden" name="%s[][poster]" value="%s">',
+                                if(!empty($item['poster'])) {
+                                    printf('<img class="option__relative-image" src="%s" alt="">',
+                                        esc_url($item['poster'])
+                                    );
+                                }
+
+                                printf(
+                                    '<figcaption class="option__relative-caption">%s</figcaption>',
+                                    __('Выбрать изображение для постера', 'knife-theme')
+                                );
+
+                                printf('<input type="hidden" data-item="poster" name="%s[][poster]" value="%s">',
                                     esc_attr(self::$meta_items),
                                     esc_attr($item['poster'] ?? '')
                                 );
 
-                                printf('<input class="option__relative-attachment" type="hidden" name="%s[][attachment]" value="%s">',
+                                printf('<input type="hidden" data-item="attachment" name="%s[][attachment]" value="%s">',
                                     esc_attr(self::$meta_items),
                                     esc_attr($item['attachment'] ?? '')
                                 );
                             ?>
                         </figure>
 
-                        <p class="option__relative-warning"></p>
+                        <div class="option__relative-footer">
+                            <?php
+                                if(method_exists('Knife_Poster_Templates', 'get_select')) {
+                                    Knife_Poster_Templates::get_select([
+                                        'attributes' => [
+                                            'class' => 'option__relative-template',
+                                            'data-item' => 'template',
+                                            'name' => esc_attr(self::$meta_items) . '[][template]'
+                                        ],
+                                        'selected' => esc_attr($item['template'] ?? '')
+                                    ]);
 
-                        <?php
-                            printf('<button class="option__relative-generate button" type="button">%s</button>',
-                                __('Сгенерировать', 'knife-theme')
-                            );
+                                    printf('<button class="option__relative-generate button" type="button">%s</button>',
+                                        __('Сгенерировать', 'knife-theme')
+                                    );
+                                }
 
-                            printf('<button class="option__relative-settings button" disabled type="button">%s</button>',
-                                __('Настройки', 'knife-theme')
-                            );
-                        ?>
+                                printf('<button class="option__relative-settings button" disabled type="button">%s</button>',
+                                    __('Настройки', 'knife-theme')
+                                );
+                            ?>
 
-                        <span class="option__relative-spinner spinner"></span>
-                        <span class="dashicons dashicons-trash"></span>
+                            <span class="option__relative-spinner spinner"></span>
+                            <span class="dashicons dashicons-trash"></span>
+                        </div>
+
+                        <div class="option__relative-warning"></div>
                     </div>
                 </div>
             </div>

@@ -39,7 +39,7 @@
   /**
    * Replace share links
    */
-  function replaceShare(caption, index) {
+  function replaceShare(heading, index) {
     // Check generator share links
     if(typeof knife_generator_options.share_links === 'undefined') {
       return false;
@@ -53,7 +53,7 @@
     var links = generator.querySelectorAll('.share > .share__link');
 
     var matches = [
-      knife_generator_options.permalink.replace(/\/?$/, '/') + index + '/', caption
+      knife_generator_options.permalink.replace(/\/?$/, '/') + index + '/', heading
     ];
 
     for(var i = 0, link; link = links[i]; i++) {
@@ -152,8 +152,8 @@
       return false;
     }
 
-    // Check selected item has caption
-    if(typeof item.caption === 'undefined') {
+    // Check selected item has heading
+    if(typeof item.heading === 'undefined') {
       return false;
     }
 
@@ -164,7 +164,7 @@
 
     // Update generator share buttons
     if(generator.querySelector('.entry-generator__share')) {
-      replaceShare(item.caption, rand + 1);
+      replaceShare(item.heading, rand + 1);
     }
 
 
@@ -196,7 +196,7 @@
       }, 600);
     });
 
-    poster.setAttribute('alt', item.caption);
+    poster.setAttribute('alt', item.heading);
     poster.setAttribute('src', item.poster);
 
     generator.classList.add('entry-generator--loader', 'entry-generator--results');

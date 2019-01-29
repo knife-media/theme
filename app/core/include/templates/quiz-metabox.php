@@ -3,7 +3,7 @@
         $post_id = get_the_ID();
 
         // Quiz options
-        $options = get_post_meta($post_id, self::$meta_options, true);
+        $options = (array) get_post_meta($post_id, self::$meta_options, true);
 
         if(!isset($options['details'])) {
             $options['details'] = 'none';

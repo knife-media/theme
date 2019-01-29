@@ -222,7 +222,7 @@
 
   width: 300px;
   max-width: 100%;
-  margin: 0 0 10px 0;
+  margin: 0 0 8px;
   padding-top: 52.5%;
   overflow: hidden;
 }
@@ -232,7 +232,7 @@
   }
 }
 
-#knife-generator-box .option__relative-image {
+#knife-generator-box img {
   display: block;
   position: absolute;
   top: 0;
@@ -246,21 +246,44 @@
   object-position: center;
 }
 
-#knife-generator-box .option__relative-generate {
-  margin-right: 5px;
+#knife-generator-box .option__relative-footer {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  position: relative;
 }
 
-#knife-generator-box .option__relative-warning {
-  display: none;
-  margin: -5px 0 5px;
-  color: #a00;
+#knife-generator-box .option__relative-generate {
+  margin-right: 10px;
+}
+
+#knife-generator-box .option__relative-settings {
+  margin-right: 10px;
+}
+
+#knife-generator-box .option__relative-template {
+  display: block;
+
+  width: 100%;
+  margin: 0 0 8px;
 }
 
 #knife-generator-box .option__relative-spinner {
   float: none;
+  margin: 0;
 }
 
-#knife-generator-box .option__relative-blank {
+#knife-generator-box .option__relative-warning {
+  display: none;
+  flex: 1 1 100%;
+
+  margin: 8px 0 0;
+  color: #a00;
+}
+
+
+
+#knife-generator-box .option__relative-caption {
   display: flex;
   position: absolute;
   top: 0;
@@ -278,17 +301,17 @@
 
   border: dashed 2px #ddd;
 }
-  #knife-generator-box .option__relative-blank--error {
+  #knife-generator-box .option__relative-caption--error {
     border-color: #a00;
   }
 
-#knife-generator-box .option__relative-blank:hover {
+#knife-generator-box .option__relative-caption:hover {
   transition: border .2s;
 
   border-color: #0073aa;
 }
 
-#knife-generator-box .option__relative-image + .option__relative-blank {
+#knife-generator-box img + .option__relative-caption {
   z-index: 1;
 
   width: 100%;
