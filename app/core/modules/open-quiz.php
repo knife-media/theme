@@ -159,6 +159,10 @@ class Knife_Open_Quiz {
             $post_id = get_the_ID();
             $options = get_post_meta($post_id, self::$meta_options, true);
 
+            if(!is_array($options)) {
+                $options = [];
+            }
+
             // Add quiz items
             wp_localize_script('knife-theme', 'knife_quiz_items',
                 self::retrieve_items($post_id, $options)
@@ -367,7 +371,14 @@ class Knife_Open_Quiz {
         delete_post_meta($post_id, $query);
 
         foreach($_REQUEST[$query] as $result) {
-            add_post_meta($post_id, $query, wp_kses_post_deep($result));
+            // We should unset empty posters array
+            if(isset($result['posters']) && !array_filter($result['posters'])) {
+                unset($result['posters']);
+            }
+
+            if(array_filter($result)) {
+                add_post_meta($post_id, $query, wp_kses_post_deep($result));
+            }
         }
     }
 
@@ -410,32 +421,44 @@ class Knife_Open_Quiz {
      * Retrieve results within meta to show as object
      */
     private static function retrieve_results($post_id, $options, $results = []) {
+        $options = wp_parse_args($options, [
+            'details' => 'none',
+            'remark' => ''
+        ]);
+
         // Loop through results
         foreach(get_post_meta($post_id, self::$meta_results) as $meta) {
-            $result = [];
+            $item = wp_parse_args($meta, [
+                'from' => 0,
+                'to' => 0,
+                'posters' => [],
+                'details' => ''
+            ]);
 
-            if(empty($options['details'])) {
-                $options['details'] = 'none';
+            for($i = (int) $item['from']; $i <= (int) $item['to']; $i++) {
+                $result = [];
+
+                if(isset($item['posters'][$i])) {
+                    $result['poster'] = esc_url($item['posters'][$i]);
+                }
+
+                switch($options['details']) {
+                    case 'result':
+                        $result['details'] = apply_filters('the_content', $item['details']);
+                        break;
+
+                    case 'remark':
+                        $result['details'] = apply_filters('the_content', $options['remark']);
+                        break;
+                }
+
+                if(array_filter($result)) {
+                    $results[$i][] = $result;
+                }
             }
-
-            if($options['details'] === 'result' && !empty($meta['details'])) {
-                $result['details'] = apply_filters('the_content', $meta['details']);
-            }
-
-            if($options['details'] === 'remark' && !empty($options['remark'])) {
-                $result['details'] = apply_filters('the_content', $options['remark']);
-            }
-
-            for($i = (int) $meta['from']; $i <= (int) $meta['to']; $i++) {
-                $results[$i][] = $result;
-            }
-
-            print_r($meta);
         }
-        print_r($results);
-        die;
 
-        return $results;
+        return (object) $results;
     }
 
 

@@ -192,6 +192,10 @@ class Knife_Random_Generator {
             $post_id = get_the_ID();
             $options = get_post_meta($post_id, self::$meta_options, true);
 
+            if(!is_array($options)) {
+                $options = [];
+            }
+
             if(class_exists('Knife_Share_Buttons')) {
                 $options = array_merge($options, [
                     'permalink' => get_permalink($post_id),
