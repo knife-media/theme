@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.6
+ * @version 1.7
  */
 
 
@@ -17,15 +17,17 @@ if(!function_exists('the_share')) :
      * @since 1.3
      */
     function the_share($before = '', $after = '', $action = '', $echo = true) {
-        $share = Knife_Share_Buttons::get_buttons($action);
+        if(method_exists('Knife_Share_Buttons', 'get_buttons')) {
+            $share = Knife_Share_Buttons::get_buttons($action);
 
-        $output = $before . $share . $after;
+            $output = $before . $share . $after;
 
-        if($echo === true) {
+            if($echo === false) {
+                return $output;
+            }
+
             echo $output;
         }
-
-        return $output;
     }
 endif;
 
@@ -37,15 +39,17 @@ if(!function_exists('the_info')) :
      * @since 1.3
      */
     function the_info($before = '', $after = '', $options = [], $echo = true) {
-        $info = Knife_Post_Info::get_info($options);
+        if(method_exists('Knife_Post_Info', 'get_info')) {
+            $info = Knife_Post_Info::get_info($options);
 
-        $output = $before . $info . $after;
+            $output = $before . $info . $after;
 
-        if($echo === true) {
+            if($echo === false) {
+                return $output;
+            }
+
             echo $output;
         }
-
-        return $output;
     }
 endif;
 
@@ -57,16 +61,18 @@ if(!function_exists('the_lead')) :
      * @since 1.3
      */
     function the_lead($before = '', $after = '', $echo = true) {
-        $lead = Knife_Post_Lead::get_lead();
+        if(method_exists('Knife_Post_Lead', 'get_lead')) {
+            $lead = Knife_Post_Lead::get_lead();
 
-        if(!empty($lead)) {
-            $output = $before . $lead . $after;
+            if(strlen($lead) > 0) {
+                $output = $before . $lead . $after;
 
-            if($echo === true) {
+                if($echo === false) {
+                    return $output;
+                }
+
                 echo $output;
             }
-
-            return $output;
         }
     }
 endif;

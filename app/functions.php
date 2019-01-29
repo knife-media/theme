@@ -504,6 +504,9 @@ require get_template_directory() . '/core/modules/site-meta.php';
 // Customize default wordpress embed code
 require get_template_directory() . '/core/modules/embed-filters.php';
 
+// Poster templates options
+require get_template_directory() . '/core/modules/poster-templates.php';
+
 // Share buttons manager class
 require get_template_directory() . '/core/modules/share-buttons.php';
 

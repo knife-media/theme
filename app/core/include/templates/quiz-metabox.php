@@ -349,7 +349,7 @@
                             );
 
                             printf(
-                                '<input type="hidden" data-result="attachment" value="%s">',
+                                '<input class="result__image-attachment" type="hidden" data-result="attachment" value="%s">',
                                 esc_attr($result['attachment'] ?? '')
                             );
                         ?>
@@ -364,7 +364,7 @@
 
                             printf(
                                 '<button class="result__image-manual button" type="button">%s</button>',
-                                __('Показать постеры', 'knife-theme')
+                                __('Редактировать', 'knife-theme')
                             );
                         ?>
 
@@ -401,11 +401,11 @@
                         printf(
                             __('Показывать с %s по %s баллов или правильных ответов', 'knife-theme'),
 
-                            sprintf('<input type="number" data-result="from" value="%s">',
+                            sprintf('<input class="result__scores-field" type="number" data-result="from" value="%s">',
                                 esc_attr($result['from'] ?? 0)
                             ),
 
-                            sprintf('<input type="number" data-result="to" value="%s">',
+                            sprintf('<input class="result__scores-field" type="number" data-result="to" value="%s">',
                                 esc_attr($result['to'] ?? 0)
                             )
                         );

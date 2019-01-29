@@ -96,18 +96,18 @@ class Knife_Post_Lead {
     /**
      * Get lead post meta
      */
-    public static function get_lead($post = 0, $lead = '') {
+    public static function get_lead($post = 0, $post_lead = '') {
         if(!$post = get_post($post)) {
             return $lead;
         }
 
-        $lead = get_post_meta($post->ID, self::$meta, true);
+        $post_lead = get_post_meta($post->ID, self::$meta, true);
 
-        if(strlen($lead) > 0) {
-            $lead = wpautop($lead);
+        if(strlen($post_lead) > 0) {
+            $post_lead = wpautop($post_lead);
         }
 
-        return $lead;
+        return $post_lead;
     }
 
 

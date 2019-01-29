@@ -47,12 +47,10 @@ jQuery(document).ready(function($) {
   /**
    * Update poster fields
    */
-  function updatePosters(result, posters) {
-    var points = {};
-
-    $.each(['from', 'to'], function(i, v) {
-      points[v] = result.find('[data-result="' + v + '"]').val();
-    });
+  function updatePosters(result, points, posters) {
+    if(result.find('.result__posters').children().length === 0) {
+      return alert(knife_quiz_metabox.error);
+    }
 
     // Collect all results posters by points
     if(typeof posters === 'undefined') {
@@ -68,10 +66,6 @@ jQuery(document).ready(function($) {
     // Clone first field
     var clone = result.find('.poster:first').clone();
 
-    if(points.from > points.to) {
-      return false;
-    }
-
     // Clear posters to recreate them below
     result.find('.result__posters').empty();
 
@@ -86,7 +80,7 @@ jQuery(document).ready(function($) {
         'value': '', 'data-poster': i
       });
 
-      if(posters.hasOwnProperty(i)) {
+      if(typeof posters[i] !== 'undefined') {
         poster.find('.poster__field').val(posters[i]);
       }
 
@@ -100,7 +94,7 @@ jQuery(document).ready(function($) {
   /**
    * Generate poster using ajax
    */
-  function createPoster(result) {
+  function createPosters(result, points) {
     var data = {
       'action': knife_quiz_metabox.action,
       'nonce': knife_quiz_metabox.nonce,
@@ -112,46 +106,61 @@ jQuery(document).ready(function($) {
       data[v] = result.find('[data-result="' + v + '"]').val();
     });
 
-    // Add achievment poster info if need
+    // Add points to data object
+    $.extend(data, points);
+
+    // Add achievment if need
     if(result.hasClass('result--achievment')) {
-      $.each(['achievment', 'from', 'to'], function(i, v) {
-        data[v] = result.find('[data-result="' + v + '"]').val();
-      });
+      data.achievment = result.find('[data-result="achievment"]').val();
     }
 
     // Add quiz title if exists
-    if($("#title").length > 0) {
+    if($('#title').length > 0) {
       data.title = $('#title').val();
     }
 
+    // Add quiz tagline if exists
+    if($('#knife-tagline-input').length > 0) {
+      data.tagline = $('#knife-tagline-input').val();
+    }
 
-//    result.find('.result__warning').html('').hide();
+
+    // Clear warning before request
+    var warning = result.find('.result__image-warning');
+    warning.html('').hide();
 
     var xhr = $.ajax({method: 'POST', url: ajaxurl, data: data}, 'json');
 
+    // TODO: remake
     xhr.done(function(answer) {
-      if(answer.data.length > 1 && answer.success === true) {
-        result.find('[data-result="media"]').val(answer.data);
-        result.find('.result__image-poster > img').attr('src', answer.data);
+      toggleLoader(result);
 
-        return toggleLoader(result);
+      answer.success = answer.success || false;
+
+      if(typeof answer.data === 'undefined') {
+        return warning.html(knife_quiz_metabox.error).show();
       }
 
-      if(answer.data.length > 1 && answer.success === false) {
-        result.find('.result__warning').html(answer.data).show();
+      if(answer.success === true && Object.keys(answer.data) > 0) {
+        var poster = result.find('.result__image-poster');
 
-        return toggleLoader(result);
+        var pp = answer.data[Object.keys(answer.data)[0]];
+
+        // Create image if not exists
+        if(poster.find('img').length === 0) {
+          $('<img />').prependTo(poster);
+        }
+
+        poster.find('img').attr('src', pp);
+
+        updatePosters(result, points, answer.data);
       }
-
-      result.find('.result__warning').html(knife_quiz_metabox.error).show();
-
-      return toggleLoader(result);
     });
 
     xhr.error(function() {
       toggleLoader(result);
 
-      result.find('.result__warning').html(knife_quiz_metabox.error).show();
+      return warning.html(knife_quiz_metabox.error).show();
     });
 
     return toggleLoader(result);
@@ -332,7 +341,7 @@ jQuery(document).ready(function($) {
   /**
    * Image append
    */
-  function appendImage(poster, attachment, thumbnail, media) {
+  function appendImage(poster, attachment, thumbnail, callback) {
     if(typeof knife_quiz_metabox.choose === 'undefined') {
       return alert(knife_quiz_metabox.error);
     }
@@ -343,22 +352,12 @@ jQuery(document).ready(function($) {
       multiple: false
     });
 
-
-    // On open frame select current attachment
-    frame.on('open', function() {
-      var selection = frame.state().get('selection');
-      var current = poster.find(attachment).val();
-
-      return selection.add(wp.media.attachment(current));
-    });
-
-
     // On image select
     frame.on('select', function() {
       var selection = frame.state().get('selection').first().toJSON();
 
       // Set hidden inputs values
-      if(typeof media !== 'undefuned') {
+      if(typeof media !== 'undefined') {
         poster.find(media).val(selection.url);
       }
 
@@ -369,13 +368,16 @@ jQuery(document).ready(function($) {
         selection = selection.sizes.thumbnail;
       }
 
-      if(poster.find('img').length > 0) {
-        return poster.find('img').attr('src', selection.url);
+      // Create image if not exists
+      if(poster.find('img').length === 0) {
+        $('<img />').prependTo(poster);
       }
 
-      var showcase = $('<img />', {src: selection.url});
+      poster.find('img').attr('src', selection.url);
 
-      return showcase.prependTo(poster);
+      if(typeof callback === 'function') {
+        return callback(selection.url);
+      }
     });
 
     frame.open();
@@ -568,15 +570,16 @@ jQuery(document).ready(function($) {
   box.on('click', '.item__manage-toggle', function(e) {
     e.preventDefault();
 
-    var item = $(this).closest('.item');
+    var button = $(this);
 
     // Swap title with data attr
-    var title = $(this).text();
+    var title = button.text();
+    button.text(button.data('toggle'));
+    button.data('toggle', title);
 
-    $(this).text($(this).data('toggle'))
-    $(this).data('toggle', title);
-
-    item.find('.item__answers').toggleClass('item__answers--expand')
+    // Find closest answers
+    var answers = button.closest('.item').find('.item__answers');
+    answers.toggleClass('item__answers--expand');
   });
 
 
@@ -645,7 +648,13 @@ jQuery(document).ready(function($) {
 
     var poster = $(this);
 
-    appendImage(poster, '.result__image-attachment', false, '.result__image-media');
+    appendImage(poster, '.result__image-attachment', false, function(url) {
+      var result = poster.closest('.result');
+
+      result.find('input[data-poster]').each(function() {
+        $(this).attr('value', url);
+      });
+    });
   });
 
 
@@ -655,14 +664,29 @@ jQuery(document).ready(function($) {
   box.on('click', '.result__image-generate', function(e) {
     e.preventDefault();
 
+    var points = {};
+
+    // Select closest result
     var result = $(this).closest('.result');
+
+    $.each(['from', 'to'], function(i, v) {
+      points[v] = parseInt(result.find('[data-result="' + v + '"]').val());
+    });
+
+    // Get scores fields
+    var fields = result.find('.result__scores-field');
+
+    if(points.from > points.to) {
+      return blinkClass(fields, 'result__scores-field--error')
+    }
+
     var caption = result.find('.result__image-caption');
 
     if(result.find('.result__image-poster > img').length < 1) {
       return blinkClass(caption, 'result__image-caption--error');
     }
 
-    createPoster(result);
+    createPosters(result, points);
   });
 
 
@@ -672,17 +696,28 @@ jQuery(document).ready(function($) {
   box.on('click', '.result__image-manual', function(e) {
     e.preventDefault();
 
+    var points = {};
+
+    // Select closest result
     var result = $(this).closest('.result');
 
-    if(result.find('.result__posters').children().length === 0) {
-      return alert(knife_quiz_metabox.error);
+    $.each(['from', 'to'], function(i, v) {
+      points[v] = parseInt(result.find('[data-result="' + v + '"]').val());
+    });
+
+    // Get scores fields
+    var fields = result.find('.result__scores-field');
+
+    if(points.from > points.to) {
+      return blinkClass(fields, 'result__scores-field--error')
     }
 
-    if(!result.hasClass('result--posters')) {
-      updatePosters(result);
-    }
-
+    // Toggle posters class
     result.toggleClass('result--posters');
+
+    if(result.hasClass('result--posters')) {
+      updatePosters(result, points);
+    }
   });
 
 
@@ -692,21 +727,20 @@ jQuery(document).ready(function($) {
   box.on('click', '.poster__display', function(e) {
     e.preventDefault();
 
-    var field = $(this).siblings('.poster__field').val();
+    var field = $(this).siblings('.poster__field');
 
-    if(field.length === 0) {
-      return false;
+    if(field.val().length === 0) {
+      return blinkClass(field, 'poster__field--error');
     }
 
     var poster = $(this).closest('.result').find('.result__image-poster');
 
-    if(poster.find('img').length > 0) {
-      return poster.find('img').attr('src', field);
+    // Create image if not exists
+    if(poster.find('img').length === 0) {
+      $('<img />').prependTo(poster);
     }
 
-    var showcase = $('<img />', {src: field});
-
-    return showcase.prependTo(poster);
+    poster.find('img').attr('src', field.val());
   });
 
 

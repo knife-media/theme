@@ -169,7 +169,7 @@ class Knife_Open_Quiz {
                 self::retrieve_results($post_id, $options)
             );
 
-            if(class_exists('Knife_Share_Buttons')) {
+            if(method_exists('Knife_Share_Buttons', 'get_settings')) {
                 $options = array_merge($options, [
                     'permalink' => get_permalink($post_id),
                     'share_links' => Knife_Share_Buttons::get_settings($post_id)
@@ -204,29 +204,24 @@ class Knife_Open_Quiz {
     public static function create_poster() {
         check_admin_referer(self::$nonce, 'nonce');
 
-        if(!class_exists('PHPImage')) {
-            require(get_template_directory() . '/core/classes/phpimage.class.php');
+        if(!method_exists('Knife_Poster_Templates', 'create_posters')) {
+            wp_send_json_error(__('Модуль генерации не найден', 'knife-theme'));
         }
 
-        $default = [
-            'caption' => '', 'post_id' => 0, 'attachment' => 0
-        ];
+        $options = wp_parse_args($_REQUEST, [
+            'template' => 'strong_head',
+            'post_id' => 0,
+            'attachment' => 0,
+            'achievment' => ''
+        ]);
 
-        $options = wp_parse_args(
-            array_intersect_key($_REQUEST, $default), $default
-        );
+        $posters = Knife_Poster_Templates::create_posters($options, self::$upload_folder);
 
-        extract($options);
-
-        $attachment = get_attached_file($attachment);
-
-        if($attachment === false) {
-            wp_send_json_error(__('Не удалось найти вложение', 'knife-theme'));
+        if(is_wp_error($posters)) {
+            return wp_send_json_error($posters->get_error_message());
         }
 
-        $poster = self::generate_image($attachment, $caption, $post_id);
-
-        return wp_send_json_success($poster);
+        return wp_send_json_success($posters);
     }
 
 
@@ -496,49 +491,6 @@ class Knife_Open_Quiz {
         }
 
         return $answer;
-    }
-
-
-    /**
-     * Generate image using PHPImage class
-     */
-    private static function generate_image($image, $caption, $post_id) {
-        $upload = wp_upload_dir();
-
-        if(!wp_is_writable($upload['basedir'] . self::$upload_folder)) {
-            if(!mkdir($upload['basedir'] . self::$upload_folder)) {
-                wp_send_json_error(__('Проверьте права на запись', 'knife-theme'));
-            }
-        }
-
-        $file_name = self::$upload_folder . "{$post_id}-" . time() . '.jpg';
-
-        try {
-            $poster = new PHPImage();
-            $poster->setDimensionsFromImage($image)->draw($image);
-            $poster->resize(1200, 630, true);
-
-            $poster->setFont(get_template_directory() . '/assets/fonts/formular/formular-black.ttf');
-            $poster->setTextColor([255, 255, 255]);
-
-            if(function_exists('mb_strtoupper')) {
-                $caption = mb_strtoupper($caption);
-            }
-
-            $poster->textBox($caption, [
-                'x' => 48,
-                'y' => 290,
-                'width' => 1000,
-                'fontSize' => 64
-            ]);
-
-            $poster->snapshot($upload['basedir'] . $file_name);
-
-        } catch(Exception $error) {
-            wp_send_json_error(__('Ошибка генерации: ' . $error->getMessage(), 'knife-theme'));
-        }
-
-        return $upload['baseurl'] . $file_name;
     }
 }
 
