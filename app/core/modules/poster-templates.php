@@ -28,7 +28,43 @@ class Knife_Poster_Templates {
 
 
     /**
-     * Get posters
+     * Get templates select
+     */
+    public static function get_select($args = []) {
+        $args = wp_parse_args($args, [
+            'attributes' => [],
+            'selected' => 0,
+            'echo' => true
+        ]);
+
+        $options = [];
+        foreach(self::get_templates() as $template => $label) {
+            $options[] = sprintf('<option value="%1$s"%3$s>%2$s</option>',
+                esc_attr($template), esc_html($label),
+                selected($args['selected'], $template, false)
+            );
+        }
+
+        $attributes = [];
+        foreach($args['attributes'] as $key => $value) {
+            $attributes[] = $key . '="' . $value . '"';
+        }
+
+        // Create select using attributes and options
+        $select = sprintf('<select %1$s>%2$s</select>',
+            implode(' ', $attributes), implode("\n", $options)
+        );
+
+        if($args['echo'] !== true) {
+            return $select;
+        }
+
+        echo $select;
+    }
+
+
+    /**
+     * Create posters
      */
     public static function create_posters($options, $folder, $posters = []) {
         $templates = self::get_templates();
@@ -41,7 +77,7 @@ class Knife_Poster_Templates {
         // Find generator method by template
         $method = substr_replace($options['template'], '_', 0, 0);
         if(!method_exists(__CLASS__, $method)) {
-            return new WP_Error('method', __('Не найден метод генератора', 'knife-theme'));
+            return new WP_Error('method', __('Не найден шаблон генератора', 'knife-theme'));
         }
 
         // Get image url by attachment id

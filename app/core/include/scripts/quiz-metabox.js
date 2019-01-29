@@ -48,11 +48,6 @@ jQuery(document).ready(function($) {
    * Update poster fields
    */
   function updatePosters(result, points, posters) {
-    if(result.find('.result__posters').children().length === 0) {
-      return alert(knife_quiz_metabox.error);
-    }
-
-    // Collect all results posters by points
     if(typeof posters === 'undefined') {
       posters = {};
 
@@ -87,6 +82,10 @@ jQuery(document).ready(function($) {
       result.find('.result__posters').append(poster);
     }
 
+    if(result.find('.result__posters').children().length === 0) {
+      result.find('.result__posters').append(clone);
+    }
+
     sortPosters(result);
   }
 
@@ -102,7 +101,7 @@ jQuery(document).ready(function($) {
     }
 
     // Add required poster fields
-    $.each(['heading', 'description', 'attachment'], function(i, v) {
+    $.each(['heading', 'description', 'attachment', 'template'], function(i, v) {
       data[v] = result.find('[data-result="' + v + '"]').val();
     });
 
@@ -131,30 +130,33 @@ jQuery(document).ready(function($) {
 
     var xhr = $.ajax({method: 'POST', url: ajaxurl, data: data}, 'json');
 
-    // TODO: remake
     xhr.done(function(answer) {
       toggleLoader(result);
-
-      answer.success = answer.success || false;
 
       if(typeof answer.data === 'undefined') {
         return warning.html(knife_quiz_metabox.error).show();
       }
 
-      if(answer.success === true && Object.keys(answer.data) > 0) {
+      answer.success = answer.success || false;
+
+      if(answer.success === true && typeof answer.data === 'object') {
         var poster = result.find('.result__image-poster');
 
-        var pp = answer.data[Object.keys(answer.data)[0]];
+        $.each(answer.data, function(i, image) {
+          // Create image if not exists
+          if(poster.find('img').length === 0) {
+            $('<img />').prependTo(poster);
+          }
 
-        // Create image if not exists
-        if(poster.find('img').length === 0) {
-          $('<img />').prependTo(poster);
-        }
+          poster.find('img').attr('src', image);
 
-        poster.find('img').attr('src', pp);
+          return false;
+        });
 
-        updatePosters(result, points, answer.data);
+        return updatePosters(result, points, answer.data);
       }
+
+      return warning.html(answer.data).show();
     });
 
     xhr.error(function() {
@@ -714,6 +716,33 @@ jQuery(document).ready(function($) {
 
     // Toggle posters class
     result.toggleClass('result--posters');
+
+    if(result.hasClass('result--posters')) {
+      updatePosters(result, points);
+    }
+  });
+
+
+  /**
+   * Show posters fields
+   */
+  box.on('change keyup', '.result__scores input', function(e) {
+    if($(this).val().length === 0) {
+      return false;
+    }
+
+    var points = {};
+
+    // Select closest result
+    var result = $(this).closest('.result');
+
+    $.each(['from', 'to'], function(i, v) {
+      points[v] = parseInt(result.find('[data-result="' + v + '"]').val());
+    });
+
+    if(points.from > points.to) {
+      return blinkClass($(this), 'result__scores-field--error')
+    }
 
     if(result.hasClass('result--posters')) {
       updatePosters(result, points);

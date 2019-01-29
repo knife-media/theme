@@ -357,10 +357,20 @@
 
                     <div class="result__image-footer">
                         <?php
-                            printf(
-                                '<button class="result__image-generate button" type="button">%s</button>',
-                                __('Сгенерировать', 'knife-theme')
-                            );
+                            if(method_exists('Knife_Poster_Templates', 'get_select')) {
+                                Knife_Poster_Templates::get_select([
+                                    'attributes' => [
+                                        'class' => 'result__image-template',
+                                        'data-result' => 'template'
+                                    ],
+                                    'selected' => esc_attr($result['template'] ?? '')
+                                ]);
+
+                                printf(
+                                    '<button class="result__image-generate button" type="button">%s</button>',
+                                    __('Сгенерировать', 'knife-theme')
+                                );
+                            }
 
                             printf(
                                 '<button class="result__image-manual button" type="button">%s</button>',

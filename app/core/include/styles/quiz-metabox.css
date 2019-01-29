@@ -459,7 +459,7 @@
  */
 #knife-quiz-box .summary {
   display: block;
-  flex: 1;
+  flex: 1 1 350px;
 
   margin: 15px 15px 5px;
 }
@@ -558,7 +558,7 @@
 
 #knife-quiz-box .result__share {
   display: flex;
-  flex: 1 1 auto;
+  flex: 1 1 320px;
   flex-flow: row wrap;
 
   margin: 10px;
@@ -605,13 +605,13 @@
 
 #knife-quiz-box .result__image {
   display: block;
-  flex: 1 1 100%;
+  flex: 0 1 300px;
 
   margin: 10px;
 }
-  @media screen and (min-width: 1200px) {
+  @media screen and (max-width: 782px) {
     #knife-quiz-box .result__image {
-      flex: 0 1 300px;
+      flex: 1 1 100%;
     }
   }
 
@@ -622,7 +622,7 @@
 
     width: 100%;
     max-width: 100%;
-    margin: 0 0 10px 0;
+    margin: 0 0 8px;
     padding-top: 52.5%;
     overflow: hidden;
   }
@@ -648,6 +648,7 @@
     left: 0;
     align-items: center;
     justify-content: center;
+    user-select: none;
 
     width: calc(100% - 4px);
     height: calc(100% - 4px);
@@ -683,6 +684,7 @@
 
   #knife-quiz-box .result__image-footer {
     display: flex;
+    flex-flow: row wrap;
     align-items: center;
   }
 
@@ -691,8 +693,15 @@
   }
 
   #knife-quiz-box .result__image-manual {
-    display: none;
+    display: block;
     margin-right: 10px;
+  }
+
+  #knife-quiz-box .result__image-template {
+    display: block;
+
+    width: 100%;
+    margin: 0 0 8px;
   }
 
 
@@ -787,10 +796,6 @@
 }
 
 #knife-quiz-box .result--achievment .result__share-achievment {
-  display: block;
-}
-
-#knife-quiz-box .result--achievment .result__image-manual {
   display: block;
 }
 
