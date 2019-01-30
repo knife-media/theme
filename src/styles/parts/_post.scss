@@ -16,9 +16,11 @@
 
     .entry-content {
       padding-top: 2rem;
+      padding-bottom: 4rem;
 
       @media screen and (max-width: 767px) {
         padding-top: 1.5rem;
+        padding-bottom: 2rem;
       }
     }
   }
