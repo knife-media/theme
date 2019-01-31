@@ -43,11 +43,6 @@
             the_tags(
                 '<div class="entry-footer__tags tags">', null, '</div>'
             );
-
-            the_share(
-                '<div class="entry-footer__share share">', '</div>',
-                __('Share quiz — bottom', 'knife-theme')
-            );
         ?>
     </div>
 </article>

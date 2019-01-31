@@ -171,9 +171,13 @@
    * Show choice answers
    */
   function showAnswersAttachment(answers, vote) {
+    var grid = document.createElement('div');
+    grid.classList.add('entry-quiz__vote-grid');
+    vote.appendChild(grid);
+
     // Append answers images to vote
     for(var i = 0; i < answers.length; i++) {
-      var attachment = document.createElement('div');
+      var attachment = document.createElement('figure');
 
       if(typeof answers[i].attachment !== 'undefined') {
         var image = document.createElement('img');
@@ -183,7 +187,7 @@
         attachment.classList.add('entry-quiz__vote-attachment');
         attachment.setAttribute('data-answer', i);
 
-        vote.appendChild(attachment);
+        grid.appendChild(attachment);
       }
     }
 

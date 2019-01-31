@@ -160,11 +160,14 @@
   .entry-quiz__vote {
     display: none;
     flex-flow: row wrap;
-    justify-content: space-between;
 
-    width: calc(#{$width-content} + 1rem);
-    margin-bottom: 2rem;
-    padding: 0 .5rem;
+    .entry-quiz__vote-grid {
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: space-between;
+
+      margin: -.5rem 0;
+    }
 
     .entry-quiz__vote-attachment {
       display: block;
@@ -172,9 +175,8 @@
       cursor: pointer;
 
       width: calc(50% + .25rem);
-      margin: .25rem -.375rem;
+      margin: .125rem -.375rem;
       padding: .375rem;
-      overflow: hidden;
       transition: opacity .25s;
 
       border-radius: 2px;
@@ -271,7 +273,7 @@
       display: block;
 
       width: 100%;
-      margin-top: 1.5rem;
+      margin-top: 1.75rem;
       padding-top: 1.5rem;
       font-family: $font-serif;
       font-size: 1.125rem;
@@ -294,7 +296,15 @@
       margin-top: 1.5rem;
 
       @media screen and (max-width: 767px) {
-        margin-top: 0.75rem;
+        margin-top: .75rem;
+      }
+    }
+
+    &.entry-quiz__vote--choice {
+      margin-bottom: 1rem;
+
+      @media screen and (max-width: 767px) {
+        margin-bottom: .5rem;
       }
     }
 
@@ -368,10 +378,6 @@
       & ~ .entry-quiz__button {
         display: flex;
       }
-    }
-
-    @media screen and (max-width: 767px) {
-      margin-bottom: 1rem;
     }
   }
 
