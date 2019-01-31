@@ -141,7 +141,7 @@ class Knife_Poster_Templates {
             }
         }
 
-        return (object) $posters;
+        return $posters;
     }
 
 
@@ -197,7 +197,7 @@ class Knife_Poster_Templates {
 
         $heading = [];
 
-        if(strlen($options['achievment']) > 0) {
+        if(!empty($options['achievment'])) {
             $heading[] = str_replace('%', $i, $options['achievment']);
         }
 

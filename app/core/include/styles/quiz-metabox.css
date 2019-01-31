@@ -150,9 +150,12 @@
 #knife-quiz-box .item__answers {
   display: none;
   position: relative;
+
+  margin: 0 -5px;
 }
   #knife-quiz-box .item__answers--expand {
-    display: block;
+    display: flex;
+    flex-flow: row wrap;
   }
 
 #knife-quiz-box .item__manage {
@@ -175,8 +178,10 @@
   display: flex;
   position: relative;
   flex-flow: row wrap;
+  box-sizing: border-box;
 
-  margin: 15px 0;
+  width: 100%;
+  margin: 15px 5px 0;
   padding: 15px 0 0 10px;
   background-color: #eaeaea;
 
@@ -187,13 +192,43 @@
     display: none;
   }
 
+  #knife-quiz-box .answer--poster {
+    width: 100%;
+    padding: 10px 10px 0;
+  }
+
+  @media screen and (min-width: 480px) {
+    #knife-quiz-box .answer--poster {
+      width: calc(50% - 10px);
+    }
+  }
+
+  @media screen and (min-width: 960px) {
+    #knife-quiz-box .answer--poster {
+      width: 100%;
+    }
+  }
+
+  @media screen and (min-width: 1024px) {
+    #knife-quiz-box .answer--poster {
+      width: calc(50% - 10px);
+    }
+  }
+
+  @media screen and (min-width: 1600px) {
+    #knife-quiz-box .answer--poster {
+      width: calc(25% - 10px);
+    }
+  }
+
+
   #knife-quiz-box .answer__options {
     display: flex;
     flex-flow: row wrap;
     flex: 1 1 100%;
     position: relative;
 
-    margin: 0 10px 0 0;
+    margin: 0;
     padding-top: 15px;
 
     border-top: solid 1px rgba(0, 0, 0, 0.1);
@@ -203,11 +238,11 @@
     display: none;
     position: relative;
     cursor: pointer;
-    flex: 0 1 300px;
+    flex: 1 1 100%;
 
     max-width: 100%;
-    height: 150px;
-    margin: 0 10px 15px 0;
+    padding-top: 75%;
+    margin: 0 0 15px;
     overflow: hidden;
   }
 
@@ -355,8 +390,17 @@
   display: none;
 }
 
+#knife-quiz-box .answer--poster .answer__delete {
+  top: auto;
+  bottom: 15px;
+}
+
 #knife-quiz-box .answer--poster .answer__poster {
   display: flex;
+}
+
+#knife-quiz-box .answer--poster .answer__text {
+  margin-right: 0;
 }
 
 #knife-quiz-box .answer--poster .answer__text--choice {
@@ -365,24 +409,6 @@
 
 #knife-quiz-box .answer--message .answer__text--message {
   display: flex;
-}
-
-@media screen and (min-width: 1200px) {
-  #knife-quiz-box .answer--poster .answer__poster {
-    margin-right: 15px;
-  }
-
-  #knife-quiz-box .answer--poster:not(.answer--message) .answer__options {
-    flex: 1 1 200px;
-    flex-flow: column wrap;
-    justify-content: center;
-
-    margin: 0 10px 15px 0;
-    padding: 0 0 0 15px;
-
-    border-top: none;
-    border-left: solid 1px rgba(0, 0, 0, 0.1);
-  }
 }
 
 

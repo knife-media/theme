@@ -135,7 +135,9 @@
                             <figure class="answer__poster">
                                 <?php
                                     if(!empty($answer['attachment'])) {
-                                        echo wp_get_attachment_image($answer['attachment'], 'thumbnail');
+                                        printf('<img src="%s" alt="">',
+                                            wp_get_attachment_image_url($answer['attachment'], 'short')
+                                        );
                                     }
 
                                     printf(
@@ -239,9 +241,9 @@
                 );
 
                 printf(
-                    '<p class="summary__check"><label><input type="checkbox" name="%1$s[repeat]" value="1"%2$s>%3$s</label></p>',
+                    '<p class="summary__check"><label><input type="checkbox" name="%1$s[norepeat]" value="1"%2$s>%3$s</label></p>',
                     esc_attr(self::$meta_options),
-                    checked(isset($options['repeat']), true, false),
+                    checked(isset($options['norepeat']), true, false),
                     __('Скрыть кнопку повтороного прохождения', 'knife-theme')
                 );
             ?>

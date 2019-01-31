@@ -208,7 +208,7 @@ class Knife_Random_Generator {
 
             // Add generator items
             wp_localize_script('knife-theme', 'knife_generator_items',
-                self::retrieve_items($post_id)
+                (array) self::retrieve_items($post_id)
             );
         }
     }
@@ -218,10 +218,12 @@ class Knife_Random_Generator {
      * Redirect to custom generated template if share query var exists
      */
     public static function redirect_share() {
-        if(is_singular(self::$slug) && get_query_var('share')) {
+        $share = get_query_var('share');
+
+        if(is_singular(self::$slug) && strlen($share) > 0) {
             $post_id = get_the_ID();
 
-            $share = absint(get_query_var('share')) - 1;
+            $share = absint($share) - 1;
             $items = self::retrieve_items($post_id, true);
 
             if($share >= 0 && count($items) > $share) {

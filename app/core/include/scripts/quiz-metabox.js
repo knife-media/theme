@@ -365,9 +365,11 @@ jQuery(document).ready(function($) {
 
       poster.find(attachment).val(selection.id);
 
+      console.log(selection);
+
       // Set thumbnail as selection if exists
-      if(thumbnail && typeof selection.sizes.thumbnail !== 'undefined') {
-        selection = selection.sizes.thumbnail;
+      if(thumbnail && typeof selection.sizes[thumbnail] !== 'undefined') {
+        selection = selection.sizes[thumbnail];
       }
 
       // Create image if not exists
@@ -593,7 +595,7 @@ jQuery(document).ready(function($) {
 
     var poster = $(this);
 
-    appendImage(poster, '.answer__poster-attachment', true);
+    appendImage(poster, '.answer__poster-attachment', 'short');
   });
 
 

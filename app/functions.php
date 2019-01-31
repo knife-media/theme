@@ -76,6 +76,7 @@ add_action('after_setup_theme', function(){
 
     add_image_size('outer', 1024, 9999, false);
     add_image_size('inner', 640, 9999, false);
+    add_image_size('short', 640, 480, true);
 
     add_image_size('ground', 1600, 900, true);
     add_image_size('triple', 480, 360, true);

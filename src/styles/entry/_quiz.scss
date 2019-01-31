@@ -144,6 +144,7 @@
     border-radius: 4px;
 
     @media screen and (max-width: 767px) {
+      margin-top: 1.5rem;
       padding: .75rem 1.5rem;
       font-size: 1.25rem;
       line-height: 1.375;
@@ -159,6 +160,39 @@
   .entry-quiz__vote {
     display: none;
     flex-flow: row wrap;
+    justify-content: space-between;
+
+    width: calc(#{$width-content} + 1rem);
+    margin-bottom: 2rem;
+    padding: 0 .5rem;
+
+    .entry-quiz__vote-attachment {
+      display: block;
+      position: relative;
+      cursor: pointer;
+
+      width: calc(50% + .25rem);
+      margin: .25rem -.375rem;
+      padding: .375rem;
+      overflow: hidden;
+      transition: opacity .25s;
+
+      border-radius: 2px;
+
+      &:hover > img {
+        opacity: .85;
+      }
+
+      &:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        width: 100%;
+        height: 100%;
+      }
+    }
 
     .entry-quiz__vote-choice {
       display: flex;
@@ -168,7 +202,7 @@
 
       width: 100%;
       min-height: 2.5rem;
-      margin: 0 .25rem 1.5rem;
+      margin: 1.5rem .25rem 0;
       padding-left: 3.5rem;
 
       font-family: $font-serif;
@@ -206,13 +240,17 @@
         border-radius: 50%;
       }
 
+      &:first-child {
+        margin-top: 0;
+      }
+
       &:hover:after {
         background-color: rgba($color-black, .85);
       }
 
       @media screen and (max-width: 767px) {
         min-height: 2rem;
-        margin-bottom: 1rem;
+        margin-top: 1rem;
         padding-left: 2.75rem;
         font-size: 1rem;
 
@@ -233,6 +271,7 @@
       display: block;
 
       width: 100%;
+      margin-top: 1.5rem;
       padding-top: 1.5rem;
       font-family: $font-serif;
       font-size: 1.125rem;
@@ -241,6 +280,7 @@
       border-top: solid 1px rgba($color-black, .25);
 
       @media screen and (max-width: 767px) {
+        margin-top: 1rem;
         padding-top: 1rem;
         font-size: 1rem;
       }
@@ -250,7 +290,41 @@
       display: none;
     }
 
+    &.entry-quiz__vote--attachment {
+      margin-top: 1.5rem;
+
+      @media screen and (max-width: 767px) {
+        margin-top: 0.75rem;
+      }
+    }
+
     &.entry-quiz__vote--complete {
+      .entry-quiz__vote-attachment {
+        cursor: default;
+
+        & > img {
+          opacity: .85;
+        }
+
+        &.entry-quiz__vote-attachment--selected {
+          & > img {
+            opacity: 1;
+          }
+        }
+
+        &.entry-quiz__vote-attachment--correct {
+          background-color: #00efbe;
+        }
+
+        &.entry-quiz__vote-attachment--missed {
+          background-color: #00efbe;
+        }
+
+        &.entry-quiz__vote-attachment--wrong {
+          background-color: #ff2640;
+        }
+      }
+
       .entry-quiz__vote-choice {
         cursor: default;
 
@@ -295,15 +369,18 @@
         display: flex;
       }
     }
+
+    @media screen and (max-width: 767px) {
+      margin-bottom: 1rem;
+    }
   }
 
   &.entry-quiz--item {
-    .entry-quiz__share {
-      display: none;
-    }
-
-    .entry-quiz__title {
-      display: none;
+    .entry-quiz__info {
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 700;
+      color: rgba(0, 0, 0, .375);
     }
 
     .entry-quiz__vote {
@@ -324,15 +401,53 @@
       }
     }
 
+    .entry-quiz__share {
+      display: none;
+    }
+
+    .entry-quiz__title {
+      display: none;
+    }
+  }
+
+  &.entry-quiz--results {
+    .entry-quiz__share {
+      display: flex;
+      justify-content: space-between;
+
+      .share__link {
+        flex: 1 1 auto;
+      }
+
+      .share__text {
+        display: block;
+
+        @media screen and (max-width: 767px) {
+          display: none;
+        }
+      }
+    }
+
+    .entry-quiz__content {
+      & > p {
+        text-align: left;
+      }
+    }
+
+    .entry-quiz__title {
+      display: none;
+    }
+
+    .entry-quiz__vote {
+      display: none;
+    }
+
     .entry-quiz__info {
-      text-align: center;
-      font-size: 1rem;
-      font-weight: 700;
-      color: rgba(0, 0, 0, .375);
+      display: none;
     }
   }
 
   @media screen and (max-width: 767px) {
-    padding: 1rem;
+    padding: 1rem 1rem 1.5rem;
   }
 }
