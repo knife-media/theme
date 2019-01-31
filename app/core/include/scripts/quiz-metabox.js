@@ -584,6 +584,11 @@ jQuery(document).ready(function($) {
     // Find closest answers
     var answers = button.closest('.item').find('.item__answers');
     answers.toggleClass('item__answers--expand');
+
+    // Animate scrolling to item
+    $('html, body').animate({
+      scrollTop: button.closest('.item').offset().top
+    }, 200);
   });
 
 
