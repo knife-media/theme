@@ -133,8 +133,10 @@
 
       // Loop through answers to find and mark correct
       for(var i = 0; i < answers.length; i++) {
+        var sibling = target.parentNode.children[i];
+
         if(answers[i].hasOwnProperty('binary') && answers[i].binary) {
-          vote.children[i].classList.add(cl + '--missed');
+          sibling.classList.add(cl + '--missed');
         }
       }
 

@@ -105,7 +105,7 @@ class Knife_Open_Quiz {
         add_action('single_template', [__CLASS__, 'include_single']);
 
         // Add quiz metabox
-        add_action('add_meta_boxes', [__CLASS__, 'add_metabox'], 10);
+        add_action('add_meta_boxes', [__CLASS__, 'add_metabox'], 12);
 
         // Save metabox
         add_action('save_post', [__CLASS__, 'save_metabox']);
