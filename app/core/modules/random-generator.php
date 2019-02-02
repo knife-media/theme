@@ -135,7 +135,6 @@ class Knife_Random_Generator {
             ],
             'label'                 => __('Генератор', 'knife-theme'),
             'supports'              => ['title', 'thumbnail', 'excerpt', 'comments'],
-            'taxonomies'            => ['post_tag'],
             'hierarchical'          => false,
             'public'                => true,
             'show_ui'               => true,

@@ -6,17 +6,38 @@
  *
  * @package knife-theme
  * @since 1.4
+ * @version 1.7
  */
 
 
 class Knife_Widget_Televisor extends WP_Widget {
+    /**
+     * Widget post types
+     */
+    private $post_type = ['post', 'quiz'];
 
+
+    /**
+     * News category id
+     */
+    private $news_id = null;
+
+
+    /**
+     * Widget constructor
+     */
     public function __construct() {
         $widget_ops = [
             'classname' => 'televisor',
             'description' => __('Выводит телевизор из 4 постов и блока новостей', 'knife-theme'),
             'customize_selective_refresh' => true
         ];
+
+        $term = get_category_by_slug('news');
+
+        if(isset($term->term_id)) {
+            $this->news_id = $term->term_id;
+        }
 
         parent::__construct('knife_widget_televisor', __('[НОЖ] Телевизор', 'knife-theme'), $widget_ops);
     }
@@ -30,9 +51,9 @@ class Knife_Widget_Televisor extends WP_Widget {
         $defaults = [
             'title' => '',
             'link' => '',
-            'filter' => 620,
             'cover' => 0,
-            'unique' => 0
+            'unique' => 0,
+            'posts_per_page' => 7,
         ];
 
         $instance = wp_parse_args((array) $instance, $defaults);
@@ -52,8 +73,8 @@ class Knife_Widget_Televisor extends WP_Widget {
         $instance = $old_instance;
 
         $instance['title'] = sanitize_text_field($new_instance['title']);
+        $instance['posts_per_page'] = (int) $new_instance['posts_per_page'];
         $instance['unique'] = $new_instance['unique'] ? 1 : 0;
-        $instance['filter'] = absint($new_instance['filter']);
         $instance['link'] = esc_url($new_instance['link']);
         $instance['cover'] = absint($new_instance['cover']);
 
@@ -68,7 +89,6 @@ class Knife_Widget_Televisor extends WP_Widget {
         $defaults = [
             'title' => '',
             'link' => '',
-            'filter' => 620,
             'cover' => 0,
             'unique' => 0
         ];
@@ -97,22 +117,14 @@ class Knife_Widget_Televisor extends WP_Widget {
             checked($instance['unique'], 1, false)
         );
 
-
-        // Categories filter
-        $categories = wp_dropdown_categories([
-            'name' => $this->get_field_name('filter'),
-            'id' => $this->get_field_id('filter'),
-            'selected' => esc_attr($instance['filter']),
-            'class' => 'widefat',
-            'echo' => false
-        ]);
-
-        printf('<p><label for="%2$s">%1$s</label>%3$s</p>',
-            __('Категория записей в сайдбаре:', 'knife-theme'),
-            esc_attr($this->get_field_id('filter')),
-            $categories
+        // News count
+        printf(
+            '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
+            esc_attr($this->get_field_id('posts_per_page')),
+            esc_attr($this->get_field_name('posts_per_page')),
+            __('Количество новостей:', 'knife-theme'),
+            esc_attr($instance['posts_per_page'])
         );
-
 
         // Widget cover
         if($cover = wp_get_attachment_url($instance['cover'])) {
@@ -150,8 +162,9 @@ class Knife_Widget_Televisor extends WP_Widget {
         $query = [
             'post_status' => 'publish',
             'ignore_sticky_posts' => 1,
-            'category__not_in' => $filter,
-            'posts_per_page' => 3
+            'category__not_in' => $this->news_id,
+            'posts_per_page' => 3,
+            'post_type' => $this->post_type
         ];
 
         // Check option to show posts only unique posts
@@ -224,7 +237,7 @@ class Knife_Widget_Televisor extends WP_Widget {
         $query = new WP_Query([
             'post_status' => 'publish',
             'ignore_sticky_posts' => 1,
-            'cat' => $instance['filter'],
+            'cat' => $this->news_id,
             'posts_per_page' => 7
         ]);
 

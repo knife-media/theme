@@ -118,6 +118,9 @@ class Knife_Open_Quiz {
 
         // Include quiz options
         add_action('wp_enqueue_scripts', [__CLASS__, 'inject_quiz'], 12);
+
+        // Add quiz post type to archives
+        add_action('pre_get_posts', [__CLASS__, 'update_archives'], 12);
     }
 
 
@@ -274,6 +277,28 @@ class Knife_Open_Quiz {
         }
 
         return $template;
+    }
+
+
+    /**
+     * Append quiz posts to archives
+     */
+    public static function update_archives($query) {
+        if(is_admin() || !$query->is_main_query()) {
+            return false;
+        }
+
+        if($query->is_tag() || $query->is_author() || $query->is_home()) {
+            $types = $query->get('post_type');
+
+            if(!is_array($types)) {
+                $types = ['post'];
+            }
+
+            $types[] = self::$slug;
+
+            $query->set('post_type', $types);
+        }
     }
 
 

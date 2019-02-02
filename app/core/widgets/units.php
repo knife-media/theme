@@ -6,17 +6,38 @@
  *
  * @package knife-theme
  * @since 1.4
+ * @version 1.7
  */
 
 
 class Knife_Widget_Units extends WP_Widget {
+    /**
+     * Widget post types
+     */
+    private $post_type = ['post', 'quiz'];
 
+
+    /**
+     * News category id
+     */
+    private $news_id = null;
+
+
+    /**
+     * Widget constructor
+     */
     public function __construct() {
         $widget_ops = [
             'classname' => 'units',
             'description' => __('Выводит полосу по заданному критерию в виде карточек.', 'knife-theme'),
             'customize_selective_refresh' => true
         ];
+
+        $term = get_category_by_slug('news');
+
+        if(isset($term->term_id)) {
+            $this->news_id = $term->term_id;
+        }
 
         parent::__construct('knife_widget_units', __('[НОЖ] Карточки', 'knife-theme'), $widget_ops);
     }
@@ -30,7 +51,6 @@ class Knife_Widget_Units extends WP_Widget {
             'title' => '',
             'posts_per_page' => 5,
             'offset' => 0,
-            'filter' => 620,
             'unique' => 1
         ];
 
@@ -70,7 +90,6 @@ class Knife_Widget_Units extends WP_Widget {
         $instance['offset'] = absint($new_instance['offset']);
         $instance['title'] = sanitize_text_field($new_instance['title']);
         $instance['unique'] = $new_instance['unique'] ? 1 : 0;
-        $instance['filter'] = absint($new_instance['filter']);
 
         return $instance;
     }
@@ -84,7 +103,6 @@ class Knife_Widget_Units extends WP_Widget {
             'title' => '',
             'posts_per_page' => 5,
             'offset' => 0,
-            'filter' => 620,
             'unique' => 1
         ];
 
@@ -108,22 +126,6 @@ class Knife_Widget_Units extends WP_Widget {
             esc_attr($this->get_field_name('unique')),
             __('Только уникальные посты', 'knife-theme'),
             checked($instance['unique'], 1, false)
-        );
-
-        // Categories filter
-        $categories = wp_dropdown_categories([
-            'name' => $this->get_field_name('filter'),
-            'id' => $this->get_field_id('filter'),
-            'show_option_none' => __('Без фильтра', 'knife-theme'),
-            'selected' => esc_attr($instance['filter']),
-            'class' => 'widefat',
-            'echo' => false
-        ]);
-
-        printf('<p><label for="%2$s">%1$s</label>%3$s</p>',
-            __('Исключить записи из категории:', 'knife-theme'),
-            esc_attr($this->get_field_id('filter')),
-            $categories
         );
 
 
@@ -159,8 +161,9 @@ class Knife_Widget_Units extends WP_Widget {
             'post_status' => 'publish',
             'ignore_sticky_posts' => 1,
             'offset' => $offset,
-            'category__not_in' => $filter,
+            'category__not_in' => $this->news_id,
             'posts_per_page' => $posts_per_page,
+            'post_type' => $this->post_type
         ];
 
         // Check option to show posts only unique posts

@@ -6,7 +6,7 @@
 *
 * @package knife-theme
 * @since 1.3
-* @version 1.5
+* @version 1.7
 */
 
 
@@ -105,11 +105,8 @@ class Knife_User_Club {
         add_action('draft_to_pending', [__CLASS__, 'notify_review']);
         add_action('auto-draft_to_pending', [__CLASS__, 'notify_review']);
 
-        // Add clup post type to author archive
-        add_action('pre_get_posts', [__CLASS__, 'update_author_archive'], 12);
-
-        // Add club post type to tags archive
-        add_action('pre_get_posts', [__CLASS__, 'update_tags_archive'], 12);
+        // Add club post type to archives
+        add_action('pre_get_posts', [__CLASS__, 'update_archives'], 12);
 
         // Prepend author meta to content
         add_filter('the_content', [__CLASS__, 'insert_author_link']);
@@ -305,30 +302,14 @@ class Knife_User_Club {
 
 
     /**
-     * Append to author archive loop club posts
+     * Append club posts to author and tag archives
      */
-    public static function update_author_archive($query) {
-        if(!is_admin() && is_author() && $query->is_main_query()) {
-            $types = $query->get('post_type');
-
-            if(!is_array($types)) {
-                $types = ['post'];
-            }
-
-            $types[] = self::$slug;
-
-            $query->set('post_type', $types);
+    public static function update_archives($query) {
+        if(is_admin() || !$query->is_main_query()) {
+            return false;
         }
-    }
 
-
-    /**
-     * Append to tags archive loop club posts
-     *
-     * @since 1.4
-     */
-    public static function update_tags_archive($query) {
-        if(!is_admin() && $query->is_tag() && $query->is_main_query()) {
+        if($query->is_tag() || $query->is_author()) {
             $types = $query->get('post_type');
 
             if(!is_array($types)) {
