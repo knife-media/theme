@@ -145,7 +145,7 @@ class Knife_Open_Quiz {
                 'insert_into_item'      => __('Добавить в тест', 'knife-theme')
             ],
             'label'                 => __('Тесты', 'knife-theme'),
-            'supports'              => ['title', 'thumbnail', 'excerpt', 'comments'],
+            'supports'              => ['title', 'thumbnail', 'excerpt', 'comments', 'author'],
             'taxonomies'            => ['post_tag', 'category'],
             'hierarchical'          => false,
             'public'                => true,
