@@ -38,7 +38,7 @@ class Knife_Relap_Links {
     * @access  private
     * @var     array
     */
-    private static $type = ['post', 'generator'];
+    private static $type = ['post', 'generator', 'quiz'];
 
 
     /**
