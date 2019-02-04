@@ -41,18 +41,10 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
                     $turbo = get_the_content_feed();
 
                     // Custom header for turbo content
-                    if(has_post_thumbnail()) {
-                        $header = sprintf(
-                            '<header><figure><img src="%s"></figure><h1>%s</h1></header>',
-                            get_the_post_thumbnail_url(get_the_ID(), 'outer'),
-                            get_the_title_rss()
-                        );
-                    } else {
-                        $header = sprintf(
-                            '<header><h1>%s</h1></header>',
-                            get_the_title_rss()
-                        );
-                    }
+                    $header = sprintf(
+                        '<header><h1>%s</h1></header>',
+                        get_the_title_rss()
+                    );
 
                     $content = self::get_filtered_content();
 
