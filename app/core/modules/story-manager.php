@@ -39,7 +39,7 @@ class Knife_Story_Manager {
      *
      * @since   1.3
      * @access  private
-     * @var     string
+     * @var     array
      */
     private static $opts = ['background', 'shadow', 'blur'];
 

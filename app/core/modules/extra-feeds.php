@@ -19,7 +19,7 @@ class Knife_Extra_Feeds {
     /**
      * Exclude post from Yandex.Zen meta
      *
-     * @access  private static
+     * @access  private
      * @var     string
      */
     private static $zen_exclude = '_knife-zen-exclude';
@@ -28,7 +28,7 @@ class Knife_Extra_Feeds {
     /**
      * Republish Yandex.Zen meta
      *
-     * @access  private static
+     * @access  private
      * @var     string
      */
     private static $zen_publish = '_knife-zen-publish';
@@ -37,7 +37,7 @@ class Knife_Extra_Feeds {
     /**
      * Checkbox save nonce
      *
-     * @access  private static
+     * @access  private
      * @var     string
      */
     private static $nonce = 'knife-feed-nonce';

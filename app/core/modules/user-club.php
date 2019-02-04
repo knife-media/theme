@@ -20,7 +20,7 @@ class Knife_User_Club {
      * Unique slug using for custom post type register and url
      *
      * @since   1.3
-     * @access  private static
+     * @access  private
      * @var     string
      */
     private static $slug = 'club';
@@ -30,7 +30,7 @@ class Knife_User_Club {
     * User form meta
     *
     * @since   1.3
-    * @access  private static
+    * @access  private
     * @var     string
     */
     private static $meta = '_knife-user-form';
@@ -40,7 +40,7 @@ class Knife_User_Club {
     * Ajax action
     *
     * @since   1.3
-    * @access  private static
+    * @access  private
     * @var     string
     */
     private static $action = 'knife-user-form';
@@ -50,7 +50,7 @@ class Knife_User_Club {
      * Unique option key to store user settings
      *
      * @since   1.3
-     * @access  private static
+     * @access  private
      * @var     string
      */
     private static $option = 'knife-user-settings';
@@ -60,7 +60,7 @@ class Knife_User_Club {
      * Checkbox save nonce
      *
      * @since   1.5
-     * @access  private static
+     * @access  private
      * @var     string
      */
     private static $nonce = 'knife-user-form-nonce';

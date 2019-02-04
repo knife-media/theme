@@ -26,7 +26,7 @@ class Knife_Select_Links {
     /**
      * Unique nonce string using for ajax referer check
      *
-     * @access  private static
+     * @access  private
      * @var     string
      */
     private static $nonce = 'knife-select-nonce';
@@ -35,7 +35,7 @@ class Knife_Select_Links {
    /**
     * Ajax action
     *
-    * @access  private static
+    * @access  private
     * @var     string
     */
     private static $action = 'knife-select-title';

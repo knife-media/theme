@@ -38,7 +38,7 @@ class Knife_Post_Tagline {
      * Tagline save nonce
      *
      * @since   1.5
-     * @access  private static
+     * @access  private
      * @var     string
      */
     private static $nonce = 'knife-tagline-nonce';

@@ -29,7 +29,7 @@ class Knife_Terms_Emoji {
      *
      * @since   1.5
      * @access  private
-     * @var     string
+     * @var     array
      */
     private static $taxes = ['post_tag', 'label'];
 

@@ -34,7 +34,7 @@ class Knife_Open_Quiz {
     /**
      * Unique nonce string
      *
-     * @access  private static
+     * @access  private
      * @var     string
      */
     private static $nonce = 'knife-quiz-nonce';

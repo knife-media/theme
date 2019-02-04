@@ -38,7 +38,7 @@ class Knife_Post_Lead {
      * Lead save nonce
      *
      * @since   1.5
-     * @access  private static
+     * @access  private
      * @var     string
      */
     private static $nonce = 'knife-lead-nonce';
