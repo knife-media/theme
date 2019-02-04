@@ -1,16 +1,16 @@
 <?php
 /**
- * Details widget template
+ * Blunt widget template
  *
  * @package knife-theme
- * @since 1.4
+ * @since 1.7
  */
 ?>
 
-<div class="widget-details__inner">
+<div class="widget-blunt__inner">
     <?php
         printf(
-            '<a class="widget-details__link" href="%1$s">%2$s</a>',
+            '<a class="widget-blunt__link" href="%1$s">%2$s</a>',
             esc_html(get_permalink()),
             get_the_title()
         );

@@ -24,6 +24,12 @@ class Knife_Widget_Televisor extends WP_Widget {
 
 
     /**
+     * Exclude tags
+     */
+    private $tag__not_in = [];
+
+
+    /**
      * Widget constructor
      */
     public function __construct() {
@@ -33,10 +39,14 @@ class Knife_Widget_Televisor extends WP_Widget {
             'customize_selective_refresh' => true
         ];
 
-        $term = get_category_by_slug('news');
+        $cat = get_category_by_slug('news');
+        if(isset($cat->term_id)) {
+            $this->news_id = $cat->term_id;
+        }
 
-        if(isset($term->term_id)) {
-            $this->news_id = $term->term_id;
+        $tag = get_term_by('slug', 'bluntmedia', 'post_tag');
+        if(isset($tag->term_id)) {
+            $this->tag__not_in[] = (int) $tag->term_id;
         }
 
         parent::__construct('knife_widget_televisor', __('[НОЖ] Телевизор', 'knife-theme'), $widget_ops);
@@ -160,11 +170,11 @@ class Knife_Widget_Televisor extends WP_Widget {
         extract($instance);
 
         $query = [
-            'post_status' => 'publish',
-            'ignore_sticky_posts' => 1,
             'category__not_in' => $this->news_id,
             'posts_per_page' => 3,
-            'post_type' => $this->post_type
+            'post_type' => $this->post_type,
+            'post_status' => 'publish',
+            'ignore_sticky_posts' => 1
         ];
 
         // Check option to show posts only unique posts
@@ -235,9 +245,10 @@ class Knife_Widget_Televisor extends WP_Widget {
      */
     private function show_recent($instance) {
         $query = new WP_Query([
+            'cat' => $this->news_id,
+            'tag__not_in' => $this->tag__not_in,
             'post_status' => 'publish',
             'ignore_sticky_posts' => 1,
-            'cat' => $this->news_id,
             'posts_per_page' => 7
         ]);
 

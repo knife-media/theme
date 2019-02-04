@@ -1,4 +1,4 @@
-.widget-details {
+.widget-blunt {
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
@@ -6,10 +6,7 @@
   width: 100%;
   margin-top: 1rem;
 
-  color: $color-white;
-  background: transparent;
-
- .widget-details__link {
+ .widget-blunt__link {
     display: block;
     position: relative;
 
@@ -21,8 +18,8 @@
     font-weight: 700;
     line-height: 1.25;
 
-    color: $color-white;
-    background-color: #8bb847;
+    color: $color-text;
+    background-color: #f9cf00;
 
     &:hover {
       filter: brightness(115%);
@@ -38,7 +35,7 @@
     }
   }
 
-  .widget-details__inner {
+  .widget-blunt__inner {
     display: flex;
 
     width: auto;
@@ -48,11 +45,9 @@
     &:nth-child(-n+2) {
       width: 100%;
 
-      .widget-details__link {
+      .widget-blunt__link {
         font-size: 1.875rem;
         line-height: 1.075;
-
-        background-color: #6aa535;
 
         @media screen and (max-width: 1023px) {
           font-size: 1.5rem;

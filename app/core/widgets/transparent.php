@@ -203,10 +203,10 @@ class Knife_Widget_Transparent extends WP_Widget {
         extract($instance);
 
         $query = [
-            'post_status' => 'publish',
-            'ignore_sticky_posts' => 1,
             'offset' => $offset,
             'posts_per_page' => 4,
+            'post_status' => 'publish',
+            'ignore_sticky_posts' => 1,
             'tax_query' => [[
                 'field' => 'id',
                 'taxonomy' => $taxonomy,

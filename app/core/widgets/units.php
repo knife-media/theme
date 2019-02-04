@@ -158,12 +158,12 @@ class Knife_Widget_Units extends WP_Widget {
         extract($instance);
 
         $query = [
-            'post_status' => 'publish',
-            'ignore_sticky_posts' => 1,
-            'offset' => $offset,
             'category__not_in' => $this->news_id,
             'posts_per_page' => $posts_per_page,
-            'post_type' => $this->post_type
+            'post_type' => $this->post_type,
+            'offset' => $offset,
+            'post_status' => 'publish',
+            'ignore_sticky_posts' => 1
         ];
 
         // Check option to show posts only unique posts

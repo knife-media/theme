@@ -11,7 +11,15 @@
 
 
 class Knife_Widget_Select extends WP_Widget {
+    /**
+     * Widget post types
+     */
+    private $post_type = ['select'];
 
+
+    /**
+     * Widget constructor
+     */
     public function __construct() {
         $widget_ops = [
             'classname' => 'select',
@@ -41,11 +49,11 @@ class Knife_Widget_Select extends WP_Widget {
         $instance = wp_parse_args((array) $instance, $defaults);
 
         $query = new WP_Query([
-            'post_status' => 'publish',
-            'ignore_sticky_posts' => 1,
-            'post_type' => 'select',
+            'post_type' => $this->post_type,
             'posts_per_page' => $instance['posts_per_page'],
-            'offset' => $instance['offset']
+            'offset' => $instance['offset'],
+            'post_status' => 'publish',
+            'ignore_sticky_posts' => 1
         ]);
 
         if($query->have_posts()) {

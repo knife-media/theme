@@ -11,7 +11,15 @@
 
 
 class Knife_Widget_Story extends WP_Widget {
+    /**
+     * Widget post types
+     */
+    private $post_type = ['story'];
 
+
+    /**
+     * Widget constructor
+     */
     public function __construct() {
         $widget_ops = [
             'classname' => 'story',
@@ -36,11 +44,11 @@ class Knife_Widget_Story extends WP_Widget {
         $instance = wp_parse_args((array) $instance, $defaults);
 
         $query = new WP_Query([
-            'post_status' => 'publish',
-            'ignore_sticky_posts' => 1,
-            'post_type' => 'story',
+            'post_type' => $this->post_type,
+            'posts_per_page' => $instance['posts_per_page'],
             'offset' => $instance['offset'],
-            'posts_per_page' => $instance['posts_per_page']
+            'post_status' => 'publish',
+            'ignore_sticky_posts' => 1
         ]);
 
 
