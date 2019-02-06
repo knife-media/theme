@@ -691,7 +691,10 @@ jQuery(document).ready(function($) {
 
     var caption = result.find('.result__image-caption');
 
-    if(result.find('.result__image-poster > img').length < 1) {
+    // Get attachment value
+    var attachment = result.find('.result__image-attachment').val();
+
+    if(attachment.length === 0) {
       return blinkClass(caption, 'result__image-caption--error');
     }
 

@@ -290,12 +290,12 @@
    * Create quiz button
    */
   (function() {
-    button = document.createElement('button');
-
-    button.classList.add('entry-quiz__button', 'button');
-    button.setAttribute('type', 'button');
-
     if(knife_quiz_options.hasOwnProperty('button_start')) {
+      button = document.createElement('button');
+
+      button.classList.add('entry-quiz__button', 'button');
+      button.setAttribute('type', 'button');
+
       button.textContent = knife_quiz_options.button_start;
     }
 
@@ -356,12 +356,11 @@
       return showItem(item, progress, total);
     }
 
-    quiz.classList.remove('entry-quiz--item');
 
     if(quiz.classList.contains('entry-quiz--results') === false) {
       // Check if result exists
       if(typeof knife_quiz_results[scores] === 'object') {
-        quiz.classList.add('entry-quiz--results');
+        quiz.classList.remove('entry-quiz--item');
 
         if(knife_quiz_options.hasOwnProperty('button_repeat')) {
           button.textContent = knife_quiz_options.button_repeat;
@@ -370,6 +369,8 @@
         if(knife_quiz_options.hasOwnProperty('norepeat') && knife_quiz_options.norepeat) {
           button.parentNode.removeChild(button);
         }
+
+        quiz.classList.add('entry-quiz--results');
 
         return showResult(knife_quiz_results[scores], scores);
       }
