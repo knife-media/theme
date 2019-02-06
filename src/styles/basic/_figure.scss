@@ -12,15 +12,22 @@
   }
 
   .figure__caption {
+    display: block;
+
     width: $width-content;
     max-width: 100%;
     margin: 0 auto;
     padding-top: .75rem;
 
+    color: $color-text;
+    font-size: .8125rem;
+    font-weight: 400;
+    line-height: 1.375;
     text-align: left;
 
     @media screen and (max-width: 767px) {
       padding-top: .5rem;
+      font-size: .75rem;
     }
   }
 

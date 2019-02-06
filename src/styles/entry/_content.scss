@@ -228,17 +228,7 @@
   }
 
   figcaption {
-    display: block;
-
-    color: $color-text;
-    font-size: .8125rem;
-    font-weight: 400;
-    line-height: 1.375;
     text-align: left;
-
-    @media screen and (max-width: 767px) {
-      font-size: .75rem;
-    }
   }
 
   figure {
