@@ -73,7 +73,7 @@ class Knife_User_Club {
      */
     public static function load_module() {
         // Register club post type
-        add_action('init', [__CLASS__, 'register_club']);
+        add_action('init', [__CLASS__, 'register_type']);
 
         // Print checkbox user form
         add_action('page_attributes_misc_attributes', [__CLASS__, 'print_checkbox']);
@@ -181,7 +181,7 @@ class Knife_User_Club {
     /**
      * Register club post type
      */
-    public static function register_club() {
+    public static function register_type() {
         register_post_type(self::$slug, [
             'labels'                => [
                 'name'              => __('Клуб', 'knife-theme'),

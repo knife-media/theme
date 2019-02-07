@@ -129,7 +129,7 @@ class Knife_Select_Links {
 
 
     /**
-     * Include archive story template
+     * Include archive select template
      *
      * @since 1.5
      */

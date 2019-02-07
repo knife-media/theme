@@ -481,6 +481,9 @@ require get_template_directory() . '/core/modules/news-manager.php';
 // Story post type
 require get_template_directory() . '/core/modules/story-manager.php';
 
+// Ask post type
+require get_template_directory() . '/core/modules/ask-section.php';
+
 // Select post type
 require get_template_directory() . '/core/modules/select-links.php';
 
