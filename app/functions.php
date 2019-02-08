@@ -472,6 +472,9 @@ require get_template_directory() . '/core/modules/hidden-widgets.php';
 // Upgrade theme menus
 require get_template_directory() . '/core/modules/menu-upgrade.php';
 
+// Notification sender module
+require get_template_directory() . '/core/modules/notifier-robot.php';
+
 // User generated blogs
 require get_template_directory() . '/core/modules/user-club.php';
 
