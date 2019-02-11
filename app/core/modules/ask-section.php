@@ -40,9 +40,6 @@ class Knife_Ask_Section {
 
         // Change posts count on ask archive
         add_action('pre_get_posts', [__CLASS__, 'update_count']);
-
-        // Filter content to show custom section
-        add_filter('the_content', [__CLASS__, 'update_content']);
     }
 
 
@@ -68,7 +65,7 @@ class Knife_Ask_Section {
             ],
             'label'                 => __('Вопросы', 'knife-theme'),
             'description'           => __('Раздел с вопросами пользователей', 'knife-theme'),
-            'supports'              => ['title', 'thumbnail', 'revisions', 'excerpt', 'author', 'comments'],
+            'supports'              => ['title', 'editor', 'thumbnail', 'revisions', 'excerpt', 'author', 'comments'],
             'hierarchical'          => false,
             'public'                => true,
             'show_ui'               => true,
@@ -126,22 +123,6 @@ class Knife_Ask_Section {
             wp_redirect(home_url(), 302);
             exit;
         }
-    }
-
-
-    /**
-     * Update content with custom links
-     */
-    public static function update_content($content) {
-        if(is_singular(self::$slug) && in_the_loop()) {
-            $units = get_post_meta(get_the_ID(), self::$meta_items);
-
-            foreach($units as $unit) {
-                $content = self::append_unit($unit, $content);
-            }
-        }
-
-        return $content;
     }
 
 

@@ -1,12 +1,12 @@
 <?php
 /**
-* Label posts
-*
-* Custom labels posts taxonomy settings
-*
-* @package knife-theme
-* @since 1.5
-*/
+ * Label posts
+ *
+ * Custom labels posts taxonomy settings
+ *
+ * @package knife-theme
+ * @since 1.5
+ */
 
 
 if (!defined('WPINC')) {
@@ -30,7 +30,7 @@ class Knife_Label_Posts {
      */
     public static function load_module() {
         // Register taxonomy
-        add_action('after_setup_theme', [__CLASS__, 'register_taxonomy']);
+        add_action('init', [__CLASS__, 'register_taxonomy']);
     }
 
 
@@ -48,7 +48,7 @@ class Knife_Label_Posts {
                 'edit_item'                  => __('Редактировать', 'knife-theme'),
                 'update_item'                => __('Обновить', 'knife-theme'),
                 'add_new_item'               => __('Добавить новый', 'knife-theme'),
-                'new_item_name'              => __('Новый спецпроект', 'knife-theme'),
+                'new_item_name'              => __('Новый ярылк', 'knife-theme'),
                 'separate_items_with_commas' => __('Разделить записи запятыми', 'knife-theme'),
                 'add_or_remove_items'        => __('Добавить или удалить ярлык', 'knife-theme'),
                 'choose_from_most_used'      => __('Наиболее используемые', 'knife-theme'),

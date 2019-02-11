@@ -1,13 +1,13 @@
 <?php
 /**
-* Special projects
-*
-* Custom special projects taxonomy settings
-*
-* @package knife-theme
-* @since 1.3
-* @version 1.5
-*/
+ * Special projects
+ *
+ * Custom special projects taxonomy settings
+ *
+ * @package knife-theme
+ * @since 1.3
+ * @version 1.5
+ */
 
 
 if (!defined('WPINC')) {
@@ -43,7 +43,7 @@ class Knife_Special_Projects {
      */
     public static function load_module() {
         // Register taxonomy
-        add_action('after_setup_theme', [__CLASS__, 'register_taxonomy']);
+        add_action('init', [__CLASS__, 'register_taxonomy']);
 
         // Add special options form fields
         add_action('admin_init', [__CLASS__, 'add_options_fields']);
@@ -111,7 +111,7 @@ class Knife_Special_Projects {
      *
      * @since 1.4
      */
-    public static function print_options_row($term, $taxonomy) {
+    public static function print_options_row($term, $slug) {
         $include = get_template_directory() . '/core/include';
 
         include_once($include . '/templates/special-options.php');
