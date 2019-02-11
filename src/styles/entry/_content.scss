@@ -9,7 +9,6 @@
   line-height: 1.65;
   font-size: 1rem;
   font-weight: 400;
-  letter-spacing: .25px;
 
   color: $color-text;
   background-color: $color-white;
@@ -83,7 +82,6 @@
   h1, h2, h3 {
     margin-top: 2.5rem;
     font-weight: 400;
-    letter-spacing: .5px;
 
     @media screen and (max-width: 767px) {
       margin-top: 1.5rem;
@@ -93,7 +91,6 @@
 
   h4, h5, h6 {
     font-weight: 400;
-    letter-spacing: .25px;
 
     @media screen and (max-width: 767px) {
       margin-bottom: .5rem;
