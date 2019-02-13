@@ -23,11 +23,45 @@ class Knife_Ask_Section {
 
 
     /**
+     * Unique nonce string
+     *
+     * @access  private
+     * @var     string
+     */
+    private static $nonce = 'knife-ask-nonce';
+
+
+    /**
+     * Unique meta to store generator options
+     *
+     * @access  private
+     * @var     string
+     */
+    private static $meta_options = '_knife-ask-options';
+
+
+    /**
+     * Current question counter option
+     * This meta stores in wp_options table
+     *
+     * @access  private
+     * @var     string
+     */
+    private static $option_counter = 'knife-ask-counter';
+
+
+    /**
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public static function load_module() {
         // Register ask post type
         add_action('init', [__CLASS__, 'register_type']);
+
+        // Add ask author metabox
+        add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
+
+        // Save metabox
+        add_action('save_post', [__CLASS__, 'save_metabox']);
 
         // Include ask single template
         add_action('single_template', [__CLASS__, 'include_single']);
@@ -80,6 +114,61 @@ class Knife_Ask_Section {
             'publicly_queryable'    => true,
             'taxonomies'            => ['post_tag']
         ]);
+    }
+
+
+    /**
+     * Add ask author metabox
+     */
+    public static function add_metabox() {
+        add_meta_box('knife-ask-metabox', __('Настройка вопроса'), [__CLASS__, 'display_metabox'], self::$slug, 'normal', 'high');
+    }
+
+
+    /**
+     * Display ask author metabox
+     */
+    public static function display_metabox($post, $box) {
+        $include = get_template_directory() . '/core/include';
+
+        include_once($include . '/templates/ask-metabox.php');
+    }
+
+
+    /**
+     * Save ask author metabox
+     */
+    public static function save_metabox($post_id) {
+        if(get_post_type($post_id) !== self::$slug) {
+            return;
+        }
+
+        if(!isset($_REQUEST[self::$nonce])) {
+            return;
+        }
+
+        if(!wp_verify_nonce($_REQUEST[self::$nonce], 'metabox')) {
+            return;
+        }
+
+        if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+            return;
+        }
+
+        if(!current_user_can('edit_post', $post_id)) {
+            return;
+        }
+
+        // Update options
+        if(isset($_REQUEST[self::$meta_options])) {
+            $options = $_REQUEST[self::$meta_options];
+
+            if(isset($options['counter'])) {
+                update_option(self::$option_counter, $options['counter']);
+            }
+
+            update_post_meta($post_id, self::$meta_options, $options);
+        }
     }
 
 

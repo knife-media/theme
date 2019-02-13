@@ -365,8 +365,6 @@ jQuery(document).ready(function($) {
 
       poster.find(attachment).val(selection.id);
 
-      console.log(selection);
-
       // Set thumbnail as selection if exists
       if(thumbnail && typeof selection.sizes[thumbnail] !== 'undefined') {
         selection = selection.sizes[thumbnail];

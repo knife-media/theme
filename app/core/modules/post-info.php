@@ -18,7 +18,7 @@ class Knife_Post_Info {
      * Common method to output posts info meta
      */
     public static function get_info($options = [], $output = '') {
-        $meta = array_intersect($options, ['club', 'author', 'date', 'tag', 'tags', 'time', 'category']);
+        $meta = array_intersect($options, ['club', 'author', 'date', 'tag', 'tags', 'time', 'category', 'asker']);
         $items = [];
 
         foreach($meta as $option) {
@@ -207,6 +207,26 @@ class Knife_Post_Info {
 
         $output = sprintf('<div class="label">%s</div>',
             implode('', $links)
+        );
+
+        return $output;
+    }
+
+
+    /**
+     * Get question asker
+     */
+    private static function info_asker() {
+        $options = get_post_meta(get_the_ID(), '_knife-ask-options', true);
+
+        if(empty($options['asker'])) {
+            return false;
+        }
+
+        $asker = preg_replace('~^([^,]+,?)(.*)$~iu', '<strong>$1</strong>$2', $options['asker']);
+
+        $output = sprintf('<span class="meta__asker">%s</span>',
+            strip_tags($asker, '<strong>')
         );
 
         return $output;
