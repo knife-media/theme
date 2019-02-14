@@ -63,28 +63,5 @@
 
     return frame.open();
   });
-
-
-  /**
-   * Widget taxonomy handler
-   */
-  $(document).on('change', '.knife-widget-taxonomy', function() {
-    var list = $(this).closest('.widget-content').find('.knife-widget-termlist');
-
-    var data = {
-      action: knife_widget_screen.action,
-      nonce: knife_widget_screen.nonce,
-      filter: jQuery(this).val()
-    }
-
-    $.post(ajaxurl, data, function(response) {
-      list.html(response);
-
-      return list.show();
-    });
-
-    return list.hide();
-  });
-
 }(jQuery));
 

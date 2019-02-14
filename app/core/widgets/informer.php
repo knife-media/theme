@@ -2,11 +2,11 @@
 /**
  * Informer widget
  *
- * Informer line with optional sticker and custom colors
+ * Informer line with optional emoji and custom colors
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.4
+ * @version 1.7
  */
 
 
@@ -29,7 +29,7 @@ class Knife_Widget_Informer extends WP_Widget {
         $defaults = [
             'title' => '',
             'link' => '',
-            'sticker' => '',
+            'emoji' => '',
             'color' => '#000000',
             'background' => '#ffe64e'
         ];
@@ -41,10 +41,6 @@ class Knife_Widget_Informer extends WP_Widget {
 
             $post_id = url_to_postid($instance['link']);
             $options = $this->get_attributes($instance, $post_id);
-
-            if(empty($instance['sticker']) && $post_id > 0) {
-                $instance['sticker'] = get_post_meta($post_id, '_knife-sticker', true);
-            }
 
             include(get_template_directory() . '/templates/widget-informer.php');
 
@@ -61,7 +57,7 @@ class Knife_Widget_Informer extends WP_Widget {
 
         $instance['title'] = sanitize_text_field($new_instance['title']);
         $instance['link'] = esc_url($new_instance['link']);
-        $instance['sticker'] = esc_url($new_instance['sticker']);
+        $instance['emoji'] = wp_encode_emoji($new_instance['emoji']);
         $instance['color'] = sanitize_hex_color($new_instance['color']);
         $instance['background'] = sanitize_hex_color($new_instance['background']);
 
@@ -76,7 +72,7 @@ class Knife_Widget_Informer extends WP_Widget {
         $defaults = [
             'title' => '',
             'link' => '',
-            'sticker' => '',
+            'emoji' => '',
             'color' => '#000000',
             'background' => '#ffe64e'
         ];
@@ -101,12 +97,11 @@ class Knife_Widget_Informer extends WP_Widget {
         );
 
         printf(
-            '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"><small>%5$s</small></p>',
-            esc_attr($this->get_field_id('sticker')),
-            esc_attr($this->get_field_name('sticker')),
-            __('Ссылка на стикер', 'knife-theme'),
-            esc_attr($instance['sticker']),
-            __('По умолчанию отобразится стикер записи', 'knife-theme')
+            '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
+            esc_attr($this->get_field_id('emoji')),
+            esc_attr($this->get_field_name('emoji')),
+            __('Эмодзи', 'knife-theme'),
+            esc_attr($instance['emoji'])
         );
 
         printf(

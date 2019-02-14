@@ -2,15 +2,26 @@
 /**
  * Transparent widget
  *
- * Transparent recent posts with optional stickers
+ * Transparent recent posts with emoji
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.4
+ * @version 1.7
  */
 
 
 class Knife_Widget_Transparent extends WP_Widget {
+    /**
+     * Widget post types
+     */
+    private $post_type = ['post', 'quiz'];
+
+
+    /**
+     * News category id
+     */
+    private $news_id = null;
+
 
     public function __construct() {
         $widget_ops = [
@@ -18,6 +29,12 @@ class Knife_Widget_Transparent extends WP_Widget {
             'description' => __('Выводит список из четырех прозрачных постов со стикерами.', 'knife-theme'),
             'customize_selective_refresh' => true
         ];
+
+        $term = get_category_by_slug('news');
+
+        if(isset($term->term_id)) {
+            $this->news_id = $term->term_id;
+        }
 
         parent::__construct('knife_widget_transparent', __('[НОЖ] Прозрачный', 'knife-theme'), $widget_ops);
     }
@@ -31,7 +48,6 @@ class Knife_Widget_Transparent extends WP_Widget {
             'title' => '',
             'link' => '',
             'offset' => 0,
-            'sticker' => 0,
             'taxonomy' => 'category',
             'termlist' => []
         ];
@@ -50,9 +66,22 @@ class Knife_Widget_Transparent extends WP_Widget {
                 );
             }
 
+            $repeated = [];
+
             while($query->have_posts()) {
                 $query->the_post();
-                $image = get_post_meta(get_the_ID(), '_knife-sticker', true);
+
+                $terms = get_the_tags(get_the_ID());
+
+                foreach(wp_list_pluck($terms, 'term_id') as $term_id) {
+                    $emoji = get_term_meta($term_id, '_knife-term-emoji', true);
+
+                    if(!in_array($term_id, $repeated)) {
+                        array_push($repeated, $term_id);
+
+                        break;
+                    }
+                }
 
                 include(get_template_directory() . '/templates/widget-transparent.php');
             }
@@ -68,25 +97,22 @@ class Knife_Widget_Transparent extends WP_Widget {
      * Sanitize widget form values as they are saved.
      */
     public function update($new_instance, $old_instance) {
+        $taxonomy = 'post_tag';
 
-        if(taxonomy_exists($new_instance['taxonomy'])) {
-            $taxonomy = $new_instance['taxonomy'];
+        if(isset($_REQUEST['widget-id']) && $_REQUEST['widget-id'] == $this->id) {
+            $posted_terms = [];
 
-            if(isset($_REQUEST['widget-id']) && $_REQUEST['widget-id'] == $this->id) {
-                $posted_terms = [];
+            if(isset($_POST['post_category'])) {
+                $posted_terms = $_POST['post_category'];
+            }
 
-                if(isset($_POST['post_category'])) {
-                    $posted_terms = $_POST['post_category'];
-                }
+            if(isset($_POST['tax_input'][$taxonomy])) {
+                $posted_terms = $_POST['tax_input'][$taxonomy];
+            }
 
-                if(isset($_POST['tax_input'][$taxonomy])) {
-                    $posted_terms = $_POST['tax_input'][$taxonomy];
-                }
-
-                foreach($posted_terms as $term) {
-                    if(term_exists(absint($term), $taxonomy)) {
-                        $terms[] = absint($term);
-                    }
+            foreach($posted_terms as $term) {
+                if(term_exists(absint($term), $taxonomy)) {
+                    $terms[] = absint($term);
                 }
             }
         }
@@ -96,9 +122,7 @@ class Knife_Widget_Transparent extends WP_Widget {
         $instance['offset'] = absint($new_instance['offset']);
         $instance['title'] = sanitize_text_field($new_instance['title']);
         $instance['link'] = esc_url($new_instance['link']);
-        $instance['taxonomy'] = sanitize_text_field($new_instance['taxonomy']);
         $instance['termlist'] = $terms;
-        $instance['sticker'] = $new_instance['sticker'] ? 1 : 0;
 
         return $instance;
     }
@@ -112,23 +136,10 @@ class Knife_Widget_Transparent extends WP_Widget {
             'title' => '',
             'link' => '',
             'offset' => 0,
-            'sticker' => 0,
-            'taxonomy' => 'category',
             'termlist' => []
         ];
 
         $instance = wp_parse_args((array) $instance, $defaults);
-
-        $taxes = get_taxonomies([
-            'public' => true
-        ], 'object');
-
-        $terms = wp_terms_checklist(0, [
-            'taxonomy' => $instance['taxonomy'],
-            'selected_cats' => $instance['termlist'],
-            'echo' => false
-        ]);
-
 
         // Widget title
         printf(
@@ -141,7 +152,7 @@ class Knife_Widget_Transparent extends WP_Widget {
         );
 
 
-         // Widget title link
+        // Widget title link
         printf(
             '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"><small>%5$s</small></p>',
             esc_attr($this->get_field_id('link')),
@@ -152,36 +163,15 @@ class Knife_Widget_Transparent extends WP_Widget {
         );
 
 
-        // Taxonomies filter
-        printf(
-            '<p><label for="%1$s">%3$s</label><select class="widefat knife-widget-taxonomy" id="%1$s" name="%2$s">',
-            esc_attr($this->get_field_id('taxonomy')),
-            esc_attr($this->get_field_name('taxonomy')),
-            __('Фильтр записей:', 'knife-theme')
-        );
-
-        foreach($taxes as $name => $object) {
-            printf('<option value="%1$s"%3$s>%2$s</option>', $name, $object->label, selected($instance['taxonomy'], $name, false));
-        }
-
-        echo '</select></p>';
-
-
         // Terms filter
         printf(
             '<ul class="cat-checklist categorychecklist knife-widget-termlist" id="%1$s">%2$s</ul>',
             esc_attr($this->get_field_id('termlist')),
-            $terms
-        );
-
-
-        // Ony with stickers checkbox
-        printf(
-            '<p><input type="checkbox" id="%1$s" name="%2$s" class="checkbox"%4$s><label for="%1$s">%3$s</label></p>',
-            esc_attr($this->get_field_id('sticker')),
-            esc_attr($this->get_field_name('sticker')),
-            __('Только со стикерами', 'knife-theme'),
-            checked($instance['sticker'], 1, false)
+            wp_terms_checklist(0, [
+                'taxonomy' => 'post_tag',
+                'selected_cats' => $instance['termlist'],
+                'echo' => false
+            ])
         );
 
 
@@ -204,6 +194,7 @@ class Knife_Widget_Transparent extends WP_Widget {
 
         $query = [
             'offset' => $offset,
+            'category__not_in' => $this->news_id,
             'posts_per_page' => 4,
             'post_status' => 'publish',
             'ignore_sticky_posts' => 1,
@@ -213,15 +204,6 @@ class Knife_Widget_Transparent extends WP_Widget {
                 'terms' => $termlist
             ]]
         ];
-
-        // If user selected option to show posts only with stickers
-        if($sticker === 1) {
-            $query['meta_query'] = [[
-                'key' => '_knife-sticker',
-                'value' => '',
-                'compare' => '!='
-            ]];
-        }
 
         return $query;
     }

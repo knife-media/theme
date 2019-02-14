@@ -100,7 +100,8 @@ class Knife_Widget_Televisor extends WP_Widget {
             'title' => '',
             'link' => '',
             'cover' => 0,
-            'unique' => 0
+            'unique' => 0,
+            'posts_per_page' => 7
         ];
 
         $picture = '';

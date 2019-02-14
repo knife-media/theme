@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.4
- * @version 1.5
+ * @version 1.7
  */
 ?>
 
@@ -18,10 +18,10 @@
                 esc_html($instance['title'])
             );
 
-            if(!empty($instance['sticker'])) {
+            if(!empty($instance['emoji'])) {
                 printf(
-                    '<img class="widget-informer__content-sticker" src="%1$s" alt="%2$s">',
-                    esc_url($instance['sticker']), sanitize_text_field($instance['title'])
+                    '<span class="widget-informer__content-emoji">%s</span>',
+                    wp_encode_emoji($instance['emoji'])
                 );
             }
         ?>

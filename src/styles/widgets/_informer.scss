@@ -76,10 +76,14 @@
       }
     }
 
-    .widget-informer__content-sticker {
+    .widget-informer__content-emoji {
+      display: block;
+      cursor: default;
+
       margin-left: 1rem;
-      width: 2rem;
-      max-height: 2rem;
+
+      font-size: 1.875rem;
+      line-height: 1.875rem;
     }
   }
 }
