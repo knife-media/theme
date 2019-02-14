@@ -1,12 +1,12 @@
 <?php
 /**
-* Menu upgrade
-*
-* Filters to upgrade theme menus
-*
-* @package knife-theme
-* @since 1.4
-*/
+ * Menu upgrade
+ *
+ * Filters to upgrade theme menus
+ *
+ * @package knife-theme
+ * @since 1.4
+ */
 
 
 if (!defined('WPINC')) {

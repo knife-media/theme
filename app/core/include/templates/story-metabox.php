@@ -2,19 +2,19 @@
     <?php
         // get stories array
         $post_id = get_the_ID();
-        $stories = get_post_meta($post_id, self::$meta . '-stories');
+        $stories = get_post_meta($post_id, self::$meta_items . '-stories');
 
         $options = [];
 
         // get options
-        foreach(self::$opts as $item) {
-            $options[$item] = get_post_meta($post_id, self::$meta . "-{$item}", true);
+        foreach(self::$meta_options as $item) {
+            $options[$item] = get_post_meta($post_id, self::$meta_items . "-{$item}", true);
         }
 
         // Upgrade with default vaules
         array_unshift($stories, []);
 
-        wp_nonce_field('metabox', self::$nonce);
+        wp_nonce_field('metabox', self::$metabox_nonce);
     ?>
 
 
@@ -30,12 +30,12 @@
                     }
 
                     printf('<input class="item__media" type="hidden" name="%1$s" value="%2$s">',
-                        self::$meta . '-stories[][media]',
+                        self::$meta_items . '-stories[][media]',
                         esc_attr($story['media'] ?? '')
                     );
 
                     printf('<textarea class="item__entry" name="%1$s">%2$s</textarea>',
-                        self::$meta . '-stories[][entry]',
+                        self::$meta_items . '-stories[][entry]',
                         esc_attr($story['entry'] ?? '')
                     );
                 ?>
@@ -67,7 +67,7 @@
 
                 <?php
                     printf('<input class="option__background-media" type="hidden" name="%s" value="%s">',
-                        self::$meta . '-background',
+                        self::$meta_items . '-background',
                         $options['background']
                     );
                 ?>
@@ -80,7 +80,7 @@
 
                 <?php
                     printf('<input class="option__range option__range--shadow" type="range" name="%1$s" min="0" max="100" step="5" value="%2$s">',
-                        self::$meta . '-shadow',
+                        self::$meta_items . '-shadow',
                         absint($options['shadow'])
                     );
                 ?>
@@ -91,7 +91,7 @@
 
                 <?php
                     printf('<input class="option__range option__range--blur" type="range" name="%1$s" min="0" max="10" step="1" value="%2$s">',
-                        self::$meta . '-blur',
+                        self::$meta_items . '-blur',
                         absint($options['blur'])
                     );
                 ?>

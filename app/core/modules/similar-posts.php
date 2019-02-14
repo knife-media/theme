@@ -1,12 +1,13 @@
 <?php
 /**
-* Similar posts
-*
-* Show similar posts grouped by common tags inside single template
-*
-* @package knife-theme
-* @since 1.5
-*/
+ * Similar posts
+ *
+ * Show similar posts grouped by common tags inside single template
+ *
+ * @package knife-theme
+ * @since 1.5
+ * @version 1.7
+ */
 
 
 if (!defined('WPINC')) {
@@ -20,7 +21,7 @@ class Knife_Similar_Posts {
      * @access  private
      * @var     string
      */
-    private static $cache = 'knife-similar-posts';
+    private static $cache_group = 'knife-similar-posts';
 
 
     /**
@@ -52,7 +53,7 @@ class Knife_Similar_Posts {
      * Using get_the_tags function to retrieve terms with primary tag first
      */
     private static function get_similar($post_id) {
-        $similar = wp_cache_get($post_id, self::$cache);
+        $similar = wp_cache_get($post_id, self::$cache_group);
 
         if($similar !== false) {
             return $similar;
@@ -124,7 +125,7 @@ class Knife_Similar_Posts {
             }
         }
 
-        wp_cache_set($post_id, $similar, self::$cache);
+        wp_cache_set($post_id, $similar, self::$cache_group);
 
         return $similar;
     }

@@ -1,13 +1,13 @@
 <?php
 /**
-* Custom background
-*
-* Backdrop for sites and custom archives
-*
-* @package knife-theme
-* @since 1.2
-* @version 1.4
-*/
+ * Custom background
+ *
+ * Backdrop for sites and custom archives
+ *
+ * @package knife-theme
+ * @since 1.2
+ * @version 1.7
+ */
 
 
 if (!defined('WPINC')) {
@@ -22,7 +22,7 @@ class Knife_Custom_Background {
      * @access  private
      * @var     string
      */
-    private static $meta = '_knife-term-background';
+    private static $term_meta = '_knife-term-background';
 
 
     /**
@@ -32,7 +32,7 @@ class Knife_Custom_Background {
      * @access  private
      * @var     string
      */
-    private static $taxes = ['special'];
+    private static $taxonomies = ['special'];
 
 
     /**
@@ -58,9 +58,9 @@ class Knife_Custom_Background {
      * @since 1.4
      */
     public static function add_options_fields() {
-        foreach(self::$taxes as $tax) {
+        foreach(self::$taxonomies as $tax) {
             add_action("{$tax}_edit_form_fields", [__CLASS__, 'print_options_row'], 10, 2);
-            add_action("edited_{$tax}", [__CLASS__, 'save_options_meta']);
+            add_action("edited_{$tax}", [__CLASS__, 'save_term_meta']);
         }
 
         // Enqueue scripts only on admin screen
@@ -121,7 +121,7 @@ class Knife_Custom_Background {
     public static function add_options_assets($hook) {
         $screen = get_current_screen()->taxonomy;
 
-        if($hook !== 'term.php' || !in_array($screen, self::$taxes)) {
+        if($hook !== 'term.php' || !in_array($screen, self::$taxonomies)) {
             return;
         }
 
@@ -157,24 +157,24 @@ class Knife_Custom_Background {
     /**
      * Save image meta
      */
-    public static function save_options_meta($term_id) {
+    public static function save_term_meta($term_id) {
         if(!current_user_can('edit_term', $term_id)) {
             return;
         }
 
-        if(empty($_REQUEST[self::$meta])) {
-            return delete_term_meta($term_id, self::$meta);
+        if(empty($_REQUEST[self::$term_meta])) {
+            return delete_term_meta($term_id, self::$term_meta);
         }
 
         $meta = [];
 
-        foreach($_REQUEST[self::$meta] as $key => $value) {
+        foreach($_REQUEST[self::$term_meta] as $key => $value) {
             if((string) $value !== '') {
                 $meta[$key] = $value;
             }
         }
 
-        update_term_meta($term_id, self::$meta, $meta);
+        update_term_meta($term_id, self::$term_meta, $meta);
     }
 
 
@@ -192,17 +192,17 @@ class Knife_Custom_Background {
          * @link https://core.trac.wordpress.org/ticket/18636
          */
         if(is_tax() || is_tag() || is_category()) {
-            $background = get_term_meta(get_queried_object_id(), self::$meta, true);
+            $background = get_term_meta(get_queried_object_id(), self::$term_meta, true);
         }
 
-        foreach(self::$taxes as $tax) {
+        foreach(self::$taxonomies as $tax) {
             if(!is_single() || !has_term('', $tax)) {
                 continue;
             }
 
             // Loop over all tax terms
             foreach(get_the_terms(get_queried_object_id(), $tax) as $term) {
-                if($background = get_term_meta($term->term_id, self::$meta, true)) {
+                if($background = get_term_meta($term->term_id, self::$term_meta, true)) {
                     break 2;
                 }
             }

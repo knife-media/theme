@@ -52,7 +52,7 @@
             esc_attr($zen_publish)
         );
 
-        wp_nonce_field('fieldset', self::$nonce);
+        wp_nonce_field('metabox', self::$metabox_nonce);
     ?>
 </div>
 

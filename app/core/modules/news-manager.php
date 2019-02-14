@@ -1,13 +1,13 @@
 <?php
 /**
-* News manager
-*
-* Manage news category
-*
-* @package knife-theme
-* @since 1.3
-* @version 1.5
-*/
+ * News manager
+ *
+ * Manage news category
+ *
+ * @package knife-theme
+ * @since 1.3
+ * @version 1.7
+ */
 
 if (!defined('WPINC')) {
     die;
@@ -20,7 +20,7 @@ class Knife_News_Manager {
      * @access  private
      * @var     string
      */
-    private static $slug = 'news';
+    private static $post_type = 'news';
 
     /**
      * News category id
@@ -28,7 +28,7 @@ class Knife_News_Manager {
      * @access  private
      * @var     int
      */
-    private static $news_id = 620;
+    private static $news_id = null;
 
 
     /**
@@ -51,6 +51,13 @@ class Knife_News_Manager {
 
         // Update related posts in sidebar
         add_action('pre_get_posts', [__CLASS__, 'update_related']);
+
+        // Set news_id
+        $category = get_category_by_slug('news');
+
+        if(isset($category->term_id)) {
+            self::$news_id = $category->term_id;
+        }
     }
 
 
@@ -79,7 +86,7 @@ class Knife_News_Manager {
         if($query->get('query_type') === 'related') {
             $query->set('category__not_in', [self::$news_id]);
 
-            if(in_category(self::$slug)) {
+            if(in_category(self::$post_type)) {
                 $query->set('post__in', [0]);
             }
         }
@@ -100,7 +107,7 @@ class Knife_News_Manager {
      * Change posts_per_page for news category archive template
      */
     public static function update_count($query) {
-        if($query->is_main_query() && $query->is_category(self::$slug)) {
+        if($query->is_main_query() && $query->is_category(self::$post_type)) {
             $query->set('posts_per_page', 20);
         }
     }
@@ -113,7 +120,7 @@ class Knife_News_Manager {
         if($post_type === 'post') {
             $values = [
                 __('Все записи', 'knife-theme') => 0,
-                __('Только новости', 'knife-theme') => self::$slug,
+                __('Только новости', 'knife-theme') => self::$post_type,
                 __('Без новостей', 'knife-theme') => 'other'
             ];
 
@@ -146,7 +153,7 @@ class Knife_News_Manager {
 
         $classics = get_category_by_slug('classics');
 
-        if($_GET['cat'] === self::$slug) {
+        if($_GET['cat'] === self::$post_type) {
             $query->query_vars['cat'] = self::$news_id;
         }
 

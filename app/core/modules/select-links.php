@@ -20,7 +20,7 @@ class Knife_Select_Links {
      * @access  private
      * @var     string
      */
-    private static $slug = 'select';
+    private static $post_type = 'select';
 
 
     /**
@@ -29,7 +29,7 @@ class Knife_Select_Links {
      * @access  private
      * @var     string
      */
-    private static $nonce = 'knife-select-nonce';
+    private static $metabox_nonce = 'knife-select-nonce';
 
 
    /**
@@ -38,7 +38,7 @@ class Knife_Select_Links {
     * @access  private
     * @var     string
     */
-    private static $action = 'knife-select-title';
+    private static $ajax_action = 'knife-select-title';
 
 
     /**
@@ -73,7 +73,7 @@ class Knife_Select_Links {
         add_action('save_post', [__CLASS__, 'save_metabox']);
 
         // Get postid by url
-        add_action('wp_ajax_' . self::$action, [__CLASS__, 'get_post_by_url']);
+        add_action('wp_ajax_' . self::$ajax_action, [__CLASS__, 'get_post_by_url']);
 
         // Add scripts to admin page
         add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
@@ -93,7 +93,7 @@ class Knife_Select_Links {
      * Register select post type
      */
     public static function register_type() {
-        register_post_type(self::$slug, [
+        register_post_type(self::$post_type, [
             'labels'                    => [
                 'name'                  => __('Подборки', 'knife-theme'),
                 'singular_name'         => __('Подборка', 'knife-theme'),
@@ -134,7 +134,7 @@ class Knife_Select_Links {
      * @since 1.5
      */
     public static function include_archive($template) {
-        if(is_post_type_archive(self::$slug)) {
+        if(is_post_type_archive(self::$post_type)) {
             $new_template = locate_template(['templates/archive-select.php']);
 
             if(!empty($new_template)) {
@@ -150,7 +150,7 @@ class Knife_Select_Links {
      * Include single select template
      */
     public static function include_single($template) {
-        if(is_singular(self::$slug)) {
+        if(is_singular(self::$post_type)) {
             $new_template = locate_template(['templates/single-select.php']);
 
             if(!empty($new_template)) {
@@ -168,7 +168,7 @@ class Knife_Select_Links {
      * @since 1.6
      */
     public static function redirect_empty_archive() {
-        if(is_post_type_archive(self::$slug) && !have_posts()) {
+        if(is_post_type_archive(self::$post_type) && !have_posts()) {
             wp_redirect(home_url(), 302);
             exit;
         }
@@ -197,7 +197,7 @@ class Knife_Select_Links {
      * Get postid by url using admin side ajax
      */
     public static function get_post_by_url() {
-        check_admin_referer(self::$nonce, 'nonce');
+        check_admin_referer(self::$metabox_nonce, 'nonce');
 
         if(isset($_POST['link'])) {
             $link = sanitize_text_field($_POST['link']);
@@ -224,7 +224,7 @@ class Knife_Select_Links {
      * Update content with custom links
      */
     public static function update_content($content) {
-        if(is_singular(self::$slug) && in_the_loop()) {
+        if(is_singular(self::$post_type) && in_the_loop()) {
             $units = get_post_meta(get_the_ID(), self::$meta_items);
 
             foreach($units as $unit) {
@@ -242,7 +242,7 @@ class Knife_Select_Links {
      * @since 1.6
      */
     public static function update_count($query) {
-        if($query->is_main_query() && $query->is_post_type_archive(self::$slug)) {
+        if($query->is_main_query() && $query->is_post_type_archive(self::$post_type)) {
             $query->set('posts_per_page', 24);
         }
     }
@@ -252,7 +252,7 @@ class Knife_Select_Links {
      * Add select metabox
      */
     public static function add_metabox() {
-        add_meta_box('knife-select-metabox', __('Подборка статей'), [__CLASS__, 'display_metabox'], self::$slug, 'normal', 'high');
+        add_meta_box('knife-select-metabox', __('Подборка статей'), [__CLASS__, 'display_metabox'], self::$post_type, 'normal', 'high');
     }
 
 
@@ -266,7 +266,7 @@ class Knife_Select_Links {
 
         $post_id = get_the_ID();
 
-        if(get_post_type($post_id) !== self::$slug) {
+        if(get_post_type($post_id) !== self::$post_type) {
             return;
         }
 
@@ -283,8 +283,8 @@ class Knife_Select_Links {
         wp_enqueue_script('knife-select-metabox', $include . '/scripts/select-metabox.js', ['jquery', 'jquery-ui-sortable'], $version);
 
         $options = [
-            'action' => esc_attr(self::$action),
-            'nonce' => wp_create_nonce(self::$nonce),
+            'action' => esc_attr(self::$ajax_action),
+            'nonce' => wp_create_nonce(self::$metabox_nonce),
             'choose' => __('Выберите изображение постера', 'knife-theme'),
             'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
         ];
@@ -307,15 +307,15 @@ class Knife_Select_Links {
      * Save post options
      */
     public static function save_metabox($post_id) {
-        if(get_post_type($post_id) !== self::$slug) {
+        if(get_post_type($post_id) !== self::$post_type) {
             return;
         }
 
-        if(!isset($_REQUEST[self::$nonce])) {
+        if(!isset($_REQUEST[self::$metabox_nonce])) {
             return;
         }
 
-        if(!wp_verify_nonce($_REQUEST[self::$nonce], 'metabox')) {
+        if(!wp_verify_nonce($_REQUEST[self::$metabox_nonce], 'metabox')) {
             return;
         }
 

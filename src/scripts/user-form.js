@@ -138,7 +138,6 @@
     });
 
 
-
     // Send request
     var request = new XMLHttpRequest();
     request.open('POST', getOption('ajaxurl'));

@@ -1,12 +1,12 @@
 <?php
 /**
-* Poster Templates
-*
-* Return generated posters using custom templates
-*
-* @package knife-theme
-* @since 1.7
-*/
+ * Poster Templates
+ *
+ * Return generated posters using custom templates
+ *
+ * @package knife-theme
+ * @since 1.7
+ */
 
 if (!defined('WPINC')) {
     die;

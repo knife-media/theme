@@ -1,13 +1,13 @@
 <?php
 /**
-* Embed filters
-*
-* Customize default wordpress embed code
-*
-* @package knife-theme
-* @since 1.2
-* @version 1.7
-*/
+ * Embed filters
+ *
+ * Customize default wordpress embed code
+ *
+ * @package knife-theme
+ * @since 1.2
+ * @version 1.7
+ */
 
 if (!defined('WPINC')) {
     die;

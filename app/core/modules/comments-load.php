@@ -1,12 +1,12 @@
 <?php
 /**
-* Hypercomments handler
-*
-* Set Hypercomments script options
-*
-* @package knife-theme
-* @since 1.4
-*/
+ * Hypercomments handler
+ *
+ * Set Hypercomments script options
+ *
+ * @package knife-theme
+ * @since 1.4
+ */
 
 
 if (!defined('WPINC')) {

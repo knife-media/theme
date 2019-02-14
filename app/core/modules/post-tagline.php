@@ -1,13 +1,13 @@
 <?php
 /**
-* Post tagline meta
-*
-* Add second title to post
-*
-* @package knife-theme
-* @since 1.2
-* @version 1.7
-*/
+ * Post tagline meta
+ *
+ * Add second title to post
+ *
+ * @package knife-theme
+ * @since 1.2
+ * @version 1.7
+ */
 
 
 if (!defined('WPINC')) {
@@ -22,7 +22,7 @@ class Knife_Post_Tagline {
     * @access  private
     * @var     string
     */
-    private static $meta = '_knife-tagline';
+    private static $post_meta = '_knife-tagline';
 
 
    /**
@@ -31,7 +31,7 @@ class Knife_Post_Tagline {
     * @access  private
     * @var     array
     */
-    private static $type = ['post', 'club', 'quiz'];
+    private static $post_type = ['post', 'club', 'quiz'];
 
 
     /**
@@ -41,7 +41,7 @@ class Knife_Post_Tagline {
      * @access  private
      * @var     string
      */
-    private static $nonce = 'knife-tagline-nonce';
+    private static $input_nonce = 'knife-tagline-nonce';
 
 
     /**
@@ -75,7 +75,7 @@ class Knife_Post_Tagline {
 
         $post_id = get_the_ID();
 
-        if(!in_array(get_post_type($post_id), self::$type)) {
+        if(!in_array(get_post_type($post_id), self::$post_type)) {
             return;
         }
 
@@ -93,21 +93,21 @@ class Knife_Post_Tagline {
     public static function print_input() {
         $post_id = get_the_ID();
 
-        if(!in_array(get_post_type($post_id), self::$type)) {
+        if(!in_array(get_post_type($post_id), self::$post_type)) {
             return;
         }
 
-        $tagline = get_post_meta($post_id, self::$meta, true);
+        $tagline = get_post_meta($post_id, self::$post_meta, true);
         $tagline = sanitize_text_field($tagline);
 
         printf(
             '<input id="knife-tagline-input" type="text" class="large-text" value="%1$s" name="%2$s" placeholder="%3$s">',
             esc_attr($tagline),
-            esc_attr(self::$meta),
+            esc_attr(self::$post_meta),
             __('Подзаголовок', 'knife-theme')
         );
 
-        wp_nonce_field('input', self::$nonce);
+        wp_nonce_field('input', self::$input_nonce);
     }
 
 
@@ -115,7 +115,7 @@ class Knife_Post_Tagline {
      * Filter the post title on the Posts screen, and on the front-end
      */
     public static function post_tagline($title, $post_id) {
-        $tagline = get_post_meta($post_id, self::$meta, true);
+        $tagline = get_post_meta($post_id, self::$post_meta, true);
 
         if(empty($tagline)) {
             return $title;
@@ -139,7 +139,7 @@ class Knife_Post_Tagline {
             return $title;
         }
 
-        $tagline = get_post_meta($post->ID, self::$meta, true);
+        $tagline = get_post_meta($post->ID, self::$post_meta, true);
         $tagline = sanitize_text_field($tagline);
 
         if(empty($tagline)) {
@@ -156,15 +156,15 @@ class Knife_Post_Tagline {
      * Save post options
      */
     public static function save_meta($post_id) {
-        if(!in_array(get_post_type($post_id), self::$type)) {
+        if(!in_array(get_post_type($post_id), self::$post_type)) {
             return;
         }
 
-        if(!isset($_REQUEST[self::$nonce])) {
+        if(!isset($_REQUEST[self::$input_nonce])) {
             return;
         }
 
-        if(!wp_verify_nonce($_REQUEST[self::$nonce], 'input')) {
+        if(!wp_verify_nonce($_REQUEST[self::$input_nonce], 'input')) {
             return;
         }
 
@@ -177,11 +177,11 @@ class Knife_Post_Tagline {
         }
 
         // Save tagline meta
-        if(empty($_REQUEST[self::$meta])) {
-            return delete_post_meta($post_id, self::$meta);
+        if(empty($_REQUEST[self::$post_meta])) {
+            return delete_post_meta($post_id, self::$post_meta);
         }
 
-        return update_post_meta($post_id, self::$meta, trim($_REQUEST[self::$meta]));
+        return update_post_meta($post_id, self::$post_meta, trim($_REQUEST[self::$post_meta]));
     }
 }
 

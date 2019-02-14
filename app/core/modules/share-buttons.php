@@ -1,13 +1,13 @@
 <?php
 /**
-* Share buttons
-*
-* Share buttons manager class
-*
-* @package knife-theme
-* @since 1.3
-* @version 1.6
-*/
+ * Share buttons
+ *
+ * Share buttons manager class
+ *
+ * @package knife-theme
+ * @since 1.3
+ * @version 1.6
+ */
 
 
 if (!defined('WPINC')) {

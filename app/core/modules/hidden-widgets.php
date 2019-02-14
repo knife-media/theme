@@ -1,14 +1,14 @@
 <?php
 /**
-* Hidden widgets
-*
-* Hide or show widgets conditionally
-* Fork of jetpack-widget-visibility plugin
-*
-* @link https://wordpress.org/plugins/jetpack-widget-visibility/
-* @package knife-theme
-* @since 1.5
-*/
+ * Hidden widgets
+ *
+ * Hide or show widgets conditionally
+ * Fork of jetpack-widget-visibility plugin
+ *
+ * @link https://wordpress.org/plugins/jetpack-widget-visibility/
+ * @package knife-theme
+ * @since 1.5
+ */
 
 
 if (!defined('WPINC')) {

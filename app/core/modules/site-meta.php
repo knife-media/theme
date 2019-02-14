@@ -1,11 +1,11 @@
 <?php
 /**
-* Add custom site header meta and footer description
-*
-* @package knife-theme
-* @since 1.5
-* @version 1.6
-*/
+ * Add custom site header meta and footer description
+ *
+ * @package knife-theme
+ * @since 1.5
+ * @version 1.6
+ */
 
 
 if (!defined('WPINC')) {

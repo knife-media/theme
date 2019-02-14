@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.5
+ * @version 1.7
  */
 
 
@@ -23,7 +23,7 @@ class Knife_Special_Projects {
      * @access  private
      * @var     string
      */
-    private static $slug = 'special';
+    private static $taxonomy = 'special';
 
 
     /**
@@ -33,7 +33,7 @@ class Knife_Special_Projects {
      * @access  private
      * @var     string
      */
-    private static $meta = '_knife-special-options';
+    private static $term_meta = '_knife-special-options';
 
 
     /**
@@ -60,7 +60,7 @@ class Knife_Special_Projects {
      * Create custom taxonomy
      */
     public static function register_taxonomy() {
-        register_taxonomy(self::$slug, 'post', [
+        register_taxonomy(self::$taxonomy, 'post', [
             'labels' => [
                 'name'                       => __('Спецпроекты', 'knife-theme'),
                 'singular_name'              => __('Спецпроект', 'knife-theme'),
@@ -83,7 +83,7 @@ class Knife_Special_Projects {
             'show_admin_column'     => true,
             'show_in_nav_menus'     => true,
             'query_var'             => true,
-            'rewrite'               => ['slug' => self::$slug],
+            'rewrite'               => ['slug' => self::$taxonomy],
             'meta_box_cb'           => [__CLASS__, 'print_metabox']
         ]);
     }
@@ -96,10 +96,10 @@ class Knife_Special_Projects {
      */
     public static function add_options_fields() {
         // Print special options row
-        add_action(self::$slug . "_edit_form_fields", [__CLASS__, 'print_options_row'], 12, 2);
+        add_action(self::$taxonomy . "_edit_form_fields", [__CLASS__, 'print_options_row'], 12, 2);
 
         // Save admin side options meta
-        add_action("edited_" . self::$slug, [__CLASS__, 'save_options_meta']);
+        add_action("edited_" . self::$taxonomy, [__CLASS__, 'save_options_meta']);
 
         // Enqueue scripts only on admin screen
         add_action('admin_enqueue_scripts', [__CLASS__, 'add_options_scripts']);
@@ -126,7 +126,7 @@ class Knife_Special_Projects {
     public static function add_options_scripts($hook) {
         $screen = get_current_screen()->taxonomy;
 
-        if($hook !== 'term.php' || $screen !== self::$slug) {
+        if($hook !== 'term.php' || $screen !== self::$taxonomy) {
             return;
         }
 
@@ -166,19 +166,19 @@ class Knife_Special_Projects {
             return;
         }
 
-        if(empty($_REQUEST[self::$meta])) {
-            return delete_term_meta($term_id, self::$meta);
+        if(empty($_REQUEST[self::$term_meta])) {
+            return delete_term_meta($term_id, self::$term_meta);
         }
 
         $meta = [];
 
-        foreach($_REQUEST[self::$meta] as $key => $value) {
+        foreach($_REQUEST[self::$term_meta] as $key => $value) {
             if(!empty($value)) {
                 $meta[$key] = sanitize_hex_color($value);
             }
         }
 
-        update_term_meta($term_id, self::$meta, $meta);
+        update_term_meta($term_id, self::$term_meta, $meta);
     }
 
 
@@ -188,16 +188,16 @@ class Knife_Special_Projects {
      * @since 1.4
      */
     public static function update_archive_title($title) {
-        if(!is_tax(self::$slug)) {
+        if(!is_tax(self::$taxonomy)) {
             return $title;
         }
 
-        $options = get_term_meta(get_queried_object_id(), self::$meta, true);
+        $options = get_term_meta(get_queried_object_id(), self::$term_meta, true);
 
         if(empty($options)) {
             $title =  sprintf(
                 '<h1 class="tagline-title tagline-title--%2$s">%1$s</h1>',
-                single_term_title('', false), esc_attr(self::$slug)
+                single_term_title('', false), esc_attr(self::$taxonomy)
             );
 
             return $title;
@@ -210,7 +210,7 @@ class Knife_Special_Projects {
 
         $title = sprintf(
             '<h1 class="tagline-title tagline-title--%2$s" style="%3$s">%1$s</h1>',
-            single_term_title('', false), esc_attr(self::$slug),
+            single_term_title('', false), esc_attr(self::$taxonomy),
             esc_attr(implode(';', $styles))
         );
 
@@ -228,17 +228,17 @@ class Knife_Special_Projects {
             return $title;
         }
 
-        if(has_term('', self::$slug)) {
-            $terms = get_the_terms(get_queried_object_id(), self::$slug);
+        if(has_term('', self::$taxonomy)) {
+            $terms = get_the_terms(get_queried_object_id(), self::$taxonomy);
 
             // Check only first term
-            $options = get_term_meta($terms[0]->term_id, self::$meta, true);
+            $options = get_term_meta($terms[0]->term_id, self::$term_meta, true);
 
             if(empty($options)) {
                 $title = sprintf(
                     '<a class="tagline-link tagline-link--%2$s" href="%3$s">%1$s</a>',
-                    esc_html($terms[0]->name), esc_attr(self::$slug),
-                    esc_url(get_term_link($terms[0]->term_id, self::$slug))
+                    esc_html($terms[0]->name), esc_attr(self::$taxonomy),
+                    esc_url(get_term_link($terms[0]->term_id, self::$taxonomy))
                 );
 
                 return $title;
@@ -251,8 +251,8 @@ class Knife_Special_Projects {
 
             $title = sprintf(
                 '<a class="tagline-link tagline-link--%2$s" href="%3$s" style="%4$s">%1$s</a>',
-                esc_html($terms[0]->name), esc_attr(self::$slug),
-                esc_url(get_term_link($terms[0]->term_id, self::$slug)),
+                esc_html($terms[0]->name), esc_attr(self::$taxonomy),
+                esc_url(get_term_link($terms[0]->term_id, self::$taxonomy)),
                 esc_attr(implode(';', $styles))
             );
 

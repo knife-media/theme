@@ -1,12 +1,13 @@
 <?php
 /**
-* Relap links
-*
-* Set relap links options
-*
-* @package knife-theme
-* @since 1.5
-*/
+ * Relap links
+ *
+ * Set relap links options
+ *
+ * @package knife-theme
+ * @since 1.5
+ * @version 1.7
+ */
 
 
 if (!defined('WPINC')) {
@@ -38,7 +39,7 @@ class Knife_Relap_Links {
     * @access  private
     * @var     array
     */
-    private static $type = ['post', 'generator', 'quiz'];
+    private static $post_type = ['post', 'generator', 'quiz'];
 
 
     /**
@@ -57,7 +58,7 @@ class Knife_Relap_Links {
      * Pass Relap links options to js
      */
     public static function inject_object() {
-        if(is_singular(self::$type)) {
+        if(is_singular(self::$post_type)) {
             $relap_options = [
                 'token' => get_theme_mod(self::$relap_token),
                 'block' => get_theme_mod(self::$relap_block)

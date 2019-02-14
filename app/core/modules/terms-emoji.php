@@ -1,12 +1,13 @@
 <?php
 /**
-* Terms emoji
-*
-* Enable terms emojis for default and custom taxonomies
-*
-* @package knife-theme
-* @since 1.5
-*/
+ * Terms emoji
+ *
+ * Enable terms emojis for default and custom taxonomies
+ *
+ * @package knife-theme
+ * @since 1.5
+ * @version 1.7
+ */
 
 
 if (!defined('WPINC')) {
@@ -21,7 +22,7 @@ class Knife_Terms_Emoji {
      * @access  private
      * @var     string
      */
-    private static $meta = '_knife-term-emoji';
+    private static $term_meta = '_knife-term-emoji';
 
 
     /**
@@ -31,7 +32,7 @@ class Knife_Terms_Emoji {
      * @access  private
      * @var     array
      */
-    private static $taxes = ['post_tag', 'label'];
+    private static $taxonomies = ['post_tag', 'label'];
 
 
     /**
@@ -50,7 +51,7 @@ class Knife_Terms_Emoji {
      * Add adminside edit form fields
      */
     public static function add_options_fields() {
-        foreach(self::$taxes as $tax) {
+        foreach(self::$taxonomies as $tax) {
             add_action("{$tax}_edit_form_fields", [__CLASS__, 'print_options_row'], 10, 2);
             add_action("edited_{$tax}", [__CLASS__, 'save_options_meta']);
         }
@@ -61,7 +62,7 @@ class Knife_Terms_Emoji {
      * Add custom terms column
      */
     public static function add_terms_column() {
-        foreach(self::$taxes as $tax) {
+        foreach(self::$taxonomies as $tax) {
             add_action("manage_edit-{$tax}_columns", [__CLASS__, 'add_column_title']);
             add_action("manage_{$tax}_custom_column", [__CLASS__, 'add_column_emoji'], 10, 3);
         }
@@ -86,10 +87,10 @@ class Knife_Terms_Emoji {
             return;
         }
 
-        if(isset($_REQUEST[self::$meta])) {
-            $meta = sanitize_text_field($_REQUEST[self::$meta]);
+        if(isset($_REQUEST[self::$term_meta])) {
+            $meta = sanitize_text_field($_REQUEST[self::$term_meta]);
 
-            update_term_meta($term_id, self::$meta, $meta);
+            update_term_meta($term_id, self::$term_meta, $meta);
         }
     }
 
@@ -111,7 +112,7 @@ class Knife_Terms_Emoji {
      */
     public static function add_column_emoji($content, $column, $term_id) {
         if($column === 'term-emoji') {
-            $content = get_term_meta($term_id, self::$meta, true);
+            $content = get_term_meta($term_id, self::$term_meta, true);
         }
 
         return $content;

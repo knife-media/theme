@@ -1,13 +1,13 @@
 <?php
 /**
-* Lead post meta
-*
-* Insert lead metabox to admin post screen
-*
-* @package knife-theme
-* @since 1.2
-* @version 1.7
-*/
+ * Lead post meta
+ *
+ * Insert lead metabox to admin post screen
+ *
+ * @package knife-theme
+ * @since 1.2
+ * @version 1.7
+ */
 
 
 if (!defined('WPINC')) {
@@ -22,7 +22,7 @@ class Knife_Post_Lead {
     * @access  private
     * @var     string
     */
-    private static $meta = 'lead-text';
+    private static $post_meta = 'lead-text';
 
 
    /**
@@ -31,7 +31,7 @@ class Knife_Post_Lead {
     * @access  private
     * @var     array
     */
-    private static $type = ['post', 'club', 'select', 'generator', 'quiz'];
+    private static $post_type = ['post', 'club', 'select', 'generator', 'quiz'];
 
 
     /**
@@ -41,7 +41,7 @@ class Knife_Post_Lead {
      * @access  private
      * @var     string
      */
-    private static $nonce = 'knife-lead-nonce';
+    private static $metabox_nonce = 'knife-lead-nonce';
 
 
     /**
@@ -65,7 +65,7 @@ class Knife_Post_Lead {
      * Add lead-text metabox
      */
     public static function add_metabox() {
-        add_meta_box('knife-lead-metabox', __('Лид текст'), [__CLASS__, 'print_metabox'], self::$type, 'normal', 'high');
+        add_meta_box('knife-lead-metabox', __('Лид текст'), [__CLASS__, 'print_metabox'], self::$post_type, 'normal', 'high');
     }
 
 
@@ -73,11 +73,11 @@ class Knife_Post_Lead {
      * Print wp-editor based metabox for lead-text meta
      */
     public static function print_metabox($post, $box) {
-        $lead = get_post_meta($post->ID, self::$meta, true);
+        $lead = get_post_meta($post->ID, self::$post_meta, true);
 
         wp_editor($lead, 'knife-lead-editor', [
             'media_buttons' => true,
-            'textarea_name' => self::$meta,
+            'textarea_name' => self::$post_meta,
             'teeny' => true,
             'tinymce' => [
                 'toolbar1' => 'link'
@@ -89,7 +89,7 @@ class Knife_Post_Lead {
             'drag_drop_upload' => false
         ]);
 
-        wp_nonce_field('textarea', self::$nonce);
+        wp_nonce_field('metabox', self::$metabox_nonce);
     }
 
 
@@ -101,7 +101,7 @@ class Knife_Post_Lead {
             return $lead;
         }
 
-        $post_lead = get_post_meta($post->ID, self::$meta, true);
+        $post_lead = get_post_meta($post->ID, self::$post_meta, true);
 
         if(strlen($post_lead) > 0) {
             $post_lead = wpautop($post_lead);
@@ -131,15 +131,15 @@ class Knife_Post_Lead {
      * Save post options
      */
     public static function save_meta($post_id) {
-        if(!in_array(get_post_type($post_id), self::$type)) {
+        if(!in_array(get_post_type($post_id), self::$post_type)) {
             return;
         }
 
-        if(!isset($_REQUEST[self::$nonce])) {
+        if(!isset($_REQUEST[self::$metabox_nonce])) {
             return;
         }
 
-        if(!wp_verify_nonce($_REQUEST[self::$nonce], 'textarea')) {
+        if(!wp_verify_nonce($_REQUEST[self::$metabox_nonce], 'metabox')) {
             return;
         }
 
@@ -152,11 +152,11 @@ class Knife_Post_Lead {
         }
 
         // Save lead-text meta
-        if(empty($_REQUEST[self::$meta])) {
-            return delete_post_meta($post_id, self::$meta);
+        if(empty($_REQUEST[self::$post_meta])) {
+            return delete_post_meta($post_id, self::$post_meta);
         }
 
-        return update_post_meta($post_id, self::$meta, $_REQUEST[self::$meta]);
+        return update_post_meta($post_id, self::$post_meta, $_REQUEST[self::$post_meta]);
     }
 }
 

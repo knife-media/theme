@@ -1,12 +1,12 @@
 <?php
 /**
-* Notifier robot
-*
-* Send notifications to private service channels via telegram
-*
-* @package knife-theme
-* @since 1.7
-*/
+ * Notifier robot
+ *
+ * Send notifications to private service channels via telegram
+ *
+ * @package knife-theme
+ * @since 1.7
+ */
 
 
 if (!defined('WPINC')) {

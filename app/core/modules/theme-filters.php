@@ -1,13 +1,13 @@
 <?php
 /**
-* Common theme filters
-*
-* Useful template manager class
-*
-* @package knife-theme
-* @since 1.3
-* @version 1.4
-*/
+ * Common theme filters
+ *
+ * Useful template manager class
+ *
+ * @package knife-theme
+ * @since 1.3
+ * @version 1.4
+ */
 
 if (!defined('WPINC')) {
     die;

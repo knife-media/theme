@@ -1,13 +1,13 @@
 <?php
 /**
-* TinyMCE Buttons
-*
-* Add custom TinyMCE buttons
-*
-* @package knife-theme
-* @since 1.2
-* @version 1.5
-*/
+ * TinyMCE Buttons
+ *
+ * Add custom TinyMCE buttons
+ *
+ * @package knife-theme
+ * @since 1.2
+ * @version 1.5
+ */
 
 
 if (!defined('WPINC')) {

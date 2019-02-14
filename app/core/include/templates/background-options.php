@@ -1,5 +1,5 @@
 <?php
-    $meta = get_term_meta($term->term_id, self::$meta, true);
+    $meta = get_term_meta($term->term_id, self::$term_meta, true);
 
     $sizes = [
         'auto' => __('Замостить фон', 'knife-theme'),
@@ -17,7 +17,7 @@
         <div class="knife-background-color">
             <?php
                 printf('<input type="text" name="%s[color]" value="%s">',
-                    esc_attr(self::$meta), $meta['color'] ?? ''
+                    esc_attr(self::$term_meta), $meta['color'] ?? ''
                 );
             ?>
         </div>
@@ -33,7 +33,7 @@
         <div class="knife-background-image" style="max-width: 300px">
             <?php
                 printf('<input type="hidden" name="%s[image]" value="%s">',
-                    esc_attr(self::$meta), $meta['image'] ?? ''
+                    esc_attr(self::$term_meta), $meta['image'] ?? ''
                 );
             ?>
 
@@ -43,7 +43,7 @@
             </p>
 
             <p style="margin-top: 10px;">
-                <select name="<?php echo esc_attr(self::$meta); ?>[size]" style="width: 100%;">
+                <select name="<?php echo esc_attr(self::$term_meta); ?>[size]" style="width: 100%;">
                 <?php
                     foreach($sizes as $name => $title) {
                         printf('<option value="%1$s"%3$s>%2$s</option>', $name, $title, selected($meta['size'], $name, false));

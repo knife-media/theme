@@ -6,6 +6,7 @@
  *
  * @package knife-theme
  * @since 1.5
+ * @version 1.7
  */
 
 
@@ -22,7 +23,7 @@ class Knife_Label_Posts {
      * @access  private
      * @var     string
      */
-    private static $slug = 'label';
+    private static $taxonomy = 'label';
 
 
     /**
@@ -38,7 +39,7 @@ class Knife_Label_Posts {
      * Create custom taxonomy
      */
     public static function register_taxonomy() {
-        register_taxonomy(self::$slug, 'post', [
+        register_taxonomy(self::$taxonomy, 'post', [
             'labels' => [
                 'name'                       => __('Ярлыки', 'knife-theme'),
                 'singular_name'              => __('Ярлык', 'knife-theme'),
@@ -61,7 +62,7 @@ class Knife_Label_Posts {
             'show_admin_column'     => true,
             'show_in_nav_menus'     => true,
             'query_var'             => true,
-            'rewrite'               => ['slug' => self::$slug],
+            'rewrite'               => ['slug' => self::$taxonomy],
             'meta_box_cb'           => [__CLASS__, 'print_metabox']
         ]);
     }

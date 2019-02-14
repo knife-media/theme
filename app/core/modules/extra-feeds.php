@@ -1,14 +1,14 @@
 <?php
 /**
-* Extra feeds
-*
-* Add custom feeds templates
-*
-* @package knife-theme
-* @since 1.7
-* @link https://yandex.ru/support/news/feed.html
-* @link https://yandex.ru/support/zen/website/rss-modify.html
-*/
+ * Extra feeds
+ *
+ * Add custom feeds templates
+ *
+ * @package knife-theme
+ * @since 1.7
+ * @link https://yandex.ru/support/news/feed.html
+ * @link https://yandex.ru/support/zen/website/rss-modify.html
+ */
 
 
 if (!defined('WPINC')) {
@@ -40,7 +40,7 @@ class Knife_Extra_Feeds {
      * @access  private
      * @var     string
      */
-    private static $nonce = 'knife-feed-nonce';
+    private static $metabox_nonce = 'knife-feed-nonce';
 
 
     /**
@@ -114,11 +114,11 @@ class Knife_Extra_Feeds {
      * Save feed post meta
      */
     public static function save_meta($post_id) {
-        if(!isset($_REQUEST[self::$nonce])) {
+        if(!isset($_REQUEST[self::$metabox_nonce])) {
             return;
         }
 
-        if(!wp_verify_nonce($_REQUEST[self::$nonce], 'fieldset')) {
+        if(!wp_verify_nonce($_REQUEST[self::$metabox_nonce], 'metabox')) {
             return;
         }
 

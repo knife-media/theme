@@ -1,13 +1,13 @@
 <?php
 /**
-* Story manager
-*
-* Custom story post type
-*
-* @package knife-theme
-* @since 1.3
-* @version 1.7
-*/
+ * Story manager
+ *
+ * Custom story post type
+ *
+ * @package knife-theme
+ * @since 1.3
+ * @version 1.7
+ */
 
 if (!defined('WPINC')) {
     die;
@@ -21,7 +21,7 @@ class Knife_Story_Manager {
      * @access  private
      * @var     string
      */
-    private static $slug = 'story';
+    private static $post_type = 'story';
 
 
     /**
@@ -31,7 +31,7 @@ class Knife_Story_Manager {
      * @access  private
      * @var     string
      */
-    private static $meta = '_knife-story';
+    private static $meta_items = '_knife-story';
 
 
     /**
@@ -41,7 +41,7 @@ class Knife_Story_Manager {
      * @access  private
      * @var     array
      */
-    private static $opts = ['background', 'shadow', 'blur'];
+    private static $meta_options = ['background', 'shadow', 'blur'];
 
 
     /**
@@ -51,7 +51,7 @@ class Knife_Story_Manager {
      * @access  private static
      * @var     string
      */
-    private static $nonce = 'knife-story-nonce';
+    private static $metabox_nonce = 'knife-story-nonce';
 
 
     /*
@@ -96,7 +96,7 @@ class Knife_Story_Manager {
      * @since 1.4
      */
     public static function include_archive($template) {
-        if(is_post_type_archive(self::$slug)) {
+        if(is_post_type_archive(self::$post_type)) {
             $new_template = locate_template(['templates/archive-story.php']);
 
             if(!empty($new_template)) {
@@ -114,7 +114,7 @@ class Knife_Story_Manager {
      * @since 1.4
      */
     public static function include_single($template) {
-        if(is_singular(self::$slug)) {
+        if(is_singular(self::$post_type)) {
             $new_template = locate_template(['templates/single-story.php']);
 
             if(!empty($new_template)) {
@@ -136,7 +136,7 @@ class Knife_Story_Manager {
 
         $post_id = get_the_ID();
 
-        if(get_post_type($post_id) !== self::$slug) {
+        if(get_post_type($post_id) !== self::$post_type) {
             return;
         }
 
@@ -167,7 +167,7 @@ class Knife_Story_Manager {
      * Enqueue glide vendor script
      */
     public static function inject_dependences() {
-        if(is_singular(self::$slug)) {
+        if(is_singular(self::$post_type)) {
             $version = '3.2.4';
             $include = get_template_directory_uri() . '/assets';
 
@@ -181,14 +181,14 @@ class Knife_Story_Manager {
      * Include slider story meta options
      */
     public static function inject_stories() {
-        if(is_singular(self::$slug)) {
+        if(is_singular(self::$post_type)) {
             $post_id = get_the_ID();
             $stories = self::convert_stories($post_id);
 
             $options = [];
 
-            foreach(self::$opts as $item) {
-                $options[$item] = get_post_meta($post_id, self::$meta . "-{$item}", true);
+            foreach(self::$meta_options as $item) {
+                $options[$item] = get_post_meta($post_id, self::$meta_items . "-{$item}", true);
             }
 
             $options['action'] = __('Share story — last', 'knife-media');
@@ -206,7 +206,7 @@ class Knife_Story_Manager {
      * Register story post type
      */
     public static function register_story() {
-        register_post_type(self::$slug, [
+        register_post_type(self::$post_type, [
             'labels'                    => [
                 'name'                  => __('Истории', 'knife-theme'),
                 'singular_name'         => __('История', 'knife-theme'),
@@ -257,7 +257,7 @@ class Knife_Story_Manager {
                 $types = ['post'];
             }
 
-            $types[] = self::$slug;
+            $types[] = self::$post_type;
 
             $query->set('post_type', $types);
         }
@@ -270,7 +270,7 @@ class Knife_Story_Manager {
      * @since 1.4
      */
     public static function update_count($query) {
-        if($query->is_main_query() && $query->is_post_type_archive(self::$slug)) {
+        if($query->is_main_query() && $query->is_post_type_archive(self::$post_type)) {
             $query->set('posts_per_page', 12);
         }
     }
@@ -280,7 +280,7 @@ class Knife_Story_Manager {
      * Add story manage metabox
      */
     public static function add_metabox() {
-        add_meta_box('knife-story-metabox', __('Настройки истории', 'knife-theme'), [__CLASS__, 'display_metabox'], self::$slug, 'normal', 'high');
+        add_meta_box('knife-story-metabox', __('Настройки истории', 'knife-theme'), [__CLASS__, 'display_metabox'], self::$post_type, 'normal', 'high');
     }
 
 
@@ -298,15 +298,15 @@ class Knife_Story_Manager {
      * Save post options
      */
     public static function save_metabox($post_id) {
-        if(get_post_type($post_id) !== self::$slug) {
+        if(get_post_type($post_id) !== self::$post_type) {
             return;
         }
 
-        if(!isset($_REQUEST[self::$nonce])) {
+        if(!isset($_REQUEST[self::$metabox_nonce])) {
             return;
         }
 
-        if(!wp_verify_nonce($_REQUEST[self::$nonce], 'metabox')) {
+        if(!wp_verify_nonce($_REQUEST[self::$metabox_nonce], 'metabox')) {
             return;
         }
 
@@ -320,11 +320,11 @@ class Knife_Story_Manager {
 
 
         // Update stories meta
-        self::update_stories(self::$meta . '-stories', $post_id);
+        self::update_stories(self::$meta_items . '-stories', $post_id);
 
         // Update other story options
-        foreach(self::$opts as $option) {
-            $query = self::$meta . "-{$option}";
+        foreach(self::$meta_options as $option) {
+            $query = self::$meta_items . "-{$option}";
 
             if(isset($_REQUEST[$query])) {
                 // Get value by query
@@ -383,7 +383,7 @@ class Knife_Story_Manager {
      * Convert stories post meta to object
      */
     private static function convert_stories($post_id, $stories = []) {
-        $items = get_post_meta($post_id, self::$meta . '-stories');
+        $items = get_post_meta($post_id, self::$meta_items . '-stories');
 
         foreach($items as $i => $slide) {
             if(!empty($slide['media'])) {

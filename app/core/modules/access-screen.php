@@ -1,13 +1,13 @@
 <?php
 /**
-* Custom login screen
-*
-* Styling wp-login.php page
-*
-* @package knife-theme
-* @since 1.2
-* @version 1.4
-*/
+ * Custom login screen
+ *
+ * Styling wp-login.php page
+ *
+ * @package knife-theme
+ * @since 1.2
+ * @version 1.4
+ */
 
 if (!defined('WPINC')) {
     die;

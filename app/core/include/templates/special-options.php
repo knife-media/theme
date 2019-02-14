@@ -1,5 +1,5 @@
 <?php
-    $meta = get_term_meta($term->term_id, self::$meta, true);
+    $meta = get_term_meta($term->term_id, self::$term_meta, true);
 ?>
 
 <tr class="form-field hide-if-no-js">
@@ -11,7 +11,7 @@
         <div class="knife-special-background">
             <?php
                 printf('<input type="text" name="%s[background]" value="%s">',
-                    esc_attr(self::$meta), $meta['background'] ?? ''
+                    esc_attr(self::$term_meta), $meta['background'] ?? ''
                 );
             ?>
         </div>
@@ -27,7 +27,7 @@
         <div class="knife-special-color">
             <?php
                 printf('<input type="text" name="%s[color]" value="%s">',
-                    esc_attr(self::$meta), $meta['color'] ?? ''
+                    esc_attr(self::$term_meta), $meta['color'] ?? ''
                 );
             ?>
         </div>

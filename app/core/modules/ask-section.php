@@ -19,16 +19,7 @@ class Knife_Ask_Section {
      * @access  private
      * @var     string
      */
-    private static $slug = 'ask';
-
-
-    /**
-     * Unique nonce string
-     *
-     * @access  private
-     * @var     string
-     */
-    private static $nonce = 'knife-ask-nonce';
+    private static $post_type = 'ask';
 
 
     /**
@@ -51,6 +42,33 @@ class Knife_Ask_Section {
 
 
     /**
+     * Unique option key to store telegram chat id
+     *
+     * @access  private
+     * @var     string
+     */
+    private static $telegram_chat = 'knife_ask_telegram_chat';
+
+
+   /**
+    * Ajax action
+    *
+    * @access  private
+    * @var     string
+    */
+    private static $ajax_action = 'knife-ask-form';
+
+
+    /**
+     * Unique nonce string
+     *
+     * @access  private
+     * @var     string
+     */
+    private static $metabox_nonce = 'knife-ask-nonce';
+
+
+    /**
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public static function load_module() {
@@ -62,6 +80,13 @@ class Knife_Ask_Section {
 
         // Save metabox
         add_action('save_post', [__CLASS__, 'save_metabox']);
+
+        // Append ask form to content
+        add_filter('wp_enqueue_scripts', [__CLASS__, 'inject_object'], 12);
+
+        // Send ask form with ajax
+//        add_action('wp_ajax_' . self::$ajax_action, [__CLASS__, 'submit_question']);
+//        add_action('wp_ajax_nopriv_' . self::$ajax_action, [__CLASS__, 'submit_question']);
 
         // Include ask single template
         add_action('single_template', [__CLASS__, 'include_single']);
@@ -81,7 +106,7 @@ class Knife_Ask_Section {
      * Register ask post type
      */
     public static function register_type() {
-        register_post_type(self::$slug, [
+        register_post_type(self::$post_type, [
             'labels'                    => [
                 'name'                  => __('Вопросы', 'knife-theme'),
                 'singular_name'         => __('Вопрос', 'knife-theme'),
@@ -121,7 +146,7 @@ class Knife_Ask_Section {
      * Add ask author metabox
      */
     public static function add_metabox() {
-        add_meta_box('knife-ask-metabox', __('Настройка вопроса'), [__CLASS__, 'display_metabox'], self::$slug, 'normal', 'high');
+        add_meta_box('knife-ask-metabox', __('Настройка вопроса'), [__CLASS__, 'display_metabox'], self::$post_type, 'normal', 'high');
     }
 
 
@@ -139,15 +164,15 @@ class Knife_Ask_Section {
      * Save ask author metabox
      */
     public static function save_metabox($post_id) {
-        if(get_post_type($post_id) !== self::$slug) {
+        if(get_post_type($post_id) !== self::$post_type) {
             return;
         }
 
-        if(!isset($_REQUEST[self::$nonce])) {
+        if(!isset($_REQUEST[self::$metabox_nonce])) {
             return;
         }
 
-        if(!wp_verify_nonce($_REQUEST[self::$nonce], 'metabox')) {
+        if(!wp_verify_nonce($_REQUEST[self::$metabox_nonce], 'metabox')) {
             return;
         }
 
@@ -173,10 +198,67 @@ class Knife_Ask_Section {
 
 
     /**
+     * Append user form to page content
+     */
+    public static function inject_object() {
+        if(!is_singular('page')) {
+            return;
+        }
+
+        $fields = [
+            'name' => [
+                'element' => 'input',
+                'type' => 'text',
+                'required' => '',
+                'autocomplete' => 'name',
+                'maxlength' => 50,
+                'placeholder' => __('Ваше имя, род занятий и проекты', 'knife-theme'),
+            ],
+
+            'email' => [
+                'element' => 'input',
+                'type' => 'email',
+                'required' => '',
+                'autocomplete' => 'email',
+                'maxlength' => 50,
+                'placeholder' => __('Электронная почта', 'knife-theme')
+            ],
+
+            'subject' => [
+                'element' => 'input',
+                'type' => 'text',
+                'required' => '',
+                'maxlength' => 100,
+                'placeholder' => __('О чем хотите писать', 'knife-theme')
+            ],
+
+            'text' => [
+                'element' => 'textarea',
+                'required' => '',
+                'placeholder' => __('Текст поста целиком без форматирования', 'knife-theme')
+            ]
+        ];
+
+
+        $options = [
+            'ajaxurl' => esc_url(admin_url('admin-ajax.php')),
+            'warning' => __('Не удалось отправить форму. Попробуйте еще раз', 'knife-theme'),
+            'button' => __('Отправить', 'knife-theme'),
+            'action' => self::$ajax_action,
+            'fields' => $fields,
+            'nonce' => wp_create_nonce(self::$ajax_action)
+        ];
+
+        // add user form fields
+        wp_localize_script('knife-theme', 'knife_ask_form', $options);
+    }
+
+
+    /**
      * Include archive ask template
      */
     public static function include_archive($template) {
-        if(is_post_type_archive(self::$slug)) {
+        if(is_post_type_archive(self::$post_type)) {
             $new_template = locate_template(['templates/archive-ask.php']);
 
             if(!empty($new_template)) {
@@ -192,7 +274,7 @@ class Knife_Ask_Section {
      * Include single ask template
      */
     public static function include_single($template) {
-        if(is_singular(self::$slug)) {
+        if(is_singular(self::$post_type)) {
             $new_template = locate_template(['templates/single-ask.php']);
 
             if(!empty($new_template)) {
@@ -208,7 +290,7 @@ class Knife_Ask_Section {
      * Redirect empty archive
      */
     public static function redirect_empty_archive() {
-        if(is_post_type_archive(self::$slug) && !have_posts()) {
+        if(is_post_type_archive(self::$post_type) && !have_posts()) {
             wp_redirect(home_url(), 302);
             exit;
         }
@@ -219,7 +301,7 @@ class Knife_Ask_Section {
      * Change posts_per_page for ask archive template
      */
     public static function update_count($query) {
-        if($query->is_main_query() && $query->is_post_type_archive(self::$slug)) {
+        if($query->is_main_query() && $query->is_post_type_archive(self::$post_type)) {
             $query->set('posts_per_page', 12);
         }
     }

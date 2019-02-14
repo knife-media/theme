@@ -1,13 +1,13 @@
 <?php
 /**
-* Common widgets handler
-*
-* Use for cross-widget functions
-*
-* @package knife-theme
-* @since 1.2
-* @version 1.7
-*/
+ * Common widgets handler
+ *
+ * Use for cross-widget functions
+ *
+ * @package knife-theme
+ * @since 1.2
+ * @version 1.7
+ */
 
 
 if (!defined('WPINC')) {
@@ -21,7 +21,7 @@ class Knife_Widget_Handler {
     * @access   private
     * @var      string
     */
-    private static $nonce = 'knife-widget-nonce';
+    private static $metabox_nonce = 'knife-widget-nonce';
 
 
     /**
@@ -31,7 +31,7 @@ class Knife_Widget_Handler {
     * @var     string
     * @since   1.7
     */
-    private static $action = 'knife-widget-terms';
+    private static $ajax_action = 'knife-widget-terms';
 
 
     /**
@@ -55,7 +55,7 @@ class Knife_Widget_Handler {
         add_filter('widget_title', '__return_empty_string');
 
         // ajax terms handler
-        add_action('wp_ajax_' . self::$action, [__CLASS__, 'ajax_terms']);
+        add_action('wp_ajax_' . self::$ajax_action, [__CLASS__, 'ajax_terms']);
     }
 
 
@@ -142,8 +142,8 @@ class Knife_Widget_Handler {
         wp_enqueue_script('knife-widget-screen', $include . '/scripts/widget-screen.js', ['jquery'], $version);
 
         $options = [
-            'action' => esc_attr(self::$action),
-            'nonce' => wp_create_nonce(self::$nonce),
+            'action' => esc_attr(self::$ajax_action),
+            'nonce' => wp_create_nonce(self::$metabox_nonce),
             'choose' => __('Выберите обложку', 'knife-theme')
         ];
 
@@ -167,7 +167,7 @@ class Knife_Widget_Handler {
      * Custom terms form by taxonomy name
      */
     public static function ajax_terms() {
-        check_ajax_referer(self::$nonce, 'nonce');
+        check_ajax_referer(self::$metabox_nonce, 'nonce');
 
         wp_terms_checklist(0, [
             'taxonomy' => esc_attr($_POST['filter'])

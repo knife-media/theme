@@ -1,13 +1,13 @@
 <?php
 /**
-* Generator type
-*
-* Custom post type for random generated answers
-*
-* @package knife-theme
-* @since 1.6
-* @version 1.7
-*/
+ * Generator type
+ *
+ * Custom post type for random generated answers
+ *
+ * @package knife-theme
+ * @since 1.6
+ * @version 1.7
+ */
 
 if (!defined('WPINC')) {
     die;
@@ -20,7 +20,7 @@ class Knife_Random_Generator {
      * @access  private
      * @var     string
      */
-    private static $slug = 'generator';
+    private static $post_type = 'generator';
 
 
     /**
@@ -38,7 +38,7 @@ class Knife_Random_Generator {
      * @access  private
      * @var     string
      */
-    private static $nonce = 'knife-generator-nonce';
+    private static $metabox_nonce = 'knife-generator-nonce';
 
 
    /**
@@ -47,7 +47,7 @@ class Knife_Random_Generator {
     * @access  private
     * @var     string
     */
-    private static $action = 'knife-generator-poster';
+    private static $ajax_action = 'knife-generator-poster';
 
 
     /**
@@ -106,7 +106,7 @@ class Knife_Random_Generator {
         add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
 
         // Create poster
-        add_action('wp_ajax_' . self::$action, [__CLASS__, 'create_poster']);
+        add_action('wp_ajax_' . self::$ajax_action, [__CLASS__, 'create_poster']);
 
         // Include generator options
         add_action('wp_enqueue_scripts', [__CLASS__, 'inject_generator'], 12);
@@ -117,7 +117,7 @@ class Knife_Random_Generator {
      * Register generator post type
      */
     public static function register_type() {
-        register_post_type(self::$slug, [
+        register_post_type(self::$post_type, [
             'labels'                    => [
                 'name'                  => __('Генератор', 'knife-theme'),
                 'singular_name'         => __('Генератор', 'knife-theme'),
@@ -159,12 +159,12 @@ class Knife_Random_Generator {
     public static function add_share_rule() {
         add_rewrite_rule(
             sprintf('%s/([^/]+)/([^/]+)/?$',
-                self::$slug
+                self::$post_type
             ),
 
             sprintf(
                 'index.php?post_type=%1$s&%1$s=$matches[1]&%2$s=$matches[2]',
-                self::$slug,
+                self::$post_type,
                 self::$query_var
             ),
 
@@ -187,7 +187,7 @@ class Knife_Random_Generator {
      * Include generator meta options and items
      */
     public static function inject_generator() {
-        if(is_singular(self::$slug)) {
+        if(is_singular(self::$post_type)) {
             $post_id = get_the_ID();
             $options = get_post_meta($post_id, self::$meta_options, true);
 
@@ -219,7 +219,7 @@ class Knife_Random_Generator {
     public static function redirect_share() {
         $share = get_query_var('share');
 
-        if(is_singular(self::$slug) && strlen($share) > 0) {
+        if(is_singular(self::$post_type) && strlen($share) > 0) {
             $post_id = get_the_ID();
 
             $share = absint($share) - 1;
@@ -241,7 +241,7 @@ class Knife_Random_Generator {
      * Include single generator template
      */
     public static function include_single($template) {
-        if(is_singular(self::$slug)) {
+        if(is_singular(self::$post_type)) {
             $new_template = locate_template(['templates/single-generator.php']);
 
             if(!empty($new_template)) {
@@ -257,7 +257,7 @@ class Knife_Random_Generator {
      * Create poster using ajax options
      */
     public static function create_poster() {
-        check_admin_referer(self::$nonce, 'nonce');
+        check_admin_referer(self::$metabox_nonce, 'nonce');
 
         if(!method_exists('Knife_Poster_Templates', 'create_posters')) {
             wp_send_json_error(__('Модуль генерации не найден', 'knife-theme'));
@@ -286,7 +286,7 @@ class Knife_Random_Generator {
      * Add generator metabox
      */
     public static function add_metabox() {
-        add_meta_box('knife-generator-metabox', __('Настройки генератора'), [__CLASS__, 'display_metabox'], self::$slug, 'normal', 'high');
+        add_meta_box('knife-generator-metabox', __('Настройки генератора'), [__CLASS__, 'display_metabox'], self::$post_type, 'normal', 'high');
     }
 
 
@@ -300,7 +300,7 @@ class Knife_Random_Generator {
 
         $post_id = get_the_ID();
 
-        if(get_post_type($post_id) !== self::$slug) {
+        if(get_post_type($post_id) !== self::$post_type) {
             return;
         }
 
@@ -321,8 +321,8 @@ class Knife_Random_Generator {
 
         $options = [
             'post_id' => absint($post_id),
-            'action' => esc_attr(self::$action),
-            'nonce' => wp_create_nonce(self::$nonce),
+            'action' => esc_attr(self::$ajax_action),
+            'nonce' => wp_create_nonce(self::$metabox_nonce),
             'choose' => __('Выберите изображение постера', 'knife-theme'),
             'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
         ];
@@ -345,15 +345,15 @@ class Knife_Random_Generator {
      * Save post options
      */
     public static function save_metabox($post_id) {
-        if(get_post_type($post_id) !== self::$slug) {
+        if(get_post_type($post_id) !== self::$post_type) {
             return;
         }
 
-        if(!isset($_REQUEST[self::$nonce])) {
+        if(!isset($_REQUEST[self::$metabox_nonce])) {
             return;
         }
 
-        if(!wp_verify_nonce($_REQUEST[self::$nonce], 'metabox')) {
+        if(!wp_verify_nonce($_REQUEST[self::$metabox_nonce], 'metabox')) {
             return;
         }
 

@@ -1,13 +1,13 @@
 <?php
 /**
-* Post Info
-*
-* Return post info meta
-*
-* @package knife-theme
-* @since 1.3
-* @version 1.5
-*/
+ * Post Info
+ *
+ * Return post info meta
+ *
+ * @package knife-theme
+ * @since 1.3
+ * @version 1.5
+ */
 
 if (!defined('WPINC')) {
     die;

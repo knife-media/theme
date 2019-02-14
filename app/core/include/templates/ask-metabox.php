@@ -28,7 +28,7 @@
             )
         );
 
-        wp_nonce_field('metabox', self::$nonce);
+        wp_nonce_field('metabox', self::$metabox_nonce);
     ?>
 </div>
 

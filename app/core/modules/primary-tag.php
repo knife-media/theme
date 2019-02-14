@@ -1,13 +1,13 @@
 <?php
 /**
-* Primary post tag
-*
-* Update current post tag metabox to add opportunity select primary tag
-*
-* @package knife-theme
-* @since 1.3
-* @version 1.7
-*/
+ * Primary post tag
+ *
+ * Update current post tag metabox to add opportunity select primary tag
+ *
+ * @package knife-theme
+ * @since 1.3
+ * @version 1.7
+ */
 
 
 if (!defined('WPINC')) {
@@ -22,7 +22,7 @@ class Knife_Primary_Tag {
     * @access  private
     * @var     string
     */
-    private static $meta = 'primary-tag';
+    private static $post_meta = 'primary-tag';
 
 
    /**
@@ -31,7 +31,7 @@ class Knife_Primary_Tag {
     * @access  private
     * @var     array
     */
-    private static $type = ['post', 'generator', 'quiz'];
+    private static $post_type = ['post', 'generator', 'quiz'];
 
 
     /**
@@ -61,7 +61,7 @@ class Knife_Primary_Tag {
 
         $post_id = get_the_ID();
 
-        if(!in_array(get_post_type($post_id), self::$type)) {
+        if(!in_array(get_post_type($post_id), self::$post_type)) {
             return;
         }
 
@@ -76,7 +76,7 @@ class Knife_Primary_Tag {
         ];
 
         // get current primary term
-        $term_id = get_post_meta($post_id, self::$meta, true);
+        $term_id = get_post_meta($post_id, self::$post_meta, true);
 
         if($term_id && $term = get_term($term_id)) {
             $options['primary'] = $term->name;
@@ -90,7 +90,7 @@ class Knife_Primary_Tag {
      * Save post options
      */
     public static function save_meta($post_id) {
-        if(!in_array(get_post_type($post_id), self::$type)) {
+        if(!in_array(get_post_type($post_id), self::$post_type)) {
             return;
         }
 
@@ -103,11 +103,11 @@ class Knife_Primary_Tag {
         }
 
         // Save meta
-        if(isset($_REQUEST[self::$meta])) {
-            $term = get_term_by('name', $_REQUEST[self::$meta], 'post_tag');
+        if(isset($_REQUEST[self::$post_meta])) {
+            $term = get_term_by('name', $_REQUEST[self::$post_meta], 'post_tag');
 
             if($term && $term->term_id > 0) {
-                update_post_meta($post_id, self::$meta, $term->term_id);
+                update_post_meta($post_id, self::$post_meta, $term->term_id);
             }
         }
     }
@@ -123,7 +123,7 @@ class Knife_Primary_Tag {
             return $items;
         }
 
-        if($primary = get_post_meta($post->ID, self::$meta, true)) {
+        if($primary = get_post_meta($post->ID, self::$post_meta, true)) {
             $sorted = [];
 
             foreach($items as $item) {

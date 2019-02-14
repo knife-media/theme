@@ -21,7 +21,7 @@
         // Add empty quiz result
         array_unshift($results, []);
 
-        wp_nonce_field('metabox', self::$nonce);
+        wp_nonce_field('metabox', self::$metabox_nonce);
     ?>
 
     <div class="box box--manage">

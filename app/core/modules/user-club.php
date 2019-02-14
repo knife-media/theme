@@ -23,7 +23,7 @@ class Knife_User_Club {
      * @access  private
      * @var     string
      */
-    private static $slug = 'club';
+    private static $post_type = 'club';
 
 
    /**
@@ -33,17 +33,7 @@ class Knife_User_Club {
     * @access  private
     * @var     string
     */
-    private static $meta = '_knife-user-form';
-
-
-   /**
-    * Ajax action
-    *
-    * @since   1.3
-    * @access  private
-    * @var     string
-    */
-    private static $action = 'knife-user-form';
+    private static $meta_form = '_knife-user-form';
 
 
     /**
@@ -76,6 +66,16 @@ class Knife_User_Club {
     private static $request_id = 'knife_club_request_id';
 
 
+   /**
+    * Ajax action
+    *
+    * @since   1.3
+    * @access  private
+    * @var     string
+    */
+    private static $ajax_action = 'knife-user-form';
+
+
     /**
      * Checkbox save nonce
      *
@@ -83,7 +83,7 @@ class Knife_User_Club {
      * @access  private
      * @var     string
      */
-    private static $nonce = 'knife-user-form-nonce';
+    private static $metabox_nonce = 'knife-user-form-nonce';
 
 
     /**
@@ -99,14 +99,14 @@ class Knife_User_Club {
         add_action('page_attributes_misc_attributes', [__CLASS__, 'print_checkbox']);
 
         // Save user form post meta
-        add_action('save_post', [__CLASS__, 'save_meta']);
+        add_action('save_post', [__CLASS__, 'save_metabox']);
 
         // Append user form to content
         add_filter('wp_enqueue_scripts', [__CLASS__, 'inject_object'], 12);
 
-        // Receive user form with ajax
-        add_action('wp_ajax_' . self::$action, [__CLASS__, 'submit_request']);
-        add_action('wp_ajax_nopriv_' . self::$action, [__CLASS__, 'submit_request']);
+        // Send user form with ajax
+        add_action('wp_ajax_' . self::$ajax_action, [__CLASS__, 'submit_request']);
+        add_action('wp_ajax_nopriv_' . self::$ajax_action, [__CLASS__, 'submit_request']);
 
         // Add club settings to customizer
         add_action('customize_register', [__CLASS__, 'add_customize_setting']);
@@ -187,7 +187,7 @@ class Knife_User_Club {
      * Register club post type
      */
     public static function register_type() {
-        register_post_type(self::$slug, [
+        register_post_type(self::$post_type, [
             'labels'                => [
                 'name'              => __('Клуб', 'knife-theme'),
                 'singular_name'     => __('Запись в клуб', 'knife-theme'),
@@ -222,7 +222,7 @@ class Knife_User_Club {
     public static function update_archive_description($description) {
         $button_link = get_theme_mod(self::$button_link, '');
 
-        if(is_post_type_archive(self::$slug) && strlen($button_link) > 0) {
+        if(is_post_type_archive(self::$post_type) && strlen($button_link) > 0) {
             $button = sprintf('<div class="tagline-button tagline-button--club"><a class="button" href="%2$s">%1$s</a></div>',
                 __('Присоединиться', 'knife-theme'),
                 esc_url($button_link)
@@ -241,7 +241,7 @@ class Knife_User_Club {
      * @since 1.4
      */
     public static function update_archive_title($title) {
-        if(is_post_type_archive(self::$slug)) {
+        if(is_post_type_archive(self::$post_type)) {
             $title = sprintf('<h1 class="tagline-title tagline-title--club">%s</h1>',
                 post_type_archive_title('', false)
             );
@@ -257,7 +257,7 @@ class Knife_User_Club {
      * @version 1.4
      */
     public static function insert_author_link($content) {
-        if(!is_singular(self::$slug) || !in_the_loop()) {
+        if(!is_singular(self::$post_type) || !in_the_loop()) {
             return $content;
         }
 
@@ -287,7 +287,7 @@ class Knife_User_Club {
      * @since 1.4
      */
     public static function insert_club_promo($content) {
-        if(is_singular(self::$slug) && in_the_loop()) {
+        if(is_singular(self::$post_type) && in_the_loop()) {
             $button_link = get_theme_mod(self::$button_link, '');
 
             if(strlen($button_link) > 0) {
@@ -319,7 +319,7 @@ class Knife_User_Club {
                 $types = ['post'];
             }
 
-            $types[] = self::$slug;
+            $types[] = self::$post_type;
 
             $query->set('post_type', $types);
         }
@@ -373,7 +373,7 @@ class Knife_User_Club {
             return;
         }
 
-        $form = get_post_meta($post_id, self::$meta, true);
+        $form = get_post_meta($post_id, self::$meta_form, true);
 
         printf(
             '<p class="post-attributes-label-wrapper"><span class="post-attributes-label">%s</span></p>',
@@ -382,24 +382,24 @@ class Knife_User_Club {
 
         printf(
             '<label><input type="checkbox" name="%1$s" class="checkbox"%3$s> %2$s</label>',
-            esc_attr(self::$meta),
+            esc_attr(self::$meta_form),
             __('Добавить форму заявки в клуб', 'knife-theme'),
             checked($form, 1, false)
         );
 
-        wp_nonce_field('checkbox', self::$nonce);
+        wp_nonce_field('checkbox', self::$metabox_nonce);
     }
 
 
     /**
      * Save feed post meta
      */
-    public static function save_meta($post_id) {
-        if(!isset($_REQUEST[self::$nonce])) {
+    public static function save_metabox($post_id) {
+        if(!isset($_REQUEST[self::$metabox_nonce])) {
             return;
         }
 
-        if(!wp_verify_nonce($_REQUEST[self::$nonce], 'checkbox')) {
+        if(!wp_verify_nonce($_REQUEST[self::$metabox_nonce], 'checkbox')) {
             return;
         }
 
@@ -411,11 +411,11 @@ class Knife_User_Club {
             return;
         }
 
-        if(empty($_REQUEST[self::$meta])) {
-            return delete_post_meta($post_id, self::$meta);
+        if(empty($_REQUEST[self::$meta_form])) {
+            return delete_post_meta($post_id, self::$meta_form);
         }
 
-        return update_post_meta($post_id, self::$meta, 1);
+        return update_post_meta($post_id, self::$meta_form, 1);
     }
 
 
@@ -429,7 +429,7 @@ class Knife_User_Club {
 
         $post_id = get_the_ID();
 
-        if(!get_post_meta($post_id, self::$meta, true)) {
+        if(!get_post_meta($post_id, self::$meta_form, true)) {
             return;
         }
 
@@ -472,9 +472,9 @@ class Knife_User_Club {
             'ajaxurl' => esc_url(admin_url('admin-ajax.php')),
             'warning' => __('Не удалось отправить форму. Попробуйте еще раз', 'knife-theme'),
             'button' => __('Отправить', 'knife-theme'),
-            'action' => self::$action,
+            'action' => self::$ajax_action,
             'fields' => $fields,
-            'nonce' => wp_create_nonce(self::$action)
+            'nonce' => wp_create_nonce(self::$ajax_action)
         ];
 
         // add user form fields
@@ -504,7 +504,7 @@ class Knife_User_Club {
      * Send user form data
      */
     public static function submit_request() {
-        if(!check_ajax_referer(self::$action, 'nonce', false)) {
+        if(!check_ajax_referer(self::$ajax_action, 'nonce', false)) {
             wp_send_json_error(__('Ошибка безопасности. Попробуйте еще раз', 'knife-theme'));
         }
 
