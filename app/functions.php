@@ -517,9 +517,6 @@ require get_template_directory() . '/core/modules/share-buttons.php';
 // Return post info meta
 require get_template_directory() . '/core/modules/post-info.php';
 
-// Custom optional image for posts
-require get_template_directory() . '/core/modules/post-sticker.php';
-
 // Add second title to post
 require get_template_directory() . '/core/modules/post-tagline.php';
 
