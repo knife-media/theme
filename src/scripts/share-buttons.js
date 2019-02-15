@@ -1,8 +1,8 @@
-(function() {
-  if(document.querySelector('.share') === null) {
-    return false;
-  }
+/**
+ * Share buttons manager
+ */
 
+(function() {
   var counters = {facebook: false, vkontakte: false};
 
 

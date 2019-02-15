@@ -2,16 +2,17 @@
  * Replace embed links with iframes
  *
  * @since 1.5
+ * @version 1.7
  */
 
 (function() {
-  var embeds = document.querySelectorAll('.embed');
+  var post = document.querySelector('.post');
 
 
   /**
-   * Check if similar posts exist
+   * Check if post element exists
    */
-  if(embeds.length < 1) {
+  if(post === null) {
     return false;
   }
 
@@ -50,19 +51,27 @@
   }
 
 
-  for(var i = 0; i < embeds.length; i++) {
-      embeds[i].addEventListener('click', function(e) {
-        if(this.hasAttribute('data-embed')) {
-          e.preventDefault();
+  /**
+   * Click listeners for embeds
+   */
+  post.addEventListener('click', function(e) {
+    var target = e.target || e.srcElement;
 
-          // Remove all embed child nodes
-          while(this.firstChild) {
-            this.removeChild(this.firstChild);
-          }
+    if(!target.parentNode.classList.contains('embed')) {
+      return;
+    }
 
-          this.appendChild(createIframe(this));
-        }
-    });
-  };
+    var embed = target.parentNode;
 
+    if(embed.hasAttribute('data-embed')) {
+      e.preventDefault();
+
+      // Remove all embed child nodes
+      while(embed.firstChild) {
+        embed.removeChild(embed.firstChild);
+      }
+
+      embed.appendChild(createIframe(embed));
+    }
+  });
 })();
