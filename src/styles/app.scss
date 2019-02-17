@@ -26,6 +26,10 @@ $color-quiz: #fff200;
 // Setup default styles
 @import "setup/*.scss";
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   display: block;
 
