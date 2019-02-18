@@ -15,6 +15,14 @@
 
 
   /**
+   * Set body background color
+   */
+  if(typeof knife_backdrop.color !== 'undefined') {
+    document.body.style.backgroundColor = '#' + knife_backdrop.color;
+  }
+
+
+  /**
    * Set footer element color
    */
   if(typeof knife_backdrop.color !== 'undefined') {
