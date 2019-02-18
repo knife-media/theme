@@ -43,7 +43,7 @@ class Knife_User_Club {
      * @access  private
      * @var     string
      */
-    private static $telegram_chat = 'knife_club_telegram_chat';
+    private static $option_chat = 'knife_club_telegram_chat';
 
 
     /**
@@ -63,7 +63,7 @@ class Knife_User_Club {
      * @access  private
      * @var     string
      */
-    private static $request_id = 'knife_club_request_id';
+    private static $option_request = 'knife_club_request_id';
 
 
    /**
@@ -335,13 +335,13 @@ class Knife_User_Club {
             'priority' => 200,
         ]);
 
-        $wp_customize->add_setting(self::$telegram_chat);
-        $wp_customize->add_setting(self::$request_id);
+        $wp_customize->add_setting(self::$option_chat);
+        $wp_customize->add_setting(self::$option_request);
         $wp_customize->add_setting(self::$button_link);
 
 
         $wp_customize->add_control(new WP_Customize_Control($wp_customize,
-            self::$telegram_chat, [
+            self::$option_chat, [
                  'label' => __('ID чата в Telegram', 'knife-theme'),
                  'section' => 'knife_club'
              ]
@@ -355,7 +355,7 @@ class Knife_User_Club {
         ));
 
         $wp_customize->add_control(new WP_Customize_Control($wp_customize,
-            self::$request_id, [
+            self::$option_request, [
                  'label' => __('ID последней заявки', 'knife-theme'),
                  'section' => 'knife_club'
              ]
@@ -486,7 +486,7 @@ class Knife_User_Club {
      * Notify on sending to review
      */
     public static function notify_review($post) {
-        $chat_id = get_theme_mod(self::$telegram_chat, '');
+        $chat_id = get_theme_mod(self::$option_chat, '');
 
         $message = [
             'chat_id' => $chat_id,
@@ -520,8 +520,8 @@ class Knife_User_Club {
 
 
         if(method_exists('Knife_Notifier_Robot', 'send_telegram')) {
-            $chat_id = get_theme_mod(self::$telegram_chat, '');
-            $request = get_theme_mod(self::$request_id, 0) + 1;
+            $chat_id = get_theme_mod(self::$option_chat, '');
+            $request = get_theme_mod(self::$option_request, 0) + 1;
 
             $message = [
                 'chat_id' => $chat_id,
@@ -530,7 +530,7 @@ class Knife_User_Club {
             ];
 
             if(Knife_Notifier_Robot::send_telegram($message)) {
-                set_theme_mod(self::$request_id, $request);
+                set_theme_mod(self::$option_request, $request);
                 wp_send_json_success(__('Сообщение успешно отправлено', 'knife-theme'));
             }
         }

@@ -47,7 +47,7 @@ class Knife_Ask_Section {
      * @access  private
      * @var     string
      */
-    private static $telegram_chat = 'knife_ask_telegram_chat';
+    private static $option_chat = 'knife_ask_telegram_chat';
 
 
    /**
@@ -146,7 +146,7 @@ class Knife_Ask_Section {
      * Add ask author metabox
      */
     public static function add_metabox() {
-        add_meta_box('knife-ask-metabox', __('Настройка вопроса'), [__CLASS__, 'display_metabox'], self::$post_type, 'normal', 'high');
+        add_meta_box('knife-ask-metabox', __('Настройка вопроса'), [__CLASS__, 'display_metabox'], self::$post_type, 'side', 'high');
     }
 
 
@@ -201,56 +201,43 @@ class Knife_Ask_Section {
      * Append user form to page content
      */
     public static function inject_object() {
-        if(!is_singular('page')) {
-            return;
+        if(is_singular(self::$post_type)) {
+            $fields = [
+                'text' => [
+                    'element' => 'textarea',
+                    'required' => '',
+                    'placeholder' => __('А вдруг квантовая физика — выдумка гуманитарев?', 'knife-theme')
+                ],
+
+                'name' => [
+                    'element' => 'input',
+                    'type' => 'text',
+                    'required' => '',
+                    'autocomplete' => 'name',
+                    'placeholder' => __('Как вас зовут?', 'knife-theme'),
+                ],
+
+                'contact' => [
+                    'element' => 'input',
+                    'type' => 'text',
+                    'required' => '',
+                    'placeholder' => __('Как с вами связаться?', 'knife-theme')
+                ]
+            ];
+
+            $options = [
+                'ajaxurl' => esc_url(admin_url('admin-ajax.php')),
+                'heading' => __('Вы можете задать свой вопрос журналу «Нож»', 'knife-theme'),
+                'warning' => __('Не удалось отправить форму. Попробуйте еще раз', 'knife-theme'),
+                'button' => __('Спросить у специалиста', 'knife-theme'),
+                'action' => self::$ajax_action,
+                'fields' => $fields,
+                'nonce' => wp_create_nonce(self::$ajax_action)
+            ];
+
+            // add ask form fields
+            wp_localize_script('knife-theme', 'knife_ask_form', $options);
         }
-
-        $fields = [
-            'name' => [
-                'element' => 'input',
-                'type' => 'text',
-                'required' => '',
-                'autocomplete' => 'name',
-                'maxlength' => 50,
-                'placeholder' => __('Ваше имя, род занятий и проекты', 'knife-theme'),
-            ],
-
-            'email' => [
-                'element' => 'input',
-                'type' => 'email',
-                'required' => '',
-                'autocomplete' => 'email',
-                'maxlength' => 50,
-                'placeholder' => __('Электронная почта', 'knife-theme')
-            ],
-
-            'subject' => [
-                'element' => 'input',
-                'type' => 'text',
-                'required' => '',
-                'maxlength' => 100,
-                'placeholder' => __('О чем хотите писать', 'knife-theme')
-            ],
-
-            'text' => [
-                'element' => 'textarea',
-                'required' => '',
-                'placeholder' => __('Текст поста целиком без форматирования', 'knife-theme')
-            ]
-        ];
-
-
-        $options = [
-            'ajaxurl' => esc_url(admin_url('admin-ajax.php')),
-            'warning' => __('Не удалось отправить форму. Попробуйте еще раз', 'knife-theme'),
-            'button' => __('Отправить', 'knife-theme'),
-            'action' => self::$ajax_action,
-            'fields' => $fields,
-            'nonce' => wp_create_nonce(self::$ajax_action)
-        ];
-
-        // add user form fields
-        wp_localize_script('knife-theme', 'knife_ask_form', $options);
     }
 
 

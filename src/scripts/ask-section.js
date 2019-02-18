@@ -1,12 +1,12 @@
 /**
- * User requests form
+ * Question form for ask type posts
  *
- * @since 1.3
+ * @since 1.7
  */
 
 (function() {
-  // Check user form options existing
-  if(typeof knife_user_form === 'undefined') {
+  // Check ask form options existing
+  if(typeof knife_ask_form === 'undefined') {
     return false;
   }
 
@@ -46,17 +46,17 @@
 
   // Set local storage input value
   var setStorage = function(name, value) {
-    var storage = JSON.parse(localStorage.getItem('knife_user_form')) || {};
+    var storage = JSON.parse(localStorage.getItem('knife_ask_form')) || {};
 
     storage[name] = value;
 
-    return localStorage.setItem('knife_user_form', JSON.stringify(storage));
+    return localStorage.setItem('knife_ask_form', JSON.stringify(storage));
   }
 
 
   // Get local storage input value by name
   var getStorage = function(name) {
-    var storage = JSON.parse(localStorage.getItem('knife_user_form')) || {};
+    var storage = JSON.parse(localStorage.getItem('knife_ask_form')) || {};
 
     return storage[name] || '';
   }
@@ -117,7 +117,7 @@
     loader.classList.add('icon--done');
     notice.innerHTML = message;
 
-    localStorage.removeItem('knife_user_form');
+    localStorage.removeItem('knife_ask_form');
 
     return form.reset();
   }
@@ -167,8 +167,8 @@
 
   // Get option from global settings
   var getOption = function(option, def) {
-    if(knife_user_form.hasOwnProperty(option)) {
-      return knife_user_form[option];
+    if(knife_ask_form.hasOwnProperty(option)) {
+      return knife_ask_form[option];
     }
 
     return def || '';
@@ -177,7 +177,7 @@
 
   //  Append fields to form
   var createForm = function(form) {
-    var fields = knife_user_form.fields;
+    var fields = knife_ask_form.fields;
 
     for(var key in fields) {
       if(!fields.hasOwnProperty(key)) {
@@ -194,7 +194,7 @@
   var post = document.querySelector('.entry-content');
 
   var form = document.createElement('form');
-  form.classList.add('form', 'form--club');
+  form.classList.add('form', 'form--ask');
   form.addEventListener('submit', submitForm);
   post.appendChild(form);
 

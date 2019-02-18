@@ -117,7 +117,7 @@ class Knife_Open_Quiz {
         add_action('wp_ajax_' . self::$ajax_action, [__CLASS__, 'create_poster']);
 
         // Include quiz options
-        add_action('wp_enqueue_scripts', [__CLASS__, 'inject_quiz'], 12);
+        add_action('wp_enqueue_scripts', [__CLASS__, 'inject_object'], 12);
 
         // Add quiz post type to archives
         add_action('pre_get_posts', [__CLASS__, 'update_archives'], 12);
@@ -198,7 +198,7 @@ class Knife_Open_Quiz {
     /**
      * Include quiz meta options, items and results
      */
-    public static function inject_quiz() {
+    public static function inject_object() {
         if(is_singular(self::$post_type)) {
             $post_id = get_the_ID();
             $options = get_post_meta($post_id, self::$meta_options, true);
