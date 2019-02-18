@@ -57,11 +57,7 @@
       margin-top: 1rem;
     }
 
-    .entry-comments + .entry-footer {
-      margin-top: 0;
-    }
-
-    .entry-header, .entry-content {
+    .entry-header {
       padding: 2rem 1rem;
 
       @media screen and (max-width: 767px) {
@@ -69,15 +65,28 @@
       }
     }
 
+    .entry-content {
+      padding: 3rem 1rem;
+
+      @media screen and (max-width: 767px) {
+        padding: 1.5rem 1rem;
+      }
+    }
+
+    .entry-comments + .entry-footer {
+      margin-top: 0;
+    }
+
     .entry-content > .figure--toc {
       width: calc(100% + 2rem);
       max-width: none;
-      margin: -2rem -1rem;
+      margin: -3rem -1rem;
       padding: 2rem 1rem;
 
       background-color: lighten(desaturate($color-mark, 20), 10);
 
       @media screen and (max-width: 767px) {
+        margin: -1.5rem -1rem;
         padding: 1rem;
       }
     }
