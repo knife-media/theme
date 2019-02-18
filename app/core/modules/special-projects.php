@@ -96,7 +96,7 @@ class Knife_Special_Projects {
      */
     public static function add_options_fields() {
         // Print special options row
-        add_action(self::$taxonomy . "_edit_form_fields", [__CLASS__, 'print_options_row'], 12, 2);
+        add_action(self::$taxonomy . "_edit_form_fields", [__CLASS__, 'print_options_row'], 12);
 
         // Save admin side options meta
         add_action("edited_" . self::$taxonomy, [__CLASS__, 'save_options_meta']);
@@ -111,7 +111,7 @@ class Knife_Special_Projects {
      *
      * @since 1.4
      */
-    public static function print_options_row($term, $slug) {
+    public static function print_options_row($term) {
         $include = get_template_directory() . '/core/include';
 
         include_once($include . '/templates/special-options.php');
