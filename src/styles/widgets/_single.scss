@@ -32,9 +32,11 @@
     z-index: -1;
 
     width: 100%;
-    height: calc(100% + 1px);
+    height: 100%;
     padding: 0;
     overflow: hidden;
+
+    background-color: $color-white;
 
     .widget-single__image-thumbnail {
       display: block;
@@ -43,7 +45,7 @@
       left: 0;
 
       width: 100%;
-      height: 100%;
+      height: calc(100% + 1px);
 
       object-fit: cover;
       object-position: right center;
@@ -79,7 +81,7 @@
     margin: 0;
     padding: 1rem 1.25rem 1.25rem;
 
-    background-color: transparent;
+    background: transparent;
 
     .widget-single__content-title {
       display: block;

@@ -9,10 +9,10 @@
 
 <div class="widget-transparent__inner">
     <?php
-        if(!empty($image)) {
+        if(!empty($emoji)) {
             printf(
-                '<img class="widget-transparent__sticker" src="%1$s" alt="%2$s">',
-                esc_url($image), sanitize_text_field(get_the_title())
+                '<span class="widget-transparent__emoji">%s</span>',
+                wp_encode_emoji($emoji)
             );
         }
     ?>

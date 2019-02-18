@@ -17,28 +17,33 @@
     z-index: 2;
   }
 
-  .widget-transparent__sticker {
+  .widget-transparent__emoji {
     display: flex;
-    align-self: flex-start;
+    align-self: center;
+    cursor: default;
 
     width: 5rem;
     min-width: 5rem;
     height: auto;
-    margin-top: 3.75rem;
     margin-right: 1rem;
+
+    font-size: 4.25rem;
 
     @media screen and (max-width: 1023px) {
       align-self: center;
 
       width: 4rem;
       min-width: 4rem;
-      margin-top: 0;
+
+      font-size: 3.75rem;
     }
 
     @media screen and (max-width: 767px) {
       width: 3rem;
       min-width: 3rem;
       margin-left: 1rem;
+
+      font-size: 3rem;
     }
 
     @media screen and (max-width: 479px) {
@@ -165,7 +170,7 @@
         }
       }
 
-      .widget-transparent__sticker {
+      .widget-transparent__emoji {
         display: none;
 
         @media screen and (max-width: 1023px) {

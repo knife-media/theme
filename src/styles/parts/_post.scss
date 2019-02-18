@@ -68,6 +68,19 @@
         padding: 1.5rem 1rem;
       }
     }
+
+    .entry-content > .figure--toc {
+      width: calc(100% + 2rem);
+      max-width: none;
+      margin: -2rem -1rem;
+      padding: 2rem 1rem;
+
+      background-color: lighten(desaturate($color-mark, 20), 10);
+
+      @media screen and (max-width: 767px) {
+        padding: 1rem;
+      }
+    }
   }
 
   &.post--quiz {

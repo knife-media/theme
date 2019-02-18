@@ -72,6 +72,37 @@
     }
   }
 
+  &.figure--toc {
+    width: $width-content + 1rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    padding: 0 .5rem;
+
+    blockquote {
+      width: calc(100% + 2rem);
+      max-width: calc(#{$width-content} + 2rem);
+
+      background-color: lighten(desaturate($color-mark, 20), 10);
+    }
+
+    ul, ol {
+      padding-left: 1.5rem;
+      list-style-position: outside;
+    }
+
+    li {
+      margin-top: 1rem;
+      font-size: 1.25rem;
+      font-weight: 500;
+      line-height: 1.25;
+
+      @media screen and (max-width: 767px) {
+        margin-top: .75rem;
+        font-size: 1rem;
+      }
+    }
+  }
+
   &.figure--inner {
     width: $width-content;
 
