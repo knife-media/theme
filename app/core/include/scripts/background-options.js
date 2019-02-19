@@ -25,9 +25,8 @@ jQuery(document).ready(function($) {
     image.find('button.remove').attr('disabled', 'disabled');
     image.find('select').attr('disabled', 'disabled');
 
-
     if(input && input.length > 1) {
-      $('<img />', {src: input}).prependTo(value).css('max-width', '100%');
+      $('<img />', {src: input}).prependTo(image).css('max-width', '100%');
 
       image.find('button.remove').removeAttr('disabled');
       image.find('select').removeAttr('disabled');
