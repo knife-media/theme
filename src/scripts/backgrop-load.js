@@ -23,14 +23,6 @@
 
 
   /**
-   * Set footer element color
-   */
-  if(typeof knife_backdrop.color !== 'undefined') {
-    document.querySelector('.block-bottom').style.backgroundColor = '#' + knife_backdrop.color;
-  }
-
-
-  /**
    * Apply element if image is not set
    */
   if(typeof knife_backdrop.image === 'undefined') {
