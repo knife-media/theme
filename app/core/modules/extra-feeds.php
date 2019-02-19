@@ -60,7 +60,7 @@ class Knife_Extra_Feeds {
         add_filter('wp_get_attachment_image_attributes', [__CLASS__, 'image_attributes'], 10, 3);
 
         // Update feed meta on save post
-        add_action('save_post', [__CLASS__, 'save_meta']);
+        add_action('save_post', [__CLASS__, 'save_metabox']);
 
         // Post metabox
         add_action('add_meta_boxes', [__CLASS__, 'add_metabox'], 9);

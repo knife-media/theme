@@ -1,13 +1,13 @@
 <?php
 /**
-* Custom background
-*
-* Backdrop for sites and custom archives
-*
-* @package knife-theme
-* @since 1.2
-* @version 1.4
-*/
+ * Custom background
+ *
+ * Backdrop for sites and custom archives
+ *
+ * @package knife-theme
+ * @since 1.2
+ * @version 1.7
+ */
 
 
 if (!defined('WPINC')) {
@@ -22,7 +22,7 @@ class Knife_Custom_Background {
      * @access  private
      * @var     string
      */
-    private static $meta = '_knife-term-background';
+    private static $term_meta = '_knife-term-background';
 
 
     /**
@@ -32,7 +32,37 @@ class Knife_Custom_Background {
      * @access  private
      * @var     string
      */
-    private static $taxes = ['special'];
+    private static $taxonomies = ['special'];
+
+
+    /**
+     * Default post type with custom background metabox
+     *
+     * @since   1.7
+     * @access  private
+     * @var     array
+     */
+    private static $post_type = ['post', 'club', 'select', 'generator', 'quiz'];
+
+
+    /**
+     * Unique meta to store post background options
+     *
+     * @since   1.7
+     * @access  private
+     * @var     string
+     */
+    private static $post_meta = '_knife-background';
+
+
+    /**
+     * Lead save nonce
+     *
+     * @since   1.7
+     * @access  private
+     * @var     string
+     */
+    private static $metabox_nonce = 'knife-background-nonce';
 
 
     /**
@@ -44,6 +74,12 @@ class Knife_Custom_Background {
         // Add background form fields
         add_action('admin_init', [__CLASS__, 'add_options_fields']);
 
+        // Save background post meta
+        add_action('save_post', [__CLASS__, 'save_metabox']);
+
+        // Add custom background metabox
+        add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
+
         // Update Customizer
         add_action('customize_register', [__CLASS__, 'update_customizer']);
 
@@ -53,18 +89,45 @@ class Knife_Custom_Background {
 
 
     /**
+     * Add custom background metabox only for admins
+     *
+     * @since 1.7
+     */
+    public static function add_metabox() {
+        if(current_user_can('unfiltered_html')) {
+            add_meta_box('knife-background-metabox', __('Произвольный фон страницы'), [__CLASS__, 'display_metabox'], self::$post_type, 'side');
+
+            // Enqueue post metabox scripts
+            add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_metabox_assets']);
+        }
+    }
+
+
+    /**
+     * Display background metabox
+     *
+     * @since 1.7
+     */
+    public static function display_metabox() {
+        $include = get_template_directory() . '/core/include';
+
+        include_once($include . '/templates/background-metabox.php');
+    }
+
+
+    /**
      * Add adminside edit form fields
      *
      * @since 1.4
      */
     public static function add_options_fields() {
-        foreach(self::$taxes as $tax) {
+        foreach(self::$taxonomies as $tax) {
             add_action("{$tax}_edit_form_fields", [__CLASS__, 'print_options_row'], 10, 2);
-            add_action("edited_{$tax}", [__CLASS__, 'save_options_meta']);
+            add_action("edited_{$tax}", [__CLASS__, 'save_options']);
         }
 
-        // Enqueue scripts only on admin screen
-        add_action('admin_enqueue_scripts', [__CLASS__, 'add_options_assets']);
+        // Enqueue term options scripts
+        add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_options_assets']);
     }
 
 
@@ -117,11 +180,14 @@ class Knife_Custom_Background {
 
     /**
      * Enqueue assets to term edit screen only
+     *
+     * @since 1.7
      */
-    public static function add_options_assets($hook) {
-        $screen = get_current_screen()->taxonomy;
+    public static function enqueue_options_assets($hook) {
+        // Current screen object
+        $screen = get_current_screen();
 
-        if($hook !== 'term.php' || !in_array($screen, self::$taxes)) {
+        if($hook !== 'term.php' || !in_array($screen->taxonomy,  self::$taxonomies)) {
             return;
         }
 
@@ -146,6 +212,40 @@ class Knife_Custom_Background {
 
 
     /**
+     * Enqueue assets for metabox
+     *
+     * @since 1.7
+     */
+    public static function enqueue_metabox_assets($hook) {
+        if(!in_array($hook, ['post.php', 'post-new.php'])) {
+            return;
+        }
+
+        // Current screen object
+        $screen = get_current_screen();
+
+        if(!in_array($screen->post_type,  self::$post_type)) {
+            return;
+        }
+
+        $version = wp_get_theme()->get('Version');
+        $include = get_template_directory_uri() . '/core/include';
+
+        // Insert wp media scripts
+        wp_enqueue_media();
+
+        // Insert admin scripts
+        wp_enqueue_script('knife-background-metabox', $include . '/scripts/background-metabox.js', ['jquery'], $version);
+
+        $options = [
+            'choose' => __('Выберите фоновое изображение', 'knife-theme')
+        ];
+
+        wp_localize_script('knife-background-metabox', 'knife_background_metabox', $options);
+    }
+
+
+    /**
      * Display custom background options row
      */
     public static function print_options_row($term, $taxonomy) {
@@ -154,27 +254,61 @@ class Knife_Custom_Background {
         include_once($include . '/templates/background-options.php');
     }
 
+
     /**
-     * Save image meta
+     * Save background post meta
+     *
+     * @since 1.7
      */
-    public static function save_options_meta($term_id) {
+    public static function save_metabox($post_id) {
+        if(!in_array(get_post_type($post_id), self::$post_type)) {
+            return;
+        }
+
+        if(!isset($_REQUEST[self::$metabox_nonce])) {
+            return;
+        }
+
+        if(!wp_verify_nonce($_REQUEST[self::$metabox_nonce], 'metabox')) {
+            return;
+        }
+
+        if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+            return;
+        }
+
+        if(!current_user_can('manage_options', $post_id)) {
+            return;
+        }
+
+        // Save background meta
+        if(empty($_REQUEST[self::$post_meta])) {
+            return delete_post_meta($post_id, self::$post_meta);
+        }
+
+        // Filter empty values
+        $background = array_filter($_REQUEST[self::$post_meta]);
+
+        return update_post_meta($post_id, self::$post_meta, $background);
+    }
+
+
+    /**
+     * Save term options
+     */
+    public static function save_options($term_id) {
         if(!current_user_can('edit_term', $term_id)) {
             return;
         }
 
-        if(empty($_REQUEST[self::$meta])) {
-            return delete_term_meta($term_id, self::$meta);
+        if(empty($_REQUEST[self::$term_meta])) {
+            return delete_term_meta($term_id, self::$term_meta);
         }
 
-        $meta = [];
+        // Filter empty values
+        $background = array_filter($_REQUEST[self::$term_meta]);
 
-        foreach($_REQUEST[self::$meta] as $key => $value) {
-            if((string) $value !== '') {
-                $meta[$key] = $value;
-            }
-        }
-
-        update_term_meta($term_id, self::$meta, $meta);
+        return update_term_meta($term_id, self::$term_meta, $background);
     }
 
 
@@ -183,29 +317,37 @@ class Knife_Custom_Background {
      *
      * @link https://github.com/knife-media/knife-theme/issues/49
      */
-    public static function get_meta() {
-        $background = [];
+    public static function get_meta($background = []) {
+        $object_id = get_queried_object_id();
 
-        /*
+        if(is_singular(self::$post_type)) {
+            $background = (array) get_post_meta($object_id, self::$post_meta, true);
+
+            if(array_filter($background)) {
+                return $background;
+            }
+
+            foreach(self::$taxonomies as $tax) {
+                if(!has_term('', $tax)) {
+                    continue;
+                }
+
+                // Loop over all tax terms
+                foreach(get_the_terms($object_id, $tax) as $term) {
+                    if($background = get_term_meta($term->term_id, self::$term_meta, true)) {
+                        break 2;
+                    }
+                }
+            }
+        }
+
+        /**
          * We have to check archives separately
          *
          * @link https://core.trac.wordpress.org/ticket/18636
          */
         if(is_tax() || is_tag() || is_category()) {
-            $background = get_term_meta(get_queried_object_id(), self::$meta, true);
-        }
-
-        foreach(self::$taxes as $tax) {
-            if(!is_single() || !has_term('', $tax)) {
-                continue;
-            }
-
-            // Loop over all tax terms
-            foreach(get_the_terms(get_queried_object_id(), $tax) as $term) {
-                if($background = get_term_meta($term->term_id, self::$meta, true)) {
-                    break 2;
-                }
-            }
+            return (array) get_term_meta($object_id, self::$term_meta, true);
         }
 
         return $background;

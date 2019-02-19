@@ -3,25 +3,31 @@ jQuery(document).ready(function($) {
     return false;
   }
 
-  var frame;
-
   var image = $('.knife-background-image');
   var color = $('.knife-background-color');
+
+
+  /**
+   * Check required options
+   */
+  if(typeof knife_background_options === 'undefined') {
+    return false;
+  }
 
 
   /**
    * Toggle background
    */
   function toggleBackground() {
-    var src = image.find('input').val();
+    var input = image.find('input.image').val();
 
     image.find('img').remove();
     image.find('button.remove').attr('disabled', 'disabled');
     image.find('select').attr('disabled', 'disabled');
 
 
-    if(src.length > 0) {
-      $('<img />', {src: src}).prependTo(image).css('max-width', '100%');
+    if(input && input.length > 1) {
+      $('<img />', {src: input}).prependTo(value).css('max-width', '100%');
 
       image.find('button.remove').removeAttr('disabled');
       image.find('select').removeAttr('disabled');
@@ -32,7 +38,7 @@ jQuery(document).ready(function($) {
   /**
    * Define color input as colorpicker
    */
-  color.find('input').wpColorPicker();
+  color.find('input.color').wpColorPicker();
 
 
   /**
@@ -41,11 +47,7 @@ jQuery(document).ready(function($) {
   image.on('click', 'button.select', function(e) {
     e.preventDefault();
 
-    if(frame) {
-      return frame.open();
-    }
-
-    frame = wp.media({
+    var frame = wp.media({
       title: knife_background_options.choose,
       multiple: false
     });
@@ -53,12 +55,12 @@ jQuery(document).ready(function($) {
     frame.on('select', function() {
       var attachment = frame.state().get('selection').first().toJSON();
 
-      image.find('input').val(attachment.url);
+      image.find('input.image').val(attachment.url);
 
       return toggleBackground();
     });
 
-    return frame.open();
+    frame.open();
   });
 
 
@@ -68,7 +70,7 @@ jQuery(document).ready(function($) {
   image.on('click', 'button.remove', function(e) {
     e.preventDefault();
 
-    image.find('input').val('');
+    image.find('input.image').val('');
 
     return toggleBackground();
   });
