@@ -51,7 +51,7 @@ class Knife_Post_Lead {
      */
     public static function load_module() {
         // Save meta
-        add_action('save_post', [__CLASS__, 'save_meta']);
+        add_action('save_post', [__CLASS__, 'save_metabox']);
 
         // Add lead-text metabox
         add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
@@ -130,7 +130,7 @@ class Knife_Post_Lead {
     /**
      * Save post options
      */
-    public static function save_meta($post_id) {
+    public static function save_metabox($post_id) {
         if(!in_array(get_post_type($post_id), self::$post_type)) {
             return;
         }
