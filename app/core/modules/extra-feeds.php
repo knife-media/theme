@@ -113,7 +113,7 @@ class Knife_Extra_Feeds {
     /**
      * Save feed post meta
      */
-    public static function save_meta($post_id) {
+    public static function save_metabox($post_id) {
         if(!isset($_REQUEST[self::$nonce])) {
             return;
         }
