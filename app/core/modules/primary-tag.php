@@ -31,7 +31,7 @@ class Knife_Primary_Tag {
     * @access  private
     * @var     array
     */
-    private static $post_type = ['post', 'generator', 'quiz'];
+    private static $post_type = ['post', 'generator', 'quiz', 'ask'];
 
 
     /**

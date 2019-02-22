@@ -115,8 +115,8 @@ class Knife_Ask_Section {
                 'all_items'             => __('Все вопросы', 'knife-theme'),
                 'add_new_item'          => __('Добавить новый вопрос', 'knife-theme'),
                 'new_item'              => __('Новый вопрос', 'knife-theme'),
-                'edit_item'             => __('Редактировать вопросы', 'knife-theme'),
-                'update_item'           => __('Обновить вопросы', 'knife-theme'),
+                'edit_item'             => __('Редактировать вопрос', 'knife-theme'),
+                'update_item'           => __('Обновить вопрос', 'knife-theme'),
                 'view_item'             => __('Просмотреть вопрос', 'knife-theme'),
                 'view_items'            => __('Просмотреть вопросы', 'knife-theme'),
                 'search_items'          => __('Искать вопрос', 'knife-theme'),
@@ -289,7 +289,7 @@ class Knife_Ask_Section {
      */
     public static function update_count($query) {
         if($query->is_main_query() && $query->is_post_type_archive(self::$post_type)) {
-            $query->set('posts_per_page', 12);
+            $query->set('posts_per_page', 16);
         }
     }
 }

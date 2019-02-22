@@ -59,8 +59,22 @@ class Knife_Widget_Select extends WP_Widget {
         if($query->have_posts()) {
             echo $args['before_widget'];
 
-            include(get_template_directory() . '/templates/widget-select.php');
+            printf('<a class="widget-select__head head" href="%2$s">%1$s</a>',
+                esc_html($instance['title']),
+                esc_url(get_post_type_archive_link('select'))
+            );
 
+            while($query->have_posts()) {
+                $query->the_post();
+
+                printf(
+                    '<a class="widget-select__link" href="%1$s">%2$s</a>',
+                    esc_url(get_permalink()),
+                    get_the_title()
+                );
+            }
+
+            wp_reset_query();
             echo $args['after_widget'];
         }
     }
@@ -131,25 +145,6 @@ class Knife_Widget_Select extends WP_Widget {
             esc_attr($instance['offset'])
         );
     }
-
-
-    /**
-     * Show select links
-     */
-    private function show_links($query) {
-        while($query->have_posts()) {
-            $query->the_post();
-
-            printf(
-                '<a class="select__link" href="%1$s">%2$s</a>',
-                esc_url(get_permalink()),
-                get_the_title()
-            );
-        }
-
-        wp_reset_query();
-    }
-
 }
 
 

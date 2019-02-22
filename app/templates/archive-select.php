@@ -4,20 +4,20 @@
  *
  * @package knife-theme
  * @since 1.5
- * @version 1.6
+ * @version 1.7
  */
 get_header(); ?>
 
 <div class="block-wrapper">
-    <div class="select">
-        <div class="select__head head">
-            <span><?php _e('Все подборки', 'knife-theme'); ?></span>
-        </div>
-
+    <div class="widget-select">
         <?php
+            printf('<span class="widget-select__head head">%s</span>',
+                __('Все подборки', 'knife-theme')
+            );
+
             while(have_posts()) : the_post();
                 printf(
-                    '<a class="select__link" href="%1$s">%2$s</a>',
+                    '<a class="widget-select__link" href="%1$s">%2$s</a>',
                     esc_url(get_permalink()),
                     get_the_title()
                 );

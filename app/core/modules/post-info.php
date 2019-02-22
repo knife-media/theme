@@ -17,9 +17,10 @@ class Knife_Post_Info {
     /**
      * Common method to output posts info meta
      */
-    public static function get_info($options = [], $output = '') {
-        $meta = array_intersect($options, ['club', 'author', 'date', 'tag', 'tags', 'time', 'category', 'asker']);
-        $items = [];
+    public static function get_info($options = [], $output = '', $items = []) {
+        $meta = array_intersect($options, [
+            'club', 'author', 'date', 'tag', 'tags', 'time', 'category', 'asker', 'question', 'emoji'
+        ]);
 
         foreach($meta as $option) {
             $method = 'info_' . $option;
@@ -227,6 +228,44 @@ class Knife_Post_Info {
 
         $output = sprintf('<span class="meta__asker">%s</span>',
             strip_tags($asker, '<strong>')
+        );
+
+        return $output;
+    }
+
+
+    /**
+     * Get question number
+     */
+    private static function info_question() {
+        $options = get_post_meta(get_the_ID(), '_knife-ask-options', true);
+
+        if(empty($options['counter'])) {
+            return false;
+        }
+
+        $output = sprintf('<span class="meta__item">%s</span>',
+            __('Вопрос ', 'knife-theme') . absint($options['counter'])
+        );
+
+        return $output;
+    }
+
+
+    /**
+     * Get primary post tag emoji
+     */
+    private static function info_emoji() {
+        $tags = get_the_tags();
+
+        if(!isset($tags[0])) {
+            return false;
+        }
+
+        $emoji = get_term_meta($tags[0]->term_id, '_knife-term-emoji', true);
+
+        $output = sprintf('<a class="meta__emoji">%s</a>',
+            esc_html($emoji)
         );
 
         return $output;

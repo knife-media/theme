@@ -17,7 +17,7 @@
       margin-left: .5rem;
       margin-right: .5rem;
 
-      font-size: .5625rem;
+      font-size: .75em;
     }
 
     &:last-child:after {
@@ -73,14 +73,10 @@
   }
 
   .meta__emoji {
-    display: flex;
+    cursor: default;
 
-    margin-right: .5rem;
-    line-height: 1;
-    font-size: 1.25rem;
-
-    &:last-child {
-      margin-right: 0;
+    &:after {
+      display: none;
     }
   }
 }
