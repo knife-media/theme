@@ -1,4 +1,4 @@
-.select {
+.widget-select {
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
@@ -12,7 +12,7 @@
 
   background-color: $color-white;
 
-  .select__head {
+  .widget-select__head {
     position: relative;
     z-index: 2;
 
@@ -23,7 +23,7 @@
     background-color: $color-select;
   }
 
-  .select__link {
+  .widget-select__link {
     display: block;
     position: relative;
 

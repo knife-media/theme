@@ -16,7 +16,7 @@ get_header(); ?>
 
             while(have_posts()) : the_post();
 
-                get_template_part('partials/loop', 'ask');
+                get_template_part('templates/widget', 'ask');
 
             endwhile;
         ?>

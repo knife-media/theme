@@ -1,6 +1,6 @@
 <?php
 /**
- * Ask archive loop partial template
+ * Ask widget template
  *
  * @package knife-theme
  * @since 1.7
