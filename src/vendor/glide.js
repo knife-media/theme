@@ -1,6 +1,6 @@
 /*!
- * Glide.js v3.2.4
- * (c) 2013-2018 Jędrzej Chałubek <jedrzej.chalubek@gmail.com> (http://jedrzejchalubek.com/)
+ * Glide.js v3.2.6
+ * (c) 2013-2019 Jędrzej Chałubek <jedrzej.chalubek@gmail.com> (http://jedrzejchalubek.com/)
  * Released under the MIT License.
  */
 
@@ -1550,10 +1550,11 @@
        * @return {Void}
        */
       setupSlides: function setupSlides() {
+        var width = this.slideWidth + 'px';
         var slides = Components.Html.slides;
 
         for (var i = 0; i < slides.length; i++) {
-          slides[i].style.width = this.slideWidth + 'px';
+          slides[i].style.width = width;
         }
       },
 
@@ -1811,6 +1812,7 @@
         var half = Math.floor(items.length / 2);
         var prepend = items.slice(0, half).reverse();
         var append = items.slice(half, items.length);
+        var width = Components.Sizes.slideWidth + 'px';
 
         for (var i = 0; i < append.length; i++) {
           wrapper.appendChild(append[i]);
@@ -1821,7 +1823,7 @@
         }
 
         for (var _i3 = 0; _i3 < items.length; _i3++) {
-          items[_i3].style.width = Components.Sizes.slideWidth + 'px';
+          items[_i3].style.width = width;
         }
       },
 
@@ -1926,18 +1928,21 @@
        *
        * @param  {String|Array} events
        * @param  {Element|Window|Document} el
+       * @param  {Boolean|Object} capture
        * @return {Void}
        */
 
     }, {
       key: 'off',
       value: function off(events, el) {
+        var capture = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
         if (isString(events)) {
           events = [events];
         }
 
         for (var i = 0; i < events.length; i++) {
-          el.removeEventListener(events[i], this.listeners[events[i]], false);
+          el.removeEventListener(events[i], this.listeners[events[i]], capture);
         }
       }
 
@@ -2716,8 +2721,8 @@
        * @return {Void}
        */
       unbindSwipeStart: function unbindSwipeStart() {
-        Binder.off(START_EVENTS[0], Components.Html.wrapper);
-        Binder.off(START_EVENTS[1], Components.Html.wrapper);
+        Binder.off(START_EVENTS[0], Components.Html.wrapper, capture);
+        Binder.off(START_EVENTS[1], Components.Html.wrapper, capture);
       },
 
 
@@ -2741,7 +2746,7 @@
        * @return {Void}
        */
       unbindSwipeMove: function unbindSwipeMove() {
-        Binder.off(MOVE_EVENTS, Components.Html.wrapper);
+        Binder.off(MOVE_EVENTS, Components.Html.wrapper, capture);
       },
 
 
@@ -2982,9 +2987,8 @@
        * @return {Void}
        */
       click: function click(event) {
-        event.stopPropagation();
-
         if (prevented) {
+          event.stopPropagation();
           event.preventDefault();
         }
       },

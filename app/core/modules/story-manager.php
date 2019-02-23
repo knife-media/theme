@@ -168,7 +168,7 @@ class Knife_Story_Manager {
      */
     public static function inject_dependences() {
         if(is_singular(self::$post_type)) {
-            $version = '3.2.4';
+            $version = '3.2.6';
             $include = get_template_directory_uri() . '/assets';
 
             // Enqueue swiper js to bottom

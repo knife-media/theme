@@ -136,7 +136,7 @@
 
       font-size: 3.25rem;
       font-weight: 700;
-      line-height: 1.075;
+      line-height: 1;
 
       transform: translateX(-3px);
 
@@ -157,7 +157,6 @@
 
       @media screen and (max-width: 479px) {
         font-size: 2rem;
-        line-height: 1.25;
       }
 
       @media screen and (max-width: 379px) {

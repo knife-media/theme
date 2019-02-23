@@ -4,24 +4,20 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.4
+ * @version 1.7
  */
 get_header(); ?>
 
 <div class="block-wrapper">
-   <?php
-        if(have_posts()) :
+    <div class="widget-story">
+        <?php
             while(have_posts()) : the_post();
 
-                get_template_part('partials/loop', 'story');
+                get_template_part('templates/widget', 'story');
 
             endwhile;
-        else :
-
-            get_template_part('partials/message');
-
-        endif;
-    ?>
+        ?>
+    </div>
 </div>
 
 <?php if(have_posts() && get_next_posts_link()) : ?>
