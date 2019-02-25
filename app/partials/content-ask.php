@@ -21,6 +21,11 @@
                     '</h1>'
                 );
 
+                the_lead(
+                    '<div class="entry-ask__lead">',
+                    '</div>'
+                );
+
                 the_info(
                     '<div class="entry-ask__asker">', '</div>',
                     ['asker']

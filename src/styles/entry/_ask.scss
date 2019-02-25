@@ -14,7 +14,7 @@
     margin: 0 auto;
     padding: 1.5rem 0;
 
-    background-color: lighten(desaturate($color-mark, 5), 10);
+    background-color: $color-layer;
 
     & > * {
       max-width: $width-content;
@@ -36,6 +36,59 @@
     }
   }
 
+  .entry-ask__lead {
+    display: block;
+
+    overflow: hidden;
+    -moz-osx-font-smoothing: auto;
+    -webkit-font-smoothing: auto;
+
+    & > * {
+      margin: 1rem 0;
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      @media screen and (max-width: 767px) {
+        margin-bottom: .5rem;
+      }
+    }
+
+    p {
+      line-height: 1.5;
+      font-size: 1.125rem;
+      font-weight: 500;
+
+      @media screen and (max-width: 767px) {
+        font-size: 1rem;
+      }
+    }
+
+    a {
+      color: $color-primary;
+      border-bottom: 1px solid $color-primary;
+
+      &:hover {
+        border-bottom-color: transparent;
+      }
+    }
+
+    figure {
+      width: $width-wide;
+      max-width: 100%;
+      margin: 2rem 0;
+
+      @media screen and (max-width: 767px) {
+        margin: 1rem 0;
+      }
+    }
+  }
+
   .entry-ask__date {
     display: flex;
     flex-flow: row nowrap;
@@ -43,8 +96,6 @@
     justify-content: space-between;
 
     .meta {
-      font-size: 0.875rem;
-      font-weight: 300;
       color: $color-text;
     }
   }
@@ -63,6 +114,14 @@
         line-height: 1.25;
         font-size: 1.125rem;
         font-weight: 700;
+
+        @media screen and (max-width: 767px) {
+          font-size: 1rem;
+        }
+      }
+
+      @media screen and (max-width: 767px) {
+        font-size: 0.8125rem;
       }
     }
   }

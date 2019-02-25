@@ -123,4 +123,41 @@
       font-size: .875rem;
     }
   }
+
+  &.widget-ask--sidebar {
+    padding: 0;
+    background-color: transparent;
+
+    .widget-ask__inner {
+      width: 100%;
+      margin: 0;
+      margin-bottom: 1px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    .widget-ask__head {
+      width: 100%;
+      margin: 0;
+    }
+
+    .widget-ask__info {
+      margin-bottom: 1rem;
+    }
+
+    .widget-ask__link {
+      font-size: 1.25rem;
+
+      @media screen and (max-width: 767px) {
+        font-size: 1.125rem;
+      }
+    }
+
+    .widget-ask__author {
+      font-size: .875rem;
+      font-weight: 500;
+    }
+  }
 }

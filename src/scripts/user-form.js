@@ -112,7 +112,7 @@
 
   // Show form errors
   var displaySuccess = function(message) {
-    var message = message || 'All done';
+    var message = message || '';
 
     loader.classList.add('icon--done');
     notice.innerHTML = message;
