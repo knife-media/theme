@@ -2,27 +2,42 @@
   display: block;
   position: relative;
 
-  width: 100%;
-  padding: 1.25rem 2rem;
+  padding: 1rem 2rem;
   font-size: 1.25rem;
   font-weight: 500;
   line-height: 1.375;
   text-decoration: none;
 
-  color: $color-white;
-  background-color: $color-primary;
+  -webkit-font-smoothing: antialiased;
 
-  border-radius: 5px;
+  &:hover {
+    filter: brightness(120%);
+  }
+
+  .entry-content & {
+    margin-top: 2rem;
+
+    color: $color-white;
+    background-color: $color-primary;
+
+    border-bottom: none;
+    border-radius: 3px;
+  }
 
   &.promo--club {
     color: $color-text;
     background-color: $color-club;
+  }
 
-    border: none;
+  &.promo--news {
+    padding-right: 6rem;
 
-    &:hover {
-      filter: brightness(120%);
-    }
+    color: $color-white;
+    background-color: #f33;
+    background-image: url('images/yandex-news-button.svg');
+    background-size: 2rem 2rem;
+    background-repeat: no-repeat;
+    background-position: right 2rem center;
   }
 
   &.promo--skyeng {
@@ -33,8 +48,6 @@
 
     color: $color-white;
     background: linear-gradient(to bottom, #3f76ea 0%, #3e71e0 100%);
-
-    border: none;
 
     strong {
       display: block;
@@ -49,10 +62,6 @@
 
       width: 60px;
       height: auto;
-    }
-
-    &:hover {
-      filter: brightness(120%);
     }
 
     @media screen and (max-width: 767px) {

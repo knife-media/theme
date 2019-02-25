@@ -34,6 +34,7 @@ a {
   text-decoration: none;
 
   transition: filter .25s, border .125s;
+  will-change: transform;
 
   cursor: pointer;
   outline: none;

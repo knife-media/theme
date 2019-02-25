@@ -13,7 +13,6 @@
   color: $color-text;
   background-color: $color-white;
 
-  -moz-osx-font-smoothing: auto;
   -webkit-font-smoothing: auto;
 
   & > * {
@@ -275,7 +274,6 @@
     width: auto;
     color: $color-white;
 
-    -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
   }
 
