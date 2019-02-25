@@ -16,7 +16,7 @@
 
         printf(
             '<a class="widget-recent__content-link" href="%1$s">%2$s</a>',
-            get_permalink(),
+            esc_url(get_permalink()),
             get_the_title()
         );
     ?>

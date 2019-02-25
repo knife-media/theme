@@ -10,19 +10,15 @@
 get_header(); ?>
 
 <div class="block-wrapper">
-   <?php
-        if(have_posts()) :
+   <div class="widget-news">
+       <?php
             while(have_posts()) : the_post();
 
-                get_template_part('partials/loop', 'news');
+                get_template_part('templates/widget', 'news');
 
             endwhile;
-        else :
-
-            get_template_part('message');
-
-        endif;
-    ?>
+        ?>
+    </div>
 </div>
 
 <?php if(have_posts() && get_next_posts_link()) : ?>
