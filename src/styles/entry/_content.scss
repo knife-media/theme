@@ -13,7 +13,6 @@
   color: $color-text;
   background-color: $color-white;
 
-  -moz-osx-font-smoothing: auto;
   -webkit-font-smoothing: auto;
 
   & > * {
@@ -271,12 +270,50 @@
     }
   }
 
-  .button {
-    width: auto;
-    color: $color-white;
-
-    -moz-osx-font-smoothing: grayscale;
+  input, textarea {
     -webkit-font-smoothing: antialiased;
+  }
+
+  .button {
+    position: relative;
+
+    width: auto;
+    max-width: 100%;
+    padding: 1rem 1.5rem;
+    padding-right: 6rem;
+
+    font-size: 1.125rem;
+    font-weight: 700;
+
+    color: $color-text;
+    background-color: $color-layer;
+    box-shadow: -2px 0 10px 1px rgba(0, 0, 0, .2);
+
+    border: none;
+
+    -webkit-font-smoothing: antialiased;
+
+    &:after {
+      @extend .icon;
+      @extend .icon--right;
+
+      position: absolute;
+      top: 50%;
+      right: 1.5rem;
+
+      margin-top: -.5rem;
+      font-size: 1rem;
+
+      transition: transform .25s;
+    }
+
+    &:hover {
+      filter: none;
+
+      &:after {
+        transform: translateX(5px);
+      }
+    }
   }
 
   @media screen and (max-width: 767px) {

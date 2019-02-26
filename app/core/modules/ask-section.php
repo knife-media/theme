@@ -32,7 +32,7 @@ class Knife_Ask_Section {
 
 
     /**
-     * Current question counter option
+     * Current front question counter option
      * This meta stores in wp_options table
      *
      * @access  private
@@ -48,6 +48,16 @@ class Knife_Ask_Section {
      * @var     string
      */
     private static $option_chat = 'knife_ask_telegram_chat';
+
+
+    /**
+     * Unique option key to store current question id
+     *
+     * @since   1.7
+     * @access  private
+     * @var     string
+     */
+    private static $option_request = 'knife_ask_request_id';
 
 
    /**
@@ -85,8 +95,11 @@ class Knife_Ask_Section {
         add_filter('wp_enqueue_scripts', [__CLASS__, 'inject_object'], 12);
 
         // Send ask form with ajax
-//        add_action('wp_ajax_' . self::$ajax_action, [__CLASS__, 'submit_question']);
-//        add_action('wp_ajax_nopriv_' . self::$ajax_action, [__CLASS__, 'submit_question']);
+        add_action('wp_ajax_' . self::$ajax_action, [__CLASS__, 'submit_request']);
+        add_action('wp_ajax_nopriv_' . self::$ajax_action, [__CLASS__, 'submit_request']);
+
+        // Add ask settings to customizer
+        add_action('customize_register', [__CLASS__, 'add_customize_setting']);
 
         // Include ask single template
         add_action('single_template', [__CLASS__, 'include_single']);
@@ -139,6 +152,35 @@ class Knife_Ask_Section {
             'publicly_queryable'    => true,
             'taxonomies'            => ['post_tag']
         ]);
+    }
+
+
+    /**
+     * Add question settings to customizer
+     */
+    public static function add_customize_setting($wp_customize) {
+        $wp_customize->add_section('knife_ask', [
+            'title' => __('Настройки вопросов','knife-theme'),
+            'priority' => 250,
+        ]);
+
+        $wp_customize->add_setting(self::$option_chat);
+        $wp_customize->add_setting(self::$option_request);
+
+
+        $wp_customize->add_control(new WP_Customize_Control($wp_customize,
+            self::$option_chat, [
+                 'label' => __('ID чата в Telegram', 'knife-theme'),
+                 'section' => 'knife_ask'
+             ]
+        ));
+
+        $wp_customize->add_control(new WP_Customize_Control($wp_customize,
+            self::$option_request, [
+                 'label' => __('ID последнего вопроса', 'knife-theme'),
+                 'section' => 'knife_ask'
+             ]
+        ));
     }
 
 
@@ -227,17 +269,106 @@ class Knife_Ask_Section {
 
             $options = [
                 'ajaxurl' => esc_url(admin_url('admin-ajax.php')),
-                'heading' => __('Вы можете задать свой вопрос журналу «Нож»', 'knife-theme'),
-                'warning' => __('Не удалось отправить форму. Попробуйте еще раз', 'knife-theme'),
+                'warning' => __('Не удалось отправить вопрос', 'knife-theme'),
                 'button' => __('Спросить у специалиста', 'knife-theme'),
+                'heading' => __('Вы можете задать свой вопрос журналу «Нож»', 'knife-theme'),
                 'action' => self::$ajax_action,
                 'fields' => $fields,
+                'styles' => esc_attr('form--ask'),
                 'nonce' => wp_create_nonce(self::$ajax_action)
             ];
 
             // add ask form fields
-            wp_localize_script('knife-theme', 'knife_ask_form', $options);
+            wp_localize_script('knife-theme', 'knife_form_request', $options);
         }
+    }
+
+
+    /**
+     * Send user form data
+     */
+    public static function submit_request() {
+        if(!check_ajax_referer(self::$ajax_action, 'nonce', false)) {
+            wp_send_json_error(__('Ошибка безопасности. Попробуйте еще раз', 'knife-theme'));
+        }
+
+        $fields = [];
+
+        foreach(['name', 'text', 'contact'] as $key) {
+            if(empty($_REQUEST[$key])) {
+                wp_send_json_error(__('Необходимо заполнить все поля формы', 'knife-theme'));
+            }
+
+            $fields[$key] = stripslashes_deep($_REQUEST[$key]);
+        }
+
+
+        if(method_exists('Knife_Notifier_Robot', 'send_telegram')) {
+            $chat_id = get_theme_mod(self::$option_chat, '');
+            $request = get_theme_mod(self::$option_request, 0) + 1;
+
+            $message = [
+                'chat_id' => $chat_id,
+                'text' => self::get_request($fields, $request),
+                'parse_mode' => 'HTML'
+            ];
+
+            if(Knife_Notifier_Robot::send_telegram($message)) {
+                set_theme_mod(self::$option_request, $request);
+                wp_send_json_success(__('Сообщение успешно отправлено', 'knife-theme'));
+            }
+        }
+
+        wp_send_json_error(__('Ошибка отправки сообщения', 'knife-theme'));
+    }
+
+
+    /**
+     * Create text from array
+     */
+    private static function get_request($fields, $request) {
+        $upload = wp_upload_dir();
+        $folder = '/questions/';
+
+        $file = sprintf("%d-%s.html", $request,
+            substr(md5(uniqid()), -8)
+        );
+
+        $path = $folder . $file;
+
+        if(!is_dir($upload['basedir'] . $folder) && !mkdir($upload['basedir'] . $folder)) {
+            wp_send_json_error(__('Не удалось сохранить заявку.', 'knife-theme'));
+        }
+
+        $content = self::create_request($fields, $request);
+
+        if(!file_put_contents($upload['basedir'] . $path, $content)) {
+            wp_send_json_error(__('Не удалось сохранить заявку.', 'knife-theme'));
+        }
+
+        $text = sprintf("%s\n\n%s \n%s \n\n%s",
+            sprintf(__('<strong>Добавлен новый вопрос #%d</strong>', 'knife-theme'), $request),
+            sprintf(__('Автор вопроса: %s', 'knife-theme'), esc_attr($fields['name'])),
+            sprintf(__('Контакты автора: %s', 'knife-theme'), esc_attr($fields['contact'])),
+            esc_url($upload['baseurl'] . $path)
+        );
+
+        return $text;
+    }
+
+
+    /**
+     * Create request by template
+     */
+    private static function create_request($fields, $request) {
+        extract($fields);
+
+        ob_start();
+
+        $include = get_template_directory() . '/core/include';
+        include_once($include . '/templates/ask-request.php');
+
+        return ob_get_clean();
     }
 
 

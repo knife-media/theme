@@ -120,10 +120,6 @@ class Knife_User_Club {
         // Update archive caption title
         add_filter('get_the_archive_title', [__CLASS__, 'update_archive_title'], 12);
 
-        // Notify on sendig to review
-        add_action('draft_to_pending', [__CLASS__, 'notify_review']);
-        add_action('auto-draft_to_pending', [__CLASS__, 'notify_review']);
-
         // Add club post type to archives
         add_action('pre_get_posts', [__CLASS__, 'update_archives'], 12);
 
@@ -213,6 +209,43 @@ class Knife_User_Club {
             'capability_type'       => ['club_item', 'club_items'],
             'map_meta_cap'          => true
         ]);
+    }
+
+
+    /**
+     * Add club settings to customizer
+     */
+    public static function add_customize_setting($wp_customize) {
+        $wp_customize->add_section('knife_club', [
+            'title' => __('Настройки клуба','knife-theme'),
+            'priority' => 200,
+        ]);
+
+        $wp_customize->add_setting(self::$option_chat);
+        $wp_customize->add_setting(self::$option_request);
+        $wp_customize->add_setting(self::$button_link);
+
+
+        $wp_customize->add_control(new WP_Customize_Control($wp_customize,
+            self::$option_chat, [
+                 'label' => __('ID чата в Telegram', 'knife-theme'),
+                 'section' => 'knife_club'
+             ]
+        ));
+
+        $wp_customize->add_control(new WP_Customize_Control($wp_customize,
+            self::$button_link, [
+                 'label' => __('Ссылка с кнопки в архиве', 'knife-theme'),
+                 'section' => 'knife_club'
+             ]
+        ));
+
+        $wp_customize->add_control(new WP_Customize_Control($wp_customize,
+            self::$option_request, [
+                 'label' => __('ID последней заявки', 'knife-theme'),
+                 'section' => 'knife_club'
+             ]
+        ));
     }
 
 
@@ -327,43 +360,6 @@ class Knife_User_Club {
 
 
     /**
-     * Add club settings to customizer
-     */
-    public static function add_customize_setting($wp_customize) {
-        $wp_customize->add_section('knife_club', [
-            'title' => __('Настройки клуба','knife-theme'),
-            'priority' => 200,
-        ]);
-
-        $wp_customize->add_setting(self::$option_chat);
-        $wp_customize->add_setting(self::$option_request);
-        $wp_customize->add_setting(self::$button_link);
-
-
-        $wp_customize->add_control(new WP_Customize_Control($wp_customize,
-            self::$option_chat, [
-                 'label' => __('ID чата в Telegram', 'knife-theme'),
-                 'section' => 'knife_club'
-             ]
-        ));
-
-        $wp_customize->add_control(new WP_Customize_Control($wp_customize,
-            self::$button_link, [
-                 'label' => __('Ссылка с кнопки в архиве', 'knife-theme'),
-                 'section' => 'knife_club'
-             ]
-        ));
-
-        $wp_customize->add_control(new WP_Customize_Control($wp_customize,
-            self::$option_request, [
-                 'label' => __('ID последней заявки', 'knife-theme'),
-                 'section' => 'knife_club'
-             ]
-        ));
-    }
-
-
-    /**
      * Prints checkbox in post publish action section
      */
     public static function print_checkbox() {
@@ -470,33 +466,17 @@ class Knife_User_Club {
 
         $options = [
             'ajaxurl' => esc_url(admin_url('admin-ajax.php')),
-            'warning' => __('Не удалось отправить форму. Попробуйте еще раз', 'knife-theme'),
+            'warning' => __('Не удалось отправить заявку. Попробуйте еще раз', 'knife-theme'),
             'button' => __('Отправить', 'knife-theme'),
+            'heading' => __('Отправить заявку', 'knife-theme'),
             'action' => self::$ajax_action,
             'fields' => $fields,
+            'styles' => esc_attr('form--club'),
             'nonce' => wp_create_nonce(self::$ajax_action)
         ];
 
         // add user form fields
-        wp_localize_script('knife-theme', 'knife_user_form', $options);
-    }
-
-
-    /**
-     * Notify on sending to review
-     */
-    public static function notify_review($post) {
-        $chat_id = get_theme_mod(self::$option_chat, '');
-
-        $message = [
-            'chat_id' => $chat_id,
-            'text' => self::get_review($post),
-            'parse_mode' => 'HTML'
-        ];
-
-        if(method_exists('Knife_Notifier_Robot', 'send_telegram')) {
-            Knife_Notifier_Robot::send_telegram($message);
-        }
+        wp_localize_script('knife-theme', 'knife_form_request', $options);
     }
 
 
@@ -574,23 +554,6 @@ class Knife_User_Club {
 
 
     /**
-     * Get review message for telegram bot
-     */
-    private static function get_review($post) {
-        $author = get_userdata($post->post_author);
-
-        $text = sprintf("%s\n\n%s \n%s \n\n%s",
-            __('<strong>В клуб добавлена новая запись на утверждение</strong>', 'knife-theme'),
-            sprintf(__('Автор: %s', 'knife-theme'), esc_attr($author->display_name)),
-            sprintf(__('Тема: %s', 'knife-theme'), esc_attr($post->post_title)),
-            esc_url(get_preview_post_link($post))
-        );
-
-        return $text;
-    }
-
-
-    /**
      * Create request by template
      */
     private static function create_request($fields, $request) {
@@ -599,7 +562,7 @@ class Knife_User_Club {
         ob_start();
 
         $include = get_template_directory() . '/core/include';
-        include_once($include . '/templates/user-request.php');
+        include_once($include . '/templates/club-request.php');
 
         return ob_get_clean();
     }

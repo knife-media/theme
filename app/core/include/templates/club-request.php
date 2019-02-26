@@ -68,15 +68,17 @@
             <header>
                 <?php
                     printf(
-                        __('<strong>Имя, род занятий:</strong><span>%s</span>', 'knife-theme'),
+                        __('<strong>Имя, род занятий:</strong> <span>%s</span>', 'knife-theme'),
                         sanitize_text_field($name)
                     );
+
                     printf(
-                        __('<strong>E-mail:</strong><span>%s</span>', 'knife-theme'),
+                        __('<strong>E-mail:</strong> <span>%s</span>', 'knife-theme'),
                         sanitize_text_field($email)
                     );
+
                     printf(
-                        __('<strong>Тема:</strong><span>%s</span>', 'knife-theme'),
+                        __('<strong>Тема:</strong> <span>%s</span>', 'knife-theme'),
                         sanitize_text_field($subject)
                     );
                 ?>

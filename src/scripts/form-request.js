@@ -2,11 +2,12 @@
  * User requests form
  *
  * @since 1.3
+ * @version 1.7
  */
 
 (function() {
   // Check user form options existing
-  if(typeof knife_user_form === 'undefined') {
+  if(typeof knife_form_request === 'undefined') {
     return false;
   }
 
@@ -46,17 +47,17 @@
 
   // Set local storage input value
   var setStorage = function(name, value) {
-    var storage = JSON.parse(localStorage.getItem('knife_user_form')) || {};
+    var storage = JSON.parse(localStorage.getItem('knife_form_request')) || {};
 
     storage[name] = value;
 
-    return localStorage.setItem('knife_user_form', JSON.stringify(storage));
+    return localStorage.setItem('knife_form_request', JSON.stringify(storage));
   }
 
 
   // Get local storage input value by name
   var getStorage = function(name) {
-    var storage = JSON.parse(localStorage.getItem('knife_user_form')) || {};
+    var storage = JSON.parse(localStorage.getItem('knife_form_request')) || {};
 
     return storage[name] || '';
   }
@@ -67,11 +68,6 @@
     var wrapper = document.createElement('div');
     wrapper.classList.add('form__control');
 
-    submit = document.createElement('button');
-    submit.classList.add('form__control-button', 'button');
-    submit.innerHTML = getOption('button', 'Send');
-    wrapper.appendChild(submit);
-
     loader = document.createElement('span');
     loader.classList.add('form__control-loader', 'icon');
     wrapper.appendChild(loader);
@@ -79,6 +75,11 @@
     notice = document.createElement('span');
     notice.classList.add('form__control-notice');
     wrapper.appendChild(notice);
+
+    submit = document.createElement('button');
+    submit.classList.add('form__control-button', 'button');
+    submit.innerHTML = getOption('button', 'Send');
+    wrapper.appendChild(submit);
 
     return form.appendChild(wrapper);
   }
@@ -117,7 +118,7 @@
     loader.classList.add('icon--done');
     notice.innerHTML = message;
 
-    localStorage.removeItem('knife_user_form');
+    localStorage.removeItem('knife_form_request');
 
     return form.reset();
   }
@@ -167,8 +168,8 @@
 
   // Get option from global settings
   var getOption = function(option, def) {
-    if(knife_user_form.hasOwnProperty(option)) {
-      return knife_user_form[option];
+    if(knife_form_request.hasOwnProperty(option)) {
+      return knife_form_request[option];
     }
 
     return def || '';
@@ -177,7 +178,7 @@
 
   //  Append fields to form
   var createForm = function(form) {
-    var fields = knife_user_form.fields;
+    var fields = knife_form_request.fields;
 
     for(var key in fields) {
       if(!fields.hasOwnProperty(key)) {
@@ -194,9 +195,24 @@
   var post = document.querySelector('.entry-content');
 
   var form = document.createElement('form');
-  form.classList.add('form', 'form--club');
+  form.classList.add('form');
   form.addEventListener('submit', submitForm);
   post.appendChild(form);
+
+  // Set custom form class
+  var styles = getOption('styles');
+  if(styles.length > 0) {
+    form.classList.add(styles);
+  }
+
+  // Set form title
+  var heading = getOption('heading');
+  if(heading.length > 0) {
+    var title = document.createElement('h3');
+    title.classList.add('form__heading');
+    title.textContent = heading;
+    form.appendChild(title);
+  }
 
   return createForm(form);
 })();
