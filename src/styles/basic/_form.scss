@@ -23,8 +23,8 @@
       margin-bottom: 0;
     }
 
-
     @media screen and (max-width: 767px) {
+      margin-top: 1.5rem;
       padding: 1rem;
     }
   }
@@ -69,7 +69,7 @@
 
       width: 100%;
       height: 10rem;
-      min-height: 4rem;
+      min-height: 4.25rem;
       padding: .625rem .75rem;
 
       font-size: 1rem;
@@ -110,6 +110,10 @@
         margin-left: 0;
         margin-bottom: 1rem;
         padding: 1rem;
+      }
+
+      @media screen and (max-width: 479px) {
+        text-align: left;
       }
     }
 
@@ -174,12 +178,16 @@
 
   &.form--ask {
     .form__field-textarea {
-      height: 4rem;
+      height: 4.25rem;
     }
 
     .form__control-button {
       padding-right: 4.5rem;
       background-color: $color-ask;
+
+      @media screen and (max-width: 767px) {
+        padding: 1rem;
+      }
     }
   }
 }
