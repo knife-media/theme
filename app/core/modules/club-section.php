@@ -494,7 +494,7 @@ class Knife_Club_Section {
             'heading' => __('Отправить заявку', 'knife-theme'),
             'action' => self::$ajax_request,
             'fields' => $fields,
-            'styles' => esc_attr('form--club'),
+            'classes' => ['form--club'],
             'nonce' => wp_create_nonce(self::$ajax_request)
         ];
 

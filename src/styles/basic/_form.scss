@@ -18,11 +18,11 @@
     & > * {
       max-width: 100%;
       width: $width-content;
-      margin: 0 auto .75rem;
+      margin: .75rem auto 0;
     }
 
-    & > :last-child {
-      margin-bottom: 0;
+    & > :first-child {
+      margin-top: 0;
     }
 
     @media screen and (max-width: 767px) {
@@ -92,6 +92,8 @@
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
+
+    animation: fade-in .5s forwards;
 
     .form__control-button {
       flex: 0 0 auto;
@@ -168,13 +170,13 @@
     }
   }
 
-  &.form--club {
-    .form__field-textarea {
-      height: 20rem;
+  &.form--fold {
+    .form__field, .form__control {
+      display: none;
     }
 
-    .form__control-button {
-      background-color: $color-club;
+    .form__field:first-of-type {
+      display: block;
     }
   }
 
@@ -190,6 +192,16 @@
       @media screen and (max-width: 767px) {
         padding: 1rem;
       }
+    }
+  }
+
+  &.form--club {
+    .form__field-textarea {
+      height: 20rem;
+    }
+
+    .form__control-button {
+      background-color: $color-club;
     }
   }
 }

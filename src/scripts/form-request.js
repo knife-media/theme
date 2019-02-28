@@ -1,8 +1,7 @@
 /**
  * User requests form
  *
- * @since 1.3
- * @version 1.7
+ * @since 1.7
  */
 
 (function() {
@@ -16,7 +15,7 @@
   var form, notice, loader, submit;
 
   // Create single form field
-  var createField = function(key, field, form) {
+  function createField(key, field, form) {
     if(typeof field.element === 'undefined') {
       return null;
     }
@@ -37,8 +36,14 @@
 
     element.value = getStorage(key);
 
+    // Set save storage event listener
     element.addEventListener('input', function(e) {
-      return setStorage(this.name, this.value);
+      setStorage(this.name, this.value);
+    });
+
+    // Set unfold event listener
+    element.addEventListener('focus', function(e) {
+      form.classList.remove('form--fold');
     });
 
     return form.appendChild(wrapper);
@@ -46,7 +51,7 @@
 
 
   // Set local storage input value
-  var setStorage = function(name, value) {
+  function setStorage(name, value) {
     var storage = JSON.parse(localStorage.getItem('knife_form_request')) || {};
 
     storage[name] = value;
@@ -56,7 +61,7 @@
 
 
   // Get local storage input value by name
-  var getStorage = function(name) {
+  function getStorage(name) {
     var storage = JSON.parse(localStorage.getItem('knife_form_request')) || {};
 
     return storage[name] || '';
@@ -64,7 +69,7 @@
 
 
   // Create form controls
-  var appendControls = function(form) {
+  function appendControls(form) {
     var wrapper = document.createElement('div');
     wrapper.classList.add('form__control');
 
@@ -86,7 +91,7 @@
 
 
   // Control event before and after request
-  var requestEvent = function(stop) {
+  function requestEvent(stop) {
     loader.classList.remove('icon--loop');
 
     if(typeof stop === 'undefined' || stop === true) {
@@ -103,7 +108,7 @@
 
 
   // Show form errors
-  var displayWarning = function(message) {
+  function displayWarning(message) {
     var message = message || getOption('warning', 'Request error');
 
     loader.classList.add('icon--alert');
@@ -112,7 +117,7 @@
 
 
   // Show form errors
-  var displaySuccess = function(message) {
+  function displaySuccess(message) {
     var message = message || '';
 
     loader.classList.add('icon--done');
@@ -125,7 +130,7 @@
 
 
   // Submit form event
-  var submitForm = function(e) {
+  function submitForm(e) {
     e.preventDefault();
 
     var formData = new FormData(form);
@@ -167,7 +172,7 @@
 
 
   // Get option from global settings
-  var getOption = function(option, def) {
+  function getOption(option, def) {
     if(knife_form_request.hasOwnProperty(option)) {
       return knife_form_request[option];
     }
@@ -176,8 +181,8 @@
   }
 
 
-  //  Append fields to form
-  var createForm = function(form) {
+  // Append fields to form
+  function createFields(form) {
     var fields = knife_form_request.fields;
 
     for(var key in fields) {
@@ -191,18 +196,17 @@
     return appendControls(form);
   }
 
+  // Create form element
+  var form = document.createElement('form');
+
   // Find post element
   var post = document.querySelector('.entry-content');
-
-  var form = document.createElement('form');
-  form.classList.add('form');
-  form.addEventListener('submit', submitForm);
   post.appendChild(form);
 
   // Set custom form class
-  var styles = getOption('styles');
-  if(styles.length > 0) {
-    form.classList.add(styles);
+  var classes = getOption('classes');
+  if(classes.length > 0) {
+    form.className = classes.join(' ');
   }
 
   // Set form title
@@ -214,5 +218,8 @@
     form.appendChild(title);
   }
 
-  return createForm(form);
+  form.classList.add('form');
+  form.addEventListener('submit', submitForm);
+
+  return createFields(form);
 })();

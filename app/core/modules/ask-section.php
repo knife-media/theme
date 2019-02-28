@@ -328,7 +328,7 @@ class Knife_Ask_Section {
                 'heading' => __('Вы можете задать свой вопрос журналу «Нож»', 'knife-theme'),
                 'action' => self::$ajax_request,
                 'fields' => $fields,
-                'styles' => esc_attr('form--ask'),
+                'classes' => ['form--ask', 'form--fold'],
                 'nonce' => wp_create_nonce(self::$ajax_request)
             ];
 
