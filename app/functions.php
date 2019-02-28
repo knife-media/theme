@@ -319,18 +319,6 @@ add_filter('wp_link_pages_link', function($link) {
 }, 10, 2);
 
 
-// Update authors contact info
-add_filter('user_contactmethods', function($contact) {
-    $contact['vkontakte'] = __('Ссылка на ВКонтакте', 'knife-theme');
-    $contact['facebook'] = __('Ссылка на Facebook', 'knife-theme');
-    $contact['telegram'] = __('Профиль Telegram', 'knife-theme');
-    $contact['instagram'] = __('Профиль Instagram', 'knife-theme');
-    $contact['twitter'] = __('Профиль Twitter', 'knife-theme');
-
-    return $contact;
-});
-
-
 // Rename default posts format
 add_filter('gettext_with_context', function($translation, $text, $context, $domain) {
     $names = [
@@ -504,6 +492,9 @@ require get_template_directory() . '/core/modules/access-screen.php';
 
 // Custom site meta and footer description
 require get_template_directory() . '/core/modules/site-meta.php';
+
+// Add custom author fields
+require get_template_directory() . '/core/modules/author-meta.php';
 
 // Customize default wordpress embed code
 require get_template_directory() . '/core/modules/embed-filters.php';
