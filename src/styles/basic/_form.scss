@@ -13,6 +13,8 @@
 
     background-color: $color-layer;
 
+    -webkit-font-smoothing: antialiased;
+
     & > * {
       max-width: 100%;
       width: $width-content;

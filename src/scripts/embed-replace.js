@@ -40,6 +40,7 @@
     var iframe = document.createElement('iframe');
     var loader = createLoader(embed);
 
+    iframe.setAttribute('allow', 'autoplay');
     iframe.setAttribute('frameborder', '0');
     iframe.setAttribute('src', embed.dataset.embed);
 

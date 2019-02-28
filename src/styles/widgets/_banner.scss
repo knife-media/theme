@@ -5,10 +5,13 @@
   width: 100%;
 
   .widget-banner__link {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: relative;
 
     width: 100%;
+    overflow: hidden;
 
     img {
       display: block;

@@ -20,7 +20,7 @@ class Knife_News_Manager {
      * @access  private
      * @var     string
      */
-    private static $post_type = 'news';
+    private static $news_slug = 'news';
 
     /**
      * News category id
@@ -52,12 +52,37 @@ class Knife_News_Manager {
         // Update related posts in sidebar
         add_action('pre_get_posts', [__CLASS__, 'update_related']);
 
+        // Append Yandex.News subscribe link to news
+        add_filter('the_content', [__CLASS__, 'append_yandex_link']);
+
         // Set news_id
         $category = get_category_by_slug('news');
 
         if(isset($category->term_id)) {
             self::$news_id = $category->term_id;
         }
+    }
+
+
+    /**
+     * Append Yandex.News subscribe link to news
+     */
+    public static function append_yandex_link($content) {
+        if(!is_singular('post') || !in_the_loop()) {
+            return $content;
+        }
+
+        if(!in_category(self::$news_id)) {
+            return $content;
+        }
+
+        $button_link = sprintf(
+            '<a class="promo promo--news" href="%2$s" target="_blank">%1$s</a>',
+            __('Читаете Яндекс.Новости? Добавьте нас там!', 'knife-theme'),
+            esc_url('https://knf.md/yandex-news')
+        );
+
+        return $content . $button_link;
     }
 
 
@@ -86,7 +111,7 @@ class Knife_News_Manager {
         if($query->get('query_type') === 'related') {
             $query->set('category__not_in', [self::$news_id]);
 
-            if(in_category(self::$post_type)) {
+            if(in_category(self::$news_slug)) {
                 $query->set('post__in', [0]);
             }
         }
@@ -107,7 +132,7 @@ class Knife_News_Manager {
      * Change posts_per_page for news category archive template
      */
     public static function update_count($query) {
-        if($query->is_main_query() && $query->is_category(self::$post_type)) {
+        if($query->is_main_query() && $query->is_category(self::$news_slug)) {
             $query->set('posts_per_page', 20);
         }
     }
@@ -120,7 +145,7 @@ class Knife_News_Manager {
         if($post_type === 'post') {
             $values = [
                 __('Все записи', 'knife-theme') => 0,
-                __('Только новости', 'knife-theme') => self::$post_type,
+                __('Только новости', 'knife-theme') => self::$news_slug,
                 __('Без новостей', 'knife-theme') => 'other'
             ];
 
@@ -153,7 +178,7 @@ class Knife_News_Manager {
 
         $classics = get_category_by_slug('classics');
 
-        if($_GET['cat'] === self::$post_type) {
+        if($_GET['cat'] === self::$news_slug) {
             $query->query_vars['cat'] = self::$news_id;
         }
 
