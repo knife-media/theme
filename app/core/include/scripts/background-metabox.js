@@ -20,15 +20,17 @@ jQuery(document).ready(function($) {
   function toggleBackground() {
     var input = box.find('input.image').val();
 
-    box.find('img').remove();
+    box.find('select.size').attr('disabled', 'disabled');
     box.find('button.remove').attr('disabled', 'disabled');
-    box.find('select').attr('disabled', 'disabled');
+
+    // Remove image if exists
+    box.find('img').remove();
 
     if(input && input.length > 1) {
       $('<img />', {src: input}).prependTo(box).css('max-width', '100%');
 
       box.find('button.remove').removeAttr('disabled');
-      box.find('select').removeAttr('disabled');
+      box.find('select.size').removeAttr('disabled');
     }
   }
 

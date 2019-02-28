@@ -23,8 +23,8 @@
         <button class="button remove right" type="button" disabled><?php _e('Удалить', 'knife-theme'); ?></button>
     </p>
 
-    <p style="margin-top: 10px;">
-        <select name="<?php echo esc_attr(self::$post_meta); ?>[size]" style="width: 100%;" disabled>
+    <p style="margin-bottom: 0;">
+        <select class="size" name="<?php echo esc_attr(self::$post_meta); ?>[size]" style="width: 100%;" disabled>
         <?php
             foreach($sizes as $name => $title) {
                 printf('<option value="%1$s"%3$s>%2$s</option>', $name, $title, selected($background['size'], $name, false));

@@ -99,16 +99,18 @@ class Knife_Poster_Templates {
             require(get_template_directory() . '/core/classes/phpimage.class.php');
         }
 
-        // Check upload folder
         $upload = wp_upload_dir();
-        if(!wp_is_writable($upload['basedir']) && !mkdir($upload['basedir'])) {
-            return new WP_Error('upload', __('Проверьте права на запись', 'knife-theme'));
-        }
 
+        // Merge upload urls with options
         $options = array_merge($options, [
             'baseurl' => $upload['baseurl'] . $folder,
             'basedir' => $upload['basedir'] . $folder
         ]);
+
+        // Check upload folder
+        if(!wp_is_writable($options['basedir']) && !mkdir($options['basedir'])) {
+            return new WP_Error('upload', __('Проверьте права на запись', 'knife-theme'));
+        }
 
         // Check post id existance
         if(absint($options['post_id']) === 0) {

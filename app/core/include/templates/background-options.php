@@ -20,7 +20,7 @@
     </th>
 
     <td>
-        <div class="knife-background-color">
+        <div id="knife-background-color">
             <?php
                 printf('<input class="color" type="text" name="%s[color]" value="%s">',
                     esc_attr(self::$term_meta), sanitize_hex_color($background['color'])
@@ -36,7 +36,7 @@
     </th>
 
     <td>
-        <div class="knife-background-image" style="max-width: 300px">
+        <div id="knife-background-image" style="max-width: 300px;">
             <?php
                 printf('<input class="image" type="hidden" name="%s[image]" value="%s">',
                     esc_attr(self::$term_meta), esc_url($background['image'])
@@ -49,7 +49,7 @@
             </p>
 
             <p style="margin-top: 10px;">
-                <select name="<?php echo esc_attr(self::$term_meta); ?>[size]" style="width: 100%;" disabled>
+                <select class="size" name="<?php echo esc_attr(self::$term_meta); ?>[size]" style="width: 100%;" disabled>
                 <?php
                     foreach($sizes as $name => $title) {
                         printf('<option value="%1$s"%3$s>%2$s</option>', $name, $title, selected($background['size'], $name, false));

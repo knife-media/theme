@@ -359,10 +359,6 @@ jQuery(document).ready(function($) {
       var selection = frame.state().get('selection').first().toJSON();
 
       // Set hidden inputs values
-      if(typeof media !== 'undefined') {
-        poster.find(media).val(selection.url);
-      }
-
       poster.find(attachment).val(selection.id);
 
       // Set thumbnail as selection if exists

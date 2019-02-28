@@ -33,11 +33,11 @@ class Knife_Select_Links {
 
 
    /**
-    * Ajax action
-    *
-    * @access  private
-    * @var     string
-    */
+     * Ajax action
+     *
+     * @access  private
+     * @var     string
+     */
     private static $ajax_action = 'knife-select-title';
 
 

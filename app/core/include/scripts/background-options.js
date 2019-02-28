@@ -3,8 +3,8 @@ jQuery(document).ready(function($) {
     return false;
   }
 
-  var image = $('.knife-background-image');
-  var color = $('.knife-background-color');
+  var image = $('#knife-background-image');
+  var color = $('#knife-background-color');
 
 
   /**
@@ -21,15 +21,17 @@ jQuery(document).ready(function($) {
   function toggleBackground() {
     var input = image.find('input.image').val();
 
-    image.find('img').remove();
+    image.find('select.size').attr('disabled', 'disabled');
     image.find('button.remove').attr('disabled', 'disabled');
-    image.find('select').attr('disabled', 'disabled');
+
+    // Remove image if exists
+    image.find('img').remove();
 
     if(input && input.length > 1) {
       $('<img />', {src: input}).prependTo(image).css('max-width', '100%');
 
       image.find('button.remove').removeAttr('disabled');
-      image.find('select').removeAttr('disabled');
+      image.find('select.size').removeAttr('disabled');
     }
   }
 

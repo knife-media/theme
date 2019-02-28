@@ -15,11 +15,10 @@ if (!defined('WPINC')) {
 }
 
 
-class Knife_User_Club {
+class Knife_Club_Section {
     /**
      * Unique slug using for custom post type register and url
      *
-     * @since   1.3
      * @access  private
      * @var     string
      */
@@ -27,13 +26,12 @@ class Knife_User_Club {
 
 
    /**
-    * User form meta
+    * Club form meta
     *
-    * @since   1.3
     * @access  private
     * @var     string
     */
-    private static $meta_form = '_knife-user-form';
+    private static $meta_form = '_knife-club-form';
 
 
     /**
@@ -69,11 +67,11 @@ class Knife_User_Club {
    /**
     * Ajax action
     *
-    * @since   1.3
+    * @since   1.7
     * @access  private
     * @var     string
     */
-    private static $ajax_action = 'knife-user-form';
+    private static $ajax_request = 'knife-club-request';
 
 
     /**
@@ -83,13 +81,11 @@ class Knife_User_Club {
      * @access  private
      * @var     string
      */
-    private static $metabox_nonce = 'knife-user-form-nonce';
+    private static $metabox_nonce = 'knife-club-form-nonce';
 
 
     /**
      * Use this method instead of constructor to avoid multiple hook setting
-     *
-     * @since 1.3
      */
     public static function load_module() {
         // Register club post type
@@ -105,8 +101,8 @@ class Knife_User_Club {
         add_filter('wp_enqueue_scripts', [__CLASS__, 'inject_object'], 12);
 
         // Send user form with ajax
-        add_action('wp_ajax_' . self::$ajax_action, [__CLASS__, 'submit_request']);
-        add_action('wp_ajax_nopriv_' . self::$ajax_action, [__CLASS__, 'submit_request']);
+        add_action('wp_ajax_' . self::$ajax_request, [__CLASS__, 'submit_request']);
+        add_action('wp_ajax_nopriv_' . self::$ajax_request, [__CLASS__, 'submit_request']);
 
         // Add club settings to customizer
         add_action('customize_register', [__CLASS__, 'add_customize_setting']);
@@ -286,31 +282,58 @@ class Knife_User_Club {
 
     /**
      * Insert link to author on single club post
-     *
-     * @version 1.4
      */
     public static function insert_author_link($content) {
         if(!is_singular(self::$post_type) || !in_the_loop()) {
             return $content;
         }
 
-        if($custom_url = get_the_author_meta('user_url')) {
-            $author_url = sprintf('<a class="author author--club" href="%3$s" target="_blank"><strong>%1$s </strong>%2$s</a>',
-                get_the_author(),
-                esc_html(get_the_author_meta('description')),
-                esc_url($custom_url)
-            );
+        $user_id = get_the_author_meta('ID');
 
-            return $author_url . $content;
-        }
-
-        $author_url = sprintf('<a class="author author--club" href="%3$s"><strong>%1$s </strong>%2$s</a>',
-            get_the_author(),
-            esc_html(get_the_author_meta('description')),
-            esc_url(get_author_posts_url(get_the_author_meta('ID')))
+        // Allowed description tags
+        $allowed = array(
+            'a' => [
+                'href' => true,
+                'target' => true,
+                'title' => true
+            ]
         );
 
-        return $author_url . $content;
+        $author = [];
+
+        // Add author name with link
+        $author[] = sprintf(
+            '<div class="author__name"><strong>%s</strong>%s</div>',
+
+            sprintf(
+                __('Автор <a href="%1$s">%2$s</a>', 'knife-theme'),
+                esc_url(get_author_posts_url($user_id)),
+                esc_html(get_the_author())
+            ),
+
+            sprintf(
+                '<p class="author__description">%s</p>',
+                wp_kses(get_the_author_meta('description'), $allowed)
+            )
+        );
+
+        // Add photo if exists
+        $photo = get_user_meta($user_id, '_knife-user-photo', true);
+
+        if(strlen($photo) > 0) {
+            $author[] = sprintf(
+                '<img class="author__photo" src="%2$s" alt="%1$s">',
+                esc_html(get_the_author()),
+                esc_url($photo)
+            );
+        }
+
+        $output = sprintf(
+            '<div class="author author--ask">%s</div>',
+            implode("\n", $author)
+        );
+
+        return $output . $content;
     }
 
 
@@ -469,10 +492,10 @@ class Knife_User_Club {
             'warning' => __('Не удалось отправить заявку. Попробуйте еще раз', 'knife-theme'),
             'button' => __('Отправить', 'knife-theme'),
             'heading' => __('Отправить заявку', 'knife-theme'),
-            'action' => self::$ajax_action,
+            'action' => self::$ajax_request,
             'fields' => $fields,
             'styles' => esc_attr('form--club'),
-            'nonce' => wp_create_nonce(self::$ajax_action)
+            'nonce' => wp_create_nonce(self::$ajax_request)
         ];
 
         // add user form fields
@@ -484,7 +507,7 @@ class Knife_User_Club {
      * Send user form data
      */
     public static function submit_request() {
-        if(!check_ajax_referer(self::$ajax_action, 'nonce', false)) {
+        if(!check_ajax_referer(self::$ajax_request, 'nonce', false)) {
             wp_send_json_error(__('Ошибка безопасности. Попробуйте еще раз', 'knife-theme'));
         }
 
@@ -572,4 +595,4 @@ class Knife_User_Club {
 /**
  * Load module
  */
-Knife_User_Club::load_module();
+Knife_Club_Section::load_module();

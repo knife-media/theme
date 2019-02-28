@@ -23,7 +23,7 @@ class Knife_Ask_Section {
 
 
     /**
-     * Unique meta to store generator options
+     * Unique meta to store ask options
      *
      * @access  private
      * @var     string
@@ -53,20 +53,19 @@ class Knife_Ask_Section {
     /**
      * Unique option key to store current question id
      *
-     * @since   1.7
      * @access  private
      * @var     string
      */
     private static $option_request = 'knife_ask_request_id';
 
 
-   /**
-    * Ajax action
-    *
-    * @access  private
-    * @var     string
-    */
-    private static $ajax_action = 'knife-ask-form';
+    /**
+     * Unique option key to store default ask post thumbnail
+     *
+     * @access  private
+     * @var     string
+     */
+    private static $option_thumbnail = 'knife_ask_thumbnail';
 
 
     /**
@@ -76,6 +75,15 @@ class Knife_Ask_Section {
      * @var     string
      */
     private static $metabox_nonce = 'knife-ask-nonce';
+
+
+   /**
+    * Send form ajax action
+    *
+    * @access  private
+    * @var     string
+    */
+    private static $ajax_request = 'knife-ask-request';
 
 
     /**
@@ -91,12 +99,15 @@ class Knife_Ask_Section {
         // Save metabox
         add_action('save_post', [__CLASS__, 'save_metabox']);
 
+        // Set default thumbnail on save post
+        add_action('save_post', [__CLASS__, 'set_thumbnail']);
+
         // Append ask form to content
         add_filter('wp_enqueue_scripts', [__CLASS__, 'inject_object'], 12);
 
         // Send ask form with ajax
-        add_action('wp_ajax_' . self::$ajax_action, [__CLASS__, 'submit_request']);
-        add_action('wp_ajax_nopriv_' . self::$ajax_action, [__CLASS__, 'submit_request']);
+        add_action('wp_ajax_' . self::$ajax_request, [__CLASS__, 'submit_request']);
+        add_action('wp_ajax_nopriv_' . self::$ajax_request, [__CLASS__, 'submit_request']);
 
         // Add ask settings to customizer
         add_action('customize_register', [__CLASS__, 'add_customize_setting']);
@@ -112,6 +123,12 @@ class Knife_Ask_Section {
 
         // Change posts count on ask archive
         add_action('pre_get_posts', [__CLASS__, 'update_count']);
+
+        // Add ask post type to archives
+        add_action('pre_get_posts', [__CLASS__, 'update_archives'], 12);
+
+        // Prepend author meta to content
+        add_filter('the_content', [__CLASS__, 'insert_author_link']);
     }
 
 
@@ -137,7 +154,7 @@ class Knife_Ask_Section {
             ],
             'label'                 => __('Вопросы', 'knife-theme'),
             'description'           => __('Раздел с вопросами пользователей', 'knife-theme'),
-            'supports'              => ['title', 'editor', 'thumbnail', 'revisions', 'excerpt', 'author', 'comments'],
+            'supports'              => ['title', 'editor', 'revisions', 'excerpt', 'author', 'comments'],
             'hierarchical'          => false,
             'public'                => true,
             'show_ui'               => true,
@@ -164,8 +181,14 @@ class Knife_Ask_Section {
             'priority' => 250,
         ]);
 
+        // Chat setting
         $wp_customize->add_setting(self::$option_chat);
+
+        // Last request id setting
         $wp_customize->add_setting(self::$option_request);
+
+        // Thumbnail setting
+        $wp_customize->add_setting(self::$option_thumbnail);
 
 
         $wp_customize->add_control(new WP_Customize_Control($wp_customize,
@@ -180,6 +203,13 @@ class Knife_Ask_Section {
                  'label' => __('ID последнего вопроса', 'knife-theme'),
                  'section' => 'knife_ask'
              ]
+        ));
+
+        $wp_customize->add_control(new WP_Customize_Media_Control($wp_customize,
+            self::$option_thumbnail, [
+                'label' => __('Обложка по умолчанию', 'knife-theme'),
+                'section' => 'knife_ask'
+            ]
         ));
     }
 
@@ -240,6 +270,30 @@ class Knife_Ask_Section {
 
 
     /**
+     * Set default thumbnail on save post
+     */
+    public static function set_thumbnail($post_id) {
+        if(get_post_type($post_id) !== self::$post_type) {
+            return;
+        }
+
+        if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+            return;
+        }
+
+        if(!current_user_can('edit_post', $post_id)) {
+            return;
+        }
+
+        $thumbnail_id = get_theme_mod(self::$option_thumbnail, '');
+
+        if($thumbnail_id) {
+            update_post_meta($post_id, '_thumbnail_id', $thumbnail_id);
+        }
+    }
+
+
+    /**
      * Append user form to page content
      */
     public static function inject_object() {
@@ -272,10 +326,10 @@ class Knife_Ask_Section {
                 'warning' => __('Не удалось отправить вопрос', 'knife-theme'),
                 'button' => __('Спросить у специалиста', 'knife-theme'),
                 'heading' => __('Вы можете задать свой вопрос журналу «Нож»', 'knife-theme'),
-                'action' => self::$ajax_action,
+                'action' => self::$ajax_request,
                 'fields' => $fields,
                 'styles' => esc_attr('form--ask'),
-                'nonce' => wp_create_nonce(self::$ajax_action)
+                'nonce' => wp_create_nonce(self::$ajax_request)
             ];
 
             // add ask form fields
@@ -288,7 +342,7 @@ class Knife_Ask_Section {
      * Send user form data
      */
     public static function submit_request() {
-        if(!check_ajax_referer(self::$ajax_action, 'nonce', false)) {
+        if(!check_ajax_referer(self::$ajax_request, 'nonce', false)) {
             wp_send_json_error(__('Ошибка безопасности. Попробуйте еще раз', 'knife-theme'));
         }
 
@@ -373,6 +427,63 @@ class Knife_Ask_Section {
 
 
     /**
+     * Insert link to author on single ask post
+     */
+    public static function insert_author_link($content) {
+        if(!is_singular(self::$post_type) || !in_the_loop()) {
+            return $content;
+        }
+
+        $author = [];
+
+        // Allowed description tags
+        $allowed = array(
+            'a' => [
+                'href' => true,
+                'target' => true,
+            ]
+        );
+
+        // Get current post author id
+        $user_id = get_the_author_meta('ID');
+
+        // Add author name with link
+        $author[] = sprintf(
+            '<div class="author__name"><strong>%s</strong>%s</div>',
+
+            sprintf(
+                __('Отвечает <a href="%1$s">%2$s</a>', 'knife-theme'),
+                esc_url(get_author_posts_url($user_id)),
+                esc_html(get_the_author())
+            ),
+
+            sprintf(
+                '<p class="author__description">%s</p>',
+                wp_kses(get_the_author_meta('description'), $allowed)
+            )
+        );
+
+        // Add photo if exists
+        $photo = get_user_meta($user_id, '_knife-user-photo', true);
+
+        if(strlen($photo) > 0) {
+            $author[] = sprintf(
+                '<img class="author__photo" src="%2$s" alt="%1$s">',
+                esc_html(get_the_author()),
+                esc_url($photo)
+            );
+        }
+
+        $output = sprintf(
+            '<div class="author author--ask">%s</div>',
+            implode("\n", $author)
+        );
+
+        return $output . $content;
+    }
+
+
+    /**
      * Include archive ask template
      */
     public static function include_archive($template) {
@@ -421,6 +532,28 @@ class Knife_Ask_Section {
     public static function update_count($query) {
         if($query->is_main_query() && $query->is_post_type_archive(self::$post_type)) {
             $query->set('posts_per_page', 16);
+        }
+    }
+
+
+    /**
+     * Append ask posts to author and tag archives
+     */
+    public static function update_archives($query) {
+        if(is_admin() || !$query->is_main_query()) {
+            return false;
+        }
+
+        if($query->is_tag() || $query->is_author()) {
+            $types = $query->get('post_type');
+
+            if(!is_array($types)) {
+                $types = ['post'];
+            }
+
+            $types[] = self::$post_type;
+
+            $query->set('post_type', $types);
         }
     }
 }

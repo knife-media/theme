@@ -15,9 +15,9 @@
         </th>
 
         <td>
-            <div class="knife-author-photo" style="max-width: 150px">
+            <div id="knife-user-photo" style="max-width: 150px;">
                 <?php
-                    printf('<input type="hidden" name="%s" value="%s">',
+                    printf('<input class="photo" type="hidden" name="%s" value="%s">',
                         esc_attr(self::$user_photo), esc_url($photo)
                     );
                 ?>
@@ -25,6 +25,8 @@
                 <p>
                     <button class="button select" type="button"><?php _e('Загрузить', 'knife-theme'); ?></button>
                     <button class="button remove hidden" type="button"><?php _e('Удалить', 'knife-theme'); ?></button>
+
+                    <span class="spinner"></span>
                 </p>
             </div>
         </td>

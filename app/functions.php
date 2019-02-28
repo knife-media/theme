@@ -464,7 +464,7 @@ require get_template_directory() . '/core/modules/menu-upgrade.php';
 require get_template_directory() . '/core/modules/notifier-robot.php';
 
 // User generated blogs
-require get_template_directory() . '/core/modules/user-club.php';
+require get_template_directory() . '/core/modules/club-section.php';
 
 // News category
 require get_template_directory() . '/core/modules/news-manager.php';
@@ -496,8 +496,8 @@ require get_template_directory() . '/core/modules/access-screen.php';
 // Custom site meta and footer description
 require get_template_directory() . '/core/modules/site-meta.php';
 
-// Add custom author fields
-require get_template_directory() . '/core/modules/author-meta.php';
+// Add custom user fields
+require get_template_directory() . '/core/modules/user-meta.php';
 
 // Customize default wordpress embed code
 require get_template_directory() . '/core/modules/embed-filters.php';
