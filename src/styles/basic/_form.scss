@@ -46,6 +46,7 @@
     .form__field-input {
       display: block;
       outline: none;
+      appearance: none;
 
       width: 100%;
       padding: .625rem .75rem;
@@ -61,12 +62,16 @@
       &::placeholder {
         color: darken($color-white, 25);
       }
+
+      @media screen and (max-width: 767px) {
+        font-size: .9375rem;
+      }
     }
 
     .form__field-textarea {
       display: block;
       outline: none;
-
+      appearance: none;
       resize: vertical;
 
       width: 100%;
@@ -84,6 +89,10 @@
 
       &::placeholder {
         color: darken($color-white, 25);
+      }
+
+      @media screen and (max-width: 767px) {
+        font-size: .9375rem;
       }
     }
   }

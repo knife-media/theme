@@ -30,13 +30,13 @@ time, mark, audio, video, input, select, textarea, button {
 
 
 a {
+  cursor: pointer;
+  outline: none;
+
   color: inherit;
   text-decoration: none;
 
   transition: filter .25s, border .125s;
-
-  cursor: pointer;
-  outline: none;
 
   time {
     cursor: pointer;
@@ -44,11 +44,12 @@ a {
 }
 
 button {
+  cursor: pointer;
+  outline: none;
+
   background-color: transparent;
   transition: .25s;
 
-  cursor: pointer;
-  outline: none;
 
   &[disabled] {
     pointer-events: none;
@@ -56,9 +57,10 @@ button {
 }
 
 input {
-  background-color: transparent;
-
   outline: none;
+
+  box-shadow: none;
+  background-color: transparent;
 }
 
 time {
