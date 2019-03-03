@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.5
+ * @version 1.7
  */
 
 ?><!DOCTYPE html>
@@ -63,6 +63,16 @@
 
             <nav class="header__navbar navbar">
                 <?php
+                    if(has_nav_menu('mobile')) :
+                        wp_nav_menu([
+                            'theme_location' => 'mobile',
+                            'depth' => 1,
+                            'echo' => true,
+                            'items_wrap' => '<ul class="menu menu--mobile">%3$s</ul>',
+                            'container_class' => 'navbar__mobile'
+                        ]);
+                    endif;
+
                     if(has_nav_menu('main')) :
                         wp_nav_menu([
                             'theme_location' => 'main',

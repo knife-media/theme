@@ -6,6 +6,7 @@
  *
  * @package knife-theme
  * @since 1.4
+ * @version 1.7
  */
 
 
@@ -22,14 +23,8 @@ class Knife_Menu_Upgrade {
         // Register theme menus
         add_action('after_setup_theme', [__CLASS__, 'register_menus']);
 
-        // Add selector menu metabox
-        add_action('admin_head-nav-menus.php', [__CLASS__, 'add_menu_metabox']);
-
         // Change default menu items class
         add_filter('nav_menu_css_class', [__CLASS__, 'update_css_classes'], 10, 3);
-
-        // Remove menu ids
-        add_filter('nav_menu_item_id', '__return_empty_string');
 
         // Add class to menu item link
         add_filter('nav_menu_link_attributes', [__CLASS__, 'update_link_attributes'], 10, 3);
@@ -37,8 +32,8 @@ class Knife_Menu_Upgrade {
         // We have to change titles to icons in social menu
         add_filter('nav_menu_item_title', [__CLASS__, 'update_item_title'], 10, 3);
 
-        // Remove separator menu item link
-        add_filter('walker_nav_menu_start_el', [__CLASS__, 'remove_separator_link'], 10, 2);
+        // Remove menu ids
+        add_filter('nav_menu_item_id', '__return_empty_string');
     }
 
 
@@ -48,6 +43,7 @@ class Knife_Menu_Upgrade {
     public static function register_menus() {
         register_nav_menus([
             'main' => __('Верхнее меню', 'knife-theme'),
+            'mobile' => __('Дополнительное меню', 'knife-theme'),
             'footer' => __('Нижнее меню', 'knife-theme'),
             'social' => __('Меню социальных ссылок', 'knife-theme')
         ]);
@@ -59,6 +55,10 @@ class Knife_Menu_Upgrade {
      */
     public static function update_link_attributes($atts, $item, $args) {
         if($args->theme_location === 'main') {
+            $atts['class'] = 'menu__item-link';
+        }
+
+        if($args->theme_location === 'mobile') {
             $atts['class'] = 'menu__item-link';
         }
 
@@ -97,6 +97,10 @@ class Knife_Menu_Upgrade {
             $classes[] = 'menu__item';
         }
 
+        if($args->theme_location === 'mobile') {
+            $classes[] = 'menu__item';
+        }
+
         if($args->theme_location === 'footer') {
             $classes[] = 'footer__nav-item';
         }
@@ -112,57 +116,6 @@ class Knife_Menu_Upgrade {
         }
 
         return $classes;
-    }
-
-
-    /**
-     * Remove separator item menu link
-     */
-    public static function remove_separator_link($item_output, $item) {
-        if($item->type === 'separator') {
-            $item_output = '';
-        }
-
-        return $item_output;
-    }
-
-    /**
-     * Add separator menu metabox
-     */
-    public static function add_menu_metabox() {
-        add_meta_box('separator-metabox', __('Разделители', 'knife-theme'), [__CLASS__, 'display_menu_metabox'], 'nav-menus', 'side', 'default');
-    }
-
-
-    /**
-     * Render separator metabox
-     */
-    public static function display_menu_metabox() {
-        global $nav_menu_selected_id;
-
-        $walker = new Walker_Nav_Menu_Checklist([]);
-
-        $separator = (object) [
-            'ID' => 1,
-            'db_id' => 0,
-            'menu_item_parent' => 0,
-            'object_id' => 1,
-            'post_parent' => 0,
-            'type' => 'separator',
-            'object' => 'separator',
-            'type_label' => '',
-            'title' => __('Мобильный разделитель', 'knife-theme'),
-            'url' => '#',
-            'target' => '',
-            'attr_title' => '',
-            'description' => '',
-            'classes' => ['--separator'],
-            'xfn' => '',
-        ];
-
-        $include = get_template_directory() . '/core/include';
-
-        include_once($include . '/templates/menu-metabox.php');
     }
 }
 

@@ -36,6 +36,15 @@
     }
   }
 
+  .navbar__mobile {
+    display: none;
+
+    @media screen and (max-width: 1023px) {
+      display: flex;
+      margin-bottom: .5rem;
+    }
+  }
+
   @media screen and (max-width: 1023px) {
     display: flex;
     flex-flow: column nowrap;
