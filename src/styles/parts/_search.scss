@@ -107,17 +107,3 @@
     visibility: visible;
   }
 }
-
-body.is-search {
-  position: fixed;
-  left: 0;
-
-  width: 100%;
-  overflow: hidden;
-
-  #wpadminbar {
-    @media screen and (max-width: 600px) {
-      top: -46px;
-    }
-  }
-}

@@ -434,6 +434,12 @@ add_action('admin_menu', function() {
 });
 
 
+// Remove admin bar styles from head
+add_action('get_header', function() {
+    remove_action('wp_head', '_admin_bar_bump_cb');
+});
+
+
 // Change wp_die errors status code for logged-in users
 add_filter('wp_die_handler', function($handler) {
     if(is_user_logged_in()) {

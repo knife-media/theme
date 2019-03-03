@@ -462,13 +462,7 @@
     }
   }
 
-  @media screen and (max-width: 1023px) {
-    min-height: 24rem;
-  }
-}
-
-body.is-adminbar {
-  .glide {
+  .is-adminbar & {
     height: calc(100vh - 6rem);
 
     @media screen and (max-width: 1023px) {
@@ -478,5 +472,9 @@ body.is-adminbar {
     @media screen and (max-width: 782px) {
       height: calc(100vh - 6.125rem);
     }
+  }
+
+  @media screen and (max-width: 1023px) {
+    min-height: 24rem;
   }
 }
