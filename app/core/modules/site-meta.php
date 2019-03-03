@@ -34,8 +34,9 @@ class Knife_Site_Meta {
         add_action('wp_head', [__CLASS__, 'add_twitter_tags'], 5);
         add_action('wp_head', [__CLASS__, 'add_facebook_tags'], 5);
         add_action('wp_head', [__CLASS__, 'add_vk_tags'], 5);
+        add_action('wp_head', [__CLASS__, 'add_yandex_meta'], 6);
 
-        add_action('wp_head', [__CLASS__, 'add_mediator_meta'], 6);
+        add_action('wp_head', [__CLASS__, 'add_mediator_meta'], 7);
 
         // Add custom theme lang attributes
         add_filter('language_attributes', [__CLASS__, 'add_xmlns']);
@@ -97,9 +98,7 @@ class Knife_Site_Meta {
             esc_url($path . '/icon-180.png')
         );
 
-        foreach($meta as $tag) {
-            echo $tag . PHP_EOL;
-        }
+        return self::print_tags($meta);
     }
 
 
@@ -172,6 +171,24 @@ class Knife_Site_Meta {
                 );
             }
         }
+
+        return self::print_tags($meta);
+    }
+
+
+    /**
+     * Add yandex browser meta
+     *
+     * @link https://tech.yandex.ru/browser/tableau/doc/dg/concepts/about-docpage/
+     */
+    public static function add_yandex_meta() {
+        $meta = [];
+        $path = get_template_directory_uri() . '/assets/images';
+
+        $meta[] = sprintf(
+            '<meta name="yandex-tableau-widget" content="%s, color=#002349">',
+            esc_url($path . '/logo-feature.png')
+        );
 
         return self::print_tags($meta);
     }
