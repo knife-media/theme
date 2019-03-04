@@ -94,7 +94,7 @@ class Knife_Ask_Section {
         add_action('init', [__CLASS__, 'register_type']);
 
         // Add ask author metabox
-        add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
+        add_action('add_meta_boxes', [__CLASS__, 'add_metabox'], 9);
 
         // Save metabox
         add_action('save_post', [__CLASS__, 'save_metabox']);
@@ -218,7 +218,7 @@ class Knife_Ask_Section {
      * Add ask author metabox
      */
     public static function add_metabox() {
-        add_meta_box('knife-ask-metabox', __('Настройка вопроса'), [__CLASS__, 'display_metabox'], self::$post_type, 'side', 'high');
+        add_meta_box('knife-ask-metabox', __('Настройка вопроса'), [__CLASS__, 'display_metabox'], self::$post_type, 'side', 'default');
     }
 
 
