@@ -10,6 +10,14 @@
   line-height: 1.5;
   color: $color-white;
 
+  a {
+    color: $color-light;
+
+    &:hover {
+      filter: brightness(120%);
+    }
+  }
+
   @media screen and (max-width: 1023px) {
     font-size: 1.25rem;
   }

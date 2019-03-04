@@ -91,7 +91,7 @@ class Knife_User_Meta {
      * @link https://core.trac.wordpress.org/ticket/12056
      */
     public static function update_user_description($description) {
-        $description = str_replace('<a', '<a target="_blank"', $description);
+        $description = str_replace('<a', '<a target="_blank" rel="noopener"', $description);
 
         return $description;
     }

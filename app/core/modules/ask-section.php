@@ -200,7 +200,7 @@ class Knife_Ask_Section {
 
         $wp_customize->add_control(new WP_Customize_Control($wp_customize,
             self::$option_request, [
-                 'label' => __('ID последнего вопроса', 'knife-theme'),
+                 'label' => __('ID последней заявки', 'knife-theme'),
                  'section' => 'knife_ask'
              ]
         ));
