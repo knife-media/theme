@@ -302,7 +302,7 @@ class Knife_Ask_Section {
                 'text' => [
                     'element' => 'textarea',
                     'required' => '',
-                    'placeholder' => __('А вдруг квантовая физика — выдумка гуманитарев?', 'knife-theme')
+                    'placeholder' => __('А вдруг квантовая физика — выдумка гуманитариев?', 'knife-theme')
                 ],
 
                 'name' => [
