@@ -359,8 +359,8 @@
 
                     <div class="result__image-footer">
                         <?php
-                            if(method_exists('Knife_Poster_Templates', 'get_select')) {
-                                Knife_Poster_Templates::get_select([
+                            if(method_exists('Knife_Poster_Templates', 'print_select')) {
+                                Knife_Poster_Templates::print_select([
                                     'attributes' => [
                                         'class' => 'result__image-template',
                                         'data-result' => 'template'
