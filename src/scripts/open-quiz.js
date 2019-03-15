@@ -2,6 +2,7 @@
  * Quiz post type front-end handler
  *
  * @since 1.7
+ * @version 1.8
  */
 
 (function() {
@@ -325,6 +326,16 @@
   (function() {
     if(typeof knife_quiz_results !== 'object') {
       knife_quiz_results = {};
+    }
+  })();
+
+
+  /**
+   * Set quiz predefined options
+   */
+  (function() {
+    if(knife_quiz_options.hasOwnProperty('center') && knife_quiz_options.center) {
+      quiz.classList.add('entry-quiz--center');
     }
   })();
 

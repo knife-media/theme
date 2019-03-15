@@ -40,11 +40,6 @@
                 );
 
                 printf(
-                    '<p class="manage__title">%s</p>',
-                    __('Пареметры ответов', 'knife-theme')
-                );
-
-                printf(
                     '<p class="manage__check"><label><input data-manage="poster" type="checkbox" name="%1$s[attachment]" value="1"%2$s>%3$s</label></p>',
                     esc_attr(self::$meta_options),
                     checked(isset($options['attachment']), true, false),
@@ -56,6 +51,13 @@
                     esc_attr(self::$meta_options),
                     checked(isset($options['message']), true, false),
                     __('Показывать сообщение после ответа на вопрос', 'knife-theme')
+                );
+
+                printf(
+                    '<p class="manage__check"><label><input type="checkbox" name="%1$s[center]" value="1"%2$s>%3$s</label></p>',
+                    esc_attr(self::$meta_options),
+                    checked(isset($options['center']), true, false),
+                    __('Центрировать стартовый экран', 'knife-theme')
                 );
 
                 printf(
