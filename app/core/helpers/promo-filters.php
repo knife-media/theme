@@ -7,13 +7,26 @@
  *
  * @package knife-theme
  * @since 1.4
- * @version 1.6
+ * @version 1.8
  */
 
 
 /**
- * Skyeng promo
+ * Add custom body class to posts with promo tag
  *
+ * @since 1.6
+ */
+add_filter('body_class', function($classes = []) {
+    if(is_single() && has_tag('promo')) {
+        $classes[] = 'is-promo';
+    }
+
+    return $classes;
+}, 11, 1);
+
+
+/**
+ * Skyeng promo
  * Update promo post content with custom button
  */
 add_filter('the_content', function($content) {
@@ -39,14 +52,17 @@ add_filter('the_content', function($content) {
 
 
 /**
- * Add custom body class to posts with promo tag
+ * Tinkoff Black promo
+ * Remove RTB and similar posts from promo
  *
- * @since 1.6
+ * @since 1.8
  */
-add_filter('body_class', function($classes = []) {
-    if(is_single() && has_tag('promo')) {
-        $classes[] = 'is-promo';
-    }
+add_action('wp', function() {
+    if(is_single('spender-notes')) {
+        // Disable similar posts
+        remove_action('wp_enqueue_scripts', ['Knife_Similar_Posts', 'inject_object'], 12);
 
-    return $classes;
-}, 11, 1);
+        // Disable Yandex.RTB banner
+        remove_action('wp_enqueue_scripts', ['Knife_Yandex_RTB', 'inject_object'], 12);
+    }
+});
