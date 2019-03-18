@@ -72,7 +72,7 @@ class Knife_News_Manager {
             return $content;
         }
 
-        if(!in_category(self::$news_id) && get_post_format() === false) {
+        if(!in_category(self::$news_id) || has_post_format()) {
             return $content;
         }
 
