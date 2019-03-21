@@ -4,6 +4,7 @@
  *
  * @package knife-theme
  * @since 1.7
+ * @version 1.8
  */
 ?>
 
@@ -12,7 +13,7 @@
         <?php
             the_info(
                 '<div class="entry-quiz__info">', '</div>',
-                ['author', 'date', 'category']
+                ['author', 'date', 'category', 'label', 'promo']
             );
 
             the_title(

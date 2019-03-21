@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.5
+ * @version 1.8
  */
 
 if (!defined('WPINC')) {
@@ -19,9 +19,10 @@ class Knife_Post_Info {
      */
     public static function get_info($options = [], $output = '', $items = []) {
         $meta = array_intersect($options, [
-            'club', 'author', 'date', 'tag', 'tags', 'time', 'category', 'asker', 'question', 'emoji'
+            'author', 'date', 'tag', 'tags', 'time', 'category', 'asker', 'question', 'emoji', 'club', 'promo'
         ]);
 
+        // Left-side defined meta items
         foreach($meta as $option) {
             $method = 'info_' . $option;
 
@@ -36,6 +37,7 @@ class Knife_Post_Info {
             );
         }
 
+        // Free post info items
         foreach(array_diff($options, $meta) as $option) {
             $method = 'info_' . $option;
 
@@ -186,6 +188,8 @@ class Knife_Post_Info {
 
     /**
      * Get post labels
+     *
+     * @since 1.5
      */
     private static function info_label() {
         $labels = get_the_terms(get_the_ID(), 'label');
@@ -216,6 +220,8 @@ class Knife_Post_Info {
 
     /**
      * Get question asker
+     *
+     * @since 1.7
      */
     private static function info_asker() {
         $options = get_post_meta(get_the_ID(), '_knife-ask-options', true);
@@ -236,6 +242,8 @@ class Knife_Post_Info {
 
     /**
      * Get question number
+     *
+     * @since 1.7
      */
     private static function info_question() {
         $options = get_post_meta(get_the_ID(), '_knife-ask-options', true);
@@ -254,6 +262,8 @@ class Knife_Post_Info {
 
     /**
      * Get primary post tag emoji
+     *
+     * @since 1.7
      */
     private static function info_emoji() {
         $tags = get_the_tags();
@@ -266,6 +276,26 @@ class Knife_Post_Info {
 
         $output = sprintf('<a class="meta__emoji">%s</a>',
             esc_html($emoji)
+        );
+
+        return $output;
+    }
+
+
+    /**
+     * Get primary post tag emoji
+     *
+     * @since 1.8
+     */
+    private static function info_promo() {
+        $promo = get_post_meta(get_the_ID(), '_knife-promo', true);
+
+        if((string) $promo !== '1') {
+            return false;
+        }
+
+        $output = sprintf('<span class="meta__promo">%s</span>',
+            __('Партнерский материал', 'knife-theme')
         );
 
         return $output;

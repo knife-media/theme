@@ -39,12 +39,9 @@
   }
 
   .meta__club {
-    position: absolute;
-
     padding: .125rem .375rem;
     color: $color-white;
     background-color: $color-club;
-    transform: translateY(-.125rem);
 
     border-radius: 3px;
 
@@ -53,23 +50,14 @@
     }
   }
 
-  .meta__label {
-    display: flex;
-    order: 2;
+  .meta__promo {
+    cursor: default;
 
-    margin-left: auto;
+    padding: .125rem .375rem;
+    color: $color-white;
+    background-color: #3b577c;
 
-    &:after {
-      display: none;
-    }
-
-    &:before {
-      content: "";
-    }
-
-    & ~ :last-child {
-      margin-right: 6rem;
-    }
+    border-radius: 3px;
   }
 
   .meta__emoji {

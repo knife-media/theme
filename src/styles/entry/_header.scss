@@ -22,14 +22,13 @@
     margin-top: 0;
   }
 
-
   .entry-header__info {
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
-    justify-content: space-between;
 
     .label {
+      margin-left: auto;
       font-size: 1.5rem;
 
       @media screen and (max-width: 767px) {

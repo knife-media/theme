@@ -12,20 +12,6 @@
 
 
 /**
- * Add custom body class to posts with promo tag
- *
- * @since 1.6
- */
-add_filter('body_class', function($classes = []) {
-    if(is_single() && has_tag('promo')) {
-        $classes[] = 'is-promo';
-    }
-
-    return $classes;
-}, 11, 1);
-
-
-/**
  * Skyeng promo
  * Update promo post content with custom button
  */

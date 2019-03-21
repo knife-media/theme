@@ -505,6 +505,9 @@ require get_template_directory() . '/core/modules/site-meta.php';
 // Add custom user fields
 require get_template_directory() . '/core/modules/user-meta.php';
 
+// Promo posts classification with custom possibility
+require get_template_directory() . '/core/modules/promo-manager.php';
+
 // Customize default wordpress embed code
 require get_template_directory() . '/core/modules/embed-filters.php';
 
