@@ -32,20 +32,44 @@ class Knife_Promo_Manager {
 
 
     /**
+     * Archive query var
+     *
+     * @access  private
+     * @var     string
+     */
+    private static $query_var = 'promo';
+
+
+    /**
      * Checkbox save nonce
      *
      * @access  private
      * @var     string
      */
-    private static $metabox_nonce = 'knife-club-form-nonce';
+    private static $metabox_nonce = 'knife-promo-nonce';
 
 
     /**
      * Init function instead of constructor
      */
     public static function load_module() {
+        // Create custom promo archive url
+        add_action('init', [__CLASS__, 'add_promo_rule']);
+
+        // Add share query tag
+        add_action('query_vars', [__CLASS__, 'append_promo_var']);
+
+        // Include archive template for promo posts
+        add_filter('template_include', [__CLASS__, 'include_archive']);
+
+        // Show posts only with promo post meta
+        add_action('pre_get_posts', [__CLASS__, 'update_query']);
+
+        // Update promo archive document title
+        add_filter('document_title_parts', [__CLASS__, 'update_title'], 10);
+
         // Set is-promo class if need
-        add_filter('body_class', [__CLASS__, 'set_body_class'], 11, 1);
+        add_filter('body_class', [__CLASS__, 'set_body_class'], 11);
 
         // Promo checkbox
         add_action('post_submitbox_misc_actions', [__CLASS__, 'print_checkbox']);
@@ -53,6 +77,79 @@ class Knife_Promo_Manager {
         // Update promo post meta on save post
         add_action('save_post', [__CLASS__, 'save_metabox']);
     }
+
+
+    /**
+     * Create custom promo archive url
+     */
+    public static function add_promo_rule() {
+        add_rewrite_rule(
+            sprintf(
+                '^%s/?$', self::$query_var
+            ),
+
+            sprintf(
+                'index.php?%s=1', self::$query_var
+            ),
+
+            'top'
+        );
+    }
+
+
+    /**
+     * Append promo query tag to availible query vars
+     */
+    public static function append_promo_var($query_vars) {
+        $query_vars[] = self::$query_var;
+
+        return $query_vars;
+    }
+
+
+    /**
+     * Include archive.php template for promo posts
+     */
+    public static function include_archive($template) {
+        if(get_query_var(self::$query_var)) {
+            $new_template = locate_template(['archive.php']);
+
+            if(!empty($new_template)) {
+                return $new_template;
+            }
+
+        }
+
+        return $template;
+    }
+
+
+    /**
+     * Show only promo posts in custom archive template
+     */
+    public static function update_query($query) {
+        if(is_admin() || !$query->is_main_query()) {
+            return false;
+        }
+
+        if(get_query_var(self::$query_var)) {
+            $query->set('meta_key', self::$meta_promo);
+            $query->set('meta_value', 1);
+        }
+    }
+
+
+    /**
+     * Update promo archive document title
+     */
+    public static function update_title($title) {
+        if(get_query_var(self::$query_var)) {
+            $title['title'] = __('Партнерские материалы', 'knife-theme');
+        }
+
+        return $title;
+    }
+
 
 
     /**

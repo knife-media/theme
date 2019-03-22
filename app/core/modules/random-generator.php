@@ -217,7 +217,7 @@ class Knife_Random_Generator {
      * Redirect to custom generated template if share query var exists
      */
     public static function redirect_share() {
-        $share = get_query_var('share');
+        $share = get_query_var(self::$query_var);
 
         if(is_singular(self::$post_type) && strlen($share) > 0) {
             $post_id = get_the_ID();
