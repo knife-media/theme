@@ -309,7 +309,7 @@ add_filter('previous_posts_link_attributes', function($atts) {
 
 // Post author link class
 add_filter('the_author_posts_link', function($link) {
-    return str_replace('rel="author"', 'class="meta__link" rel="author"', $link);
+    return str_replace('rel="author"', 'class="meta__item" rel="author"', $link);
 });
 
 
@@ -518,7 +518,7 @@ require get_template_directory() . '/core/modules/poster-templates.php';
 require get_template_directory() . '/core/modules/share-buttons.php';
 
 // Return post info meta
-require get_template_directory() . '/core/modules/post-info.php';
+require get_template_directory() . '/core/modules/post-meta.php';
 
 // Add second title to post
 require get_template_directory() . '/core/modules/post-tagline.php';

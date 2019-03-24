@@ -24,15 +24,18 @@
 
   .entry-quiz__info {
     display: flex;
-    flex-flow: row nowrap;
+    flex-flow: row wrap;
     align-items: center;
 
     .meta {
+      min-height: 1.5rem;
       color: $color-text;
     }
 
     .label {
+      min-height: 1.5rem;
       margin-left: auto;
+
       font-size: 1.5rem;
 
       @media screen and (max-width: 767px) {

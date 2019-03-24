@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.7
+ * @version 1.8
  */
 
 
@@ -16,11 +16,14 @@ if(!function_exists('the_share')) :
      *
      * @since 1.3
      */
-    function the_share($before = '', $after = '', $action = '', $echo = true) {
+    function the_share($before = '', $after = '', $action = '', $echo = true, $output = '') {
         if(method_exists('Knife_Share_Buttons', 'get_buttons')) {
-            $share = Knife_Share_Buttons::get_buttons($action);
+            $output = Knife_Share_Buttons::get_buttons($action);
+        }
 
-            $output = $before . $share . $after;
+        // Check if output not empty
+        if(strlen($output) > 0) {
+            $output = $before . $output . $after;
 
             if($echo === false) {
                 return $output;
@@ -38,11 +41,18 @@ if(!function_exists('the_info')) :
      *
      * @since 1.3
      */
-    function the_info($before = '', $after = '', $options = [], $echo = true) {
-        if(method_exists('Knife_Post_Info', 'get_info')) {
-            $info = Knife_Post_Info::get_info($options);
+    function the_info($before = '', $after = '', $options = [], $echo = true, $output = '') {
+        if(method_exists('Knife_Post_Meta', 'get_info')) {
+            $output = Knife_Post_Meta::get_info($options, $output);
+        }
 
-            $output = $before . $info . $after;
+        if(method_exists('Knife_Label_Posts', 'get_info')) {
+            $output = Knife_Label_Posts::get_info($options, $output);
+        }
+
+        // Check if output not empty
+        if(strlen($output) > 0) {
+            $output = $before . $output . $after;
 
             if($echo === false) {
                 return $output;
@@ -60,19 +70,20 @@ if(!function_exists('the_lead')) :
      *
      * @since 1.3
      */
-    function the_lead($before = '', $after = '', $echo = true) {
+    function the_lead($before = '', $after = '', $echo = true, $output = '') {
         if(method_exists('Knife_Post_Lead', 'get_lead')) {
-            $lead = Knife_Post_Lead::get_lead();
+            $output = Knife_Post_Lead::get_lead();
+        }
 
-            if(strlen($lead) > 0) {
-                $output = $before . $lead . $after;
+        // Check if output not empty
+        if(strlen($output) > 0) {
+            $output = $before . $output . $after;
 
-                if($echo === false) {
-                    return $output;
-                }
-
-                echo $output;
+            if($echo === false) {
+                return $output;
             }
+
+            echo $output;
         }
     }
 endif;

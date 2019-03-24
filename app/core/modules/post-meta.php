@@ -1,6 +1,6 @@
 <?php
 /**
- * Post Info
+ * Post Meta
  *
  * Return post info meta
  *
@@ -13,37 +13,40 @@ if (!defined('WPINC')) {
     die;
 }
 
-class Knife_Post_Info {
+class Knife_Post_Meta {
     /**
      * Common method to output posts info meta
      */
-    public static function get_info($options = [], $output = '', $items = []) {
-        $meta = array_intersect($options, [
-            'author', 'date', 'tag', 'tags', 'time', 'category', 'asker', 'question', 'emoji', 'club', 'promo'
+    public static function get_info($options = [], $output = '') {
+        $meta = [];
+
+        // Append promo meta if necessary
+        if(method_exists('Knife_Promo_Manager', 'get_info')) {
+            $meta[] = Knife_Promo_Manager::get_info($options);
+        }
+
+        // Append club meta if necessary
+        if(method_exists('Knife_Club_Section', 'get_info')) {
+            $meta[] = Knife_Club_Section::get_info($options);
+        }
+
+        // Get allowed meta options
+        $options = array_intersect($options, [
+            'head', 'author', 'date', 'tag', 'tags', 'time', 'category'
         ]);
 
-        // Left-side defined meta items
-        foreach($meta as $option) {
-            $method = 'info_' . $option;
+        foreach($options as $option) {
+            $method = 'meta_' . $option;
 
             if(method_exists(__CLASS__, $method)) {
-                $items[] = self::$method();
+                $meta[] = self::$method();
             }
         }
 
-        if(count($items) > 0) {
+        if(array_filter($meta)) {
             $output = $output . sprintf('<div class="meta">%s</div>',
-                implode('', $items)
+                implode('', $meta)
             );
-        }
-
-        // Free post info items
-        foreach(array_diff($options, $meta) as $option) {
-            $method = 'info_' . $option;
-
-            if(method_exists(__CLASS__, $method)) {
-                $output = $output . self::$method();
-            }
         }
 
         return $output;
@@ -53,7 +56,7 @@ class Knife_Post_Info {
     /**
      * Get post author info
      */
-    private static function info_author() {
+    private static function meta_author() {
         if(function_exists('coauthors_posts_links')) {
             return coauthors_posts_links('', '', null, null, false);
         }
@@ -65,14 +68,14 @@ class Knife_Post_Info {
     /**
      * Get post category info
      */
-    private static function info_category() {
+    private static function meta_category() {
         $cats = get_the_category();
 
         if(empty($cats[0])) {
             return false;
         }
 
-        $output = sprintf('<a class="meta__link" href="%2$s">%1$s</a>',
+        $output = sprintf('<a class="meta__item" href="%2$s">%1$s</a>',
             esc_html($cats[0]->cat_name),
             esc_url(get_category_link($cats[0]->term_id))
         );
@@ -84,7 +87,7 @@ class Knife_Post_Info {
     /**
      * Get post date info
      */
-    private static function info_date() {
+    private static function meta_date() {
         $output = sprintf('<span class="meta__item"><time datetime="%1$s">%2$s</time></span>',
             get_the_time('c'),
             get_the_date('Y') === date('Y') ? get_the_time('j F') : get_the_time('j F Y')
@@ -97,7 +100,7 @@ class Knife_Post_Info {
     /**
      * Get post time info
      */
-    private static function info_time() {
+    private static function meta_time() {
         $output = sprintf('<span class="meta__item">%s</span>',
             get_the_time('H:i')
         );
@@ -109,14 +112,14 @@ class Knife_Post_Info {
     /**
      * Get primary post tag info
      */
-    private static function info_tag() {
+    private static function meta_tag() {
         $tags = get_the_tags();
 
         if(!isset($tags[0])) {
             return false;
         }
 
-        $output = sprintf('<a class="meta__link" href="%2$s">%1$s</a>',
+        $output = sprintf('<a class="meta__item" href="%2$s">%1$s</a>',
             esc_html($tags[0]->name),
             esc_url(get_tag_link($tags[0]->term_id))
         );
@@ -128,7 +131,7 @@ class Knife_Post_Info {
     /**
      * Get post tags info
      */
-    private static function info_tags($output = '') {
+    private static function meta_tags($output = '') {
         $tags = get_the_tags();
 
         if($tags === false) {
@@ -137,7 +140,7 @@ class Knife_Post_Info {
 
         foreach($tags as $i => $tag) {
             if($i <= 3) {
-                $output = $output . sprintf('<a class="meta__link" href="%2$s">%1$s</a>',
+                $output = $output . sprintf('<a class="meta__item" href="%2$s">%1$s</a>',
                     esc_html($tag->name),
                     esc_url(get_tag_link($tag->term_id))
                 );
@@ -149,28 +152,9 @@ class Knife_Post_Info {
 
 
     /**
-     * Get post type info
-     */
-    private static function info_club() {
-        $type = get_post_type(get_the_ID());
-
-        if($type !== 'club') {
-            return false;
-        }
-
-        $output = sprintf('<a class="meta__club" href="%2$s">%1$s</a>',
-            esc_html(get_post_type_object($type)->labels->name),
-            esc_url(get_post_type_archive_link($type))
-        );
-
-        return $output;
-    }
-
-
-    /**
      * Get post head as primary tag
      */
-    private static function info_head() {
+    private static function meta_head() {
         $tags = get_the_tags();
 
         if(!isset($tags[0])) {
@@ -187,43 +171,11 @@ class Knife_Post_Info {
 
 
     /**
-     * Get post labels
-     *
-     * @since 1.5
-     */
-    private static function info_label() {
-        $labels = get_the_terms(get_the_ID(), 'label');
-
-        if($labels === false) {
-            return false;
-        }
-
-        $links = [];
-
-        foreach($labels as $label) {
-            $emoji = get_term_meta($label->term_id, '_knife-term-emoji', true);
-
-            $links[] = sprintf('<a class="label__link" href="%2$s" title="%3$s">%1$s</a>',
-                esc_html($emoji),
-                esc_url(get_term_link($label->term_id)),
-                sanitize_text_field($label->name)
-            );
-        }
-
-        $output = sprintf('<div class="label">%s</div>',
-            implode('', $links)
-        );
-
-        return $output;
-    }
-
-
-    /**
      * Get question asker
      *
      * @since 1.7
      */
-    private static function info_asker() {
+    private static function meta_asker() {
         $options = get_post_meta(get_the_ID(), '_knife-ask-options', true);
 
         if(empty($options['asker'])) {
@@ -245,7 +197,7 @@ class Knife_Post_Info {
      *
      * @since 1.7
      */
-    private static function info_question() {
+    private static function meta_question() {
         $options = get_post_meta(get_the_ID(), '_knife-ask-options', true);
 
         if(empty($options['counter'])) {
@@ -265,7 +217,7 @@ class Knife_Post_Info {
      *
      * @since 1.7
      */
-    private static function info_emoji() {
+    private static function meta_emoji() {
         $tags = get_the_tags();
 
         if(!isset($tags[0])) {
@@ -276,26 +228,6 @@ class Knife_Post_Info {
 
         $output = sprintf('<a class="meta__emoji">%s</a>',
             esc_html($emoji)
-        );
-
-        return $output;
-    }
-
-
-    /**
-     * Get primary post tag emoji
-     *
-     * @since 1.8
-     */
-    private static function info_promo() {
-        $promo = get_post_meta(get_the_ID(), '_knife-promo', true);
-
-        if((string) $promo !== '1') {
-            return false;
-        }
-
-        $output = sprintf('<span class="meta__promo">%s</span>',
-            __('Партнерский материал', 'knife-theme')
         );
 
         return $output;

@@ -46,6 +46,39 @@ class Knife_Label_Posts {
 
 
     /**
+     * Get post info labels
+     *
+     * @since 1.8
+     */
+    public static function get_info($options = [], $output = '') {
+        if(in_array('label', $options)) {
+            $labels = get_the_terms(get_the_ID(), self::$taxonomy);
+
+            // Check if labels exist
+            if(is_array($labels)) {
+                $links = [];
+
+                foreach($labels as $label) {
+                    $emoji = get_term_meta($label->term_id, '_knife-term-emoji', true);
+
+                    $links[] = sprintf('<a class="label__link" href="%2$s" title="%3$s">%1$s</a>',
+                        esc_html($emoji),
+                        esc_url(get_term_link($label->term_id)),
+                        sanitize_text_field($label->name)
+                    );
+                }
+
+                $output = $output . sprintf('<div class="label">%s</div>',
+                    implode('', $links)
+                );
+            }
+        }
+
+        return $output;
+    }
+
+
+    /**
      * Create custom taxonomy
      */
     public static function register_taxonomy() {
