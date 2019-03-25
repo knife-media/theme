@@ -15,24 +15,44 @@
     padding: .1875rem 0;
   }
 
-  & > :not(.meta) {
-    display: flex;
+  .about__club {
     flex: 0 0 auto;
+    cursor: default;
 
     margin-right: .75rem;
     padding-left: .375rem;
     padding-right: .375rem;
 
+    color: $color-white;
+    background-color: $color-club;
+
     border-radius: 3px;
+
+    @at-root #{selector-unify(&, a)} {
+      cursor: pointer;
+
+      &:hover {
+        filter: brightness(120%);
+      }
+    }
 
     @media screen and (max-width: 767px) {
       margin-right: .5rem;
     }
   }
 
-  .about__club {
+  .about__promo {
+    flex: 0 0 auto;
+    cursor: default;
+
+    margin-right: .75rem;
+    padding-left: .375rem;
+    padding-right: .375rem;
+
     color: $color-white;
-    background-color: $color-club;
+    background-color: #3b577c;
+
+    border-radius: 3px;
 
     @at-root #{selector-unify(&, a)} {
       cursor: pointer;
@@ -41,18 +61,9 @@
         filter: brightness(120%);
       }
     }
-  }
 
-  .about__promo {
-    color: $color-white;
-    background-color: #3b577c;
-
-    @at-root #{selector-unify(&, a)} {
-      cursor: pointer;
-
-      &:hover {
-        filter: brightness(120%);
-      }
+    @media screen and (max-width: 767px) {
+      margin-right: .5rem;
     }
   }
 }
