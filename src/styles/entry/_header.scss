@@ -25,15 +25,14 @@
   .entry-header__info {
     display: flex;
     flex-flow: row nowrap;
-    align-items: flex-start;
+    align-items: center;
 
-    .meta {
-      min-height: 1.5rem;
-    }
+    min-height: 2rem;
 
     .label {
-      min-height: 1.5rem;
+      min-height: 2rem;
       margin-left: auto;
+      margin-bottom: auto;
 
       font-size: 1.5rem;
 

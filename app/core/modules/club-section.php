@@ -128,25 +128,6 @@ class Knife_Club_Section {
 
 
     /**
-     * Get club meta info
-     */
-    public static function get_info($options = [], $output = '') {
-        if(in_array('club', $options)) {
-            $type = get_post_type(get_the_id());
-
-            if($type === self::$post_type) {
-                $output = sprintf('<a class="meta__club" href="%2$s">%1$s</a>',
-                    esc_html(get_post_type_object($type)->labels->name),
-                    esc_url(get_post_type_archive_link($type))
-                );
-            }
-        }
-
-        return $output;
-    }
-
-
-    /**
      * Create new user role
      */
     public static function create_role() {

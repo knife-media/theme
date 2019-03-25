@@ -518,7 +518,7 @@ require get_template_directory() . '/core/modules/poster-templates.php';
 require get_template_directory() . '/core/modules/share-buttons.php';
 
 // Return post info meta
-require get_template_directory() . '/core/modules/post-meta.php';
+require get_template_directory() . '/core/modules/post-info.php';
 
 // Add second title to post
 require get_template_directory() . '/core/modules/post-tagline.php';

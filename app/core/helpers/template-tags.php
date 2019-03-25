@@ -42,12 +42,9 @@ if(!function_exists('the_info')) :
      * @since 1.3
      */
     function the_info($before = '', $after = '', $options = [], $echo = true, $output = '') {
-        if(method_exists('Knife_Post_Meta', 'get_info')) {
-            $output = Knife_Post_Meta::get_info($options, $output);
-        }
-
-        if(method_exists('Knife_Label_Posts', 'get_info')) {
-            $output = Knife_Label_Posts::get_info($options, $output);
+        // Append post meta
+        if(method_exists('Knife_Post_Info', 'get_info')) {
+            $output = Knife_Post_Info::get_info($options);
         }
 
         // Check if output not empty

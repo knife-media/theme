@@ -1,0 +1,58 @@
+.about {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+
+  min-height: 2rem;
+  font-size: .8125rem;
+  font-weight: 500;
+  letter-spacing: .25px;
+
+  color: $color-primary;
+
+  & > * {
+    margin: .25rem 0;
+    padding: .1875rem 0;
+  }
+
+  & > :not(.meta) {
+    display: flex;
+    flex: 0 0 auto;
+
+    margin-right: .75rem;
+    padding-left: .375rem;
+    padding-right: .375rem;
+
+    border-radius: 3px;
+
+    @media screen and (max-width: 767px) {
+      margin-right: .5rem;
+    }
+  }
+
+  .about__club {
+    color: $color-white;
+    background-color: $color-club;
+
+    @at-root #{selector-unify(&, a)} {
+      cursor: pointer;
+
+      &:hover {
+        filter: brightness(120%);
+      }
+    }
+  }
+
+  .about__promo {
+    color: $color-white;
+    background-color: #3b577c;
+
+    @at-root #{selector-unify(&, a)} {
+      cursor: pointer;
+
+      &:hover {
+        filter: brightness(120%);
+      }
+    }
+  }
+}

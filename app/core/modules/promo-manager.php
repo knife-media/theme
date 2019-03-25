@@ -80,32 +80,6 @@ class Knife_Promo_Manager {
 
 
     /**
-     * Output promo post info
-     */
-    public static function get_info($options = [], $output = '') {
-        if(in_array('promo', $options)) {
-            $promo = get_post_meta(get_the_ID(), self::$meta_promo, true);
-
-            if((string) $promo === '1') {
-                $output = sprintf('<span class="meta__promo">%s</span>',
-                    __('Партнерский материал', 'knife-theme')
-                );
-
-                // Show link tp archive for editors
-                if(current_user_can('publish_posts')) {
-                    $output = sprintf('<a href="%s" class="meta__promo">%s</span>',
-                        trailingslashit(home_url(self::$query_var)),
-                        __('Партнерский материал', 'knife-theme')
-                    );
-                }
-            }
-        }
-
-        return $output;
-    }
-
-
-    /**
      * Create custom promo archive url
      */
     public static function add_promo_rule() {

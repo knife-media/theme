@@ -27,13 +27,14 @@
     flex-flow: row wrap;
     align-items: center;
 
+    min-height: 2rem;
+
     .meta {
-      min-height: 1.5rem;
       color: $color-text;
     }
 
     .label {
-      min-height: 1.5rem;
+      min-height: 2rem;
       margin-left: auto;
 
       font-size: 1.5rem;
@@ -400,6 +401,10 @@
 
     .entry-quiz__info {
       justify-content: center;
+
+      .label {
+        margin-left: 1.5rem;
+      }
     }
 
     .entry-quiz__share {

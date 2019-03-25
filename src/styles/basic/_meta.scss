@@ -10,23 +10,18 @@
   color: $color-primary;
 
   & > * {
-    display: inline-flex;
-    align-items: center;
-    cursor: default;
-  }
-
-  .meta__item {
     display: inline-block;
     cursor: default;
 
-    line-height: 1.25;
     white-space: nowrap;
 
     border-bottom: none;
+  }
 
+  .meta__item {
     &:after {
       content: "•";
-      display: inline-flex;
+      display: inline-block;
 
       margin-left: .5rem;
       margin-right: .5rem;
@@ -37,51 +32,13 @@
     &:last-child:after {
       display: none;
     }
-
-    @at-root #{selector-unify(&, a)} {
-      cursor: pointer;
-
-      &:hover {
-        filter: brightness(150%);
-      }
-    }
   }
 
-  .meta__club {
-    margin-right: .75rem;
-    padding: 0 .375rem;
-    line-height: 1.5rem;
+  & > a {
+    cursor: pointer;
 
-    color: $color-white;
-    background-color: $color-club;
-
-    border-radius: 3px;
-
-    @at-root #{selector-unify(&, a)} {
-      cursor: pointer;
-
-      &:hover {
-        filter: brightness(120%);
-      }
-    }
-  }
-
-  .meta__promo {
-    margin-right: .75rem;
-    padding: 0 .375rem;
-    line-height: 1.5rem;
-
-    color: $color-white;
-    background-color: #3b577c;
-
-    border-radius: 3px;
-
-    @at-root #{selector-unify(&, a)} {
-      cursor: pointer;
-
-      &:hover {
-        filter: brightness(120%);
-      }
+    &:hover {
+      filter: brightness(150%);
     }
   }
 }

@@ -11,7 +11,7 @@
     <?php
         the_info(
             '<div class="widget-recent__content-info">', '</div>',
-            ['time', 'tag'], true
+            ['time', 'tag']
         );
 
         printf(
