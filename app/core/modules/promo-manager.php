@@ -56,6 +56,9 @@ class Knife_Promo_Manager {
         // Create custom promo archive url
         add_action('init', [__CLASS__, 'add_promo_rule']);
 
+        // Update query_vars for promo archive
+        add_action('parse_query', [__CLASS__, 'update_query_vars']);
+
         // Add share query tag
         add_action('query_vars', [__CLASS__, 'append_promo_var']);
 
@@ -64,6 +67,9 @@ class Knife_Promo_Manager {
 
         // Show posts only with promo post meta
         add_action('pre_get_posts', [__CLASS__, 'update_query']);
+
+        // Update archive caption title
+        add_filter('get_the_archive_title', [__CLASS__, 'update_archive_title'], 12);
 
         // Update promo archive document title
         add_filter('document_title_parts', [__CLASS__, 'update_title'], 10);
@@ -84,16 +90,29 @@ class Knife_Promo_Manager {
      */
     public static function add_promo_rule() {
         add_rewrite_rule(
-            sprintf(
-                '^%s/?$', self::$query_var
-            ),
-
-            sprintf(
-                'index.php?%s=1', self::$query_var
-            ),
-
+            sprintf('^%s/?$', self::$query_var),
+            sprintf('index.php?%s=1', self::$query_var),
             'top'
         );
+
+        add_rewrite_rule(
+            sprintf('^%s/page/([0-9]+)/?$', self::$query_var),
+            sprintf('index.php?%s=1&paged=$matches[1]', self::$query_var),
+            'top'
+        );
+    }
+
+
+    /**
+     * Update query_vars for promo archive
+     */
+    public static function update_query_vars() {
+        global $wp_query;
+
+        if(in_array(self::$query_var, $wp_query->query_vars)) {
+            $wp_query->is_archive = true;
+            $wp_query->is_home = false;
+        }
     }
 
 
@@ -136,6 +155,20 @@ class Knife_Promo_Manager {
             $query->set('meta_key', self::$meta_promo);
             $query->set('meta_value', 1);
         }
+    }
+
+
+    /**
+     * Update post archive caption title
+     */
+    public static function update_archive_title($title) {
+        if(get_query_var(self::$query_var)) {
+            $title = sprintf('<h1 class="tagline-title">%s</h1>',
+                __('Партнерские материалы', 'knife-theme')
+            );
+        }
+
+        return $title;
     }
 
 
