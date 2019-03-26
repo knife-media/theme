@@ -166,6 +166,7 @@
   .entry-quiz__vote {
     display: none;
     flex-flow: row wrap;
+    text-align: left;
 
     .entry-quiz__vote-grid {
       display: flex;

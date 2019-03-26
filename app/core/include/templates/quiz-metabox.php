@@ -9,6 +9,10 @@
             $options['details'] = 'none';
         }
 
+        if(!isset($options['format'])) {
+            $options['format'] = 'binary';
+        }
+
         // Quiz items
         $items = get_post_meta($post_id, self::$meta_items);
 
@@ -29,7 +33,33 @@
             <?php
                 printf(
                     '<p class="manage__title">%s</p>',
-                    __('Настройки отображения вопросов', 'knife-theme')
+                    __('Настройки типа теста', 'knife-theme')
+                );
+
+                printf(
+                    '<p class="manage__radio"><label><input data-format="binary" type="radio" name="%1$s[format]" value="binary"%2$s>%3$s</label></p>',
+                    esc_attr(self::$meta_options),
+                    checked($options['format'], 'binary', false),
+                    __('Правильный / неправильный ответ', 'knife-theme')
+                );
+
+                printf(
+                    '<p class="manage__radio"><label><input data-format="points" type="radio" name="%1$s[format]" value="points"%2$s>%3$s</label></p>',
+                    esc_attr(self::$meta_options),
+                    checked($options['format'], 'points', false),
+                    __('Разные баллы за каждый ответ', 'knife-theme')
+                );
+
+                printf(
+                    '<p class="manage__radio"><label><input data-format="category" type="radio" name="%1$s[format]" value="category"%2$s>%3$s</label></p>',
+                    esc_attr(self::$meta_options),
+                    checked($options['format'], 'category', false),
+                    __('Наиболее часто выбираемый ответ', 'knife-theme')
+                );
+
+                printf(
+                    '<p class="manage__title">%s</p>',
+                    __('Отображениe вопросов', 'knife-theme')
                 );
 
                 printf(
@@ -54,20 +84,6 @@
                 );
 
                 printf(
-                    '<p class="manage__check"><label><input type="checkbox" name="%1$s[center]" value="1"%2$s>%3$s</label></p>',
-                    esc_attr(self::$meta_options),
-                    checked(isset($options['center']), true, false),
-                    __('Центрировать стартовый экран', 'knife-theme')
-                );
-
-                printf(
-                    '<p class="manage__check"><label><input data-manage="points" type="checkbox" name="%1$s[points]" value="1"%2$s>%3$s</label></p>',
-                    esc_attr(self::$meta_options),
-                    checked(isset($options['points']), true, false),
-                    __('Разные баллы за каждый ответ', 'knife-theme')
-                );
-
-                printf(
                     '<p class="manage__check"><label><input type="checkbox" name="%1$s[shuffle]" value="1"%2$s>%3$s</label></p>',
                     esc_attr(self::$meta_options),
                     checked(isset($options['shuffle']), true, false),
@@ -78,6 +94,18 @@
 
         <div class="manage">
             <?php
+                printf(
+                    '<p class="manage__title">%s</p>',
+                    __('Внешний вид теста', 'knife-theme')
+                );
+
+                printf(
+                    '<p class="manage__check"><label><input type="checkbox" name="%1$s[center]" value="1"%2$s>%3$s</label></p>',
+                    esc_attr(self::$meta_options),
+                    checked(isset($options['center']), true, false),
+                    __('Центрировать стартовый экран', 'knife-theme')
+                );
+
                 printf(
                     '<p class="manage__input"><strong>%3$s</strong><input type="text" name="%1$s[button_start]" value="%2$s"></p>',
                     esc_attr(self::$meta_options),
@@ -181,6 +209,12 @@
                                         esc_attr($answer['points'] ?? 0),
                                         __('Баллы за ответ', 'knife-theme')
                                     );
+
+                                    printf(
+                                        '<div class="answer__category"><input type="text" maxlength="1" data-answer="category" value="%1$s"><strong>%2$s</strong></div>',
+                                        esc_attr($answer['category'] ?? ''),
+                                        __('Категория ответа', 'knife-theme')
+                                    );
                                 ?>
                             </div>
 
@@ -246,7 +280,7 @@
                     '<p class="summary__check"><label><input type="checkbox" name="%1$s[norepeat]" value="1"%2$s>%3$s</label></p>',
                     esc_attr(self::$meta_options),
                     checked(isset($options['norepeat']), true, false),
-                    __('Скрыть кнопку повтороного прохождения', 'knife-theme')
+                    __('Скрыть кнопку повторного прохождения', 'knife-theme')
                 );
             ?>
         </div>
@@ -421,6 +455,18 @@
 
                             sprintf('<input class="result__scores-field" type="number" data-result="to" value="%s">',
                                 esc_attr($result['to'] ?? 0)
+                            )
+                        );
+                    ?>
+                </div>
+
+                <div class="result__category">
+                    <?php
+                        printf(
+                            __('Показывать для категории ответов %s', 'knife-theme'),
+
+                            sprintf('<input class="result__category-field" type="text" data-result="category" value="%s">',
+                                esc_attr($result['category'] ?? '')
                             )
                         );
                     ?>

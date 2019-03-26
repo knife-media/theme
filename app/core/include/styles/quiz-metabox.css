@@ -346,8 +346,28 @@
     padding: 4px 6px;
   }
 
+  #knife-quiz-box .answer__category {
+    display: none;
+    align-items: center;
+    position: relative;
+
+    margin: 0 25px 15px 0;
+  }
+
+  #knife-quiz-box .answer__category strong {
+    cursor: default;
+  }
+
+  #knife-quiz-box .answer__category input {
+    display: inline-block;
+
+    width: 50px;
+    margin: 0 10px 0 0;
+    padding: 4px 6px;
+  }
+
   #knife-quiz-box .answer__binary {
-    display: flex;
+    display: none;
     align-items: center;
     position: relative;
 
@@ -386,8 +406,12 @@
   display: flex;
 }
 
-#knife-quiz-box .answer--points .answer__binary {
-  display: none;
+#knife-quiz-box .answer--binary .answer__binary {
+  display: flex;
+}
+
+#knife-quiz-box .answer--category .answer__category {
+  display: flex;
 }
 
 #knife-quiz-box .answer--poster .answer__delete {
@@ -458,11 +482,19 @@
       margin-right: 8px;
     }
 
-
   #knife-quiz-box .manage__input {
     display: block;
     margin: 0 0 10px;
   }
+
+  #knife-quiz-box .manage__check + .manage__input {
+    margin-top: 20px;
+  }
+
+  #knife-quiz-box .manage__radio + .manage__input {
+    margin-top: 20px;
+  }
+
     #knife-quiz-box .manage__input strong {
       display: block;
       margin-bottom: 4px;
@@ -783,7 +815,7 @@
 }
 
 #knife-quiz-box .result__scores {
-  display: flex;
+  display: none;
   flex-flow: row wrap;
   align-items: center;
   cursor: default;
@@ -807,6 +839,41 @@
       box-shadow: none;
       border-color: #a00;
     }
+
+#knife-quiz-box .result__category {
+  display: none;
+  flex-flow: row wrap;
+  align-items: center;
+  cursor: default;
+  flex: 1 1 100%;
+
+  margin: 10px;
+  padding: 10px 20px 0 0;
+  font-weight: 600;
+
+  border-top: 1px solid #ddd;
+}
+  #knife-quiz-box .result__category-field {
+    display: inline-block;
+
+    width: 50px;
+    margin: 0 7px;
+    font-weight: 400;
+    transition: border .25s, box-shadow .25s;
+  }
+
+
+#knife-quiz-box .result--binary .result__scores {
+  display: flex;
+}
+
+#knife-quiz-box .result--points .result__scores {
+  display: flex;
+}
+
+#knife-quiz-box .result--category .result__category {
+  display: flex;
+}
 
 #knife-quiz-box .result--details .result__details {
   display: block;

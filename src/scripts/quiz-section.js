@@ -288,6 +288,17 @@
 
 
   /**
+   * Set quiz predefined options
+   */
+  (function() {
+    if(knife_quiz_options.hasOwnProperty('center') && knife_quiz_options.center) {
+      quiz.classList.add('entry-quiz--center');
+    }
+  })();
+
+
+
+  /**
    * Create quiz button
    */
   (function() {
@@ -326,16 +337,6 @@
   (function() {
     if(typeof knife_quiz_results !== 'object') {
       knife_quiz_results = {};
-    }
-  })();
-
-
-  /**
-   * Set quiz predefined options
-   */
-  (function() {
-    if(knife_quiz_options.hasOwnProperty('center') && knife_quiz_options.center) {
-      quiz.classList.add('entry-quiz--center');
     }
   })();
 

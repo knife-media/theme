@@ -396,6 +396,33 @@ jQuery(document).ready(function($) {
 
 
   /**
+   * Toggle format options
+   */
+  function toggleFormat(option) {
+    $.each(['binary', 'points', 'category'], function(i, v) {
+      // Remove answers modificators
+      box.find('.answer').removeClass(
+          'answer--' + v
+      );
+
+      // Remove result modificators
+      box.find('.result').removeClass(
+          'result--' + v
+      );
+    });
+
+    // Set new format modificators
+    box.find('.answer').addClass(
+      'answer--' + option.data('format')
+    );
+
+    box.find('.result').addClass(
+      'result--' + option.data('format')
+    );
+  }
+
+
+  /**
    * Toggle summary options
    */
   function toggleSummary(option) {
@@ -428,6 +455,16 @@ jQuery(document).ready(function($) {
     var option = $(this);
 
     return toggleManage(option);
+  });
+
+
+  /**
+   * Format radio trigger
+   */
+  box.on('change', '.manage input[data-format]', function() {
+    var option = $(this);
+
+    return toggleFormat(option);
   });
 
 
@@ -819,6 +856,13 @@ jQuery(document).ready(function($) {
       var option = $(this);
 
       toggleManage(option);
+    });
+
+    // Set format classes
+    box.find('.manage input[data-format]:checked').each(function() {
+      var option = $(this);
+
+      toggleFormat(option);
     });
 
 

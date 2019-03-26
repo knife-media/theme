@@ -524,7 +524,8 @@ class Knife_Quiz_Section {
     private static function retrieve_results($post_id, $options, $results = []) {
         $options = wp_parse_args($options, [
             'achievment' => 0,
-            'details' => 'none'
+            'details' => 'none',
+            'format' => 'binary'
         ]);
 
         foreach(get_post_meta($post_id, self::$meta_results) as $item) {
@@ -570,6 +571,13 @@ class Knife_Quiz_Section {
 
 
                 if(array_filter($result)) {
+                    if($options['format'] === 'category' && !empty($item['category'])) {
+                        $category = mb_substr($item['category'], 0, 1);
+                        $results[$category] = $result;
+
+                        continue;
+                    }
+
                     $results[$i] = $result;
                 }
             }
