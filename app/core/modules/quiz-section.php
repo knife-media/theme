@@ -1,6 +1,6 @@
 <?php
 /**
- * Open quiz
+ * Quiz section
  *
  * Custom post type for quiz
  *
@@ -13,7 +13,7 @@ if (!defined('WPINC')) {
     die;
 }
 
-class Knife_Open_Quiz {
+class Knife_Quiz_Section {
     /**
      * Unique slug using for custom post type register and url
      *
@@ -638,4 +638,4 @@ class Knife_Open_Quiz {
 /**
  * Load current module environment
  */
-Knife_Open_Quiz::load_module();
+Knife_Quiz_Section::load_module();

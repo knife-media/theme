@@ -482,7 +482,7 @@ require get_template_directory() . '/core/modules/story-manager.php';
 require get_template_directory() . '/core/modules/select-links.php';
 
 // Quiz post type
-require get_template_directory() . '/core/modules/open-quiz.php';
+require get_template_directory() . '/core/modules/quiz-section.php';
 
 // Generator post type
 require get_template_directory() . '/core/modules/random-generator.php';
