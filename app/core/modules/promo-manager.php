@@ -109,7 +109,7 @@ class Knife_Promo_Manager {
     public static function update_query_vars() {
         global $wp_query;
 
-        if(in_array(self::$query_var, $wp_query->query_vars)) {
+        if(array_key_exists(self::$query_var, $wp_query->query_vars)) {
             $wp_query->is_archive = true;
             $wp_query->is_home = false;
         }
