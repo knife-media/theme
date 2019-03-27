@@ -16,6 +16,9 @@
         // Quiz items
         $items = get_post_meta($post_id, self::$meta_items);
 
+        // Define available categories array
+        $categories = [];
+
         // Add empty item
         array_unshift($items, []);
 
@@ -215,6 +218,11 @@
                                         esc_attr($answer['category'] ?? ''),
                                         __('Категория ответа', 'knife-theme')
                                     );
+
+                                    // Append available category
+                                    if(!empty($answer['category'])) {
+                                        $categories[] = $answer['category'];
+                                    }
                                 ?>
                             </div>
 
@@ -335,6 +343,10 @@
                 <?php
                     if(empty($result['posters']) || !is_array($result['posters'])) {
                         $result['posters'] = [''];
+                    }
+
+                    if(!array_key_exists('category', $result)) {
+                        $result['category'] = '';
                     }
                 ?>
 
@@ -463,13 +475,22 @@
                 <div class="result__category">
                     <?php
                         printf(
-                            __('Показывать для категории ответов %s', 'knife-theme'),
-
-                            sprintf('<input class="result__category-field" type="text" data-result="category" value="%s">',
-                                esc_attr($result['category'] ?? '')
-                            )
+                            '<strong class="result__category-title">%s</strong>',
+                            __('Показывать для категории ответов', 'knife-theme')
                         );
                     ?>
+
+                    <select class="result__category-field" data-result="category">
+                        <?php
+                            foreach(array_unique($categories) as $category) {
+                                printf(
+                                    '<option value="%1$s"%2$s>%1$s</option>',
+                                    esc_attr($category),
+                                    selected($result['category'], $category, false)
+                                );
+                            }
+                        ?>
+                    </select>
                 </div>
 
 

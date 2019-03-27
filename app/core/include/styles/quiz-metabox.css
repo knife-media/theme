@@ -848,8 +848,8 @@
   #knife-quiz-box .result__category-field {
     display: inline-block;
 
-    width: 50px;
-    margin: 0 7px;
+    min-width: 60px;
+    margin: 0 15px;
     font-weight: 400;
     transition: border .25s, box-shadow .25s;
   }

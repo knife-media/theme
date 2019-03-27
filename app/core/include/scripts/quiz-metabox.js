@@ -489,6 +489,24 @@ jQuery(document).ready(function($) {
 
 
   /**
+   * Update results category list on answer change
+   */
+  box.on('change', '.answer input[data-answer]', function() {
+    var option = $(this);
+
+    if(option.data('answer') === 'category') {
+      var answer = option.val();
+
+      box.find('.result .result__category-field').each(function(i, select) {
+        if($(select).find('option[value=' + answer + ']').length === 0) {
+          $(select).append('<option value="' + answer + '">' + answer + '</option>');
+        }
+      });
+    }
+  });
+
+
+  /**
    * Add new question
    */
   box.on('click', '.action--item', function(e) {
