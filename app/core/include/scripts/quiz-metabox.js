@@ -419,6 +419,9 @@ jQuery(document).ready(function($) {
     box.find('.result').addClass(
       'result--' + option.data('format')
     );
+
+    // Toggle achievment
+    toggleAchievment(option.data('format'));
   }
 
 
@@ -431,6 +434,23 @@ jQuery(document).ready(function($) {
     box.find('.result').toggleClass(toggle,
       option.is(':checked')
     );
+  }
+
+
+  /**
+   * Toggle achievment option
+   */
+  function toggleAchievment(format) {
+    var toggle = box.find('.summary [data-summary="achievment"]');
+
+    toggle.prop('disabled', false);
+
+    if(format === 'category') {
+      toggle.prop('checked', false);
+      toggle.prop('disabled', true);
+    }
+
+    return toggle.change();
   }
 
 
