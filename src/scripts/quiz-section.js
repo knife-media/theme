@@ -30,9 +30,15 @@
 
 
   /**
-   * Calculate scores to this var
+   * Hold victorious result in this var
    */
-  var scores = 0;
+  var hold = 0;
+
+
+  /**
+   * Store current scores progress
+   */
+  var ranking = {};
 
 
   /**
@@ -95,6 +101,11 @@
       message.classList.add('entry-quiz__vote-message');
     }
 
+    // Set default quiz format if not exists
+    if(!knife_quiz_options.hasOwnProperty('format')) {
+      knife_quiz_options.format = 'binary';
+    }
+
     // Click trigger
     vote.addEventListener('click', function(e) {
       var target = e.target || e.srcElement;
@@ -116,32 +127,50 @@
         vote.appendChild(message);
       }
 
-      // Calculate points and return
-      if(knife_quiz_options.hasOwnProperty('points') && knife_quiz_options.points) {
-        if(answer.hasOwnProperty('points') && answer.points) {
-          scores = scores + parseInt(answer.points)
-        }
+      switch(knife_quiz_options.format) {
+        case 'category':
+          if(answer.hasOwnProperty('category') && answer.category) {
+            var score = 0;
 
-        return target.classList.add(cl + '--selected');
+            if(ranking.hasOwnProperty(answer.category)) {
+              score = ranking[answer.category];
+            }
+
+            ranking[answer.category] = score + 1;
+
+            // Assign to hold currently max key
+            hold = Object.keys(ranking).reduce(function(a, b) {
+              return ranking[a] > ranking[b] ? a : b
+            })
+          }
+
+          return target.classList.add(cl + '--selected');
+
+        case 'points':
+          if(answer.hasOwnProperty('points') && answer.points) {
+            hold = hold + parseInt(answer.points)
+          }
+
+          return target.classList.add(cl + '--selected');
+
+        case 'binary':
+          if(answer.hasOwnProperty('binary') && answer.binary) {
+            hold = hold + 1;
+
+            return target.classList.add(cl + '--correct');
+          }
+
+          // Loop through answers to find and mark correct
+          for(var i = 0; i < answers.length; i++) {
+            var sibling = target.parentNode.children[i];
+
+            if(answers[i].hasOwnProperty('binary') && answers[i].binary) {
+              sibling.classList.add(cl + '--missed');
+            }
+          }
+
+          return target.classList.add(cl + '--wrong');
       }
-
-      // If user made right decision
-      if(answer.hasOwnProperty('binary') && answer.binary) {
-        scores = scores + 1;
-
-        return target.classList.add(cl + '--correct');
-      }
-
-      // Loop through answers to find and mark correct
-      for(var i = 0; i < answers.length; i++) {
-        var sibling = target.parentNode.children[i];
-
-        if(answers[i].hasOwnProperty('binary') && answers[i].binary) {
-          sibling.classList.add(cl + '--missed');
-        }
-      }
-
-      return target.classList.add(cl + '--wrong');
     });
   }
 
@@ -255,7 +284,7 @@
   /**
    * Show results
    */
-  function showResult(result, scores) {
+  function showResult(result, hold) {
     // Scroll to quiz parent
     quiz.parentNode.scrollIntoView({block: 'start', behavior: 'smooth'});
 
@@ -270,7 +299,7 @@
 
     var share = quiz.querySelector('.entry-quiz__share');
     if(document.body.contains(share)) {
-      replaceShare(result, scores);
+      replaceShare(result, hold);
     }
 
     var vote = quiz.querySelector('.entry-quiz__vote');
@@ -371,7 +400,7 @@
 
     if(quiz.classList.contains('entry-quiz--results') === false) {
       // Check if result exists
-      if(typeof knife_quiz_results[scores] === 'object') {
+      if(typeof knife_quiz_results[hold] === 'object') {
         quiz.classList.remove('entry-quiz--item');
 
         if(knife_quiz_options.hasOwnProperty('button_repeat')) {
@@ -384,7 +413,7 @@
 
         quiz.classList.add('entry-quiz--results');
 
-        return showResult(knife_quiz_results[scores], scores);
+        return showResult(knife_quiz_results[hold], hold);
       }
     }
 

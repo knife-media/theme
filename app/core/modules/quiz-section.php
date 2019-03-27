@@ -202,11 +202,13 @@ class Knife_Quiz_Section {
     public static function inject_object() {
         if(is_singular(self::$post_type)) {
             $post_id = get_the_ID();
-            $options = get_post_meta($post_id, self::$meta_options, true);
 
-            if(!is_array($options)) {
-                $options = [];
-            }
+            $options = get_post_meta($post_id, self::$meta_options, true);
+            $options = wp_parse_args($options, [
+                'achievment' => 0,
+                'details' => 'none',
+                'format' => 'binary'
+            ]);
 
             // Add quiz items
             wp_localize_script('knife-theme', 'knife_quiz_items',
@@ -239,11 +241,13 @@ class Knife_Quiz_Section {
 
         if(is_singular(self::$post_type) && strlen($share) > 0) {
             $post_id = get_the_ID();
-            $options = get_post_meta($post_id, self::$meta_options, true);
 
-            if(!is_array($options)) {
-                $options = [];
-            }
+            $options = get_post_meta($post_id, self::$meta_options, true);
+            $options = wp_parse_args($options, [
+                'achievment' => 0,
+                'details' => 'none',
+                'format' => 'binary'
+            ]);
 
             $results = self::retrieve_results($post_id, $options);
 
@@ -512,6 +516,7 @@ class Knife_Quiz_Section {
                     'answers' => $answers
                 ];
             }
+
         }
 
         return $items;
@@ -522,12 +527,7 @@ class Knife_Quiz_Section {
      * Retrieve results within meta to show as object
      */
     private static function retrieve_results($post_id, $options, $results = []) {
-        $options = wp_parse_args($options, [
-            'achievment' => 0,
-            'details' => 'none',
-            'format' => 'binary'
-        ]);
-
+        // Loop through results
         foreach(get_post_meta($post_id, self::$meta_results) as $item) {
             $blanks = ['from' => 0, 'to' => 0];
 
@@ -615,20 +615,6 @@ class Knife_Quiz_Section {
             $answer['attachment'] = esc_url($attachment);
         }
 
-        // Set binary option
-        if(empty($options['points']) && isset($fields['binary'])) {
-            $answer['binary'] = 1;
-        }
-
-        // Set points
-        if(!empty($options['points'])) {
-            if(!isset($fields['points'])) {
-                return false;
-            }
-
-            $answer['points'] = (int) $fields['points'];
-        }
-
         // Set message if required
         if(!empty($options['message'])) {
             if(empty($fields['message'])) {
@@ -637,6 +623,32 @@ class Knife_Quiz_Section {
 
             $answer['message'] = wp_kses_post($fields['message']);
         }
+
+        switch($options['format']) {
+            case 'category':
+                if(!isset($fields['category'])) {
+                    return false;
+                }
+
+                $answer['category'] = mb_substr($fields['category'], 0, 1);
+            break;
+
+            case 'points':
+                if(!isset($fields['points'])) {
+                    return false;
+                }
+
+                $answer['points'] = (int) $fields['points'];
+            break;
+
+            case 'binary':
+                if(isset($fields['binary'])) {
+                    $answer['binary'] = 1;
+                }
+
+            break;
+        }
+
 
         return $answer;
     }

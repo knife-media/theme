@@ -440,7 +440,8 @@
  * Manage styles
  */
 #knife-quiz-box .manage {
-  display: block;
+  display: flex;
+  flex-flow: column nowrap;
   flex: 1 1 350px;
 
   margin: 15px 15px 5px;
@@ -449,7 +450,7 @@
     display: block;
 
     width: 100%;
-    margin: 20px 0 10px;
+    margin: auto 0 10px;
     font-size: 13px;
     font-weight: 600;
     color: #333;
@@ -486,15 +487,6 @@
     display: block;
     margin: 0 0 10px;
   }
-
-  #knife-quiz-box .manage__check + .manage__input {
-    margin-top: 20px;
-  }
-
-  #knife-quiz-box .manage__radio + .manage__input {
-    margin-top: 20px;
-  }
-
     #knife-quiz-box .manage__input strong {
       display: block;
       margin-bottom: 4px;
