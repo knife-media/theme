@@ -55,7 +55,6 @@ class Knife_Widget_Televisor extends WP_Widget {
 
     /**
      * Outputs the content of the widget.
-     * @param array instance The current instance of the widget
      */
     public function widget($args, $instance) {
         $defaults = [

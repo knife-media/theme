@@ -292,7 +292,7 @@ class Knife_Quiz_Section {
             return false;
         }
 
-        if($query->is_tag() || $query->is_author() || $query->is_home()) {
+        if($query->is_archive() || $query->is_home()) {
             $types = $query->get('post_type');
 
             if(!is_array($types)) {
