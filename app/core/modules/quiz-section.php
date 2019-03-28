@@ -292,16 +292,22 @@ class Knife_Quiz_Section {
             return false;
         }
 
-        if($query->is_archive() || $query->is_home()) {
-            $types = $query->get('post_type');
+        // Is in archive
+        foreach(['tag', 'category', 'author', 'date', 'home'] as $archive) {
+            $method = 'is_' . $archive;
 
-            if(!is_array($types)) {
-                $types = ['post'];
+            if($query->$method()) {
+                $types = $query->get('post_type');
+
+                if(!is_array($types)) {
+                    $types = ['post'];
+                }
+
+                $types[] = self::$post_type;
+                $query->set('post_type', $types);
+
+                return false;
             }
-
-            $types[] = self::$post_type;
-
-            $query->set('post_type', $types);
         }
     }
 
