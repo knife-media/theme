@@ -13,7 +13,7 @@ if (!defined('WPINC')) {
     die;
 }
 
-class Knife_Random_Generator {
+class Knife_Generator_Section {
     /**
      * Unique slug using for custom post type register and url
      *
@@ -437,4 +437,4 @@ class Knife_Random_Generator {
 /**
  * Load current module environment
  */
-Knife_Random_Generator::load_module();
+Knife_Generator_Section::load_module();

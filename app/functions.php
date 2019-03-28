@@ -485,7 +485,7 @@ require get_template_directory() . '/core/modules/select-links.php';
 require get_template_directory() . '/core/modules/quiz-section.php';
 
 // Generator post type
-require get_template_directory() . '/core/modules/random-generator.php';
+require get_template_directory() . '/core/modules/generator-section.php';
 
 // Ask section post type
 require get_template_directory() . '/core/modules/ask-section.php';
