@@ -626,7 +626,7 @@ class Knife_Quiz_Section {
                 return false;
             }
 
-            $answer['message'] = wp_kses_post($fields['message']);
+            $answer['message'] = wpautop(wp_kses_post($fields['message']));
         }
 
         switch($options['format']) {
