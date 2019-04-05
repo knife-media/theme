@@ -1,0 +1,40 @@
+#knife-short-options .wp-list-table .column-primary {
+  width: 40%;
+}
+
+#knife-short-options .wp-list-table td.column-primary a {
+  display: block;
+}
+
+#knife-short-options .wp-list-table td.column-primary em {
+  display: block;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  font-style: normal;
+  font-size: 11px;
+  color: #777;
+}
+
+#knife-short-options .form-field {
+  max-width: 500px;
+  margin-bottom: 20px;
+}
+
+#knife-short-options .form-field label {
+  display: block;
+
+  margin-bottom: 3px;
+  font-weight: 600;
+}
+
+#knife-short-options .form-field input[type="text"] {
+  width: 100%;
+  line-height: 1.5;
+}
+
+#knife-short-options .search-form {
+  margin-top: 20px;
+}

@@ -441,6 +441,8 @@ require get_template_directory() . '/core/modules/mce-plugins.php';
 // Add custom feeds
 require get_template_directory() . '/core/modules/extra-feeds.php';
 
+// Return short links manager with simple stat
+require get_template_directory() . '/core/modules/short-manager.php';
 
 
 // Custom template tags for this theme.
