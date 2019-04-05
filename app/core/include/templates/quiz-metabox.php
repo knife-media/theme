@@ -152,7 +152,7 @@
 
                     printf(
                         '<p class="item__question"><textarea class="wp-editor-area" data-item="question">%s</textarea></p>',
-                        esc_attr($item['question'] ?? '')
+                        sanitize_textarea_field($item['question'] ?? '')
                     );
 
                     $answers = $item['answers'] ?? [];
@@ -188,13 +188,13 @@
                             <?php
                                 printf(
                                     '<div class="answer__text answer__text--choice"><strong>%2$s</strong><textarea data-answer="choice">%1$s</textarea></div>',
-                                    esc_attr($answer['choice'] ?? ''),
+                                    sanitize_textarea_field($answer['choice'] ?? ''),
                                     __('Вариант ответа', 'knife-theme')
                                 );
 
                                 printf(
                                     '<div class="answer__text answer__text--message"><strong>%2$s</strong><textarea data-answer="message">%1$s</textarea></div>',
-                                    esc_attr($answer['message'] ?? ''),
+                                    sanitize_textarea_field($answer['message'] ?? ''),
                                     __('Сообщение после ответа', 'knife-theme')
                                 );
                             ?>
@@ -209,7 +209,7 @@
 
                                     printf(
                                         '<div class="answer__points"><input type="number" data-answer="points" value="%1$s"><strong>%2$s</strong></div>',
-                                        esc_attr($answer['points'] ?? 0),
+                                        absint($answer['points'] ?? 0),
                                         __('Баллы за ответ', 'knife-theme')
                                     );
 
@@ -330,7 +330,7 @@
                 printf(
                     '<p class="remark__text"><textarea class="wp-editor-area" name="%1$s[remark]">%2$s</textarea></p>',
                     esc_attr(self::$meta_options),
-                    esc_attr($options['remark'] ?? '')
+                    sanitize_textarea_field($options['remark'] ?? '')
                 );
             ?>
         </div>
@@ -354,7 +354,7 @@
                     <?php
                         printf(
                             '<textarea class="wp-editor-area" data-result="details">%s</textarea>',
-                            esc_attr($result['details'] ?? '')
+                            sanitize_textarea_field($result['details'] ?? '')
                         );
                     ?>
                 </div>
@@ -363,20 +363,20 @@
                     <?php
                         printf(
                             '<p class="result__share-achievment"><strong>%2$s</strong><input type="text" data-result="achievment" value="%1$s" placeholder="%3$s"></p>',
-                            esc_attr($result['achievment'] ?? ''),
+                            sanitize_text_field($result['achievment'] ?? ''),
                             __('Результат', 'knife-theme'),
                             __('% из 10', 'knife-theme')
                         );
 
                         printf(
                             '<p class="result__share-heading"><strong>%2$s</strong><input type="text" data-result="heading" value="%1$s"></p>',
-                            esc_attr($result['heading'] ?? ''),
+                            sanitize_text_field($result['heading'] ?? ''),
                             __('Заголовок результата', 'knife-theme')
                         );
 
                         printf(
                             '<p class="result__share-description"><strong>%2$s</strong><textarea data-result="description">%1$s</textarea></p>',
-                            esc_attr($result['description'] ?? ''),
+                            sanitize_textarea_field($result['description'] ?? ''),
                             __('Описание', 'knife-theme')
                         );
                     ?>
@@ -400,7 +400,7 @@
 
                             printf(
                                 '<input class="result__image-attachment" type="hidden" data-result="attachment" value="%s">',
-                                esc_attr($result['attachment'] ?? '')
+                                sanitize_text_field($result['attachment'] ?? '')
                             );
                         ?>
                     </figure>
@@ -462,11 +462,11 @@
                             __('Показывать с %s по %s баллов или правильных ответов', 'knife-theme'),
 
                             sprintf('<input class="result__scores-field" type="number" data-result="from" value="%s">',
-                                esc_attr($result['from'] ?? 0)
+                                absint($result['from'] ?? 0)
                             ),
 
                             sprintf('<input class="result__scores-field" type="number" data-result="to" value="%s">',
-                                esc_attr($result['to'] ?? 0)
+                                absint($result['to'] ?? 0)
                             )
                         );
                     ?>

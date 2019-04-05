@@ -12,7 +12,7 @@
 
             sprintf('<input type="text" class="widefat" name="%s[asker]" value="%s" style="margin:5px 0;">',
                 esc_attr(self::$meta_options),
-                esc_attr($options['asker'] ?? '')
+                sanitize_text_field($options['asker'] ?? '')
             ),
 
             __('Описание можно отделить запятой', 'knife-theme')
@@ -24,7 +24,7 @@
 
             sprintf('<input type="number" class="small-text" name="%s[counter]" value="%s">',
                 esc_attr(self::$meta_options),
-                esc_attr($options['counter'])
+                absint($options['counter'])
             )
         );
 

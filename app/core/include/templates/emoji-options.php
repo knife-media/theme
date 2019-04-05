@@ -10,7 +10,7 @@
     <td>
         <?php
             printf('<input type="text" name="%1$s" value="%2$s">',
-                esc_attr(self::$term_meta), esc_attr($meta)
+                esc_attr(self::$term_meta), sanitize_text_field($meta)
             );
         ?>
     </td>

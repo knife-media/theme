@@ -35,7 +35,7 @@
                     <?php
                         printf('<input class="option__link" name="%s[][link]" value="%s" type="text">',
                             esc_attr(self::$meta_items),
-                            esc_attr($item['link'] ?? '')
+                            sanitize_text_field($item['link'] ?? '')
                         );
                     ?>
                 </div>
@@ -46,7 +46,7 @@
                     <?php
                         printf('<textarea class="option__title" name="%s[][title]">%s</textarea>',
                             esc_attr(self::$meta_items),
-                            esc_attr($item['title'] ?? '')
+                            sanitize_text_field($item['title'] ?? '')
                         );
                     ?>
                 </div>
@@ -63,7 +63,7 @@
 
                         printf('<input class="option__attachment" type="hidden" name="%s[][attachment]" value="%s">',
                             esc_attr(self::$meta_items),
-                            esc_attr($item['attachment'] ?? '')
+                            sanitize_text_field($item['attachment'] ?? '')
                         );
                     ?>
                 </figure>

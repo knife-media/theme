@@ -23,14 +23,14 @@
                         printf(
                             '<p class="option__general"><strong>%3$s</strong><input type="text" data-item="heading" name="%1$s[][heading]" value="%2$s"></p>',
                             esc_attr(self::$meta_items),
-                            esc_attr($item['heading'] ?? ''),
+                            sanitize_text_field($item['heading'] ?? ''),
                             __('Заголовок', 'knife-theme')
                         );
 
                         printf(
                             '<p class="option__general"><strong>%3$s</strong><textarea data-item="description" name="%1$s[][description]">%2$s</textarea></p>',
                             esc_attr(self::$meta_items),
-                            esc_attr($item['description'] ?? ''),
+                            sanitize_textarea_field($item['description'] ?? ''),
                             __('Описание', 'knife-theme')
                         );
                     ?>
@@ -53,12 +53,12 @@
 
                                 printf('<input type="hidden" data-item="poster" name="%s[][poster]" value="%s">',
                                     esc_attr(self::$meta_items),
-                                    esc_attr($item['poster'] ?? '')
+                                    sanitize_text_field($item['poster'] ?? '')
                                 );
 
                                 printf('<input type="hidden" data-item="attachment" name="%s[][attachment]" value="%s">',
                                     esc_attr(self::$meta_items),
-                                    esc_attr($item['attachment'] ?? '')
+                                    sanitize_text_field($item['attachment'] ?? '')
                                 );
                             ?>
                         </figure>
@@ -142,7 +142,7 @@
                     <?php
                         printf('<input type="text" name="%s[page_background]" value="%s">',
                             esc_attr(self::$meta_options),
-                            esc_attr($options['page_background'] ?? '#ffffff')
+                            sanitize_hex_color($options['page_background'] ?? '#ffffff')
                         );
                     ?>
                 </p>
@@ -155,7 +155,7 @@
                     <?php
                         printf('<input type="text" name="%s[page_color]" value="%s">',
                             esc_attr(self::$meta_options),
-                            esc_attr($options['page_color'] ?? '#000000')
+                            sanitize_hex_color($options['page_color'] ?? '#000000')
                         );
                     ?>
                 </p>
@@ -169,7 +169,7 @@
                     <?php
                         printf('<input type="text" name="%s[button_background]" value="%s">',
                             esc_attr(self::$meta_options),
-                            esc_attr($options['button_background'] ?? '')
+                            sanitize_hex_color($options['button_background'] ?? '')
                         );
                     ?>
                 </p>
@@ -182,7 +182,7 @@
                     <?php
                         printf('<input type="text" name="%s[button_color]" value="%s">',
                             esc_attr(self::$meta_options),
-                            esc_attr($options['button_color'] ?? '')
+                            sanitize_hex_color($options['button_color'] ?? '')
                         );
                     ?>
                 </p>
