@@ -63,16 +63,10 @@ class Knife_Short_Links_Table extends WP_List_Table {
      * Keyword column render
      */
     public function column_title($item) {
-        $actions = [
-            'view' => sprintf('<a href="%s" target="_blank">%s</a>',
-                esc_url($item['url']),
-                __('Открыть ссылку в новом окне', 'knife-theme')
-            ),
-        ];
-
-        $markup = sprintf('<strong class="row-title">%s</strong>%s',
-            esc_html($item['title']),
-            $this->row_actions($actions)
+        $markup = sprintf(
+            '<a href="%1$s" class="row-title" target="_blank">%2$s</a><em>%1$s</em>',
+            esc_html($item['url']),
+            esc_html($item['title'])
         );
 
         return $markup;
@@ -97,18 +91,6 @@ class Knife_Short_Links_Table extends WP_List_Table {
 
 
     /**
-     * Make url clickable
-     */
-    public function column_url($item) {
-        $markup = sprintf('<a href="%1$s" target="_blank">%1$s</a>',
-            esc_url($item['url'])
-        );
-
-        return $markup;
-    }
-
-
-    /**
      * Checkbox column render
      */
     public function column_cb($item) {
@@ -129,7 +111,6 @@ class Knife_Short_Links_Table extends WP_List_Table {
             'cb' => '<input type="checkbox" />',
             'title' => __('Название', 'knife-theme'),
             'keyword' => __('Короткий адрес', 'knife-theme'),
-            'url' => __('Полная ссылка', 'knife-theme'),
             'timestamp' => __('Дата', 'knife-theme'),
             'clicks' => __('Переходы', 'knife-theme'),
         ];
@@ -182,7 +163,7 @@ class Knife_Short_Links_Table extends WP_List_Table {
 
                 // Delete given ids
                 if($db->query("DELETE FROM urls WHERE id IN({$ids})")) {
-                    add_settings_error('knife-short-action', 'knife-short-action',
+                    add_settings_error('knife-short-actions', 'knife-short-remove',
                         __('Ссылки успешено удалены', 'knife-theme'), 'updated'
                     );
                 }
