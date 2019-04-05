@@ -186,6 +186,7 @@ class Knife_Short_Manager {
         extract($settings);
 
         $db = new wpdb($user, $password, $name, $host);
+        $db->hide_errors();
 
         if(isset($db->error)) {
             wp_die($db->error);

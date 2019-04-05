@@ -187,7 +187,6 @@ class Knife_Short_Links_Table extends WP_List_Table {
         ];
 
         $db = $this->short_db;
-        $db->hide_errors();
 
         $args = [
             'orderby' => 'timestamp',
