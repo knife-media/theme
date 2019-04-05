@@ -7,6 +7,12 @@
 }
 
 #knife-short-options .wp-list-table td.column-primary em {
+  display: block;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
   font-style: normal;
   font-size: 11px;
   color: #777;

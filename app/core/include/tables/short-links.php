@@ -25,29 +25,27 @@ class Knife_Short_Links_Table extends WP_List_Table {
 
 
     /**
+     * Option name to store table per_page option
+     *
+     * @access  private
+     * @var     string
+     */
+    private $per_page = '';
+
+
+    /**
      * Short Links table constructor
      *
      * Uses short link database wpdb instance
      */
-    public function __construct($db) {
-        // Init parent construct
+    public function __construct($db, $per_page) {
         parent::__construct([
-            'singular' => 'link',
-            'plural' => 'links'
+            'plural' => 'shortlinks',
+            'ajax' => false
         ]);
 
-        // Add screen option
-        add_screen_option('per_page', [
-            'label' => __('Показывать на странице', 'knife-theme'),
-            'default' => 20,
-            'option' => 'links_per_page',
-        ]);
-
-        // Set db instance
         $this->short_db = $db;
-
-        // Prepare table items to display
-        $this->prepare_items();
+        $this->per_page = $per_page;
     }
 
 
@@ -77,16 +75,14 @@ class Knife_Short_Links_Table extends WP_List_Table {
      * Fix timestamp format
      */
     public function column_timestamp($item) {
-        $timestamp = strtotime($item['timestamp']);
+        $publish = strtotime($item['timestamp']);
+        $current = current_time('timestamp');
 
-        // Get time diff
-        $time_diff = current_time('timestamp', true) - $timestamp;
-
-        if($time_diff >= 0 && $time_diff < DAY_IN_SECONDS) {
-            return sprintf(__('%s назад', 'knife-theme'), human_time_diff($timestamp));
+        if($current >= $publish && $publish - $current < DAY_IN_SECONDS) {
+            return sprintf(__('%s назад', 'knife-theme'), human_time_diff($current, $publish));
         }
 
-        return date_i18n(get_option('date_format'), $timestamp);
+        return date_i18n(get_option('date_format'), $publish);
     }
 
 
@@ -112,7 +108,7 @@ class Knife_Short_Links_Table extends WP_List_Table {
             'title' => __('Название', 'knife-theme'),
             'keyword' => __('Короткий адрес', 'knife-theme'),
             'timestamp' => __('Дата', 'knife-theme'),
-            'clicks' => __('Переходы', 'knife-theme'),
+            'clicks' => __('Переходы', 'knife-theme')
         ];
 
         return $columns;
@@ -123,13 +119,21 @@ class Knife_Short_Links_Table extends WP_List_Table {
      * Return columns that may be used to sort table
      */
     public function get_sortable_columns() {
-        $sortable_columns = [
-            'title' => ['title', true],
-            'timestamp' => ['timestamp', true],
-            'clicks' => ['clicks', true]
+        $columns = [
+            'title' => [
+                'title', true
+            ],
+
+            'timestamp' => [
+                'timestamp', true
+            ],
+
+            'clicks' => [
+                'clicks', true
+            ]
         ];
 
-        return $sortable_columns;
+        return $columns;
     }
 
 
@@ -148,7 +152,7 @@ class Knife_Short_Links_Table extends WP_List_Table {
     /**
      * Process bulk actions
      */
-    public function process_actions($db) {
+    public function process_actions() {
         $ids = [];
 
         if('delete' === $this->current_action()) {
@@ -158,12 +162,14 @@ class Knife_Short_Links_Table extends WP_List_Table {
                 $ids = wp_parse_id_list(wp_unslash($_REQUEST['id']));
             }
 
+            $db = $this->short_db;
+
             if(count($ids) > 0) {
                 $ids = implode(',', $ids);
 
                 // Delete given ids
                 if($db->query("DELETE FROM urls WHERE id IN({$ids})")) {
-                    add_settings_error('knife-short-actions', 'knife-short-remove',
+                    add_settings_error('knife-short-actions', 'remove',
                         __('Ссылки успешено удалены', 'knife-theme'), 'updated'
                     );
                 }
@@ -176,38 +182,60 @@ class Knife_Short_Links_Table extends WP_List_Table {
      * Get rows from database and prepare them to be showed in table
      */
     public function prepare_items() {
+        $this->_column_headers = [
+            $this->get_columns(), [], $this->get_sortable_columns()
+        ];
+
         $db = $this->short_db;
+        $db->hide_errors();
 
-        // Process actions first
-        $this->process_actions($db);
+        $args = [
+            'orderby' => 'timestamp',
+            'order' => 'desc',
+            'paged' => 0,
+            'where' => '1=1',
+            'per_page' => 20,
+            'total_items' => 0,
+        ];
 
-        $table_name = 'urls';
-        $per_page = 5;
-        $columns = $this->get_columns();
-        $hidden = array();
-        $sortable = $this->get_sortable_columns();
+        $args['per_page'] = $this->get_items_per_page($this->per_page);
 
+        if(isset($_REQUEST['paged'])) {
+            $args['paged'] = max(0, intval($_REQUEST['paged'] - 1) * $args['per_page']);
+        }
 
+        if(isset($_REQUEST['orderby'])) {
+            if(array_key_exists($_REQUEST['orderby'], $this->get_sortable_columns())) {
+                $args['orderby'] = $_REQUEST['orderby'];
+            }
+        }
 
+        if(isset($_REQUEST['order'])) {
+            if(in_array(strtoupper($_REQUEST['order']), array('ASC', 'DESC'), true)) {
+                $args['order'] = strtoupper($_REQUEST['order']);
+            }
+        }
 
+        if(isset($_REQUEST['s'])) {
+            $args['where'] = $db->prepare("CONCAT(keyword, url, title) LIKE %s",
+                '%' . $db->esc_like($_REQUEST['s']) . '%'
+            );
+        }
 
-        // here we configure table headers, defined in our methods
-        $this->_column_headers = array($columns, $hidden, $sortable);
-        // [OPTIONAL] process bulk action if any
-        // will be used in pagination settings
-        $total_items = $db->get_var("SELECT COUNT(keyword) FROM $table_name");
-        // prepare query params, as usual current page, order by and order direction
-        $paged = isset($_REQUEST['paged']) ? max(0, intval($_REQUEST['paged'] - 1) * $per_page) : 0;
-        $orderby = (isset($_REQUEST['orderby']) && in_array($_REQUEST['orderby'], array_keys($this->get_sortable_columns()))) ? $_REQUEST['orderby'] : 'keyword';
-        $order = (isset($_REQUEST['order']) && in_array($_REQUEST['order'], array('asc', 'desc'))) ? $_REQUEST['order'] : 'asc';
-        // [REQUIRED] define $items array
-        // notice that last argument is ARRAY_A, so we will retrieve array
-        $this->items = $db->get_results($db->prepare("SELECT * FROM $table_name ORDER BY $orderby $order LIMIT %d OFFSET %d", $per_page, $paged), ARRAY_A);
-        // [REQUIRED] configure pagination
+        $query = sprintf(
+            "SELECT SQL_CALC_FOUND_ROWS * FROM urls WHERE %s ORDER BY %s %s LIMIT %d OFFSET %d",
+            $args['where'], $args['orderby'], $args['order'], $args['per_page'], $args['paged']
+        );
+
+        $this->items = $db->get_results($query, ARRAY_A);
+
+        if(!$db->last_error) {
+            $args['total_items'] = $db->get_var("SELECT FOUND_ROWS()");
+        }
+
         $this->set_pagination_args(array(
-            'total_items' => $total_items, // total items defined above
-            'per_page' => $per_page, // per page constant defined at top of method
-            'total_pages' => ceil($total_items / $per_page) // calculate pages count
+            'total_items' => $args['total_items'],
+            'per_page' => $args['per_page']
         ));
     }
 }

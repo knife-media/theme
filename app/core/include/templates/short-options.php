@@ -4,19 +4,23 @@
     <?php settings_errors('knife-short-actions'); ?>
 
     <form method="post" class="form-field">
-        <p>
-            <label for="knife-short-url"><?php _e('Полный URL длинной ссылки', 'knife-theme'); ?></label>
-            <input type="text" id="knife-short-url" name="url" required>
-        </p>
-
-        <p>
-            <label for="knife-short-keyword"><?php _e('Адрес короткой ссылки', 'knife-theme'); ?></label>
-            <input type="text" id="knife-short-keyword" name="keyword" required>
-        </p>
-
-        <input type="hidden" name="action" value="knife-short-append" />
-
         <?php
+            printf(
+                '<p><label for="%1$s">%2$s</label><input type="text" id="%1$s" name="url" required></p>',
+                esc_attr(self::$page_slug . '-url'),
+                __('Полный URL длинной ссылки', 'knife-theme')
+            );
+
+            printf(
+                '<p><label for="%1$s">%2$s</label><input type="text" id="%1$s" name="keyword" required></p>',
+                esc_attr(self::$page_slug . '-keyword'),
+                __('Адрес короткой ссылки', 'knife-theme')
+            );
+
+            printf('<input type="hidden" name="action" value="%s">',
+                esc_attr(self::$page_slug . '-append')
+            );
+
             wp_nonce_field('knife-short-append');
             submit_button(__('Сократить ссылку', 'knife-theme'), 'primary', 'submit', false);
         ?>
@@ -26,7 +30,7 @@
 
     <form class="search-form wp-clearfix">
         <?php
-            $table->search_box(__('Найти ссылки', 'knife-theme'), 'knife-short');
+            $table->search_box(__('Найти ссылки', 'knife-theme'), self::$page_slug);
 
             printf('<input type="hidden" name="page" value="%s">',
                 esc_attr(self::$page_slug)
