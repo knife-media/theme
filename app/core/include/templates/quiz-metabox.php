@@ -152,7 +152,7 @@
 
                     printf(
                         '<p class="item__question"><textarea class="wp-editor-area" data-item="question">%s</textarea></p>',
-                        sanitize_textarea_field($item['question'] ?? '')
+                        wp_kses_post($item['question'] ?? '')
                     );
 
                     $answers = $item['answers'] ?? [];
@@ -188,13 +188,13 @@
                             <?php
                                 printf(
                                     '<div class="answer__text answer__text--choice"><strong>%2$s</strong><textarea data-answer="choice">%1$s</textarea></div>',
-                                    sanitize_textarea_field($answer['choice'] ?? ''),
+                                    wp_kses_post($answer['choice'] ?? ''),
                                     __('Вариант ответа', 'knife-theme')
                                 );
 
                                 printf(
                                     '<div class="answer__text answer__text--message"><strong>%2$s</strong><textarea data-answer="message">%1$s</textarea></div>',
-                                    sanitize_textarea_field($answer['message'] ?? ''),
+                                    wp_kses_post($answer['message'] ?? ''),
                                     __('Сообщение после ответа', 'knife-theme')
                                 );
                             ?>
@@ -330,7 +330,7 @@
                 printf(
                     '<p class="remark__text"><textarea class="wp-editor-area" name="%1$s[remark]">%2$s</textarea></p>',
                     esc_attr(self::$meta_options),
-                    sanitize_textarea_field($options['remark'] ?? '')
+                    wp_kses_post($options['remark'] ?? '')
                 );
             ?>
         </div>
@@ -354,7 +354,7 @@
                     <?php
                         printf(
                             '<textarea class="wp-editor-area" data-result="details">%s</textarea>',
-                            sanitize_textarea_field($result['details'] ?? '')
+                            wp_kses_post($result['details'] ?? '')
                         );
                     ?>
                 </div>
@@ -376,7 +376,7 @@
 
                         printf(
                             '<p class="result__share-description"><strong>%2$s</strong><textarea data-result="description">%1$s</textarea></p>',
-                            sanitize_textarea_field($result['description'] ?? ''),
+                            wp_kses_post($result['description'] ?? ''),
                             __('Описание', 'knife-theme')
                         );
                     ?>

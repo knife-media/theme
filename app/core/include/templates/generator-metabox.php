@@ -30,7 +30,7 @@
                         printf(
                             '<p class="option__general"><strong>%3$s</strong><textarea data-item="description" name="%1$s[][description]">%2$s</textarea></p>',
                             esc_attr(self::$meta_items),
-                            sanitize_textarea_field($item['description'] ?? ''),
+                            wp_kses_post($item['description'] ?? ''),
                             __('Описание', 'knife-theme')
                         );
                     ?>
