@@ -61,6 +61,11 @@ class Knife_Short_Manager {
 
         // Save links per page screen option
         add_filter('set-screen-option', [__CLASS__, 'save_screen_options'], 10, 3);
+
+        // Define short links settings if still not
+        if(!defined('WP_SHORT_MANAGER')) {
+            define('WP_SHORT_MANAGER', []);
+        }
     }
 
 
@@ -171,21 +176,16 @@ class Knife_Short_Manager {
      * Create custom database connection
      */
     private static function connect_short_db() {
-        if(!defined('WP_SHORT_MANAGER')) {
-            define('WP_SHORT_MANAGER', []);
-        }
-
-        // Mix with custom module settings
-        $settings = wp_parse_args(WP_SHORT_MANAGER, [
+        // Mix with default values
+        $conf = wp_parse_args(WP_SHORT_MANAGER, [
             'host' => DB_HOST,
             'name' => DB_NAME,
             'user' => DB_USER,
             'password' => DB_PASSWORD
         ]);
 
-        extract($settings);
-
-        $db = new wpdb($user, $password, $name, $host);
+        // Create custom db connection
+        $db = new wpdb($conf['user'], $conf['password'], $conf['name'], $conf['host']);
         $db->hide_errors();
 
         if(isset($db->error)) {

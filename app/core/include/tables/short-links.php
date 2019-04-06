@@ -58,13 +58,35 @@ class Knife_Short_Links_Table extends WP_List_Table {
 
 
     /**
-     * Keyword column render
+     * Title column render
      */
     public function column_title($item) {
         $markup = sprintf(
             '<a href="%1$s" class="row-title" target="_blank">%2$s</a><em>%1$s</em>',
             esc_html($item['url']),
             esc_html($item['title'])
+        );
+
+        return $markup;
+    }
+
+
+    /**
+     * Keyword column render
+     */
+    public function column_keyword($item) {
+        $conf = WP_SHORT_MANAGER;
+
+        if(empty($conf['url'])) {
+            return $item['keyword'];
+        }
+
+        $link = trailingslashit($conf['url']) . $item['keyword'];
+
+        $markup = sprintf(
+            '<a href="%s" target="_blank">%s</a>',
+            esc_url(trailingslashit($link)),
+            esc_html($item['keyword'])
         );
 
         return $markup;
@@ -215,7 +237,7 @@ class Knife_Short_Links_Table extends WP_List_Table {
             }
         }
 
-        if(isset($_REQUEST['s'])) {
+        if(isset($_REQUEST['s']) && strlen($_REQUEST['s']) > 0) {
             $args['where'] = $db->prepare("CONCAT(keyword, url, title) LIKE %s",
                 '%' . $db->esc_like($_REQUEST['s']) . '%'
             );
