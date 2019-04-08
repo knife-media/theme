@@ -132,6 +132,19 @@
         margin: 1rem 0;
       }
     }
+
+    hr {
+      display: block;
+
+      margin-top: 2rem;
+
+      border: 0;
+      border-top: 1px solid rgba(0, 0, 0, 0.15);
+    }
+
+    small {
+      font-size: small;
+    }
   }
 
   .entry-quiz__button {
