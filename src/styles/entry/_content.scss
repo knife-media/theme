@@ -277,6 +277,37 @@
     }
   }
 
+  details {
+    & > * {
+      margin-top: 1rem;
+
+      @media screen and (max-width: 767px) {
+        margin-top: .75rem;
+      }
+    }
+
+    & > :first-child {
+      margin-top: 0;
+    }
+
+    & > :last-child {
+      margin-bottom: 0;
+    }
+
+    summary {
+      cursor: pointer;
+      outline: none;
+      user-select: none;
+
+      font-size: 1.375rem;
+      line-height: 1.25;
+
+      @media screen and (max-width: 767px) {
+        font-size: 1.125rem;
+      }
+    }
+  }
+
   input, textarea {
     -webkit-font-smoothing: antialiased;
   }
