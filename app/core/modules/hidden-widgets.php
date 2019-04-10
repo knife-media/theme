@@ -8,6 +8,7 @@
  * @link https://wordpress.org/plugins/jetpack-widget-visibility/
  * @package knife-theme
  * @since 1.5
+ * @version 1.8
  */
 
 
@@ -127,6 +128,14 @@ class Knife_Hidden_Widgets {
                         esc_html($tag->name)
                     );
                 }
+            break;
+
+            case 'meta':
+                printf(
+                    '<option value="promo" %1$s>%2$s</option>',
+                    selected('promo', $minor, false),
+                    __('Партнерский материал', 'knife-theme')
+                );
             break;
 
             case 'page':
@@ -270,7 +279,7 @@ class Knife_Hidden_Widgets {
      * Provide an option to include children of pages.
      */
     public static function widget_conditions_has_children_echo($major = '', $minor = '', $has_children = false){
-        if(!$major || 'page' !== $major || ! $minor){
+        if(!$major || 'page' !== $major || !$minor){
             return null;
         }
 
@@ -403,6 +412,12 @@ class Knife_Hidden_Widgets {
                                             '<option value="category" %1$s>%2$s</option>',
                                             selected("category", $rule['major'], false),
                                             __('Категория', 'knife-theme')
+                                        );
+
+                                        printf(
+                                            '<option value="meta" %1$s>%2$s</option>',
+                                            selected("meta", $rule['major'], false),
+                                            __('Свойство записи', 'knife-theme')
                                         );
 
                                         if(get_taxonomies(['_builtin' => false])) {
@@ -663,7 +678,15 @@ class Knife_Hidden_Widgets {
 
                             if(is_category($rule['minor'])) {
                                 $condition_result = true;
-                            } else if(is_singular() && $rule['minor'] && in_array('category', get_post_taxonomies()) &&  has_category($rule['minor'])) {
+                            } else if(is_singular() && $rule['minor'] && in_array('category', get_post_taxonomies()) && has_category($rule['minor'])) {
+                                $condition_result = true;
+                            }
+                        }
+                    break;
+
+                    case 'meta':
+                        if($rule['minor'] === 'promo' && is_singular()) {
+                            if(get_post_meta(get_the_ID(), '_knife-promo', true)) {
                                 $condition_result = true;
                             }
                         }

@@ -15,7 +15,11 @@
       });
     }
 
-    $('#widgets-right .widget:has(.color-picker)').each(function () {
+    $('#widgets-left .widget:has(.color-picker)').each(function() {
+      initColorPicker($(this));
+    });
+
+    $('#widgets-right .widget:has(.color-picker)').each(function() {
       initColorPicker($(this));
     });
 
