@@ -152,6 +152,7 @@ class Knife_Promo_Manager {
         }
 
         if(get_query_var(self::$query_var)) {
+            $query->set('post_type', 'any');
             $query->set('meta_key', self::$meta_promo);
             $query->set('meta_value', 1);
         }
