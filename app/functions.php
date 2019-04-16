@@ -351,6 +351,9 @@ require get_template_directory() . '/core/modules/menu-upgrade.php';
 // Notification sender module
 require get_template_directory() . '/core/modules/notifier-robot.php';
 
+// Schedule posts sharing
+require get_template_directory() . '/core/modules/social-publisher.php';
+
 // User generated blogs
 require get_template_directory() . '/core/modules/club-section.php';
 
