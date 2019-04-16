@@ -54,7 +54,7 @@ class Knife_Notifier_Robot {
     public static function send_telegram($message) {
         $token = get_theme_mod(self::$telegram_token);
 
-        if($token && is_array($message)) {
+        if(is_array($message) && strlen($token) > 0) {
             $url = 'https://api.telegram.org/bot' . $token . '/sendMessage';
 
             $ch = curl_init();

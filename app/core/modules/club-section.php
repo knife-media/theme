@@ -249,15 +249,17 @@ class Knife_Club_Section {
      * Add button to description
      */
     public static function update_archive_description($description) {
-        $button_link = get_theme_mod(self::$button_link, '');
+        if(is_post_type_archive(self::$post_type)) {
+            $button_link = get_theme_mod(self::$button_link);
 
-        if(is_post_type_archive(self::$post_type) && strlen($button_link) > 0) {
-            $button = sprintf('<div class="tagline-button tagline-button--club"><a class="button" href="%2$s">%1$s</a></div>',
-                __('Присоединиться', 'knife-theme'),
-                esc_url($button_link)
-            );
+            if(strlen($button_link) > 0) {
+                $button = sprintf('<div class="tagline-button tagline-button--club"><a class="button" href="%2$s">%1$s</a></div>',
+                    __('Присоединиться', 'knife-theme'),
+                    esc_url($button_link)
+                );
 
-            $description = $description . $button;
+                $description = $description . $button;
+            }
         }
 
         return $description;

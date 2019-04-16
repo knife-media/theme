@@ -285,9 +285,9 @@ class Knife_Ask_Section {
             return;
         }
 
-        $thumbnail_id = get_theme_mod(self::$option_thumbnail, '');
+        $thumbnail_id = get_theme_mod(self::$option_thumbnail);
 
-        if($thumbnail_id) {
+        if(strlen($thumbnail_id) > 0) {
             update_post_meta($post_id, '_thumbnail_id', $thumbnail_id);
         }
     }
