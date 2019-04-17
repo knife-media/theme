@@ -47,7 +47,7 @@ class Knife_Google_Search {
     public static function inject_object() {
         $search_id = get_theme_mod(self::$option_id);
 
-        if(!empty($search_id)) {
+        if(strlen($search_id) > 0) {
             wp_localize_script('knife-theme', 'knife_search_id', $search_id);
         }
     }
