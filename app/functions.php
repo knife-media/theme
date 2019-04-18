@@ -352,7 +352,7 @@ require get_template_directory() . '/core/modules/menu-upgrade.php';
 require get_template_directory() . '/core/modules/notifier-robot.php';
 
 // Schedule posts sharing
-require get_template_directory() . '/core/modules/social-publisher.php';
+require get_template_directory() . '/core/modules/distribute-control.php';
 
 // User generated blogs
 require get_template_directory() . '/core/modules/club-section.php';

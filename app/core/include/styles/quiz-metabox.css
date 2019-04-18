@@ -380,6 +380,7 @@
 
   #knife-quiz-box .answer__binary label {
     user-select: none;
+    -webkit-user-select: none;
     font-weight: 600;
   }
 
