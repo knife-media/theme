@@ -52,6 +52,19 @@ class Knife_Distribute_Control {
 
 
     /**
+     * Add custom distribute metabox for editors and admins
+     */
+    public static function add_metabox() {
+        if(current_user_can('publish_pages')) {
+            add_meta_box('knife-distribute-metabox', __('Настройки кросспостинга'), [__CLASS__, 'display_metabox'], self::$post_type, 'advanced');
+
+            // Enqueue post metabox scripts
+            add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
+        }
+    }
+
+
+    /**
      * Enqueue assets for metabox
      */
     public static function enqueue_assets($hook) {
@@ -71,19 +84,6 @@ class Knife_Distribute_Control {
 
         // Insert admin styles
         wp_enqueue_style('knife-distribute-metabox', $include . '/styles/distribute-metabox.css', [], $version);
-    }
-
-
-    /**
-     * Add custom distribute metabox for editors and admins
-     */
-    public static function add_metabox() {
-        if(current_user_can('publish_pages')) {
-            add_meta_box('knife-distribute-metabox', __('Настройки кросспостинга'), [__CLASS__, 'display_metabox'], self::$post_type, 'advanced');
-
-            // Enqueue post metabox scripts
-            add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
-        }
     }
 
 
