@@ -24,7 +24,7 @@
     }
 
     if(network === 'facebook') {
-      return 'https://graph.facebook.com/?callback=FB.Share&id=' + link;
+      return 'https://knife.support/facebook?fields=engagement&callback=FB.Share&id=' + link;
     }
   }
 
@@ -112,7 +112,7 @@
     Share: function (data) {
       document.getElementById('share-facebook').outerHTML = '';
 
-      if(typeof data.share === 'undefined' || !data.share.share_count) {
+      if(typeof data.engagement === 'undefined' || !data.engagement.share_count) {
         return;
       }
 
@@ -121,7 +121,7 @@
       for(var i = 0; i < links.length; i++) {
         var child = document.createElement("span");
         child.className = 'share__count';
-        child.innerHTML = data.share.share_count;
+        child.innerHTML = data.engagement.share_count;
 
         links[i].appendChild(child);
       }
