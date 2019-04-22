@@ -393,7 +393,7 @@ class Knife_Generator_Section {
                     $i++;
                 }
 
-                if(strlen($value) > 0) {
+                if(!empty($value)) {
                     $meta[$i][$key] = sanitize_text_field($value);
                 }
             }

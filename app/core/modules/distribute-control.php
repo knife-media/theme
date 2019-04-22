@@ -25,15 +25,6 @@ class Knife_Distribute_Control {
 
 
     /**
-     * Unique meta to store post distribute options
-     *
-     * @access  private
-     * @var     string
-     */
-    private static $post_meta = '_knife-distribute';
-
-
-    /**
      * Metabox save nonce
      *
      * @access  private
@@ -43,11 +34,23 @@ class Knife_Distribute_Control {
 
 
     /**
+     * Unique meta to store distribute items
+     *
+     * @access  private
+     * @var     string
+     */
+    private static $meta_items = '_knife-distribute-items';
+
+
+    /**
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public static function load_module() {
         // Add custom distribute metabox
         add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
+
+        // Save metabox
+        add_action('save_post', [__CLASS__, 'save_metabox']);
     }
 
 
@@ -82,8 +85,22 @@ class Knife_Distribute_Control {
         $version = wp_get_theme()->get('Version');
         $include = get_template_directory_uri() . '/core/include';
 
+        // Insert wp media scripts
+        wp_enqueue_media();
+
         // Insert admin styles
         wp_enqueue_style('knife-distribute-metabox', $include . '/styles/distribute-metabox.css', [], $version);
+
+        // Insert admin scripts
+        wp_enqueue_script('knife-distribute-metabox', $include . '/scripts/distribute-metabox.js', ['jquery'], $version);
+
+        $options = [
+            'meta_items' => esc_attr(self::$meta_items),
+            'choose' => __('Выберите изображение', 'knife-theme'),
+            'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
+        ];
+
+        wp_localize_script('knife-distribute-metabox', 'knife_distribute_metabox', $options);
     }
 
 
@@ -94,6 +111,52 @@ class Knife_Distribute_Control {
         $include = get_template_directory() . '/core/include';
 
         include_once($include . '/templates/distribute-metabox.php');
+    }
+
+
+    /**
+     * Save post options
+     */
+    public static function save_metabox($post_id) {
+        if(!isset($_REQUEST[self::$metabox_nonce])) {
+            return;
+        }
+
+        if(!wp_verify_nonce($_REQUEST[self::$metabox_nonce], 'metabox')) {
+            return;
+        }
+
+        if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+            return;
+        }
+
+        if(!current_user_can('publish_pages', $post_id)) {
+            return;
+        }
+
+
+        // Update items
+        self::update_items(self::$meta_items, $post_id);
+    }
+
+
+    /**
+     * Update distribute items from post-metabox
+     */
+    private static function update_items($query, $post_id, $meta = [], $i = 0) {
+        if(empty($_REQUEST[$query])) {
+            return;
+        }
+
+        // Delete distribute post meta to create it again below
+        delete_post_meta($post_id, $query);
+
+        foreach($_REQUEST[$query] as $item) {
+            // Add post meta if not empty
+            if(array_filter($item)) {
+                add_post_meta($post_id, $query, $item);
+            }
+        }
     }
 }
 
