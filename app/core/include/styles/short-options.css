@@ -20,7 +20,7 @@
 }
 
 #knife-short-options .form-field label {
-  display: block;
+  display: inline-block;
 
   margin-bottom: 3px;
   font-weight: 600;

@@ -63,8 +63,8 @@ class Knife_Short_Manager {
         add_filter('set-screen-option', [__CLASS__, 'save_screen_options'], 10, 3);
 
         // Define short links settings if still not
-        if(!defined('WP_SHORT_MANAGER')) {
-            define('WP_SHORT_MANAGER', []);
+        if(!defined('KNIFE_SHORT')) {
+            define('KNIFE_SHORT', []);
         }
     }
 
@@ -177,7 +177,7 @@ class Knife_Short_Manager {
      */
     private static function connect_short_db() {
         // Mix with default values
-        $conf = wp_parse_args(WP_SHORT_MANAGER, [
+        $conf = wp_parse_args(KNIFE_SHORT, [
             'host' => DB_HOST,
             'name' => DB_NAME,
             'user' => DB_USER,

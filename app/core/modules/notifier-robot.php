@@ -16,57 +16,45 @@ if (!defined('WPINC')) {
 
 class Knife_Notifier_Robot {
     /**
-     * Option to store telegram bot token
-     *
-     * @access  private
-     * @var     string
-     */
-    private static $telegram_token = 'knife_notifier_telegram_token';
-
-
-    /**
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public static function load_module() {
-        // Add notifier required fields to customizer
-        add_action('customize_register', [__CLASS__, 'add_customize_setting']);
-    }
-
-
-    /**
-     * Save Notifier options
-     */
-    public static function add_customize_setting($wp_customize) {
-        $wp_customize->add_setting(self::$telegram_token);
-
-        $wp_customize->add_control(new WP_Customize_Control($wp_customize,
-            self::$telegram_token, [
-                 'label' => __('Telegram bot token', 'knife-theme'),
-                 'section' => 'title_tagline'
-             ]
-        ));
+        // Define notifier settings if still not
+        if(!defined('KNIFE_NOTIFIER')) {
+            define('KNIFE_NOTIFIER', []);
+        }
     }
 
 
     /**
      * Send message to Telegram
      */
-    public static function send_telegram($message) {
-        $token = get_theme_mod(self::$telegram_token);
+    public static function send_telegram($message, $provider = 'telegram') {
+        // Get settings by provider
+        $conf = KNIFE_NOTIFIER[$provider] ?? [];
 
-        if(is_array($message) && strlen($token) > 0) {
-            $url = 'https://api.telegram.org/bot' . $token . '/sendMessage';
+        // Check token format
+        if(!preg_match('~^[0-9a-z:]+$~i', $conf['token'])) {
+            return false;
+        }
 
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type:application/json']);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($message));
-            $response = curl_exec($ch);
+        if(is_array($message)) {
+            $url = 'https://api.telegram.org/bot' . $conf['token'] . '/sendMessage';
 
-            return json_decode($response)->ok;
+            // Send message
+            $request = wp_safe_remote_post($url, array(
+                'method' => 'POST',
+                'headers' => ['Content-Type' => 'application/json'],
+                'body' => json_encode($message))
+            );
+
+            if(isset($request['body'])) {
+                $response = json_decode($request['body']);
+
+                if(isset($response->result->message_id)) {
+                    return $response->result->message_id;
+                }
+            }
         }
 
         return false;

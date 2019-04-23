@@ -75,7 +75,7 @@ class Knife_Short_Links_Table extends WP_List_Table {
      * Keyword column render
      */
     public function column_keyword($item) {
-        $conf = WP_SHORT_MANAGER;
+        $conf = KNIFE_SHORT;
 
         if(empty($conf['url'])) {
             return $item['keyword'];

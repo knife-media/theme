@@ -152,6 +152,26 @@ class Knife_Distribute_Control {
         delete_post_meta($post_id, $query);
 
         foreach($_REQUEST[$query] as $item) {
+            // Sanitize item values
+            foreach($item as $key => &$value) {
+                switch($key) {
+                    case 'network':
+                        $value = array_map('sanitize_text_field', $value) ;
+                        break;
+
+                    case 'excerpt':
+                        $value = sanitize_textarea_field($value);
+                        break;
+
+                    case 'attachment':
+                        $value = absint($value);
+                        break;
+
+                    case 'delay':
+                        $value = absint($value);
+                }
+            }
+
             // Add post meta if not empty
             if(array_filter($item)) {
                 add_post_meta($post_id, $query, $item);

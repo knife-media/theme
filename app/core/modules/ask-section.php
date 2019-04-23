@@ -358,8 +358,8 @@ class Knife_Ask_Section {
 
 
         if(method_exists('Knife_Notifier_Robot', 'send_telegram')) {
-            $chat_id = get_theme_mod(self::$option_chat, '');
-            $request = get_theme_mod(self::$option_request, 0) + 1;
+            $chat_id = sanitize_text_field(get_theme_mod(self::$option_chat, ''));
+            $request = absint(get_theme_mod(self::$option_request, 0)) + 1;
 
             $message = [
                 'chat_id' => $chat_id,
