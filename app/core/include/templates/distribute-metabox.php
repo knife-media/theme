@@ -9,14 +9,13 @@
         array_unshift($items, []);
 
         // Get availible channels
-        $channels = [
-            'facebook_1' => 'Facebook',
-            'vk_1' => 'Вконтакте',
-            'vk_2' => 'Вконтакте: Тупой нож',
-            'twitter' => 'Twitter',
-            'telegram_1' => 'Telegram',
-            'telegram_2' => 'Telegram: Тупой нож'
-        ];
+        $channels = [];
+
+        foreach(KNIFE_DISTRIBUTE as $name => $settings) {
+            if(!empty($settings['label'])) {
+                $channels[$name] = sanitize_text_field($settings['label']);
+            }
+        }
 
         wp_nonce_field('metabox', self::$metabox_nonce);
     ?>

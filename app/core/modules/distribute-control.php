@@ -51,6 +51,11 @@ class Knife_Distribute_Control {
 
         // Save metabox
         add_action('save_post', [__CLASS__, 'save_metabox']);
+
+        // Define distribute settings if still not
+        if(!defined('KNIFE_DISTRIBUTE')) {
+            define('KNIFE_DISTRIBUTE', []);
+        }
     }
 
 
@@ -152,29 +157,32 @@ class Knife_Distribute_Control {
         delete_post_meta($post_id, $query);
 
         foreach($_REQUEST[$query] as $item) {
-            // Sanitize item values
-            foreach($item as $key => &$value) {
-                switch($key) {
-                    case 'network':
-                        $value = array_map('sanitize_text_field', $value) ;
-                        break;
+            $meta = [];
 
-                    case 'excerpt':
-                        $value = sanitize_textarea_field($value);
-                        break;
-
-                    case 'attachment':
-                        $value = absint($value);
-                        break;
-
-                    case 'delay':
-                        $value = absint($value);
+            // Sanitize item fields
+            if(isset($item['network'])) {
+                foreach((array) $item['network'] as $network) {
+                    if(array_key_exists($network, KNIFE_DISTRIBUTE)) {
+                        $meta['network'][] = $network;
+                    }
                 }
             }
 
-            // Add post meta if not empty
-            if(array_filter($item)) {
-                add_post_meta($post_id, $query, $item);
+            if(isset($item['excerpt'])) {
+                $meta['excerpt'] = sanitize_textarea_field($item['excerpt']);
+            }
+
+            if(isset($item['attachment'])) {
+                $meta['attachment'] = absint($item['attachment']);
+            }
+
+            if(isset($item['delay'])) {
+                $meta['delay'] = absint($item['delay']);
+            }
+
+            // Add non-empty post meta
+            if(array_filter($meta)) {
+                add_post_meta($post_id, $query, $meta);
             }
         }
     }
