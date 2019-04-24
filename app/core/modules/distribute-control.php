@@ -33,6 +33,15 @@ class Knife_Distribute_Control {
     private static $metabox_nonce = 'knife-distribute-nonce';
 
 
+   /**
+    * Cancel scheduled event ajax action
+    *
+    * @access  private
+    * @var     string
+    */
+    private static $ajax_action = 'knife-distribute-cancel';
+
+
     /**
      * Unique meta to store distribute items
      *
@@ -50,7 +59,14 @@ class Knife_Distribute_Control {
         add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
 
         // Save metabox
-        add_action('save_post', [__CLASS__, 'save_metabox']);
+        add_action('save_post', [__CLASS__, 'save_metabox'], 10, 2);
+
+        // Cancel scheduled event
+        add_action('wp_ajax_' . self::$ajax_action, [__CLASS__, 'cancel_scheduled']);
+
+
+        // Schedule event action
+        add_action('knife_schedule_distribution', [__CLASS__, 'publish_task'], 10, 2);
 
         // Define distribute settings if still not
         if(!defined('KNIFE_DISTRIBUTE')) {
@@ -80,10 +96,12 @@ class Knife_Distribute_Control {
             return;
         }
 
+        $post_id = get_the_ID();
+
         // Current screen object
         $screen = get_current_screen();
 
-        if(!in_array($screen->post_type,  self::$post_type)) {
+        if(!in_array($screen->post_type, self::$post_type)) {
             return;
         }
 
@@ -100,7 +118,11 @@ class Knife_Distribute_Control {
         wp_enqueue_script('knife-distribute-metabox', $include . '/scripts/distribute-metabox.js', ['jquery'], $version);
 
         $options = [
+            'post_id' => absint($post_id),
+            'action' => esc_attr(self::$ajax_action),
+            'nonce' => wp_create_nonce(self::$metabox_nonce),
             'meta_items' => esc_attr(self::$meta_items),
+
             'choose' => __('Выберите изображение', 'knife-theme'),
             'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
         ];
@@ -120,9 +142,41 @@ class Knife_Distribute_Control {
 
 
     /**
+     * Create result posters using ajax options
+     */
+    public static function cancel_scheduled() {
+        check_admin_referer(self::$metabox_nonce, 'nonce');
+
+        foreach(['uniqid', 'post_id', 'timestamp'] as $required) {
+            if(empty($_POST[$required])) {
+                wp_send_json_error(__('Отсутствуют необходимые параметры запроса', 'knife-theme'));
+            }
+        }
+
+        $timestamp = absint($_POST['timestamp']);
+
+        // Unschedule event
+        wp_unschedule_event($timestamp, 'knife_schedule_distribution', [
+            sanitize_text_field($_POST['uniqid']), absint($_POST['post_id'])
+        ]);
+
+        wp_send_json_success();
+    }
+
+
+    /**
+     * Publish scheduled task
+     */
+    public static function publish_task($post_id, $uniqid) {
+        print_r('test');
+        file_put_contents(ABSPATH . "log.txt", 'test', FILE_APPEND);
+    }
+
+
+    /**
      * Save post options
      */
-    public static function save_metabox($post_id) {
+    public static function save_metabox($post_id, $post) {
         if(!isset($_REQUEST[self::$metabox_nonce])) {
             return;
         }
@@ -139,52 +193,110 @@ class Knife_Distribute_Control {
             return;
         }
 
+        // Sanitize items request
+        $items = self::sanitize_items(self::$meta_items);
 
-        // Update items
-        self::update_items(self::$meta_items, $post_id);
+        if(count($items) > 0) {
+            // Delete distribute post meta to create it again below
+            delete_post_meta($post_id, self::$meta_items);
+
+            foreach($items as $item) {
+                // Schedule task if need
+                $item = self::schedule_task($item, $post_id, $post);
+
+                // Add post meta
+                add_post_meta($post_id, self::$meta_items, $item);
+            }
+        }
     }
 
 
     /**
      * Update distribute items from post-metabox
      */
-    private static function update_items($query, $post_id, $meta = [], $i = 0) {
+    private static function sanitize_items($query, $items = []) {
         if(empty($_REQUEST[$query])) {
-            return;
+            return $items;
         }
 
-        // Delete distribute post meta to create it again below
-        delete_post_meta($post_id, $query);
+        foreach($_REQUEST[$query] as $meta) {
+            $item = [];
 
-        foreach($_REQUEST[$query] as $item) {
-            $meta = [];
+            // Generate new item uniqid if empty
+            if(empty($meta['uniqid'])) {
+                $meta['uniqid'] = uniqid();
+            }
 
-            // Sanitize item fields
-            if(isset($item['network'])) {
-                foreach((array) $item['network'] as $network) {
+            if(isset($meta['network'])) {
+                foreach((array) $meta['network'] as $network) {
                     if(array_key_exists($network, KNIFE_DISTRIBUTE)) {
-                        $meta['network'][] = $network;
+                        $item['network'][] = $network;
                     }
                 }
             }
 
-            if(isset($item['excerpt'])) {
-                $meta['excerpt'] = sanitize_textarea_field($item['excerpt']);
+            if(isset($meta['excerpt'])) {
+                $item['excerpt'] = sanitize_textarea_field($meta['excerpt']);
             }
 
-            if(isset($item['attachment'])) {
-                $meta['attachment'] = absint($item['attachment']);
+            if(isset($meta['attachment'])) {
+                $item['attachment'] = absint($meta['attachment']);
             }
 
-            if(isset($item['delay'])) {
-                $meta['delay'] = absint($item['delay']);
+            if(isset($meta['delay'])) {
+                $item['delay'] = absint($meta['delay']);
             }
 
             // Add non-empty post meta
-            if(array_filter($meta)) {
-                add_post_meta($post_id, $query, $meta);
+            if(array_filter($item)) {
+                $items[] = array_merge($item, [
+                    'uniqid' => $meta['uniqid']
+                ]);
             }
         }
+
+        return $items;
+    }
+
+
+    /**
+     * Schedule task by post meta data
+     */
+    private static function schedule_task($item, $post_id, $post) {
+        $args = [
+            $item['uniqid'], $post_id
+        ];
+
+        $scheduled = wp_next_scheduled('knife_schedule_distribution', $args);
+
+        // Remove event if already scheduled
+        if($scheduled !== false) {
+            wp_unschedule_event($scheduled, 'knife_schedule_distribution', $args);
+        }
+
+        // Skip not delayed posts or empty networks
+        if(empty($item['delay']) || empty($item['network'])) {
+            return $item;
+        }
+
+        $status = $post->post_status;
+
+        // Skip drafts and private posts here
+        if(in_array($status, ['future', 'publish'])) {
+            $timestamp = time();
+
+            if($status === 'future') {
+                $timestamp = strtotime($post->post_date_gmt);
+            }
+
+            // Get timestamp
+            $timestamp = $timestamp + $item['delay'] * 60;
+
+            // Schedule event
+            wp_schedule_single_event($timestamp, 'knife_schedule_distribution', $args);
+        }
+
+        return $item;
     }
 }
 

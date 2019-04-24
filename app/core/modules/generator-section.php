@@ -273,11 +273,11 @@ class Knife_Generator_Section {
         $posters = Knife_Poster_Templates::create_posters($options, self::$upload_folder);
 
         if(is_wp_error($posters)) {
-            return wp_send_json_error($posters->get_error_message());
+            wp_send_json_error($posters->get_error_message());
         }
 
         foreach($posters as $poster) {
-            return wp_send_json_success($poster);
+            wp_send_json_success($poster);
         }
     }
 

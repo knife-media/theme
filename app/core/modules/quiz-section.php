@@ -332,10 +332,10 @@ class Knife_Quiz_Section {
         $posters = Knife_Poster_Templates::create_posters($options, self::$upload_folder);
 
         if(is_wp_error($posters)) {
-            return wp_send_json_error($posters->get_error_message());
+            wp_send_json_error($posters->get_error_message());
         }
 
-        return wp_send_json_success((object) $posters);
+        wp_send_json_success((object) $posters);
     }
 
 
@@ -383,6 +383,7 @@ class Knife_Quiz_Section {
             'meta_items' => esc_attr(self::$meta_items),
             'meta_results' => esc_attr(self::$meta_results),
             'editor' => wp_default_editor(),
+
             'choose' => __('Выберите изображение', 'knife-theme'),
             'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
         ];

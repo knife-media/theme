@@ -54,8 +54,6 @@ jQuery(document).ready(function($) {
       data[v] = item.find('[data-item="' + v + '"]').val();
     });
 
-    console.log(data);
-
     // Clear warning before request
     var warning = item.find('.option__relative-warning');
     warning.html('').hide();

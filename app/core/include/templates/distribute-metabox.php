@@ -1,4 +1,4 @@
-<div id="knife-distribute-box">
+<div id="knife-distribute-box" class="hide-if-no-js">
     <?php
         $post_id = get_the_ID();
 
@@ -22,8 +22,15 @@
 
     <div class="box box--items">
 
-        <?php foreach($items as $i => $item) : ?>
+        <?php foreach($items as $item) : ?>
             <div class="item">
+                <?php
+                    printf(
+                        '<input class="item__uniqid" data-item="uniqid" type="hidden" value="%s">',
+                        sanitize_text_field($item['uniqid'] ?? '')
+                    );
+                ?>
+
                 <div class="item__network">
                     <?php
                         $network = $item['network'] ?? [];
@@ -71,6 +78,36 @@
                     </figure>
                 </div>
 
+                <?php
+                    $args = [
+                        $item['uniqid'], $post_id
+                    ];
+
+                    $scheduled = wp_next_scheduled('knife_schedule_distribution', $args);
+                ?>
+
+
+                <?php if($scheduled !== false) : ?>
+                    <div class="item__schedule">
+                        <span class="dashicons dashicons-calendar"></span>
+
+                        <?php
+                            printf(
+                                '<span>%s</span><strong>%s</strong>',
+                                __('Задача запланирована на:', 'knife-theme'),
+                                date("d.m.Y G:i", $scheduled)
+                            );
+
+                            printf(
+                                '<button class="item__schedule-cancel button-link" type="button">%s</button>',
+                                __('Отменить', 'knife-theme')
+                            );
+                        ?>
+
+                        <span class="spinner"></span>
+                    </div>
+                <?php endif; ?>
+
                 <div class="item__delay">
                     <?php
                         $timing = [
@@ -99,7 +136,7 @@
                             implode('', $options)
                         );
 
-                        if(get_post_status(get_the_ID()) === 'draft') {
+                        if(get_post_status(get_the_ID()) !== 'publish') {
                             printf('<p class="item__delay-howto howto">%s</p>',
                                 __('после публикации поста', 'knife-theme')
                             );
@@ -123,3 +160,8 @@
         </div>
     </div>
 </div>
+
+<div class="hide-if-js">
+    <p><?php _e('Эта функция требует JavaScript', 'knife-theme'); ?></p>
+</div>
+

@@ -106,6 +106,46 @@ jQuery(document).ready(function($) {
   });
 
 
+  /**
+   * Cancel scheduled event
+   */
+  box.on('click', '.item__schedule-cancel', function(e) {
+    e.preventDefault();
+
+    var data = {
+      'action': knife_distribute_metabox.action,
+      'nonce': knife_distribute_metabox.nonce,
+      'post_id': knife_distribute_metabox.post_id
+    }
+
+    var schedule = $(this).closest('.item__schedule');
+
+    // Add settings to data object
+    $.extend(data, schedule.find('.item__schedule-settings').data());
+
+    var xhr = $.ajax({method: 'POST', url: ajaxurl, data: data}, 'json');
+
+    xhr.done(function(answer) {
+      schedule.find('.spinner').removeClass('is-active');
+
+      if(answer.success) {
+        return schedule.remove();
+      }
+
+      var message = answer.data || knife_distribute_metabox.error;
+
+      return alert(message);
+    });
+
+    xhr.error(function() {
+      schedule.find('.spinner').removeClass('is-active');
+
+      return alert(knife_distribute_metabox.error);
+    });
+
+    return schedule.find('.spinner').addClass('is-active');
+  });
+
 
   /**
    * Add new item
@@ -138,18 +178,6 @@ jQuery(document).ready(function($) {
 
 
   /**
-   * Show help text on delay change
-   */
-  box.on('change', '.item__delay-select', function(e) {
-    var item = $(this).closest('.item');
-
-    item.toggleClass('item--scheduled',
-      parseInt($(this).val()) > 0
-    );
-  });
-
-
-  /**
    * Onload set up
    */
   (function() {
@@ -157,11 +185,6 @@ jQuery(document).ready(function($) {
     if(box.find('.item').length === 1) {
       box.find('.actions__add').trigger('click');
     }
-
-    // Send delay select trigger event
-    box.find('.item__delay-select').each(function() {
-      $(this).trigger('change');
-    });
 
     // Add name attributes
     return sortItems();
