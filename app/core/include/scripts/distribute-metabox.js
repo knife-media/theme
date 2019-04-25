@@ -55,6 +55,57 @@ jQuery(document).ready(function($) {
 
 
   /**
+   * Cancel scheduled event
+   */
+  function cancelTask(item, callback) {
+    var data = {
+      'action': knife_distribute_metabox.action,
+      'nonce': knife_distribute_metabox.nonce,
+      'post_id': knife_distribute_metabox.post_id
+    }
+
+    var spinner = item.find('.item__schedule .spinner');
+
+    // Add uniqid to data object
+    data.uniqid = item.find('.item__uniqid').val();
+
+    var xhr = $.ajax({method: 'POST', url: ajaxurl, data: data}, 'json');
+
+    xhr.done(function(answer) {
+      spinner.removeClass('is-active');
+
+      if(answer.success && typeof callback === 'function') {
+        return callback();
+      }
+
+      var message = answer.data || knife_distribute_metabox.error;
+
+      return alert(message);
+    });
+
+    xhr.error(function() {
+      spinner.removeClass('is-active');
+
+      return alert(knife_distribute_metabox.error);
+    });
+
+    return spinner.addClass('is-active');
+  }
+
+
+  /**
+   * Remove item and create empty new if need
+   */
+  function removeItem(item) {
+    item.remove();
+
+    if(box.find('.item').length === 1) {
+      box.find('.actions__add').trigger('click');
+    }
+  }
+
+
+  /**
    * Add item poster
    */
   box.on('click', '.item__snippet-poster', function(e) {
@@ -112,38 +163,11 @@ jQuery(document).ready(function($) {
   box.on('click', '.item__schedule-cancel', function(e) {
     e.preventDefault();
 
-    var data = {
-      'action': knife_distribute_metabox.action,
-      'nonce': knife_distribute_metabox.nonce,
-      'post_id': knife_distribute_metabox.post_id
-    }
+    var item = $(this).closest('.item');
 
-    var schedule = $(this).closest('.item__schedule');
-
-    // Add settings to data object
-    $.extend(data, schedule.find('.item__schedule-settings').data());
-
-    var xhr = $.ajax({method: 'POST', url: ajaxurl, data: data}, 'json');
-
-    xhr.done(function(answer) {
-      schedule.find('.spinner').removeClass('is-active');
-
-      if(answer.success) {
-        return schedule.remove();
-      }
-
-      var message = answer.data || knife_distribute_metabox.error;
-
-      return alert(message);
+    cancelTask(item, function() {
+      item.find('.item__schedule').remove();
     });
-
-    xhr.error(function() {
-      schedule.find('.spinner').removeClass('is-active');
-
-      return alert(knife_distribute_metabox.error);
-    });
-
-    return schedule.find('.spinner').addClass('is-active');
   });
 
 
@@ -169,11 +193,15 @@ jQuery(document).ready(function($) {
   box.on('click', '.item__delete', function(e) {
     e.preventDefault();
 
-    $(this).closest('.item').remove();
+    var item = $(this).closest('.item');
 
-    if(box.find('.item').length === 1) {
-      box.find('.actions__add').trigger('click');
+    if(item.find('.item__schedule').length === 0) {
+      return removeItem(item);
     }
+
+    cancelTask(item, function() {
+      return removeItem(item);
+    });
   });
 
 

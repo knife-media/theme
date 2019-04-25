@@ -25,21 +25,31 @@
         <?php foreach($items as $item) : ?>
             <div class="item">
                 <?php
+                    $item = wp_parse_args($item, [
+                        'uniqid' => '',
+                        'network' => [],
+                        'excerpt' => '',
+                        'delay' => 0,
+                        'attachment' => ''
+                    ]);
+
                     printf(
                         '<input class="item__uniqid" data-item="uniqid" type="hidden" value="%s">',
-                        sanitize_text_field($item['uniqid'] ?? '')
+                        sanitize_title($item['uniqid'])
                     );
+
+                    $scheduled = wp_next_scheduled('knife_schedule_distribution', [
+                        sanitize_title($item['uniqid']), absint($post_id)
+                    ]);
                 ?>
 
                 <div class="item__network">
                     <?php
-                        $network = $item['network'] ?? [];
-
                         foreach($channels as $channel => $label) {
                             printf('<label class="item__network-check">%s<span>%s</span></label>',
                                 sprintf('<input type="checkbox" data-item="network" value="%s"%s>',
                                     esc_attr($channel),
-                                    checked(in_array($channel, $network), true, false)
+                                    checked(in_array($channel, $item['network']), true, false)
                                 ),
 
                                 esc_html($label)
@@ -53,7 +63,7 @@
                         printf(
                             '<textarea class="item__snippet-excerpt" data-item="excerpt" placeholder="%s">%s</textarea>',
                             __('Напишите подвдоку для соцсетей', 'knife-theme'),
-                            sanitize_textarea_field($item['excerpt'] ?? '')
+                            sanitize_textarea_field($item['excerpt'])
                         );
                     ?>
 
@@ -69,7 +79,7 @@
                         <?php
                             printf(
                                 '<input class="item__snippet-attachment" data-item="attachment" type="hidden" value="%s">',
-                                sanitize_text_field($item['attachment'] ?? '')
+                                sanitize_text_field($item['attachment'])
                             );
                         ?>
 
@@ -78,24 +88,17 @@
                     </figure>
                 </div>
 
-                <?php
-                    $args = [
-                        $item['uniqid'], $post_id
-                    ];
-
-                    $scheduled = wp_next_scheduled('knife_schedule_distribution', $args);
-                ?>
-
-
-                <?php if($scheduled !== false) : ?>
+                <?php if(is_numeric($scheduled)) : ?>
                     <div class="item__schedule">
                         <span class="dashicons dashicons-calendar"></span>
 
                         <?php
+                            $scheduled = date('Y-m-d H:i:s', $scheduled);
+
                             printf(
                                 '<span>%s</span><strong>%s</strong>',
                                 __('Задача запланирована на:', 'knife-theme'),
-                                date("d.m.Y G:i", $scheduled)
+                                get_date_from_gmt($scheduled, 'd.m.Y G:i')
                             );
 
                             printf(
@@ -120,10 +123,6 @@
                         ];
 
                         $options = [];
-
-                        if(empty($item['delay'])) {
-                            $item['delay'] = '0';
-                        }
 
                         foreach($timing as $delay => $label) {
                             $options[] = sprintf('<option value="%1$s"%3$s>%2$s</option>',

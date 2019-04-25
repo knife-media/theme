@@ -66,12 +66,15 @@ class Knife_Distribute_Control {
 
 
         // Schedule event action
-        add_action('knife_schedule_distribution', [__CLASS__, 'publish_task'], 10, 2);
+        add_action('knife_schedule_distribution', [__CLASS__, 'perform_task'], 10, 2);
 
         // Define distribute settings if still not
         if(!defined('KNIFE_DISTRIBUTE')) {
             define('KNIFE_DISTRIBUTE', []);
         }
+
+//        self::perform_task('5cc1e4c5eaaa2', 68667);
+//        exit;
     }
 
 
@@ -147,18 +150,21 @@ class Knife_Distribute_Control {
     public static function cancel_scheduled() {
         check_admin_referer(self::$metabox_nonce, 'nonce');
 
-        foreach(['uniqid', 'post_id', 'timestamp'] as $required) {
+        foreach(['uniqid', 'post_id'] as $required) {
             if(empty($_POST[$required])) {
                 wp_send_json_error(__('Отсутствуют необходимые параметры запроса', 'knife-theme'));
             }
         }
 
-        $timestamp = absint($_POST['timestamp']);
+        $settings = [
+            sanitize_title($_POST['uniqid']), absint($_POST['post_id'])
+        ];
+
+        // Find scheduled timestamp
+        $scheduled = wp_next_scheduled('knife_schedule_distribution', $settings);
 
         // Unschedule event
-        wp_unschedule_event($timestamp, 'knife_schedule_distribution', [
-            sanitize_text_field($_POST['uniqid']), absint($_POST['post_id'])
-        ]);
+        wp_unschedule_event($scheduled, 'knife_schedule_distribution', $settings);
 
         wp_send_json_success();
     }
@@ -167,9 +173,42 @@ class Knife_Distribute_Control {
     /**
      * Publish scheduled task
      */
-    public static function publish_task($post_id, $uniqid) {
-        print_r('test');
-        file_put_contents(ABSPATH . "log.txt", 'test', FILE_APPEND);
+    public static function perform_task($uniqid, $post_id) {
+        // Get distribute items
+        $items = get_post_meta($post_id, self::$meta_items);
+
+        // Find items by uniqid
+        $tasks = wp_list_filter($items, ['uniqid' => $uniqid, 'network' => true]);
+
+        // Skip if task empty
+        if(empty($tasks[0])) {
+            return;
+        }
+
+        $task = wp_parse_args($tasks[0], [
+            'excerpt' => '',
+            'attachment' => 0
+        ]);
+
+        foreach($task['network'] as $network)  {
+            if(empty(KNIFE_DISTRIBUTE[$network])) {
+                continue;
+            }
+
+            if(method_exists('Knife_Notifier_Robot', 'send_telegram')) {
+                $chat_id = KNIFE_DISTRIBUTE[$network]['group'];
+
+                $message = [
+                    'chat_id' => $chat_id,
+                    'text' => $task['excerpt'],
+                    'parse_mode' => 'HTML'
+                ];
+
+//                $id = Knife_Notifier_Robot::send_telegram($message);
+
+                var_dump($id);
+            }
+        }
     }
 
 
@@ -193,20 +232,19 @@ class Knife_Distribute_Control {
             return;
         }
 
+
         // Sanitize items request
         $items = self::sanitize_items(self::$meta_items);
 
-        if(count($items) > 0) {
-            // Delete distribute post meta to create it again below
-            delete_post_meta($post_id, self::$meta_items);
+        // Delete distribute post meta to create it again below
+        delete_post_meta($post_id, self::$meta_items);
 
-            foreach($items as $item) {
-                // Schedule task if need
-                $item = self::schedule_task($item, $post_id, $post);
+        foreach($items as $item) {
+            // Schedule task if need
+            $item = self::schedule_task($item, $post_id, $post);
 
-                // Add post meta
-                add_post_meta($post_id, self::$meta_items, $item);
-            }
+            // Add post meta
+            add_post_meta($post_id, self::$meta_items, $item);
         }
     }
 
@@ -215,10 +253,6 @@ class Knife_Distribute_Control {
      * Update distribute items from post-metabox
      */
     private static function sanitize_items($query, $items = []) {
-        if(empty($_REQUEST[$query])) {
-            return $items;
-        }
-
         foreach($_REQUEST[$query] as $meta) {
             $item = [];
 
