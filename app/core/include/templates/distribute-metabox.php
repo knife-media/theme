@@ -3,7 +3,7 @@
         $post_id = get_the_ID();
 
         // Distribute items
-        $items = get_post_meta($post_id, self::$meta_items);
+        $items = (array) get_post_meta($post_id, self::$meta_items, true);
 
         // Add empty item
         array_unshift($items, []);
@@ -22,24 +22,40 @@
 
     <div class="box box--items">
 
-        <?php foreach($items as $item) : ?>
+        <?php foreach($items as $uniqid => $item) : ?>
             <div class="item">
+                <?php if(isset($item['results'])) : ?>
+<?php
+                    $item = wp_parse_args($item, [
+                        'results' => [],
+                        'excerpt' => '',
+                        'attachment' => '',
+                        'sent' => 0
+                    ]);
+
+                    foreach($item['results'] as $network => $link)  {
+                        echo '<div>' . $network . ': ' . $link . '</div>';
+                    }
+
+                    printf('<div>%s</div>', $item['excerpt']);
+?>
+
+                <?php else: ?>
                 <?php
                     $item = wp_parse_args($item, [
-                        'uniqid' => '',
                         'network' => [],
                         'excerpt' => '',
-                        'delay' => 0,
-                        'attachment' => ''
+                        'attachment' => '',
+                        'delay' => 0
                     ]);
 
                     printf(
                         '<input class="item__uniqid" data-item="uniqid" type="hidden" value="%s">',
-                        sanitize_title($item['uniqid'])
+                        sanitize_title($uniqid)
                     );
 
                     $scheduled = wp_next_scheduled('knife_schedule_distribution', [
-                        sanitize_title($item['uniqid']), absint($post_id)
+                        sanitize_title($uniqid), absint($post_id)
                     ]);
                 ?>
 
@@ -144,6 +160,7 @@
                 </div>
 
                 <span class="item__delete dashicons dashicons-trash" title="<?php _e('Удалить задачу', 'knife-theme'); ?>"></span>
+                <?php endif;?>
             </div>
         <?php endforeach; ?>
 

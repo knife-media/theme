@@ -66,15 +66,14 @@ class Knife_Distribute_Control {
 
 
         // Schedule event action
-        add_action('knife_schedule_distribution', [__CLASS__, 'perform_task'], 10, 2);
+        add_action('knife_schedule_distribution', [__CLASS__, 'launch_task'], 10, 2);
 
         // Define distribute settings if still not
         if(!defined('KNIFE_DISTRIBUTE')) {
             define('KNIFE_DISTRIBUTE', []);
         }
 
-//        self::perform_task('5cc1e4c5eaaa2', 68667);
-//        exit;
+#       self::launch_task('5cc4944c50fdb', 68655); exit;
     }
 
 
@@ -173,42 +172,33 @@ class Knife_Distribute_Control {
     /**
      * Publish scheduled task
      */
-    public static function perform_task($uniqid, $post_id) {
+    public static function launch_task($uniqid, $post_id) {
         // Get distribute items
-        $items = get_post_meta($post_id, self::$meta_items);
+        $items = (array) get_post_meta($post_id, self::$meta_items, true);
 
-        // Find items by uniqid
-        $tasks = wp_list_filter($items, ['uniqid' => $uniqid, 'network' => true]);
-
-        // Skip if task empty
-        if(empty($tasks[0])) {
+        if(empty($items[$uniqid])) {
             return;
         }
 
-        $task = wp_parse_args($tasks[0], [
+        $task = wp_parse_args((array) $items[$uniqid], [
+            'network' => [],
             'excerpt' => '',
             'attachment' => 0
         ]);
 
-        foreach($task['network'] as $network)  {
-            if(empty(KNIFE_DISTRIBUTE[$network])) {
-                continue;
-            }
+        $results = [
+            'tg_knife' => 'https://t.me/knife.media/255',
+            'vk_knife' => 'https://vk.com/123'
+        ];
 
-            if(method_exists('Knife_Notifier_Robot', 'send_telegram')) {
-                $chat_id = KNIFE_DISTRIBUTE[$network]['group'];
+        $items[$uniqid]['results'] = $results;
+        unset($items[$uniqid]['network']);
+        unset($items[$uniqid]['delay']);
 
-                $message = [
-                    'chat_id' => $chat_id,
-                    'text' => $task['excerpt'],
-                    'parse_mode' => 'HTML'
-                ];
+        $items[$uniqid]['sent'] = time();
 
-//                $id = Knife_Notifier_Robot::send_telegram($message);
-
-                var_dump($id);
-            }
-        }
+        update_post_meta($post_id, self::$meta_items, $items);
+        print_r($items);
     }
 
 
@@ -236,16 +226,11 @@ class Knife_Distribute_Control {
         // Sanitize items request
         $items = self::sanitize_items(self::$meta_items);
 
-        // Delete distribute post meta to create it again below
-        delete_post_meta($post_id, self::$meta_items);
+        // Schedule tasks if need
+        $items = self::schedule_tasks($items, $post, $post_id);
 
-        foreach($items as $item) {
-            // Schedule task if need
-            $item = self::schedule_task($item, $post_id, $post);
-
-            // Add post meta
-            add_post_meta($post_id, self::$meta_items, $item);
-        }
+        // Update post meta
+        update_post_meta($post_id, self::$meta_items, $items);
     }
 
 
@@ -281,11 +266,11 @@ class Knife_Distribute_Control {
                 $item['delay'] = absint($meta['delay']);
             }
 
+            $uniqid = $meta['uniqid'];
+
             // Add non-empty post meta
             if(array_filter($item)) {
-                $items[] = array_merge($item, [
-                    'uniqid' => $meta['uniqid']
-                ]);
+                $items[$uniqid] = $item;
             }
         }
 
@@ -296,41 +281,39 @@ class Knife_Distribute_Control {
     /**
      * Schedule task by post meta data
      */
-    private static function schedule_task($item, $post_id, $post) {
-        $args = [
-            $item['uniqid'], $post_id
-        ];
+    private static function schedule_tasks($items, $post, $post_id) {
+        foreach($items as $uniqid => $item) {
+            // Skip if alread scheduled
+            $scheduled = wp_next_scheduled('knife_schedule_distribution', [$uniqid, $post_id]);
 
-        $scheduled = wp_next_scheduled('knife_schedule_distribution', $args);
-
-        // Remove event if already scheduled
-        if($scheduled !== false) {
-            wp_unschedule_event($scheduled, 'knife_schedule_distribution', $args);
-        }
-
-        // Skip not delayed posts or empty networks
-        if(empty($item['delay']) || empty($item['network'])) {
-            return $item;
-        }
-
-        $status = $post->post_status;
-
-        // Skip drafts and private posts here
-        if(in_array($status, ['future', 'publish'])) {
-            $timestamp = time();
-
-            if($status === 'future') {
-                $timestamp = strtotime($post->post_date_gmt);
+            if($scheduled !== false) {
+                continue;
             }
 
-            // Get timestamp
-            $timestamp = $timestamp + $item['delay'] * 60;
+            // Skip not delayed posts or empty networks
+            if(empty($item['delay']) || empty($item['network'])) {
+                continue;
+            }
 
-            // Schedule event
-            wp_schedule_single_event($timestamp, 'knife_schedule_distribution', $args);
+            $status = $post->post_status;
+
+            // Skip drafts and private posts here
+            if(in_array($status, ['future', 'publish'])) {
+                $timestamp = time();
+
+                if($status === 'future') {
+                    $timestamp = strtotime($post->post_date_gmt);
+                }
+
+                // Get timestamp
+                $timestamp = $timestamp + $item['delay'] * 60;
+
+                // Schedule event
+                wp_schedule_single_event($timestamp, 'knife_schedule_distribution', [$uniqid, $post_id]);
+            }
         }
 
-        return $item;
+        return $items;
     }
 }
 
