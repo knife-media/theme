@@ -64,7 +64,7 @@ jQuery(document).ready(function($) {
       'post_id': knife_distribute_metabox.post_id
     }
 
-    var spinner = item.find('.item__schedule .spinner');
+    var spinner = item.find('.item__time .spinner');
 
     // Add uniqid to data object
     data.uniqid = item.find('.item__uniqid').val();
@@ -160,13 +160,13 @@ jQuery(document).ready(function($) {
   /**
    * Cancel scheduled event
    */
-  box.on('click', '.item__schedule-cancel', function(e) {
+  box.on('click', '.item__time-cancel', function(e) {
     e.preventDefault();
 
     var item = $(this).closest('.item');
 
     cancelTask(item, function() {
-      item.find('.item__schedule').remove();
+      item.find('.item__time').remove();
     });
   });
 
@@ -195,7 +195,7 @@ jQuery(document).ready(function($) {
 
     var item = $(this).closest('.item');
 
-    if(item.find('.item__schedule').length === 0) {
+    if(item.find('.item__time').length === 0) {
       return removeItem(item);
     }
 

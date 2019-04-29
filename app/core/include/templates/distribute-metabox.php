@@ -33,6 +33,11 @@
                         'delay' => 0,
                         'sent' => 0
                     ]);
+
+                    printf(
+                        '<input class="item__uniqid" data-item="uniqid" type="hidden" value="%s">',
+                        sanitize_title($uniqid)
+                    );
                 ?>
 
                 <?php if(!empty($item['results'])) : ?>
@@ -40,12 +45,55 @@
                     <div class="item__results">
                         <?php
                             foreach($item['results'] as $network => $link)  {
-                                echo '<div>' . $channels[$network] . ': ' . $link . '</div>';
-                            }
+                                $label = __('Без названия', 'knife-theme');
 
-                            printf('<div>%s</div>', $item['excerpt']);
+                                if(isset($channels[$network])) {
+                                    $label = $channels[$network];
+                                }
+
+                                printf(
+                                    '<a class="item__results-link" href="%s" target="_blank">%s</a>',
+                                    esc_url($link),
+                                    esc_html($label)
+                                );
+                            }
                         ?>
                     </div>
+
+                    <div class="item__snippet">
+                        <?php
+                            printf(
+                                '<textarea class="item__snippet-excerpt" readonly>%s</textarea>',
+                                sanitize_textarea_field($item['excerpt'])
+                            );
+                        ?>
+
+                        <figure class="item__snippet-poster">
+                            <?php
+                                if(!empty($item['attachment'])) {
+                                    printf('<img src="%s" alt="">',
+                                        wp_get_attachment_image_url($item['attachment'])
+                                    );
+                                }
+                            ?>
+                        </figure>
+                    </div>
+
+                    <?php if(is_numeric($item['sent'])) : ?>
+                        <div class="item__time">
+                            <span class="dashicons dashicons-calendar"></span>
+
+                            <?php
+                                $sent = date('Y-m-d H:i:s', $item['sent']);
+
+                                printf(
+                                    '<span>%s</span><strong>%s</strong>',
+                                    __('Отправлено:', 'knife-theme'),
+                                    get_date_from_gmt($sent, 'd.m.Y G:i')
+                                );
+                            ?>
+                        </div>
+                    <?php endif; ?>
 
                 <?php else : ?>
 
@@ -64,17 +112,6 @@
                             }
                         ?>
                     </div>
-
-                    <?php
-                        printf(
-                            '<input class="item__uniqid" data-item="uniqid" type="hidden" value="%s">',
-                            sanitize_title($uniqid)
-                        );
-
-                        $scheduled = wp_next_scheduled('knife_schedule_distribution', [
-                            sanitize_title($uniqid), absint($post_id)
-                        ]);
-                    ?>
 
                     <div class="item__snippet">
                         <?php
@@ -106,8 +143,14 @@
                         </figure>
                     </div>
 
+                    <?php
+                        $scheduled = wp_next_scheduled('knife_schedule_distribution', [
+                            sanitize_title($uniqid), absint($post_id)
+                        ]);
+                    ?>
+
                     <?php if(is_numeric($scheduled)) : ?>
-                        <div class="item__schedule">
+                        <div class="item__time">
                             <span class="dashicons dashicons-calendar"></span>
 
                             <?php
@@ -120,7 +163,7 @@
                                 );
 
                                 printf(
-                                    '<button class="item__schedule-cancel button-link" type="button">%s</button>',
+                                    '<button class="item__time-cancel button-link" type="button">%s</button>',
                                     __('Отменить', 'knife-theme')
                                 );
                             ?>

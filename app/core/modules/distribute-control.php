@@ -73,7 +73,7 @@ class Knife_Distribute_Control {
             define('KNIFE_DISTRIBUTE', []);
         }
 
-#       self::launch_task('5cc4944c50fdb', 68655); exit;
+#       self::launch_task('5cc73cd4e11b9', 68655); exit;
     }
 
 
@@ -222,9 +222,15 @@ class Knife_Distribute_Control {
             return;
         }
 
+        if(empty($_REQUEST[self::$meta_items])) {
+            return;
+        }
+
+        // Get existing items
+        $items = (array) get_post_meta($post_id, self::$meta_items, true);
 
         // Sanitize items request
-        $items = self::sanitize_items(self::$meta_items);
+        $items = self::sanitize_items($items, self::$meta_items);
 
         // Schedule tasks if need
         $items = self::schedule_tasks($items, $post, $post_id);
@@ -237,14 +243,24 @@ class Knife_Distribute_Control {
     /**
      * Update distribute items from post-metabox
      */
-    private static function sanitize_items($query, $items = []) {
-        foreach($_REQUEST[$query] as $meta) {
-            $item = [];
+    private static function sanitize_items($items, $query) {
+        $requests = [];
+
+        // Normailze requests array
+        foreach((array) $_REQUEST[$query] as $request) {
+            $uniqid = uniqid();
 
             // Generate new item uniqid if empty
-            if(empty($meta['uniqid'])) {
-                $meta['uniqid'] = uniqid();
+            if(!empty($request['uniqid'])) {
+                $uniqid = $request['uniqid'];
             }
+
+            $requests[$uniqid] = $request;
+        }
+
+        // Loop through requests and update items
+        foreach($requests as $uniqid => $meta) {
+            $item = [];
 
             if(isset($meta['network'])) {
                 foreach((array) $meta['network'] as $network) {
@@ -266,13 +282,14 @@ class Knife_Distribute_Control {
                 $item['delay'] = absint($meta['delay']);
             }
 
-            $uniqid = $meta['uniqid'];
-
             // Add non-empty post meta
             if(array_filter($item)) {
                 $items[$uniqid] = $item;
             }
         }
+
+        // Unset removed items
+        $items = array_intersect_key($items, $requests);
 
         return $items;
     }
