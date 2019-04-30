@@ -193,7 +193,6 @@ class Knife_Distribute_Control {
 
         $items[$uniqid]['results'] = $results;
         unset($items[$uniqid]['network']);
-        unset($items[$uniqid]['delay']);
 
         $items[$uniqid]['sent'] = time();
 
@@ -246,52 +245,52 @@ class Knife_Distribute_Control {
     private static function sanitize_items($items, $query) {
         $requests = [];
 
-        // Normailze requests array
+        // Normalize requests array
         foreach((array) $_REQUEST[$query] as $request) {
-            $uniqid = uniqid();
-
-            // Generate new item uniqid if empty
-            if(!empty($request['uniqid'])) {
-                $uniqid = $request['uniqid'];
-            }
-
-            $requests[$uniqid] = $request;
-        }
-
-        // Loop through requests and update items
-        foreach($requests as $uniqid => $meta) {
             $item = [];
 
-            if(isset($meta['network'])) {
-                foreach((array) $meta['network'] as $network) {
+            // Generate new item uniqid if empty
+            if(empty($request['uniqid'])) {
+                $request['uniqid'] = uniqid();
+            }
+
+            $uniqid = $request['uniqid'];
+
+            if(isset($request['network'])) {
+                foreach((array) $request['network'] as $network) {
                     if(array_key_exists($network, KNIFE_DISTRIBUTE)) {
                         $item['network'][] = $network;
                     }
                 }
             }
 
-            if(isset($meta['excerpt'])) {
-                $item['excerpt'] = sanitize_textarea_field($meta['excerpt']);
+            if(isset($request['excerpt'])) {
+                $item['excerpt'] = sanitize_textarea_field($request['excerpt']);
             }
 
-            if(isset($meta['attachment'])) {
-                $item['attachment'] = absint($meta['attachment']);
+            if(isset($request['attachment'])) {
+                $item['attachment'] = absint($request['attachment']);
             }
 
-            if(isset($meta['delay'])) {
-                $item['delay'] = absint($meta['delay']);
+            if(isset($request['delay'])) {
+                $item['delay'] = absint($request['delay']);
             }
 
-            // Add non-empty post meta
-            if(array_filter($item)) {
-                $items[$uniqid] = $item;
+            $requests[$uniqid] = $item;
+        }
+
+        // Leave only the necessary items
+        foreach($requests as $uniqid => &$request) {
+            if(isset($items[$uniqid]['results'])) {
+                $request = $items[$uniqid];
+            }
+
+            if(!array_filter($request)) {
+                unset($requests[$uniqid]);
             }
         }
 
-        // Unset removed items
-        $items = array_intersect_key($items, $requests);
-
-        return $items;
+        return $requests;
     }
 
 
