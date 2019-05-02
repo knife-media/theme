@@ -5,8 +5,8 @@
         // Distribute items
         $items = (array) get_post_meta($post_id, self::$meta_items, true);
 
-        // Add empty item
-        array_unshift($items, []);
+        // Prepend empty array to items
+        $items = array(0 => []) + $items;
 
         // Get availible channels
         $channels = [];
@@ -25,8 +25,8 @@
         <?php foreach($items as $uniqid => $item) : ?>
             <div class="item">
                 <?php
-                    $item = wp_parse_args($item, [
-                        'network' => [],
+                    $item = wp_parse_args((array) $item, [
+                        'networks' => [],
                         'results' => [],
                         'excerpt' => '',
                         'attachment' => '',
@@ -40,72 +40,17 @@
                     );
                 ?>
 
-                <?php if(!empty($item['results'])) : ?>
+                <?php if(empty($item['sent'])) : ?>
 
-                    <div class="item__results">
-                        <?php
-                            foreach($item['results'] as $network => $link)  {
-                                $label = __('Без названия', 'knife-theme');
-
-                                if(isset($channels[$network])) {
-                                    $label = $channels[$network];
-                                }
-
-                                printf(
-                                    '<a class="item__results-link" href="%s" target="_blank">%s</a>',
-                                    esc_url($link),
-                                    esc_html($label)
-                                );
-                            }
-                        ?>
-                    </div>
-
-                    <div class="item__snippet">
-                        <?php
-                            printf(
-                                '<textarea class="item__snippet-excerpt" readonly>%s</textarea>',
-                                sanitize_textarea_field($item['excerpt'])
-                            );
-                        ?>
-
-                        <figure class="item__snippet-poster">
-                            <?php
-                                if(!empty($item['attachment'])) {
-                                    printf('<img src="%s" alt="">',
-                                        wp_get_attachment_image_url($item['attachment'])
-                                    );
-                                }
-                            ?>
-                        </figure>
-                    </div>
-
-                    <?php if(is_numeric($item['sent'])) : ?>
-                        <div class="item__time">
-                            <span class="dashicons dashicons-calendar"></span>
-
-                            <?php
-                                $sent = date('Y-m-d H:i:s', $item['sent']);
-
-                                printf(
-                                    '<span>%s</span><strong>%s</strong>',
-                                    __('Отправлено:', 'knife-theme'),
-                                    get_date_from_gmt($sent, 'd.m.Y G:i')
-                                );
-                            ?>
-                        </div>
-                    <?php endif; ?>
-
-                <?php else : ?>
-
-                    <div class="item__network">
+                    <div class="item__networks">
                         <?php
                             foreach($channels as $channel => $label) {
                                 printf(
-                                    '<label class="item__network-check">%s<span>%s</span></label>',
+                                    '<label class="item__networks-check">%s<span>%s</span></label>',
 
-                                    sprintf('<input type="checkbox" data-item="network" value="%s"%s>',
+                                    sprintf('<input type="checkbox" data-item="networks" value="%s"%s>',
                                         esc_attr($channel),
-                                        checked(in_array($channel, $item['network']), true, false)
+                                        checked(in_array($channel, $item['networks']), true, false)
                                     ),
                                     esc_html($label)
                                 );
@@ -205,6 +150,61 @@
                     </div>
 
                     <span class="item__delete dashicons dashicons-trash" title="<?php _e('Удалить задачу', 'knife-theme'); ?>"></span>
+
+                <?php else : ?>
+
+                    <div class="item__results">
+                        <?php
+                            foreach($item['results'] as $network => $link)  {
+                                $label = __('Без названия', 'knife-theme');
+
+                                if(isset($channels[$network])) {
+                                    $label = $channels[$network];
+                                }
+
+                                printf(
+                                    '<a class="item__results-link" href="%s" target="_blank">%s</a>',
+                                    esc_url($link),
+                                    esc_html($label)
+                                );
+                            }
+                        ?>
+                    </div>
+
+                    <div class="item__snippet">
+                        <?php
+                            printf(
+                                '<textarea class="item__snippet-excerpt" readonly>%s</textarea>',
+                                sanitize_textarea_field($item['excerpt'])
+                            );
+                        ?>
+
+                        <figure class="item__snippet-poster">
+                            <?php
+                                if(!empty($item['attachment'])) {
+                                    printf('<img src="%s" alt="">',
+                                        wp_get_attachment_image_url($item['attachment'])
+                                    );
+                                }
+                            ?>
+                        </figure>
+                    </div>
+
+                    <?php if(is_numeric($item['sent'])) : ?>
+                        <div class="item__time">
+                            <span class="dashicons dashicons-calendar"></span>
+
+                            <?php
+                                $sent = date('Y-m-d H:i:s', $item['sent']);
+
+                                printf(
+                                    '<span>%s</span><strong>%s</strong>',
+                                    __('Отправлено:', 'knife-theme'),
+                                    get_date_from_gmt($sent, 'd.m.Y G:i')
+                                );
+                            ?>
+                        </div>
+                    <?php endif; ?>
 
                 <?php endif; ?>
 

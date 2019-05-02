@@ -73,7 +73,7 @@ class Knife_Distribute_Control {
             define('KNIFE_DISTRIBUTE', []);
         }
 
-#       self::launch_task('5cc73cd4e11b9', 68655); exit;
+       self::launch_task('5ccaf04bc179e', 68530); exit;
     }
 
 
@@ -176,27 +176,30 @@ class Knife_Distribute_Control {
         // Get distribute items
         $items = (array) get_post_meta($post_id, self::$meta_items, true);
 
-        if(empty($items[$uniqid])) {
-            return;
+        // Skip empty and already sent tasks
+        if(isset($items[$uniqid]) && empty($items[$uniqid]['sent'])) {
+            $item = wp_parse_args((array) $items[$uniqid], [
+                'networks' => [],
+                'excerpt' => '',
+                'attachment' => 0
+            ]);
+
+            $results = [];
+
+            // Loop through networks and send tasks
+            foreach($item['networks'] as $network) {
+                // Try to send message
+                $results[$network] = self::send_task($item, $network, $post_id);
+            }
+
+            $items[$uniqid] = array_merge($items[$uniqid], [
+                'results' => $results,
+                'sent' => time()
+            ]);
+
+//            update_post_meta($post_id, self::$meta_items, $items);
         }
 
-        $task = wp_parse_args((array) $items[$uniqid], [
-            'network' => [],
-            'excerpt' => '',
-            'attachment' => 0
-        ]);
-
-        $results = [
-            'tg_knife' => 'https://t.me/knife.media/255',
-            'vk_knife' => 'https://vk.com/123'
-        ];
-
-        $items[$uniqid]['results'] = $results;
-        unset($items[$uniqid]['network']);
-
-        $items[$uniqid]['sent'] = time();
-
-        update_post_meta($post_id, self::$meta_items, $items);
         print_r($items);
     }
 
@@ -256,10 +259,10 @@ class Knife_Distribute_Control {
 
             $uniqid = $request['uniqid'];
 
-            if(isset($request['network'])) {
-                foreach((array) $request['network'] as $network) {
+            if(isset($request['networks'])) {
+                foreach((array) $request['networks'] as $network) {
                     if(array_key_exists($network, KNIFE_DISTRIBUTE)) {
-                        $item['network'][] = $network;
+                        $item['networks'][] = $network;
                     }
                 }
             }
@@ -279,9 +282,9 @@ class Knife_Distribute_Control {
             $requests[$uniqid] = $item;
         }
 
-        // Leave only the necessary items
+        // Save only the necessary items
         foreach($requests as $uniqid => &$request) {
-            if(isset($items[$uniqid]['results'])) {
+            if(isset($items[$uniqid]['sent'])) {
                 $request = $items[$uniqid];
             }
 
@@ -307,7 +310,7 @@ class Knife_Distribute_Control {
             }
 
             // Skip not delayed posts or empty networks
-            if(empty($item['delay']) || empty($item['network'])) {
+            if(empty($item['delay']) || empty($item['networks'])) {
                 continue;
             }
 
@@ -330,6 +333,60 @@ class Knife_Distribute_Control {
         }
 
         return $items;
+    }
+
+
+    /**
+     * Send scheduled task
+     */
+    private static function send_task($task, $network, $post_id) {
+/*        if(empty(KNIFE_DISTRIBUTE[$network]) {
+            continue;
+        }
+
+        $options = KNIFE_DISTRIBUTE[$network];
+ */
+
+        $permalink = get_permalink($post_id);
+        $text = $task['excerpt'] . "\n\n" . $permalink;
+
+
+            $chat_id = KNIFE_DISTRIBUTE[$network]['group'];
+
+        $url        = $bot_url . "sendPhoto?chat_id=" . $chat_id;
+
+        $post_fields = array('chat_id'   => $chat_id,
+            'photo'     => new CURLFile('/tmp/ph.jpg'),
+            'caption' => $text
+        );
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            "Content-Type:multipart/form-data"
+        ));
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_fields);
+        $output = curl_exec($ch);
+        print_r($output);
+
+/*
+        if(method_exists('Knife_Notifier_Robot', 'send_telegram')) {
+
+            $message = [
+                'chat_id' => $chat_id,
+                'text' => $text
+            ];
+
+//            Knife_Notifier_Robot::send_telegram($message);
+        }
+*/
+
+
+        print_r($task);
+        exit;
+
+        return $permalink;
     }
 }
 
