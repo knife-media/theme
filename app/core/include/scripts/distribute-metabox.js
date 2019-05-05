@@ -142,6 +142,24 @@ jQuery(document).ready(function($) {
 
 
   /**
+   * Update excerpt counter
+   */
+  box.on('keyup paste', '.item__snippet-excerpt', function() {
+    var counter = $(this).siblings('.item__snippet-counter');
+
+    if(counter.length > 0) {
+      var length = $(this).val().length;
+
+      if(length > 0) {
+        return counter.text(length);
+      }
+
+      return counter.text('');
+    }
+  });
+
+
+  /**
    * Remove poster
    */
   box.on('click', '.item__snippet-delete', function(e) {

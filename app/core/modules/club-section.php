@@ -524,7 +524,7 @@ class Knife_Club_Section {
         }
 
 
-        if(method_exists('Knife_Notifier_Robot', 'send_telegram')) {
+        if(method_exists('Knife_Social_Delivery', 'send_telegram')) {
             $chat_id = sanitize_text_field(get_theme_mod(self::$option_chat, ''));
             $request = absint(get_theme_mod(self::$option_request, 0)) + 1;
 
@@ -534,7 +534,7 @@ class Knife_Club_Section {
                 'parse_mode' => 'HTML'
             ];
 
-            if(Knife_Notifier_Robot::send_telegram($message)) {
+            if(Knife_Social_Delivery::send_telegram($message)) {
                 set_theme_mod(self::$option_request, $request);
                 wp_send_json_success(__('Сообщение успешно отправлено', 'knife-theme'));
             }

@@ -1,11 +1,12 @@
 <?php
 /**
- * Notifier robot
+ * Social delivery
  *
- * Send notifications to private service channels via telegram
+ * Send notifications to social networks channels
  *
  * @package knife-theme
  * @since 1.7
+ * @version 1.8
  */
 
 
@@ -14,15 +15,22 @@ if (!defined('WPINC')) {
 }
 
 
-class Knife_Notifier_Robot {
+class Knife_Social_Delivery {
     /**
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public static function load_module() {
-        // Define notifier settings if still not
-        if(!defined('KNIFE_NOTIFIER')) {
-            define('KNIFE_NOTIFIER', []);
+        // Define social delivery settings if still not
+        if(!defined('KNIFE_DELIVERY')) {
+            define('KNIFE_DELIVERY', []);
         }
+    }
+
+
+    /**
+     * Send message to vk.com
+     */
+    public static function send_vkontakte($text, $destination, $image = null, $delivery = 'vkontakte') {
     }
 
 
@@ -31,7 +39,7 @@ class Knife_Notifier_Robot {
      */
     public static function send_telegram($message, $provider = 'telegram') {
         // Get settings by provider
-        $conf = KNIFE_NOTIFIER[$provider] ?? [];
+        $conf = KNIFE_DELIVERY[$provider] ?? [];
 
         // Check token format
         if(!preg_match('~^[0-9a-z:]+$~i', $conf['token'])) {
@@ -59,10 +67,17 @@ class Knife_Notifier_Robot {
 
         return false;
     }
+
+
+    /**
+     * Send curl request
+     */
+    private static function make_request() {
+    }
 }
 
 
 /**
  * Load module
  */
-Knife_Notifier_Robot::load_module();
+Knife_Social_Delivery::load_module();

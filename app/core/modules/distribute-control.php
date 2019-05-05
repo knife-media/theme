@@ -73,7 +73,7 @@ class Knife_Distribute_Control {
             define('KNIFE_DISTRIBUTE', []);
         }
 
-       self::launch_task('5ccaf04bc179e', 68530); exit;
+#       self::launch_task('5ccaf04bc179e', 68530); exit;
     }
 
 
@@ -340,51 +340,10 @@ class Knife_Distribute_Control {
      * Send scheduled task
      */
     private static function send_task($task, $network, $post_id) {
-/*        if(empty(KNIFE_DISTRIBUTE[$network]) {
-            continue;
-        }
-
-        $options = KNIFE_DISTRIBUTE[$network];
- */
-
         $permalink = get_permalink($post_id);
         $text = $task['excerpt'] . "\n\n" . $permalink;
 
-
-            $chat_id = KNIFE_DISTRIBUTE[$network]['group'];
-
-        $url        = $bot_url . "sendPhoto?chat_id=" . $chat_id;
-
-        $post_fields = array('chat_id'   => $chat_id,
-            'photo'     => new CURLFile('/tmp/ph.jpg'),
-            'caption' => $text
-        );
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            "Content-Type:multipart/form-data"
-        ));
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_fields);
-        $output = curl_exec($ch);
-        print_r($output);
-
-/*
-        if(method_exists('Knife_Notifier_Robot', 'send_telegram')) {
-
-            $message = [
-                'chat_id' => $chat_id,
-                'text' => $text
-            ];
-
-//            Knife_Notifier_Robot::send_telegram($message);
-        }
-*/
-
-
-        print_r($task);
-        exit;
+        $chat_id = KNIFE_DISTRIBUTE[$network]['group'];
 
         return $permalink;
     }

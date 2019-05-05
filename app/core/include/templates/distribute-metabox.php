@@ -86,6 +86,8 @@
                             <figcaption class="item__snippet-caption">+</figcaption>
                             <span class="item__snippet-delete dashicons dashicons-trash"></span>
                         </figure>
+
+                        <span class="item__snippet-counter"></span>
                     </div>
 
                     <?php
