@@ -874,7 +874,6 @@ jQuery(document).ready(function($) {
       });
     });
 
-
     // Sort results and update editor
     sortResults(function() {
       box.find('.result:not(:first)').each(function(i) {
@@ -903,14 +902,12 @@ jQuery(document).ready(function($) {
       toggleFormat(option);
     });
 
-
     // Set summary classes
     box.find('.summary input[data-summary]').each(function() {
       var option = $(this);
 
       toggleSummary(option);
     });
-
 
     // Set details classes
     box.find('.summary input[data-details]:checked').each(function() {

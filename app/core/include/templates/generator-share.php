@@ -7,17 +7,23 @@
     <meta name="description" content="<?php echo esc_attr($description); ?>">
 
     <meta property="og:title" content="<?php echo esc_attr($heading); ?>">
-    <meta property="og:site_name" content="НОЖ">
+    <meta property="og:site_name" content="<?php bloginfo('name'); ?>">
     <meta property="og:description" content="<?php echo esc_attr($description); ?>">
-    <meta property="og:image" content="<?php echo esc_attr($poster); ?>">
-    <meta property="og:image:width" content="800">
-    <meta property="og:image:height" content="420">
+
+    <?php if($poster) : ?>
+        <meta property="og:image" content="<?php echo esc_attr($poster); ?>">
+        <meta property="og:image:width" content="800">
+        <meta property="og:image:height" content="420">
+    <?php endif; ?>
 
     <meta name="twitter:card" content="photo">
     <meta name="twitter:site" content="@knife_media">
     <meta name="twitter:creator" content="@knife_media">
     <meta name="twitter:title" content="<?php echo esc_attr($heading); ?>">
-    <meta name="twitter:image" content="<?php echo esc_attr($poster); ?>">
+
+    <?php if($poster) : ?>
+        <meta name="twitter:image" content="<?php echo esc_attr($poster); ?>">
+    <?php endif; ?>
 
     <title><?php echo esc_attr($heading); ?></title>
 </head>

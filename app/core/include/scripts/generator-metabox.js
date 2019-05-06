@@ -24,13 +24,53 @@ jQuery(document).ready(function($) {
    * Show loader
    */
   function toggleLoader(item) {
-    var spinner = item.find('.option__relative-spinner');
+    var spinner = item.find('.item__image-spinner');
 
     spinner.toggleClass('is-active');
 
-    return item.find('.option__relative-generate').prop('disabled',
+    return item.find('.item__image-generate').prop('disabled',
       spinner.hasClass('is-active')
     );
+  }
+
+
+  /**
+   * Toggle manage options
+   */
+  function toggleManage(option) {
+    // Get new answer class
+    var toggle = 'item--' + option.data('manage');
+
+    box.find('.item').toggleClass(toggle,
+      option.is(':checked')
+    );
+  }
+
+
+  /**
+   * Set items proper name attribute
+   */
+  function sortItems() {
+    if(typeof knife_generator_metabox.meta_items === 'undefined') {
+      return alert(knife_generator_metabox.error);
+    }
+
+    var meta_items = knife_generator_metabox.meta_items;
+
+    box.find('.item:not(:first)').each(function(i) {
+      var item = $(this);
+
+      // Change fields name
+      item.find('[data-item]').each(function() {
+        var data = $(this).data('item');
+
+        // Create name attribute
+        var attr = meta_items + '[' + i + ']';
+        var name = attr + '[' + data + ']';
+
+        $(this).attr('name', name);
+      });
+    });
   }
 
 
@@ -55,7 +95,7 @@ jQuery(document).ready(function($) {
     });
 
     // Clear warning before request
-    var warning = item.find('.option__relative-warning');
+    var warning = item.find('.item__image-warning');
     warning.html('').hide();
 
     var xhr = $.ajax({method: 'POST', url: ajaxurl, data: data}, 'json');
@@ -72,7 +112,7 @@ jQuery(document).ready(function($) {
       if(answer.success === true && answer.data.length > 0) {
         item.find('[data-item="poster"]').val(answer.data);
 
-        var poster = item.find('.option__relative-poster');
+        var poster = item.find('.item__image-poster');
 
         // Create image if not exists
         if(poster.find('img').length === 0) {
@@ -98,7 +138,7 @@ jQuery(document).ready(function($) {
   /**
    * Add generator poster
    */
-  box.on('click', '.option__relative-poster', function(e) {
+  box.on('click', '.item__image-poster', function(e) {
     e.preventDefault();
 
     var poster = $(this);
@@ -130,20 +170,35 @@ jQuery(document).ready(function($) {
 
 
   /**
+   * Manage checkbox answer trigger
+   */
+  box.on('change', '.manage input[data-manage]', function() {
+    var option = $(this);
+
+    return toggleManage(option);
+  });
+
+
+  /**
    * Add new item
    */
   box.on('click', '.actions__add', function(e) {
     e.preventDefault();
 
     var item = box.find('.item:first').clone();
+
+    // Insert after las item
     box.find('.item:last').after(item);
+
+    // Update name attributes
+    return sortItems();
   });
 
 
   /**
    * Remove item
    */
-  box.on('click', '.option .dashicons-trash', function(e) {
+  box.on('click', '.item__delete', function(e) {
     e.preventDefault();
 
     $(this).closest('.item').remove();
@@ -157,29 +212,17 @@ jQuery(document).ready(function($) {
   /**
    * Generate button click
    */
-  box.on('click', '.option__relative-generate', function(e) {
+  box.on('click', '.item__image-generate', function(e) {
     e.preventDefault();
 
     var item = $(this).closest('.item');
-    var caption = item.find('.option__relative-caption');
+    var caption = item.find('.item__image-caption');
 
-    if(item.find('.option__relative-poster > img').length < 1) {
-      return blinkClass(caption, 'option__relative-caption--error');
+    if(item.find('.item__image-poster > img').length < 1) {
+      return blinkClass(caption, 'item__image-caption--error');
     }
 
     return createPoster(item);
-  });
-
-
-  /**
-   * Settings button click
-   */
-  box.on('click', '.option__relative-settings', function(e) {
-    e.preventDefault();
-
-    var item = $(this).closest('.item');
-
-    return item.find('.option--advanced').slideToggle();
   });
 
 
@@ -190,9 +233,25 @@ jQuery(document).ready(function($) {
 
 
   /**
-   * Show at least one item box on load
+   * Onload set up
    */
-  if(box.find('.item').length === 1) {
-    box.find('.actions__add').trigger('click');
-  }
+  (function() {
+    // Set manage classes
+    box.find('.manage input[data-manage]').each(function() {
+      var option = $(this);
+
+      toggleManage(option);
+    });
+
+    // Show at least one item box on load
+    if(box.find('.item').length === 1) {
+      box.find('.actions__add').trigger('click');
+    }
+
+    // Show items
+    box.find('.box--items').addClass('box--expand');
+
+    // Add name attributes
+    return sortItems();
+  })();
 });

@@ -202,7 +202,12 @@ class Knife_Quiz_Section {
         if(is_singular(self::$post_type)) {
             $post_id = get_the_ID();
 
-            $options = get_post_meta($post_id, self::$meta_options, true);
+            $options = (array) get_post_meta($post_id, self::$meta_options, true);
+
+            if(!is_array($options)) {
+                $options = [];
+            }
+
             $options = wp_parse_args($options, [
                 'achievment' => 0,
                 'details' => 'none',
@@ -236,11 +241,12 @@ class Knife_Quiz_Section {
      * Redirect to custom generated template if share query var exists
      */
     public static function redirect_share() {
-        $share = get_query_var('share');
+        $share = get_query_var(self::$query_var);
 
         if(is_singular(self::$post_type) && strlen($share) > 0) {
             $post_id = get_the_ID();
 
+            // Get quiz options
             $options = get_post_meta($post_id, self::$meta_options, true);
             $options = wp_parse_args($options, [
                 'achievment' => 0,
@@ -248,6 +254,7 @@ class Knife_Quiz_Section {
                 'format' => 'binary'
             ]);
 
+            // Get quiz results
             $results = self::retrieve_results($post_id, $options);
 
             if(isset($results[$share])) {
@@ -497,7 +504,9 @@ class Knife_Quiz_Section {
     /**
      * Retrieve items within meta to show as object
      */
-    private static function retrieve_items($post_id, $options, $items = []) {
+    private static function retrieve_items($post_id, $options) {
+        $items = [];
+
         // Loop through items
         foreach(get_post_meta($post_id, self::$meta_items) as $meta) {
 
@@ -532,28 +541,32 @@ class Knife_Quiz_Section {
     /**
      * Retrieve results within meta to show as object
      */
-    private static function retrieve_results($post_id, $options, $results = []) {
+    private static function retrieve_results($post_id, $options) {
+        $results = [];
+
         // Loop through results
-        foreach(get_post_meta($post_id, self::$meta_results) as $item) {
+        foreach(get_post_meta($post_id, self::$meta_results) as $meta) {
             $blanks = ['from' => 0, 'to' => 0];
 
             $points = wp_parse_args(
-                array_intersect_key($item, $blanks), $blanks
+                array_intersect_key($meta, $blanks), $blanks
             );
 
             $points = array_map('intval', $points);
 
             for($i = $points['from']; $points['to'] >= $i; $i++) {
-                if(!empty($item['posters'][$i])) {
-                    $result['poster'] = esc_url($item['posters'][$i]);
+                $result = [];
+
+                if(!empty($meta['posters'][$i])) {
+                    $result['poster'] = esc_url($meta['posters'][$i]);
                 }
 
-                if(!empty($item['description'])) {
-                    $result['description'] = wp_specialchars_decode($item['description']);
+                if(!empty($meta['description'])) {
+                    $result['description'] = wp_specialchars_decode($meta['description']);
                 }
 
-                if($options['details'] === 'result' && !empty($item['details'])) {
-                    $result['details'] = apply_filters('the_content', $item['details']);
+                if($options['details'] === 'result' && !empty($meta['details'])) {
+                    $result['details'] = apply_filters('the_content', $meta['details']);
                 }
 
                 if($options['details'] === 'remark' && !empty($options['remark'])) {
@@ -563,12 +576,12 @@ class Knife_Quiz_Section {
 
                 $heading = [];
 
-                if($options['achievment'] && !empty($item['achievment'])) {
-                    $heading[] = str_replace('%', $i, $item['achievment']);
+                if($options['achievment'] && !empty($meta['achievment'])) {
+                    $heading[] = str_replace('%', $i, $meta['achievment']);
                 }
 
-                if(!empty($item['heading'])) {
-                    $heading[] = wp_specialchars_decode($item['heading']);
+                if(!empty($meta['heading'])) {
+                    $heading[] = wp_specialchars_decode($meta['heading']);
                 }
 
                 if(count($heading) > 0) {
@@ -577,8 +590,8 @@ class Knife_Quiz_Section {
 
 
                 if(array_filter($result)) {
-                    if($options['format'] === 'category' && !empty($item['category'])) {
-                        $category = mb_substr($item['category'], 0, 1);
+                    if($options['format'] === 'category' && !empty($meta['category'])) {
+                        $category = mb_substr($meta['category'], 0, 1);
                         $results[$category] = $result;
 
                         continue;
