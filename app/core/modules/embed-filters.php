@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.2
- * @version 1.7
+ * @version 1.8
  */
 
 if (!defined('WPINC')) {
@@ -72,7 +72,7 @@ class Knife_Embed_Filters {
      * Remove instagram embeds caption
      */
     public static function hide_instagram_caption($providers) {
-        $providers['#https?://(www\.)?instagr(\.am|am\.com)/p/.*#i'] = array('https://api.instagram.com/oembed?hidecaption=true', true);
+        $providers['#https?://(www\.)?instagr(\.am|am\.com)/(p|tv)/.*#i'] = array('https://api.instagram.com/oembed?hidecaption=true', true);
 
         return $providers;
     }
