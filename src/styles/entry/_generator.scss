@@ -40,18 +40,18 @@
 
     @media screen and (max-width: 1023px) {
       margin-bottom: .75rem;
-      font-size: 3rem;
+      font-size: 3.25rem;
     }
 
     @media screen and (max-width: 767px) {
       margin-bottom: 1rem;
 
-      font-size: 2rem;
+      font-size: 2.5rem;
       line-height: 1.25;
     }
 
     @media screen and (max-width: 479px) {
-      font-size: 1.75rem;
+      font-size: 2rem;
       line-height: 1.25;
     }
   }
@@ -199,7 +199,21 @@
     }
   }
 
-  &.entry-generator--results {
+  &.entry-generator--blank {
+    .entry-generator__title {
+      padding-right: 10%;
+
+      @media screen and (max-width: 1023px) {
+        padding-right: 0;
+      }
+    }
+
+    .entry-generator__share {
+      display: flex;
+    }
+  }
+
+  &.entry-generator--poster {
     .entry-generator__title {
       display: none;
     }
