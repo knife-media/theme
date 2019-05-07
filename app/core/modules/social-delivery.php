@@ -24,6 +24,11 @@ class Knife_Social_Delivery {
         if(!defined('KNIFE_DELIVERY')) {
             define('KNIFE_DELIVERY', []);
         }
+
+        // Die if curl not exists
+        if(!function_exists('curl_version')) {
+            wp_die(__('Для нормальной работы темы необходимо установить модуль php-curl', 'knife-theme'));
+        }
     }
 
 
@@ -31,6 +36,38 @@ class Knife_Social_Delivery {
      * Send message to vk.com
      */
     public static function send_vkontakte($text, $destination, $image = null, $delivery = 'vkontakte') {
+    }
+
+
+    /**
+     * Send message to facebook.com
+     */
+    public static function send_facebook($destination, $message, $delivery = 'facebook') {
+        $api = 'https://graph.facebook.com/v3.2/' . $destination;
+
+        // Get delivery settings
+        $conf = KNIFE_DELIVERY[$delivery] ?? [];
+
+        // Check token format
+        if(!preg_match('~^[0-9a-z]+$~i', $conf['token'])) {
+            return new WP_Error('token', __('Неверный формат токена', 'knife-theme'));
+        }
+
+        // Append token to message
+        $message['access_token'] = $conf['token'];
+
+        // Setup api url
+        $endpoint = '/feed';
+
+        // Send message with poster
+        if(isset($message['source'])) {
+            $message['source'] = new CURLFile($message['source']);
+
+            // Update endpoint
+            $endpoint = '/photo';
+        }
+
+        return self::make_request($api . $endpoint, $message);
     }
 
 
@@ -72,7 +109,26 @@ class Knife_Social_Delivery {
     /**
      * Send curl request
      */
-    private static function make_request() {
+    private static function make_request($url, $postfields = null) {
+        $version = wp_get_theme()->get('Version');
+
+        $options = [
+            CURLOPT_CONNECTTIMEOUT => 5,
+            CURLOPT_HEADER => true,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => 5,
+            CURLOPT_USERAGENT => 'knife-theme/' . $version . get_bloginfo('url')
+        ];
+
+        if(is_array($postfields)) {
+            $options[CURLOPT_POST] = true;
+            $options[CURLOPT_POSTFIELDS] = $postfields;
+        }
+
+        $handler = curl_init();
+        curl_setopt_array($handler, $options);
+
+        return curl_exec($handler);
     }
 }
 
