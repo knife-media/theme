@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.6
+ * @version 1.8
  */
 
 
@@ -57,7 +57,7 @@ class Knife_Share_Buttons {
     public static function get_settings() {
         $settings = [
             'vkontakte' => [
-                'link' => 'https://vk.com/share.php?url=%1$s&text=%2$s',
+                'link' => 'https://vk.com/share.php?url=%1$s&title=%2$s',
                 'text' => __('Поделиться', 'knife-theme')
             ],
 
