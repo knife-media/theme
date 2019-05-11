@@ -529,12 +529,13 @@ class Knife_Club_Section {
             $request = absint(get_theme_mod(self::$option_request, 0)) + 1;
 
             $message = [
-                'chat_id' => $chat_id,
                 'text' => self::get_request($fields, $request),
                 'parse_mode' => 'HTML'
             ];
 
-            if(Knife_Social_Delivery::send_telegram($message)) {
+            $response = Knife_Social_Delivery::send_telegram($chat_id, $message);
+
+            if(!is_wp_error($response)) {
                 set_theme_mod(self::$option_request, $request);
                 wp_send_json_success(__('Сообщение успешно отправлено', 'knife-theme'));
             }

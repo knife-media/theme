@@ -26,8 +26,7 @@
             <div class="item">
                 <?php
                     $item = wp_parse_args((array) $item, [
-                        'networks' => [],
-                        'results' => [],
+                        'targets' => [],
                         'excerpt' => '',
                         'attachment' => '',
                         'delay' => 0,
@@ -42,15 +41,15 @@
 
                 <?php if(empty($item['sent'])) : ?>
 
-                    <div class="item__networks">
+                    <div class="item__targets">
                         <?php
                             foreach($channels as $channel => $label) {
                                 printf(
-                                    '<label class="item__networks-check">%s<span>%s</span></label>',
+                                    '<label class="item__targets-check">%s<span>%s</span></label>',
 
-                                    sprintf('<input type="checkbox" data-item="networks" value="%s"%s>',
+                                    sprintf('<input type="checkbox" data-item="targets" value="%s"%s>',
                                         esc_attr($channel),
-                                        checked(in_array($channel, $item['networks']), true, false)
+                                        checked(in_array($channel, $item['targets']), true, false)
                                     ),
                                     esc_html($label)
                                 );
@@ -155,19 +154,27 @@
 
                 <?php else : ?>
 
-                    <div class="item__results">
+                    <div class="item__targets">
                         <?php
-                            foreach($item['results'] as $network => $link)  {
-                                $label = __('Без названия', 'knife-theme');
+                            foreach($item['targets'] as $target) {
+                                if(isset($item['complete'][$target], $channels[$target])) {
+                                    printf(
+                                        '<a class="item__targets-link" href="%s" target="_blank">%s</a>',
+                                        esc_url($item['complete'][$target]),
+                                        esc_html($channels[$target])
+                                    );
 
-                                if(isset($channels[$network])) {
-                                    $label = $channels[$network];
+                                    continue;
+                                }
+
+                                if(empty($item['errors'][$target])) {
+                                    $item['errors'][$target] = __('Непредвиденная ошибка сервера', 'knife-theme');
                                 }
 
                                 printf(
-                                    '<a class="item__results-link" href="%s" target="_blank">%s</a>',
-                                    esc_url($link),
-                                    esc_html($label)
+                                    '<span class="item__targets-error" title="%s">%s</span>',
+                                    esc_attr($item['errors'][$target]),
+                                    esc_html($channels[$target])
                                 );
                             }
                         ?>

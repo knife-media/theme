@@ -66,14 +66,14 @@ class Knife_Distribute_Control {
 
 
         // Schedule event action
-        add_action('knife_schedule_distribution', [__CLASS__, 'launch_task'], 10, 2);
+        add_action('knife_schedule_distribution', [__CLASS__, 'start_task'], 10, 2);
 
         // Define distribute settings if still not
         if(!defined('KNIFE_DISTRIBUTE')) {
             define('KNIFE_DISTRIBUTE', []);
         }
 
-#       self::launch_task('5ccaf04bc179e', 68530); exit;
+#        self::start_task('5cd612511d78b', 68530); exit;
     }
 
 
@@ -170,37 +170,43 @@ class Knife_Distribute_Control {
 
 
     /**
-     * Publish scheduled task
+     * Start scheduled task
      */
-    public static function launch_task($uniqid, $post_id) {
-        // Get distribute items
-        $items = (array) get_post_meta($post_id, self::$meta_items, true);
+    public static function start_task($uniqid, $post_id) {
+        // Get post items
+        $items = get_post_meta($post_id, self::$meta_items, true);
 
-        // Skip empty and already sent tasks
-        if(isset($items[$uniqid]) && empty($items[$uniqid]['sent'])) {
-            $item = wp_parse_args((array) $items[$uniqid], [
-                'networks' => [],
-                'excerpt' => '',
-                'attachment' => 0
-            ]);
-
-            $results = [];
-
-            // Loop through networks and send tasks
-            foreach($item['networks'] as $network) {
-                // Try to send message
-                $results[$network] = self::send_task($item, $network, $post_id);
-            }
-
-            $items[$uniqid] = array_merge($items[$uniqid], [
-                'results' => $results,
-                'sent' => time()
-            ]);
-
-//            update_post_meta($post_id, self::$meta_items, $items);
+        // Check if item task exists
+        if(empty($items[$uniqid])) {
+            return;
         }
 
-        print_r($items);
+        $item = $items[$uniqid];
+
+        // Skip empty and already sent tasks
+        if(isset($item['sent']) || empty($item['targets'])) {
+            return;
+        }
+
+        $results = ['sent' => time()];
+
+        // Loop through targets and send tasks
+        foreach($item['targets'] as $target) {
+            $sent = self::launch_task($item, $target, $post_id);
+
+            if(is_wp_error($sent)) {
+                $results['errors'][$target] = $sent->get_error_message();
+
+                continue;
+            }
+
+            $results['complete'][$target] = $sent;
+        }
+
+        // Upgrade item with results array
+        $items[$uniqid] = $items[$uniqid] + $results;
+
+        update_post_meta($post_id, self::$meta_items, $items);
     }
 
 
@@ -259,10 +265,10 @@ class Knife_Distribute_Control {
 
             $uniqid = $request['uniqid'];
 
-            if(isset($request['networks'])) {
-                foreach((array) $request['networks'] as $network) {
+            if(isset($request['targets'])) {
+                foreach((array) $request['targets'] as $network) {
                     if(array_key_exists($network, KNIFE_DISTRIBUTE)) {
-                        $item['networks'][] = $network;
+                        $item['targets'][] = $network;
                     }
                 }
             }
@@ -302,15 +308,15 @@ class Knife_Distribute_Control {
      */
     private static function schedule_tasks($items, $post, $post_id) {
         foreach($items as $uniqid => $item) {
-            // Skip if alread scheduled
-            $scheduled = wp_next_scheduled('knife_schedule_distribution', [$uniqid, $post_id]);
-
-            if($scheduled !== false) {
+            // Skip empty and already sent tasks
+            if(isset($item['sent']) || empty($item['targets'])) {
                 continue;
             }
 
-            // Skip not delayed posts or empty networks
-            if(empty($item['delay']) || empty($item['networks'])) {
+            $scheduled = wp_next_scheduled('knife_schedule_distribution', [$uniqid, $post_id]);
+
+            // Skip not planned and already scheduled
+            if($scheduled || empty($item['delay'])) {
                 continue;
             }
 
@@ -339,13 +345,150 @@ class Knife_Distribute_Control {
     /**
      * Send scheduled task
      */
-    private static function send_task($task, $network, $post_id) {
-        $permalink = get_permalink($post_id);
-        $text = $task['excerpt'] . "\n\n" . $permalink;
+    private static function launch_task($item, $target, $post_id) {
+        // Get distribute settings
+        $conf = KNIFE_DISTRIBUTE[$target] ?? [];
 
-        $chat_id = KNIFE_DISTRIBUTE[$network]['group'];
+        if(empty($conf['delivery'])) {
+            return new WP_Error('config', __('Отсутствуют необходимые настройки дистрибуции', 'knife-theme'));
+        }
 
-        return $permalink;
+        $prepare = 'prepare_' . $conf['delivery'];
+
+        if(!method_exists(__CLASS__, $prepare)) {
+            return new WP_Error('config', __('Не найден метод дистрибуции, указанный в настройках', 'knife-theme'));
+        }
+
+        return self::$prepare($conf, $item, $post_id);
+    }
+
+
+    /**
+     * Prepare facebook message
+     */
+    private static function prepare_facebook($conf, $item, $post_id) {
+        $poster = false;
+
+        // Check group id setting
+        if(empty($conf['group'])) {
+            return new WP_Error('config', __('Не найдены настройки группы', 'knife-theme'));
+        }
+
+        // Check if facebook social delivery method exists
+        if(!method_exists('Knife_Social_Delivery', 'send_facebook')) {
+            return new WP_Error('module', __('Не найден метод доставки', 'knife-theme'));
+        }
+
+        $message = ['link' => get_permalink($post_id)];
+
+        if(!empty($item['excerpt'])) {
+            $message['message'] = esc_html($item['excerpt']);
+        }
+
+        if(!empty($item['attachment'])) {
+            $poster = get_attached_file($item['attachment']);
+
+            // Swap message to caption for message with poster
+            if($poster && isset($message['message'])) {
+                $message['caption'] = $message['message'];
+                unset($message['message']);
+            }
+        }
+
+
+        $response = Knife_Social_Delivery::send_facebook($conf['group'], $message, $poster);
+
+        // Try to sprintf response using config entry argument
+        if(!is_wp_error($response) && !empty($conf['entry'])) {
+            $response = sprintf($conf['entry'], $response);
+        }
+
+        return $response;
+    }
+
+
+    /**
+     * Prepare telegram message
+     */
+    private static function prepare_telegram($conf, $item, $post_id) {
+        $poster = false;
+
+        // Check group id setting
+        if(empty($conf['group'])) {
+            return new WP_Error('config', __('Не найдены настройки группы', 'knife-theme'));
+        }
+
+        // Check if telegram social delivery method exists
+        if(!method_exists('Knife_Social_Delivery', 'send_telegram')) {
+            return new WP_Error('module', __('Не найден метод доставки', 'knife-theme'));
+        }
+
+        $message = ['text' => get_permalink($post_id)];
+
+        if(!empty($item['excerpt'])) {
+            $message['text'] = esc_html($item['excerpt']) . "\n\n" . $message['text'];
+        }
+
+        if(!empty($item['attachment'])) {
+            $poster = get_attached_file($item['attachment']);
+
+            // Swap message to caption for message with poster
+            if($poster && isset($message['text'])) {
+                $message['caption'] = $message['text'];
+                unset($message['text']);
+            }
+        }
+
+
+        $response = Knife_Social_Delivery::send_telegram($conf['group'], $message, $poster);
+
+        // Try to sprintf response using config entry argument
+        if(!is_wp_error($response) && !empty($conf['entry'])) {
+            $response = sprintf($conf['entry'], $response);
+        }
+
+        return $response;
+    }
+
+
+    /**
+     * Prepare vkontakte message
+     */
+    private static function prepare_vkontakte($conf, $item, $post_id) {
+        $poster = false;
+
+        // Check group id setting
+        if(empty($conf['group'])) {
+            return new WP_Error('config', __('Не найдены настройки группы', 'knife-theme'));
+        }
+
+        // Check if vkontakte social delivery method exists
+        if(!method_exists('Knife_Social_Delivery', 'send_vkontakte')) {
+            return new WP_Error('module', __('Не найден метод доставки', 'knife-theme'));
+        }
+
+        $message = [
+            'owner_id' => '-' . $conf['group'],
+            'from_group' => 1,
+            'attachments' => get_permalink($post_id)
+        ];
+
+        if(!empty($item['excerpt'])) {
+            $message['message'] = esc_html($item['excerpt']);
+        }
+
+        if(!empty($item['attachment'])) {
+            $poster = get_attached_file($item['attachment']);
+        }
+
+        $response = Knife_Social_Delivery::send_vkontakte($conf['group'], $message, $poster);
+
+        // Try to sprintf response using config entry argument
+        if(!is_wp_error($response) && !empty($conf['entry'])) {
+            $response = sprintf($conf['entry'], $response);
+        }
+
+        return $response;
     }
 }
 
