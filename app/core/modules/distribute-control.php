@@ -72,8 +72,6 @@ class Knife_Distribute_Control {
         if(!defined('KNIFE_DISTRIBUTE')) {
             define('KNIFE_DISTRIBUTE', []);
         }
-
-#        self::start_task('5cd612511d78b', 68530); exit;
     }
 
 
@@ -482,6 +480,44 @@ class Knife_Distribute_Control {
         }
 
         $response = Knife_Social_Delivery::send_vkontakte($conf['group'], $message, $poster);
+
+        // Try to sprintf response using config entry argument
+        if(!is_wp_error($response) && !empty($conf['entry'])) {
+            $response = sprintf($conf['entry'], $response);
+        }
+
+        return $response;
+    }
+
+
+    /**
+     * Prepare twitter message
+     */
+    private static function prepare_twitter($conf, $item, $post_id) {
+        $poster = false;
+
+        // Check if twitter social delivery method exists
+        if(!method_exists('Knife_Social_Delivery', 'send_twitter')) {
+            return new WP_Error('module', __('Не найден метод доставки', 'knife-theme'));
+        }
+
+        $message = ['status' => get_permalink($post_id)];
+
+        if(!empty($item['excerpt'])) {
+            $status = esc_html($item['excerpt']);
+
+            if(function_exists('mb_strlen') && mb_strlen($status) > 250) {
+                $status = mb_substr($status, 0, 250) . '…';
+            }
+
+            $message['status'] = $status . "\n\n" . $message['status'];
+        }
+
+        if(!empty($item['attachment'])) {
+            $poster = get_attached_file($item['attachment']);
+        }
+
+        $response = Knife_Social_Delivery::send_twitter($message, $poster);
 
         // Try to sprintf response using config entry argument
         if(!is_wp_error($response) && !empty($conf['entry'])) {

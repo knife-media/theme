@@ -209,9 +209,96 @@ class Knife_Social_Delivery {
 
 
     /**
+     * Send message to Twitter
+     */
+    public static function send_twitter($message, $poster = false, $delivery = 'twitter') {
+        // Get delivery settings
+        $conf = KNIFE_DELIVERY[$delivery] ?? [];
+
+        // Check conf tokens
+        foreach(['consumer_key', 'consumer_secret', 'access_token', 'access_token_secret'] as $key) {
+            if(!array_key_exists($key, $conf)) {
+                return new WP_Error('token', __('Отсутствует необходимый ключ: ', 'knife-theme') . $key);
+            }
+        }
+
+        $oauth = [
+            'oauth_consumer_key' => $conf['consumer_key'],
+            'oauth_token' => $conf['access_token'],
+            'oauth_nonce' => uniqid(),
+            'oauth_signature_method' => 'HMAC-SHA1',
+            'oauth_timestamp' => time(),
+            'oauth_version' => '1.0'
+        ];
+
+        // Composite secret key
+        $secret = rawurlencode($conf['consumer_secret']) . '&' . rawurlencode($conf['access_token_secret']);
+
+        if($poster) {
+            $upload = 'https://upload.twitter.com/1.1/media/upload.json';
+
+            // Update oauth signature
+            $base = self::build_base_string($upload, 'POST', $oauth);
+            $auth = $oauth + [
+                'oauth_signature' => base64_encode(hash_hmac('sha1', $base, $secret, true))
+            ];
+
+            // Prepare headers
+            $header = ['Accept: application/json', self::build_auth_header($auth), "Expect:"];
+
+            $fields = [
+                'media' => file_get_contents($poster)
+            ];
+
+            // Upload twitter media
+            $response = self::make_request($upload, $fields, $header);
+
+            // Parse response
+            $response = @json_decode($response);
+
+            if(empty($response->media_id_string)) {
+                return new WP_Error('request', __('Не удалось сохранить изображение', 'knife-theme'));
+            }
+
+            $message['media_ids'] = $response->media_id_string;
+        }
+
+        $publish = 'https://api.twitter.com/1.1/statuses/update.json';
+
+        // Update oauth signature
+        $base = self::build_base_string($publish, 'POST', $oauth + $message);
+        $auth = $oauth + [
+            'oauth_signature' => base64_encode(hash_hmac('sha1', $base, $secret, true))
+        ];
+
+        // Prepare headers
+        $header = ['Accept: application/json', self::build_auth_header($auth), "Expect:"];
+
+        // Create url query from array
+        $message = http_build_query($message);
+
+        // Publish twitter status
+        $response = self::make_request($publish, $message, $header);
+
+        // Parse response
+        $response = @json_decode($response);
+
+        if(!empty($response->id)) {
+            return $response->id;
+        }
+
+        if(!empty($response->errors[0]->message)) {
+            return new WP_Error('request', $response->errors[0]->message);
+        }
+
+        return new WP_Error('request', __('Неизвестная ошибка запроса', 'knife-theme'));
+    }
+
+
+    /**
      * Send curl request
      */
-    private static function make_request($url, $postfields = null) {
+    private static function make_request($url, $postfields = null, $header = null) {
         $version = wp_get_theme()->get('Version');
 
         $options = [
@@ -223,7 +310,11 @@ class Knife_Social_Delivery {
             CURLOPT_USERAGENT => 'knife-theme/' . $version . get_bloginfo('url')
         ];
 
-        if(is_array($postfields)) {
+        if($header) {
+            $options[CURLOPT_HTTPHEADER] = $header;
+        }
+
+        if($postfields) {
             $options[CURLOPT_POST] = true;
             $options[CURLOPT_POSTFIELDS] = $postfields;
         }
@@ -232,6 +323,36 @@ class Knife_Social_Delivery {
         curl_setopt_array($handler, $options);
 
         return curl_exec($handler);
+    }
+
+
+    /**
+     * Build base string
+     *
+     * Helper method for twitter
+     */
+    private static function build_base_string($uri, $method, $args, $values = []) {
+        ksort($args);
+
+        foreach($args as $key => $value){
+            $values[] = "$key=" . rawurlencode($value);
+        }
+
+        return $method . "&" . rawurlencode($uri) . '&' . rawurlencode(implode('&', $values));
+    }
+
+
+    /**
+     * Build authorization header
+     *
+     * Helper method for twitter
+     */
+    private static function build_auth_header($oauth, $values = []) {
+        foreach($oauth as $key => $value) {
+            $values[] = $key . '="' . rawurlencode($value) . '"';
+        }
+
+        return 'Authorization: OAuth ' . implode(', ', $values);
     }
 }
 
