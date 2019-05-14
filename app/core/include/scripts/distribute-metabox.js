@@ -145,30 +145,18 @@ jQuery(document).ready(function($) {
    * Update excerpt counter
    */
   box.on('keyup paste', '.item__snippet-excerpt', function() {
+    var maxlength = $(this).data('maxlength');
     var counter = $(this).siblings('.item__snippet-counter');
 
-    if(counter.length > 0) {
-      var length = $(this).val().length;
+    if(maxlength) {
+      var value = $(this).val().length;
 
-      if(length > 0) {
-        return counter.text(length);
+      if(value > 0) {
+        return counter.text(maxlength - value).show();
       }
-
-      return counter.text('');
     }
-  });
 
-
-  /**
-   * Toggle time on delay date change
-   */
-  box.on('change', '.item__delay-date', function() {
-    var item = $(this).closest('.item');
-
-    // Toggle class depends on select value
-    item.find('.item__delay-time').toggle(
-        $(this).val().length > 0
-    );
+    return counter.hide();
   });
 
 
@@ -185,6 +173,38 @@ jQuery(document).ready(function($) {
 
     // Remove image
     poster.find('img').remove();
+  });
+
+
+  /**
+   * Update excerpt maxlength on targets check
+   */
+  box.on('change', '.item__targets-check input', function() {
+    var item = $(this).closest('.item');
+    var maxlength = 0;
+
+    item.find('.item__targets input:checked').each(function() {
+      if($(this).data('maxlength') > maxlength) {
+        maxlength = $(this).data('maxlength');
+      }
+    });
+
+    var excerpt = item.find('.item__snippet-excerpt');
+
+    excerpt.data('maxlength', maxlength).trigger('keyup');
+  });
+
+
+  /**
+   * Toggle time on delay date change
+   */
+  box.on('change', '.item__delay-date', function() {
+    var item = $(this).closest('.item');
+
+    // Toggle class depends on select value
+    item.find('.item__delay-time').toggle(
+        $(this).val().length > 0
+    );
   });
 
 

@@ -12,9 +12,11 @@
         $channels = [];
 
         foreach(KNIFE_DISTRIBUTE as $name => $settings) {
-            if(!empty($settings['label'])) {
-                $channels[$name] = sanitize_text_field($settings['label']);
+            if(empty($settings['label'])) {
+                continue;
             }
+
+            $channels[$name] = $settings;
         }
 
         wp_nonce_field('metabox', self::$metabox_nonce);
@@ -42,12 +44,17 @@
                     <div class="item__targets">
                         <?php
                             foreach($item['targets'] as $target) {
+                                if(empty($channels[$target])) {
+                                    continue;
+                                }
+
+                                $label = $channels[$target]['label'];
 
                                 if(intval($item['sent']) < 0) {
                                     printf(
                                         '<span class="item__targets-load" title="%s">%s</span>',
                                         __('Задача в обработке', 'knife-theme'),
-                                        esc_html($channels[$target])
+                                        esc_html($label)
                                     );
 
                                     continue;
@@ -57,7 +64,7 @@
                                     printf(
                                         '<a class="item__targets-link" href="%s" target="_blank">%s</a>',
                                         esc_url($item['complete'][$target]),
-                                        esc_html($channels[$target])
+                                        esc_html($label)
                                     );
 
                                     continue;
@@ -70,7 +77,7 @@
                                 printf(
                                     '<span class="item__targets-error" title="%s">%s</span>',
                                     esc_attr($item['errors'][$target]),
-                                    esc_html($channels[$target])
+                                    esc_html($label)
                                 );
                             }
                         ?>
@@ -114,19 +121,22 @@
                 <?php else : ?>
 
                     <div class="item__targets">
-                        <?php
-                            foreach($channels as $channel => $label) {
-                                printf(
-                                    '<label class="item__targets-check">%s<span>%s</span></label>',
+                        <?php foreach($channels as $channel => $settings) : ?>
+                            <label class="item__targets-check">
+                                <?php
+                                    if(empty($settings['maxlength'])) {
+                                        $settings['maxlength'] = -1;
+                                    }
 
-                                    sprintf('<input type="checkbox" data-item="targets" value="%s"%s>',
-                                        esc_attr($channel),
+                                    printf('<input type="checkbox" data-item="targets" data-maxlength="%d" value="%s"%s>',
+                                        $settings['maxlength'], esc_attr($channel),
                                         checked(in_array($channel, $item['targets']), true, false)
-                                    ),
-                                    esc_html($label)
-                                );
-                            }
-                        ?>
+                                    );
+
+                                    printf('<span>%s</span>', esc_html($settings['label']));
+                                ?>
+                            </label>
+                        <?php endforeach; ?>
                     </div>
 
                     <?php

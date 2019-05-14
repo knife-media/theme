@@ -453,7 +453,7 @@ class Knife_Distribute_Control {
         $response = Knife_Social_Delivery::send_facebook($conf['group'], $message, $poster);
 
         // Try to sprintf response using config entry argument
-        if(!is_wp_error($response) && !empty($conf['entry'])) {
+        if(isset($conf['entry']) && !is_wp_error($response)) {
             $response = sprintf($conf['entry'], $response);
         }
 
@@ -497,7 +497,7 @@ class Knife_Distribute_Control {
         $response = Knife_Social_Delivery::send_telegram($conf['group'], $message, $poster);
 
         // Try to sprintf response using config entry argument
-        if(!is_wp_error($response) && !empty($conf['entry'])) {
+        if(isset($conf['entry']) && !is_wp_error($response)) {
             $response = sprintf($conf['entry'], $response);
         }
 
@@ -538,7 +538,7 @@ class Knife_Distribute_Control {
         $response = Knife_Social_Delivery::send_vkontakte($conf['group'], $message, $poster);
 
         // Try to sprintf response using config entry argument
-        if(!is_wp_error($response) && !empty($conf['entry'])) {
+        if(isset($conf['entry']) && !is_wp_error($response)) {
             $response = sprintf($conf['entry'], $response);
         }
 
@@ -560,13 +560,7 @@ class Knife_Distribute_Control {
         $message = ['status' => get_permalink($post_id)];
 
         if(!empty($item['excerpt'])) {
-            $status = esc_html($item['excerpt']);
-
-            if(function_exists('mb_strlen') && mb_strlen($status) > 250) {
-                $status = mb_substr($status, 0, 250) . '…';
-            }
-
-            $message['status'] = $status . "\n\n" . $message['status'];
+            $message['status'] = esc_html($item['excerpt']) . "\n\n" . $message['status'];
         }
 
         if(!empty($item['attachment'])) {
@@ -576,7 +570,7 @@ class Knife_Distribute_Control {
         $response = Knife_Social_Delivery::send_twitter($message, $poster);
 
         // Try to sprintf response using config entry argument
-        if(!is_wp_error($response) && !empty($conf['entry'])) {
+        if(isset($conf['entry']) && !is_wp_error($response)) {
             $response = sprintf($conf['entry'], $response);
         }
 
