@@ -34,7 +34,7 @@
 #knife-distribute-box .item__delete {
   display: block;
   position: absolute;
-  top: 10px;
+  bottom: 15px;
   right: 0;
   cursor: pointer;
 
@@ -42,6 +42,10 @@
   line-height: 1;
   color: #a00;
 }
+  #knife-distribute-box .item__targets ~ .item__delete {
+    top: 10px;
+    bottom: auto;
+  }
 
 #knife-distribute-box .item__locked {
   display: flex;

@@ -119,26 +119,6 @@
                     <?php endif; ?>
 
                 <?php else : ?>
-
-                    <div class="item__targets">
-                        <?php foreach($channels as $channel => $settings) : ?>
-                            <label class="item__targets-check">
-                                <?php
-                                    if(empty($settings['maxlength'])) {
-                                        $settings['maxlength'] = -1;
-                                    }
-
-                                    printf('<input type="checkbox" data-item="targets" data-maxlength="%d" value="%s"%s>',
-                                        $settings['maxlength'], esc_attr($channel),
-                                        checked(in_array($channel, $item['targets']), true, false)
-                                    );
-
-                                    printf('<span>%s</span>', esc_html($settings['label']));
-                                ?>
-                            </label>
-                        <?php endforeach; ?>
-                    </div>
-
                     <?php
                         $scheduled = wp_next_scheduled('knife_schedule_distribution', [
                             sanitize_title($uniqid), absint($post_id)
@@ -146,6 +126,27 @@
 
                         $delay = strtotime("+ 15 minutes", current_time('timestamp'));
                     ?>
+
+                    <?php if(count($channels) > 0) : ?>
+                        <div class="item__targets">
+                            <?php foreach($channels as $channel => $settings) : ?>
+                                <label class="item__targets-check">
+                                    <?php
+                                        if(empty($settings['maxlength'])) {
+                                            $settings['maxlength'] = -1;
+                                        }
+
+                                        printf('<input type="checkbox" data-item="targets" data-maxlength="%d" value="%s"%s>',
+                                            $settings['maxlength'], esc_attr($channel),
+                                            checked(in_array($channel, $item['targets']), true, false)
+                                        );
+
+                                        printf('<span>%s</span>', esc_html($settings['label']));
+                                    ?>
+                                </label>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
 
                     <div class="item__snippet">
                         <?php
