@@ -1,6 +1,6 @@
 {
   "name": "knife-theme",
-  "version": "1.8.22",
+  "version": "1.8.23",
   "description": "Simple modern WordPress theme for community blog",
   "main": "gulpfile.js",
   "repository": {
