@@ -52,6 +52,15 @@ class Knife_Distribute_Control {
 
 
     /**
+     * Store task delay while scheduling
+     *
+     * @access  private
+     * @var     array
+     */
+    private static $task_delay = [];
+
+
+    /**
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public static function load_module() {
@@ -186,7 +195,12 @@ class Knife_Distribute_Control {
             return;
         }
 
-        $results = ['sent' => time()];
+        $items[$uniqid]['sent'] = -1;
+
+        // Should flag sent as soon as possible
+        update_post_meta($post_id, self::$meta_items, $items);
+
+        $results = [];
 
         // Loop through targets and send tasks
         foreach($item['targets'] as $target) {
@@ -200,6 +214,8 @@ class Knife_Distribute_Control {
 
             $results['complete'][$target] = $sent;
         }
+
+        $items[$uniqid]['sent'] = time();
 
         // Upgrade item with results array
         $items[$uniqid] = $items[$uniqid] + $results;
@@ -263,6 +279,9 @@ class Knife_Distribute_Control {
 
             $uniqid = $request['uniqid'];
 
+            // Set task delay if need
+            self::set_delay($uniqid, $request);
+
             if(isset($request['targets'])) {
                 foreach((array) $request['targets'] as $network) {
                     if(array_key_exists($network, KNIFE_DISTRIBUTE)) {
@@ -277,10 +296,6 @@ class Knife_Distribute_Control {
 
             if(isset($request['attachment'])) {
                 $item['attachment'] = absint($request['attachment']);
-            }
-
-            if(isset($request['delay'])) {
-                $item['delay'] = absint($request['delay']);
             }
 
             $requests[$uniqid] = $item;
@@ -306,37 +321,78 @@ class Knife_Distribute_Control {
      */
     private static function schedule_tasks($items, $post, $post_id) {
         foreach($items as $uniqid => $item) {
-            // Skip empty and already sent tasks
-            if(isset($item['sent']) || empty($item['targets'])) {
+            $settings = [$uniqid, $post_id];
+
+            // Skip already sent tasks
+            if(isset($item['sent'])) {
                 continue;
             }
 
-            $scheduled = wp_next_scheduled('knife_schedule_distribution', [$uniqid, $post_id]);
+            $scheduled = wp_next_scheduled('knife_schedule_distribution', $settings);
 
-            // Skip not planned and already scheduled
-            if($scheduled || empty($item['delay'])) {
-                continue;
-            }
-
-            $status = $post->post_status;
-
-            // Skip drafts and private posts here
-            if(in_array($status, ['future', 'publish'])) {
-                $timestamp = time();
-
-                if($status === 'future') {
-                    $timestamp = strtotime($post->post_date_gmt);
+            // Skip tasks with empty targets
+            if(empty($item['targets'])) {
+                if($scheduled) {
+                    wp_unschedule_event($scheduled, 'knife_schedule_distribution', $settings);
                 }
 
-                // Get timestamp
-                $timestamp = $timestamp + $item['delay'] * 60;
+                continue;
+            }
 
-                // Schedule event
-                wp_schedule_single_event($timestamp, 'knife_schedule_distribution', [$uniqid, $post_id]);
+            // Skip private and draft posts
+            if(!in_array($post->post_status, ['future', 'publish'])) {
+                if($scheduled) {
+                    wp_unschedule_event($scheduled, 'knife_schedule_distribution', $settings);
+                }
+
+                continue;
+            }
+
+            $post_date = strtotime($post->post_date_gmt);
+
+            // Reschedule time updated posts
+            if($scheduled && $post_date > $scheduled) {
+                wp_unschedule_event($scheduled, 'knife_schedule_distribution', $settings);
+
+                $scheduled = strtotime('+ 15 minutes', $post_date);
+                wp_schedule_single_event($scheduled, 'knife_schedule_distribution', $settings);
+            }
+
+            // Schedule new tasks
+            if(!$scheduled && isset(self::$task_delay[$uniqid])) {
+                $scheduled = max(time(), self::$task_delay[$uniqid]);
+
+                if($post_date > $scheduled) {
+                    $scheduled = strtotime('+ 15 minutes', $post_date);
+                }
+
+                wp_schedule_single_event($scheduled, 'knife_schedule_distribution', $settings);
             }
         }
 
         return $items;
+    }
+
+
+    /**
+     * Set task delay while scheduling
+     */
+    private static function set_delay($uniqid, $request) {
+        if(empty($request['date'])) {
+            return;
+        }
+
+        if(isset($request['hour'], $request['minute'])) {
+            $format = sprintf('%s %s:%s:00',
+                $request['date'], $request['hour'], $request['minute']
+            );
+
+            $delay = get_gmt_from_date($format, 'U');
+
+            if($delay) {
+                self::$task_delay[$uniqid] = $delay;
+            }
+        }
     }
 
 

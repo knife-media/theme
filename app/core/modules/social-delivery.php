@@ -306,7 +306,7 @@ class Knife_Social_Delivery {
             CURLOPT_CONNECTTIMEOUT => 5,
             CURLOPT_HEADER => false,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 5,
+            CURLOPT_TIMEOUT => 15,
             CURLOPT_USERAGENT => 'knife-theme/' . $version . get_bloginfo('url')
         ];
 
