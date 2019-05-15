@@ -136,7 +136,6 @@ class Knife_Promo_Manager {
             if(!empty($new_template)) {
                 return $new_template;
             }
-
         }
 
         return $template;

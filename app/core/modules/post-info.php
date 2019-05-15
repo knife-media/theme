@@ -67,9 +67,9 @@ class Knife_Post_Info {
      * @since 1.8
      */
     private static function get_promo($output = '') {
-        $promo = get_post_meta(get_the_ID(), '_knife-promo', true);
+        $is_promo = get_post_meta(get_the_ID(), '_knife-promo', true);
 
-        if((string) $promo === '1') {
+        if($is_promo) {
             $output = sprintf('<span class="about__promo">%s</span>',
                 __('Партнерский материал', 'knife-theme')
             );
@@ -93,12 +93,12 @@ class Knife_Post_Info {
      * @since 1.8
      */
     private static function get_club($output = '') {
-        $type = get_post_type(get_the_id());
+        $post_type = get_post_type(get_the_id());
 
-        if($type === 'club') {
+        if($post_type === 'club') {
             $output = sprintf('<a class="about__club" href="%2$s">%1$s</a>',
-                esc_html(get_post_type_object($type)->labels->name),
-                esc_url(get_post_type_archive_link($type))
+                esc_html(get_post_type_object($post_type)->labels->name),
+                esc_url(get_post_type_archive_link($post_type))
             );
         }
 

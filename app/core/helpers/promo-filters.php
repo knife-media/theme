@@ -35,20 +35,3 @@ add_filter('the_content', function($content) {
 
     return $content . $promo_link;
 });
-
-
-/**
- * Tinkoff Black promo
- * Remove RTB and similar posts from promo
- *
- * @since 1.8
- */
-add_action('wp', function() {
-    if(is_single('spender-notes')) {
-        // Disable similar posts
-        remove_action('wp_enqueue_scripts', ['Knife_Similar_Posts', 'inject_object'], 12);
-
-        // Disable Yandex.RTB banner
-        remove_action('wp_enqueue_scripts', ['Knife_Yandex_RTB', 'inject_object'], 12);
-    }
-});
