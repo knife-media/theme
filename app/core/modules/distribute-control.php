@@ -88,7 +88,7 @@ class Knife_Distribute_Control {
      * Add custom distribute metabox for editors and admins
      */
     public static function add_metabox() {
-        if(current_user_can('publish_pages')) {
+        if(current_user_can('unfiltered_html')) {
             add_meta_box('knife-distribute-metabox', __('Настройки кросспостинга'), [__CLASS__, 'display_metabox'], self::$post_type, 'advanced');
 
             // Enqueue post metabox scripts
@@ -240,7 +240,7 @@ class Knife_Distribute_Control {
             return;
         }
 
-        if(!current_user_can('publish_pages', $post_id)) {
+        if(!current_user_can('unfiltered_html', $post_id)) {
             return;
         }
 

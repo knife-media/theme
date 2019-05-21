@@ -76,7 +76,7 @@ class Knife_Short_Manager {
         $hookname = add_management_page(
             __('Сокращатель ссылок', 'knife-theme'),
             __('Сокращатель ссылок', 'knife-theme'),
-            'publish_pages', self::$page_slug,
+            'unfiltered_html', self::$page_slug,
             [__CLASS__, 'display_management_page']
         );
 
@@ -95,7 +95,7 @@ class Knife_Short_Manager {
             return;
         }
 
-        if(!current_user_can('publish_pages')) {
+        if(!current_user_can('unfiltered_html')) {
             wp_die(__('Извините, у вас нет доступа к этому инструменту', 'knife-theme'));
         }
 
@@ -130,7 +130,7 @@ class Knife_Short_Manager {
      * Display management page
      */
     public static function display_management_page() {
-        if(!current_user_can('publish_pages')) {
+        if(!current_user_can('unfiltered_html')) {
             wp_die(__('Извините, у вас нет доступа к этому инструменту', 'knife-theme'));
         }
 

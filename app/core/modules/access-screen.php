@@ -22,7 +22,7 @@ class Knife_Access_Screen {
      */
     public static function load_module() {
         add_action('login_headerurl', [__CLASS__, 'change_url']);
-        add_action('login_headertitle', [__CLASS__, 'change_title']);
+        add_action('login_headertext', [__CLASS__, 'change_title']);
 
         // login styles
         add_filter('login_enqueue_scripts', [__CLASS__, 'login_styles']);
