@@ -433,19 +433,19 @@ class Knife_Distribute_Control {
             return new WP_Error('module', __('Не найден метод доставки', 'knife-theme'));
         }
 
-        $message = ['link' => get_permalink($post_id)];
+        $message = array_fill_keys(['message', 'link'], get_permalink($post_id));
 
         if(!empty($item['excerpt'])) {
-            $message['message'] = esc_html($item['excerpt']);
+            $message['message'] = esc_html($item['excerpt']) . "\n\n" . $message['message'];
         }
 
         if(!empty($item['attachment'])) {
             $poster = get_attached_file($item['attachment']);
 
             // Swap message to caption for message with poster
-            if($poster && isset($message['message'])) {
+            if($poster) {
                 $message['caption'] = $message['message'];
-                unset($message['message']);
+                unset($message['message'], $message['link']);
             }
         }
 
@@ -487,7 +487,7 @@ class Knife_Distribute_Control {
             $poster = get_attached_file($item['attachment']);
 
             // Swap message to caption for message with poster
-            if($poster && isset($message['text'])) {
+            if($poster) {
                 $message['caption'] = $message['text'];
                 unset($message['text']);
             }
