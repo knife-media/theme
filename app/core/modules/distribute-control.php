@@ -81,6 +81,11 @@ class Knife_Distribute_Control {
         if(!defined('KNIFE_DISTRIBUTE')) {
             define('KNIFE_DISTRIBUTE', []);
         }
+
+        // Die if php-mb not installed
+        if(!function_exists('mb_strlen')) {
+            wp_die(__('Для нормальной работы темы необходимо установить модуль php-mb', 'knife-theme'));
+        }
     }
 
 
@@ -436,7 +441,7 @@ class Knife_Distribute_Control {
         $message = array_fill_keys(['message', 'link'], get_permalink($post_id));
 
         if(!empty($item['excerpt'])) {
-            $message['message'] = esc_html($item['excerpt']) . "\n\n" . $message['message'];
+            $message['message'] = wp_specialchars_decode($item['excerpt']) . "\n\n" . $message['message'];
         }
 
         if(!empty($item['attachment'])) {
@@ -445,6 +450,8 @@ class Knife_Distribute_Control {
             // Swap message to caption for message with poster
             if($poster) {
                 $message['caption'] = $message['message'];
+
+                // Unset useless message args
                 unset($message['message'], $message['link']);
             }
         }
@@ -477,18 +484,22 @@ class Knife_Distribute_Control {
             return new WP_Error('module', __('Не найден метод доставки', 'knife-theme'));
         }
 
-        $message = ['text' => get_permalink($post_id)];
+        $message = [
+            'text' => get_permalink($post_id)
+        ];
 
         if(!empty($item['excerpt'])) {
-            $message['text'] = esc_html($item['excerpt']) . "\n\n" . $message['text'];
+            $message['text'] = wp_specialchars_decode($item['excerpt']) . "\n\n" . $message['text'];
         }
 
-        if(!empty($item['attachment'])) {
+        if(!empty($item['attachment']) && mb_strlen($message['text']) < 1024) {
             $poster = get_attached_file($item['attachment']);
 
             // Swap message to caption for message with poster
             if($poster) {
                 $message['caption'] = $message['text'];
+
+                // Unset useless message args
                 unset($message['text']);
             }
         }
@@ -528,7 +539,7 @@ class Knife_Distribute_Control {
         ];
 
         if(!empty($item['excerpt'])) {
-            $message['message'] = esc_html($item['excerpt']);
+            $message['message'] = wp_specialchars_decode($item['excerpt']);
         }
 
         if(!empty($item['attachment'])) {
@@ -557,15 +568,18 @@ class Knife_Distribute_Control {
             return new WP_Error('module', __('Не найден метод доставки', 'knife-theme'));
         }
 
-        $message = ['status' => get_permalink($post_id)];
+        $message = [
+            'status' => get_permalink($post_id)
+        ];
 
         if(!empty($item['excerpt'])) {
-            $message['status'] = esc_html($item['excerpt']) . "\n\n" . $message['status'];
+            $message['status'] = wp_specialchars_decode($item['excerpt']) . "\n\n" . $message['status'];
         }
 
         if(!empty($item['attachment'])) {
             $poster = get_attached_file($item['attachment']);
         }
+
 
         $response = Knife_Social_Delivery::send_twitter($message, $poster);
 

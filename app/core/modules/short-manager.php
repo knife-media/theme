@@ -66,6 +66,11 @@ class Knife_Short_Manager {
         if(!defined('KNIFE_SHORT')) {
             define('KNIFE_SHORT', []);
         }
+
+        // Die if php-mb not installed
+        if(!function_exists('mb_strlen')) {
+            wp_die(__('Для нормальной работы темы необходимо установить модуль php-mb', 'knife-theme'));
+        }
     }
 
 
@@ -300,7 +305,7 @@ class Knife_Short_Manager {
         }
 
         // Cut title if too long
-        if(function_exists('mb_strlen') && mb_strlen($title) > 100) {
+        if(mb_strlen($title) > 100) {
             $title = mb_substr($title, 0, 100) . '…';
         }
 

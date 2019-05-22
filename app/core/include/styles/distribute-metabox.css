@@ -242,6 +242,7 @@
     display: block;
 
     width: 100%;
+    margin: 0;
     padding: 10px 140px 20px 10px;
     max-width: 100%;
     min-height: 120px;
