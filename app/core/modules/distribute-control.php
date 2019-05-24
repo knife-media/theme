@@ -287,7 +287,7 @@ class Knife_Distribute_Control {
             // Set task delay if need
             self::set_delay($uniqid, $request);
 
-            if(isset($request['targets'])) {
+            if(!empty($request['targets'])) {
                 foreach((array) $request['targets'] as $network) {
                     if(array_key_exists($network, KNIFE_DISTRIBUTE)) {
                         $item['targets'][] = $network;
@@ -295,16 +295,16 @@ class Knife_Distribute_Control {
                 }
             }
 
-            if(isset($request['excerpt'])) {
+            if(!empty($request['excerpt'])) {
                 $item['excerpt'] = sanitize_textarea_field($request['excerpt']);
             }
 
-            if(isset($request['preview'])) {
-                $item['preview'] = absint($request['preview']);
+            if(!empty($request['attachment'])) {
+                $item['attachment'] = absint($request['attachment']);
             }
 
-            if(isset($request['attachment'])) {
-                $item['attachment'] = absint($request['attachment']);
+            if(!empty($request['collapse'])) {
+                $item['collapse'] = absint($request['collapse']);
             }
 
             $requests[$uniqid] = $item;
@@ -446,7 +446,7 @@ class Knife_Distribute_Control {
             'message' => esc_url($link)
         ];
 
-        if(!empty($item['preview'])) {
+        if(empty($item['collapse'])) {
             $message['link'] = esc_url($link);
 
             // Remove default message link
@@ -501,12 +501,11 @@ class Knife_Distribute_Control {
 
         $message = [
             'parse_mode' => 'Markdown',
-            'disable_web_page_preview' => true,
             'text' => esc_url($link)
         ];
 
-        if(!empty($item['preview'])) {
-            $message['disable_web_page_preview'] = false;
+        if(!empty($item['collapse'])) {
+            $message['disable_web_page_preview'] = true;
         }
 
         if(!empty($item['excerpt'])) {
@@ -561,7 +560,7 @@ class Knife_Distribute_Control {
             'message' => esc_url($link)
         ];
 
-        if(!empty($item['preview'])) {
+        if(empty($item['collapse'])) {
             $message['attachments'] = esc_url($link);
         }
 

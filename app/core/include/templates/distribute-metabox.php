@@ -243,11 +243,11 @@
                     </div>
 
                     <div class="item__manage">
-                        <label class="item__manage-preview">
+                        <label class="item__manage-collapse">
                             <?php
-                                printf('<input type="checkbox" data-item="preview" value="1"%s><span>%s</span>',
-                                    checked(empty($item['preview']), false, false),
-                                    __('Добавить превью ссылки', 'knife-theme')
+                                printf('<input type="checkbox" data-item="collapse" value="1"%s><span>%s</span>',
+                                    checked(empty($item['collapse']), false, false),
+                                    __('Не формировать превью ссылки', 'knife-theme')
                                 );
                             ?>
                         </label>

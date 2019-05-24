@@ -430,17 +430,17 @@
   margin-top: 15px;
   margin-left: auto;
 }
-  #knife-distribute-box .item__manage-preview {
+  #knife-distribute-box .item__manage-collapse {
     display: flex;
     align-items: center;
     user-select: none;
   }
 
-  #knife-distribute-box .item__manage-preview input {
+  #knife-distribute-box .item__manage-collapse input {
     margin: 0;
   }
 
-  #knife-distribute-box .item__manage-preview span {
+  #knife-distribute-box .item__manage-collapse span {
     margin-left: 8px;
   }
 
