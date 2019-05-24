@@ -12,11 +12,9 @@
         $channels = [];
 
         foreach(KNIFE_DISTRIBUTE as $name => $settings) {
-            if(empty($settings['label'])) {
-                continue;
+            if(isset($settings['label'], $settings['delivery'])) {
+                $channels[$name] = $settings;
             }
-
-            $channels[$name] = $settings;
         }
 
         wp_nonce_field('metabox', self::$metabox_nonce);
@@ -132,12 +130,8 @@
                             <?php foreach($channels as $channel => $settings) : ?>
                                 <label class="item__targets-check">
                                     <?php
-                                        if(empty($settings['maxlength'])) {
-                                            $settings['maxlength'] = -1;
-                                        }
-
-                                        printf('<input type="checkbox" data-item="targets" data-maxlength="%d" value="%s"%s>',
-                                            $settings['maxlength'], esc_attr($channel),
+                                        printf('<input type="checkbox" data-item="targets" data-delivery="%s" value="%s"%s>',
+                                            esc_attr($settings['delivery']), esc_attr($channel),
                                             checked(in_array($channel, $item['targets']), true, false)
                                         );
 
@@ -177,7 +171,7 @@
                             <span class="item__snippet-delete dashicons dashicons-trash"></span>
                         </figure>
 
-                        <span class="item__snippet-counter"></span>
+                        <span class="item__snippet-status"></span>
                     </div>
 
 
@@ -246,6 +240,17 @@
                                 ?>
                             </select>
                         </div>
+                    </div>
+
+                    <div class="item__manage">
+                        <label class="item__manage-preview">
+                            <?php
+                                printf('<input type="checkbox" data-item="preview" value="1"%s><span>%s</span>',
+                                    checked(empty($item['preview']), false, false),
+                                    __('Добавить превью ссылки', 'knife-theme')
+                                );
+                            ?>
+                        </label>
                     </div>
 
                     <span class="item__delete dashicons dashicons-trash" title="<?php _e('Удалить задачу', 'knife-theme'); ?>"></span>

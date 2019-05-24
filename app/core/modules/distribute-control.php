@@ -77,14 +77,14 @@ class Knife_Distribute_Control {
         // Schedule event action
         add_action('knife_schedule_distribution', [__CLASS__, 'start_task'], 10, 2);
 
-        // Define distribute settings if still not
-        if(!defined('KNIFE_DISTRIBUTE')) {
-            define('KNIFE_DISTRIBUTE', []);
-        }
-
         // Die if php-mb not installed
         if(!function_exists('mb_strlen')) {
             wp_die(__('Для нормальной работы темы необходимо установить модуль php-mb', 'knife-theme'));
+        }
+
+        // Define distribute settings if still not
+        if(!defined('KNIFE_DISTRIBUTE')) {
+            define('KNIFE_DISTRIBUTE', []);
         }
     }
 
@@ -299,6 +299,10 @@ class Knife_Distribute_Control {
                 $item['excerpt'] = sanitize_textarea_field($request['excerpt']);
             }
 
+            if(isset($request['preview'])) {
+                $item['preview'] = absint($request['preview']);
+            }
+
             if(isset($request['attachment'])) {
                 $item['attachment'] = absint($request['attachment']);
             }
@@ -426,7 +430,7 @@ class Knife_Distribute_Control {
      * Prepare facebook message
      */
     private static function prepare_facebook($conf, $item, $post_id) {
-        $poster = false;
+        $link = get_permalink($post_id);
 
         // Check group id setting
         if(empty($conf['group'])) {
@@ -438,11 +442,22 @@ class Knife_Distribute_Control {
             return new WP_Error('module', __('Не найден метод доставки', 'knife-theme'));
         }
 
-        $message = array_fill_keys(['message', 'link'], get_permalink($post_id));
+        $message = [
+            'message' => esc_url($link)
+        ];
+
+        if(!empty($item['preview'])) {
+            $message['link'] = esc_url($link);
+
+            // Remove default message link
+            unset($message['message']);
+        }
 
         if(!empty($item['excerpt'])) {
-            $message['message'] = wp_specialchars_decode($item['excerpt']) . "\n\n" . $message['message'];
+            $message['message'] = wp_specialchars_decode($item['excerpt']) . "\n\n" . esc_url($link);
         }
+
+        $poster = false;
 
         if(!empty($item['attachment'])) {
             $poster = get_attached_file($item['attachment']);
@@ -472,7 +487,7 @@ class Knife_Distribute_Control {
      * Prepare telegram message
      */
     private static function prepare_telegram($conf, $item, $post_id) {
-        $poster = false;
+        $link = get_permalink($post_id);
 
         // Check group id setting
         if(empty($conf['group'])) {
@@ -485,12 +500,20 @@ class Knife_Distribute_Control {
         }
 
         $message = [
-            'text' => get_permalink($post_id)
+            'parse_mode' => 'Markdown',
+            'disable_web_page_preview' => true,
+            'text' => esc_url($link)
         ];
 
-        if(!empty($item['excerpt'])) {
-            $message['text'] = wp_specialchars_decode($item['excerpt']) . "\n\n" . $message['text'];
+        if(!empty($item['preview'])) {
+            $message['disable_web_page_preview'] = false;
         }
+
+        if(!empty($item['excerpt'])) {
+            $message['text'] = wp_specialchars_decode($item['excerpt']) . "\n\n" . esc_url($link);
+        }
+
+        $poster = false;
 
         if(!empty($item['attachment']) && mb_strlen($message['text']) < 1024) {
             $poster = get_attached_file($item['attachment']);
@@ -520,7 +543,7 @@ class Knife_Distribute_Control {
      * Prepare vkontakte message
      */
     private static function prepare_vkontakte($conf, $item, $post_id) {
-        $poster = false;
+        $link = get_permalink($post_id);
 
         // Check group id setting
         if(empty($conf['group'])) {
@@ -535,11 +558,15 @@ class Knife_Distribute_Control {
         $message = [
             'owner_id' => '-' . $conf['group'],
             'from_group' => 1,
-            'attachments' => get_permalink($post_id)
+            'message' => esc_url($link)
         ];
 
+        if(!empty($item['preview'])) {
+            $message['attachments'] = esc_url($link);
+        }
+
         if(!empty($item['excerpt'])) {
-            $message['message'] = wp_specialchars_decode($item['excerpt']);
+            $message['message'] = wp_specialchars_decode($item['excerpt']) . "\n\n" . esc_url($link);
         }
 
         if(!empty($item['attachment'])) {
@@ -561,20 +588,24 @@ class Knife_Distribute_Control {
      * Prepare twitter message
      */
     private static function prepare_twitter($conf, $item, $post_id) {
-        $poster = false;
+        $link = get_permalink($post_id);
 
         // Check if twitter social delivery method exists
         if(!method_exists('Knife_Social_Delivery', 'send_twitter')) {
             return new WP_Error('module', __('Не найден метод доставки', 'knife-theme'));
         }
 
-        $message = [
-            'status' => get_permalink($post_id)
-        ];
+        $message = [];
 
         if(!empty($item['excerpt'])) {
-            $message['status'] = wp_specialchars_decode($item['excerpt']) . "\n\n" . $message['status'];
+            $message['status'] = wp_specialchars_decode($item['excerpt']) . "\n\n" . esc_url($link);
         }
+
+        if(empty($message['status'])) {
+            $message['status'] = esc_url($link);
+        }
+
+        $poster = false;
 
         if(!empty($item['attachment'])) {
             $poster = get_attached_file($item['attachment']);

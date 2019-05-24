@@ -142,21 +142,35 @@ jQuery(document).ready(function($) {
 
 
   /**
-   * Update excerpt counter
+   * Set sinppet status for twitter excerpt
    */
   box.on('keyup paste', '.item__snippet-excerpt', function() {
-    var maxlength = $(this).data('maxlength');
-    var counter = $(this).siblings('.item__snippet-counter');
+    var item = $(this).closest('.item');
 
-    if(maxlength) {
-      var value = $(this).val().length;
+    // Hide status bar by default
+    item.find('.item__snippet-status').hide();
 
-      if(value > 0) {
-        return counter.text(maxlength - value).show();
+    // Get excerpt value length
+    var value = $(this).val().length;
+
+    item.find('.item__targets input:checked').each(function() {
+      if($(this).data('delivery') === 'twitter') {
+
+        if(value > 0) {
+          return item.find('.item__snippet-status').text(250 - value).show();
+        }
       }
-    }
+    });
+  });
 
-    return counter.hide();
+
+  /**
+   * Trigger keyup event for excerpt on checkbox change
+   */
+  box.on('change', '.item__targets-check input', function() {
+    var item = $(this).closest('.item');
+
+    item.find('.item__snippet-excerpt').trigger('keyup');
   });
 
 
@@ -173,25 +187,6 @@ jQuery(document).ready(function($) {
 
     // Remove image
     poster.find('img').remove();
-  });
-
-
-  /**
-   * Update excerpt maxlength on targets check
-   */
-  box.on('change', '.item__targets-check input', function() {
-    var item = $(this).closest('.item');
-    var maxlength = 0;
-
-    item.find('.item__targets input:checked').each(function() {
-      if($(this).data('maxlength') > maxlength) {
-        maxlength = $(this).data('maxlength');
-      }
-    });
-
-    var excerpt = item.find('.item__snippet-excerpt');
-
-    excerpt.data('maxlength', maxlength).trigger('keyup');
   });
 
 
