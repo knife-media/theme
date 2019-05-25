@@ -252,7 +252,7 @@ class Knife_Select_Links {
      * Add select metabox
      */
     public static function add_metabox() {
-        add_meta_box('knife-select-metabox', __('Подборка статей'), [__CLASS__, 'display_metabox'], self::$post_type, 'normal', 'high');
+        add_meta_box('knife-select-metabox', __('Подборка статей', 'knife-theme'), [__CLASS__, 'display_metabox'], self::$post_type, 'normal', 'high');
     }
 
 

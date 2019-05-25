@@ -64,18 +64,25 @@ class Knife_Distribute_Control {
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public static function load_module() {
-        // Add custom distribute metabox
-        add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
-
         // Save metabox
         add_action('save_post', [__CLASS__, 'save_metabox'], 10, 2);
 
         // Cancel scheduled event
         add_action('wp_ajax_' . self::$ajax_action, [__CLASS__, 'cancel_scheduled']);
 
-
         // Schedule event action
         add_action('knife_schedule_distribution', [__CLASS__, 'start_task'], 10, 2);
+
+        if(current_user_can('unfiltered_html')) {
+            // Add custom distribute metabox
+            add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
+
+            // Add dashboard widget with scheduled tasks
+            add_action('wp_dashboard_setup', [__CLASS__, 'add_dashboard_widget']);
+
+            // Enqueue dashboard widget scripts
+            add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
+        }
 
         // Die if php-mb not installed
         if(!function_exists('mb_strlen')) {
@@ -90,15 +97,18 @@ class Knife_Distribute_Control {
 
 
     /**
+     * Add dashboard widget with scheduled tasks
+     */
+    public static function add_dashboard_widget() {
+        wp_add_dashboard_widget('knife-distribute-widget', __('Кросспостинг', 'knife-theme'), [__CLASS__, 'display_widget']);
+    }
+
+
+    /**
      * Add custom distribute metabox for editors and admins
      */
     public static function add_metabox() {
-        if(current_user_can('unfiltered_html')) {
-            add_meta_box('knife-distribute-metabox', __('Настройки кросспостинга'), [__CLASS__, 'display_metabox'], self::$post_type, 'advanced');
-
-            // Enqueue post metabox scripts
-            add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
-        }
+        add_meta_box('knife-distribute-metabox', __('Настройки кросспостинга', 'knife-theme'), [__CLASS__, 'display_metabox'], self::$post_type, 'advanced');
     }
 
 
@@ -106,42 +116,57 @@ class Knife_Distribute_Control {
      * Enqueue assets for metabox
      */
     public static function enqueue_assets($hook) {
-        if(!in_array($hook, ['post.php', 'post-new.php'])) {
-            return;
-        }
-
-        $post_id = get_the_ID();
-
-        // Current screen object
-        $screen = get_current_screen();
-
-        if(!in_array($screen->post_type, self::$post_type)) {
-            return;
-        }
-
         $version = wp_get_theme()->get('Version');
         $include = get_template_directory_uri() . '/core/include';
 
-        // Insert wp media scripts
-        wp_enqueue_media();
+        // Dashboard widget styles
+        if($hook === 'index.php') {
+            // Insert admin styles
+            wp_enqueue_style('knife-distribute-widget', $include . '/styles/distribute-widget.css', [], $version);
+        }
 
-        // Insert admin styles
-        wp_enqueue_style('knife-distribute-metabox', $include . '/styles/distribute-metabox.css', [], $version);
+        // Metabox styles
+        if(in_array($hook, ['post.php', 'post-new.php'])) {
+            $post_id = get_the_ID();
 
-        // Insert admin scripts
-        wp_enqueue_script('knife-distribute-metabox', $include . '/scripts/distribute-metabox.js', ['jquery'], $version);
+            // Current screen object
+            $screen = get_current_screen();
 
-        $options = [
-            'post_id' => absint($post_id),
-            'action' => esc_attr(self::$ajax_action),
-            'nonce' => wp_create_nonce(self::$metabox_nonce),
-            'meta_items' => esc_attr(self::$meta_items),
+            if(!in_array($screen->post_type, self::$post_type)) {
+                return;
+            }
 
-            'choose' => __('Выберите изображение', 'knife-theme'),
-            'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
-        ];
+            // Insert wp media scripts
+            wp_enqueue_media();
 
-        wp_localize_script('knife-distribute-metabox', 'knife_distribute_metabox', $options);
+            // Insert admin styles
+            wp_enqueue_style('knife-distribute-metabox', $include . '/styles/distribute-metabox.css', [], $version);
+
+            // Insert admin scripts
+            wp_enqueue_script('knife-distribute-metabox', $include . '/scripts/distribute-metabox.js', ['jquery'], $version);
+
+            $options = [
+                'post_id' => absint($post_id),
+                'action' => esc_attr(self::$ajax_action),
+                'nonce' => wp_create_nonce(self::$metabox_nonce),
+                'meta_items' => esc_attr(self::$meta_items),
+
+                'choose' => __('Выберите изображение', 'knife-theme'),
+                'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
+            ];
+
+            wp_localize_script('knife-distribute-metabox', 'knife_distribute_metabox', $options);
+        }
+    }
+
+
+    /**
+     * Display dashboard widget
+     */
+    public static function display_widget() {
+        $include = get_template_directory() . '/core/include';
+
+        include_once($include . '/templates/distribute-widget.php');
     }
 
 

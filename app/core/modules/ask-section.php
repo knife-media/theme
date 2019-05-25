@@ -218,7 +218,7 @@ class Knife_Ask_Section {
      * Add ask author metabox
      */
     public static function add_metabox() {
-        add_meta_box('knife-ask-metabox', __('Настройка вопроса'), [__CLASS__, 'display_metabox'], self::$post_type, 'side', 'default');
+        add_meta_box('knife-ask-metabox', __('Настройка вопроса', 'knife-theme'), [__CLASS__, 'display_metabox'], self::$post_type, 'side', 'default');
     }
 
 

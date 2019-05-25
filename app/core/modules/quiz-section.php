@@ -350,7 +350,7 @@ class Knife_Quiz_Section {
      * Add quiz metabox
      */
     public static function add_metabox() {
-        add_meta_box('knife-quiz-metabox', __('Настройки теста'), [__CLASS__, 'display_metabox'], self::$post_type, 'normal', 'high');
+        add_meta_box('knife-quiz-metabox', __('Настройки теста', 'knife-theme'), [__CLASS__, 'display_metabox'], self::$post_type, 'normal', 'high');
     }
 
 

@@ -296,7 +296,7 @@ class Knife_Generator_Section {
      * Add generator metabox
      */
     public static function add_metabox() {
-        add_meta_box('knife-generator-metabox', __('Настройки генератора'), [__CLASS__, 'display_metabox'], self::$post_type, 'normal', 'high');
+        add_meta_box('knife-generator-metabox', __('Настройки генератора', 'knife-theme'), [__CLASS__, 'display_metabox'], self::$post_type, 'normal', 'high');
     }
 
 
