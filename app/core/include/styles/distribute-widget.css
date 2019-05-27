@@ -11,7 +11,8 @@
 }
 
 #knife-distribute-widget .item {
-  display: block;
+  display: flex;
+  flex-flow: row wrap;
 
   margin-bottom: 15px;
   padding-bottom: 15px;
@@ -29,6 +30,7 @@
     display: flex;
     align-items: center;
 
+    width: 100%;
     margin-bottom: 10px;
   }
 
@@ -45,17 +47,36 @@
     margin-right: 20px;
   }
 
+  #knife-distribute-widget .item__poster {
+    display: block;
+
+    width: 60px;
+    height: 60px;
+
+    border-radius: 2px;
+  }
+
   #knife-distribute-widget .item__content {
     display: block;
+    flex: 1;
+
+    margin-right: 15px;
   }
 
   #knife-distribute-widget .item__content p {
-    margin: 5px 0;
+    margin: 5px 0 0;
+  }
+
+  #knife-distribute-widget .item__content p:first-child {
+    margin-top: 0;
   }
 
   #knife-distribute-widget .item__targets {
     display: flex;
     flex-flow: row wrap;
+
+    width: 100%;
+    margin-top: 5px;
   }
 
   #knife-distribute-widget .item__targets-network {

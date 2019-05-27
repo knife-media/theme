@@ -78,11 +78,17 @@
                     </div>
 
                     <?php
-                        if(isset($task['excerpt'])) {
-                            $excerpt = wpautop($task['excerpt']);
+                        if(!empty($task['excerpt'])) {
+                            $excerpt = preg_replace('~\*|\_(.+?)\*|\_~is', "$1", wpautop($task['excerpt']));
 
                             printf('<div class="item__content">%s</div>',
                                 wp_specialchars_decode($excerpt)
+                            );
+                        }
+
+                        if(!empty($task['attachment'])) {
+                            printf('<img class="item__poster" src="%s" alt="">',
+                                wp_get_attachment_image_url($task['attachment'])
                             );
                         }
                     ?>
