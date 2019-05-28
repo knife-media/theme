@@ -1,11 +1,7 @@
 @font-face {
   font-family: 'Formular';
-  src: url('fonts/formular/formular-black.eot');
-  src: url('fonts/formular/formular-black.eot?#iefix') format('embedded-opentype'),
-  url('fonts/formular/formular-black.woff2') format('woff2'),
-  url('fonts/formular/formular-black.woff') format('woff'),
-  url('fonts/formular/formular-black.ttf') format('truetype'),
-  url('fonts/formular/formular-black.otf') format('opentype');
+  src: url('fonts/formular/formular-black.woff2') format('woff2'),
+  url('fonts/formular/formular-black.woff') format('woff');
   font-weight: 900;
   font-style: normal;
   font-stretch: normal;
@@ -13,12 +9,8 @@
 
 @font-face {
   font-family: 'Formular';
-  src: url('fonts/formular/formular-bold.eot');
-  src: url('fonts/formular/formular-bold.eot?#iefix') format('embedded-opentype'),
-  url('fonts/formular/formular-bold.woff2') format('woff2'),
-  url('fonts/formular/formular-bold.woff') format('woff'),
-  url('fonts/formular/formular-bold.ttf') format('truetype'),
-  url('fonts/formular/formular-bold.otf') format('opentype');
+  src: url('fonts/formular/formular-bold.woff2') format('woff2'),
+  url('fonts/formular/formular-bold.woff') format('woff');
   font-weight: 700;
   font-style: normal;
   font-stretch: normal;
@@ -26,12 +18,8 @@
 
 @font-face {
   font-family: 'Formular';
-  src: url('fonts/formular/formular-regular.eot');
-  src: url('fonts/formular/formular-regular.eot?#iefix') format('embedded-opentype'),
-  url('fonts/formular/formular-regular.woff2') format('woff2'),
-  url('fonts/formular/formular-regular.woff') format('woff'),
-  url('fonts/formular/formular-regular.ttf') format('truetype'),
-  url('fonts/formular/formular-regular.otf') format('opentype');
+  src: url('fonts/formular/formular-regular.woff2') format('woff2'),
+  url('fonts/formular/formular-regular.woff') format('woff');
   font-weight: 400;
   font-style: normal;
   font-stretch: normal;
@@ -39,12 +27,8 @@
 
 @font-face {
   font-family: 'Formular';
-  src: url('fonts/formular/formular-medium.eot');
-  src: url('fonts/formular/formular-medium.eot?#iefix') format('embedded-opentype'),
-  url('fonts/formular/formular-medium.woff2') format('woff2'),
-  url('fonts/formular/formular-medium.woff') format('woff'),
-  url('fonts/formular/formular-medium.ttf') format('truetype'),
-  url('fonts/formular/formular-medium.otf') format('opentype');
+  src: url('fonts/formular/formular-medium.woff2') format('woff2'),
+  url('fonts/formular/formular-medium.woff') format('woff');
   font-weight: 500;
   font-style: normal;
   font-stretch: normal;
@@ -52,13 +36,18 @@
 
 @font-face {
   font-family: 'PT Serif';
-  src: url('fonts/pt-serif/pt-serif.eot');
-  src: url('fonts/pt-serif/pt-serif.eot?#iefix') format('embedded-opentype'),
-  url('fonts/pt-serif/pt-serif.woff2') format('woff2'),
-  url('fonts/pt-serif/pt-serif.woff') format('woff'),
-  url('fonts/pt-serif/pt-serif.ttf') format('truetype'),
-  url('fonts/pt-serif/pt-serif.otf') format('opentype');
+  src: url('fonts/ptserif/ptserif-regular.woff2') format('woff2'),
+  url('fonts/ptserif/ptserif-regular.woff') format('woff');
   font-weight: 400;
   font-style: normal;
+  font-stretch: normal;
+}
+
+@font-face {
+  font-family: 'PT Serif';
+  src: url('fonts/ptserif/ptserif-italic.woff2') format('woff2'),
+  url('fonts/ptserif/ptserif-italic.woff') format('woff');
+  font-weight: 400;
+  font-style: italic;
   font-stretch: normal;
 }

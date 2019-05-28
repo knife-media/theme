@@ -17,9 +17,9 @@ gulp.task('styles', function(done) {
     .pipe(plumber())
     .pipe(sassGlob())
     .pipe(sass({errLogToConsole: true}))
-    .pipe(prefix({browsers: ['ie >= 10', 'ff >= 30', 'chrome >= 34', 'safari >= 7', 'opera >= 23', 'ios >= 7', 'android >= 4.4']}))
+    .pipe(prefix({browsers: ['ie >= 9', 'ff >= 30', 'chrome >= 34', 'safari >= 7', 'opera >= 23', 'ios >= 7', 'android >= 4.4']}))
     .pipe(concat('styles.min.css'))
-    .pipe(cleanCss({compatibility: 'ie8'}))
+    .pipe(cleanCss({compatibility: 'ie9'}))
     .pipe(gulp.dest(path.assets))
 
   done();
@@ -51,7 +51,7 @@ gulp.task('video', function() {
 })
 
 gulp.task('fonts', function() {
-  gulp.src([path.source + '/fonts/**/*.{ttf,woff,eot,svg,woff2}'])
+  gulp.src([path.source + '/fonts/**/*.{ttf,woff,woff2}'])
     .pipe(gulp.dest(path.assets + '/fonts/'));
 })
 
