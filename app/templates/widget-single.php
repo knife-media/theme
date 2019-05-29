@@ -4,6 +4,7 @@
  *
  * @package knife-theme
  * @since 1.4
+ * @version 1.9
  */
 ?>
 
@@ -32,10 +33,17 @@
                 get_the_title()
             );
 
-            the_info(
-                '<div class="widget-single__content-info">', '</div>',
-                ['author', 'label']
-            );
+            if(empty($instance['button'])) :
+                the_info(
+                    '<div class="widget-single__content-info">', '</div>',
+                    ['author', 'label']
+                );
+            else :
+                printf(
+                    '<button class="widget-single__content-button">%s</button>',
+                    esc_html($instance['button'])
+                );
+            endif;
         ?>
     </div>
 </div>

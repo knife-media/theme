@@ -138,10 +138,31 @@
       .meta {
         color: $color-white;
 
-        a.meta__item {
+        a {
           position: relative;
           z-index: 2;
         }
+      }
+    }
+
+    .widget-single__content-button {
+      display: flex;
+      align-self: flex-start;
+
+      margin-top: 1.5rem;
+      padding: .75rem 2.5rem;
+
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: $color-white;
+      background: linear-gradient(to bottom, #05d3b8 0%, #0fbaa3 100%);
+
+      border-radius: 3px;
+
+      @media screen and (max-width: 1023px) {
+        padding: .75rem 1.5rem;
+        font-size: .875rem;
       }
     }
 
