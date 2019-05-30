@@ -31,7 +31,7 @@ class Knife_Widget_Single extends WP_Widget {
             'title' => '',
             'cover' => 0,
             'link' => '',
-            'info' => 1
+            'button' => ''
         ];
 
         $instance = wp_parse_args((array) $instance, $defaults);
@@ -129,12 +129,12 @@ class Knife_Widget_Single extends WP_Widget {
 
         // Button text
         printf(
-            '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"><small>%5$s</small></p>',
+            '<p><label for="%1$s">%3$s</label><input type="text" class="widefat knife-widget-button" data-title="%5$s" id="%1$s" name="%2$s"value="%4$s"></p>',
             esc_attr($this->get_field_id('button')),
             esc_attr($this->get_field_name('button')),
-            __('Добавить кнопку:', 'knife-theme'),
+            __('Надпись на кнопке:', 'knife-theme'),
             esc_attr($instance['button']),
-            __('Надпись на кнопке', 'knife-theme')
+            __('Добавить кнопку', 'knife-theme')
         );
     }
 }

@@ -30,6 +30,36 @@
 
 
   /**
+   * Widget append button handler
+   */
+  $(document).ready(function() {
+    $('#widgets-right .knife-widget-button').each(function() {
+      var block = $(this).parent();
+
+      if($(this).val().length > 0) {
+        return true;
+      }
+
+      var title = $(this).data('title') || '';
+
+      // Create button
+      var button = $('<button>', {'class': 'button', type: 'button'}).text(title);
+
+      block.children().hide();
+
+      button.on('click', function(e) {
+        e.preventDefault();
+
+        block.children().show();
+        button.remove();
+      });
+
+      button.appendTo(block);
+    });
+  });
+
+
+  /**
    * Widget cover image
    */
   $(document).on('click', '.knife-widget-image', function(e) {
