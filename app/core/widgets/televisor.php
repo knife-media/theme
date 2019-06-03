@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.4
- * @version 1.7
+ * @version 1.9
  */
 
 
@@ -163,7 +163,7 @@ class Knife_Widget_Televisor extends WP_Widget {
             esc_attr($this->get_field_name('link')),
             __('Ссылка с фичера:', 'knife-theme'),
             esc_attr($instance['link']),
-            __('Абсолютная ссылка с этого сайта', 'knife-theme')
+            __('Запись с этого сайта', 'knife-theme')
         );
 
 
@@ -273,7 +273,7 @@ class Knife_Widget_Televisor extends WP_Widget {
             printf(
                 '<a class="widget-recent__head head" href="%2$s">%1$s</a>',
                 __('Новости', 'knife-theme'),
-                esc_url(get_category_link($instance['filter']))
+                esc_url(get_category_link($this->news_id))
             );
 
             while($query->have_posts()) {
@@ -285,7 +285,7 @@ class Knife_Widget_Televisor extends WP_Widget {
             printf(
                 '<a class="widget-recent__more button" href="%2$s">%1$s</a>',
                 __('Все новости', 'knife-theme'),
-                esc_url(get_category_link($instance['filter']))
+                esc_url(get_category_link($this->news_id))
             );
 
             wp_reset_query();

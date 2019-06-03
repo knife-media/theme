@@ -33,14 +33,13 @@
    * Widget append button handler
    */
   $(document).ready(function() {
-    $('#widgets-right .knife-widget-button').each(function() {
-      var block = $(this).parent();
-
-      if($(this).val().length > 0) {
+    var initWidgetButton = function(input) {
+      if(input.val()) {
         return true;
       }
 
-      var title = $(this).data('title') || '';
+      var block = input.parent();
+      var title = input.data('title') || '';
 
       // Create button
       var button = $('<button>', {'class': 'button', type: 'button'}).text(title);
@@ -55,6 +54,19 @@
       });
 
       button.appendTo(block);
+    }
+
+    $(document).on('widget-added widget-updated', function(event, widget) {
+      var input = widget.find('.knife-widget-button');
+
+      initWidgetButton(input);
+    });
+
+
+    $('#widgets-right .widget:has(.knife-widget-button)').each(function() {
+      var input = $(this).find('.knife-widget-button');
+
+      initWidgetButton(input);
     });
   });
 

@@ -8,13 +8,13 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.4
+ * @version 1.9
  */
 
 get_header(); ?>
 
 <?php if(is_active_sidebar('knife-feature')) : ?>
-    <div class="block-feature">
+    <div class="block-wrapper">
         <?php
             dynamic_sidebar('knife-feature');
         ?>

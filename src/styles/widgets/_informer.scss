@@ -86,4 +86,28 @@
       line-height: 1.875rem;
     }
   }
+
+  &.widget-informer--sidebar {
+    flex: 0;
+    margin-top: 1rem;
+
+    .widget-informer__content-title {
+      font-size: 1.125rem;
+    }
+
+    .widget-informer__content-emoji {
+      display: none;
+    }
+  }
+
+  &.widget-informer--entry {
+    width: calc(100% - 2rem);
+    max-width: $width-content;
+    margin: 1rem;
+
+    @media screen and (max-width: 479px) {
+      width: 100%;
+      margin: 0;
+    }
+  }
 }

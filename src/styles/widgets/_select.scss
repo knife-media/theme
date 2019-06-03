@@ -2,14 +2,14 @@
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
-  align-self: flex-start;
   position: relative;
 
   width: 100%;
-  margin-top: 1rem;
+  max-width: $width-site - 2rem;
+  margin: 1rem 1rem 0;
   padding: 0 0 2rem 1rem;
-  overflow: hidden;
 
+  color: $color-select;
   background-color: $color-white;
 
   .widget-select__head {
@@ -74,5 +74,60 @@
       width: calc(100% - 1rem);
       padding-bottom: 2rem;
     }
+  }
+
+  &.widget-select--sidebar {
+    margin: 1rem 0 0;
+
+    .widget-select__head {
+      color: $color-white;
+    }
+
+    .widget-select__link {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.125rem;
+
+      strong {
+        font-size: 5rem;
+        margin: 0 0 .25rem;
+      }
+    }
+  }
+
+  &.widget-select--entry {
+    width: calc(100% - 2rem);
+    max-width: $width-content;
+    margin: 1rem;
+
+    .widget-select__head {
+      color: $color-white;
+    }
+
+    .widget-select__link {
+      width: 100%;
+
+      strong {
+        font-size: 7rem;
+        margin: 0 0 .25rem;
+      }
+    }
+
+    @media screen and (max-width: 479px) {
+      width: 100%;
+      margin: 0;
+    }
+  }
+
+  &.widget-select--poster {
+    display: none;
+  }
+
+  @media screen and (max-width: 1023px) {
+    max-width: $width-content;
+  }
+
+  @media screen and (max-width: 479px) {
+    margin: 0;
   }
 }

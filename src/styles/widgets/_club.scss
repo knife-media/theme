@@ -2,11 +2,11 @@
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
-  align-self: flex-start;
   position: relative;
 
   width: 100%;
-  margin-top: 1rem;
+  max-width: $width-site - 2rem;
+  margin: 1rem 1rem 0;
   overflow: hidden;
 
   color: $color-text;
@@ -108,6 +108,7 @@
       line-height: 1;
       text-transform: none;
 
+      color: $color-white;
       background-color: $color-club;
       box-shadow: 0 10px 10px -4px silver;
 
@@ -151,6 +152,9 @@
   }
 
   &.widget-club--sidebar {
+    align-self: flex-start;
+    margin: 1rem 0 0;
+
     .widget-club__inner {
       width: 100%;
       margin-bottom: 1px;
@@ -214,5 +218,36 @@
     @media screen and (max-width: 767px) {
       padding-bottom: 0;
     }
+  }
+
+  &.widget-club--entry {
+    width: calc(100% - 2rem);
+    max-width: $width-content;
+    margin: 1rem;
+
+    .widget-club__inner {
+      width: 100%;
+    }
+
+    .widget-club__more {
+      padding: 0;
+    }
+
+    @media screen and (max-width: 479px) {
+      width: 100%;
+      margin: 0;
+    }
+  }
+
+  &.widget-club--poster {
+    display: none;
+  }
+
+  @media screen and (max-width: 1023px) {
+    max-width: $width-content;
+  }
+
+  @media screen and (max-width: 479px) {
+    margin: 0;
   }
 }

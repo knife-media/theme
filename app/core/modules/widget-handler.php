@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.2
- * @version 1.7
+ * @version 1.9
  */
 
 
@@ -23,17 +23,20 @@ class Knife_Widget_Handler {
     public static function load_module() {
         add_action('admin_enqueue_scripts', [__CLASS__, 'add_assets']);
 
-        // include all widgets
+        // Include all widgets
         add_action('after_setup_theme', [__CLASS__, 'include_widgets']);
 
-        // register widget areas
+        // Register widget areas
         add_action('widgets_init', [__CLASS__, 'register_sidebars']);
 
-        // unregister default widgets
+        // Unregister default widgets
         add_action('widgets_init', [__CLASS__, 'unregister_defaults'], 1);
 
-        // hide default widgets title
+        // Hide default widgets title
         add_filter('widget_title', '__return_empty_string');
+
+        // Enqueue article widgets
+        add_action('wp_enqueue_scripts', [__CLASS__, 'inject_article'], 12);
     }
 
 
@@ -65,12 +68,19 @@ class Knife_Widget_Handler {
             'after_widget'  => '</div>'
         ]);
 
-
         register_sidebar([
             'name'          => __('Сайдбар', 'knife-theme'),
             'id'            => 'knife-sidebar',
             'description'   => __('Добавленные виджеты появятся в сайдбаре внутри постов.', 'knife-theme'),
             'before_widget' => '<div class="widget-%2$s widget-%2$s--sidebar">',
+            'after_widget'  => '</div>'
+        ]);
+
+        register_sidebar([
+            'name'          => __('Внутри записи', 'knife-theme'),
+            'id'            => 'knife-entry',
+            'description'   => __('Добавленные виджеты появятся в равномерно внутри поста.', 'knife-theme'),
+            'before_widget' => '<div class="widget-%2$s widget-%2$s--entry">',
             'after_widget'  => '</div>'
         ]);
     }
@@ -99,6 +109,16 @@ class Knife_Widget_Handler {
         unregister_widget('WP_Widget_Media_Audio');
         unregister_widget('WP_Widget_Media_Image');
         unregister_widget('WP_Widget_Media_Gallery');
+    }
+
+
+    /**
+     * Inject widget from knife-article sidebar
+     *
+     * @since 1.9
+     */
+    public static function inject_article() {
+
     }
 
 
