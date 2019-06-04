@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.2
- * @version 1.8
+ * @version 1.9
  */
 
 if (!defined('WPINC')) {
@@ -27,6 +27,9 @@ class Knife_Embed_Filters {
 
         // Instagram update
         add_filter('oembed_providers', [__CLASS__, 'hide_instagram_caption']);
+
+        // Twitter update
+        add_filter('oembed_providers', [__CLASS__, 'hide_twitter_thread']);
 
         // YouTube preloader
         add_filter('pre_oembed_result', [__CLASS__, 'update_youtube_embed'], 10, 2);
@@ -73,6 +76,18 @@ class Knife_Embed_Filters {
      */
     public static function hide_instagram_caption($providers) {
         $providers['#https?://(www\.)?instagr(\.am|am\.com)/(p|tv)/.*#i'] = array('https://api.instagram.com/oembed?hidecaption=true', true);
+
+        return $providers;
+    }
+
+
+    /**
+     * Hide twitter parent tweet
+     *
+     * @version 1.9
+     */
+    public static function hide_twitter_thread($providers) {
+        $providers['#https?://(www\.)?twitter\.com/\w{1,15}/status(es)?/.*#i'] = array('https://publish.twitter.com/oembed?hide_thread=true', true);
 
         return $providers;
     }
