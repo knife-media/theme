@@ -293,7 +293,7 @@ add_filter('the_tags', function($tags) {
 // Remove private posts from archives and home page.
 // Note: Knife editors use private posts as drafts. So we don't want to see drafts in templates even if we have logged in
 add_action('pre_get_posts', function($query) {
-    if(is_admin() && $query->is_main_query()) {
+    if(is_admin() || $query->is_main_query()) {
         return;
     }
 
