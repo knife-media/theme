@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.2
- * @version 1.7
+ * @version 1.8
  */
 
 
@@ -35,6 +35,9 @@ class Knife_Google_Search {
 
         // Plugin settings
         add_action('customize_register', [__CLASS__, 'add_customize_setting']);
+
+        // Disable default search
+        add_action('parse_query', [__CLASS__, 'disable_search'], 9);
     }
 
 
@@ -44,8 +47,20 @@ class Knife_Google_Search {
     public static function inject_object() {
         $search_id = get_theme_mod(self::$option_id);
 
-        if(!empty($search_id)) {
+        if(strlen($search_id) > 0) {
             wp_localize_script('knife-theme', 'knife_search_id', $search_id);
+        }
+    }
+
+
+    /**
+     * Disable wordpress based search to reduce CPU load and prevent DDOS attacks
+     */
+    public static function disable_search($query) {
+        if(!is_admin() && $query->is_search()) {
+            $query->set('s', '');
+            $query->is_search = false;
+            $query->is_404 = true;
         }
     }
 

@@ -49,7 +49,7 @@
         printf(
             '<input id="knife-feed-publish" type="hidden" name="%1$s" value="%2$s">',
             esc_attr(self::$zen_publish),
-            esc_attr($zen_publish)
+            sanitize_text_field($zen_publish)
         );
 
         wp_nonce_field('metabox', self::$metabox_nonce);

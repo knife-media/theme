@@ -122,6 +122,7 @@
 
       if(relative.tagName.toLowerCase() === 'p') {
         appendSimilar(relative, similar[i]);
+
         break;
       }
     }

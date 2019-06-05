@@ -1,6 +1,6 @@
 <?php
 /**
- * Open quiz
+ * Quiz section
  *
  * Custom post type for quiz
  *
@@ -13,7 +13,7 @@ if (!defined('WPINC')) {
     die;
 }
 
-class Knife_Open_Quiz {
+class Knife_Quiz_Section {
     /**
      * Unique slug using for custom post type register and url
      *
@@ -158,7 +158,6 @@ class Knife_Open_Quiz {
             'show_in_nav_menus'     => true,
             'can_export'            => true,
             'has_archive'           => false,
-            'exclude_from_search'   => true,
             'publicly_queryable'    => true
         ]);
     }
@@ -202,11 +201,18 @@ class Knife_Open_Quiz {
     public static function inject_object() {
         if(is_singular(self::$post_type)) {
             $post_id = get_the_ID();
-            $options = get_post_meta($post_id, self::$meta_options, true);
+
+            $options = (array) get_post_meta($post_id, self::$meta_options, true);
 
             if(!is_array($options)) {
                 $options = [];
             }
+
+            $options = wp_parse_args($options, [
+                'achievment' => 0,
+                'details' => 'none',
+                'format' => 'binary'
+            ]);
 
             // Add quiz items
             wp_localize_script('knife-theme', 'knife_quiz_items',
@@ -235,16 +241,20 @@ class Knife_Open_Quiz {
      * Redirect to custom generated template if share query var exists
      */
     public static function redirect_share() {
-        $share = get_query_var('share');
+        $share = get_query_var(self::$query_var);
 
         if(is_singular(self::$post_type) && strlen($share) > 0) {
             $post_id = get_the_ID();
+
+            // Get quiz options
             $options = get_post_meta($post_id, self::$meta_options, true);
+            $options = wp_parse_args($options, [
+                'achievment' => 0,
+                'details' => 'none',
+                'format' => 'binary'
+            ]);
 
-            if(!is_array($options)) {
-                $options = [];
-            }
-
+            // Get quiz results
             $results = self::retrieve_results($post_id, $options);
 
             if(isset($results[$share])) {
@@ -289,17 +299,50 @@ class Knife_Open_Quiz {
             return false;
         }
 
-        if($query->is_tag() || $query->is_author() || $query->is_home()) {
-            $types = $query->get('post_type');
+        // Is in archive
+        foreach(['tag', 'category', 'author', 'date', 'home'] as $archive) {
+            $method = 'is_' . $archive;
 
-            if(!is_array($types)) {
-                $types = ['post'];
+            if($query->$method()) {
+                $types = $query->get('post_type');
+
+                if(!is_array($types)) {
+                    $types = ['post'];
+                }
+
+                $types[] = self::$post_type;
+                $query->set('post_type', $types);
+
+                return false;
             }
-
-            $types[] = self::$post_type;
-
-            $query->set('post_type', $types);
         }
+    }
+
+
+    /**
+     * Create result posters using ajax options
+     */
+    public static function create_poster() {
+        check_admin_referer(self::$metabox_nonce, 'nonce');
+
+        if(!method_exists('Knife_Poster_Templates', 'create_posters')) {
+            wp_send_json_error(__('Модуль генерации не найден', 'knife-theme'));
+        }
+
+        $options = wp_parse_args($_REQUEST, [
+            'template' => 'strong_head',
+            'post_id' => 0,
+            'attachment' => 0,
+            'achievment' => ''
+        ]);
+
+        $posters = Knife_Poster_Templates::create_posters($options, self::$upload_folder);
+
+        if(is_wp_error($posters)) {
+            wp_send_json_error($posters->get_error_message());
+        }
+
+        wp_send_json_success((object) $posters);
     }
 
 
@@ -307,7 +350,7 @@ class Knife_Open_Quiz {
      * Add quiz metabox
      */
     public static function add_metabox() {
-        add_meta_box('knife-quiz-metabox', __('Настройки теста'), [__CLASS__, 'display_metabox'], self::$post_type, 'normal', 'high');
+        add_meta_box('knife-quiz-metabox', __('Настройки теста', 'knife-theme'), [__CLASS__, 'display_metabox'], self::$post_type, 'normal', 'high');
     }
 
 
@@ -347,6 +390,7 @@ class Knife_Open_Quiz {
             'meta_items' => esc_attr(self::$meta_items),
             'meta_results' => esc_attr(self::$meta_results),
             'editor' => wp_default_editor(),
+
             'choose' => __('Выберите изображение', 'knife-theme'),
             'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
         ];
@@ -616,7 +660,9 @@ class Knife_Open_Quiz {
     /**
      * Retrieve items within meta to show as object
      */
-    private static function retrieve_items($post_id, $options, $items = []) {
+    private static function retrieve_items($post_id, $options) {
+        $items = [];
+
         // Loop through items
         foreach(get_post_meta($post_id, self::$meta_items) as $meta) {
 
@@ -641,6 +687,7 @@ class Knife_Open_Quiz {
                     'answers' => $answers
                 ];
             }
+
         }
 
         return $items;
@@ -650,32 +697,32 @@ class Knife_Open_Quiz {
     /**
      * Retrieve results within meta to show as object
      */
-    private static function retrieve_results($post_id, $options, $results = []) {
-        $options = wp_parse_args($options, [
-            'achievment' => 0,
-            'details' => 'none'
-        ]);
+    private static function retrieve_results($post_id, $options) {
+        $results = [];
 
-        foreach(get_post_meta($post_id, self::$meta_results) as $item) {
+        // Loop through results
+        foreach(get_post_meta($post_id, self::$meta_results) as $meta) {
             $blanks = ['from' => 0, 'to' => 0];
 
             $points = wp_parse_args(
-                array_intersect_key($item, $blanks), $blanks
+                array_intersect_key($meta, $blanks), $blanks
             );
 
             $points = array_map('intval', $points);
 
             for($i = $points['from']; $points['to'] >= $i; $i++) {
-                if(!empty($item['posters'][$i])) {
-                    $result['poster'] = esc_url($item['posters'][$i]);
+                $result = [];
+
+                if(!empty($meta['posters'][$i])) {
+                    $result['poster'] = esc_url($meta['posters'][$i]);
                 }
 
-                if(!empty($item['description'])) {
-                    $result['description'] = wp_specialchars_decode($item['description']);
+                if(!empty($meta['description'])) {
+                    $result['description'] = wp_specialchars_decode($meta['description']);
                 }
 
-                if($options['details'] === 'result' && !empty($item['details'])) {
-                    $result['details'] = apply_filters('the_content', $item['details']);
+                if($options['details'] === 'result' && !empty($meta['details'])) {
+                    $result['details'] = apply_filters('the_content', $meta['details']);
                 }
 
                 if($options['details'] === 'remark' && !empty($options['remark'])) {
@@ -685,12 +732,12 @@ class Knife_Open_Quiz {
 
                 $heading = [];
 
-                if($options['achievment'] && !empty($item['achievment'])) {
-                    $heading[] = str_replace('%', $i, $item['achievment']);
+                if($options['achievment'] && !empty($meta['achievment'])) {
+                    $heading[] = str_replace('%', $i, $meta['achievment']);
                 }
 
-                if(!empty($item['heading'])) {
-                    $heading[] = wp_specialchars_decode($item['heading']);
+                if(!empty($meta['heading'])) {
+                    $heading[] = wp_specialchars_decode($meta['heading']);
                 }
 
                 if(count($heading) > 0) {
@@ -699,6 +746,13 @@ class Knife_Open_Quiz {
 
 
                 if(array_filter($result)) {
+                    if($options['format'] === 'category' && !empty($meta['category'])) {
+                        $category = mb_substr($meta['category'], 0, 1);
+                        $results[$category] = $result;
+
+                        continue;
+                    }
+
                     $results[$i] = $result;
                 }
             }
@@ -736,28 +790,40 @@ class Knife_Open_Quiz {
             $answer['attachment'] = esc_url($attachment);
         }
 
-        // Set binary option
-        if(empty($options['points']) && isset($fields['binary'])) {
-            $answer['binary'] = 1;
-        }
-
-        // Set points
-        if(!empty($options['points'])) {
-            if(!isset($fields['points'])) {
-                return false;
-            }
-
-            $answer['points'] = (int) $fields['points'];
-        }
-
         // Set message if required
         if(!empty($options['message'])) {
             if(empty($fields['message'])) {
                 return false;
             }
 
-            $answer['message'] = wp_kses_post($fields['message']);
+            $answer['message'] = wpautop(wp_kses_post($fields['message']));
         }
+
+        switch($options['format']) {
+            case 'category':
+                if(!isset($fields['category'])) {
+                    return false;
+                }
+
+                $answer['category'] = mb_substr($fields['category'], 0, 1);
+            break;
+
+            case 'points':
+                if(!isset($fields['points'])) {
+                    return false;
+                }
+
+                $answer['points'] = (int) $fields['points'];
+            break;
+
+            case 'binary':
+                if(isset($fields['binary'])) {
+                    $answer['binary'] = 1;
+                }
+
+            break;
+        }
+
 
         return $answer;
     }
@@ -767,4 +833,4 @@ class Knife_Open_Quiz {
 /**
  * Load current module environment
  */
-Knife_Open_Quiz::load_module();
+Knife_Quiz_Section::load_module();

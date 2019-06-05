@@ -3,6 +3,7 @@
   flex-flow: column nowrap;
   align-items: center;
   position: relative;
+  z-index: 2;
 
   width: auto;
   max-width: 100%;
@@ -123,6 +124,23 @@
 
     .figure__caption {
       max-width: calc(100% - 2rem);
+    }
+  }
+
+  &.figure--widget {
+    width: calc(100% + 2rem);
+    max-width: none;
+
+    margin-left: -1rem;
+    margin-right: -1rem;
+
+    background: darken($color-white, 5);
+
+    -webkit-font-smoothing: antialiased;
+
+    a {
+      color: inherit;
+      border: none;
     }
   }
 }

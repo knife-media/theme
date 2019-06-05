@@ -218,7 +218,7 @@ class Knife_Ask_Section {
      * Add ask author metabox
      */
     public static function add_metabox() {
-        add_meta_box('knife-ask-metabox', __('Настройка вопроса'), [__CLASS__, 'display_metabox'], self::$post_type, 'side', 'default');
+        add_meta_box('knife-ask-metabox', __('Настройка вопроса', 'knife-theme'), [__CLASS__, 'display_metabox'], self::$post_type, 'side', 'default');
     }
 
 
@@ -285,9 +285,9 @@ class Knife_Ask_Section {
             return;
         }
 
-        $thumbnail_id = get_theme_mod(self::$option_thumbnail, '');
+        $thumbnail_id = get_theme_mod(self::$option_thumbnail);
 
-        if($thumbnail_id) {
+        if(strlen($thumbnail_id) > 0) {
             update_post_meta($post_id, '_thumbnail_id', $thumbnail_id);
         }
     }
@@ -357,17 +357,18 @@ class Knife_Ask_Section {
         }
 
 
-        if(method_exists('Knife_Notifier_Robot', 'send_telegram')) {
-            $chat_id = get_theme_mod(self::$option_chat, '');
-            $request = get_theme_mod(self::$option_request, 0) + 1;
+        if(method_exists('Knife_Social_Delivery', 'send_telegram')) {
+            $chat_id = sanitize_text_field(get_theme_mod(self::$option_chat, ''));
+            $request = absint(get_theme_mod(self::$option_request, 0)) + 1;
 
             $message = [
-                'chat_id' => $chat_id,
                 'text' => self::get_request($fields, $request),
                 'parse_mode' => 'HTML'
             ];
 
-            if(Knife_Notifier_Robot::send_telegram($message)) {
+            $response = Knife_Social_Delivery::send_telegram($chat_id, $message);
+
+            if(!is_wp_error($response)) {
                 set_theme_mod(self::$option_request, $request);
                 wp_send_json_success(__('Сообщение успешно отправлено', 'knife-theme'));
             }

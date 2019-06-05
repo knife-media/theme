@@ -52,37 +52,12 @@ class Knife_News_Manager {
         // Update related posts in sidebar
         add_action('pre_get_posts', [__CLASS__, 'update_related']);
 
-        // Append Yandex.News subscribe link to news
-        add_filter('the_content', [__CLASS__, 'append_yandex_link']);
-
         // Set news_id
         $category = get_category_by_slug('news');
 
         if(isset($category->term_id)) {
             self::$news_id = $category->term_id;
         }
-    }
-
-
-    /**
-     * Append Yandex.News subscribe link to news
-     */
-    public static function append_yandex_link($content) {
-        if(!is_singular('post') || !in_the_loop()) {
-            return $content;
-        }
-
-        if(!in_category(self::$news_id)) {
-            return $content;
-        }
-
-        $button_link = sprintf(
-            '<a class="promo promo--news" href="%2$s" target="_blank">%1$s</a>',
-            __('Читаете Яндекс.Новости? Добавьте нас там!', 'knife-theme'),
-            esc_url('https://knf.md/yandex-news')
-        );
-
-        return $content . $button_link;
     }
 
 

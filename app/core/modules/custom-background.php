@@ -56,7 +56,7 @@ class Knife_Custom_Background {
 
 
     /**
-     * Lead save nonce
+     * Metabox save nonce
      *
      * @since   1.7
      * @access  private

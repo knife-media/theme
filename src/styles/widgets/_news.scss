@@ -5,6 +5,8 @@
   position: relative;
 
   width: 100%;
+  max-width: $width-site - 2rem;
+  margin: 0 1rem;
 
   .widget-news__inner {
     display: block;
@@ -93,7 +95,7 @@
       text-transform: uppercase;
       letter-spacing: .5px;
 
-      .meta__link {
+      a.meta__item {
         position: relative;
         z-index: 2;
 
@@ -111,10 +113,10 @@
   }
 
   @media screen and (max-width: 1023px) {
-    width: 100%;
+    max-width: $width-content;
   }
 
   @media screen and (max-width: 479px) {
-    margin-top: .5rem;
+    margin: .5rem 0 0;
   }
 }

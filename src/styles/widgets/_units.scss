@@ -4,10 +4,56 @@
   justify-content: space-between;
 
   width: 100%;
+  max-width: $width-site - 2rem;
+  margin: 0 1rem;
 
   &.widget-units--sidebar {
+    margin: 0;
+
     .unit {
       width: 100%;
+
+      .unit__content-link {
+        font-size: 1.25rem;
+        line-height: 1.25;
+
+        @media screen and (max-width: 1023px) {
+          font-size: 1.375rem;
+        }
+
+        @media screen and (max-width: 767px) {
+          font-size: 1.125rem;
+        }
+      }
     }
+  }
+
+  &.widget-units--entry {
+    padding: 0 1rem 1rem;
+
+    .unit__content-link {
+      font-size: 1.25rem;
+      line-height: 1.25;
+
+      @media screen and (max-width: 1199px) {
+        font-size: 1.125rem;
+      }
+
+      @media screen and (max-width: 1023px) {
+        font-size: 1.375rem;
+      }
+
+      @media screen and (max-width: 767px) {
+        font-size: 1.125rem;
+      }
+    }
+  }
+
+  @media screen and (max-width: 1023px) {
+    max-width: $width-content;
+  }
+
+  @media screen and (max-width: 479px) {
+    margin: 0;
   }
 }

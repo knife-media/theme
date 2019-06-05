@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.5
- * @version 1.6
+ * @version 1.8
  */
 
 
@@ -81,6 +81,8 @@ class Knife_Site_Meta {
      */
     public static function add_header_icons() {
         $meta = [];
+
+        // Get assets path
         $path = get_template_directory_uri() . '/assets/images';
 
         $meta[] = sprintf(
@@ -143,34 +145,13 @@ class Knife_Site_Meta {
     public static function add_seo_tags() {
         $meta = [];
 
-        if(is_front_page()) {
-            $meta[] = sprintf(
-                '<meta name="description" content="%s">',
-                esc_attr(get_bloginfo('description'))
-            );
-        }
+        // Get description
+        $description = self::get_description();
 
-        if(is_singular() && !is_front_page()) {
-            $object_id = get_queried_object_id();
-
-            if(has_excerpt($object_id)) {
-                $meta[] = sprintf(
-                    '<meta name="description" content="%s">',
-                    esc_attr(strip_tags(get_the_excerpt($object_id)))
-                );
-            }
-        }
-
-        if(is_archive()) {
-            $object_type = get_queried_object();
-
-            if(!empty($object_type->description)) {
-                $meta[] = sprintf(
-                    '<meta name="description" content="%s">',
-                    esc_attr($object_type->description)
-                );
-            }
-        }
+        $meta[] = sprintf(
+            '<meta name="description" content="%s">',
+            esc_attr($description)
+        );
 
         return self::print_tags($meta);
     }
@@ -183,10 +164,12 @@ class Knife_Site_Meta {
      */
     public static function add_yandex_meta() {
         $meta = [];
+
+        // Get assets path
         $path = get_template_directory_uri() . '/assets/images';
 
         $meta[] = sprintf(
-            '<meta name="yandex-tableau-widget" content="%s, color=#002349">',
+            '<meta name="yandex-tableau-widget" content="logo=%s, color=#002349">',
             esc_url($path . '/logo-feature.png')
         );
 
@@ -201,7 +184,12 @@ class Knife_Site_Meta {
      */
     public static function add_og_tags() {
         $meta = [];
+
+        // Get social image array
         $social_image = self::get_social_image();
+
+        // Get description
+        $description = self::get_description();
 
         $meta[] = sprintf(
             '<meta property="og:site_name" content="%s">',
@@ -211,6 +199,11 @@ class Knife_Site_Meta {
         $meta[] = sprintf(
              '<meta property="og:locale" content="%s">',
              esc_attr(get_locale())
+        );
+
+        $meta[] = sprintf(
+            '<meta property="og:description" content="%s">',
+            esc_attr($description)
         );
 
         $meta[] = sprintf(
@@ -252,11 +245,6 @@ class Knife_Site_Meta {
                 '<meta property="og:title" content="%s">',
                 esc_attr(get_bloginfo('title'))
             );
-
-            $meta[] = sprintf(
-                '<meta property="og:description" content="%s">',
-                esc_attr(get_bloginfo('description'))
-            );
         }
 
         if(is_singular() && !is_front_page()) {
@@ -273,13 +261,6 @@ class Knife_Site_Meta {
                 '<meta property="og:title" content="%s">',
                 esc_attr(strip_tags(get_the_title($object_id)))
             );
-
-            if(has_excerpt($object_id)) {
-                $meta[] = sprintf(
-                    '<meta property="og:description" content="%s">',
-                    esc_attr(strip_tags(get_the_excerpt($object_id)))
-                );
-            }
         }
 
         if(is_archive()) {
@@ -289,13 +270,6 @@ class Knife_Site_Meta {
                 '<meta property="og:title" content="%s">',
                 esc_attr(wp_get_document_title())
             );
-
-            if(!empty($object_type->description)) {
-                $meta[] = sprintf(
-                    '<meta property="og:description" content="%s">',
-                    esc_attr($object_type->description)
-                );
-            }
         }
 
         return self::print_tags($meta);
@@ -345,6 +319,36 @@ class Knife_Site_Meta {
         );
 
         return self::print_tags($meta);
+    }
+
+
+    /**
+     * Get description
+     */
+    private static function get_description() {
+        if(is_singular() && !is_front_page()) {
+            $object_id = get_queried_object_id();
+
+            if(has_excerpt($object_id)) {
+                return strip_tags(get_the_excerpt($object_id));
+            }
+        }
+
+        if(is_archive()) {
+            $object_type = get_queried_object();
+
+            if(!empty($object_type->description)) {
+                return $object_type->description;
+            }
+
+            if(!empty($object_type->name)) {
+                $description = __('Журнал Нож – архив статей по теме ', 'knife-theme') . strip_tags($object_type->name);
+
+                return trim($description);
+            }
+        }
+
+        return get_bloginfo('description');
     }
 
 

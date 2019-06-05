@@ -2,14 +2,12 @@
   display: block;
   position: relative;
 
-  width: 100%;
-  max-width: $width-site;
+  width: calc(100% - 2rem);
+  max-width: $width-site - 2rem;
 
   margin: 0 auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
 
   @media screen and (max-width: 1023px) {
-    max-width: $width-tablet;
+    max-width: $width-content;
   }
 }

@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.5
- * @version 1.7
+ * @version 1.8
  */
 
 
@@ -27,6 +27,16 @@ class Knife_Label_Posts {
 
 
     /**
+     * Default post type with custom background metabox
+     *
+     * @since   1.8
+     * @access  private
+     * @var     array
+     */
+    private static $post_type = ['post', 'quiz'];
+
+
+    /**
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public static function load_module() {
@@ -39,7 +49,7 @@ class Knife_Label_Posts {
      * Create custom taxonomy
      */
     public static function register_taxonomy() {
-        register_taxonomy(self::$taxonomy, 'post', [
+        register_taxonomy(self::$taxonomy, self::$post_type, [
             'labels' => [
                 'name'                       => __('Ярлыки', 'knife-theme'),
                 'singular_name'              => __('Ярлык', 'knife-theme'),

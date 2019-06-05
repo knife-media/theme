@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.7
+ * @version 1.9
  */
 
 ?><!DOCTYPE html>
@@ -32,13 +32,14 @@
     <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KZ7MHM" style="display:none;"></iframe>
 </noscript>
 
-<div class="block-heading">
-    <?php if(is_active_sidebar('knife-poster')) : ?>
-        <figure class="poster">
-            <?php dynamic_sidebar('knife-poster'); ?>
-        </figure>
-    <?php endif; ?>
 
+<?php if(is_active_sidebar('knife-poster')) : ?>
+    <div class="block-poster">
+        <?php dynamic_sidebar('knife-poster'); ?>
+    </div>
+<?php endif; ?>
+
+<div class="block-heading">
     <header class="header">
         <div class="header__inner">
              <button class="header__button header__button--menu toggle toggle--menu" id="toggle-menu" role="button">

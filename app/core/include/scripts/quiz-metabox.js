@@ -396,6 +396,36 @@ jQuery(document).ready(function($) {
 
 
   /**
+   * Toggle format options
+   */
+  function toggleFormat(option) {
+    $.each(['binary', 'points', 'category'], function(i, v) {
+      // Remove answers modificators
+      box.find('.answer').removeClass(
+          'answer--' + v
+      );
+
+      // Remove result modificators
+      box.find('.result').removeClass(
+          'result--' + v
+      );
+    });
+
+    // Set new format modificators
+    box.find('.answer').addClass(
+      'answer--' + option.data('format')
+    );
+
+    box.find('.result').addClass(
+      'result--' + option.data('format')
+    );
+
+    // Toggle achievment
+    toggleAchievment(option.data('format'));
+  }
+
+
+  /**
    * Toggle summary options
    */
   function toggleSummary(option) {
@@ -404,6 +434,23 @@ jQuery(document).ready(function($) {
     box.find('.result').toggleClass(toggle,
       option.is(':checked')
     );
+  }
+
+
+  /**
+   * Toggle achievment option
+   */
+  function toggleAchievment(format) {
+    var toggle = box.find('.summary [data-summary="achievment"]');
+
+    toggle.prop('disabled', false);
+
+    if(format === 'category') {
+      toggle.prop('checked', false);
+      toggle.prop('disabled', true);
+    }
+
+    return toggle.change();
   }
 
 
@@ -432,6 +479,16 @@ jQuery(document).ready(function($) {
 
 
   /**
+   * Format radio trigger
+   */
+  box.on('change', '.manage input[data-format]', function() {
+    var option = $(this);
+
+    return toggleFormat(option);
+  });
+
+
+  /**
    * Summary checkbox trigger
    */
   box.on('change', '.summary input[data-summary]', function() {
@@ -448,6 +505,24 @@ jQuery(document).ready(function($) {
     var option = $(this);
 
     return toggleDetails(option);
+  });
+
+
+  /**
+   * Update results category list on answer change
+   */
+  box.on('change', '.answer input[data-answer]', function() {
+    var option = $(this);
+
+    if(option.data('answer') === 'category') {
+      var answer = option.val();
+
+      box.find('.result .result__category-field').each(function(i, select) {
+        if($(select).find('option[value=' + answer + ']').length === 0) {
+          $(select).append('<option value="' + answer + '">' + answer + '</option>');
+        }
+      });
+    }
   });
 
 
@@ -799,7 +874,6 @@ jQuery(document).ready(function($) {
       });
     });
 
-
     // Sort results and update editor
     sortResults(function() {
       box.find('.result:not(:first)').each(function(i) {
@@ -821,6 +895,12 @@ jQuery(document).ready(function($) {
       toggleManage(option);
     });
 
+    // Set format classes
+    box.find('.manage input[data-format]:checked').each(function() {
+      var option = $(this);
+
+      toggleFormat(option);
+    });
 
     // Set summary classes
     box.find('.summary input[data-summary]').each(function() {
@@ -828,7 +908,6 @@ jQuery(document).ready(function($) {
 
       toggleSummary(option);
     });
-
 
     // Set details classes
     box.find('.summary input[data-details]:checked').each(function() {

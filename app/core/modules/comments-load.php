@@ -41,7 +41,7 @@ class Knife_Comments_Load {
     public static function inject_object() {
         $comments_id = get_theme_mod(self::$comments_id);
 
-        if(!empty($comments_id)) {
+        if(strlen($comments_id) > 0) {
             wp_localize_script('knife-theme', 'knife_comments_id', $comments_id);
         }
     }

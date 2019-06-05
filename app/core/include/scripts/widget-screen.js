@@ -15,12 +15,58 @@
       });
     }
 
-    $('#widgets-right .widget:has(.color-picker)').each(function () {
+    $('#widgets-left .widget:has(.color-picker)').each(function() {
+      initColorPicker($(this));
+    });
+
+    $('#widgets-right .widget:has(.color-picker)').each(function() {
       initColorPicker($(this));
     });
 
     $(document).on('widget-added widget-updated', function(event, widget) {
       initColorPicker(widget);
+    });
+  });
+
+
+  /**
+   * Widget append button handler
+   */
+  $(document).ready(function() {
+    var initWidgetButton = function(input) {
+      if(input.val()) {
+        return true;
+      }
+
+      var block = input.parent();
+      var title = input.data('title') || '';
+
+      // Create button
+      var button = $('<button>', {'class': 'button', type: 'button'}).text(title);
+
+      block.children().hide();
+
+      button.on('click', function(e) {
+        e.preventDefault();
+
+        block.children().show();
+        button.remove();
+      });
+
+      button.appendTo(block);
+    }
+
+    $(document).on('widget-added widget-updated', function(event, widget) {
+      var input = widget.find('.knife-widget-button');
+
+      initWidgetButton(input);
+    });
+
+
+    $('#widgets-right .widget:has(.knife-widget-button)').each(function() {
+      var input = $(this).find('.knife-widget-button');
+
+      initWidgetButton(input);
     });
   });
 

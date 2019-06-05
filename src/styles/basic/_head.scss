@@ -1,7 +1,6 @@
 .head {
   display: flex;
   align-items: center;
-  cursor: default;
 
   height: 2rem;
   padding: 0 1.25rem;
@@ -14,7 +13,7 @@
   color: $color-white;
   background-color: $color-primary;
 
-  @at-root a#{&} {
+  @at-root #{selector-unify(&, a)} {
     cursor: pointer;
 
     &:hover {

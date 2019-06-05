@@ -1,6 +1,10 @@
 .widget-televisor {
   display: flex;
 
+  width: 100%;
+  max-width: $width-site - 2rem;
+  margin: 0 1rem;
+
   .widget-televisor__inner {
     display: flex;
     flex-flow: row wrap;
@@ -14,14 +18,25 @@
     flex: 1 1 53.25rem;
 
     .widget-units {
+      margin-left: 0;
+      margin-right: 0;
+
       .unit__content-link {
         font-size: 1.375rem;
         line-height: 1.25;
 
         @media screen and (max-width: 767px) {
+          font-size: 1.25rem;
+        }
+
+        @media screen and (max-width: 479px) {
           font-size: 1.125rem;
         }
       }
+    }
+
+    .widget-single {
+      margin: 1rem 0 0;
     }
   }
 
@@ -37,5 +52,25 @@
       flex: 1 1 auto;
       padding-left: 0;
     }
+  }
+
+  &.widget-televisor--sidebar {
+    display: none;
+  }
+
+  &.widget-televisor--entry {
+    display: none;
+  }
+
+  &.widget-televisor--poster {
+    display: none;
+  }
+
+  @media screen and (max-width: 1023px) {
+    max-width: $width-content;
+  }
+
+  @media screen and (max-width: 479px) {
+    margin: 0;
   }
 }

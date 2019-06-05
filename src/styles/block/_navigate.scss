@@ -3,19 +3,15 @@
   flex-flow: row nowrap;
   justify-content: space-around;
 
-  width: 100%;
-  max-width: $width-site;
-
+  width: calc(100% - 2rem);
+  max-width: $width-site - 2rem;
   margin: 1rem auto 0;
-  padding-left: 1rem;
-  padding-right: 1rem;
 
   @media screen and (max-width: 1023px) {
-    max-width: $width-tablet;
+    max-width: $width-content;
   }
 
   @media screen and (max-width: 479px) {
-    padding-left: 0;
-    padding-right: 0;
+    width: 100%;
   }
 }

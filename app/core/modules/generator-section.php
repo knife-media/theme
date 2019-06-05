@@ -6,14 +6,14 @@
  *
  * @package knife-theme
  * @since 1.6
- * @version 1.7
+ * @version 1.8
  */
 
 if (!defined('WPINC')) {
     die;
 }
 
-class Knife_Random_Generator {
+class Knife_Generator_Section {
     /**
      * Unique slug using for custom post type register and url
      *
@@ -207,7 +207,7 @@ class Knife_Random_Generator {
 
             // Add generator items
             wp_localize_script('knife-theme', 'knife_generator_items',
-                (array) self::retrieve_items($post_id)
+                (array) self::retrieve_items($post_id, $options)
             );
         }
     }
@@ -217,16 +217,26 @@ class Knife_Random_Generator {
      * Redirect to custom generated template if share query var exists
      */
     public static function redirect_share() {
-        $share = get_query_var('share');
+        $share = get_query_var(self::$query_var);
 
         if(is_singular(self::$post_type) && strlen($share) > 0) {
             $post_id = get_the_ID();
 
-            $share = absint($share) - 1;
-            $items = self::retrieve_items($post_id, true);
+            // Get generator options
+            $options = get_post_meta($post_id, self::$meta_options, true);
 
-            if($share >= 0 && count($items) > $share) {
-                extract($items[$share]);
+            // Get generator items
+            $items = self::retrieve_items($post_id, $options, true);
+            $share = absint($share) - 1;
+
+            if(isset($items[$share])) {
+                $blanks = array_fill_keys(['heading', 'description', 'poster'], '');
+
+                $item = wp_parse_args(
+                    array_intersect_key($items[$share], $blanks), $blanks
+                );
+
+                extract($item);
 
                 $include = get_template_directory() . '/core/include';
                 include_once($include . '/templates/generator-share.php');
@@ -273,11 +283,11 @@ class Knife_Random_Generator {
         $posters = Knife_Poster_Templates::create_posters($options, self::$upload_folder);
 
         if(is_wp_error($posters)) {
-            return wp_send_json_error($posters->get_error_message());
+            wp_send_json_error($posters->get_error_message());
         }
 
         foreach($posters as $poster) {
-            return wp_send_json_success($poster);
+            wp_send_json_success($poster);
         }
     }
 
@@ -286,7 +296,7 @@ class Knife_Random_Generator {
      * Add generator metabox
      */
     public static function add_metabox() {
-        add_meta_box('knife-generator-metabox', __('Настройки генератора'), [__CLASS__, 'display_metabox'], self::$post_type, 'normal', 'high');
+        add_meta_box('knife-generator-metabox', __('Настройки генератора', 'knife-theme'), [__CLASS__, 'display_metabox'], self::$post_type, 'normal', 'high');
     }
 
 
@@ -323,6 +333,8 @@ class Knife_Random_Generator {
             'post_id' => absint($post_id),
             'action' => esc_attr(self::$ajax_action),
             'nonce' => wp_create_nonce(self::$metabox_nonce),
+            'meta_items' => esc_attr(self::$meta_items),
+
             'choose' => __('Выберите изображение постера', 'knife-theme'),
             'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
         ];
@@ -379,7 +391,7 @@ class Knife_Random_Generator {
     /**
      * Update generator items meta from post-metabox
      */
-    private static function update_items($query, $post_id, $meta = [], $i = 0) {
+    private static function update_items($query, $post_id) {
         if(empty($_REQUEST[$query])) {
             return;
         }
@@ -387,20 +399,33 @@ class Knife_Random_Generator {
         // Delete generator post meta to create it again below
         delete_post_meta($post_id, $query);
 
-        foreach($_REQUEST[$query] as $item) {
-            foreach($item as $key => $value) {
-                if(isset($meta[$i]) && array_key_exists($key, $meta[$i])) {
-                    $i++;
-                }
+        foreach((array) $_REQUEST[$query] as $request) {
+            $item = [];
 
-                if(strlen($value) > 0) {
-                    $meta[$i][$key] = sanitize_text_field($value);
-                }
+            if(isset($request['heading'])) {
+                $item['heading'] = sanitize_text_field($request['heading']);
             }
-        }
 
-        foreach($meta as $item) {
-            add_post_meta($post_id, $query, $item);
+            if(isset($request['template'])) {
+                $item['template'] = sanitize_text_field($request['template']);
+            }
+
+            if(isset($request['poster'])) {
+                $item['poster'] = sanitize_text_field($request['poster']);
+            }
+
+            if(isset($request['description'])) {
+                $item['description'] = sanitize_textarea_field($request['description']);
+            }
+
+            if(isset($request['attachment'])) {
+                $item['attachment'] = absint($request['attachment']);
+            }
+
+            // Add post meta if not empty
+            if(array_filter($item)) {
+                add_post_meta($post_id, $query, $item);
+            }
         }
     }
 
@@ -408,25 +433,30 @@ class Knife_Random_Generator {
     /**
      * Retrieve items within meta to show as object
      */
-    private static function retrieve_items($post_id, $raw = false, $items = []) {
-        $options = ['description', 'heading', 'poster'];
+    private static function retrieve_items($post_id, $options, $raw = false) {
+        $items = [];
 
+        // Loop through items
         foreach(get_post_meta($post_id, self::$meta_items) as $meta) {
-            if(array_diff_key(array_flip($options), $meta)) {
-                continue;
+            $item = [];
+
+            if(!empty($meta['heading'])) {
+                $item['heading'] = esc_html($meta['heading']);
             }
 
-            if($raw === false) {
-                $items[] = [
-                    'description' => apply_filters('the_content', $meta['description']),
-                    'heading' => esc_html($meta['heading']),
-                    'poster' => esc_url($meta['poster'])
-                ];
+            if(!empty($meta['description'])) {
+                $item['description'] = wp_specialchars_decode($meta['description']);
 
-                continue;
+                if($raw === false) {
+                    $item['description'] = apply_filters('the_content', $meta['description']);
+                }
             }
 
-            $items[] = $meta;
+            if(empty($options['blank']) && !empty($meta['poster'])) {
+                $item['poster'] = esc_url($meta['poster']);
+            }
+
+            $items[] = $item;
         }
 
         return $items;
@@ -437,4 +467,4 @@ class Knife_Random_Generator {
 /**
  * Load current module environment
  */
-Knife_Random_Generator::load_module();
+Knife_Generator_Section::load_module();

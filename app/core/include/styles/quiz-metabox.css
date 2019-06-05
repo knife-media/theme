@@ -346,8 +346,28 @@
     padding: 4px 6px;
   }
 
+  #knife-quiz-box .answer__category {
+    display: none;
+    align-items: center;
+    position: relative;
+
+    margin: 0 25px 15px 0;
+  }
+
+  #knife-quiz-box .answer__category strong {
+    cursor: default;
+  }
+
+  #knife-quiz-box .answer__category input {
+    display: inline-block;
+
+    width: 50px;
+    margin: 0 10px 0 0;
+    padding: 4px 6px;
+  }
+
   #knife-quiz-box .answer__binary {
-    display: flex;
+    display: none;
     align-items: center;
     position: relative;
 
@@ -360,6 +380,7 @@
 
   #knife-quiz-box .answer__binary label {
     user-select: none;
+    -webkit-user-select: none;
     font-weight: 600;
   }
 
@@ -386,8 +407,12 @@
   display: flex;
 }
 
-#knife-quiz-box .answer--points .answer__binary {
-  display: none;
+#knife-quiz-box .answer--binary .answer__binary {
+  display: flex;
+}
+
+#knife-quiz-box .answer--category .answer__category {
+  display: flex;
 }
 
 #knife-quiz-box .answer--poster .answer__delete {
@@ -416,7 +441,8 @@
  * Manage styles
  */
 #knife-quiz-box .manage {
-  display: block;
+  display: flex;
+  flex-flow: column nowrap;
   flex: 1 1 350px;
 
   margin: 15px 15px 5px;
@@ -425,7 +451,7 @@
     display: block;
 
     width: 100%;
-    margin: 20px 0 10px;
+    margin: auto 0 10px;
     font-size: 13px;
     font-weight: 600;
     color: #333;
@@ -457,7 +483,6 @@
     #knife-quiz-box .manage__radio input[type="radio"] {
       margin-right: 8px;
     }
-
 
   #knife-quiz-box .manage__input {
     display: block;
@@ -783,7 +808,7 @@
 }
 
 #knife-quiz-box .result__scores {
-  display: flex;
+  display: none;
   flex-flow: row wrap;
   align-items: center;
   cursor: default;
@@ -807,6 +832,41 @@
       box-shadow: none;
       border-color: #a00;
     }
+
+#knife-quiz-box .result__category {
+  display: none;
+  flex-flow: row wrap;
+  align-items: center;
+  cursor: default;
+  flex: 1 1 100%;
+
+  margin: 10px;
+  padding: 10px 20px 0 0;
+  font-weight: 600;
+
+  border-top: 1px solid #ddd;
+}
+  #knife-quiz-box .result__category-field {
+    display: inline-block;
+
+    min-width: 60px;
+    margin: 0 15px;
+    font-weight: 400;
+    transition: border .25s, box-shadow .25s;
+  }
+
+
+#knife-quiz-box .result--binary .result__scores {
+  display: flex;
+}
+
+#knife-quiz-box .result--points .result__scores {
+  display: flex;
+}
+
+#knife-quiz-box .result--category .result__category {
+  display: flex;
+}
 
 #knife-quiz-box .result--details .result__details {
   display: block;

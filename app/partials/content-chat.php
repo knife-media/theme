@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.4
+ * @version 1.8
  */
 ?>
 
@@ -13,7 +13,7 @@
         <?php
             the_info(
                 '<div class="entry-header__info">', '</div>',
-                ['author', 'date', 'category', 'club', 'label']
+                ['promo', 'author', 'date', 'category', 'label']
             );
 
             the_title(

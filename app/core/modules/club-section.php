@@ -6,7 +6,7 @@
 *
 * @package knife-theme
 * @since 1.3
-* @version 1.7
+* @version 1.8
 */
 
 
@@ -249,15 +249,17 @@ class Knife_Club_Section {
      * Add button to description
      */
     public static function update_archive_description($description) {
-        $button_link = get_theme_mod(self::$button_link, '');
+        if(is_post_type_archive(self::$post_type)) {
+            $button_link = get_theme_mod(self::$button_link);
 
-        if(is_post_type_archive(self::$post_type) && strlen($button_link) > 0) {
-            $button = sprintf('<div class="tagline-button tagline-button--club"><a class="button" href="%2$s">%1$s</a></div>',
-                __('Присоединиться', 'knife-theme'),
-                esc_url($button_link)
-            );
+            if(strlen($button_link) > 0) {
+                $button = sprintf('<div class="tagline-button tagline-button--club"><a class="button" href="%2$s">%1$s</a></div>',
+                    __('Присоединиться', 'knife-theme'),
+                    esc_url($button_link)
+                );
 
-            $description = $description . $button;
+                $description = $description . $button;
+            }
         }
 
         return $description;
@@ -522,17 +524,18 @@ class Knife_Club_Section {
         }
 
 
-        if(method_exists('Knife_Notifier_Robot', 'send_telegram')) {
-            $chat_id = get_theme_mod(self::$option_chat, '');
-            $request = get_theme_mod(self::$option_request, 0) + 1;
+        if(method_exists('Knife_Social_Delivery', 'send_telegram')) {
+            $chat_id = sanitize_text_field(get_theme_mod(self::$option_chat, ''));
+            $request = absint(get_theme_mod(self::$option_request, 0)) + 1;
 
             $message = [
-                'chat_id' => $chat_id,
                 'text' => self::get_request($fields, $request),
                 'parse_mode' => 'HTML'
             ];
 
-            if(Knife_Notifier_Robot::send_telegram($message)) {
+            $response = Knife_Social_Delivery::send_telegram($chat_id, $message);
+
+            if(!is_wp_error($response)) {
                 set_theme_mod(self::$option_request, $request);
                 wp_send_json_success(__('Сообщение успешно отправлено', 'knife-theme'));
             }

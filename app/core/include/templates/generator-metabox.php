@@ -14,124 +14,54 @@
         wp_nonce_field('metabox', self::$metabox_nonce);
     ?>
 
-    <div class="box box--items">
-
-        <?php foreach($items as $i => $item) : ?>
-            <div class="item">
-                <div class="option option--general">
-                    <?php
-                        printf(
-                            '<p class="option__general"><strong>%3$s</strong><input type="text" data-item="heading" name="%1$s[][heading]" value="%2$s"></p>',
-                            esc_attr(self::$meta_items),
-                            esc_attr($item['heading'] ?? ''),
-                            __('Заголовок', 'knife-theme')
-                        );
-
-                        printf(
-                            '<p class="option__general"><strong>%3$s</strong><textarea data-item="description" name="%1$s[][description]">%2$s</textarea></p>',
-                            esc_attr(self::$meta_items),
-                            esc_attr($item['description'] ?? ''),
-                            __('Описание', 'knife-theme')
-                        );
-                    ?>
-                </div>
-
-                <div class="option option--relative">
-                    <div class="option__relative">
-                        <figure class="option__relative-poster">
-                            <?php
-                                if(!empty($item['poster'])) {
-                                    printf('<img class="option__relative-image" src="%s" alt="">',
-                                        esc_url($item['poster'])
-                                    );
-                                }
-
-                                printf(
-                                    '<figcaption class="option__relative-caption">%s</figcaption>',
-                                    __('Выбрать изображение для постера', 'knife-theme')
-                                );
-
-                                printf('<input type="hidden" data-item="poster" name="%s[][poster]" value="%s">',
-                                    esc_attr(self::$meta_items),
-                                    esc_attr($item['poster'] ?? '')
-                                );
-
-                                printf('<input type="hidden" data-item="attachment" name="%s[][attachment]" value="%s">',
-                                    esc_attr(self::$meta_items),
-                                    esc_attr($item['attachment'] ?? '')
-                                );
-                            ?>
-                        </figure>
-
-                        <div class="option__relative-footer">
-                            <?php
-                                if(method_exists('Knife_Poster_Templates', 'get_select')) {
-                                    Knife_Poster_Templates::get_select([
-                                        'attributes' => [
-                                            'class' => 'option__relative-template',
-                                            'data-item' => 'template',
-                                            'name' => esc_attr(self::$meta_items) . '[][template]'
-                                        ],
-                                        'selected' => esc_attr($item['template'] ?? '')
-                                    ]);
-
-                                    printf('<button class="option__relative-generate button" type="button">%s</button>',
-                                        __('Сгенерировать', 'knife-theme')
-                                    );
-                                }
-
-                                printf('<button class="option__relative-settings button" disabled type="button">%s</button>',
-                                    __('Настройки', 'knife-theme')
-                                );
-                            ?>
-
-                            <span class="option__relative-spinner spinner"></span>
-                            <span class="dashicons dashicons-trash"></span>
-                        </div>
-
-                        <div class="option__relative-warning"></div>
-                    </div>
-                </div>
-            </div>
-        <?php endforeach; ?>
-
-    </div>
-
-    <div class="box box--actions">
-        <?php
-            printf('<button class="actions__add button" type="button">%s</button>',
-                __('Добавить элемент', 'knife-theme')
-            );
-        ?>
-    </div>
-
     <div class="box box--manage">
         <div class="manage manage--general">
-            <div class="manage__option">
+            <p class="manage__title">
+                <?php _e('Настройки генератора', 'knife-theme'); ?>
+            </p>
+
+            <p class="manage__check">
+                <?php
+                    printf('<label><input data-manage="blank" type="checkbox" name="%s[blank]" value="1"%s>%s</label>',
+                        esc_attr(self::$meta_options),
+                        checked(isset($options['blank']), true, false),
+                        __('Не использовать изображения', 'knife-theme')
+                    );
+                ?>
+            </p>
+
+            <p class="manage__check">
+                <?php
+                    printf('<label><input data-manage="fulltext" type="checkbox" name="%s[fulltext]" value="1"%s>%s</label>',
+                        esc_attr(self::$meta_options),
+                        checked(isset($options['fulltext']), true, false),
+                        __('Добавить описание в расшариваемый текст', 'knife-theme')
+                    );
+                ?>
+            </p>
+
+
+            <p class="manage__input">
                 <strong><?php _e('Текст на кнопке', 'knife-theme'); ?></strong>
 
-                <p>
-                    <?php
-                        printf('<input type="text" name="%s[button_text]" value="%s">',
-                            esc_attr(self::$meta_options),
-                            esc_attr($options['button_text'] ?? __('Сгенерировать', 'knife-theme'))
-                        );
-                    ?>
-                </p>
-            </div>
+                <?php
+                    printf('<input type="text" name="%s[button_text]" value="%s">',
+                        esc_attr(self::$meta_options),
+                        esc_attr($options['button_text'] ?? __('Сгенерировать', 'knife-theme'))
+                    );
+                ?>
+            </p>
 
-            <div class="manage__option">
+            <p class="manage__input">
                 <strong><?php _e('Текст на кнопке повтора', 'knife-theme'); ?></strong>
 
-                <p>
-                    <?php
-                        printf('<input type="text" name="%s[button_repeat]" value="%s">',
-                            esc_attr(self::$meta_options),
-                            esc_attr($options['button_repeat'] ?? __('Попробовать другой', 'knife-theme'))
-                        );
-                    ?>
-                </p>
-            </div>
+                <?php
+                    printf('<input type="text" name="%s[button_repeat]" value="%s">',
+                        esc_attr(self::$meta_options),
+                        esc_attr($options['button_repeat'] ?? __('Попробовать другой', 'knife-theme'))
+                    );
+                ?>
+            </p>
         </div>
 
         <div class="manage manage--colors">
@@ -142,7 +72,7 @@
                     <?php
                         printf('<input type="text" name="%s[page_background]" value="%s">',
                             esc_attr(self::$meta_options),
-                            esc_attr($options['page_background'] ?? '#ffffff')
+                            sanitize_hex_color($options['page_background'] ?? '#ffffff')
                         );
                     ?>
                 </p>
@@ -155,12 +85,11 @@
                     <?php
                         printf('<input type="text" name="%s[page_color]" value="%s">',
                             esc_attr(self::$meta_options),
-                            esc_attr($options['page_color'] ?? '#000000')
+                            sanitize_hex_color($options['page_color'] ?? '#000000')
                         );
                     ?>
                 </p>
             </div>
-
 
             <div class="manage__color">
                 <strong><?php _e('Цвет кнопки', 'knife-theme'); ?></strong>
@@ -169,7 +98,7 @@
                     <?php
                         printf('<input type="text" name="%s[button_background]" value="%s">',
                             esc_attr(self::$meta_options),
-                            esc_attr($options['button_background'] ?? '')
+                            sanitize_hex_color($options['button_background'] ?? '')
                         );
                     ?>
                 </p>
@@ -182,11 +111,90 @@
                     <?php
                         printf('<input type="text" name="%s[button_color]" value="%s">',
                             esc_attr(self::$meta_options),
-                            esc_attr($options['button_color'] ?? '')
+                            sanitize_hex_color($options['button_color'] ?? '')
                         );
                     ?>
                 </p>
             </div>
         </div>
+    </div>
+
+    <div class="box box--items">
+
+        <?php foreach($items as $i => $item) : ?>
+            <div class="item">
+                <div class="item__text">
+                    <?php
+                        printf(
+                            '<p class="item__text-heading"><strong>%2$s</strong><input type="text" data-item="heading" value="%1$s"></p>',
+                            sanitize_text_field($item['heading'] ?? ''),
+                            __('Заголовок', 'knife-theme')
+                        );
+
+                        printf(
+                            '<p class="item__text-description"><strong>%2$s</strong><textarea data-item="description">%1$s</textarea></p>',
+                            wp_kses_post($item['description'] ?? ''),
+                            __('Описание', 'knife-theme')
+                        );
+                    ?>
+                </div>
+
+                <div class="item__image">
+                    <figure class="item__image-poster">
+                        <?php
+                            if(!empty($item['poster'])) {
+                                printf('<img src="%s" alt="">', esc_url($item['poster']));
+                            }
+
+                            printf(
+                                '<figcaption class="item__image-caption">%s</figcaption>',
+                                __('Выбрать изображение для постера', 'knife-theme')
+                            );
+
+                            printf('<input type="hidden" data-item="poster" value="%s">',
+                                sanitize_text_field($item['poster'] ?? '')
+                            );
+
+                            printf('<input type="hidden" data-item="attachment" value="%s">',
+                                sanitize_text_field($item['attachment'] ?? '')
+                            );
+                        ?>
+                    </figure>
+
+                    <div class="item__image-footer">
+                        <?php
+                            if(method_exists('Knife_Poster_Templates', 'get_select')) {
+                                Knife_Poster_Templates::get_select([
+                                    'attributes' => [
+                                        'class' => 'item__image-template',
+                                        'data-item' => 'template'
+                                    ],
+                                    'selected' => esc_attr($item['template'] ?? '')
+                                ]);
+
+                                printf('<button class="item__image-generate button" type="button">%s</button>',
+                                    __('Сгенерировать', 'knife-theme')
+                                );
+                            }
+                        ?>
+
+                        <span class="item__image-spinner spinner"></span>
+                    </div>
+
+                    <div class="item__image-warning"></div>
+                </div>
+
+                <span class="item__delete dashicons dashicons-trash"></span>
+            </div>
+        <?php endforeach; ?>
+
+    </div>
+
+    <div class="box box--actions">
+        <?php
+            printf('<button class="actions__add button" type="button">%s</button>',
+                __('Добавить элемент', 'knife-theme')
+            );
+        ?>
     </div>
 </div>

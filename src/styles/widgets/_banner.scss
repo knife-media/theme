@@ -1,5 +1,6 @@
 .widget-banner {
-  display: block;
+  display: flex;
+  justify-content: center;
   position: relative;
 
   width: 100%;
@@ -10,8 +11,9 @@
     align-items: center;
     position: relative;
 
-    width: 100%;
     overflow: hidden;
+
+    border: none;
 
     img {
       display: block;
@@ -43,7 +45,15 @@
     }
   }
 
-  &.widget-banner--sidebar > * {
+  &.widget-banner--entry {
+    padding: 1rem;
+
+    @media screen and (max-width: 479px) {
+      padding: 0;
+    }
+  }
+
+  &.widget-banner--sidebar {
     margin-top: 1rem;
   }
 }

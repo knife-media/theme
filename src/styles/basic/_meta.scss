@@ -1,15 +1,24 @@
 .meta {
-  display: block;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
 
-  color: $color-primary;
   font-size: .8125rem;
   font-weight: 500;
   letter-spacing: .25px;
 
+  color: $color-primary;
+
   & > * {
     display: inline-block;
+    cursor: default;
+
     white-space: nowrap;
 
+    border-bottom: none;
+  }
+
+  .meta__item {
     &:after {
       content: "•";
       display: inline-block;
@@ -25,58 +34,11 @@
     }
   }
 
-  .meta__link {
+  & > a {
     cursor: pointer;
-    border-bottom: none;
 
     &:hover {
       filter: brightness(150%);
-    }
-  }
-
-  .meta__item {
-    cursor: default;
-  }
-
-  .meta__club {
-    position: absolute;
-
-    padding: .125rem .375rem;
-    color: $color-white;
-    background-color: $color-club;
-    transform: translateY(-.125rem);
-
-    border-radius: 3px;
-
-    &:hover {
-      filter: brightness(120%);
-    }
-  }
-
-  .meta__label {
-    display: flex;
-    order: 2;
-
-    margin-left: auto;
-
-    &:after {
-      display: none;
-    }
-
-    &:before {
-      content: "";
-    }
-
-    & ~ :last-child {
-      margin-right: 6rem;
-    }
-  }
-
-  .meta__emoji {
-    cursor: default;
-
-    &:after {
-      display: none;
     }
   }
 }

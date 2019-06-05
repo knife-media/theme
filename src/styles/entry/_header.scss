@@ -22,14 +22,19 @@
     margin-top: 0;
   }
 
-
   .entry-header__info {
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
-    justify-content: space-between;
+
+    min-height: 2rem;
+    margin: -.25rem auto;
 
     .label {
+      min-height: 2rem;
+      margin-left: auto;
+      margin-bottom: auto;
+
       font-size: 1.5rem;
 
       @media screen and (max-width: 767px) {

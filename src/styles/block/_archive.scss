@@ -1,0 +1,19 @@
+.block-archive {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+
+  width: calc(100% - 2rem);
+  max-width: $width-site - 2rem;
+  margin: 0 auto;
+
+  @media screen and (max-width: 1023px) {
+    max-width: $width-content;
+  }
+
+  @media screen and (max-width: 479px) {
+    width: 100%;
+  }
+}

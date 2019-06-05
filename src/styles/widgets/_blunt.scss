@@ -4,7 +4,8 @@
   justify-content: flex-start;
 
   width: 100%;
-  margin-top: 1rem;
+  max-width: $width-site - 2rem;
+  margin: 1rem 1rem 0;
 
  .widget-blunt__link {
     display: block;
@@ -62,14 +63,55 @@
     }
 
     &:last-child {
-      @media screen and (max-width: 767px) {
-        margin-bottom: 0;
-      }
+      margin-bottom: 0;
     }
 
     @media screen and (max-width: 1023px) {
       width: 100%;
       margin-right: 0;
     }
+  }
+
+  &.widget-blunt--sidebar {
+    margin: 1rem 0 0;
+
+    .widget-blunt__inner {
+      width: 100%;
+      margin-right: 0;
+
+      .widget-blunt__link {
+        width: 100%;
+        font-size: 1rem;
+        font-weight: 500;
+        line-height: 1.25;
+      }
+    }
+  }
+
+  &.widget-blunt--entry {
+    justify-content: center;
+
+    width: 100%;
+    max-width: none;
+    margin: 0;
+
+    background-color: $color-white;
+
+    .widget-blunt__inner {
+      width: 100%;
+      max-width: $width-content;
+    }
+  }
+
+  &.widget-blunt--poster {
+    display: none;
+  }
+
+  @media screen and (max-width: 1023px) {
+    max-width: $width-content;
+  }
+
+  @media screen and (max-width: 479px) {
+    margin: 1rem 0 0;
   }
 }

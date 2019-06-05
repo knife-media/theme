@@ -37,14 +37,16 @@ class Knife_Widget_Informer extends WP_Widget {
         $instance = wp_parse_args((array) $instance, $defaults);
 
         if(!empty($instance['title']) && !empty($instance['link'])) {
-            echo $args['before_widget'];
-
             $post_id = url_to_postid($instance['link']);
             $options = $this->get_attributes($instance, $post_id);
 
-            include(get_template_directory() . '/templates/widget-informer.php');
+            if(!is_single($post_id)) {
+                echo $args['before_widget'];
 
-            echo $args['after_widget'];
+                include(get_template_directory() . '/templates/widget-informer.php');
+
+                echo $args['after_widget'];
+            }
         }
     }
 

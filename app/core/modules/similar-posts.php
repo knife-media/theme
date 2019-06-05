@@ -37,7 +37,14 @@ class Knife_Similar_Posts {
      * Inject similar posts data
      */
     public static function inject_object() {
-        if(is_singular('post') && !in_category('news')) {
+        if(is_singular('post')) {
+            // Check if promo post
+            $is_promo = get_post_meta(get_the_ID(), '_knife-promo', true);
+
+            if(in_category('news') || $is_promo) {
+                return;
+            }
+
             $similar = self::get_similar(get_queried_object_id());
 
             if($similar > 0) {

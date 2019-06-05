@@ -2,7 +2,6 @@
   display: flex;
   flex-flow: column wrap;
   justify-content: space-between;
-  align-self: flex-start;
   flex: 1 1 auto;
   position: relative;
 
@@ -36,7 +35,7 @@
         letter-spacing: .5px;
         color: $color-primary;
 
-        .meta__link {
+        a.meta__item {
           position: relative;
           z-index: 2;
         }
@@ -80,7 +79,31 @@
     margin-top: .5rem;
   }
 
+  &.widget-recent--entry {
+    width: calc(100% - 2rem);
+    max-width: $width-content;
+    margin: 1rem;
+
+    .widget-recent__head {
+      color: $color-white;
+    }
+
+    .widget-recent__more {
+      display: none;
+    }
+
+    @media screen and (max-width: 479px) {
+      width: 100%;
+      margin: 0;
+    }
+  }
+
   &.widget-recent--sidebar {
+    align-self: flex-start;
     flex: 0 0 auto;
+  }
+
+  &.widget-recent--poster {
+    display: none;
   }
 }

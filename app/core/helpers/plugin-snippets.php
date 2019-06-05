@@ -16,7 +16,7 @@
  * @link https://github.com/Automattic/Co-Authors-Plus/blob/master/template-tags.php#L272
  */
 add_filter('coauthors_posts_link', function($args) {
-    $args['class'] = 'meta__link';
+    $args['class'] = 'meta__item';
 
     return $args;
 });

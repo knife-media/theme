@@ -11,7 +11,8 @@
         <div class="knife-special-background">
             <?php
                 printf('<input type="text" name="%s[background]" value="%s">',
-                    esc_attr(self::$term_meta), $meta['background'] ?? ''
+                    esc_attr(self::$term_meta),
+                    sanitize_text_field($meta['background'] ?? '')
                 );
             ?>
         </div>
@@ -27,7 +28,8 @@
         <div class="knife-special-color">
             <?php
                 printf('<input type="text" name="%s[color]" value="%s">',
-                    esc_attr(self::$term_meta), $meta['color'] ?? ''
+                    esc_attr(self::$term_meta),
+                    sanitize_hex_color($meta['color'] ?? '')
                 );
             ?>
         </div>

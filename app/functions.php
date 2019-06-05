@@ -69,74 +69,6 @@ add_action('after_setup_theme', function() {
 });
 
 
-// Custom image sizes
-add_action('after_setup_theme', function(){
-    add_theme_support('post-thumbnails');
-    set_post_thumbnail_size(300, 300, true);
-
-    add_image_size('outer', 1024, 9999, false);
-    add_image_size('inner', 640, 9999, false);
-    add_image_size('short', 640, 480, true);
-
-    add_image_size('ground', 1600, 900, true);
-    add_image_size('triple', 480, 360, true);
-    add_image_size('double', 640, 480, true);
-    add_image_size('single', 1280, 360, true);
-});
-
-
-add_filter('max_srcset_image_width', function($width) {
-    return 640;
-});
-
-
-// We want to use own image sizes in post
-add_filter('image_size_names_choose', function($size_names) {
-    global $_wp_additional_image_sizes;
-
-    $size_names = [
-        'outer' => __('На всю ширину', 'knife-theme'),
-        'inner' => __('По ширине текста', 'knife-theme'),
-        'full'  => __('Исходный размер', 'knife-theme'),
-        'short' => __('Обрезанный по высоте', 'knife-theme'),
-        'thumbnail' => __('Миниатюра', 'knife-theme')
-    ];
-
-    return $size_names;
-});
-
-
-// Remove default useless large and medium sizes
-add_filter('intermediate_image_sizes', function($def_sizes) {
-    unset($def_sizes['medium']);
-    unset($def_sizes['large']);
-
-    return $def_sizes;
-});
-
-
-// Disable wordpress captions to replace them by own
-add_filter('disable_captions', '__return_true');
-
-
-// Wrap all images in editor with figure
-add_filter('image_send_to_editor', function($html, $id, $caption, $title, $align, $url, $size, $alt) {
-    $html = get_image_tag($id, $alt, '', $align, $size);
-
-    if($url) {
-        $html = '<a href="' . esc_attr($url) . '">' . $html . '</a>';
-    }
-
-    if($caption) {
-        $html = $html . '<figcaption class="figure__caption">' . $caption . '</figcaption>';
-    }
-
-    $html = '<figure class="figure figure--' . esc_attr($size) . '">' . $html . '</figure>';
-
-    return $html;
-}, 10, 9);
-
-
 // Add editor custom styles
 add_action('admin_enqueue_scripts', function() {
     $version = wp_get_theme()->get('Version');
@@ -289,10 +221,6 @@ add_filter('redirect_canonical', function($url) {
 });
 
 
-// We don't want to use default gallery styles anymore
-add_filter('use_default_gallery_style', '__return_false');
-
-
 // For the reason that we don't use comments in this theme we have to remove comments feed link from header
 add_filter('feed_links_show_comments_feed', '__return_false');
 
@@ -309,7 +237,7 @@ add_filter('previous_posts_link_attributes', function($atts) {
 
 // Post author link class
 add_filter('the_author_posts_link', function($link) {
-    return str_replace('rel="author"', 'class="meta__link" rel="author"', $link);
+    return str_replace('rel="author"', 'class="meta__item" rel="author"', $link);
 });
 
 
@@ -362,63 +290,10 @@ add_filter('the_tags', function($tags) {
 }, 10, 1);
 
 
-// Remove useless image attributes
-add_filter('post_thumbnail_html', function($html) {
-    return preg_replace('/(width|height)="\d*"\s/', "", $html);
-}, 10);
-
-add_filter('get_image_tag', function($html) {
-    return preg_replace('/(width|height)="\d*"\s/', "", $html);
-}, 10);
-
-add_filter('get_image_tag_class', function($class, $id, $align, $size) {
-    $class = 'figure__image';
-
-    return $class;
-}, 0, 4);
-
-
-// Disable post attachment pages
-// Redirect to post parent if exists
-add_action('template_redirect', function() {
-    global $post;
-
-    if(!is_attachment()) {
-        return false;
-    }
-
-    if(isset($post->post_parent) && $post->post_parent > 0) {
-        $url = get_permalink($post->post_parent);
-    }
-    else {
-        $url = home_url('/');
-    }
-
-    wp_redirect(esc_url($url), 301);
-    exit;
-});
-
-add_filter('attachment_link', function() {
-    return;
-});
-
-
-// Disable wordpress based search to reduce CPU load and prevent DDOS attacks
-add_action('parse_query', function($query) {
-    if(!$query->is_search() || is_admin()) {
-        return false;
-    }
-
-    $query->set('s', '');
-    $query->is_search = false;
-    $query->is_404 = true;
-}, 9);
-
-
 // Remove private posts from archives and home page.
 // Note: Knife editors use private posts as drafts. So we don't want to see drafts in templates even if we have logged in
 add_action('pre_get_posts', function($query) {
-    if(is_admin() && $query->is_main_query()) {
+    if(is_admin() || $query->is_main_query()) {
         return;
     }
 
@@ -454,6 +329,13 @@ add_filter('wp_die_handler', function($handler) {
 });
 
 
+// Remove extra &nbsp; from content on save
+add_filter('content_save_pre', function($content) {
+    return preg_replace("~((&nbsp;|\s)+$)~is", "", $content);
+});
+
+
+
 // Add custom theme widgets from common hanlder
 require get_template_directory() . '/core/modules/widget-handler.php';
 
@@ -466,8 +348,11 @@ require get_template_directory() . '/core/modules/hidden-widgets.php';
 // Upgrade theme menus
 require get_template_directory() . '/core/modules/menu-upgrade.php';
 
-// Notification sender module
-require get_template_directory() . '/core/modules/notifier-robot.php';
+// Social delivery module
+require get_template_directory() . '/core/modules/social-delivery.php';
+
+// Schedule posts sharing
+require get_template_directory() . '/core/modules/distribute-control.php';
 
 // User generated blogs
 require get_template_directory() . '/core/modules/club-section.php';
@@ -482,10 +367,10 @@ require get_template_directory() . '/core/modules/story-manager.php';
 require get_template_directory() . '/core/modules/select-links.php';
 
 // Quiz post type
-require get_template_directory() . '/core/modules/open-quiz.php';
+require get_template_directory() . '/core/modules/quiz-section.php';
 
 // Generator post type
-require get_template_directory() . '/core/modules/random-generator.php';
+require get_template_directory() . '/core/modules/generator-section.php';
 
 // Ask section post type
 require get_template_directory() . '/core/modules/ask-section.php';
@@ -504,6 +389,12 @@ require get_template_directory() . '/core/modules/site-meta.php';
 
 // Add custom user fields
 require get_template_directory() . '/core/modules/user-meta.php';
+
+// Promo posts classification with custom possibility
+require get_template_directory() . '/core/modules/promo-manager.php';
+
+// Required admin-side image filters
+require get_template_directory() . '/core/modules/image-filters.php';
 
 // Customize default wordpress embed code
 require get_template_directory() . '/core/modules/embed-filters.php';
@@ -553,6 +444,8 @@ require get_template_directory() . '/core/modules/mce-plugins.php';
 // Add custom feeds
 require get_template_directory() . '/core/modules/extra-feeds.php';
 
+// Return short links manager with simple stat
+require get_template_directory() . '/core/modules/short-manager.php';
 
 
 // Custom template tags for this theme.

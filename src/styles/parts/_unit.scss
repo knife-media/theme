@@ -10,6 +10,8 @@
     top: 0;
     left: 0;
     z-index: 2;
+
+    color: $color-white;
   }
 
   .unit__image {
@@ -94,6 +96,10 @@
       }
 
       @media screen and (max-width: 767px) {
+        font-size: 1.25rem;
+      }
+
+      @media screen and (max-width: 479px) {
         font-size: 1.125rem;
       }
     }
@@ -110,7 +116,7 @@
       .meta {
         color: $color-primary;
 
-        .meta__link {
+        a.meta__item {
           position: relative;
           z-index: 2;
         }

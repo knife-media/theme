@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.4
+ * @version 1.9
  */
 ?>
 
@@ -13,7 +13,7 @@
         <?php
             the_info(
                 '<div class="entry-header__info">', '</div>',
-                ['author', 'date', 'category', 'club', 'label']
+                ['promo', 'author', 'date', 'category', 'label']
             );
 
             the_title(
@@ -38,6 +38,14 @@
             the_content();
         ?>
     </div>
+
+    <?php if(is_active_sidebar('knife-entry')) : ?>
+        <div class="entry-widgets">
+            <?php
+                dynamic_sidebar('knife-entry');
+            ?>
+        </div>
+    <?php endif; ?>
 
     <?php if(comments_open()) : ?>
         <div class="entry-comments">

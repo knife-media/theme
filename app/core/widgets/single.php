@@ -31,6 +31,7 @@ class Knife_Widget_Single extends WP_Widget {
             'title' => '',
             'cover' => 0,
             'link' => '',
+            'button' => ''
         ];
 
         $instance = wp_parse_args((array) $instance, $defaults);
@@ -69,6 +70,7 @@ class Knife_Widget_Single extends WP_Widget {
         $instance['link'] = esc_url($new_instance['link']);
         $instance['title'] = sanitize_text_field($new_instance['title']);
         $instance['cover'] = absint($new_instance['cover']);
+        $instance['button'] = sanitize_text_field($new_instance['button']);
 
         return $instance;
     }
@@ -80,7 +82,8 @@ class Knife_Widget_Single extends WP_Widget {
         $defaults = [
             'title' => '',
             'link' => '',
-            'cover' => 0
+            'cover' => 0,
+            'button' => ''
         ];
 
         $picture = '';
@@ -118,9 +121,20 @@ class Knife_Widget_Single extends WP_Widget {
             '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"><small>%5$s</small></p>',
             esc_attr($this->get_field_id('link')),
             esc_attr($this->get_field_name('link')),
-            __('Ссылка на запись:', 'knife-theme'),
+            __('Ссылка:', 'knife-theme'),
             esc_attr($instance['link']),
-            __('Абсолютная ссылка с этого сайта', 'knife-theme')
+            __('Запись с этого сайта', 'knife-theme')
+        );
+
+
+        // Button text
+        printf(
+            '<p><label for="%1$s">%3$s</label><input type="text" class="widefat knife-widget-button" data-title="%5$s" id="%1$s" name="%2$s"value="%4$s"></p>',
+            esc_attr($this->get_field_id('button')),
+            esc_attr($this->get_field_name('button')),
+            __('Надпись на кнопке:', 'knife-theme'),
+            esc_attr($instance['button']),
+            __('Добавить кнопку', 'knife-theme')
         );
     }
 }

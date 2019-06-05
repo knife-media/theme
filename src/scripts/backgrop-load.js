@@ -1,3 +1,9 @@
+/**
+ * Set page background image and color
+ *
+ * @version 1.8
+ */
+
 (function() {
   /**
    * Check if backdrop options exist
@@ -8,27 +14,29 @@
 
 
   /**
-   * Create element
+   * Set body background color only if image not set
+   */
+  if(typeof knife_backdrop.image === 'undefined') {
+
+    // Set body background color
+    if(typeof knife_backdrop.color !== 'undefined') {
+      document.body.style.backgroundColor = '#' + knife_backdrop.color;
+    }
+
+    return false;
+  }
+
+
+  /**
+   * Create backdrop element
    */
   var backdrop = document.createElement('div');
   backdrop.classList.add('backdrop');
 
 
   /**
-   * Set body background color
+   * Set background image url
    */
-  if(typeof knife_backdrop.color !== 'undefined') {
-    document.body.style.backgroundColor = '#' + knife_backdrop.color;
-  }
-
-
-  /**
-   * Apply element if image is not set
-   */
-  if(typeof knife_backdrop.image === 'undefined') {
-    return document.body.appendChild(backdrop);
-  }
-
   backdrop.style.backgroundImage = 'url(' + knife_backdrop.image + ')';
 
 
