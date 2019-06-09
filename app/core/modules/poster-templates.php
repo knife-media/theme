@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.7
- * @version 1.8
+ * @version 1.9
  */
 
 if (!defined('WPINC')) {

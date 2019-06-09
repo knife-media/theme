@@ -64,9 +64,6 @@ class Knife_Distribute_Control {
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public static function load_module() {
-        // Save metabox
-        add_action('save_post', [__CLASS__, 'save_metabox'], 10, 2);
-
         // Cancel scheduled event
         add_action('wp_ajax_' . self::$ajax_action, [__CLASS__, 'cancel_scheduled']);
 
@@ -77,10 +74,13 @@ class Knife_Distribute_Control {
             // Add custom distribute metabox
             add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
 
+            // Save metabox
+            add_action('save_post', [__CLASS__, 'save_metabox'], 10, 2);
+
             // Add dashboard widget with scheduled tasks
             add_action('wp_dashboard_setup', [__CLASS__, 'add_dashboard_widget']);
 
-            // Enqueue dashboard widget scripts
+            // Enqueue metabox assets
             add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
         }
 
@@ -267,10 +267,6 @@ class Knife_Distribute_Control {
         }
 
         if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
-            return;
-        }
-
-        if(!current_user_can('unfiltered_html', $post_id)) {
             return;
         }
 

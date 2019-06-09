@@ -402,6 +402,9 @@ require get_template_directory() . '/core/modules/embed-filters.php';
 // Poster templates options
 require get_template_directory() . '/core/modules/poster-templates.php';
 
+// Create sharing image for social networks
+require get_template_directory() . '/core/modules/snippet-image.php';
+
 // Share buttons manager class
 require get_template_directory() . '/core/modules/share-buttons.php';
 
