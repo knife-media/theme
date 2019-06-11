@@ -67,7 +67,7 @@ class Knife_Share_Buttons {
             ],
 
             'telegram' => [
-                'link' => 'https://t.me/share/url?url=%1$s&text=%2$s',
+                'link' => 'https://tgram.link/share/url?url=%1$s&text=%2$s',
                 'text' => __('Репостнуть', 'knife-theme')
             ],
 

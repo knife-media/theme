@@ -52,7 +52,7 @@
 
          <div class="footer__copy">
             <?php
-                echo wp_kses_data(
+                echo wp_kses_post(
                     get_theme_mod('footer-description')
                 );
             ?>
