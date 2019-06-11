@@ -10,8 +10,9 @@
   justify-content: center;
 
   width: 100%;
+  max-width: $width-site;
   min-height: 60vh;
-  padding: 2rem 0;
+  padding: 2rem 1rem;
 
   background-color: transparent;
 
@@ -38,5 +39,9 @@
     width: 100%;
     font-size: 1.125rem;
     font-weight: 500;
+  }
+
+  @media screen and (max-width: 1023px) {
+    max-width: $width-content;
   }
 }
