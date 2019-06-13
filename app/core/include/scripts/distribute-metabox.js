@@ -198,7 +198,7 @@ jQuery(document).ready(function($) {
 
     // Toggle class depends on select value
     item.find('.item__delay-time').toggle(
-        $(this).val().length > 0
+        /^[\d]{4}-[\d]{2}-[\d]{2}$/.test($(this).val())
     );
   });
 
