@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.7
- * @version 1.8
+ * @version 1.9
  */
 
 
@@ -182,13 +182,7 @@ class Knife_Social_Delivery {
                 return new WP_Error('request', __('Не удалось сохранить изображение', 'knife-theme'));
             }
 
-            $attachment = 'photo' . $options->owner_id . '_' . $options->id;
-
-            if(empty($message['attachments'])) {
-                $message['attachments'] = $attachment;
-            }
-
-            $message['attachments'] = $message['attachments'] . ',' . $attachment;
+            $message['attachments'] = 'photo' . $options->owner_id . '_' . $options->id;
         }
 
         $response = self::make_request($api . '/wall.post', $settings + $message);
