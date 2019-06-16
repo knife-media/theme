@@ -4,12 +4,12 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.4
+ * @version 1.9
  */
 
 get_header(); ?>
 
-<div class="block-wrapper">
+<div class="block-archive">
    <?php
         if(have_posts()) :
             while(have_posts()) : the_post();
