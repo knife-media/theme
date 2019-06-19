@@ -7,7 +7,7 @@
  */
 
 $poster = new PHPImage();
-$poster->setDimensionsFromImage($images)->draw($image);
+$poster->setDimensionsFromImage($image)->draw($image);
 $poster->resize(1200, 630, true, true);
 
 

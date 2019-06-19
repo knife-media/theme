@@ -16,12 +16,21 @@ if (!defined('WPINC')) {
 
 class Knife_Snippet_Image {
    /**
-    * Backward compatibility meta name
+    * Backward compatibility social image meta name
     *
     * @access  private
     * @var     string
     */
-    private static $post_meta = '_social-image';
+    private static $meta_image = '_social-image';
+
+
+   /**
+    * Backward compatibility options meta name
+    *
+    * @access  private
+    * @var     string
+    */
+    private static $meta_options = '_social-image-options';
 
 
     /**
@@ -30,7 +39,7 @@ class Knife_Snippet_Image {
      * @access  private
      * @var     array
      */
-    private static $post_type = ['post', 'club', 'quiz', 'select'];
+    private static $post_type = ['post', 'club', 'quiz', 'select', 'generator'];
 
 
     /**
@@ -40,6 +49,24 @@ class Knife_Snippet_Image {
      * @var     string
      */
     private static $metabox_nonce = 'knife-snippet-nonce';
+
+
+    /**
+     * Ajax action
+     *
+     * @access  private
+     * @var     string
+     */
+    private static $ajax_action = 'knife-snippet-poster';
+
+
+    /**
+     * Directory to save social snippets images
+     *
+     * @access  private
+     * @var     string
+     */
+    private static $upload_folder = '/social-image/';
 
 
     /**
@@ -54,7 +81,10 @@ class Knife_Snippet_Image {
             add_action('save_post', [__CLASS__, 'save_metabox'], 10, 2);
 
             // Enqueue dashboard widget scripts
-//          add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
+            add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
+
+            // Generate poster using ajax options
+            add_action('wp_ajax_' . self::$ajax_action, [__CLASS__, 'generate_poster']);
         }
     }
 
@@ -64,6 +94,47 @@ class Knife_Snippet_Image {
      */
     public static function add_metabox() {
         add_meta_box('knife-snippet-metabox', __('Изображение соцсети', 'knife-theme'), [__CLASS__, 'display_metabox'], self::$post_type, 'advanced');
+    }
+
+
+    /**
+     * Enqueue assets for metabox
+     */
+    public static function enqueue_assets($hook) {
+        $version = wp_get_theme()->get('Version');
+        $include = get_template_directory_uri() . '/core/include';
+
+        // Metabox styles
+        if(in_array($hook, ['post.php', 'post-new.php'])) {
+            $post_id = get_the_ID();
+
+            // Current screen object
+            $screen = get_current_screen();
+
+            if(!in_array($screen->post_type, self::$post_type)) {
+                return;
+            }
+
+            // Insert wp media scripts
+            wp_enqueue_media();
+
+            // Insert admin styles
+            wp_enqueue_style('knife-snippet-metabox', $include . '/styles/snippet-metabox.css', [], $version);
+
+            // Insert admin scripts
+            wp_enqueue_script('knife-snippet-metabox', $include . '/scripts/snippet-metabox.js', ['jquery'], $version);
+
+            $options = [
+                'post_id' => absint($post_id),
+                'action' => esc_attr(self::$ajax_action),
+                'nonce' => wp_create_nonce(self::$metabox_nonce),
+
+                'choose' => __('Выберите изображение', 'knife-theme'),
+                'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
+            ];
+
+            wp_localize_script('knife-snippet-metabox', 'knife_snippet_metabox', $options);
+        }
     }
 
 
@@ -97,14 +168,50 @@ class Knife_Snippet_Image {
             return;
         }
 
+        // Update options
+        update_post_meta($post_id, self::$meta_options, $_REQUEST[self::$meta_options]);
+
         // Save social-image meta
-        if(empty($_REQUEST[self::$post_meta])) {
-            return delete_post_meta($post_id, self::$post_meta);
+        if(empty($_REQUEST[self::$meta_image])) {
+            return delete_post_meta($post_id, self::$meta_image);
         }
 
-        return update_post_meta($post_id, self::$post_meta, $_REQUEST[self::$post_meta]);
+        update_post_meta($post_id, self::$meta_image, $_REQUEST[self::$meta_image]);
     }
 
+
+    /**
+     * Generate poster using ajax options
+     */
+    public static function generate_poster() {
+        check_admin_referer(self::$metabox_nonce, 'nonce');
+
+        if(!method_exists('Knife_Poster_Templates', 'create_poster')) {
+            wp_send_json_error(__('Модуль генерации не найден', 'knife-theme'));
+        }
+
+        $options = wp_parse_args($_REQUEST, [
+            'template' => 'snippet',
+            'post_id' => 0,
+            'attachment' => 0
+        ]);
+
+        if(isset($_REQUEST['image'])) {
+            $image = attachment_url_to_postid($_REQUEST['image']);
+
+            if($image > 0) {
+                $options['attachment'] = $image;
+            }
+        }
+
+        $poster = Knife_Poster_Templates::create_poster($options, self::$upload_folder);
+
+        if(is_wp_error($poster)) {
+            wp_send_json_error($poster->get_error_message());
+        }
+
+        wp_send_json_success($poster);
+    }
 }
 
 

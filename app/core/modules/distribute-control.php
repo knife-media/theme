@@ -108,7 +108,7 @@ class Knife_Distribute_Control {
      * Add custom distribute metabox for editors and admins
      */
     public static function add_metabox() {
-        add_meta_box('knife-distribute-metabox', __('Настройки кросспостинга', 'knife-theme'), [__CLASS__, 'display_metabox'], self::$post_type, 'advanced');
+        add_meta_box('knife-distribute-metabox', __('Настройки кросспостинга', 'knife-theme'), [__CLASS__, 'display_metabox'], self::$post_type, 'side');
     }
 
 
