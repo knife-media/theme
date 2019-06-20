@@ -6,6 +6,7 @@
  *
  * @package knife-theme
  * @since 1.8
+ * @version 1.9
  */
 
 
@@ -406,9 +407,16 @@ class Knife_Distribute_Control {
 
     /**
      * Set task delay while scheduling
+     *
+     * @version 1.9
      */
     private static function set_delay($uniqid, $request) {
         if(empty($request['date'])) {
+            return;
+        }
+
+        if($request['date'] === 'now') {
+            self::$task_delay[$uniqid] = current_time('U', true);
             return;
         }
 

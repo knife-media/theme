@@ -201,6 +201,7 @@
                     <div class="item__delay">
                         <select class="item__delay-date" data-item="date">
                             <option value><?php _e('Не отправлять автоматически', 'knife-theme'); ?></option>
+                            <option value="now"><?php _e('Отправить сразу', 'knife-theme'); ?></option>
 
                             <?php
                                 for($i = 0; $i < 5; $i++) {
