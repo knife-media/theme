@@ -20,7 +20,7 @@ class Knife_Poster_Templates {
     public static function get_templates() {
         $templates = [
             'generic' => __('Универсальный шаблон', 'knife-theme'),
-            'snippet' => __('Шаблон для соцсетей', 'knife-theme')
+            'snippet' => __('Сниппет для соцсетей', 'knife-theme')
         ];
 
         return $templates;
@@ -77,7 +77,7 @@ class Knife_Poster_Templates {
 
 
     /**
-     * Create poster
+     * Create poster using options
      *
      * @since 1.9
      */
@@ -86,19 +86,19 @@ class Knife_Poster_Templates {
 
         // Check if template defined
         if(!array_key_exists($options['template'], $templates)) {
-            return new WP_Error(__('Шаблон генерации не задан', 'knife-theme'));
+            return new WP_Error('prepare', __('Шаблон генерации не задан', 'knife-theme'));
         }
 
         // Check if poster template file exists
         if(!file_exists(get_template_directory() . $options['include'])) {
-            return new WP_Error(__('Не удалось найти файл шаблона', 'knife-theme'));
+            return new WP_Error('prepare', __('Не удалось найти файл шаблона', 'knife-theme'));
         }
 
         $image = get_attached_file($options['attachment']);
 
         // Check image url by attachment id
         if($image === false) {
-            return new WP_Error(__('Не удалось найти вложение', 'knife-theme'));
+            return new WP_Error('prepare', __('Не удалось найти вложение', 'knife-theme'));
         }
 
         // Append required PHPImage class
@@ -114,25 +114,32 @@ class Knife_Poster_Templates {
 
         // Check upload folder
         if(!wp_is_writable($basedir) && !wp_mkdir_p($basedir)) {
-            return new WP_Error(__('Проверьте права на запись', 'knife-theme'));
+            return new WP_Error('prepare', __('Проверьте права на запись', 'knife-theme'));
         }
 
         // Check post id existance
         if(absint($options['post_id']) === 0) {
-            return new WP_Error(__('Пустое значение post ID', 'knife-theme'));
+            return new WP_Error('prepare', __('Пустое значение post ID', 'knife-theme'));
+        }
+
+        $textbox = [];
+
+        // Fill textbox array
+        if(isset($options['textbox'])) {
+            $textbox = array_map('wp_specialchars_decode', $options['textbox']);
         }
 
         // Create poster file name
         $filename = $options['post_id'] . uniqid('-') . '.jpg';
 
         try {
-            $include = '/core/include/posters/' . $options['template']. '.php';
+            $include = '/core/include/posters/' . $options['template'] . '.php';
 
             // Include posters template
-            include_once(get_template_directory() . $include);
+            include(get_template_directory() . $include);
 
         } catch(Exception $error) {
-            return new WP_Error(__('Ошибка генерации: ', 'knife-theme') . $error->getMessage());
+            return new WP_Error('generate', __('Ошибка генерации: ', 'knife-theme') . $error->getMessage());
         }
 
         return $baseurl . $filename;

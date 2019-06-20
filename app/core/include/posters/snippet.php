@@ -13,7 +13,7 @@ $poster->resize(1024, 512, true, true);
 
 // Change brightness and contrast
 $filter = $poster->getResource();
-imagefilter($filter, IMG_FILTER_CONTRAST, 35);
+imagefilter($filter, IMG_FILTER_CONTRAST, 45);
 imagefilter($filter, IMG_FILTER_BRIGHTNESS, -85);
 $poster->setResource($filter);
 
@@ -22,19 +22,14 @@ $poster->setResource($filter);
 $poster->draw(get_template_directory() . '/assets/images/logo-title.png', 70, 40);
 
 
-// Draw site name
-/*
-$poster->setFont(get_template_directory() . '/assets/fonts/formular/formular-medium.ttf');
-$poster->text('knife.media', [
-    'x' => 48, 'y' => 40, 'fontSize' => 16
-]);
- */
-
-
 // Draw title
+$poster->setAlignVertical('center');
+$poster->setFont(get_template_directory() . '/assets/fonts/formular/formular-medium.ttf');
+$poster->setLineHeight(1.25);
+
 if(!empty($textbox['title'])) {
     $poster->textBox($textbox['title'], [
-        'x' => 48, 'y' => 160, 'width' => 950, 'height' => 200, 'fontSize' => 24
+        'x' => 70, 'y' => 170, 'width' => 800, 'height' => 200, 'fontSize' => 26
     ]);
 }
 

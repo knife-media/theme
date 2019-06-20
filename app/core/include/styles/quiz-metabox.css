@@ -244,6 +244,8 @@
     padding-top: 75%;
     margin: 0 0 15px;
     overflow: hidden;
+
+    border-radius: 3px;
   }
 
   #knife-quiz-box .answer__poster img {
@@ -270,11 +272,12 @@
 
     width: calc(100% - 4px);
     height: calc(100% - 4px);
+    overflow: hidden;
 
     text-align: center;
     color: #555;
     font-size: 14px;
-    transition: border .5s;
+    transition: border .25s;
 
     border: dashed 2px #bbb;
   }
@@ -676,6 +679,8 @@
     margin: 0 0 8px;
     padding-top: 52.5%;
     overflow: hidden;
+
+    border-radius: 3px;
   }
 
   #knife-quiz-box .result__image img {
@@ -705,9 +710,10 @@
     height: calc(100% - 4px);
 
     text-align: center;
-    color: #666;
-    font-size: 14px;
-    transition: border .5s;
+    font-size: 48px;
+    font-weight: 300;
+    color: #ccc;
+    transition: border .3s;
 
     border: dashed 2px #ddd;
   }
@@ -716,8 +722,6 @@
     }
 
   #knife-quiz-box .result__image-caption:hover {
-    transition: border .2s;
-
     border-color: #0073aa;
   }
 

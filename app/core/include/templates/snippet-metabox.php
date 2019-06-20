@@ -42,8 +42,9 @@
         <div class="snippet__title">
             <?php
                 printf(
-                    '<textarea class="snippet__title-textarea" name="%s[text]">%s</textarea>',
+                    '<textarea class="snippet__title-textarea" name="%s[text]" placeholder="%s">%s</textarea>',
                     esc_attr(self::$meta_options),
+                    __('Текст на обложке', 'knife-theme'),
                     sanitize_textarea_field($options['text'])
                 )
             ?>

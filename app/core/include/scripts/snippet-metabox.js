@@ -3,11 +3,27 @@ jQuery(document).ready(function($) {
     return false;
   }
 
+  var box = $('#knife-snippet-box');
+
+
+  /**
+   * Check required metabox options
+   */
   if(typeof knife_snippet_metabox === 'undefined') {
     return false;
   }
 
-  var box = $('#knife-snippet-box');
+  if(typeof knife_snippet_metabox.error === 'undefined') {
+    return false;
+  }
+
+
+  /**
+   * Show generate loader
+   */
+  function toggleLoader() {
+    box.find('.snippet__footer-spinner').toggleClass('is-active');
+  }
 
 
   /**
@@ -76,6 +92,10 @@ jQuery(document).ready(function($) {
 
     // Set snippet ready class
     box.find('.snippet').removeClass('snippet--ready');
+
+    // Clear warning
+    var warning = box.find('.snippet__warning');
+    warning.html('').hide();
   });
 
 
@@ -103,16 +123,35 @@ jQuery(document).ready(function($) {
       'action': knife_snippet_metabox.action,
       'nonce': knife_snippet_metabox.nonce,
       'post_id': knife_snippet_metabox.post_id,
+      'textbox': {}
     }
 
-    data.image = box.find('.snippet__poster-image').val();
+    if(box.find('.snippet__poster-attachment').val()) {
+      data.attachment = box.find('.snippet__poster-attachment').val();
+    }
+
+    if(box.find('.snippet__title-textarea').val()) {
+      data.textbox.title = box.find('.snippet__title-textarea').val();
+    }
+
+    // Clear warning before request
+    var warning = box.find('.snippet__warning');
+    warning.html('').hide();
 
     var xhr = $.ajax({method: 'POST', url: ajaxurl, data: data}, 'json');
 
     xhr.done(function(answer) {
-      var poster = box.find('.snippet__poster');
+      toggleLoader();
 
-      if(answer.data.length > 0) {
+      if(typeof answer.data === 'undefined') {
+        return warning.html(knife_snippet_metabox.error).show();
+      }
+
+      answer.success = answer.success || false;
+
+      if(answer.success === true) {
+        var poster = box.find('.snippet__poster');
+
         // Set hidden input image url
         poster.find('.snippet__poster-image').val(answer.data);
 
@@ -124,9 +163,19 @@ jQuery(document).ready(function($) {
         poster.find('img').attr('src', answer.data);
 
         // Set snippet ready class
-        box.find('.snippet').addClass('snippet--ready');
+        return box.find('.snippet').addClass('snippet--ready');
       }
+
+      return warning.html(answer.data).show();
     });
+
+    xhr.error(function() {
+      toggleLoader();
+
+      return warning.html(knife_snippet_metabox.error).show();
+    });
+
+    return toggleLoader();
   });
 
 

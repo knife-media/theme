@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.7
- * @version 1.8
+ * @version 1.9
  */
 
 if (!defined('WPINC')) {
@@ -114,8 +114,8 @@ class Knife_Quiz_Section {
         // Add scripts to admin page
         add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
 
-        // Create result poster
-        add_action('wp_ajax_' . self::$ajax_action, [__CLASS__, 'create_posters']);
+        // Generate result posters
+        add_action('wp_ajax_' . self::$ajax_action, [__CLASS__, 'generate_posters']);
 
         // Include quiz options
         add_action('wp_enqueue_scripts', [__CLASS__, 'inject_object'], 12);
@@ -320,33 +320,6 @@ class Knife_Quiz_Section {
 
 
     /**
-     * Create result posters using ajax options
-     */
-    public static function create_poster() {
-        check_admin_referer(self::$metabox_nonce, 'nonce');
-
-        if(!method_exists('Knife_Poster_Templates', 'create_posters')) {
-            wp_send_json_error(__('Модуль генерации не найден', 'knife-theme'));
-        }
-
-        $options = wp_parse_args($_REQUEST, [
-            'template' => 'strong_head',
-            'post_id' => 0,
-            'attachment' => 0,
-            'achievment' => ''
-        ]);
-
-        $posters = Knife_Poster_Templates::create_posters($options, self::$upload_folder);
-
-        if(is_wp_error($posters)) {
-            wp_send_json_error($posters->get_error_message());
-        }
-
-        wp_send_json_success((object) $posters);
-    }
-
-
-    /**
      * Add quiz metabox
      */
     public static function add_metabox() {
@@ -412,8 +385,12 @@ class Knife_Quiz_Section {
     /**
      * Create result posters using ajax options
      */
-    public static function create_posters() {
+    public static function generate_posters() {
         check_admin_referer(self::$metabox_nonce, 'nonce');
+
+        if(!method_exists('Knife_Poster_Templates', 'create_poster')) {
+            wp_send_json_error(__('Модуль генерации не найден', 'knife-theme'));
+        }
 
         $options = wp_parse_args($_REQUEST, [
             'template' => 'generic',
@@ -422,8 +399,46 @@ class Knife_Quiz_Section {
             'achievment' => ''
         ]);
 
-        // Generate posters using options
-        $posters = self::prepare_generator($options);
+        $points = ['from' => 0, 'to' => 0];
+
+        if(isset($options['from'])) {
+            $points['from'] = intval($options['from']);
+        }
+
+        if(isset($options['to'])) {
+            $points['to'] = intval($options['to']);
+        }
+
+        if(isset($options['textbox']['heading'])) {
+            $heading = $options['textbox']['heading'];
+        }
+
+        $posters = [];
+
+        // Loop through result points
+        for($i = $points['from']; $points['to'] >= $i; $i++) {
+            // If not first poster and achievment not replaced
+            if(count($posters) > 0 && strpos($options['achievment'], '%') === false) {
+                $posters[$i] = array_pop(array_reverse($posters));
+
+                continue;
+            }
+
+            $options['textbox']['heading'] = str_replace('%', $i, $options['achievment']);
+
+            if(isset($heading)) {
+                $options['textbox']['heading'] = $options['textbox']['heading'] . ' ' . $heading;
+            }
+
+            // Create poster
+            $poster = Knife_Poster_Templates::create_poster($options, self::$upload_folder);
+
+            if(is_wp_error($poster)) {
+                wp_send_json_error($poster->get_error_message());
+            }
+
+            $posters[$i] = $poster;
+        }
 
         return wp_send_json_success((object) $posters);
     }
@@ -464,142 +479,6 @@ class Knife_Quiz_Section {
 
         // Update results meta
         self::update_results(self::$meta_results, $post_id);
-    }
-
-
-    /**
-     * Prepare posters generator
-     *
-     * @since 1.8
-     */
-    private static function prepare_generator($options) {
-        if(!method_exists('Knife_Poster_Templates', 'get_templates')) {
-            wp_send_json_error(__('Шаблонный модуль не найден', 'knife-theme'));
-        }
-
-        $templates = Knife_Poster_Templates::get_templates();
-
-        // Check if template defined
-        if(!array_key_exists($options['template'], $templates)) {
-            wp_send_json_error(__('Шаблон генерации не задан', 'knife-theme'));
-        }
-
-        $options = array_merge($options, [
-            'include' => '/core/include/posters/' . $options['template'] . '.php',
-        ]);
-
-        // Check if poster template file exists
-        if(!file_exists(get_template_directory() . $options['include'])) {
-            wp_send_json_error(__('Не удалось найти файл шаблона', 'knife-theme'));
-        }
-
-        // Get image url by attachment id
-        $image = get_attached_file($options['attachment']);
-        if($image === false) {
-            wp_send_json_error(__('Не удалось найти вложение', 'knife-theme'));
-        }
-
-        // Append required PHPImage class
-        if(!class_exists('PHPImage')) {
-            require(get_template_directory() . '/core/classes/phpimage.class.php');
-        }
-
-        $upload = wp_upload_dir();
-
-        // Merge upload urls with options
-        $options = array_merge($options, [
-            'baseurl' => $upload['baseurl'] . $folder,
-            'basedir' => $upload['basedir'] . $folder
-        ]);
-
-        // Check upload folder
-        if(!wp_is_writable($options['basedir']) && !mkdir($options['basedir'])) {
-            wp_send_json_error(__('Проверьте права на запись', 'knife-theme'));
-        }
-
-        // Check post id existance
-        if(absint($options['post_id']) === 0) {
-            wp_send_json_error(__('Пустое значение post ID', 'knife-theme'));
-        }
-
-
-        // Intersect result points with blank values
-        $blanks = ['from' => 0, 'to' => 0];
-
-        $points = wp_parse_args(
-            array_intersect_key($options, $blanks), $blanks
-        );
-
-        $points = array_map('intval', $points);
-
-        // Loop through result points
-        for($i = $points['from']; $points['to'] >= $i; $i++) {
-            try {
-                if($i === $points['from'] || strlen($options['achievment']) > 0) {
-                    $filename = $options['post_id'] . uniqid('-') . '.jpg';
-                    $posters[$i] = self::generate_poster($i, $image, $options, $filename);
-
-                    continue;
-                }
-
-                $posters[$i] = $posters[$i - 1];
-
-            } catch(Exception $error) {
-                wp_send_json_error(__('Ошибка генерации: ', 'knife-theme') . $error->getMessage());
-            }
-        }
-
-        return $posters;
-    }
-
-
-    /**
-     * Generate poster using options
-     *
-     * @since 1.8
-     */
-    private static function generate_poster($i, $image, $options, $filename) {
-        $textbox = [];
-
-        // Prepare quiz heading
-        $heading = [];
-
-        if(!empty($options['achievment'])) {
-            $heading[] = str_replace('%', $i, $options['achievment']);
-        }
-
-        if(!empty($options['heading'])) {
-            $heading[] = $options['heading'];
-        }
-
-        if(count($heading) > 0) {
-            $textbox['heading'] = wp_specialchars_decode(implode(' ', $heading));
-        }
-
-        // Prepare quiz title
-        $titles = [];
-
-        if(!empty($options['title'])) {
-            $titles[] = $options['title'];
-        }
-
-        if(!empty($options['tagline'])) {
-            $titles[] = $options['tagline'];
-        }
-
-        if(count($titles) > 0) {
-            $textbox['title'] = wp_specialchars_decode(implode(' ', $titles));
-        }
-
-        // Prepare quiz description
-        if(!empty($options['description'])) {
-            $textbox['description'] = $options['description'];
-        }
-
-        // Include posters template
-        include_once(get_template_directory() . $options['include']);
-
-        return $options['baseurl'] . $filename;
     }
 
 

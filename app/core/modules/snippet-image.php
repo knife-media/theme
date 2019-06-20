@@ -39,7 +39,7 @@ class Knife_Snippet_Image {
      * @access  private
      * @var     array
      */
-    private static $post_type = ['post', 'club', 'quiz', 'select', 'generator'];
+    private static $post_type = ['post', 'club', 'quiz', 'select', 'story', 'generator'];
 
 
     /**
@@ -93,7 +93,7 @@ class Knife_Snippet_Image {
      * Add snippet image metabox
      */
     public static function add_metabox() {
-        add_meta_box('knife-snippet-metabox', __('Изображение соцсети', 'knife-theme'), [__CLASS__, 'display_metabox'], self::$post_type, 'advanced');
+        add_meta_box('knife-snippet-metabox', __('Изображение соцсети', 'knife-theme'), [__CLASS__, 'display_metabox'], self::$post_type, 'side');
     }
 
 
@@ -195,14 +195,6 @@ class Knife_Snippet_Image {
             'post_id' => 0,
             'attachment' => 0
         ]);
-
-        if(isset($_REQUEST['image'])) {
-            $image = attachment_url_to_postid($_REQUEST['image']);
-
-            if($image > 0) {
-                $options['attachment'] = $image;
-            }
-        }
 
         $poster = Knife_Poster_Templates::create_poster($options, self::$upload_folder);
 

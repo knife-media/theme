@@ -9,7 +9,11 @@ jQuery(document).ready(function($) {
   /**
    * Check required metabox options
    */
-  if(typeof knife_quiz_metabox === 'undefined' || typeof knife_quiz_metabox.error === 'undefined') {
+  if(typeof knife_quiz_metabox === 'undefined') {
+    return false;
+  }
+
+  if(typeof knife_quiz_metabox.error === 'undefined') {
     return false;
   }
 
@@ -98,30 +102,37 @@ jQuery(document).ready(function($) {
       'action': knife_quiz_metabox.action,
       'nonce': knife_quiz_metabox.nonce,
       'post_id': knife_quiz_metabox.post_id,
+      'textbox': {}
     }
 
     // Add required poster fields
-    $.each(['heading', 'description', 'attachment', 'template'], function(i, v) {
+    $.each(['attachment', 'template'], function(i, v) {
       data[v] = result.find('[data-result="' + v + '"]').val();
     });
-
-    // Add points to data object
-    $.extend(data, points);
 
     // Add achievment if need
     if(result.hasClass('result--achievment')) {
       data.achievment = result.find('[data-result="achievment"]').val();
     }
 
-    // Add quiz title if exists
-    if($('#title').length > 0) {
-      data.title = $('#title').val();
+    // Add points to data object
+    $.extend(data, points);
+
+    data.textbox.title = $('#title').val() || '';
+
+    if($('#knife-tagline-input').val()) {
+      // If title not emnpty
+      if(data.textbox.title) {
+        data.textbox.title = data.textbox.title + ' ';
+      }
+
+      data.textbox.title = data.textbox.title + $('#knife-tagline-input').val();
     }
 
-    // Add quiz tagline if exists
-    if($('#knife-tagline-input').length > 0) {
-      data.tagline = $('#knife-tagline-input').val();
-    }
+    // Add required poster fields
+    $.each(['heading', 'description'], function(i, v) {
+      data.textbox[v] = result.find('[data-result="' + v + '"]').val();
+    });
 
 
     // Clear warning before request

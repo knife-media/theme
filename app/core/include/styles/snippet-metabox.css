@@ -103,12 +103,16 @@
   }
 
 #knife-snippet-box .snippet__title {
-  display: block;
+  display: none;
   position: relative;
 
   width: 100%;
   margin-top: 10px;
 }
+  #knife-snippet-box .snippet--ready .snippet__title {
+    display: block;
+  }
+
   #knife-snippet-box .snippet__title-textarea {
     display: block;
     width: 100%;
@@ -143,9 +147,26 @@
 
 #knife-snippet-box .snippet__warning {
   display: none;
-  flex: 1 1 100%;
+  position: relative;
 
-  margin: 8px 0 0;
+  width: 100%;
+  margin: 12px 0 0;
+  padding-left: 25px;
   color: #a00;
 }
+  #knife-snippet-box .snippet__warning:before {
+    content: "\f534";
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 50%;
+
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    font-family: dashicons;
+    line-height: 1;
+
+    transform: translateY(-50%);
+  }
 

@@ -392,11 +392,11 @@
 
                                 break;
                             }
+                        ?>
 
-                            printf(
-                                '<figcaption class="result__image-caption">%s</figcaption>',
-                                __('Выбрать изображение для постера', 'knife-theme')
-                            );
+                        <figcaption class="result__image-caption">+</figcaption>
+
+                        <?php
 
                             printf(
                                 '<input class="result__image-attachment" type="hidden" data-result="attachment" value="%s">',
