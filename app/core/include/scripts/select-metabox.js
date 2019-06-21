@@ -13,17 +13,6 @@ jQuery(document).ready(function($) {
 
 
   /**
-   * Sort items
-   */
-  box.find('.box--items').sortable({
-    items: '.item',
-    handle: '.dashicons-menu',
-    placeholder: 'dump',
-    axis: 'y'
-  }).disableSelection();
-
-
-  /**
    * Show loader
    */
   function toggleLoader() {
@@ -65,6 +54,23 @@ jQuery(document).ready(function($) {
     item.find('.option__link').val(input.val());
     input.attr('value', '');
   }
+
+
+  /**
+   * Swap questions
+   */
+  box.on('click', '.dashicons-arrow-up-alt', function(e) {
+    e.preventDefault();
+
+    var item = $(this).closest('.item');
+
+    // Don't swap first element
+    if(item.index() === 1) {
+      return false;
+    }
+
+    item.prev().insertAfter(item);
+  });
 
 
   /**

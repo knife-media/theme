@@ -29,47 +29,39 @@
 
         <?php foreach($items as $i => $item) : ?>
             <div class="item">
-                <div class="option">
-                    <strong><?php _e('Ссылка с карточки', 'knife-theme') ?></strong>
+                <?php
+                    printf('<p class="item__link"><strong>%s</strong><input name="%s[][link]" value="%s" type="text"></p>',
+                        __('Ссылка с карточки', 'knife-theme'),
+                        esc_attr(self::$meta_items),
+                        sanitize_text_field($item['link'] ?? '')
+                    );
 
-                    <?php
-                        printf('<input class="option__link" name="%s[][link]" value="%s" type="text">',
-                            esc_attr(self::$meta_items),
-                            sanitize_text_field($item['link'] ?? '')
-                        );
-                    ?>
-                </div>
+                    printf('<p class="item__title"><strong>%s</strong><textarea name="%s[][title]">%s</textarea></p>',
+                        __('Заголовок карточки', 'knife-theme'),
+                        esc_attr(self::$meta_items),
+                        sanitize_text_field($item['title'] ?? '')
+                    );
+                ?>
 
-                <div class="option">
-                    <strong><?php _e('Заголовок карточки', 'knife-theme') ?></strong>
-
-                    <?php
-                        printf('<textarea class="option__title" name="%s[][title]">%s</textarea>',
-                            esc_attr(self::$meta_items),
-                            sanitize_text_field($item['title'] ?? '')
-                        );
-                    ?>
-                </div>
-
-                <figure class="option option--poster">
+                <figure class="item__poster">
                     <?php
                         if(!empty($item['attachment'])) {
-                            echo wp_get_attachment_image($item['attachment'], 'thumbnail', false, ['class' => 'option__image']);
+                            echo wp_get_attachment_image($item['attachment'], 'thumbnail', false, ['class' => 'item__poster-image']);
                         }
+                    ?>
 
-                        printf('<figcaption class="option__blank">%s</figcaption>',
-                            __('Выбрать изображение', 'knife-theme')
-                        );
+                    <figcaption class="item__poster-caption">+</figcaption>
 
-                        printf('<input class="option__attachment" type="hidden" name="%s[][attachment]" value="%s">',
+                    <?php
+                        printf('<input class="item__poster-attachment" type="hidden" name="%s[][attachment]" value="%s">',
                             esc_attr(self::$meta_items),
                             sanitize_text_field($item['attachment'] ?? '')
                         );
                     ?>
                 </figure>
 
-                <span class="dashicons dashicons-menu"></span>
-                <span class="dashicons dashicons-trash"></span>
+                <span class="item__change dashicons dashicons-arrow-up-alt"></span>
+                <span class="item__delete dashicons dashicons-trash"></span>
             </div>
         <?php endforeach; ?>
 
