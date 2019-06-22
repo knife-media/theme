@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.6
- * @version 1.8
+ * @version 1.9
  */
 
 if (!defined('WPINC')) {
@@ -106,7 +106,7 @@ class Knife_Generator_Section {
         add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
 
         // Create poster
-        add_action('wp_ajax_' . self::$ajax_action, [__CLASS__, 'create_poster']);
+        add_action('wp_ajax_' . self::$ajax_action, [__CLASS__, 'generate_poster']);
 
         // Include generator options
         add_action('wp_enqueue_scripts', [__CLASS__, 'inject_generator'], 12);
@@ -264,31 +264,27 @@ class Knife_Generator_Section {
 
 
     /**
-     * Create poster using ajax options
+     * Generate poster using ajax options
      */
-    public static function create_poster() {
+    public static function generate_poster() {
         check_admin_referer(self::$metabox_nonce, 'nonce');
 
-        if(!method_exists('Knife_Poster_Templates', 'create_posters')) {
+        if(!method_exists('Knife_Poster_Templates', 'create_poster')) {
             wp_send_json_error(__('Модуль генерации не найден', 'knife-theme'));
         }
 
         $options = wp_parse_args($_REQUEST, [
-            'template' => 'large_title',
             'post_id' => 0,
-            'attachment' => 0,
-            'achievment' => ''
+            'attachment' => 0
         ]);
 
-        $posters = Knife_Poster_Templates::create_posters($options, self::$upload_folder);
+        $poster = Knife_Poster_Templates::create_poster($options, self::$upload_folder);
 
-        if(is_wp_error($posters)) {
-            wp_send_json_error($posters->get_error_message());
+        if(is_wp_error($poster)) {
+            wp_send_json_error($poster->get_error_message());
         }
 
-        foreach($posters as $poster) {
-            wp_send_json_success($poster);
-        }
+        wp_send_json_success($poster);
     }
 
 

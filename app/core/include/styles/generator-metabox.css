@@ -274,6 +274,8 @@
   margin: 0 0 8px;
   padding-top: 52.5%;
   overflow: hidden;
+
+  border-radius: 3px;
 }
 @media screen and (max-width: 1023px) {
   #knife-generator-box .item__image-poster {
@@ -281,7 +283,7 @@
   }
 }
 
-#knife-generator-box img {
+#knife-generator-box .item__image-poster img {
   display: block;
   position: absolute;
   top: 0;
@@ -291,7 +293,7 @@
   width: 100%;
   height: 100%;
 
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
 }
 
@@ -306,29 +308,48 @@
   margin-right: 10px;
 }
 
-#knife-generator-box .item__image-settings {
-  margin-right: 10px;
-}
+  #knife-generator-box .item__image-settings {
+    margin-right: 10px;
+  }
 
-#knife-generator-box .item__image-template {
-  display: block;
+  #knife-generator-box .item__image-template {
+    display: block;
 
-  width: 100%;
-  margin: 0 0 8px;
-}
+    width: 100%;
+    margin: 0 0 8px;
+  }
 
-#knife-generator-box .item__image-spinner {
-  float: none;
-  margin: 0;
-}
+  #knife-generator-box .item__image-spinner {
+    float: none;
+    margin: 0;
+  }
 
-#knife-generator-box .item__image-warning {
-  display: none;
-  flex: 1 1 100%;
+  #knife-generator-box .item__image-warning {
+    display: none;
+    position: relative;
+    box-sizing: border-box;
 
-  margin: 8px 0 0;
-  color: #a00;
-}
+    width: 100%;
+    margin: 12px 0 0;
+    padding-left: 25px;
+    color: #a00;
+  }
+
+  #knife-generator-box .item__image-warning:before {
+    content: "\f534";
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 50%;
+
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    font-family: dashicons;
+    line-height: 1;
+
+    transform: translateY(-50%);
+  }
 
 #knife-generator-box .item__image-caption {
   display: flex;
@@ -342,9 +363,10 @@
   height: calc(100% - 4px);
 
   text-align: center;
-  color: #666;
-  font-size: 14px;
-  transition: border .5s;
+  font-size: 48px;
+  font-weight: 300;
+  color: #ccc;
+  transition: border .25s;
 
   border: dashed 2px #ddd;
 }
@@ -353,8 +375,6 @@
   }
 
 #knife-generator-box .item__image-caption:hover {
-  transition: border .2s;
-
   border-color: #0073aa;
 }
 

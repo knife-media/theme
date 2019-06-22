@@ -393,7 +393,6 @@ class Knife_Quiz_Section {
         }
 
         $options = wp_parse_args($_REQUEST, [
-            'template' => 'generic',
             'post_id' => 0,
             'attachment' => 0,
             'achievment' => ''

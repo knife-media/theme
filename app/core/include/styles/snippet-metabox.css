@@ -148,6 +148,7 @@
 #knife-snippet-box .snippet__warning {
   display: none;
   position: relative;
+  box-sizing: border-box;
 
   width: 100%;
   margin: 12px 0 0;

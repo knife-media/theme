@@ -46,8 +46,6 @@ if(!empty($textbox['title'])) {
 // Draw heading
 if(!empty($textbox['heading'])) {
     $poster->setLineHeight(1.125);
-    $poster->setFont(get_template_directory() . '/assets/fonts/formular/formular-medium.ttf');
-
     $poster->textBox($textbox['heading'], [
         'x' => 70, 'y' => 280, 'width' => 950, 'height' => 160, 'fontSize' => 52
     ]);

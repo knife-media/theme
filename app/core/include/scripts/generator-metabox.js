@@ -3,11 +3,15 @@ jQuery(document).ready(function($) {
     return false;
   }
 
+  var box = $('#knife-generator-box');
+
+
+  /**
+   * Check required metabox options
+   */
   if(typeof knife_generator_metabox === 'undefined') {
     return false;
   }
-
-  var box = $('#knife-generator-box');
 
 
   /**
@@ -82,17 +86,30 @@ jQuery(document).ready(function($) {
       'action': knife_generator_metabox.action,
       'nonce': knife_generator_metabox.nonce,
       'post_id': knife_generator_metabox.post_id,
-    }
-
-    // Add generator title if exists
-    if($('#title').length > 0) {
-      data.title = $('#title').val();
+      'textbox': {}
     }
 
     // Add required poster fields
-    $.each(['heading', 'attachment', 'template'], function(i, v) {
+    $.each(['attachment', 'template'], function(i, v) {
       data[v] = item.find('[data-item="' + v + '"]').val();
     });
+
+    data.textbox.title = $('#title').val() || '';
+
+    if($('#knife-tagline-input').val()) {
+      // If title not emnpty
+      if(data.textbox.title) {
+        data.textbox.title = data.textbox.title + ' ';
+      }
+
+      data.textbox.title = data.textbox.title + $('#knife-tagline-input').val();
+    }
+
+    // Add required poster fields
+    $.each(['heading', 'description'], function(i, v) {
+      data.textbox[v] = item.find('[data-item="' + v + '"]').val();
+    });
+
 
     // Clear warning before request
     var warning = item.find('.item__image-warning');

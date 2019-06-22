@@ -32,10 +32,10 @@
 
             <p class="manage__check">
                 <?php
-                    printf('<label><input data-manage="fulltext" type="checkbox" name="%s[fulltext]" value="1"%s>%s</label>',
+                    printf('<label><input data-manage="noshare" type="checkbox" name="%s[noshare]" value="1"%s>%s</label>',
                         esc_attr(self::$meta_options),
-                        checked(isset($options['fulltext']), true, false),
-                        __('Добавить описание в расшариваемый текст', 'knife-theme')
+                        checked(isset($options['noshare']), true, false),
+                        __('Шарить страницу генератора, вместо результата', 'knife-theme')
                     );
                 ?>
             </p>
@@ -145,12 +145,11 @@
                             if(!empty($item['poster'])) {
                                 printf('<img src="%s" alt="">', esc_url($item['poster']));
                             }
+                        ?>
 
-                            printf(
-                                '<figcaption class="item__image-caption">%s</figcaption>',
-                                __('Выбрать изображение для постера', 'knife-theme')
-                            );
+                        <figcaption class="item__image-caption">+</figcaption>
 
+                        <?php
                             printf('<input type="hidden" data-item="poster" value="%s">',
                                 sanitize_text_field($item['poster'] ?? '')
                             );
@@ -163,8 +162,8 @@
 
                     <div class="item__image-footer">
                         <?php
-                            if(method_exists('Knife_Poster_Templates', 'get_select')) {
-                                Knife_Poster_Templates::get_select([
+                            if(method_exists('Knife_Poster_Templates', 'print_select')) {
+                                Knife_Poster_Templates::print_select([
                                     'attributes' => [
                                         'class' => 'item__image-template',
                                         'data-item' => 'template'
@@ -172,7 +171,8 @@
                                     'selected' => esc_attr($item['template'] ?? '')
                                 ]);
 
-                                printf('<button class="item__image-generate button" type="button">%s</button>',
+                                printf(
+                                    '<button class="item__image-generate button" type="button">%s</button>',
                                     __('Сгенерировать', 'knife-theme')
                                 );
                             }
