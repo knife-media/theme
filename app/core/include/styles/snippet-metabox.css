@@ -150,24 +150,10 @@
   position: relative;
   box-sizing: border-box;
 
-  width: 100%;
-  margin: 12px 0 0;
-  padding-left: 25px;
+  margin: 10px -12px -12px;
+  padding: 10px 15px;
   color: #a00;
+
+  background: rgb(245, 245, 245);
+  border-top: 1px solid rgb(221, 221, 221);
 }
-  #knife-snippet-box .snippet__warning:before {
-    content: "\f534";
-    display: block;
-    position: absolute;
-    left: 0;
-    top: 50%;
-
-    width: 20px;
-    height: 20px;
-    font-size: 20px;
-    font-family: dashicons;
-    line-height: 1;
-
-    transform: translateY(-50%);
-  }
-
