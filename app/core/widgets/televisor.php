@@ -264,7 +264,7 @@ class Knife_Widget_Televisor extends WP_Widget {
             'tag__not_in' => $this->tag__not_in,
             'post_status' => 'publish',
             'ignore_sticky_posts' => 1,
-            'posts_per_page' => 7
+            'posts_per_page' => $instance['posts_per_page']
         ]);
 
         if($query->have_posts()) {
