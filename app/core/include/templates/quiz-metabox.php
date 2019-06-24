@@ -360,100 +360,107 @@
                 </div>
 
                 <div class="result__share">
+                    <div class="result__share-block">
+                        <?php
+                            printf(
+                                '<p class="result__share-achievment"><strong>%2$s</strong><input type="text" data-result="achievment" value="%1$s" placeholder="%3$s"></p>',
+                                sanitize_text_field($result['achievment'] ?? ''),
+                                __('Результат', 'knife-theme'),
+                                __('% из 10', 'knife-theme')
+                            );
+
+                            printf(
+                                '<p class="result__share-heading"><strong>%2$s</strong><input type="text" data-result="heading" value="%1$s"></p>',
+                                sanitize_text_field($result['heading'] ?? ''),
+                                __('Заголовок результата', 'knife-theme')
+                            );
+                        ?>
+                    </div>
+
                     <?php
-                        printf(
-                            '<p class="result__share-achievment"><strong>%2$s</strong><input type="text" data-result="achievment" value="%1$s" placeholder="%3$s"></p>',
-                            sanitize_text_field($result['achievment'] ?? ''),
-                            __('Результат', 'knife-theme'),
-                            __('% из 10', 'knife-theme')
-                        );
-
-                        printf(
-                            '<p class="result__share-heading"><strong>%2$s</strong><input type="text" data-result="heading" value="%1$s"></p>',
-                            sanitize_text_field($result['heading'] ?? ''),
-                            __('Заголовок результата', 'knife-theme')
-                        );
-
                         printf(
                             '<p class="result__share-description"><strong>%2$s</strong><textarea data-result="description">%1$s</textarea></p>',
                             wp_kses_post($result['description'] ?? ''),
                             __('Описание', 'knife-theme')
                         );
                     ?>
+
+                    <div class="result__share-posters">
+
+                        <?php foreach($result['posters'] as $score => $poster) : ?>
+                            <p class="poster">
+                                <?php
+                                    printf(
+                                        '<strong class="poster__title">%1$s <span>%2$d</span></strong>',
+                                        __('Постер для результата:', 'knife-theme'), (int) $score
+                                    );
+
+                                    printf(
+                                        '<input class="poster__field" type="text" data-poster="%2$d" value="%1$s">',
+                                        esc_url($poster ?? ''), (int) $score
+                                    );
+                                ?>
+
+                                <span class="poster__display dashicons dashicons-visibility"></span>
+                            </p>
+                        <?php endforeach; ?>
+
+                    </div>
+
                 </div>
 
                 <div class="result__image">
-                    <figure class="result__image-poster">
-                        <?php
-                            foreach($result['posters'] as $poster) {
-                                if(!empty($poster)) {
-                                    printf('<img src="%s" alt="">', esc_url($poster));
+                    <div class="result__image-block">
+                        <figure class="result__image-poster">
+                            <?php
+                                foreach($result['posters'] as $poster) {
+                                    if(!empty($poster)) {
+                                        printf('<img src="%s" alt="">', esc_url($poster));
+                                    }
+
+                                    break;
+                                }
+                            ?>
+
+                            <figcaption class="result__image-caption">+</figcaption>
+
+                            <?php
+
+                                printf(
+                                    '<input class="result__image-attachment" type="hidden" data-result="attachment" value="%s">',
+                                    sanitize_text_field($result['attachment'] ?? '')
+                                );
+                            ?>
+                        </figure>
+
+                        <div class="result__image-warning"></div>
+
+                        <div class="result__image-footer">
+                            <?php
+                                if(method_exists('Knife_Poster_Templates', 'print_select')) {
+                                    Knife_Poster_Templates::print_select([
+                                        'attributes' => [
+                                            'class' => 'result__image-template',
+                                            'data-result' => 'template'
+                                        ],
+                                        'selected' => esc_attr($result['template'] ?? '')
+                                    ]);
+
+                                    printf(
+                                        '<button class="result__image-generate button" type="button">%s</button>',
+                                        __('Сгенерировать', 'knife-theme')
+                                    );
                                 }
 
-                                break;
-                            }
-                        ?>
-
-                        <figcaption class="result__image-caption">+</figcaption>
-
-                        <?php
-
-                            printf(
-                                '<input class="result__image-attachment" type="hidden" data-result="attachment" value="%s">',
-                                sanitize_text_field($result['attachment'] ?? '')
-                            );
-                        ?>
-                    </figure>
-
-                    <div class="result__image-footer">
-                        <?php
-                            if(method_exists('Knife_Poster_Templates', 'print_select')) {
-                                Knife_Poster_Templates::print_select([
-                                    'attributes' => [
-                                        'class' => 'result__image-template',
-                                        'data-result' => 'template'
-                                    ],
-                                    'selected' => esc_attr($result['template'] ?? '')
-                                ]);
-
                                 printf(
-                                    '<button class="result__image-generate button" type="button">%s</button>',
-                                    __('Сгенерировать', 'knife-theme')
-                                );
-                            }
-
-                            printf(
-                                '<button class="result__image-manual button" type="button">%s</button>',
-                                __('Редактировать', 'knife-theme')
-                            );
-                        ?>
-
-                        <span class="result__image-spinner spinner"></span>
-                    </div>
-
-                    <div class="result__image-warning"></div>
-                </div>
-
-                <div class="result__posters">
-
-                    <?php foreach($result['posters'] as $score => $poster) : ?>
-                        <p class="poster">
-                            <?php
-                                printf(
-                                    '<strong class="poster__title">%1$s <span>%2$d</span></strong>',
-                                    __('Постер для результата:', 'knife-theme'), (int) $score
-                                );
-
-                                printf(
-                                    '<input class="poster__field" type="text" data-poster="%2$d" value="%1$s">',
-                                    esc_url($poster ?? ''), (int) $score
+                                    '<button class="result__image-manual button" type="button">%s</button>',
+                                    __('Редактировать', 'knife-theme')
                                 );
                             ?>
 
-                            <span class="poster__display dashicons dashicons-visibility"></span>
-                        </p>
-                    <?php endforeach; ?>
-
+                            <span class="result__image-spinner spinner"></span>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="result__scores">
@@ -468,6 +475,11 @@
                             sprintf('<input class="result__scores-field" type="number" data-result="to" value="%s">',
                                 absint($result['to'] ?? 0)
                             )
+                        );
+
+                        printf(
+                            '<p class="result__scores-warning dashicons dashicons-warning" title="%s"></p>',
+                            __('Необходимо обновить постеры', 'knife-theme')
                         );
                     ?>
                 </div>

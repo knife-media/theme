@@ -160,6 +160,8 @@
                         ?>
                     </figure>
 
+                    <div class="item__image-warning"></div>
+
                     <div class="item__image-footer">
                         <?php
                             if(method_exists('Knife_Poster_Templates', 'print_select')) {
@@ -180,8 +182,6 @@
 
                         <span class="item__image-spinner spinner"></span>
                     </div>
-
-                    <div class="item__image-warning"></div>
                 </div>
 
                 <span class="item__delete dashicons dashicons-trash"></span>

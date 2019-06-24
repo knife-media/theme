@@ -65,8 +65,11 @@ jQuery(document).ready(function($) {
     // Clone first field
     var clone = result.find('.poster:first').clone();
 
+    // Find fields
+    var fields = result.find('.result__share-posters');
+
     // Clear posters to recreate them below
-    result.find('.result__posters').empty();
+    fields.empty();
 
     for(var i = points.from; i <= points.to; i++) {
       var poster = clone.clone();
@@ -83,11 +86,11 @@ jQuery(document).ready(function($) {
         poster.find('.poster__field').val(posters[i]);
       }
 
-      result.find('.result__posters').append(poster);
+      fields.append(poster);
     }
 
-    if(result.find('.result__posters').children().length === 0) {
-      result.find('.result__posters').append(clone);
+    if(fields.children().length === 0) {
+      fields.append(clone);
     }
 
     sortPosters(result);
@@ -330,6 +333,9 @@ jQuery(document).ready(function($) {
       return alert(knife_quiz_metabox.error);
     }
 
+    // Hide scores warning
+    result.find('.result__scores-warning').hide();
+
     var meta_results = knife_quiz_metabox.meta_results;
 
     // Get item number
@@ -347,6 +353,11 @@ jQuery(document).ready(function($) {
       });
 
       $(this).attr('name', name);
+
+      if($(this).val().length === 0) {
+        result.find('.result__scores-warning').show();
+        return false;
+      }
     });
   }
 
@@ -816,7 +827,7 @@ jQuery(document).ready(function($) {
   /**
    * Show posters fields
    */
-  box.on('change keyup', '.result__scores input', function(e) {
+  box.on('change', '.result__scores input', function(e) {
     if($(this).val().length === 0) {
       return false;
     }
@@ -830,13 +841,15 @@ jQuery(document).ready(function($) {
       points[v] = parseInt(result.find('[data-result="' + v + '"]').val());
     });
 
+    if(points.to - points.from > 15) {
+      return blinkClass($(this), 'result__scores-field--error')
+    }
+
     if(points.from > points.to) {
       return blinkClass($(this), 'result__scores-field--error')
     }
 
-    if(result.hasClass('result--posters')) {
-      updatePosters(result, points);
-    }
+    updatePosters(result, points);
   });
 
 
@@ -859,7 +872,13 @@ jQuery(document).ready(function($) {
       $('<img />').prependTo(poster);
     }
 
-    poster.find('img').attr('src', field.val());
+    var image = poster.find('img');
+
+    image.load(function() {
+      image.fadeIn(100);
+    });
+
+    image.attr('src', field.val()).hide();
   });
 
 

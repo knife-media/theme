@@ -175,11 +175,10 @@
 
 #knife-generator-box .item__text {
   display: flex;
-  position: relative;
-  box-sizing: border-box;
-  flex-flow: row wrap;
-  flex: 1;
-  padding: 10px;
+  flex: 1 1 320px;
+  flex-flow: column wrap;
+
+  margin: 10px;
 }
   #knife-generator-box .item--blank .item__text {
     margin-right: 25px;
@@ -198,21 +197,19 @@
 
 #knife-generator-box .item__image {
   display: block;
-  position: relative;
-  box-sizing: border-box;
-  flex: 0 0 320px;
-  max-width: 100%;
-  padding: 10px;
+  flex: 0 1 300px;
+
+  margin: 10px;
 }
+  @media screen and (max-width: 782px) {
+    #knife-generator-box .result__image {
+      flex: 1 1 100%;
+    }
+  }
+
   #knife-generator-box .item--blank .item__image {
     display: none;
   }
-@media screen and (max-width: 1023px) {
-  #knife-generator-box .item__image {
-    flex: 1 1 100%;
-    padding-top: 0;
-  }
-}
 
 #knife-generator-box .item__delete {
   position: absolute;
@@ -226,10 +223,10 @@
 }
 
 #knife-generator-box .item__text-heading {
-  display: block;
-  flex: 1 1 auto;
+  display: flex;
+  flex-flow: column wrap;
 
-  margin: 5px 0;
+  margin: 0;
 }
 
 #knife-generator-box .item__text-heading strong {
@@ -244,10 +241,9 @@
 
 #knife-generator-box .item__text-description {
   display: flex;
-  flex: 1 1 100%;
   flex-flow: column wrap;
+  flex: 1 1 auto;
 
-  min-height: calc(100% - 70px);
   margin: 10px 0 0;
 }
 
@@ -330,25 +326,14 @@
     box-sizing: border-box;
 
     width: 100%;
-    margin: 12px 0 0;
-    padding-left: 25px;
+    margin: 12px 0;
+    padding: 10px;
+
     color: #a00;
-  }
+    background: #fff;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
 
-  #knife-generator-box .item__image-warning:before {
-    content: "\f534";
-    display: block;
-    position: absolute;
-    left: 0;
-    top: 50%;
-
-    width: 20px;
-    height: 20px;
-    font-size: 20px;
-    font-family: dashicons;
-    line-height: 1;
-
-    transform: translateY(-50%);
+    border-left: 3px solid;
   }
 
 #knife-generator-box .item__image-caption {
