@@ -40,7 +40,7 @@ class Knife_Widget_Informer extends WP_Widget {
             $post_id = url_to_postid($instance['link']);
             $options = $this->get_attributes($instance, $post_id);
 
-            if(!is_single($post_id)) {
+            if($post_id === 0 || !is_single($post_id)) {
                 echo $args['before_widget'];
 
                 include(get_template_directory() . '/templates/widget-informer.php');

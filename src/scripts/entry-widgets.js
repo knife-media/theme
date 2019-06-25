@@ -11,7 +11,7 @@
   /**
    * Check if entry-content exists and it's long enough
    */
-  if(post === null || post.children.length < 8) {
+  if(post === null) {
     return false;
   }
 
@@ -31,10 +31,28 @@
    */
   var middle = Math.floor(post.children.length / 2);
 
-  for(var i = middle; i < post.children.length; i++) {
-    var relative = post.children[i];
+  if(post.children.length > 8) {
+    var allowed = ['p', 'h4', 'blockquote'];
 
-    if(relative.tagName.toLowerCase() === 'p') {
+    for(var i = middle; i < post.children.length; i++) {
+      var relative = post.children[i];
+
+      // Check if next tag in allowed list
+      if(allowed.indexOf(relative.tagName.toLowerCase()) < 0) {
+        continue;
+      }
+
+      if(typeof post.children[i - 1] === 'undefined') {
+        continue;
+      }
+
+      var following = post.children[i - 1];
+
+      // Check if prev tag in allowed list
+      if(allowed.indexOf(following.tagName.toLowerCase()) < 0) {
+        continue;
+      }
+
       var figure = document.createElement('figure');
 
       figure.classList.add('figure', 'figure--widget');

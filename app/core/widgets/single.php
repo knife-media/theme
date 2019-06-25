@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.4
+ * @version 1.9
  */
 
 
@@ -36,7 +36,6 @@ class Knife_Widget_Single extends WP_Widget {
 
         $instance = wp_parse_args((array) $instance, $defaults);
 
-        $exclude = get_query_var('widget_exclude', []);
         $post_id = url_to_postid($instance['link']);
 
         $query = new WP_Query([
@@ -47,17 +46,15 @@ class Knife_Widget_Single extends WP_Widget {
             'post__in' => [$post_id]
         ]);
 
+        // If the required post is found
         if($query->have_posts()) {
-            echo $args['before_widget'];
+            $exclude = get_query_var('widget_exclude', []);
+            set_query_var('widget_exclude', array_merge($exclude, [$post_id]));
 
-            $query->the_post();
-            include(get_template_directory() . '/templates/widget-single.php');
-
-            set_query_var('widget_exclude', array_merge($exclude, wp_list_pluck($query->posts, 'ID')));
-            wp_reset_query();
-
-            echo $args['after_widget'];
+            return $this->display_internal($instance, $args, $query);
         }
+
+        return $this->display_external($instance, $args);
     }
 
 
@@ -67,8 +64,8 @@ class Knife_Widget_Single extends WP_Widget {
     public function update($new_instance, $old_instance) {
         $instance = $old_instance;
 
+        $instance['title'] = $new_instance['title'];
         $instance['link'] = esc_url($new_instance['link']);
-        $instance['title'] = sanitize_text_field($new_instance['title']);
         $instance['cover'] = absint($new_instance['cover']);
         $instance['button'] = sanitize_text_field($new_instance['button']);
 
@@ -83,11 +80,36 @@ class Knife_Widget_Single extends WP_Widget {
             'title' => '',
             'link' => '',
             'cover' => 0,
-            'button' => ''
+            'button' => '',
+            'picture' => ''
         ];
 
-        $picture = '';
         $instance = wp_parse_args((array) $instance, $defaults);
+
+        // Post url
+        printf(
+            '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"><small>%5$s</small></p>',
+            esc_attr($this->get_field_id('link')),
+            esc_attr($this->get_field_name('link')),
+            __('Ссылка:', 'knife-theme'),
+            esc_attr($instance['link']),
+            __('На внешний ресурс или запись c этого сайта', 'knife-theme')
+        );
+
+
+        // Widget cover
+        if($cover = wp_get_attachment_url($instance['cover'])) {
+            $instance['picture'] = sprintf('<img src="%s" alt="" style="max-width: 100%%;">', esc_url($cover));
+        }
+
+        printf(
+            '<p>%5$s<input id="%1$s" name="%2$s" type="hidden" value="%3$s"><button type="button" class="button knife-widget-image">%4$s</button></p>',
+            esc_attr($this->get_field_id('cover')),
+            esc_attr($this->get_field_name('cover')),
+            esc_attr($instance['cover']),
+            __('Выбрать обложку', 'knife-theme'),
+            $instance['picture']
+        );
 
 
         // Widget title
@@ -97,33 +119,7 @@ class Knife_Widget_Single extends WP_Widget {
             esc_attr($this->get_field_name('title')),
             __('Заголовок:', 'knife-theme'),
             esc_attr($instance['title']),
-            __('Не будет отображаться на странице', 'knife-theme')
-        );
-
-
-        // Widget cover
-        if($cover = wp_get_attachment_url($instance['cover'])) {
-            $picture = sprintf('<img src="%s" alt="" style="max-width: 100%%;">', esc_url($cover));
-        }
-
-        printf(
-            '<p>%5$s<input id="%1$s" name="%2$s" type="hidden" value="%3$s"><button type="button" class="button knife-widget-image">%4$s</button></p>',
-            esc_attr($this->get_field_id('cover')),
-            esc_attr($this->get_field_name('cover')),
-            esc_attr($instance['cover']),
-            __('Выбрать обложку', 'knife-theme'),
-            $picture
-        );
-
-
-        // Post url
-        printf(
-            '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"><small>%5$s</small></p>',
-            esc_attr($this->get_field_id('link')),
-            esc_attr($this->get_field_name('link')),
-            __('Ссылка:', 'knife-theme'),
-            esc_attr($instance['link']),
-            __('Запись с этого сайта', 'knife-theme')
+            __('Заполните, чтобы обновить заголовок записи', 'knife-theme')
         );
 
 
@@ -136,6 +132,40 @@ class Knife_Widget_Single extends WP_Widget {
             esc_attr($instance['button']),
             __('Добавить кнопку', 'knife-theme')
         );
+    }
+
+
+    /**
+     * Display template for internal posts
+     *
+     * @since 1.9
+     */
+    private function display_internal($instance, $args, $query, $internal = true) {
+        $query->the_post();
+
+        if(empty($instance['title'])) {
+            $instance['title'] = get_the_title();
+        }
+
+        $instance['link'] = get_permalink();
+
+        echo $args['before_widget'];
+        include(get_template_directory() . '/templates/widget-single.php');
+        echo $args['after_widget'];
+
+        wp_reset_query();
+    }
+
+
+    /**
+     * Display template for external single post
+     *
+     * @since 1.9
+     */
+    private function display_external($instance, $args, $internal = false) {
+        echo $args['before_widget'];
+        include(get_template_directory() . '/templates/widget-single.php');
+        echo $args['after_widget'];
     }
 }
 

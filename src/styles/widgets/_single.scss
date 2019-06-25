@@ -79,6 +79,7 @@
       display: block;
 
       max-width: 42.5rem;
+      margin-bottom: 1.5rem;
 
       font-size: 1.875rem;
       font-weight: 700;
@@ -129,7 +130,6 @@
       align-items: flex-end;
 
       width: 100%;
-      margin-top: 1.5rem;
 
       .meta {
         color: $color-white;
@@ -145,7 +145,6 @@
       display: flex;
       align-self: flex-start;
 
-      margin-top: 1.5rem;
       padding: .75rem 2.5rem;
 
       font-size: 1rem;
@@ -196,6 +195,7 @@
 
   &.widget-single--entry {
     width: calc(100% - 2rem);
+    max-width: $width-content;
     margin: 1rem;
 
     .widget-single__content-title {
