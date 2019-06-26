@@ -11,6 +11,7 @@
     align-items: center;
     position: relative;
 
+    width: 100%;
     overflow: hidden;
 
     border: none;
@@ -48,8 +49,8 @@
   &.widget-banner--entry {
     padding: 1rem;
 
-    @media screen and (max-width: 479px) {
-      padding: 0;
+    .widget-banner__link {
+      width: auto;
     }
   }
 

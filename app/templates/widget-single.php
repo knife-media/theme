@@ -10,10 +10,12 @@
 
 <div class="widget-single__inner">
     <?php
-        the_info(
-            '<div class="widget-single__head">', '</div>',
-            ['head']
-        );
+        if($internal) :
+            the_info(
+                '<div class="widget-single__head">', '</div>',
+                ['head']
+            );
+        endif;
     ?>
 
     <div class="widget-single__image">
@@ -29,20 +31,24 @@
         <?php
             printf(
                 '<a class="widget-single__content-title" href="%1$s">%2$s</a>',
-                esc_html(get_permalink()),
-                get_the_title()
+                esc_url($instance['link']),
+                wp_kses($instance['title'], [
+                    'em' => []
+                ])
             );
 
-            if(empty($instance['button'])) :
+            if(empty($instance['button']) && $internal) :
                 the_info(
                     '<div class="widget-single__content-info">', '</div>',
                     ['author', 'label']
                 );
             else :
-                printf(
-                    '<button class="widget-single__content-button">%s</button>',
-                    esc_html($instance['button'])
-                );
+                if(!empty($instance['button'])) :
+                    printf(
+                        '<button class="widget-single__content-button">%s</button>',
+                        esc_html($instance['button'])
+                    );
+                endif;
             endif;
         ?>
     </div>

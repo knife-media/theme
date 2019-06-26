@@ -82,7 +82,7 @@ class Knife_Widget_Televisor extends WP_Widget {
     public function update($new_instance, $old_instance) {
         $instance = $old_instance;
 
-        $instance['title'] = sanitize_text_field($new_instance['title']);
+        $instance['title'] = $new_instance['title'];
         $instance['posts_per_page'] = (int) $new_instance['posts_per_page'];
         $instance['unique'] = $new_instance['unique'] ? 1 : 0;
         $instance['info'] = $new_instance['info'] ? 1 : 0;
@@ -103,11 +103,21 @@ class Knife_Widget_Televisor extends WP_Widget {
             'cover' => 0,
             'unique' => 1,
             'info' => 1,
-            'posts_per_page' => 7
+            'posts_per_page' => 7,
+            'picture' => ''
         ];
 
-        $picture = '';
         $instance = wp_parse_args((array) $instance, $defaults);
+
+        // Post url
+        printf(
+            '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"><small>%5$s</small></p>',
+            esc_attr($this->get_field_id('link')),
+            esc_attr($this->get_field_name('link')),
+            __('Ссылка с фичера:', 'knife-theme'),
+            esc_attr($instance['link']),
+            __('На внешний ресурс или запись c этого сайта', 'knife-theme')
+        );
 
 
         // Widget title
@@ -117,7 +127,7 @@ class Knife_Widget_Televisor extends WP_Widget {
             esc_attr($this->get_field_name('title')),
             __('Заголовок:', 'knife-theme'),
             esc_attr($instance['title']),
-            __('Не будет отображаться на странице', 'knife-theme')
+            __('Заполните, чтобы обновить заголовок фичера', 'knife-theme')
         );
 
 
@@ -143,7 +153,7 @@ class Knife_Widget_Televisor extends WP_Widget {
 
         // Widget cover
         if($cover = wp_get_attachment_url($instance['cover'])) {
-            $picture = sprintf('<img src="%s" alt="" style="max-width: 100%%;">', esc_url($cover));
+            $instance['picture'] = sprintf('<img src="%s" alt="" style="max-width: 100%%;">', esc_url($cover));
         }
 
         printf(
@@ -152,18 +162,7 @@ class Knife_Widget_Televisor extends WP_Widget {
             esc_attr($this->get_field_name('cover')),
             esc_attr($instance['cover']),
             __('Выбрать обложку фичера', 'knife-theme'),
-            $picture
-        );
-
-
-        // Post url
-        printf(
-            '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"><small>%5$s</small></p>',
-            esc_attr($this->get_field_id('link')),
-            esc_attr($this->get_field_name('link')),
-            __('Ссылка с фичера:', 'knife-theme'),
-            esc_attr($instance['link']),
-            __('Запись с этого сайта', 'knife-theme')
+            $instance['picture']
         );
 
 
@@ -230,7 +229,6 @@ class Knife_Widget_Televisor extends WP_Widget {
      * Show single post part
      */
     private function show_single($instance) {
-        $exclude = get_query_var('widget_exclude', []);
         $post_id = url_to_postid($instance['link']);
 
         $query = new WP_Query([
@@ -242,16 +240,13 @@ class Knife_Widget_Televisor extends WP_Widget {
         ]);
 
         if($query->have_posts()) {
-            echo '<div class="widget-single">';
+            $exclude = get_query_var('widget_exclude', []);
+            set_query_var('widget_exclude', array_merge($exclude, [$post_id]));
 
-            $query->the_post();
-            include(get_template_directory() . '/templates/widget-single.php');
-
-            set_query_var('widget_exclude', array_merge($exclude, wp_list_pluck($query->posts, 'ID')));
-            wp_reset_query();
-
-            echo '</div>';
+            return $this->display_internal($instance, $query);
         }
+
+        return $this->display_external($instance);
     }
 
 
@@ -292,6 +287,41 @@ class Knife_Widget_Televisor extends WP_Widget {
             echo '</div>';
         }
     }
+
+
+    /**
+     * Display template for internal single post
+     *
+     * @since 1.9
+     */
+    private function display_internal($instance, $query, $internal = true) {
+        $query->the_post();
+
+        if(empty($instance['title'])) {
+            $instance['title'] = get_the_title();
+        }
+
+        $instance['link'] = get_permalink();
+
+        echo '<div class="widget-single">';
+        include(get_template_directory() . '/templates/widget-single.php');
+        echo '</div>';
+
+        wp_reset_query();
+    }
+
+
+    /**
+     * Display template for external single post
+     *
+     * @since 1.9
+     */
+    private function display_external($instance, $internal = false) {
+        echo '<div class="widget-single">';
+        include(get_template_directory() . '/templates/widget-single.php');
+        echo '</div>';
+    }
+
 }
 
 

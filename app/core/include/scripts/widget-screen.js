@@ -2,20 +2,21 @@
   /**
    * Widget colorpicker
    */
+  var initColorPicker = function(widget) {
+    widget.find('.color-picker').wpColorPicker({
+      change: function(e, ui) {
+        $(e.target).val(ui.color.toString());
+        $(e.target).trigger('change');
+      },
+
+      clear: function(e, ui) {
+        $(e.target).trigger('change');
+      }
+    });
+  }
+
   $(document).ready(function() {
-    var initColorPicker = function(widget) {
-      widget.find('.color-picker').wpColorPicker({
-        change: _.throttle(function() {
-          $(this).trigger('change');
-        }, 3000),
-
-        clear: _.throttle(function() {
-            $(this).trigger('change');
-        }, 4000)
-      });
-    }
-
-    $('#widgets-left .widget:has(.color-picker)').each(function() {
+    $('#wp_inactive_widgets .widget:has(.color-picker)').each(function() {
       initColorPicker($(this));
     });
 
@@ -32,39 +33,39 @@
   /**
    * Widget append button handler
    */
-  $(document).ready(function() {
-    var initWidgetButton = function(input) {
-      if(input.val()) {
-        return true;
-      }
-
-      var block = input.parent();
-      var title = input.data('title') || '';
-
-      // Create button
-      var button = $('<button>', {'class': 'button', type: 'button'}).text(title);
-
-      block.children().hide();
-
-      button.on('click', function(e) {
-        e.preventDefault();
-
-        block.children().show();
-        button.remove();
-      });
-
-      button.appendTo(block);
+  var initWidgetButton = function(input) {
+    if(input.val()) {
+      return true;
     }
 
-    $(document).on('widget-added widget-updated', function(event, widget) {
-      var input = widget.find('.knife-widget-button');
+    var block = input.parent();
+    var title = input.data('title') || '';
+
+    // Create button
+    var button = $('<button>', {'class': 'button', type: 'button'}).text(title);
+
+    block.children().hide();
+
+    button.on('click', function(e) {
+      e.preventDefault();
+
+      block.children().show();
+      button.remove();
+    });
+
+    button.appendTo(block);
+  }
+
+
+  $(document).ready(function() {
+    $('#widgets-right .widget:has(.knife-widget-button)').each(function() {
+      var input = $(this).find('.knife-widget-button');
 
       initWidgetButton(input);
     });
 
-
-    $('#widgets-right .widget:has(.knife-widget-button)').each(function() {
-      var input = $(this).find('.knife-widget-button');
+    $(document).on('widget-added widget-updated', function(event, widget) {
+      var input = widget.find('.knife-widget-button');
 
       initWidgetButton(input);
     });
