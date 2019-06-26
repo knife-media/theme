@@ -168,8 +168,20 @@ class Knife_Snippet_Image {
             return;
         }
 
+        // Add updated image sizes
+        $options = [];
+
+        if(isset($_REQUEST[self::$meta_options])) {
+            $options = $_REQUEST[self::$meta_options];
+        }
+
+        $options = wp_parse_args($options, [
+            'width' => 1200,
+            'height' => 630
+        ]);
+
         // Update options
-        update_post_meta($post_id, self::$meta_options, $_REQUEST[self::$meta_options]);
+        update_post_meta($post_id, self::$meta_options, $options);
 
         // Save social-image meta
         if(empty($_REQUEST[self::$meta_image])) {

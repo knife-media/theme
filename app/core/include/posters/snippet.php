@@ -8,7 +8,7 @@
 
 $poster = new PHPImage();
 $poster->setDimensionsFromImage($image)->draw($image);
-$poster->resize(1024, 512, true, true);
+$poster->resize(1200, 630, true, true);
 
 
 // Change brightness and contrast

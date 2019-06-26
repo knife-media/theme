@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.5
- * @version 1.8
+ * @version 1.9
  */
 
 
@@ -311,6 +311,8 @@ class Knife_Site_Meta {
      */
     public static function add_vk_tags() {
         $meta = [];
+
+        // Get social image
         $social_image = self::get_social_image();
 
         $meta[] = sprintf(
@@ -356,22 +358,30 @@ class Knife_Site_Meta {
      * Get social image cover
      */
     private static function get_social_image() {
-        if(is_singular() && has_post_thumbnail()) {
+        if(is_singular()) {
             $object_id = get_queried_object_id();
 
             // Custom social image storing via social-image plugin in post meta
             $social_image = get_post_meta($object_id, '_social-image', true);
 
-            if(empty($social_image)) {
+            if(empty($social_image) && has_post_thumbnail()) {
                 return wp_get_attachment_image_src(get_post_thumbnail_id($object_id), 'outer');
             }
 
-            return [$social_image, 1024, 512];
+            $options = get_post_meta($object_id, '_social-image-options', true);
+
+            // Set size using options
+            $options = wp_parse_args($options, [
+                'width' => 1200,
+                'height' => 630
+            ]);
+
+            return array($social_image, $options['width'], $options['height']);
         }
 
         $social_image = get_template_directory_uri() . '/assets/images/poster-feature.png';
 
-        return [$social_image, 1200, 630];
+        return array($social_image, 1200, 630);
     }
 
 
@@ -379,10 +389,8 @@ class Knife_Site_Meta {
      * Print tags if not empty array
      */
     private static function print_tags($meta) {
-        if(count($meta) > 0) {
-            foreach($meta as $tag) {
-                echo $tag . PHP_EOL;
-            }
+        foreach($meta as $tag) {
+            echo $tag . PHP_EOL;
         }
     }
 }
