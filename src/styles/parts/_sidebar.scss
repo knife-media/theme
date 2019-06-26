@@ -10,7 +10,7 @@
 
   .sidebar__widgets {
     display: flex;
-    flex-flow: column wrap;
+    flex-flow: column nowrap;
     flex: 1 1 auto;
 
     & > :last-child {
@@ -21,7 +21,7 @@
 
   .sidebar__related {
     display: flex;
-    flex-flow: column wrap;
+    flex-flow: column nowrap;
     flex: 0 0 auto;
 
     .unit {
