@@ -5,4 +5,12 @@
   position: relative;
 
   width: 100%;
+
+  body.is-search & {
+    display: none;
+  }
+
+  body.is-navbar & {
+    display: none;
+  }
 }
