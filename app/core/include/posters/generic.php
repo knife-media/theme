@@ -43,11 +43,15 @@ if(!empty($textbox['title'])) {
 }
 
 
+// Draw line
+$poster->rectangle(70, 230, 950, 2, [255, 255, 255]);
+
+
 // Draw heading
 if(!empty($textbox['heading'])) {
     $poster->setLineHeight(1.125);
     $poster->textBox($textbox['heading'], [
-        'x' => 70, 'y' => 280, 'width' => 950, 'height' => 160, 'fontSize' => 52
+        'x' => 70, 'y' => 280, 'width' => 950, 'height' => 160, 'fontSize' => 42
     ]);
 }
 
