@@ -32,10 +32,11 @@
   var middle = Math.floor(post.children.length / 2);
 
   if(post.children.length > 8) {
-    var allowed = ['p', 'h4', 'blockquote'];
+    var allowed = ['p', 'ul', 'ol', 'blockquote'];
 
     for(var i = middle; i < post.children.length; i++) {
       var relative = post.children[i];
+      console.log(relative);
 
       // Check if next tag in allowed list
       if(allowed.indexOf(relative.tagName.toLowerCase()) < 0) {
