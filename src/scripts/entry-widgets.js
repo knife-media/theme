@@ -36,7 +36,6 @@
 
     for(var i = middle; i < post.children.length; i++) {
       var relative = post.children[i];
-      console.log(relative);
 
       // Check if next tag in allowed list
       if(allowed.indexOf(relative.tagName.toLowerCase()) < 0) {
