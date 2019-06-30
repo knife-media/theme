@@ -55,6 +55,8 @@
   }
 
   &.widget-banner--sidebar {
-    margin-top: 1rem;
+    .widget-banner__link {
+      margin-top: 1rem;
+    }
   }
 }
