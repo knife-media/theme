@@ -73,19 +73,17 @@ class Knife_Snippet_Image {
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public static function load_module() {
-        if(current_user_can('edit_posts')) {
-            // Add custom distribute metabox
-            add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
+        // Add custom distribute metabox
+        add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
 
-            // Save metabox
-            add_action('save_post', [__CLASS__, 'save_metabox'], 10, 2);
+        // Save metabox
+        add_action('save_post', [__CLASS__, 'save_metabox'], 10, 2);
 
-            // Enqueue dashboard widget scripts
-            add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
+        // Enqueue dashboard widget scripts
+        add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
 
-            // Generate poster using ajax options
-            add_action('wp_ajax_' . self::$ajax_action, [__CLASS__, 'generate_poster']);
-        }
+        // Generate poster using ajax options
+        add_action('wp_ajax_' . self::$ajax_action, [__CLASS__, 'generate_poster']);
     }
 
 
@@ -168,6 +166,10 @@ class Knife_Snippet_Image {
             return;
         }
 
+        if(!current_user_can('edit_post', $post_id)) {
+            return;
+        }
+
         // Add updated image sizes
         $options = [];
 
@@ -207,6 +209,10 @@ class Knife_Snippet_Image {
             'post_id' => 0,
             'attachment' => 0
         ]);
+
+        if(!current_user_can('edit_post', $options['post_id'])) {
+            return;
+        }
 
         $poster = Knife_Poster_Templates::create_poster($options, self::$upload_folder);
 
