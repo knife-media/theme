@@ -470,7 +470,13 @@ class Knife_Quiz_Section {
 
         // Update options
         if(isset($_REQUEST[self::$meta_options])) {
-            update_post_meta($post_id, self::$meta_options, $_REQUEST[self::$meta_options]);
+            $options = wp_kses_post_deep($_REQUEST[self::$meta_options]);
+
+            if(isset($options['remark'])) {
+                $options['remark'] = wp_targeted_link_rel(links_add_target($options['remark']));
+            }
+
+            update_post_meta($post_id, self::$meta_options, $options);
         }
 
         // Update items meta
@@ -500,7 +506,15 @@ class Knife_Quiz_Section {
                     if((bool) array_filter($answer) === false) {
                         unset($item['answers'][$i]);
                     }
+
+                    // Add blank and rel attributes to answer
+                    $answer = wp_targeted_link_rel(links_add_target($answer));
                 }
+            }
+
+            // Add blank and rel attributes to question
+            if(isset($item['question'])) {
+                $item['question'] = wp_targeted_link_rel(links_add_target($item['question']));
             }
 
             // Add post meta if not empty
@@ -526,6 +540,11 @@ class Knife_Quiz_Section {
             // We should unset empty posters array
             if(isset($result['posters']) && !array_filter($result['posters'])) {
                 unset($result['posters']);
+            }
+
+            // Add blank and rel attributes to details
+            if(isset($result['details'])) {
+                $result['details'] = wp_targeted_link_rel(links_add_target($result['details']));
             }
 
             if(array_filter($result)) {

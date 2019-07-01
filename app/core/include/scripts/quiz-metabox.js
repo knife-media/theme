@@ -207,6 +207,7 @@ jQuery(document).ready(function($) {
       wp.editor.initialize(editorId, {
         tinymce: {
           toolbar1: 'link',
+          invalid_styles: 'color font-weight font-size',
           init_instance_callback: function() {
             if(window.tinymce && window.switchEditors) {
               window.switchEditors.go(editorId, knife_quiz_metabox.editor);

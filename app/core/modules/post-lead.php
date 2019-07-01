@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.2
- * @version 1.7
+ * @version 1.9
  */
 
 
@@ -65,12 +65,14 @@ class Knife_Post_Lead {
      * Add lead-text metabox
      */
     public static function add_metabox() {
-        add_meta_box('knife-lead-metabox', __('Лид текст'), [__CLASS__, 'print_metabox'], self::$post_type, 'normal', 'high');
+        add_meta_box('knife-lead-metabox', __('Лид текст', 'knife-theme'), [__CLASS__, 'print_metabox'], self::$post_type, 'normal', 'high');
     }
 
 
     /**
      * Print wp-editor based metabox for lead-text meta
+     *
+     * @link https://wordpress.stackexchange.com/a/292324/126253
      */
     public static function print_metabox($post, $box) {
         $lead = get_post_meta($post->ID, self::$post_meta, true);
@@ -78,7 +80,6 @@ class Knife_Post_Lead {
         wp_editor($lead, 'knife-lead-editor', [
             'media_buttons' => true,
             'textarea_name' => self::$post_meta,
-            'teeny' => true,
             'tinymce' => [
                 'toolbar1' => 'link'
             ],
