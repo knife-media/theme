@@ -231,13 +231,26 @@
     display: block;
 
     padding: .5rem 1rem;
-    font-family: monospace;
-    white-space: pre;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+
+    font-family: $font-monospace;
+    font-size: 0.875rem;
+    font-weight: 400;
     overflow-x: auto;
 
     background-color: $color-sheet;
+  }
 
-    border-left: solid 3px $color-primary;
+  code {
+    padding: .5rem 1rem;
+
+    font-family: $font-monospace;
+    font-size: 0.875rem;
+    font-weight: 400;
+    overflow-x: auto;
+
+    background-color: $color-sheet;
   }
 
   small {
