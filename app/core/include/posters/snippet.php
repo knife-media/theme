@@ -19,17 +19,17 @@ $poster->setResource($filter);
 
 
 // Draw logo image
-$poster->draw(get_template_directory() . '/assets/images/logo-title.png', 70, 40);
+$poster->draw(get_template_directory() . '/assets/images/logo-title.png', 40, 40);
 
 
 // Draw title
 $poster->setAlignVertical('center');
 $poster->setFont(get_template_directory() . '/assets/fonts/formular/formular-medium.ttf');
-$poster->setLineHeight(1.25);
+$poster->setLineHeight(1.125);
 
 if(!empty($textbox['title'])) {
     $poster->textBox($textbox['title'], [
-        'x' => 70, 'y' => 170, 'width' => 800, 'height' => 200, 'fontSize' => 26
+        'x' => 40, 'y' => 140, 'width' => 1000, 'height' => 350, 'fontSize' => 36
     ]);
 }
 

@@ -19,7 +19,7 @@ $poster->setResource($filter);
 
 
 // Draw logo image
-$poster->draw(get_template_directory() . '/assets/images/logo-title.png', 70, 40);
+$poster->draw(get_template_directory() . '/assets/images/logo-title.png', 40, 40);
 
 // Set font settings
 $poster->setAlignVertical('top');
@@ -30,7 +30,7 @@ $poster->setLineHeight(1.25);
 // Draw description
 if(!empty($textbox['description'])) {
     $poster->textBox($textbox['description'], [
-        'x' => 70, 'y' => 445, 'width' => 950, 'height' => 120, 'fontSize' => 24
+        'x' => 40, 'y' => 445, 'width' => 950, 'height' => 100, 'fontSize' => 24
     ]);
 }
 
