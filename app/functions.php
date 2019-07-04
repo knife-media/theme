@@ -374,7 +374,9 @@ require get_template_directory() . '/core/modules/quiz-section.php';
 require get_template_directory() . '/core/modules/generator-section.php';
 
 // Ask section post type
-require get_template_directory() . '/core/modules/ask-section.php';
+// Temporarily disabled
+//
+// require get_template_directory() . '/core/modules/ask-section.php';
 
 // Custom labels posts taxonomy settings
 require get_template_directory() . '/core/modules/label-posts.php';
