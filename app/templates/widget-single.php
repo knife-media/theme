@@ -12,7 +12,7 @@
     <?php
         if($internal) :
             the_info(
-                '<div class="widget-single__head">', '</div>',
+                '<div class="widget-single__head info">', '</div>',
                 ['head']
             );
         endif;
@@ -39,7 +39,7 @@
 
             if(empty($instance['button']) && $internal) :
                 the_info(
-                    '<div class="widget-single__content-info">', '</div>',
+                    '<div class="widget-single__content-info info">', '</div>',
                     ['author', 'label']
                 );
             else :

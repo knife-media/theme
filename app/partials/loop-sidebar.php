@@ -28,7 +28,7 @@
                 );
 
                 the_info(
-                    '<div class="unit__content-info">', '</div>',
+                    '<div class="unit__content-info info">', '</div>',
                     ['author', 'date', 'label']
                 );
             ?>

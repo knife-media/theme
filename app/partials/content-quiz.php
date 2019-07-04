@@ -12,8 +12,8 @@
     <div class="entry-quiz" id="quiz">
         <?php
             the_info(
-                '<div class="entry-quiz__info">', '</div>',
-                ['promo', 'author', 'date', 'category', 'label']
+                '<div class="entry-quiz__info info">', '</div>',
+                ['author', 'date', 'category', 'label']
             );
 
             the_title(

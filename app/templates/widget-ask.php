@@ -10,7 +10,7 @@
 <div class="widget-ask__inner">
     <?php
         the_info(
-            '<div class="widget-ask__info">', '</div>',
+            '<div class="widget-ask__info info">', '</div>',
             ['question', 'date']
         );
 

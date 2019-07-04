@@ -124,12 +124,9 @@
     }
 
     .widget-single__content-info {
-      display: flex;
       flex-flow: row nowrap;
       justify-content: space-between;
       align-items: flex-end;
-
-      width: 100%;
 
       .meta {
         color: $color-white;

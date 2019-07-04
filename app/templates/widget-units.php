@@ -11,7 +11,7 @@
     <div class="unit__inner">
         <?php
             the_info(
-                '<div class="unit__head">', '</div>',
+                '<div class="unit__head info">', '</div>',
                 ['head']
             );
         ?>
@@ -31,7 +31,7 @@
                 );
 
                 the_info(
-                    '<div class="unit__content-info">', '</div>',
+                    '<div class="unit__content-info info">', '</div>',
                     ['author', 'date', 'label']
                 );
             ?>

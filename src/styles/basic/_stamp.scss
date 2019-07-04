@@ -1,0 +1,26 @@
+.stamp {
+  flex: 0 0 auto;
+  cursor: default;
+
+  margin: .25rem .75rem .25rem 0;
+  padding: .1875rem .375rem;
+
+  border-radius: 3px;
+
+  &.stamp--club {
+    color: $color-white;
+    background-color: $color-club;
+  }
+
+  @at-root #{selector-unify(&, a)} {
+    cursor: pointer;
+
+    &:hover {
+      filter: brightness(120%);
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    margin-right: .5rem;
+  }
+}

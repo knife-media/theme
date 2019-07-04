@@ -20,25 +20,20 @@ class Knife_Post_Info {
      * @since 1.8
      */
     public static function get_info($options = [], $output = '') {
-        $about = [];
-
-        // Get promo about info
-        if(in_array('promo', $options)) {
-            $about[] = self::get_promo();
-        }
+        $stamp = [];
 
         // Get club about info
         if(in_array('club', $options)) {
-            $about[] = self::get_club();
+            $stamp[] = self::get_club($output);
         }
 
         // Get post meta
         $output = self::get_meta($options, $output);
 
         // Wrap about if exists
-        if(array_filter($about)) {
-            $output = sprintf('<div class="about">%s</div>',
-                implode('', $about) . $output
+        if(array_filter($stamp)) {
+            $output = sprintf('<div class="info__wrapper">%s</div>',
+                implode('', $stamp) . $output
             );
         }
 
@@ -62,32 +57,6 @@ class Knife_Post_Info {
 
 
     /**
-     * Get promo about meta
-     *
-     * @since 1.8
-     */
-    private static function get_promo($output = '') {
-        $is_promo = get_post_meta(get_the_ID(), '_knife-promo', true);
-
-        if($is_promo) {
-            $output = sprintf('<span class="about__promo">%s</span>',
-                __('Партнерский материал', 'knife-theme')
-            );
-
-            // Show link tp archive for editors
-            if(current_user_can('publish_posts')) {
-                $output = sprintf('<a class="about__promo" href="%s">%s</a>',
-                    esc_url(home_url('/promo/')),
-                    __('Партнерский материал', 'knife-theme')
-                );
-            }
-        }
-
-        return $output;
-    }
-
-
-    /**
      * Get club about meta
      *
      * @since 1.8
@@ -96,7 +65,7 @@ class Knife_Post_Info {
         $post_type = get_post_type(get_the_id());
 
         if($post_type === 'club') {
-            $output = sprintf('<a class="about__club" href="%2$s">%1$s</a>',
+            $output = $output . sprintf('<a class="stamp stamp--club" href="%2$s">%1$s</a>',
                 esc_html(get_post_type_object($post_type)->labels->name),
                 esc_url(get_post_type_archive_link($post_type))
             );
@@ -161,6 +130,17 @@ class Knife_Post_Info {
      * @since 1.8
      */
     private static function get_head($output = '') {
+        $is_promo = get_post_meta(get_the_ID(), '_knife-promo', true);
+
+        if($is_promo) {
+            $output = sprintf('<a class="head" href="%s">%s</a>',
+                esc_url(home_url('/promo/')),
+                __('Партнерский материал', 'knife-theme')
+            );
+
+            return $output;
+        }
+
         $tags = get_the_tags();
 
         if(isset($tags[0])) {
@@ -168,7 +148,6 @@ class Knife_Post_Info {
                 esc_html($tags[0]->name),
                 esc_url(get_tag_link($tags[0]->term_id))
             );
-
         }
 
         return $output;
@@ -197,7 +176,7 @@ class Knife_Post_Info {
         }
 
         if(array_filter($meta)) {
-            $output = sprintf('<div class="meta">%s</div>',
+            $output = $output . sprintf('<div class="meta">%s</div>',
                 implode('', $meta)
             );
         }
@@ -264,6 +243,17 @@ class Knife_Post_Info {
      * Get primary post tag info
      */
     private static function meta_tag($output = '') {
+        $is_promo = get_post_meta(get_the_ID(), '_knife-promo', true);
+
+        if($is_promo) {
+            $output = sprintf('<a class="meta__item" href="%s">%s</a>',
+                esc_url(home_url('/promo/')),
+                __('Партнерский материал', 'knife-theme')
+            );
+
+            return $output;
+        }
+
         $tags = get_the_tags();
 
         if(isset($tags[0])) {

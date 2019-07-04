@@ -12,7 +12,7 @@
         <div class="entry-ask__content">
             <?php
                 the_info(
-                    '<div class="entry-ask__date">', '</div>',
+                    '<div class="entry-ask__date info">', '</div>',
                     ['date']
                 );
 
@@ -27,7 +27,7 @@
                 );
 
                 the_info(
-                    '<div class="entry-ask__asker">', '</div>',
+                    '<div class="entry-ask__asker info">', '</div>',
                     ['asker']
                 );
             ?>

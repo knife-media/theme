@@ -20,7 +20,7 @@
     <div class="widget-transparent__content">
         <?php
             the_info(
-                '<div class="widget-transparent__content-info">', '</div>',
+                '<div class="widget-transparent__content-info info">', '</div>',
                 ['author', 'date']
             );
 
