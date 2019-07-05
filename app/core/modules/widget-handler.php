@@ -53,7 +53,7 @@ class Knife_Widget_Handler {
         ]);
 
         register_sidebar([
-            'name'          => __('Фичер под меню', 'knife-theme'),
+            'name'          => __('Зона под меню', 'knife-theme'),
             'id'            => 'knife-feature',
             'description'   => __('Добавленные виджеты появятся под шапкой на главной и внутренних страницах.', 'knife-theme'),
             'before_widget' => '<div class="widget-%2$s widget-%2$s--feature">',
