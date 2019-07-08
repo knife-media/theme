@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.7
+ * @version 1.9
  */
 
 
@@ -31,7 +31,8 @@ class Knife_Widget_Informer extends WP_Widget {
             'link' => '',
             'emoji' => '',
             'color' => '#000000',
-            'background' => '#ffe64e'
+            'background' => '#ffe64e',
+            'promo' => 0
         ];
 
         $instance = wp_parse_args((array) $instance, $defaults);
@@ -62,6 +63,7 @@ class Knife_Widget_Informer extends WP_Widget {
         $instance['emoji'] = wp_encode_emoji($new_instance['emoji']);
         $instance['color'] = sanitize_hex_color($new_instance['color']);
         $instance['background'] = sanitize_hex_color($new_instance['background']);
+        $instance['promo'] = $new_instance['promo'] ? 1 : 0;
 
         return $instance;
     }
@@ -76,7 +78,8 @@ class Knife_Widget_Informer extends WP_Widget {
             'link' => '',
             'emoji' => '',
             'color' => '#000000',
-            'background' => '#ffe64e'
+            'background' => '#ffe64e',
+            'promo' => 0
         ];
 
         $instance = wp_parse_args((array) $instance, $defaults);
@@ -91,11 +94,20 @@ class Knife_Widget_Informer extends WP_Widget {
         );
 
         printf(
-            '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
+            '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"><small>%5$s</small></p>',
             esc_attr($this->get_field_id('link')),
             esc_attr($this->get_field_name('link')),
             __('Ссылка с информера', 'knife-theme'),
-            esc_attr($instance['link'])
+            esc_attr($instance['link']),
+            __('Обязательно для заполнения', 'knife-theme')
+        );
+
+        printf(
+            '<p><input type="checkbox" id="%1$s" name="%2$s" class="checkbox"%4$s><label for="%1$s">%3$s</label></p>',
+            esc_attr($this->get_field_id('promo')),
+            esc_attr($this->get_field_name('promo')),
+            __('Партнерский материал', 'knife-theme'),
+            checked($instance['promo'], 1, false)
         );
 
         printf(

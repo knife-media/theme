@@ -9,12 +9,12 @@
 
 <div class="widget-transparent__inner">
     <?php
-        if(!empty($emoji)) {
+        if(!empty($emoji)) :
             printf(
                 '<span class="widget-transparent__emoji">%s</span>',
                 wp_encode_emoji($emoji)
             );
-        }
+        endif;
     ?>
 
     <div class="widget-transparent__content">

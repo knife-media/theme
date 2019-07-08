@@ -40,16 +40,18 @@
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
+    position: relative;
 
     width: 100%;
     max-width: $width-site;
     min-height: 3rem;
-    padding: .5rem 1rem;
+    padding: .5rem 4rem .5rem 1rem;
 
     .icon {
       display: block;
+      position: absolute;
+      right: 1rem;
 
-      margin-left: auto;
       padding-left: 1rem;
       font-size: 1.5rem;
 
@@ -62,6 +64,7 @@
 
     .widget-informer__content-title {
       display: inline-block;
+      flex: 1 1 auto;
 
       font-size: 1.375rem;
       font-weight: 700;
@@ -79,12 +82,42 @@
     .widget-informer__content-emoji {
       display: block;
       cursor: default;
-      flex: 1 0 auto;
+      flex: 0 0 auto;
 
-      margin-left: 1rem;
+      margin-right: 1rem;
 
       font-size: 1.875rem;
-      line-height: 1.875rem;
+      line-height: 1;
+
+      @media screen and (max-width: 1023px) {
+        position: absolute;
+
+        & ~ * {
+          margin-left: 3rem;
+        }
+      }
+    }
+
+
+    .widget-informer__content-promo {
+      display: flex;
+      align-items: flex-end;
+      cursor: default;
+      flex: 0 0 auto;
+      order: -1;
+
+      min-height: 1.25rem;
+      margin-right: 1rem;
+      margin-bottom: 0.5rem;
+
+      font-size: 0.625rem;
+      font-weight: 700;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    @media screen and (max-width: 1023px) {
+      flex-flow: row wrap;
     }
   }
 
