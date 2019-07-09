@@ -147,8 +147,24 @@ class Knife_Widget_Informer extends WP_Widget {
             'data-label' => $instance['link']
         ];
 
+        $color = trim($instance['background'], '#');
+
+        if(strlen($color) == 3) {
+            $r = hexdec(substr($color, 0, 1) . substr($color, 0, 1));
+            $g = hexdec(substr($color, 1, 1) . substr($color, 1, 1));
+            $b = hexdec(substr($color, 2, 1) . substr($color, 2, 1));
+        } elseif(strlen($color) == 6) {
+            $r = hexdec(substr($color, 0, 2));
+            $g = hexdec(substr($color, 2, 2));
+            $b = hexdec(substr($color, 4, 2));
+        }
+
+        $y = 0.2126*$r + 0.7152*$g + 0.0722*$b;
+
+        $color = $y > 128 ? '#000' : '#fff';
+
         $options['style'] = implode('; ', [
-            'color: ' . $instance['color'],
+            'color: ' . $color,
             'background-color: ' . $instance['background']
         ]);
 
