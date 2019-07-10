@@ -31,7 +31,6 @@ class Knife_Widget_Informer extends WP_Widget {
             'link' => '',
             'emoji' => '',
             'color' => '#000000',
-            'background' => '#ffe64e',
             'promo' => 0
         ];
 
@@ -62,7 +61,6 @@ class Knife_Widget_Informer extends WP_Widget {
         $instance['link'] = esc_url($new_instance['link']);
         $instance['emoji'] = wp_encode_emoji($new_instance['emoji']);
         $instance['color'] = sanitize_hex_color($new_instance['color']);
-        $instance['background'] = sanitize_hex_color($new_instance['background']);
         $instance['promo'] = $new_instance['promo'] ? 1 : 0;
 
         return $instance;
@@ -78,7 +76,6 @@ class Knife_Widget_Informer extends WP_Widget {
             'link' => '',
             'emoji' => '',
             'color' => '#000000',
-            'background' => '#ffe64e',
             'promo' => 0
         ];
 
@@ -122,16 +119,8 @@ class Knife_Widget_Informer extends WP_Widget {
             '<p><label for="%1$s">%3$s</label><input class="color-picker" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
             esc_attr($this->get_field_id('color')),
             esc_attr($this->get_field_name('color')),
-            __('Цвет текста', 'knife-theme'),
-            esc_attr($instance['color'])
-        );
-
-        printf(
-            '<p><label for="%1$s">%3$s</label><input class="color-picker" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
-            esc_attr($this->get_field_id('background')),
-            esc_attr($this->get_field_name('background')),
             __('Цвет фона', 'knife-theme'),
-            esc_attr($instance['background'])
+            esc_attr($instance['color'])
         );
     }
 
@@ -147,25 +136,9 @@ class Knife_Widget_Informer extends WP_Widget {
             'data-label' => $instance['link']
         ];
 
-        $color = trim($instance['background'], '#');
-
-        if(strlen($color) == 3) {
-            $r = hexdec(substr($color, 0, 1) . substr($color, 0, 1));
-            $g = hexdec(substr($color, 1, 1) . substr($color, 1, 1));
-            $b = hexdec(substr($color, 2, 1) . substr($color, 2, 1));
-        } elseif(strlen($color) == 6) {
-            $r = hexdec(substr($color, 0, 2));
-            $g = hexdec(substr($color, 2, 2));
-            $b = hexdec(substr($color, 4, 2));
-        }
-
-        $y = 0.2126*$r + 0.7152*$g + 0.0722*$b;
-
-        $color = $y > 128 ? '#000' : '#fff';
-
         $options['style'] = implode('; ', [
-            'color: ' . $color,
-            'background-color: ' . $instance['background']
+            'background-color: ' . $instance['color'],
+            'color: ' . $this->get_text_color($instance['color'])
         ]);
 
         if($post_id > 0) {
@@ -180,6 +153,30 @@ class Knife_Widget_Informer extends WP_Widget {
         return $attributes;
     }
 
+
+    /**
+     * Get text color using relative luminance
+     *
+     * @link https://en.wikipedia.org/wiki/Relative_luminance
+     */
+    private function get_text_color($color) {
+        $color = trim($color, '#');
+
+        if(strlen($color) == 3) {
+            $r = hexdec(substr($color, 0, 1) . substr($color, 0, 1));
+            $g = hexdec(substr($color, 1, 1) . substr($color, 1, 1));
+            $b = hexdec(substr($color, 2, 1) . substr($color, 2, 1));
+        } elseif(strlen($color) == 6) {
+            $r = hexdec(substr($color, 0, 2));
+            $g = hexdec(substr($color, 2, 2));
+            $b = hexdec(substr($color, 4, 2));
+        }
+
+        // Get relative luminance
+        $y = 0.2126*$r + 0.7152*$g + 0.0722*$b;
+
+        return $y > 128 ? '#000' : '#fff';
+    }
 }
 
 
