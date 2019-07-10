@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.7
+ * @version 1.9
  */
 
 
@@ -50,9 +50,6 @@ class Knife_Special_Projects {
 
         // Update archive caption title
         add_filter('get_the_archive_title', [__CLASS__, 'update_archive_title'], 15);
-
-        // Add archive title on single with special tax
-        add_filter('get_the_archive_title', [__CLASS__, 'update_single_title'], 20);
     }
 
 
@@ -96,7 +93,7 @@ class Knife_Special_Projects {
      */
     public static function add_options_fields() {
         // Print special options row
-        add_action(self::$taxonomy . "_edit_form_fields", [__CLASS__, 'print_options_row'], 12);
+        add_action(self::$taxonomy . "_edit_form_fields", [__CLASS__, 'print_options_row'], 9);
 
         // Save admin side options meta
         add_action("edited_" . self::$taxonomy, [__CLASS__, 'save_options_meta']);
@@ -204,8 +201,8 @@ class Knife_Special_Projects {
         }
 
         $styles = [
-            'color: ' . $options['color'],
-            'background: ' . $options['background']
+            'background-color: ' . $options['color'],
+            'color: ' . self::get_text_color($options['color'])
         ];
 
         $title = sprintf(
@@ -219,46 +216,30 @@ class Knife_Special_Projects {
 
 
     /**
-     * Update special post single caption title
+     * Get text color using relative luminance
      *
-     * @since 1.4
+     * @link https://en.wikipedia.org/wiki/Relative_luminance
+     * @since 1.9
      */
-    public static function update_single_title($title) {
-        if(!is_single()) {
-            return $title;
+    private static function get_text_color($color) {
+        $color = trim($color, '#');
+
+        if(strlen($color) == 3) {
+            $r = hexdec(substr($color, 0, 1) . substr($color, 0, 1));
+            $g = hexdec(substr($color, 1, 1) . substr($color, 1, 1));
+            $b = hexdec(substr($color, 2, 1) . substr($color, 2, 1));
+        } elseif(strlen($color) == 6) {
+            $r = hexdec(substr($color, 0, 2));
+            $g = hexdec(substr($color, 2, 2));
+            $b = hexdec(substr($color, 4, 2));
         }
 
-        if(has_term('', self::$taxonomy)) {
-            $terms = get_the_terms(get_queried_object_id(), self::$taxonomy);
+        // Get relative luminance
+        $y = 0.2126*$r + 0.7152*$g + 0.0722*$b;
 
-            // Check only first term
-            $options = get_term_meta($terms[0]->term_id, self::$term_meta, true);
-
-            if(empty($options)) {
-                $title = sprintf(
-                    '<a class="tagline-link tagline-link--%2$s" href="%3$s">%1$s</a>',
-                    esc_html($terms[0]->name), esc_attr(self::$taxonomy),
-                    esc_url(get_term_link($terms[0]->term_id, self::$taxonomy))
-                );
-
-                return $title;
-            }
-
-            $styles = [
-                'color: ' . $options['color'],
-                'background: ' . $options['background']
-            ];
-
-            $title = sprintf(
-                '<a class="tagline-link tagline-link--%2$s" href="%3$s" style="%4$s">%1$s</a>',
-                esc_html($terms[0]->name), esc_attr(self::$taxonomy),
-                esc_url(get_term_link($terms[0]->term_id, self::$taxonomy)),
-                esc_attr(implode(';', $styles))
-            );
-
-            return $title;
-        }
+        return $y > 128 ? '#000' : '#fff';
     }
+
 }
 
 

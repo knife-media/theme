@@ -65,14 +65,6 @@
             );
         ?>
     </div>
-
-    <?php if(get_the_archive_title()) : ?>
-        <div class="entry-caption">
-            <?php
-                the_archive_title();
-            ?>
-        </div>
-    <?php endif; ?>
 </article>
 
 <?php get_sidebar(); ?>
