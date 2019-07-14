@@ -6,7 +6,7 @@
 *
 * @package knife-theme
 * @since 1.3
-* @version 1.8
+* @version 1.9
 */
 
 
@@ -122,8 +122,8 @@ class Knife_Club_Section {
         // Prepend author meta to content
         add_filter('the_content', [__CLASS__, 'insert_author_link']);
 
-        // Append promo link to club content
-        add_filter('the_content', [__CLASS__, 'insert_club_promo']);
+        // Append club link to post content
+        add_filter('the_content', [__CLASS__, 'insert_club_link']);
     }
 
 
@@ -331,7 +331,7 @@ class Knife_Club_Section {
         }
 
         $output = sprintf(
-            '<div class="author author--ask">%s</div>',
+            '<div class="author">%s</div>',
             implode("\n", $author)
         );
 
@@ -344,13 +344,13 @@ class Knife_Club_Section {
      *
      * @since 1.4
      */
-    public static function insert_club_promo($content) {
+    public static function insert_club_link($content) {
         if(is_singular(self::$post_type) && in_the_loop()) {
             $button_link = get_theme_mod(self::$button_link, '');
 
             if(strlen($button_link) > 0) {
-                $promo_link = sprintf('<a class="promo promo--club" href="%2$s">%1$s</a>',
-                    __('Вы тоже можете писать в Клуб «Ножа»!<br> Попробуйте, это бесплатно и совершенно не страшно.', 'knife-theme'),
+                $promo_link = sprintf('<figure class="figure figure--club"><a class="button" href="%2$s">%1$s</a>',
+                    __('Присоединиться к клубу', 'knife-theme'),
                     esc_url($button_link)
                 );
 

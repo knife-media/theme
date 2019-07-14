@@ -65,4 +65,10 @@
             );
         ?>
     </div>
+
+    <?php
+        the_promo(
+            '<div class="entry-caption">', '</div>'
+        );
+    ?>
 </article>

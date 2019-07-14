@@ -8,6 +8,7 @@
   font-weight: 500;
   line-height: 1.125;
   text-align: center;
+  text-decoration: none;
 
   color: $color-white;
   background-color: $color-primary;
@@ -15,8 +16,38 @@
   border: solid 1px $color-primary;
   border-radius: 2px;
 
+  transition: .25s;
+  -webkit-font-smoothing: antialiased;
+
   &:hover {
     filter: brightness(125%);
+  }
+
+  .entry-content & {
+    position: relative;
+
+    width: auto;
+    min-width: 50%;
+    max-width: 100%;
+    margin: 1rem 0;
+    padding: 1rem 1.5rem;
+
+    font-size: 1.25rem;
+
+    color: $color-white;
+    background-color: $color-button;
+
+    border: none;
+    border-radius: 3px;
+
+    &:hover {
+      filter: none;
+      background-color: darken($color-button, 4);
+    }
+
+    @media screen and (max-width: 767px) {
+      font-size: 1rem;
+    }
   }
 
   @media screen and (max-width: 767px) {

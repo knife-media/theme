@@ -6,6 +6,7 @@
  *
  * @package knife-theme
  * @since 1.8
+ * @version 1.9
  */
 
 if (!defined('WPINC')) {
@@ -29,6 +30,15 @@ class Knife_Promo_Manager {
      * @var     string
      */
     private static $meta_promo = '_knife-promo';
+
+
+    /**
+     * Unique meta to store promo options
+     *
+     * @access  private
+     * @var     string
+     */
+    private static $meta_options = '_knife-promo-options';
 
 
     /**
@@ -77,11 +87,40 @@ class Knife_Promo_Manager {
         // Set is-promo class if need
         add_filter('body_class', [__CLASS__, 'set_body_class'], 11);
 
-        // Promo checkbox
-        add_action('post_submitbox_misc_actions', [__CLASS__, 'print_checkbox']);
+        // Add snippet image metabox
+        add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
 
         // Update promo post meta on save post
         add_action('save_post', [__CLASS__, 'save_metabox']);
+
+        // Enqueue metabox scripts
+        add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
+    }
+
+
+    /**
+     * Get promo board markup
+     */
+    public static function get_promo($output = '') {
+        $post_id = get_the_ID();
+
+        // Check if post promoted
+        if(!get_post_meta($post_id, self::$meta_promo, true)) {
+            return $output;
+        }
+
+        // Get promo options
+        $options = (array) get_post_meta($post_id, self::$meta_options, true);
+
+        // Set default promo panel color
+        if(empty($options['color'])) {
+            $options['color'] = '#fff';
+        }
+
+        // Get promo parts
+        $output = self::compose_promo($options);
+
+        return $output;
     }
 
 
@@ -184,28 +223,47 @@ class Knife_Promo_Manager {
     }
 
 
+    /**
+     * Add snippet image metabox
+     */
+    public static function add_metabox() {
+        add_meta_box('knife-promo-metabox', __('Настройки промо', 'knife-theme'), [__CLASS__, 'display_metabox'], self::$post_type, 'side');
+    }
+
 
     /**
-     * Print checkbox in post publish action section
+     * Enqueue assets for metabox
      */
-    public static function print_checkbox() {
-        $post_id = get_the_ID();
+    public static function enqueue_assets($hook) {
+        $version = wp_get_theme()->get('Version');
+        $include = get_template_directory_uri() . '/core/include';
 
-        if(!in_array(get_post_type($post_id), self::$post_type)) {
-            return;
+        if(in_array($hook, ['post.php', 'post-new.php'])) {
+            $post_id = get_the_ID();
+
+            // Current screen object
+            $screen = get_current_screen();
+
+            if(!in_array($screen->post_type, self::$post_type)) {
+                return;
+            }
+
+            // Insert color picker scripts
+            wp_enqueue_style('wp-color-picker');
+
+            // Insert admin scripts
+            wp_enqueue_script('knife-promo-metabox', $include . '/scripts/promo-metabox.js', ['jquery', 'wp-color-picker'], $version);
         }
-
-        $promo = get_post_meta($post_id, self::$meta_promo, true);
-
-        printf(
-            '<div class="misc-pub-section misc-pub-section-last"><label><input type="checkbox" name="%1$s" class="checkbox"%3$s> %2$s</label></div>',
-            esc_attr(self::$meta_promo),
-            __('Партнерский материал', 'knife-theme'),
-            checked($promo, 1, false)
-        );
+    }
 
 
-        wp_nonce_field('checkbox', self::$metabox_nonce);
+    /**
+     * Display feed metabox
+     */
+    public static function display_metabox() {
+        $include = get_template_directory() . '/core/include';
+
+        include_once($include . '/templates/promo-metabox.php');
     }
 
 
@@ -217,7 +275,7 @@ class Knife_Promo_Manager {
             return;
         }
 
-        if(!wp_verify_nonce($_REQUEST[self::$metabox_nonce], 'checkbox')) {
+        if(!wp_verify_nonce($_REQUEST[self::$metabox_nonce], 'metabox')) {
             return;
         }
 
@@ -229,11 +287,17 @@ class Knife_Promo_Manager {
             return;
         }
 
+        // Update options
+        if(isset($_REQUEST[self::$meta_options])) {
+            update_post_meta($post_id, self::$meta_options, $_REQUEST[self::$meta_options]);
+        }
+
+        // Save promo meta
         if(empty($_REQUEST[self::$meta_promo])) {
             return delete_post_meta($post_id, self::$meta_promo);
         }
 
-        return update_post_meta($post_id, self::$meta_promo, 1);
+        update_post_meta($post_id, self::$meta_promo, 1);
     }
 
 
@@ -250,6 +314,98 @@ class Knife_Promo_Manager {
         }
 
         return $classes;
+    }
+
+
+    /**
+     * Affiliate helper method
+     *
+     * @since 1.9
+     */
+    private static function compose_promo($options, $partner = '') {
+        $classes = 'promo';
+
+        // Add logo if exists
+        if(!empty($options['logo'])) {
+            $partner = $partner . sprintf(
+                '<img class="promo__partner-logo" src="%s" alt="">',
+                esc_url($options['logo'])
+            );
+
+            $classes = $classes . ' promo--logo';
+        }
+
+        // Add title if exists
+        if(!empty($options['title'])) {
+            $partner = $partner . sprintf(
+                '<span class="promo__partner-title">%s</span>',
+                sanitize_text_field($options['title'])
+            );
+        }
+
+        // Add required title
+        $promo = sprintf(
+            '<span class="promo__text">%s</span>',
+            __('Партнерский материал', 'knife-theme')
+        );
+
+        // Wrap logo and title
+        if(!empty($partner)) {
+            $promo = $promo . sprintf(
+                '<div class="promo__partner">%s</div>', $partner
+            );
+        }
+
+        $styles = [
+            'background-color:' . $options['color'],
+            'color:' . self::get_text_color($options['color'])
+        ];
+
+        $styles = implode('; ', $styles);
+
+        // Return if link not defined
+        if(empty($options['link'])) {
+            $output = sprintf(
+                '<div class="%2$s" style="%3$s">%1$s</div>',
+                $promo, $classes, esc_attr($styles)
+            );
+
+            return $output;
+        }
+
+        $output = sprintf(
+            '<a href="%2$s" class="%3$s" target="_blank" rel="noopener" style="%4$s">%1$s</a>',
+            $promo, esc_url($options['link']),
+            $classes, esc_attr($styles)
+        );
+
+        return $output;
+    }
+
+
+    /**
+     * Get text color using relative luminance
+     *
+     * @link https://en.wikipedia.org/wiki/Relative_luminance
+     * @since 1.9
+     */
+    private static function get_text_color($color) {
+        $color = trim($color, '#');
+
+        if(strlen($color) == 3) {
+            $r = hexdec(substr($color, 0, 1) . substr($color, 0, 1));
+            $g = hexdec(substr($color, 1, 1) . substr($color, 1, 1));
+            $b = hexdec(substr($color, 2, 1) . substr($color, 2, 1));
+        } elseif(strlen($color) == 6) {
+            $r = hexdec(substr($color, 0, 2));
+            $g = hexdec(substr($color, 2, 2));
+            $b = hexdec(substr($color, 4, 2));
+        }
+
+        // Get relative luminance
+        $y = 0.2126*$r + 0.7152*$g + 0.0722*$b;
+
+        return $y > 128 ? '#000' : '#fff';
     }
 }
 

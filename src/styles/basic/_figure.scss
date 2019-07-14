@@ -127,6 +127,32 @@
     }
   }
 
+  &.figure--club {
+    display: block;
+    position: relative;
+
+    width: $width-content;
+    max-width: none;
+    margin-top: 2rem;
+
+    .button {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 500;
+
+      color: $color-white;
+      background-color: $color-club;
+
+      &:hover {
+        filter: brightness(125%);
+      }
+
+      @media screen and (max-width: 767px) {
+        font-size: 1rem;
+      }
+    }
+  }
+
   &.figure--widget {
     width: calc(100% + 2rem);
     max-width: none;

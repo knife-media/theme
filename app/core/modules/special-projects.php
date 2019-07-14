@@ -191,7 +191,7 @@ class Knife_Special_Projects {
 
         $options = get_term_meta(get_queried_object_id(), self::$term_meta, true);
 
-        if(empty($options)) {
+        if(empty($options['color'])) {
             $title =  sprintf(
                 '<h1 class="tagline-title tagline-title--%2$s">%1$s</h1>',
                 single_term_title('', false), esc_attr(self::$taxonomy)
@@ -201,14 +201,14 @@ class Knife_Special_Projects {
         }
 
         $styles = [
-            'background-color: ' . $options['color'],
-            'color: ' . self::get_text_color($options['color'])
+            'background-color:' . $options['color'],
+            'color:' . self::get_text_color($options['color'])
         ];
 
         $title = sprintf(
             '<h1 class="tagline-title tagline-title--%2$s" style="%3$s">%1$s</h1>',
             single_term_title('', false), esc_attr(self::$taxonomy),
-            esc_attr(implode(';', $styles))
+            esc_attr(implode('; ', $styles))
         );
 
         return $title;
@@ -239,7 +239,6 @@ class Knife_Special_Projects {
 
         return $y > 128 ? '#000' : '#fff';
     }
-
 }
 
 

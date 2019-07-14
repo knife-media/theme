@@ -1,78 +1,75 @@
 .promo {
-  display: block;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
   position: relative;
+  cursor: default;
 
-  padding: 1rem 2rem;
-  font-size: 1.25rem;
-  font-weight: 500;
-  line-height: 1.375;
-  text-decoration: none;
+  min-height: 2.5rem;
+  margin-top: 1rem;
+  padding: .25rem 0;
+  padding-left: calc(50% - #{$width-content / 2} - 1rem);
+  overflow: hidden;
 
-  will-change: transform;
-  -webkit-font-smoothing: antialiased;
+  .promo__text {
+    display: block;
 
-  &:hover {
-    filter: brightness(120%);
+    margin: 0 1rem;
+    margin-right: 1.25rem;
+    padding: .25rem 0;
+
+    font-size: .625rem;
+    font-weight: 700;
+    line-height: 1;
+    text-transform: uppercase;
   }
 
-  .entry-content & {
-    margin-top: 2rem;
+  .promo__partner {
+    display: flex;
+    align-items: center;
+    flex-flow: row wrap;
 
-    color: $color-white;
-    background-color: $color-primary;
+    padding: 0 1rem;
+    margin-left: 1rem;
+    margin-left: -1px;
 
-    border-bottom: none;
-    border-radius: 3px;
-  }
+    border-left: solid 1px;
 
-  &.promo--club {
-    color: $color-text;
-    background-color: $color-club;
-  }
-
-  &.promo--news {
-    padding-right: 6rem;
-
-    color: $color-white;
-    background-color: #f33;
-    background-image: url('images/yandex-news-button.svg');
-    background-size: 2rem 2rem;
-    background-repeat: no-repeat;
-    background-position: right 2rem center;
-  }
-
-  &.promo--skyeng {
-    padding-right: 7rem;
-    font-size: 1.625rem;
-    font-weight: 400;
-    line-height: 1.25;
-
-    color: $color-white;
-    background: linear-gradient(to bottom, #3f76ea 0%, #3e71e0 100%);
-
-    strong {
+    .promo__partner-title {
       display: block;
 
-      font-weight: 700;
+      font-size: 0.875rem;
+      font-weight: 500;
+      line-height: 1.25;
+      text-transform: uppercase;
     }
 
-    img {
-      position: absolute;
-      top: 2rem;
-      right: 2rem;
+    .promo__partner-logo {
+      display: block;
 
-      width: 60px;
-      height: auto;
-    }
-
-    @media screen and (max-width: 767px) {
-      font-size: 1.25rem;
-      line-height: 1.375;
+      width: auto;
+      max-height: 1.5rem;
+      margin: 0.25rem 0;
+      margin-right: 1rem;
     }
   }
 
-  @media screen and (max-width: 767px) {
-    padding: 1rem;
-    font-size: 1.125rem;
+  &.promo--logo {
+    .promo__text {
+      margin-right: 0;
+    }
+
+    .promo__partner {
+      margin-left: 0;
+      border-left: none;
+    }
+  }
+
+  @at-root #{selector-unify(&, a)} {
+    cursor: pointer;
+
+    &:hover {
+      filter: brightness(120%);
+    }
   }
 }

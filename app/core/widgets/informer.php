@@ -132,13 +132,14 @@ class Knife_Widget_Informer extends WP_Widget {
         $options = [
             'href' => esc_url($instance['link']),
             'target' => '_blank',
+            'rel' => 'noopener',
             'data-action' => __('Informer click', 'knife-theme'),
             'data-label' => $instance['link']
         ];
 
         $options['style'] = implode('; ', [
-            'background-color: ' . $instance['color'],
-            'color: ' . $this->get_text_color($instance['color'])
+            'background-color:' . $instance['color'],
+            'color:' . $this->get_text_color($instance['color'])
         ]);
 
         if($post_id > 0) {

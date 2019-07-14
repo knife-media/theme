@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.8
+ * @version 1.9
  */
 
 
@@ -70,6 +70,31 @@ if(!function_exists('the_lead')) :
     function the_lead($before = '', $after = '', $echo = true, $output = '') {
         if(method_exists('Knife_Post_Lead', 'get_lead')) {
             $output = Knife_Post_Lead::get_lead();
+        }
+
+        // Check if output not empty
+        if(strlen($output) > 0) {
+            $output = $before . $output . $after;
+
+            if($echo === false) {
+                return $output;
+            }
+
+            echo $output;
+        }
+    }
+endif;
+
+
+if(!function_exists('the_promo')) :
+    /**
+     * Public function using on templates to get promo bar
+     *
+     * @since 1.9
+     */
+    function the_promo($before = '', $after = '', $echo = true, $output = '') {
+        if(method_exists('Knife_Promo_Manager', 'get_promo')) {
+            $output = Knife_Promo_Manager::get_promo();
         }
 
         // Check if output not empty

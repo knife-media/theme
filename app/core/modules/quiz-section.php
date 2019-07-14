@@ -508,7 +508,7 @@ class Knife_Quiz_Section {
                     }
 
                     // Add blank and rel attributes to answer
-                    $answer = wp_targeted_link_rel(links_add_target($answer));
+                    $answer['message'] = wp_targeted_link_rel(links_add_target($answer['message']));
                 }
             }
 
