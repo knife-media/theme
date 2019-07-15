@@ -372,6 +372,8 @@ class Knife_Promo_Manager {
                 '<span class="promo__partner-title">%s</span>',
                 sanitize_text_field($options['title'])
             );
+
+            $classes = $classes . ' promo--title';
         }
 
         // Add required title
