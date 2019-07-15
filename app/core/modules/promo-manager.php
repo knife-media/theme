@@ -82,7 +82,7 @@ class Knife_Promo_Manager {
         add_filter('get_the_archive_title', [__CLASS__, 'update_archive_title'], 12);
 
         // Update promo archive document title
-        add_filter('document_title_parts', [__CLASS__, 'update_title'], 10);
+        add_filter('document_title_parts', [__CLASS__, 'update_document_title'], 10);
 
         // Set is-promo class if need
         add_filter('body_class', [__CLASS__, 'set_body_class'], 11);
@@ -95,6 +95,9 @@ class Knife_Promo_Manager {
 
         // Enqueue metabox scripts
         add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
+
+        // Add promo tag to tag list
+        add_filter('term_links-post_tag', [__CLASS__, 'add_promo_tag']);
     }
 
 
@@ -214,12 +217,33 @@ class Knife_Promo_Manager {
     /**
      * Update promo archive document title
      */
-    public static function update_title($title) {
+    public static function update_document_title($title) {
         if(get_query_var(self::$query_var)) {
             $title['title'] = __('Партнерские материалы', 'knife-theme');
         }
 
         return $title;
+    }
+
+
+    /**
+     * Add promo tag to tag list
+     *
+     * @since 1.9
+     */
+    public static function add_promo_tag($tags) {
+        $is_promo = get_post_meta(get_the_ID(), self::$meta_promo, true);
+
+        if($is_promo) {
+            $link = sprintf('<a href="%s" rel="tag">%s</a>',
+                esc_url(home_url(self::$query_var)),
+                __('партнерский материал', 'knife-theme')
+            );
+
+            array_unshift($tags, $link);
+        }
+
+        return $tags;
     }
 
 
