@@ -313,7 +313,14 @@ class Knife_Promo_Manager {
 
         // Update options
         if(isset($_REQUEST[self::$meta_options])) {
-            update_post_meta($post_id, self::$meta_options, $_REQUEST[self::$meta_options]);
+            $options = $_REQUEST[self::$meta_options];
+
+            // Add # to color if not exists
+            if(!empty($options['color'])) {
+                $options['color'] = sanitize_hex_color('#' . ltrim($options['color'], '#'));
+            }
+
+            update_post_meta($post_id, self::$meta_options, $options);
         }
 
         // Save promo meta
