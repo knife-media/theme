@@ -157,7 +157,10 @@
   }
 
   &.widget-story--entry {
+    z-index: 1;
+
     padding: 0 1rem 1rem;
+    background-color: darken($color-white, 5);
 
     .widget-story__title {
       font-size: 1.25rem;

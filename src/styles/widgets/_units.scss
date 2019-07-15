@@ -29,7 +29,10 @@
   }
 
   &.widget-units--entry {
+    z-index: 1;
+
     padding: 0 1rem 1rem;
+    background-color: darken($color-white, 5);
 
     .unit__content-link {
       font-size: 1.25rem;

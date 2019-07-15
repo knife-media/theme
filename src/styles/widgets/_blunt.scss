@@ -89,17 +89,12 @@
   }
 
   &.widget-blunt--entry {
-    justify-content: center;
-
     width: 100%;
-    max-width: none;
+    max-width: $width-content;
     margin: 0;
-
-    background-color: $color-white;
 
     .widget-blunt__inner {
       width: 100%;
-      max-width: $width-content;
     }
 
     .widget-blunt__link {

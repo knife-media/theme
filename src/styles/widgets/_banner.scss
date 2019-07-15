@@ -47,7 +47,14 @@
   }
 
   &.widget-banner--entry {
+    align-items: center;
+
+    width: $width-content;
     padding: 1rem;
+    box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, .2);
+
+    border-top: solid 6px $color-primary;
+    border-radius: 3px;
 
     .widget-banner__link {
       width: auto;
