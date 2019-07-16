@@ -74,7 +74,7 @@ add_action('admin_enqueue_scripts', function() {
     $version = wp_get_theme()->get('Version');
 
     // Insert custom editor styles
-    add_editor_style('/core/include/styles/editor-styles.css', [], $version);
+    add_editor_style('core/include/styles/editor-styles.css', [], $version);
 });
 
 

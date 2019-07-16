@@ -1,6 +1,6 @@
 (function() {
-  tinymce.PluginManager.add('quote', function(editor, url) {
-    editor.addButton('quote', {
+  tinymce.PluginManager.add('quote-button', function(editor, url) {
+    editor.addButton('quote-button', {
       icon: 'blockquote',
       title: 'Добавить цитату',
       onclick: function() {

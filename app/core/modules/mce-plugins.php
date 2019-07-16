@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.2
- * @version 1.5
+ * @version 1.9
  */
 
 
@@ -64,9 +64,11 @@ class Knife_MCE_Plugins {
     public static function add_plugins($plugins) {
         $include = get_template_directory_uri() . '/core/include';
 
-        $plugins['pushbutton'] = $include . '/scripts/mce-pushbutton.js';
-        $plugins['markbutton'] = $include . '/scripts/mce-markbutton.js';
-        $plugins['quote'] = $include . '/scripts/mce-blockquote.js';
+        $plugins['push-button']  = $include . '/tinymce/button-push.js';
+        $plugins['mark-button']  = $include . '/tinymce/button-mark.js';
+        $plugins['quote-button'] = $include . '/tinymce/button-quote.js';
+
+        $plugins['figure-helper'] = $include . '/tinymce/helper-figure.js';
 
         return $plugins;
     }
@@ -76,7 +78,7 @@ class Knife_MCE_Plugins {
      * Register buttons in editor panel
      */
     public static function register_buttons($buttons) {
-        array_push($buttons, 'pushbutton', 'markbutton', 'quote');
+        array_push($buttons, 'push-button', 'mark-button', 'quote-button', 'figure-helper');
 
         if(($key = array_search('blockquote', $buttons)) !== false) {
             unset($buttons[$key]);
