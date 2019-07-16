@@ -117,14 +117,30 @@
       continue;
     }
 
+    var allowed = ['p', 'blockquote'];
+
     for(var e = range; e < post.children.length - 5; e++) {
       var relative = post.children[e];
 
-      if(relative.tagName.toLowerCase() === 'p') {
-        appendSimilar(relative, similar[i]);
-
-        break;
+      // Check if next tag in allowed list
+      if(allowed.indexOf(relative.tagName.toLowerCase()) < 0) {
+        continue;
       }
+
+      if(typeof post.children[e - 1] === 'undefined') {
+        continue;
+      }
+
+      var following = post.children[e - 1];
+
+      // Check if prev tag in allowed list
+      if(allowed.indexOf(following.tagName.toLowerCase()) < 0) {
+        continue;
+      }
+
+      appendSimilar(following, similar[i]);
+
+      break;
     }
 
     range = Math.floor(post.children.length / 3) + e;

@@ -32,7 +32,7 @@
   var middle = Math.floor(post.children.length / 2);
 
   if(post.children.length > 8) {
-    var allowed = ['p', 'ul', 'ol', 'blockquote'];
+    var allowed = ['p', 'blockquote'];
 
     for(var i = middle; i < post.children.length; i++) {
       var relative = post.children[i];
