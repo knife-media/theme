@@ -21,6 +21,28 @@
           });
         }
       });
+
+      // Trigger before set content
+      editor.on('BeforeSetContent', function (e) {
+        var node = editor.selection.getNode();
+
+        // Move cursor to the end of figure block
+        if (node.nodeName.toLowerCase() === 'figure') {
+          editor.selection.select(node);
+          editor.selection.collapse(false);
+        }
+      });
+
+
+      // Trigger on set content
+      editor.on('SetContent', function (e) {
+        var node = editor.selection.getNode();
+
+        // Append space after figure
+        if (node.nodeName.toLowerCase() === 'figure') {
+          editor.execCommand('mceInsertContent', false, '<br>');
+        }
+      });
     });
 })();
 
