@@ -51,13 +51,37 @@
 
     width: $width-content;
     padding: 1rem;
+    padding-top: 3rem;
     box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, .2);
 
-    border-top: solid 6px $color-primary;
+    border-top: solid 2px $color-primary;
     border-radius: 3px;
 
     .widget-banner__link {
       width: auto;
+    }
+
+    &:before {
+      content: "А вот еще что интересно";
+      display: flex;
+      align-items: center;
+
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      width: 100%;
+      height: 1.75rem;
+      padding: 0 1rem 2px 1rem;
+
+      font-size: .5625rem;
+      font-weight: 700;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+
+      background-color: $color-primary;
+      color: $color-white;
     }
   }
 
