@@ -21,7 +21,7 @@
             },
           ],
           onsubmit: function(e) {
-            editor.insertContent( '<a class="button" href="' + e.data.href + '" target="_blank" rel="noopener">' + e.data.name  + '</a>');
+            editor.insertContent('<a class="button" href="' + e.data.href + '" target="_blank" rel="noopener">' + e.data.name  + '</a>');
           }
         });
       }

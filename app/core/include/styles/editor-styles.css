@@ -54,3 +54,14 @@ figure {
 blockquote {
   margin: 0;
 }
+
+.similar {
+  display: block;
+
+  margin: 1rem 0;
+  padding: 1rem;
+  box-shadow: 1px 1px 4px 0 rgba(0,0,0,.2);
+
+  border-top: solid 6px #1e488f;
+  border-radius: 3px;
+}

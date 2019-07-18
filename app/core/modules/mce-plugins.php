@@ -64,11 +64,17 @@ class Knife_MCE_Plugins {
     public static function add_plugins($plugins) {
         $include = get_template_directory_uri() . '/core/include';
 
-        $plugins['push-button']  = $include . '/tinymce/button-push.js';
-        $plugins['mark-button']  = $include . '/tinymce/button-mark.js';
-        $plugins['quote-button'] = $include . '/tinymce/button-quote.js';
+        // Add custom plugins
+        $custom = [
+            'push-button' => $include . '/tinymce/button-push.js',
+            'mark-button' => $include . '/tinymce/button-mark.js',
+            'quote-button' => $include . '/tinymce/button-quote.js',
+            'similar-button' => $include . '/tinymce/button-similar.js',
 
-        $plugins['figure-helper'] = $include . '/tinymce/helper-figure.js';
+            'figure-helper' => $include . '/tinymce/helper-figure.js'
+        ];
+
+        $plugins = $plugins + $custom;
 
         return $plugins;
     }
@@ -78,7 +84,7 @@ class Knife_MCE_Plugins {
      * Register buttons in editor panel
      */
     public static function register_buttons($buttons) {
-        array_push($buttons, 'push-button', 'mark-button', 'quote-button', 'figure-helper');
+        array_push($buttons, 'push-button', 'mark-button', 'quote-button', 'similar-button', 'figure-helper');
 
         if(($key = array_search('blockquote', $buttons)) !== false) {
             unset($buttons[$key]);
@@ -93,6 +99,7 @@ class Knife_MCE_Plugins {
      */
     public static function configure_tinymce($settings) {
         $settings['invalid_styles'] = 'color font-weight font-size';
+        $settings['valid_children'] = '-aside[aside]';
 
         return $settings;
     }
