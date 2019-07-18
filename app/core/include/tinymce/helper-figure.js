@@ -32,17 +32,6 @@
           editor.selection.collapse(false);
         }
       });
-
-
-      // Trigger on set content
-      editor.on('SetContent', function (e) {
-        var node = editor.selection.getNode();
-
-        // Append space after figure
-        if (node.nodeName.toLowerCase() === 'figure') {
-          editor.execCommand('mceInsertContent', false, '<br>');
-        }
-      });
     });
 })();
 
