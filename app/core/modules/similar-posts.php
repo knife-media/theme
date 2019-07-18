@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.5
- * @version 1.7
+ * @version 1.9
  */
 
 
@@ -25,6 +25,16 @@ class Knife_Similar_Posts {
 
 
     /**
+     * Default post type with similar aside
+     *
+     * @since   1.8
+     * @access  private
+     * @var     array
+     */
+    private static $post_type = ['post', 'club'];
+
+
+    /**
      * Init function instead of constructor
      */
     public static function load_module() {
@@ -37,7 +47,7 @@ class Knife_Similar_Posts {
      * Inject similar posts data
      */
     public static function inject_object() {
-        if(is_singular('post')) {
+        if(is_singular(self::$post_type)) {
             // Check if promo post
             $is_promo = get_post_meta(get_the_ID(), '_knife-promo', true);
 

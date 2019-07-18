@@ -27,7 +27,7 @@ class Knife_Label_Posts {
 
 
     /**
-     * Default post type with custom background metabox
+     * Default post type with posts labels
      *
      * @since   1.8
      * @access  private
