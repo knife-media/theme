@@ -22,7 +22,7 @@
         <?php
             echo wp_get_attachment_image(
                 $instance['cover'], 'single', false,
-                ['class' => 'widget-single__image-thumbnail']
+                ['class' => 'widget-single__image-thumbnail', 'loading' => 'lazy']
             );
         ?>
     </div>

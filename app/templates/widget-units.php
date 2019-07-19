@@ -4,6 +4,7 @@
  *
  * @package knife-theme
  * @since 1.4
+ * @version 1.9
  */
 ?>
 
@@ -18,7 +19,7 @@
 
         <div class="unit__image">
             <?php
-                the_post_thumbnail($size, ['class' => 'unit__image-thumbnail']);
+                the_post_thumbnail($size, ['class' => 'unit__image-thumbnail', 'loading' => 'lazy']);
             ?>
         </div>
 

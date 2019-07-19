@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.4
+ * @version 1.9
  */
 ?>
 
@@ -14,7 +14,7 @@
             <?php
                 the_post_thumbnail(
                     get_query_var('widget_size', 'triple'),
-                    ['class' => 'unit__image-thumbnail']
+                    ['class' => 'unit__image-thumbnail', 'loading' => 'lazy']
                 );
             ?>
         </div>
