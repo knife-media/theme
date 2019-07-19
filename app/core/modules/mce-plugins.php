@@ -66,12 +66,12 @@ class Knife_MCE_Plugins {
 
         // Add custom plugins
         $custom = [
-            'push-button' => $include . '/tinymce/button-push.js',
-            'mark-button' => $include . '/tinymce/button-mark.js',
-            'quote-button' => $include . '/tinymce/button-quote.js',
-            'similar-button' => $include . '/tinymce/button-similar.js',
+            'push-button' => $include . '/tinymce/push-button.js',
+            'mark-button' => $include . '/tinymce/mark-button.js',
+            'quote-button' => $include . '/tinymce/quote-button.js',
+            'similar-button' => $include . '/tinymce/similar-button.js',
 
-            'figure-helper' => $include . '/tinymce/helper-figure.js'
+            'figure-helper' => $include . '/tinymce/figure-helper.js'
         ];
 
         $plugins = $plugins + $custom;
