@@ -5,7 +5,7 @@
 
   width: 100%;
   max-width: $width-site - 2rem;
-  margin: 1rem 1rem 0;
+  margin: 1rem 1rem -2px;
 
  .widget-blunt__link {
     display: block;
@@ -62,10 +62,6 @@
       }
     }
 
-    &:last-child {
-      margin-bottom: 0;
-    }
-
     @media screen and (max-width: 1023px) {
       width: 100%;
       margin-right: 0;
@@ -91,7 +87,7 @@
   &.widget-blunt--entry {
     width: 100%;
     max-width: $width-content;
-    margin: 0;
+    margin: 0 0 -2px;
 
     .widget-blunt__inner {
       width: 100%;
@@ -111,6 +107,6 @@
   }
 
   @media screen and (max-width: 479px) {
-    margin: 1rem 0 0;
+    margin: 1rem 0 -2px;
   }
 }
