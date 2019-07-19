@@ -81,7 +81,8 @@ class Knife_Post_Lead {
             'media_buttons' => true,
             'textarea_name' => self::$post_meta,
             'tinymce' => [
-                'toolbar1' => 'link'
+                'toolbar1' => 'link',
+                'toolbar2' => ''
             ],
             'quicktags' => [
                 'buttons' => 'link'
