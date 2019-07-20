@@ -47,7 +47,7 @@ jQuery(document).ready(function($) {
     box.find('.item:first').after(item);
 
     if(object.hasOwnProperty('title')) {
-      item.find('.item__title input').val(object.title);
+      item.find('.item__title textarea').val(object.title);
     }
 
     if(object.hasOwnProperty('attachment') && object.attachment) {

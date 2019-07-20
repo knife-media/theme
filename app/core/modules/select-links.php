@@ -215,8 +215,17 @@ class Knife_Select_Links {
             $post_id = url_to_postid($link);
 
             if($post_id > 0) {
+                $title = get_the_title();
+
+                if(method_exists('Knife_Post_Tagline', 'post_tagline')) {
+                    $post = get_post($post_id);
+
+                    // Get upgraded title with <em> tags
+                    $title = Knife_Post_Tagline::post_tagline($post->post_title, $post_id, false);
+                }
+
                 $data = [
-                    'title' => get_the_title($post_id),
+                    'title' => wp_kses($title, self::$title_html),
                     'poster' => strval(get_the_post_thumbnail_url($post_id)),
                     'attachment' => get_post_thumbnail_id($post_id)
                 ];
