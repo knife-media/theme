@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.4
- * @version 1.7
+ * @version 1.9
  */
 
 if (!defined('WPINC')) {
@@ -48,6 +48,15 @@ class Knife_Select_Links {
      * @var     string
      */
     private static $meta_items = '_knife-select-items';
+
+
+    /**
+     * Allowed html in title
+     *
+     * @access  private
+     * @var     array
+     */
+    private static $title_html = array('em' => []);
 
 
     /**
@@ -285,6 +294,8 @@ class Knife_Select_Links {
         $options = [
             'action' => esc_attr(self::$ajax_action),
             'nonce' => wp_create_nonce(self::$metabox_nonce),
+            'meta_items' => esc_attr(self::$meta_items),
+
             'choose' => __('Выберите изображение постера', 'knife-theme'),
             'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
         ];
@@ -343,20 +354,25 @@ class Knife_Select_Links {
         // Delete select post meta to create it again below
         delete_post_meta($post_id, $query);
 
-        foreach($_REQUEST[$query] as $item) {
-            foreach($item as $key => $value) {
-                if(isset($meta[$i]) && array_key_exists($key, $meta[$i])) {
-                    $i++;
-                }
+        foreach((array) $_REQUEST[$query] as $request) {
+            $item = [];
 
-                if(!empty($value)) {
-                    $meta[$i][$key] = sanitize_text_field($value);
-                }
+            if(isset($request['link'])) {
+                $item['link'] = sanitize_text_field($request['link']);
             }
-        }
 
-        foreach($meta as $item) {
-            add_post_meta($post_id, $query, $item);
+            if(isset($request['title'])) {
+                $item['title'] = wp_kses($request['title'], self::$title_html);
+            }
+
+            if(isset($request['attachment'])) {
+                $item['attachment'] = absint($request['attachment']);
+            }
+
+            // Add post meta if not empty
+            if(array_filter($item)) {
+                add_post_meta($post_id, $query, $item);
+            }
         }
     }
 
@@ -379,13 +395,13 @@ class Knife_Select_Links {
                 '<div class="unit__image">%s</div><div class="unit__content">%s</div>',
 
                 wp_get_attachment_image($attributes['attachment'], 'double', false,
-                    ['class' => 'unit__image-thumbnail']
+                    ['class' => 'unit__image-thumbnail', 'loading' => 'lazy']
                 ),
 
                 sprintf(
                     '<a class="unit__content-link" href="%1$s">%2$s</a>',
                     esc_url($attributes['link']),
-                    esc_html($attributes['title'])
+                    wp_kses($attributes['title'], self::$title_html)
                 )
             )
         );

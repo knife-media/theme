@@ -7,7 +7,7 @@
   width: 100%;
   max-width: $width-site - 2rem;
   margin: 1rem 1rem 0;
-  padding: 0 0 2rem 1rem;
+  padding: 0 0 1rem 1rem;
 
   color: $color-select;
   background-color: $color-white;
@@ -29,16 +29,16 @@
 
     width: calc(100% / 4 - 1rem);
     margin: 1rem 1rem 0 0;
-    padding: 1rem 1rem 3rem;
+    padding: 1rem 1rem 1.5rem;
     overflow: hidden;
 
-    font-size: 1.5rem;
+    font-size: 1.375rem;
     font-weight: 700;
-    line-height: 1;
+    line-height: 1.125;
 
     color: $color-select;
     background-color: $color-white;
-    box-shadow: 0 0 20px 1px rgba(0, 0, 0, .25);
+    box-shadow: 0 0 5px 2px rgba(0, 0, 0, .125);
 
     transition: box-shadow .25s;
 
@@ -59,7 +59,7 @@
     }
 
     &:hover {
-      box-shadow: 0 0 20px 2px rgba(0, 0, 0, .375);
+      box-shadow: 0 0 5px 2px rgba(0, 0, 0, .25);
     }
 
     @media screen and (max-width: 1023px) {
