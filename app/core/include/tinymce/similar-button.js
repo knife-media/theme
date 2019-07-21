@@ -16,7 +16,7 @@
             },
           ],
           onsubmit: function(e) {
-            editor.insertContent('<aside class="similar"><h4>' + e.data.title  + '</h4><br></aside>');
+            editor.insertContent('<figure class="figure figure--similar"><h4>' + e.data.title  + '</h4></figure>');
           }
         });
       }

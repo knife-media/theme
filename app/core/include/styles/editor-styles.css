@@ -55,7 +55,7 @@ blockquote {
   margin: 0;
 }
 
-.similar {
+.figure--similar {
   display: block;
 
   margin: 1rem 0;
@@ -65,3 +65,8 @@ blockquote {
   border-top: solid 6px #1e488f;
   border-radius: 3px;
 }
+
+.figure--similar h4 {
+  margin: 0 0 10px;
+}
+

@@ -124,7 +124,7 @@ class Knife_Similar_Posts {
                     'link' => get_permalink($id),
                     'label' => get_post_field('post_name', $id),
                     'action' => __('Similar click', 'knife-theme'),
-                    'head' => __('Читайте также:', 'knife-theme'),
+                    'head' => __('Читайте также', 'knife-theme'),
                     'count' => $count
                 ];
 

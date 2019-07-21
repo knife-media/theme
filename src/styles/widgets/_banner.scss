@@ -49,7 +49,7 @@
   &.widget-banner--entry {
     align-items: center;
 
-    width: $width-content;
+    width: #{$width-content + 2rem};
     padding: 1rem;
     padding-top: 3rem;
     box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, .2);
@@ -72,7 +72,7 @@
 
       width: 100%;
       height: 1.75rem;
-      padding: 0 1.5rem 2px;
+      padding: 0 1rem 2px;
 
       font-size: .5625rem;
       font-weight: 700;

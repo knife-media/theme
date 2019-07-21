@@ -49,23 +49,7 @@
     }
 
     var wrap = document.createElement('figure');
-    wrap.classList.add('similar');
-
-    var item = document.createElement('div');
-    item.classList.add('similar__item');
-    wrap.appendChild(item);
-
-    // Append emoji
-    (function(){
-      if(typeof similar.emoji === 'undefined') {
-        return false;
-      }
-
-      var emoji = document.createElement('div');
-      emoji.classList.add('similar__emoji');
-      emoji.innerHTML = similar.emoji;
-      wrap.appendChild(emoji);
-    })();
+    wrap.classList.add('figure', 'figure--similar');
 
     // Append head
     (function(){
@@ -73,14 +57,15 @@
         return false;
       }
 
-      var head = document.createElement('div');
-      head.classList.add('similar__item-head');
+      var head = document.createElement('h4');
       head.innerHTML = similar.head;
-      item.appendChild(head);
+      wrap.appendChild(head);
     })();
 
+    var item = document.createElement('p');
+    wrap.appendChild(item);
+
     var link = document.createElement('a');
-    link.classList.add('similar__item-link');
     link.href = similar.link;
     link.innerHTML = similar.title;
     item.appendChild(link);
@@ -110,6 +95,10 @@
   /**
    * Append 2 similar posts
    */
+  if(post.querySelector('.figure--similar') !== null) {
+    return;
+  }
+
   var range = Math.floor(post.children.length / 3);
 
   for(var i = 0; i < 2; i++) {
