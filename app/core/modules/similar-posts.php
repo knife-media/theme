@@ -40,6 +40,23 @@ class Knife_Similar_Posts {
     public static function load_module() {
         // Include similar posts data
         add_action('wp_enqueue_scripts', [__CLASS__, 'inject_object'], 12);
+
+        // Update links returned via tinymce
+        add_filter('wp_link_query', [__CLASS__, 'update_link_query'], 12);
+    }
+
+
+    /**
+     * Update links returned via tinymce
+     *
+     * @since 1.9
+     */
+    public static function update_link_query($results) {
+        foreach($results as &$result) {
+            $result['title'] = html_entity_decode($result['title']);
+        }
+
+        return $results;
     }
 
 
