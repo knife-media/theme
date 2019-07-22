@@ -30,7 +30,7 @@ $poster->setLineHeight(1.25);
 // Draw description
 if(!empty($textbox['description'])) {
     $poster->textBox($textbox['description'], [
-        'x' => 40, 'y' => 445, 'width' => 950, 'height' => 100, 'fontSize' => 24
+        'x' => 40, 'y' => 445, 'width' => 950, 'height' => 200, 'fontSize' => 24
     ]);
 }
 
@@ -38,20 +38,20 @@ if(!empty($textbox['description'])) {
 // Draw title
 if(!empty($textbox['title'])) {
     $poster->textBox($textbox['title'], [
-        'x' => 70, 'y' => 160, 'width' => 950, 'height' => 200, 'fontSize' => 24
+        'x' => 40, 'y' => 160, 'width' => 950, 'height' => 100, 'fontSize' => 24
     ]);
 }
 
 
 // Draw line
-$poster->rectangle(70, 230, 950, 2, [255, 255, 255]);
+$poster->rectangle(40, 245, 950, 2, [255, 255, 255]);
 
 
 // Draw heading
 if(!empty($textbox['heading'])) {
     $poster->setLineHeight(1.125);
     $poster->textBox($textbox['heading'], [
-        'x' => 70, 'y' => 280, 'width' => 950, 'height' => 160, 'fontSize' => 42
+        'x' => 40, 'y' => 290, 'width' => 950, 'height' => 140, 'fontSize' => 42
     ]);
 }
 
