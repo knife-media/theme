@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.5
- * @version 1.7
+ * @version 1.9
  */
 
 
@@ -80,7 +80,7 @@ class Knife_Widget_Banner extends WP_Widget {
             esc_attr($this->get_field_name('title')),
             __('Заголовок:', 'knife-theme'),
             esc_attr($instance['title']),
-            __('Не будет отображаться на странице', 'knife-theme')
+            __('Может отобразиться в плашке баннера', 'knife-theme')
         );
 
         printf(
@@ -100,7 +100,7 @@ class Knife_Widget_Banner extends WP_Widget {
             '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
             esc_attr($this->get_field_id('link')),
             esc_attr($this->get_field_name('link')),
-            __('Ссылка с баннера', 'knife-theme'),
+            __('Ссылка с баннера:', 'knife-theme'),
             esc_attr($instance['link'])
         );
 
@@ -116,7 +116,7 @@ class Knife_Widget_Banner extends WP_Widget {
             '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
             esc_attr($this->get_field_id('styles')),
             esc_attr($this->get_field_name('styles')),
-            __('Стили изображения', 'knife-theme'),
+            __('Стили изображения:', 'knife-theme'),
             esc_attr($instance['styles'])
         );
 
@@ -133,7 +133,7 @@ class Knife_Widget_Banner extends WP_Widget {
             '<p><label for="%1$s">%3$s</label><input class="color-picker" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
             esc_attr($this->get_field_id('background')),
             esc_attr($this->get_field_name('background')),
-            __('Цвет фона', 'knife-theme'),
+            __('Цвет фона:', 'knife-theme'),
             esc_attr($instance['background'])
         );
     }
@@ -165,6 +165,12 @@ class Knife_Widget_Banner extends WP_Widget {
             'href' => esc_url($instance['link']),
             'target' => '_blank'
         ];
+
+        if(strlen($instance['title']) > 0) {
+            $options['data-title'] = esc_attr(
+                $instance['title']
+            );
+        }
 
         if(strlen($instance['campaign']) > 0) {
             $options['data-banner'] = esc_attr(
