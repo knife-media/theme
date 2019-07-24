@@ -53,7 +53,7 @@ class Knife_Hidden_Widgets {
     /**
      * Set admin-side actions
      */
-    public static function init_admin () {
+    public static function init_admin() {
         add_action('sidebar_admin_setup', [__CLASS__, 'include_assets']);
         add_action('in_widget_form', [__CLASS__, 'widget_conditions_admin'], 10, 3);
         add_action('wp_ajax_widget_conditions_options', [__CLASS__, 'widget_conditions_options']);

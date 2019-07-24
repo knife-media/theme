@@ -241,12 +241,6 @@ add_filter('the_author_posts_link', function($link) {
 });
 
 
-// Single post nav links
-add_filter('wp_link_pages_link', function($link) {
-    return str_replace('href="', 'class="refers__link" href="', $link);
-}, 10, 2);
-
-
 // Rename default posts format
 add_filter('gettext_with_context', function($translation, $text, $context, $domain) {
     $names = [
@@ -288,20 +282,6 @@ add_filter('the_content', function($content) {
 add_filter('the_tags', function($tags) {
     return str_replace('href="', 'class="tags__link" href="', $tags);
 }, 10, 1);
-
-
-// Remove private posts from archives and home page.
-// Note: Knife editors use private posts as drafts.
-// So we don't want to see drafts in templates even if we logged in
-add_action('pre_get_posts', function($query) {
-    if(is_admin() || !$query->is_main_query()) {
-        return;
-    }
-
-    if($query->is_archive() || $query->is_home()) {
-        $query->set('post_status', 'publish');
-    }
-});
 
 
 // Hide comments menu from admin menu
@@ -372,11 +352,6 @@ require get_template_directory() . '/core/modules/quiz-section.php';
 
 // Generator post type
 require get_template_directory() . '/core/modules/generator-section.php';
-
-// Ask section post type
-// Temporarily disabled
-//
-// require get_template_directory() . '/core/modules/ask-section.php';
 
 // Custom labels posts taxonomy settings
 require get_template_directory() . '/core/modules/label-posts.php';

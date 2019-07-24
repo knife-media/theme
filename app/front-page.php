@@ -32,7 +32,7 @@ get_header(); ?>
         <?php
             printf('<a class="button" href="%2$s">%1$s</a>',
                 __('Больше статей', 'knife-theme'),
-                esc_url(home_url('/recent/page/4/'))
+                esc_url(home_url('/recent/'))
             );
         ?>
     </nav>
