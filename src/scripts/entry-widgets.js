@@ -29,7 +29,7 @@
   /**
    * Find post middle
    */
-  var middle = Math.floor(post.children.length / 2);
+  var middle = Math.floor(post.children.length / 3);
 
 
   /**
