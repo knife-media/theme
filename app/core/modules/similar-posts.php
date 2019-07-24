@@ -65,8 +65,10 @@ class Knife_Similar_Posts {
      */
     public static function inject_object() {
         if(is_singular(self::$post_type)) {
+            $post_id = get_the_ID();
+
             // Check if promo post
-            $is_promo = get_post_meta(get_the_ID(), '_knife-promo', true);
+            $is_promo = get_post_meta($post_id, '_knife-promo', true);
 
             if(in_category('news') || $is_promo) {
                 return;
@@ -77,11 +79,13 @@ class Knife_Similar_Posts {
                 'action' => __('Similar click', 'knife-theme')
             ];
 
-            // Get similar posts
-            $similar = self::get_similar(get_queried_object_id());
+            // Get similar if not cards
+            if(!has_post_format('chat', $post_id)) {
+                $similar = self::get_similar($post_id);
 
-            if($similar > 0) {
-                $options['similar'] = $similar;
+                if($similar > 0) {
+                    $options['similar'] = $similar;
+                }
             }
 
             wp_localize_script('knife-theme', 'knife_similar_posts', $options);
