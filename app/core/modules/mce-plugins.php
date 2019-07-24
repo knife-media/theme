@@ -69,8 +69,8 @@ class Knife_MCE_Plugins {
             'push-button' => $include . '/tinymce/push-button.js',
             'mark-button' => $include . '/tinymce/mark-button.js',
             'quote-button' => $include . '/tinymce/quote-button.js',
-            'similar-button' => $include . '/tinymce/similar-button.js',
 
+            'similar-block' => $include . '/tinymce/similar-block.js',
             'figure-helper' => $include . '/tinymce/figure-helper.js'
         ];
 
@@ -84,7 +84,7 @@ class Knife_MCE_Plugins {
      * Register buttons in editor panel
      */
     public static function register_buttons($buttons) {
-        array_push($buttons, 'push-button', 'mark-button', 'quote-button', 'similar-button', 'figure-helper');
+        array_push($buttons, 'push-button', 'mark-button', 'quote-button', 'similar-block', 'figure-helper');
 
         if(($key = array_search('blockquote', $buttons)) !== false) {
             unset($buttons[$key]);

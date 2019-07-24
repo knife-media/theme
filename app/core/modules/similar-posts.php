@@ -72,11 +72,19 @@ class Knife_Similar_Posts {
                 return;
             }
 
+            $options = [
+                'title' => __('Читайте также', 'knife-theme'),
+                'action' => __('Similar click', 'knife-theme')
+            ];
+
+            // Get similar posts
             $similar = self::get_similar(get_queried_object_id());
 
             if($similar > 0) {
-                wp_localize_script('knife-theme', 'knife_similar_posts', $similar);
+                $options['similar'] = $similar;
             }
+
+            wp_localize_script('knife-theme', 'knife_similar_posts', $options);
         }
     }
 
@@ -128,34 +136,18 @@ class Knife_Similar_Posts {
                 }
             }
 
-
             // Sort by tags count
             arsort($related);
 
-            // Get first 5 elements
-            $related = array_slice($related, 0, 5, true);
+            // Get first 10 elements
+            $related = array_slice($related, 0, 10, true);
 
             foreach($related as $id => $count) {
-                $relate_items = [
+                $similar[] = [
                     'title' => get_the_title($id),
                     'link' => get_permalink($id),
-                    'label' => get_post_field('post_name', $id),
-                    'action' => __('Similar click', 'knife-theme'),
-                    'head' => __('Читайте также', 'knife-theme'),
                     'count' => $count
                 ];
-
-                $relate_terms = get_the_tags($id);
-
-                if(is_array($relate_terms)) {
-                    $relate_term = end($relate_terms);
-
-                    if($relate_emoji = get_term_meta($relate_term->term_id, '_knife-term-emoji', true)) {
-                        $relate_items['emoji'] = $relate_emoji;
-                    }
-                }
-
-                $similar[] = $relate_items;
             }
         }
 

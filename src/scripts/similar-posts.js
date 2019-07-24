@@ -12,15 +12,7 @@
   /**
    * Check if similar posts exist
    */
-  if(typeof knife_similar_posts === 'undefined') {
-    return false;
-  }
-
-
-  /**
-   * Check if entry-content exists and it's long enough
-   */
-  if(post === null || post.children.length < 10) {
+  if(typeof knife_similar_posts === 'undefined' || knife_similar_posts.similar === 'undefuned') {
     return false;
   }
 
@@ -38,101 +30,105 @@
     }
 
     return items;
-  }(knife_similar_posts));
+  }(knife_similar_posts.similar));
 
 
   /**
    * Create similar block
    */
-  function appendSimilar(relative, similar) {
-    if(typeof similar.link === 'undefined' || typeof similar.title === 'undefined') {
-      return false;
-    }
-
+  function appendSimilar(following) {
     var wrap = document.createElement('figure');
     wrap.classList.add('figure', 'figure--similar');
 
-    // Append head
-    (function(){
-      if(typeof similar.head === 'undefined') {
-        return false;
+    var title = document.createElement('h4');
+    title.innerHTML = knife_similar_posts.title || '';
+    wrap.appendChild(title);
+
+    // Add similar items
+    for(var i = 0; i < similar.length && i < 3; i++) {
+      if(!similar[i].link || !similar[i].title) {
+        continue;
       }
 
-      var head = document.createElement('h4');
-      head.innerHTML = similar.head;
-      wrap.appendChild(head);
-    })();
+      var item = document.createElement('p');
+      wrap.appendChild(item);
 
-    var item = document.createElement('p');
-    wrap.appendChild(item);
+      var link = document.createElement('a');
+      link.href = similar[i].link;
+      link.innerHTML = similar[i].title;
+      item.appendChild(link);
+    }
 
-    var link = document.createElement('a');
-    link.href = similar.link;
-    link.innerHTML = similar.title;
-    item.appendChild(link);
-
-    // Append gtm action to similar link
-    (function() {
-      if(typeof similar.action === 'undefined') {
-        return false;
-      }
-
-      link.setAttribute('data-action', similar.action);
-    })();
-
-    // Append gtm label to similar link
-    (function() {
-      if(typeof similar.label === 'undefined') {
-        return false;
-      }
-
-      link.setAttribute('data-label', similar.label);
-    })();
-
-    relative.parentNode.insertBefore(wrap, relative.nextSibling);
+    following.parentNode.insertBefore(wrap, following.nextSibling);
   }
 
 
   /**
-   * Append 2 similar posts
+   * Create auto similar posts if need
    */
-  if(post.querySelector('.figure--similar') !== null) {
-    return;
-  }
+  (function() {
+    // Check if entry-content exists and it's long enough
+    if(post === null || post.children.length < 10) {
+      return false;
+    }
 
-  var range = Math.floor(post.children.length / 3);
+    // Find start point
+    var landmark = Math.floor(post.children.length / 1.5);
 
-  for(var i = 0; i < 2; i++) {
-    if(typeof similar[i] === 'undefined') {
-      continue;
+    // Check if manual similar alread exists
+    if(post.querySelector('.figure--similar') !== null) {
+      return false;
     }
 
     var allowed = ['p', 'blockquote'];
 
-    for(var e = range; e < post.children.length - 5; e++) {
-      var relative = post.children[e];
+    for(var i = landmark; i < post.children.length - 5; i++) {
+      var relative = post.children[i];
 
       // Check if next tag in allowed list
       if(allowed.indexOf(relative.tagName.toLowerCase()) < 0) {
         continue;
       }
 
-      if(typeof post.children[e - 1] === 'undefined') {
+      if(typeof post.children[i - 1] === 'undefined') {
         continue;
       }
 
-      var following = post.children[e - 1];
+      var following = post.children[i - 1];
 
       // Check if prev tag in allowed list
       if(allowed.indexOf(following.tagName.toLowerCase()) < 0) {
         continue;
       }
 
-      appendSimilar(following, similar[i]);
-
+      appendSimilar(following);
       break;
     }
+  })();
 
-    range = Math.floor(post.children.length / 3) + e;
-  }
+
+  /**
+   * Append gtm attributes to all similar blocks
+   */
+  (function() {
+    // Check if action exists
+    if(typeof knife_similar_posts.action === 'undefined') {
+      return false;
+    }
+
+    var figure = post.querySelectorAll('.figure--similar') || [];
+
+    for(var i = 0; i < figure.length; i++) {
+      var items = figure[i].querySelectorAll('a');
+
+      // Set attributes for all similar links
+      for(var e = 0; e < items.length; e++) {
+        items[e].setAttribute('data-action', knife_similar_posts.action);
+
+        if(items[e].href) {
+          items[e].setAttribute('data-label', items[e].href);
+        }
+      }
+    }
+  })();
 })();
