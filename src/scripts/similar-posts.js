@@ -72,6 +72,11 @@
       return false;
     }
 
+    // It will be better to skip cards posts
+    if(document.body.classList.contains('is-chat')) {
+      return false;
+    }
+
     // Find start point
     var landmark = Math.floor(post.children.length / 1.5);
 
