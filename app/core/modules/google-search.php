@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.2
- * @version 1.8
+ * @version 1.10
  */
 
 
@@ -38,6 +38,11 @@ class Knife_Google_Search {
 
         // Disable default search
         add_action('parse_query', [__CLASS__, 'disable_search'], 9);
+
+        // Add search popover to footer
+        add_action('wp_footer', function() {
+            get_search_form();
+        });
     }
 
 

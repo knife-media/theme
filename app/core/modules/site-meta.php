@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.5
- * @version 1.9
+ * @version 1.10
  */
 
 
@@ -42,14 +42,18 @@ class Knife_Site_Meta {
         add_filter('language_attributes', [__CLASS__, 'add_xmlns']);
 
         // Add footer description field to customizer
-        add_action('customize_register', [__CLASS__, 'add_customize_setting']);
+        add_action('customize_register', [__CLASS__, 'update_customize_settings']);
+
+        // Remove comments feed link
+        // For the reason that we don't use comments in this theme we have to remove comments feed link from header
+        add_filter('feed_links_show_comments_feed', '__return_false');
     }
 
 
     /**
      * Footer description option
      */
-    public static function add_customize_setting($wp_customize) {
+    public static function update_customize_settings($wp_customize) {
         $wp_customize->add_setting(self::$footer_description);
 
         $wp_customize->add_section('knife_footer', [
@@ -65,6 +69,9 @@ class Knife_Site_Meta {
                  'priority' => 10
              ]
         ));
+
+        // Remove site icon controls from admin customizer
+        $wp_customize->remove_control('site_icon');
     }
 
 
