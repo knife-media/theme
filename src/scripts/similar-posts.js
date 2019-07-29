@@ -12,7 +12,7 @@
   /**
    * Check if similar posts exist
    */
-  if(typeof knife_similar_posts === 'undefined' || knife_similar_posts.similar === 'undefuned') {
+  if(typeof knife_similar_posts === 'undefined' || post === null) {
     return false;
   }
 
@@ -30,7 +30,7 @@
     }
 
     return items;
-  }(knife_similar_posts.similar));
+  }(knife_similar_posts.similar || []));
 
 
   /**
@@ -68,7 +68,7 @@
    */
   (function() {
     // Check if entry-content exists and it's long enough
-    if(post === null || post.children.length < 10) {
+    if(post.children.length < 10 || similar.length < 1) {
       return false;
     }
 
