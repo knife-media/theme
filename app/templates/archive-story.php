@@ -20,7 +20,7 @@ get_header(); ?>
     </div>
 </div>
 
-<?php if(have_posts() && get_next_posts_link()) : ?>
+<?php if(get_next_posts_link()) : ?>
     <nav class="block-navigate">
         <?php
             next_posts_link(__('Больше историй', 'knife-theme'));

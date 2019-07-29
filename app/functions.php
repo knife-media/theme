@@ -101,15 +101,6 @@ if(is_admin()) {
     add_filter('pre_site_transient_browser_' . md5($_SERVER['HTTP_USER_AGENT']), '__return_true');
 }
 
-// Navigation links classes
-add_filter('next_posts_link_attributes', function($atts) {
-    return 'class="button"';
-});
-
-add_filter('previous_posts_link_attributes', function($atts) {
-    return 'class="button"';
-});
-
 
 
 // Theme filters

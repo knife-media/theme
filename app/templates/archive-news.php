@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.4
+ * @version 1.10
  */
 
 get_header(); ?>
@@ -21,10 +21,11 @@ get_header(); ?>
     </div>
 </div>
 
-<?php if(have_posts() && get_next_posts_link()) : ?>
+<?php if(have_posts()) : ?>
     <nav class="block-navigate">
         <?php
-            next_posts_link(__('Больше новостей', 'knife-theme'));
+            previous_posts_link(__('Предыдущие', 'knife-theme'));
+            next_posts_link(__('Следующие', 'knife-theme'));
         ?>
     </nav>
 <?php endif; ?>

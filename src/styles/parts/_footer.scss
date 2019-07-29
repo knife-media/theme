@@ -2,11 +2,9 @@
   display: flex;
   flex-flow: row wrap;
 
-  width: 100%;
-  max-width: $width-site;
+  width: calc(100% - 2rem);
+  max-width: $width-site - 2rem;
   margin: 2rem 0;
-  padding-left: 1rem;
-  padding-right: 1rem;
 
   .footer__copy {
     display: block;
