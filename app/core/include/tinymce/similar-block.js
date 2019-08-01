@@ -1,3 +1,8 @@
+/**
+ * Add similar block
+ *
+ * @since 1.9
+ */
 (function() {
   tinymce.PluginManager.add('similar-block', function(editor, url) {
     editor.addButton('similar-block', {
