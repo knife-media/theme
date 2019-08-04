@@ -353,6 +353,19 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  span[data-body] {
+    position: relative;
+    cursor: pointer;
+
+    padding: 0 4px 2px;
+    white-space: pre-wrap;
+
+    background-color: darken($color-white, 5);
+
+    border: solid 1px rgba(0, 0, 0, 0.125);
+    border-radius: 2px;
+  }
+
   @media screen and (max-width: 767px) {
     padding-bottom: 2rem;
     font-size: .9375rem;

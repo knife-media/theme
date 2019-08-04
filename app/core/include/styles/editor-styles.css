@@ -70,3 +70,13 @@ blockquote {
   margin: 0 0 10px;
 }
 
+span[data-body] {
+  position: relative;
+
+  padding: 0 4px;
+  white-space: pre-wrap;
+  background: #f8f8f8;
+
+  border: solid 1px #cccccc;
+  border-radius: 2px;
+}
