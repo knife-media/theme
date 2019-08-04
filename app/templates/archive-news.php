@@ -24,7 +24,6 @@ get_header(); ?>
 <?php if(have_posts()) : ?>
     <nav class="block-navigate">
         <?php
-            previous_posts_link(__('Предыдущие', 'knife-theme'));
             next_posts_link(__('Следующие', 'knife-theme'));
         ?>
     </nav>
