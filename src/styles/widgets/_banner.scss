@@ -16,7 +16,10 @@
 
     border: none;
 
-    @include full-after();
+    &:after {
+      content: '';
+      @include full-size();
+    }
 
     img {
       display: block;

@@ -59,7 +59,8 @@
     @media screen and (max-width: 1023px) {
       &:after {
         content: '';
-        @include blackout(.375);
+        @include full-size();
+        background-color: rgba(0, 0, 0, .375);
       }
     }
   }
@@ -182,7 +183,8 @@
 
     .widget-single__image:after {
       content: '';
-      @include blackout(.375);
+      @include full-size();
+      background-color: rgba(0, 0, 0, .375);
     }
 
     @media screen and (max-width: 1023px) {
@@ -211,7 +213,8 @@
 
     .widget-single__image:after {
       content: '';
-      @include blackout(.375);
+      @include full-size();
+      background-color: rgba(0, 0, 0, .375);
     }
 
     @media screen and (max-width: 1023px) {

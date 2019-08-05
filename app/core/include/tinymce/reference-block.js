@@ -22,14 +22,13 @@
         editor.windowManager.open({
           title: 'Вставить аннотацию',
           width: 600,
-          height: 250,
+          height: 180,
           body: [
             {
               type: 'textbox',
               multiline: true,
               name: 'text',
-              label: 'Текст аннотации',
-              minHeight: 200,
+              minHeight: 150,
               value: node.dataset.body || ''
             },
           ],

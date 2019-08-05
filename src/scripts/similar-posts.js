@@ -1,24 +1,24 @@
 /**
- * Append similar posts to single template
+ * Append similar contents to single template
  *
  * @since 1.5
- * @version 1.9
+ * @version 1.10
  */
 
 (function() {
-  var post = document.querySelector('.entry-content');
+  var content = document.querySelector('.entry-content');
 
 
   /**
-   * Check if similar posts exist
+   * Check if similar contents exist
    */
-  if(typeof knife_similar_posts === 'undefined' || post === null) {
+  if(typeof knife_similar_contents === 'undefined' || content === null) {
     return false;
   }
 
 
   /**
-   * Shuffle similar posts array
+   * Shuffle similar contents array
    */
   var similar = (function(items) {
     for(var i = 0, c; i < items.length; i++) {
@@ -30,7 +30,7 @@
     }
 
     return items;
-  }(knife_similar_posts.similar || []));
+  }(knife_similar_contents.similar || []));
 
 
   /**
@@ -41,7 +41,7 @@
     wrap.classList.add('figure', 'figure--similar');
 
     var title = document.createElement('h4');
-    title.innerHTML = knife_similar_posts.title || '';
+    title.innerHTML = knife_similar_contents.title || '';
     wrap.appendChild(title);
 
     // Add similar items
@@ -64,37 +64,37 @@
 
 
   /**
-   * Create auto similar posts if need
+   * Create auto similar contents if need
    */
   (function() {
     // Check if entry-content exists and it's long enough
-    if(post.children.length < 10 || similar.length < 1) {
+    if(content.children.length < 10 || similar.length < 1) {
       return false;
     }
 
     // Find start point
-    var landmark = Math.floor(post.children.length / 1.5);
+    var landmark = Math.floor(content.children.length / 1.5);
 
     // Check if manual similar alread exists
-    if(post.querySelector('.figure--similar') !== null) {
+    if(content.querySelector('.figure--similar') !== null) {
       return false;
     }
 
     var allowed = ['p', 'blockquote'];
 
-    for(var i = landmark; i < post.children.length - 5; i++) {
-      var relative = post.children[i];
+    for(var i = landmark; i < content.children.length - 5; i++) {
+      var relative = content.children[i];
 
       // Check if next tag in allowed list
       if(allowed.indexOf(relative.tagName.toLowerCase()) < 0) {
         continue;
       }
 
-      if(typeof post.children[i - 1] === 'undefined') {
+      if(typeof content.children[i - 1] === 'undefined') {
         continue;
       }
 
-      var following = post.children[i - 1];
+      var following = content.children[i - 1];
 
       // Check if prev tag in allowed list
       if(allowed.indexOf(following.tagName.toLowerCase()) < 0) {
@@ -112,18 +112,18 @@
    */
   (function() {
     // Check if action exists
-    if(typeof knife_similar_posts.action === 'undefined') {
+    if(typeof knife_similar_contents.action === 'undefined') {
       return false;
     }
 
-    var figure = post.querySelectorAll('.figure--similar') || [];
+    var figure = content.querySelectorAll('.figure--similar') || [];
 
     for(var i = 0; i < figure.length; i++) {
       var items = figure[i].querySelectorAll('a');
 
       // Set attributes for all similar links
       for(var e = 0; e < items.length; e++) {
-        items[e].setAttribute('data-action', knife_similar_posts.action);
+        items[e].setAttribute('data-action', knife_similar_contents.action);
 
         if(items[e].href) {
           items[e].setAttribute('data-label', items[e].href);

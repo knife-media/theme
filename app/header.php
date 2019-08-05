@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.9
+ * @version 1.10
  */
 
 ?><!DOCTYPE html>
@@ -42,7 +42,7 @@
 <div class="block-heading">
     <header class="header">
         <div class="header__inner">
-             <button class="header__button header__button--menu toggle toggle--menu" id="toggle-menu" role="button">
+             <button class="header__button header__button--menu toggle toggle--menu" id="toggle-menu">
                 <span class="toggle__line"></span>
                  <span class="toggle__line"></span>
                  <span class="toggle__line"></span>
@@ -96,7 +96,7 @@
                 ?>
             </nav>
 
-            <button class="header__button header__button--search toggle toggle--search" id="toggle-search" role="button">
+            <button class="header__button header__button--search toggle toggle--search" id="toggle-search">
                  <span class="toggle__line"></span>
                  <span class="toggle__line"></span>
                 <span class="toggle__icon icon icon--search"></span>

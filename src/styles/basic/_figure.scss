@@ -195,7 +195,10 @@
         font-weight: 700;
         line-height: 1.25;
 
-        @include full-after();
+        &:after {
+          content: '';
+          @include full-size();
+        }
 
         @media screen and (max-width: 767px) {
           font-size: 1rem;
