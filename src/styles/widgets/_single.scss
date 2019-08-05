@@ -193,9 +193,10 @@
   }
 
   &.widget-single--entry {
-    width: calc(100% - 2rem);
+    width: 100%;
     max-width: $width-content;
-    margin: 0 1rem;
+    margin-left: 0;
+    margin-right: 0;
 
     .widget-single__content-title {
       width: 100%;
@@ -215,10 +216,6 @@
       content: '';
       @include full-size();
       background-color: rgba(0, 0, 0, .375);
-    }
-
-    @media screen and (max-width: 1023px) {
-      max-width: $width-content;
     }
   }
 

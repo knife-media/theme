@@ -149,13 +149,7 @@
   }
 
   &.widget-informer--entry {
-    width: calc(100% - 2rem);
+    width: 100%;
     max-width: $width-content;
-    margin: 1rem;
-
-    @media screen and (max-width: 479px) {
-      width: 100%;
-      margin: 0;
-    }
   }
 }

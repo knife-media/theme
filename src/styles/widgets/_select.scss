@@ -96,27 +96,7 @@
   }
 
   &.widget-select--entry {
-    width: calc(100% - 2rem);
-    max-width: $width-content;
-    margin: 1rem;
-
-    .widget-select__head {
-      color: $color-white;
-    }
-
-    .widget-select__link {
-      width: 100%;
-
-      strong {
-        font-size: 7rem;
-        margin: 0 0 .25rem;
-      }
-    }
-
-    @media screen and (max-width: 479px) {
-      width: 100%;
-      margin: 0;
-    }
+    display: none;
   }
 
   &.widget-select--poster {

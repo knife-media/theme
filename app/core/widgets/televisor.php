@@ -62,7 +62,6 @@ class Knife_Widget_Televisor extends WP_Widget {
             'link' => '',
             'cover' => 0,
             'unique' => 1,
-            'info' => 1,
             'posts_per_page' => 7,
         ];
 
@@ -85,7 +84,6 @@ class Knife_Widget_Televisor extends WP_Widget {
         $instance['title'] = $new_instance['title'];
         $instance['posts_per_page'] = (int) $new_instance['posts_per_page'];
         $instance['unique'] = $new_instance['unique'] ? 1 : 0;
-        $instance['info'] = $new_instance['info'] ? 1 : 0;
         $instance['link'] = esc_url($new_instance['link']);
         $instance['cover'] = absint($new_instance['cover']);
 
@@ -102,7 +100,6 @@ class Knife_Widget_Televisor extends WP_Widget {
             'link' => '',
             'cover' => 0,
             'unique' => 1,
-            'info' => 1,
             'posts_per_page' => 7,
             'picture' => ''
         ];
@@ -163,16 +160,6 @@ class Knife_Widget_Televisor extends WP_Widget {
             esc_attr($instance['cover']),
             __('Выбрать обложку фичера', 'knife-theme'),
             $instance['picture']
-        );
-
-
-        // Show feature info
-        printf(
-            '<p><input type="checkbox" id="%1$s" name="%2$s" class="checkbox"%4$s><label for="%1$s">%3$s</label></p>',
-            esc_attr($this->get_field_id('info')),
-            esc_attr($this->get_field_name('info')),
-            __('Показывать мету фичера', 'knife-theme'),
-            checked($instance['info'], 1, false)
         );
     }
 

@@ -155,34 +155,7 @@
   }
 
   &.widget-story--entry {
-    z-index: 1;
-
-    padding: 0 1rem 1rem;
-    background-color: darken($color-white, 5);
-
-    .widget-story__title {
-      font-size: 1.25rem;
-
-      @media screen and (max-width: 1199px) {
-        font-size: 1.125rem;
-      }
-
-      @media screen and (max-width: 1023px) {
-        font-size: 1.25rem;
-      }
-
-      @media screen and (max-width: 479px) {
-        font-size: 1.125rem;
-      }
-    }
-
-    .widget-story__inner {
-      width: calc(100% / 3 - .625rem);
-
-      @media screen and (max-width: 1023px) {
-        width: 100%;
-      }
-    }
+    display: none;
   }
 
   &.widget-story--poster {
