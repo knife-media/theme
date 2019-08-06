@@ -14,4 +14,10 @@
   body.is-navbar & {
     display: none;
   }
+
+  body.is-reference & {
+    @media screen and (max-width: 1023px) {
+      display: none;
+    }
+  }
 }

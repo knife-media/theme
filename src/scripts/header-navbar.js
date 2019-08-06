@@ -37,5 +37,4 @@
       return toggle.click();
     }
   }, true);
-
 })();

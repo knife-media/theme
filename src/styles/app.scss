@@ -49,11 +49,7 @@ body {
   -webkit-text-size-adjust: none;
 
   &.is-search {
-    position: fixed;
-    left: 0;
-
-    width: 100%;
-    overflow: hidden;
+    @include body-overflow;
   }
 
   &.is-adminbar {
@@ -66,24 +62,7 @@ body {
 
   &.is-navbar {
     @media screen and (max-width: 1023px) {
-      position: fixed;
-      left: 0;
-
-      width: 100%;
-      overflow: hidden;
-
-      &:after {
-        content: "";
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 4;
-
-        width: 100%;
-        height: 100vh;
-
-        background: rgba(0, 0, 0, .75);
-      }
+      @include body-overflow;
     }
   }
 }

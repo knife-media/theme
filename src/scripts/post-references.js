@@ -5,13 +5,13 @@
  */
 
 (function() {
-  var content = document.querySelector('.entry-content');
+  var post = document.querySelector('.post');
 
 
   /**
    * Check if post element exists
    */
-  if(content === null) {
+  if(post === null) {
     return false;
   }
 
@@ -30,8 +30,8 @@
     popup.appendChild(content);
 
     var button = document.createElement('button')
-    button.classList.add('reference__close');
-    popup.appendChild(button);
+    button.classList.add('reference__content-close');
+    content.appendChild(button);
 
     // Append reference popup to body
     document.body.appendChild(popup);
@@ -46,6 +46,11 @@
   function movePopup(popup, target) {
     var rect = target.getBoundingClientRect();
 
+    // Push popup to text for standart posts
+    if(post.classList.contains('post--standard')) {
+      popup.classList.add('reference--push');
+    }
+
     // Get offset from top
     var offset = rect.top + window.pageYOffset || document.documentElement.scrollTop;
 
@@ -56,7 +61,7 @@
   /**
    * Click listeners for references
    */
-  content.addEventListener('click', function(e) {
+  post.addEventListener('click', function(e) {
     var target = e.target || e.srcElement;
 
     // Trigger only elements with data-body attribute inside content
@@ -75,16 +80,18 @@
 
       // Set active target styles
       target.setAttribute('data-active', true);
+      document.body.classList.add('is-reference');
 
       // Add listener to close popup
       popup.addEventListener('click', function(e) {
         var source = e.target || e.srcElement;
 
-        if(source === popup || source.classList.contains('reference__close')) {
+        if(source === popup || source.classList.contains('reference__content-close')) {
           popup.parentNode.removeChild(popup);
-        }
 
-        target.removeAttribute('data-active');
+          target.removeAttribute('data-active');
+          document.body.classList.remove('is-reference');
+        }
       });
     }
   });
