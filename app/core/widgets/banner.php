@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.5
- * @version 1.9
+ * @version 1.10
  */
 
 
@@ -34,6 +34,7 @@ class Knife_Widget_Banner extends WP_Widget {
             'campaign' => '',
             'background' => '',
             'styles' => '',
+            'pixek' => '',
             'visibility' => 'default'
         ];
 
@@ -53,6 +54,13 @@ class Knife_Widget_Banner extends WP_Widget {
                 )
             );
 
+            // Show pixel as hidden image
+            if(!empty($instance['pixel'])) {
+                printf('<img src="%s" alt="" style="visibility: hidden;">',
+                    esc_url($instance['pixel'])
+                );
+            }
+
             echo $args['after_widget'];
         }
     }
@@ -69,6 +77,7 @@ class Knife_Widget_Banner extends WP_Widget {
             'campaign' => '',
             'background' => '',
             'styles' => '',
+            'pixel' => '',
             'visibility' => 'default'
         ];
 
@@ -130,6 +139,14 @@ class Knife_Widget_Banner extends WP_Widget {
         );
 
         printf(
+            '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
+            esc_attr($this->get_field_id('pixel')),
+            esc_attr($this->get_field_name('pixel')),
+            __('Ссылка на промерочный пиксель:', 'knife-theme'),
+            esc_attr($instance['pixel'])
+        );
+
+        printf(
             '<p><label for="%1$s">%3$s</label><input class="color-picker" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
             esc_attr($this->get_field_id('background')),
             esc_attr($this->get_field_name('background')),
@@ -149,6 +166,7 @@ class Knife_Widget_Banner extends WP_Widget {
         $instance['link'] = esc_url($new_instance['link']);
         $instance['image'] = esc_url($new_instance['image']);
         $instance['campaign'] = sanitize_text_field($new_instance['campaign']);
+        $instance['pixel'] = sanitize_text_field($new_instance['pixel']);
         $instance['styles'] = sanitize_text_field($new_instance['styles']);
         $instance['background'] = sanitize_hex_color($new_instance['background']);
         $instance['visibility'] = sanitize_text_field($new_instance['visibility']);
