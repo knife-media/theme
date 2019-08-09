@@ -12,7 +12,7 @@
   /**
    * Check if similar contents exist
    */
-  if(typeof knife_similar_contents === 'undefined' || content === null) {
+  if(typeof knife_similar_posts === 'undefined' || content === null) {
     return false;
   }
 
@@ -30,7 +30,7 @@
     }
 
     return items;
-  }(knife_similar_contents.similar || []));
+  }(knife_similar_posts.similar || []));
 
 
   /**
@@ -41,7 +41,7 @@
     wrap.classList.add('figure', 'figure--similar');
 
     var title = document.createElement('h4');
-    title.innerHTML = knife_similar_contents.title || '';
+    title.innerHTML = knife_similar_posts.title || '';
     wrap.appendChild(title);
 
     // Add similar items
@@ -112,7 +112,7 @@
    */
   (function() {
     // Check if action exists
-    if(typeof knife_similar_contents.action === 'undefined') {
+    if(typeof knife_similar_posts.action === 'undefined') {
       return false;
     }
 
@@ -123,7 +123,7 @@
 
       // Set attributes for all similar links
       for(var e = 0; e < items.length; e++) {
-        items[e].setAttribute('data-action', knife_similar_contents.action);
+        items[e].setAttribute('data-action', knife_similar_posts.action);
 
         if(items[e].href) {
           items[e].setAttribute('data-label', items[e].href);
