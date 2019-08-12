@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.5
- * @version 1.9
+ * @version 1.10
  */
 
 
@@ -83,6 +83,9 @@ class Knife_Similar_Posts {
             if(!has_post_format('chat', $post_id)) {
                 $similar = self::get_similar($post_id);
 
+                // Append promo
+                $similar = self::append_promo($similar);
+
                 if($similar > 0) {
                     $options['similar'] = $similar;
                 }
@@ -143,19 +146,36 @@ class Knife_Similar_Posts {
             // Sort by tags count
             arsort($related);
 
-            // Get first 10 elements
-            $related = array_slice($related, 0, 10, true);
+            // Get first 9 elements
+            $related = array_slice($related, 0, 9, true);
 
             foreach($related as $id => $count) {
                 $similar[] = [
                     'title' => get_the_title($id),
                     'link' => get_permalink($id),
-                    'count' => $count
                 ];
             }
+
+            // Update similar posts cache by post id
+            wp_cache_set($post_id, $similar, self::$cache_group);
         }
 
-        wp_cache_set($post_id, $similar, self::$cache_group);
+        return $similar;
+    }
+
+
+    /**
+     * Append similar promo links from query var if exists
+     */
+    private static function append_promo($similar) {
+        $similar_promo = get_query_var('similar_promo', []);
+
+        if(array_filter($similar_promo)) {
+            $similar = array_merge($similar_promo, $similar);
+        }
+
+        // Query var is no use any more
+        set_query_var('similar_promo', false);
 
         return $similar;
     }

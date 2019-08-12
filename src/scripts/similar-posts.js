@@ -5,6 +5,7 @@
  * @version 1.10
  */
 
+
 (function() {
   var content = document.querySelector('.entry-content');
 

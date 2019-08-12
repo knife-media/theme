@@ -178,6 +178,8 @@
     @for $i from 1 through 4 {
       h#{$i} {
         @extend .head;
+
+        margin-bottom: 0;
         -webkit-font-smoothing: antialiased;
       }
     }
@@ -219,6 +221,10 @@
   &.figure--widget {
     width: 100%;
     -webkit-font-smoothing: antialiased;
+
+    h4 {
+      margin-bottom: 0;
+    }
 
     a {
       color: inherit;

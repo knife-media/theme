@@ -7,7 +7,7 @@
  *
  * @package knife-theme
  * @since 1.4
- * @version 1.8
+ * @version 1.10
  */
 
 
@@ -35,3 +35,22 @@ add_filter('the_content', function($content) {
 
     return $content . $promo_link;
 });
+
+
+/**
+ * IQOS promo
+ * Append link to similar posts via query variable
+ */
+add_action('wp_enqueue_scripts', function() {
+    if(is_singular('post')) {
+        $similar_promo = get_query_var('similar_promo', []);
+
+        $similar_promo[] = [
+            'title' => 'Тест: <em>Насколько вы техногик?</em>',
+            'link' => 'http://technologies.knife.media/?utm_source=knife&utm_medium=similar&utm_campaign=iqos',
+            'promo' => 1
+        ];
+
+        set_query_var('similar_promo', $similar_promo);
+    }
+}, 9);

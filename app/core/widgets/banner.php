@@ -34,7 +34,7 @@ class Knife_Widget_Banner extends WP_Widget {
             'campaign' => '',
             'background' => '',
             'styles' => '',
-            'pixek' => '',
+            'pixel' => '',
             'visibility' => 'default'
         ];
 

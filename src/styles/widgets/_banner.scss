@@ -45,8 +45,7 @@
     align-items: center;
 
     width: #{$width-content + 2rem};
-    padding: 1rem;
-    padding-top: 3rem;
+    padding: 3rem 1rem 1rem;
     overflow: hidden;
 
     box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, .2);
@@ -57,14 +56,18 @@
     }
 
     .widget-banner__title {
+      @extend .head;
+
       position: absolute;
       top: 0;
       left: 0;
       cursor: default;
 
       width: 100%;
+    }
 
-      @extend .head;
+    @media screen and (max-width: 479px) {
+      padding: calc(2rem - 1px) 0 0;
     }
   }
 

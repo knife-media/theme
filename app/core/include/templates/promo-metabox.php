@@ -43,7 +43,14 @@
                 '<p><label>%3$s</label><input class="widefat" type="text" name="%1$s[title]" value="%2$s"></p>',
                 esc_attr(self::$meta_options),
                 sanitize_text_field($options['title'] ?? ''),
-                __('Текст на плашке:', 'knife-theme')
+                __('Рекламодатель:', 'knife-theme')
+            );
+
+            printf(
+                '<p><label>%3$s</label><input class="widefat" type="text" name="%1$s[text]" value="%2$s"></p>',
+                esc_attr(self::$meta_options),
+                sanitize_text_field($options['text'] ?? __('Партнерский материал', 'knife-theme')),
+                __('Тип материала:', 'knife-theme')
             );
         ?>
 

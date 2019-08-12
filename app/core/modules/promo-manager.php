@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.8
- * @version 1.9
+ * @version 1.10
  */
 
 if (!defined('WPINC')) {
@@ -377,9 +377,13 @@ class Knife_Promo_Manager {
         }
 
         // Add required title
+        if(empty($options['text'])) {
+            $options['text'] = __('Партнерский материал', 'knife-theme');
+        }
+
         $promo = sprintf(
             '<span class="promo__text">%s</span>',
-            __('Партнерский материал', 'knife-theme')
+            sanitize_text_field($options['text'])
         );
 
         // Wrap logo and title
