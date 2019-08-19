@@ -114,6 +114,7 @@ class Knife_Hidden_Widgets {
 
                 $tags = get_tags([
                     'number' => 1000,
+                    'hide_empty' => false,
                     'orderby' => 'count',
                     'order' => 'DESC'
                 ]);

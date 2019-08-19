@@ -195,6 +195,7 @@
   &.widget-single--entry {
     width: 100%;
     max-width: $width-content;
+    margin-top: 0;
     margin-left: 0;
     margin-right: 0;
 
@@ -216,6 +217,10 @@
       content: '';
       @include full-size();
       background-color: rgba(0, 0, 0, .375);
+    }
+
+    @media screen and (max-width: 767px) {
+      min-height: 12rem;
     }
   }
 

@@ -31,7 +31,8 @@ class Knife_Widget_Single extends WP_Widget {
             'title' => '',
             'cover' => 0,
             'link' => '',
-            'button' => ''
+            'button' => '',
+            'picture' => ''
         ];
 
         $instance = wp_parse_args((array) $instance, $defaults);
@@ -39,9 +40,9 @@ class Knife_Widget_Single extends WP_Widget {
         $post_id = url_to_postid($instance['link']);
 
         $query = new WP_Query([
-            'post_status' => 'publish',
-            'posts_per_page' => 1,
+            'post_status' => 'any',
             'post_type' => 'any',
+            'posts_per_page' => 1,
             'ignore_sticky_posts' => 1,
             'post__in' => [$post_id]
         ]);
@@ -65,7 +66,7 @@ class Knife_Widget_Single extends WP_Widget {
         $instance = $old_instance;
 
         $instance['title'] = $new_instance['title'];
-        $instance['link'] = esc_url($new_instance['link']);
+        $instance['link'] = sanitize_text_field($new_instance['link']);
         $instance['cover'] = absint($new_instance['cover']);
         $instance['button'] = sanitize_text_field($new_instance['button']);
 

@@ -13,10 +13,10 @@
     display: flex;
 
     & > * {
-      margin-top: 1rem;
+      margin-bottom: 1rem;
 
-      &:first-child {
-        margin-top: 0;
+      &:last-child {
+        margin-bottom: 0;
       }
     }
   }

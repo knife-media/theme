@@ -42,8 +42,12 @@ add_filter('the_content', function($content) {
  * Remove relap widget
  */
 add_action('wp', function() {
-    if(is_single('inside-modern-art')) {
-        remove_action('wp_enqueue_scripts', ['Knife_Relap_Links', 'inject_object'], 12);
+    if(is_singular('post')) {
+        global $post;
+
+        if(has_tag('moden-art', $post->ID)) {
+            remove_action('wp_enqueue_scripts', ['Knife_Relap_Links', 'inject_object'], 12);
+        }
     }
 });
 
@@ -59,6 +63,25 @@ add_action('wp_enqueue_scripts', function() {
         $similar_promo[] = [
             'title' => 'Тест: <em>Насколько вы техногик?</em>',
             'link' => 'http://technologies.knife.media/?utm_source=knife&utm_medium=similar&utm_campaign=iqos',
+            'promo' => 1
+        ];
+
+        set_query_var('similar_promo', $similar_promo);
+    }
+}, 9);
+
+
+/**
+ * Lipton Art promo
+ * Append link to similar posts via query variable
+ */
+add_action('wp_enqueue_scripts', function() {
+    if(is_singular('post')) {
+        $similar_promo = get_query_var('similar_promo', []);
+
+        $similar_promo[] = [
+            'title' => 'Пройди тест и узнай, насколько хорошо ты разбираешься в русском авангарде',
+            'link' => 'http://liptonart.knife.media/?utm_source=knife&utm_medium=next_read&utm_campaign=lipton',
             'promo' => 1
         ];
 
