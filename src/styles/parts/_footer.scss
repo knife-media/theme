@@ -1,6 +1,7 @@
 .footer {
   display: flex;
   flex-flow: row wrap;
+  position: relative;
 
   width: calc(100% - 2rem);
   max-width: $width-site - 2rem;

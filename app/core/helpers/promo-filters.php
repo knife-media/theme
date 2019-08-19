@@ -38,6 +38,17 @@ add_filter('the_content', function($content) {
 
 
 /**
+ * MTS promo
+ * Remove relap widget
+ */
+add_action('wp', function() {
+    if(is_single('inside-modern-art')) {
+        remove_action('wp_enqueue_scripts', ['Knife_Relap_Links', 'inject_object'], 12);
+    }
+});
+
+
+/**
  * IQOS promo
  * Append link to similar posts via query variable
  */
