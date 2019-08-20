@@ -42,7 +42,7 @@ class Knife_Relap_Links {
      * Pass Relap links options to js
      */
     public static function inject_object() {
-        if(is_singular(self::$post_type)) {
+        if(is_singular(self::$post_type) && !has_term('', 'special')) {
             // Mix with default values
             $conf = wp_parse_args(KNIFE_RELAP, [
                 'block' => '',

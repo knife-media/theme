@@ -38,21 +38,6 @@ add_filter('the_content', function($content) {
 
 
 /**
- * MTS promo
- * Remove relap widget
- */
-add_action('wp', function() {
-    if(is_singular('post')) {
-        global $post;
-
-        if(has_tag('moden-art', $post->ID)) {
-            remove_action('wp_enqueue_scripts', ['Knife_Relap_Links', 'inject_object'], 12);
-        }
-    }
-});
-
-
-/**
  * IQOS promo
  * Append link to similar posts via query variable
  */
