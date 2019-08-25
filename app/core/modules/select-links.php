@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.4
- * @version 1.9
+ * @version 1.10
  */
 
 if (!defined('WPINC')) {
@@ -190,7 +190,7 @@ class Knife_Select_Links {
      * @since 1.5
      */
     public static function select_title($title, $post_id) {
-        if(!is_admin()) {
+        if(!is_admin() && get_post_type($post_id) === self::$post_type) {
             $words = explode(' ', ltrim($title));
 
             if(is_numeric($words[0])) {
