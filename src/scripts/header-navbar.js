@@ -8,33 +8,50 @@
 
 
   /**
+   * Save body scrollTop here
+   */
+  var scrollTop = 0;
+
+
+  /**
    * Toggle menu bar
    */
   toggle.addEventListener('click', function(e) {
     e.preventDefault();
 
-    var expand = document.body.classList.contains('is-navbar');
+    var body = document.body;
 
     // Close search layer if opened
-    if(document.body.classList.contains('is-search')) {
+    if(body.classList.contains('is-search')) {
       document.getElementById('toggle-search').click();
     }
 
     navbar.classList.toggle('navbar--expand');
     toggle.classList.toggle('toggle--expand');
 
-    document.body.classList.toggle('is-navbar');
+    // Close navbar menu
+    if(body.classList.contains('is-navbar')) {
+      body.classList.remove('is-navbar');
+      body.style.top = '';
+
+      return window.scrollTo(0, scrollTop);
+    }
+
+    scrollTop = window.scrollY;
+
+    body.classList.add('is-navbar');
+    body.style.top = -scrollTop + 'px';
   });
 
 
   /**
-   * Close menu on ESC
+   * Close menu on outside click
    */
-  window.addEventListener('keydown', function(e) {
-    e = e || window.event;
+  document.body.addEventListener('click', function(e) {
+    var source = e.target || e.srcElement;
 
-    if(navbar.classList.contains('navbar--expand') && e.keyCode === 27) {
+    if(this.classList.contains('is-navbar') && this === source) {
       return toggle.click();
     }
-  }, true);
+  });
 })();

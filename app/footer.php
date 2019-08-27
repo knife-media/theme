@@ -26,15 +26,15 @@
             <p class="footer__logo-desc"><?php bloginfo('description'); ?></p>
         </div>
 
-        <nav class="footer__nav">
+        <div class="footer__menu">
             <?php
-                if(has_nav_menu('footer')) :
+                if(has_nav_menu('pages')) :
                     wp_nav_menu([
-                        'theme_location' => 'footer',
+                        'theme_location' => 'pages',
                         'depth' => 1,
                         'echo' => true,
-                        'items_wrap' => '<ul class="footer__nav-menu">%3$s</ul>',
-                        'container' => false
+                        'items_wrap' => '<ul class="menu menu--pages">%3$s</ul>',
+                        'container_class' => 'footer__menu-pages'
                     ]);
                 endif;
 
@@ -44,13 +44,13 @@
                         'depth' => 1,
                         'echo' => true,
                         'items_wrap' => '<ul class="social">%3$s</ul>',
-                        'container_class' => 'footer__nav-social'
+                        'container_class' => 'footer__menu-social'
                     ]);
                 endif;
             ?>
-        </nav>
+        </div>
 
-         <div class="footer__copy">
+        <div class="footer__copy">
             <?php
                 echo wp_kses_post(
                     get_theme_mod('footer-description')

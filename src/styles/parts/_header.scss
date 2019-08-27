@@ -119,4 +119,8 @@
   @media screen and (max-width: 1023px) {
     height: 3.25rem;
   }
+
+  @media screen and (max-width: 767px) {
+    box-shadow: 0 2px 8px -2px rgba($color-black, .25);
+  }
 }
