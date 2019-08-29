@@ -2,8 +2,6 @@
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
-  position: relative;
-  z-index: 1;
 
   width: calc(100% - 2rem);
   max-width: $width-site - 2rem;

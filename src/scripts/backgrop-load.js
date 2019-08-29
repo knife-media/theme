@@ -49,7 +49,7 @@
 
   var image = new Image();
   image.addEventListener('load', function() {
-    document.body.appendChild(backdrop);
+    document.body.insertBefore(backdrop, document.body.firstChild);
   });
 
   return image.src = knife_backdrop.image;
