@@ -51,8 +51,9 @@
     position: absolute;
     top: 100%;
     left: 0;
-    opacity: 0;
+    visibility: hidden;
 
+    opacity: 0;
     width: 100%;
     padding: 1rem;
 
@@ -60,6 +61,8 @@
     transition: transform .25s;
 
     &.navbar--expand {
+      visibility: visible;
+
       opacity: 1;
       transform: translateY(0);
 
