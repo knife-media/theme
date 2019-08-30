@@ -169,7 +169,7 @@
     // Blur search input
     input.blur();
 
-    var expand = document.body.classList.contains('is-search');
+    var body = document.body;
 
     // Close navbar if opened
     if(document.body.classList.contains('is-navbar')) {
@@ -179,16 +179,25 @@
     search.classList.toggle('search--expand');
     toggle.classList.toggle('toggle--expand');
 
-    document.body.classList.toggle('is-search');
-
+    // Close search popup
     if(document.body.classList.contains('is-search')) {
-      if(typeof window.__gcse === 'undefined') {
-        initCSE(knife_search_id);
-      }
+      body.classList.remove('is-search');
+      body.style.top = '';
 
-      // Focus search input
-      input.focus();
+      return window.scrollTo(0, scrollTop);
     }
+
+    scrollTop = window.scrollY;
+
+    body.classList.add('is-search');
+    body.style.top = -scrollTop + 'px';
+
+    if(typeof window.__gcse === 'undefined') {
+      initCSE(knife_search_id);
+    }
+
+    // Focus search input
+    input.focus();
   });
 
 

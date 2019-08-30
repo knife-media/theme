@@ -42,12 +42,6 @@
 <div class="block-heading">
     <header class="header">
         <div class="header__inner">
-             <button class="header__button header__button--menu toggle toggle--menu" id="toggle-menu">
-                <span class="toggle__line"></span>
-                 <span class="toggle__line"></span>
-                 <span class="toggle__line"></span>
-            </button>
-
             <div class="header__logo">
                 <a class="header__logo-link" href="<?php echo esc_url(home_url('/')); ?>">
                     <svg class="header__logo-image" fill="#000000" x="0" y="0" viewBox="0 0 111 31.8" xml:space="preserve">
@@ -64,16 +58,6 @@
 
             <nav class="header__navbar navbar">
                 <?php
-                    if(has_nav_menu('mobile')) :
-                        wp_nav_menu([
-                            'theme_location' => 'mobile',
-                            'depth' => 1,
-                            'echo' => true,
-                            'items_wrap' => '<ul class="menu menu--mobile">%3$s</ul>',
-                            'container_class' => 'navbar__mobile'
-                        ]);
-                    endif;
-
                     if(has_nav_menu('main')) :
                         wp_nav_menu([
                             'theme_location' => 'main',
@@ -81,6 +65,16 @@
                             'echo' => true,
                             'items_wrap' => '<ul class="menu">%3$s</ul>',
                             'container_class' => 'navbar__menu'
+                        ]);
+                    endif;
+
+                    if(has_nav_menu('pages')) :
+                        wp_nav_menu([
+                            'theme_location' => 'pages',
+                            'depth' => 1,
+                            'echo' => true,
+                            'items_wrap' => '<ul class="menu">%3$s</ul>',
+                            'container_class' => 'navbar__pages'
                         ]);
                     endif;
 
@@ -97,9 +91,15 @@
             </nav>
 
             <button class="header__button header__button--search toggle toggle--search" id="toggle-search">
-                 <span class="toggle__line"></span>
-                 <span class="toggle__line"></span>
+                <span class="toggle__line"></span>
+                <span class="toggle__line"></span>
                 <span class="toggle__icon icon icon--search"></span>
+            </button>
+
+            <button class="header__button header__button--menu toggle toggle--menu" id="toggle-menu">
+                <span class="toggle__line"></span>
+                 <span class="toggle__line"></span>
+                 <span class="toggle__line"></span>
             </button>
         </div>
     </header>

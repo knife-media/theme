@@ -28,13 +28,8 @@ $color-quiz: #fff200;
 $color-ask: #d8334c;
 
 
-
 // Setup default styles
 @import "setup/*.scss";
-
-html {
-  scroll-behavior: smooth;
-}
 
 body {
   display: block;
@@ -48,10 +43,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: none;
 
-  &.is-search {
-    @include body-overflow;
-  }
-
   &.is-adminbar {
     padding-top: 32px;
 
@@ -63,7 +54,17 @@ body {
   &.is-navbar {
     @media screen and (max-width: 1023px) {
       @include body-overflow;
+
+      &:before {
+        content: '';
+        @include full-size(4);
+        background-color: rgba($color-black, .75);
+      }
     }
+  }
+
+  &.is-search {
+    @include body-overflow;
   }
 }
 

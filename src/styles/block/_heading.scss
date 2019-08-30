@@ -4,4 +4,9 @@
   z-index: 5;
 
   width: 100%;
+
+  @media screen and (max-width: 767px) {
+    position: sticky;
+    top: 0;
+  }
 }

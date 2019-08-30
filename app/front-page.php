@@ -8,7 +8,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.9
+ * @version 1.10
  */
 
 get_header(); ?>
@@ -31,8 +31,8 @@ get_header(); ?>
     <nav class="block-navigate">
         <?php
             printf('<a class="button" href="%2$s">%1$s</a>',
-                __('Больше статей', 'knife-theme'),
-                esc_url(home_url('/recent/'))
+                __('Все статьи', 'knife-theme'),
+                esc_url(home_url('/longreads/'))
             );
         ?>
     </nav>
