@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.9
+ * @version 1.10
  */
 
 
@@ -32,7 +32,8 @@ class Knife_Widget_Single extends WP_Widget {
             'cover' => 0,
             'link' => '',
             'button' => '',
-            'picture' => ''
+            'picture' => '',
+            'pixel' => ''
         ];
 
         $instance = wp_parse_args((array) $instance, $defaults);
@@ -69,6 +70,7 @@ class Knife_Widget_Single extends WP_Widget {
         $instance['link'] = sanitize_text_field($new_instance['link']);
         $instance['cover'] = absint($new_instance['cover']);
         $instance['button'] = sanitize_text_field($new_instance['button']);
+        $instance['pixel'] = sanitize_text_field($new_instance['pixel']);
 
         return $instance;
     }
@@ -82,12 +84,12 @@ class Knife_Widget_Single extends WP_Widget {
             'link' => '',
             'cover' => 0,
             'button' => '',
-            'picture' => ''
+            'picture' => '',
+            'pixel' => ''
         ];
 
         $instance = wp_parse_args((array) $instance, $defaults);
 
-        // Post url
         printf(
             '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"><small>%5$s</small></p>',
             esc_attr($this->get_field_id('link')),
@@ -97,8 +99,6 @@ class Knife_Widget_Single extends WP_Widget {
             __('На внешний ресурс или запись c этого сайта', 'knife-theme')
         );
 
-
-        // Widget cover
         if($cover = wp_get_attachment_url($instance['cover'])) {
             $instance['picture'] = sprintf('<img src="%s" alt="" style="max-width: 100%%;">', esc_url($cover));
         }
@@ -112,8 +112,14 @@ class Knife_Widget_Single extends WP_Widget {
             $instance['picture']
         );
 
+        printf(
+            '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
+            esc_attr($this->get_field_id('pixel')),
+            esc_attr($this->get_field_name('pixel')),
+            __('Ссылка на промерочный пиксель:', 'knife-theme'),
+            esc_attr($instance['pixel'])
+        );
 
-        // Widget title
         printf(
             '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"><small>%5$s</small></p>',
             esc_attr($this->get_field_id('title')),
@@ -123,8 +129,6 @@ class Knife_Widget_Single extends WP_Widget {
             __('Заполните, чтобы обновить заголовок записи', 'knife-theme')
         );
 
-
-        // Button text
         printf(
             '<p><label for="%1$s">%3$s</label><input type="text" class="widefat knife-widget-button" data-title="%5$s" id="%1$s" name="%2$s"value="%4$s"></p>',
             esc_attr($this->get_field_id('button')),
