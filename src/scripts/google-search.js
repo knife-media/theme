@@ -196,8 +196,10 @@
       initCSE(knife_search_id);
     }
 
-    // Focus search input
-    input.focus();
+    // Focus search input avoid ios header jumps
+    setTimeout(function () {
+      input.focus();
+    }, 100);
   });
 
 

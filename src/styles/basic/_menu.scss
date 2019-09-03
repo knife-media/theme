@@ -31,7 +31,7 @@
     }
 
     &.--club {
-      margin: 0 .5rem;
+      margin: .25rem .5rem;
 
       .menu__item-link {
         color: $color-white;
@@ -44,34 +44,25 @@
           filter: brightness(120%);
         }
       }
-
-      @media screen and (max-width: 1199px) {
-        margin: 0 .25rem;
-      }
     }
 
-    &.--ask {
-      margin: 0 .5rem;
+    &.--top {
+      margin: .25rem .5rem;
 
       .menu__item-link {
         color: $color-white;
-        background-color: $color-ask;
+        background-color: #ff544f;
 
-        border: solid 1px $color-ask;
+        border: solid 1px #ff544f;
         border-radius: 3px;
 
         &:hover {
           filter: brightness(120%);
         }
       }
-
-      @media screen and (max-width: 1199px) {
-        margin: 0 .25rem;
-      }
     }
 
     @media screen and (max-width: 1199px) {
-      margin: 0;
       font-size: 1rem;
     }
 

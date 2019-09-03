@@ -47,7 +47,7 @@
   /**
    * Close menu on outside click
    */
-  document.body.addEventListener('click', function(e) {
+  document.body.addEventListener('touchend', function(e) {
     var source = e.target || e.srcElement;
 
     if(this.classList.contains('is-navbar') && this === source) {
