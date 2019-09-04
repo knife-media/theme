@@ -55,9 +55,7 @@
 
     <?php
         if(!empty($instance['pixel'])) {
-            printf('<img src="%s" alt="" style="visibility: hidden;">',
-                esc_url($instance['pixel'])
-            );
+            echo $instance['pixel'];
         }
     ?>
 </div>

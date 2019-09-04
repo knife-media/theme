@@ -33,12 +33,16 @@ class Knife_Widget_Single extends WP_Widget {
             'link' => '',
             'button' => '',
             'picture' => '',
-            'pixel' => ''
+            'pixel' => '',
+            'post_id' => ''
         ];
 
         $instance = wp_parse_args((array) $instance, $defaults);
+        $post_id = $instance['post_id'];
 
-        $post_id = url_to_postid($instance['link']);
+        if(empty($post_id)) {
+            $post_id = url_to_postid($instance['link']);
+        }
 
         $query = new WP_Query([
             'post_status' => 'any',
@@ -70,7 +74,8 @@ class Knife_Widget_Single extends WP_Widget {
         $instance['link'] = sanitize_text_field($new_instance['link']);
         $instance['cover'] = absint($new_instance['cover']);
         $instance['button'] = sanitize_text_field($new_instance['button']);
-        $instance['pixel'] = sanitize_text_field($new_instance['pixel']);
+        $instance['pixel'] = $new_instance['pixel'];
+        $instance['post_id'] = sanitize_text_field($new_instance['post_id']);
 
         return $instance;
     }
@@ -85,7 +90,8 @@ class Knife_Widget_Single extends WP_Widget {
             'cover' => 0,
             'button' => '',
             'picture' => '',
-            'pixel' => ''
+            'pixel' => '',
+            'post_id' => ''
         ];
 
         $instance = wp_parse_args((array) $instance, $defaults);
@@ -113,10 +119,10 @@ class Knife_Widget_Single extends WP_Widget {
         );
 
         printf(
-            '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
+            '<p><label for="%1$s">%3$s</label><textarea class="widefat" id="%1$s" name="%2$s">%4$s</textarea></p>',
             esc_attr($this->get_field_id('pixel')),
             esc_attr($this->get_field_name('pixel')),
-            __('Ссылка на промерочный пиксель:', 'knife-theme'),
+            __('Промерочный код:', 'knife-theme'),
             esc_attr($instance['pixel'])
         );
 
@@ -127,6 +133,15 @@ class Knife_Widget_Single extends WP_Widget {
             __('Заголовок:', 'knife-theme'),
             esc_attr($instance['title']),
             __('Заполните, чтобы обновить заголовок записи', 'knife-theme')
+        );
+
+        printf(
+            '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"><small>%5$s</small></p>',
+            esc_attr($this->get_field_id('post_id')),
+            esc_attr($this->get_field_name('post_id')),
+            __('ID записи:', 'knife-theme'),
+            esc_attr($instance['post_id']),
+            __('Опциональный ID записи, с которой забрать мету', 'knife-theme')
         );
 
         printf(
@@ -152,7 +167,9 @@ class Knife_Widget_Single extends WP_Widget {
             $instance['title'] = get_the_title();
         }
 
-        $instance['link'] = get_permalink();
+        if(empty($instance['link'])) {
+            $instance['link'] = get_permalink();
+        }
 
         echo $args['before_widget'];
         include(get_template_directory() . '/templates/widget-single.php');

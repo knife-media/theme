@@ -54,11 +54,9 @@ class Knife_Widget_Banner extends WP_Widget {
                 )
             );
 
-            // Show pixel as hidden image
+            // Show pixel code
             if(!empty($instance['pixel'])) {
-                printf('<img src="%s" alt="" style="visibility: hidden;">',
-                    esc_url($instance['pixel'])
-                );
+                echo $instance['pixel'];
             }
 
             echo $args['after_widget'];
@@ -139,10 +137,10 @@ class Knife_Widget_Banner extends WP_Widget {
         );
 
         printf(
-            '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
+            '<p><label for="%1$s">%3$s</label><textarea class="widefat" id="%1$s" name="%2$s">%4$s</textarea></p>',
             esc_attr($this->get_field_id('pixel')),
             esc_attr($this->get_field_name('pixel')),
-            __('Ссылка на промерочный пиксель:', 'knife-theme'),
+            __('Промерочный код:', 'knife-theme'),
             esc_attr($instance['pixel'])
         );
 
@@ -166,7 +164,7 @@ class Knife_Widget_Banner extends WP_Widget {
         $instance['link'] = esc_url($new_instance['link']);
         $instance['image'] = esc_url($new_instance['image']);
         $instance['campaign'] = sanitize_text_field($new_instance['campaign']);
-        $instance['pixel'] = sanitize_text_field($new_instance['pixel']);
+        $instance['pixel'] = $new_instance['pixel'];
         $instance['styles'] = sanitize_text_field($new_instance['styles']);
         $instance['background'] = sanitize_hex_color($new_instance['background']);
         $instance['visibility'] = sanitize_text_field($new_instance['visibility']);
