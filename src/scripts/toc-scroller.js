@@ -37,7 +37,7 @@
       var offset = rect.top + window.pageYOffset || document.documentElement.scrollTop;
 
       window.scroll({
-        top: offset - 20,
+        top: offset - 80,
         behavior: 'smooth'
       });
     });
