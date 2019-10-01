@@ -72,13 +72,6 @@
   }
 
   &.widget-banner--sidebar {
-    .widget-banner__link--mobile {
-      padding-top: 1rem;
-    }
-
-    .widget-banner__link--desktop {
-      padding-top: 1rem;
-      margin-top: -1rem;
-    }
+    padding-top: 1rem;
   }
 }
