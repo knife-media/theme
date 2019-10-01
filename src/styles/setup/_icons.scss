@@ -29,11 +29,17 @@
 .icon--left:before {
   content: "\e901";
 }
-.icon--odnoklassniki:before {
-  content: "\e902";
-}
 .icon--vkontakte:before {
   content: "\e903";
+}
+.icon--facebook:before {
+  content: "\e90f";
+}
+.icon--zen:before {
+  content: "\e904";
+}
+.icon--odnoklassniki:before {
+  content: "\e902";
 }
 .icon--instagram:before {
   content: "\e905";
@@ -64,10 +70,4 @@
 }
 .icon--prev:before {
   content: "\e90e";
-}
-.icon--zen:before {
-  content: "\e904";
-}
-.icon--facebook:before {
-  content: "\e90f";
 }
