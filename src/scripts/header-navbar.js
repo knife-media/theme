@@ -51,6 +51,8 @@
     var source = e.target || e.srcElement;
 
     if(this.classList.contains('is-navbar') && this === source) {
+      e.stopPropagation();
+
       return toggle.click();
     }
   });
