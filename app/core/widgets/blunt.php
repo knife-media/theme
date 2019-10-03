@@ -6,6 +6,7 @@
  *
  * @package knife-theme
  * @since 1.7
+ * @version 1.10
  */
 
 
@@ -19,7 +20,7 @@ class Knife_Widget_Blunt extends WP_Widget {
     /**
      * Blunt posts tag
      */
-    private $tag = 'bluntmedia';
+    private $term_slug = 'bluntmedia';
 
 
     /**
@@ -48,7 +49,7 @@ class Knife_Widget_Blunt extends WP_Widget {
         $instance = wp_parse_args((array) $instance, $defaults);
 
         $query = new WP_Query([
-            'tag' => $this->tag,
+            'tag' => $this->term_slug,
             'post_type' => $this->post_type,
             'posts_per_page' => $instance['posts_per_page'],
             'post_status' => 'publish',
@@ -74,7 +75,7 @@ class Knife_Widget_Blunt extends WP_Widget {
     /**
      * Back-end widget form.
      */
-    function form($instance) {
+    public function form($instance) {
         $defaults = [
             'title' => '',
             'posts_per_page' => 8

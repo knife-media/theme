@@ -69,7 +69,8 @@
   }
 
   &.widget-blunt--sidebar {
-    margin: 1rem 0 0;
+    align-self: flex-start;
+    width: 100%;
 
     .widget-blunt__inner {
       width: 100%;
@@ -84,21 +85,11 @@
     }
   }
 
-  &.widget-blunt--entry {
-    width: 100%;
-    max-width: $width-content;
-    margin: 0 0 -2px;
-
-    .widget-blunt__inner {
-      width: 100%;
-    }
-
-    .widget-blunt__link {
-      width: 100%;
-    }
+  &.widget-blunt--billboard {
+    display: none;
   }
 
-  &.widget-blunt--poster {
+  &.widget-blunt--entry {
     display: none;
   }
 
