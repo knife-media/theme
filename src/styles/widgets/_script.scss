@@ -18,7 +18,11 @@
     margin-top: 1rem;
   }
 
-  &.widget-script--billboard {
-    width: 100%;
+  body.is-search &.widget-script--billboard {
+    display: none;
+  }
+
+  body.is-navbar &.widget-script--billboard {
+    display: none;
   }
 }

@@ -85,7 +85,7 @@ class Knife_Widget_Informer extends WP_Widget {
             '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"><small>%5$s</small></p>',
             esc_attr($this->get_field_id('title')),
             esc_attr($this->get_field_name('title')),
-            __('Заголовок информера', 'knife-theme'),
+            __('Заголовок информера:', 'knife-theme'),
             esc_attr($instance['title']),
              __('Отобразится на странице', 'knife-theme')
         );
@@ -94,7 +94,7 @@ class Knife_Widget_Informer extends WP_Widget {
             '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"><small>%5$s</small></p>',
             esc_attr($this->get_field_id('link')),
             esc_attr($this->get_field_name('link')),
-            __('Ссылка с информера', 'knife-theme'),
+            __('Ссылка с информера:', 'knife-theme'),
             esc_attr($instance['link']),
             __('Обязательно для заполнения', 'knife-theme')
         );
@@ -103,7 +103,7 @@ class Knife_Widget_Informer extends WP_Widget {
             '<p><input type="checkbox" id="%1$s" name="%2$s" class="checkbox"%4$s><label for="%1$s">%3$s</label></p>',
             esc_attr($this->get_field_id('promo')),
             esc_attr($this->get_field_name('promo')),
-            __('Партнерский материал', 'knife-theme'),
+            __('Партнерский материал:', 'knife-theme'),
             checked($instance['promo'], 1, false)
         );
 
@@ -111,7 +111,7 @@ class Knife_Widget_Informer extends WP_Widget {
             '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
             esc_attr($this->get_field_id('emoji')),
             esc_attr($this->get_field_name('emoji')),
-            __('Эмодзи', 'knife-theme'),
+            __('Эмодзи:', 'knife-theme'),
             esc_attr($instance['emoji'])
         );
 
@@ -119,7 +119,7 @@ class Knife_Widget_Informer extends WP_Widget {
             '<p><label for="%1$s">%3$s</label><input class="color-picker" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
             esc_attr($this->get_field_id('color')),
             esc_attr($this->get_field_name('color')),
-            __('Цвет фона', 'knife-theme'),
+            __('Цвет фона:', 'knife-theme'),
             esc_attr($instance['color'])
         );
     }

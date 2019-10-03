@@ -34,9 +34,10 @@ class Knife_Site_Meta {
         add_action('wp_head', [__CLASS__, 'add_twitter_tags'], 5);
         add_action('wp_head', [__CLASS__, 'add_facebook_tags'], 5);
         add_action('wp_head', [__CLASS__, 'add_vk_tags'], 5);
-        add_action('wp_head', [__CLASS__, 'add_yandex_meta'], 6);
+        add_action('wp_head', [__CLASS__, 'add_telegram_tags'], 5);
+        add_action('wp_head', [__CLASS__, 'add_yandex_meta'], 5);
 
-        add_action('wp_head', [__CLASS__, 'add_mediator_meta'], 7);
+        add_action('wp_head', [__CLASS__, 'add_mediator_meta'], 9);
 
         // Add custom theme lang attributes
         add_filter('language_attributes', [__CLASS__, 'add_xmlns']);
@@ -326,6 +327,18 @@ class Knife_Site_Meta {
             '<meta property="vk:image" content="%s">',
             esc_attr($social_image[0])
         );
+
+        return self::print_tags($meta);
+    }
+
+
+    /**
+     * Add telegram meta tag
+     */
+    public static function add_telegram_tags() {
+        $meta = [
+            '<meta name="telegram:channel" content="@knifemedia">'
+        ];
 
         return self::print_tags($meta);
     }
