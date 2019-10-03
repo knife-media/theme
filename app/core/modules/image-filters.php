@@ -6,6 +6,7 @@
  *
  * @package knife-theme
  * @since 1.8
+ * @version 1.10
  */
 
 
@@ -83,10 +84,6 @@ class Knife_Image_Filters {
      * Remove useless image attributes
      */
     public static function remove_attributes() {
-        add_filter('post_thumbnail_html', function($html) {
-            return preg_replace('/(width|height)="\d*"\s/', '', $html);
-        }, 10);
-
         add_filter('get_image_tag', function($html) {
             return preg_replace('/(width|height)="\d*"\s/', '', $html);
         }, 10);
