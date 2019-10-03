@@ -1,6 +1,8 @@
 (function() {
-  var search = document.querySelector('.search');
   var toggle = document.getElementById('toggle-search');
+
+  var search = document.querySelector('.search');
+  var header = document.querySelector('.header');
 
   if(toggle === null) {
     return false;
@@ -176,15 +178,37 @@
       document.getElementById('toggle-menu').click();
     }
 
-    search.classList.toggle('search--expand');
     toggle.classList.toggle('toggle--expand');
+
+    // Set search expand class
+    search.classList.toggle('search--expand');
+
+    // Get first header parent child
+    var sibling = header.parentElement.firstChild;
 
     // Close search popup
     if(document.body.classList.contains('is-search')) {
       body.classList.remove('is-search');
       body.style.top = '';
 
+      while(sibling && sibling !== header) {
+        if(sibling.nodeType == 1) {
+          sibling.style.display = '';
+        }
+
+        sibling = sibling.nextSibling;
+      }
+
       return window.scrollTo(0, scrollTop);
+    }
+
+    // Hide all elements before header
+    while(sibling && sibling !== header) {
+      if(sibling.nodeType == 1) {
+        sibling.style.display = 'none';
+      }
+
+      sibling = sibling.nextSibling;
     }
 
     scrollTop = window.scrollY;

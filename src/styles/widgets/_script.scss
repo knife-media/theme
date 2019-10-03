@@ -17,12 +17,4 @@
   &.widget-script--sidebar {
     margin-top: 1rem;
   }
-
-  body.is-search &.widget-script--billboard {
-    display: none;
-  }
-
-  body.is-navbar &.widget-script--billboard {
-    display: none;
-  }
 }

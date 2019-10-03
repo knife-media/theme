@@ -32,7 +32,6 @@
     <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KZ7MHM" style="display:none;"></iframe>
 </noscript>
 
-
 <?php
     if(is_active_sidebar('knife-billboard')) :
         dynamic_sidebar('knife-billboard');

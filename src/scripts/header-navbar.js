@@ -1,6 +1,6 @@
 (function() {
   var toggle = document.getElementById('toggle-menu');
-  var navbar = document.querySelector('.navbar');
+  var header = document.querySelector('.header');
 
   if(toggle === null) {
     return false;
@@ -26,15 +26,37 @@
       document.getElementById('toggle-search').click();
     }
 
-    navbar.classList.toggle('navbar--expand');
     toggle.classList.toggle('toggle--expand');
+
+    // Set navbar expand class
+    header.querySelector('.navbar').classList.toggle('navbar--expand');
+
+    // Get first header parent child
+    var sibling = header.parentElement.firstChild;
 
     // Close navbar menu
     if(body.classList.contains('is-navbar')) {
       body.classList.remove('is-navbar');
       body.style.top = '';
 
+      while(sibling && sibling !== header) {
+        if(sibling.nodeType == 1) {
+          sibling.style.display = '';
+        }
+
+        sibling = sibling.nextSibling;
+      }
+
       return window.scrollTo(0, scrollTop);
+    }
+
+    // Hide all elements before header
+    while(sibling && sibling !== header) {
+      if(sibling.nodeType == 1) {
+        sibling.style.display = 'none';
+      }
+
+      sibling = sibling.nextSibling;
     }
 
     scrollTop = window.scrollY;
