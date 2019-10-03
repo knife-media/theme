@@ -205,7 +205,7 @@ class Knife_Promo_Manager {
      */
     public static function update_archive_title($title) {
         if(get_query_var(self::$query_var)) {
-            $title = sprintf('<h1 class="tagline-title">%s</h1>',
+            $title = sprintf('<h1 class="caption__title">%s</h1>',
                 __('Партнерские материалы', 'knife-theme')
             );
         }

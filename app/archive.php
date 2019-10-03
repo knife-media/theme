@@ -10,7 +10,7 @@
 get_header(); ?>
 
 <?php if(have_posts() && get_the_archive_title()) : ?>
-    <div class="block-caption">
+    <div class="caption">
         <?php
             the_archive_title();
             the_archive_description();
@@ -18,7 +18,7 @@ get_header(); ?>
     </div>
 <?php endif; ?>
 
-<div class="block-archive">
+<div class="archive">
    <?php
         if(have_posts()) :
             while(have_posts()) : the_post();
@@ -35,7 +35,7 @@ get_header(); ?>
 </div>
 
 <?php if(have_posts()) : ?>
-    <nav class="block-navigate">
+    <nav class="navigate">
         <?php
             previous_posts_link(__('Предыдущие', 'knife-theme'));
             next_posts_link(__('Следующие', 'knife-theme'));

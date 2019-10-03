@@ -191,21 +191,6 @@
     }
   }
 
-  &.form--ask {
-    .form__field-textarea {
-      height: 4.25rem;
-    }
-
-    .form__control-button {
-      padding-right: 4.5rem;
-      background-color: $color-ask;
-
-      @media screen and (max-width: 767px) {
-        padding: 1rem;
-      }
-    }
-  }
-
   &.form--club {
     .form__field-textarea {
       height: 20rem;

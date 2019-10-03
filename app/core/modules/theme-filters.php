@@ -281,30 +281,30 @@ class Knife_Theme_Filters {
      */
     public static function update_archive_title($title) {
         if(is_category()) {
-            return sprintf('<h1 class="tagline-title tagline-title--category">%s</h1>',
+            return sprintf('<h1 class="caption__title caption__title--category">%s</h1>',
                 single_term_title('', false)
             );
         }
 
         if(is_author()) {
-            return sprintf('<h1 class="tagline-title tagline-title--author">%s</h1>',
+            return sprintf('<h1 class="caption__title caption__title--author">%s</h1>',
                 get_the_author()
             );
         }
 
         if(is_post_type_archive()) {
-            return sprintf('<h1 class="tagline-title">%s</h1>',
+            return sprintf('<h1 class="caption__title">%s</h1>',
                 post_type_archive_title('', false)
             );
         }
 
         if(is_tag() || is_tax()) {
-            return sprintf('<h1 class="tagline-title">%s</h1>',
+            return sprintf('<h1 class="caption__title">%s</h1>',
                 single_term_title('', false)
             );
         }
 
-        return sprintf('<h1 class="tagline-title">%s</h1>', $title);
+        return sprintf('<h1 class="caption__title">%s</h1>', $title);
     }
 
 
@@ -317,7 +317,7 @@ class Knife_Theme_Filters {
         }
 
         if(!empty($description)) {
-            $description = sprintf('<div class="tagline-description">%s</div>',
+            $description = sprintf('<div class="caption__description">%s</div>',
                 wpautop($description)
             );
         }

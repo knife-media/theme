@@ -4,9 +4,10 @@
   justify-content: space-between;
   position: relative;
 
-  width: 100%;
+  width: calc(100% - 2rem);
   max-width: $width-site - 2rem;
-  margin: 0 1rem;
+
+  margin: 0 auto;
 
   .widget-news__inner {
     display: block;
@@ -111,6 +112,7 @@
   }
 
   @media screen and (max-width: 479px) {
-    margin: .5rem 0 0;
+    width: 100%;
+    margin: .5rem auto 0;
   }
 }

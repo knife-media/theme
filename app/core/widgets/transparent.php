@@ -48,7 +48,6 @@ class Knife_Widget_Transparent extends WP_Widget {
             'title' => '',
             'link' => '',
             'offset' => 0,
-            'taxonomy' => 'category',
             'termlist' => []
         ];
 
@@ -200,7 +199,7 @@ class Knife_Widget_Transparent extends WP_Widget {
             'ignore_sticky_posts' => 1,
             'tax_query' => [[
                 'field' => 'id',
-                'taxonomy' => $taxonomy,
+                'taxonomy' => 'post_tag',
                 'terms' => $termlist
             ]]
         ];

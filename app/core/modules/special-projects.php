@@ -193,7 +193,7 @@ class Knife_Special_Projects {
 
         if(empty($options['color'])) {
             $title =  sprintf(
-                '<h1 class="tagline-title tagline-title--%2$s">%1$s</h1>',
+                '<h1 class="caption__title caption__title--%2$s">%1$s</h1>',
                 single_term_title('', false), esc_attr(self::$taxonomy)
             );
 
@@ -206,7 +206,7 @@ class Knife_Special_Projects {
         ];
 
         $title = sprintf(
-            '<h1 class="tagline-title tagline-title--%2$s" style="%3$s">%1$s</h1>',
+            '<h1 class="caption__title caption__title--%2$s" style="%3$s">%1$s</h1>',
             single_term_title('', false), esc_attr(self::$taxonomy),
             esc_attr(implode('; ', $styles))
         );

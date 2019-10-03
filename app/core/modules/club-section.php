@@ -253,7 +253,7 @@ class Knife_Club_Section {
             $button_link = get_theme_mod(self::$button_link);
 
             if(strlen($button_link) > 0) {
-                $button = sprintf('<div class="tagline-button tagline-button--club"><a class="button" href="%2$s">%1$s</a></div>',
+                $button = sprintf('<div class="caption__button caption__button--club"><a class="button" href="%2$s">%1$s</a></div>',
                     __('Присоединиться', 'knife-theme'),
                     esc_url($button_link)
                 );
@@ -273,7 +273,7 @@ class Knife_Club_Section {
      */
     public static function update_archive_title($title) {
         if(is_post_type_archive(self::$post_type)) {
-            $title = sprintf('<h1 class="tagline-title tagline-title--club">%s</h1>',
+            $title = sprintf('<h1 class="caption__title caption__title--club">%s</h1>',
                 post_type_archive_title('', false)
             );
         }

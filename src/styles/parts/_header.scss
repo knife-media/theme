@@ -3,7 +3,8 @@
   flex-flow: row nowrap;
   align-items: center;
   justify-content: center;
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 5;
 
   width: 100%;
@@ -40,30 +41,6 @@
 
     .header__logo-link {
       display: block;
-    }
-
-    .header__logo-promo {
-      display: block;
-
-      width: 8rem;
-      height: 2rem;
-      margin-right: 1rem;
-
-      text-indent: -9999rem;
-
-      background-image: url('/wp-content/uploads/2019/09/suzuki-jimny.png');
-      background-repeat: no-repeat;
-      background-size: contain;
-
-      transition: filter 0.25s;
-
-      &:hover {
-        filter: brightness(110%);
-      }
-
-      @media screen and (max-width: 1023px) {
-        display: none;
-      }
     }
 
     .header__logo-image {

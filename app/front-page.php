@@ -13,22 +13,18 @@
 
 get_header(); ?>
 
-<?php if(is_active_sidebar('knife-feature')) : ?>
-    <div class="block-wrapper">
-        <?php
-            dynamic_sidebar('knife-feature');
-        ?>
-    </div>
-<?php endif; ?>
+<?php
+    if(is_active_sidebar('knife-feature')) :
+        dynamic_sidebar('knife-feature');
+    endif;
+?>
 
 <?php if(is_active_sidebar('knife-frontal')) : ?>
-    <div class="block-wrapper">
-        <?php
-            dynamic_sidebar('knife-frontal');
-        ?>
-    </div>
+    <?php
+        dynamic_sidebar('knife-frontal');
+    ?>
 
-    <nav class="block-navigate">
+    <nav class="navigate">
         <?php
             printf('<a class="button" href="%2$s">%1$s</a>',
                 __('Все статьи', 'knife-theme'),

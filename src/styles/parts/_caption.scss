@@ -1,0 +1,167 @@
+.caption {
+  display: block;
+
+  width: calc(100% - 2rem);
+  max-width: $width-site - 2rem;
+
+  margin: 0 auto;
+
+  .caption__title {
+    display: inline-block;
+    cursor: default;
+
+    margin-top: 1rem;
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: transparent;
+
+    background: linear-gradient(90deg, #fbcb34, #ed4f71);
+    background-clip: text;
+    -webkit-background-clip: text;
+
+    &:first-letter {
+      text-transform: uppercase;
+    }
+
+    &.caption__title--author {
+      background: linear-gradient(90deg, #7ce568, #67e3d6);
+      background-clip: text;
+      -webkit-background-clip: text;
+    }
+
+    &.caption__title--special {
+      display: block;
+
+      width: 100%;
+      padding: .5rem;
+      font-size: 2.5rem;
+      text-align: center;
+
+      background: $color-white;
+      color: $color-text;
+
+      @media screen and (max-width: 1023px) {
+        font-size: 2rem;
+      }
+
+      @media screen and (max-width: 767px) {
+        font-size: 1.875rem;
+      }
+
+      @media screen and (max-width: 479px) {
+        width: calc(100% + 2rem);
+        margin-left: -1rem;
+        margin-right: -1rem;
+        font-size: 1.5rem;
+      }
+    }
+
+    &.caption__title--club {
+      margin-left: -.5rem;
+      font-size: 4.875rem;
+      line-height: 1.25;
+      color: $color-white;
+      background: none;
+
+      @media screen and (max-width: 1023px) {
+        margin-left: 0;
+        font-size: 3.75rem;
+      }
+
+      @media screen and (max-width: 479px) {
+        font-size: 2.5rem;
+      }
+    }
+
+    &.caption__title--category {
+      margin-left: -.75rem;
+      font-size: 10rem;
+      line-height: 1;
+
+      @media screen and (max-width: 1299px) {
+        margin-left: -.5rem;
+        font-size: 7.5rem;
+      }
+
+      @media screen and (max-width: 1023px) {
+        margin-left: 0;
+        font-size: 3.75rem;
+      }
+
+      @media screen and (max-width: 479px) {
+        font-size: 2.5rem;
+      }
+    }
+
+    @media screen and (max-width: 1023px) {
+      font-size: 2.5rem;
+    }
+
+    @media screen and (max-width: 767px) {
+      font-size: 1.875rem;
+    }
+  }
+
+  .caption__description {
+    display: block;
+    cursor: default;
+
+    margin: .75rem 0;
+    max-width: $width-content;
+
+    font-size: 1.375rem;
+    font-weight: 500;
+    line-height: 1.5;
+    color: $color-white;
+
+    a {
+      color: $color-light;
+
+      &:hover {
+        filter: brightness(120%);
+      }
+    }
+
+    @media screen and (max-width: 1023px) {
+      font-size: 1.25rem;
+    }
+
+    @media screen and (max-width: 767px) {
+      font-size: 1.125rem;
+    }
+
+    @media screen and (max-width: 479px) {
+      font-size: 1rem;
+    }
+  }
+
+  .caption__button {
+    display: block;
+    cursor: default;
+
+    margin: 1.5rem 0 .75rem;
+    max-width: 54rem;
+
+    .button {
+      width: auto;
+
+      font-size: 1.25rem;
+      font-weight: 500;
+
+      color: $color-white;
+    }
+
+    &.caption__button--club {
+      .button {
+        background-color: $color-club;
+
+        border-color: $color-club;
+      }
+    }
+  }
+
+  @media screen and (max-width: 1023px) {
+    max-width: $width-content;
+  }
+}

@@ -1,9 +1,9 @@
 .widget-televisor {
   display: flex;
 
-  width: 100%;
+  width: calc(100% - 2rem);
   max-width: $width-site - 2rem;
-  margin: 0 1rem;
+  margin: 0 auto;
 
   .widget-televisor__inner {
     display: flex;
@@ -13,11 +13,13 @@
 
   .widget-televisor__content {
     display: flex;
+    justify-content: center;
     flex-flow: row wrap;
-    position: relative;
     flex: 1 1 53.25rem;
+    position: relative;
 
     .widget-units {
+      width: 100%;
       margin-left: 0;
       margin-right: 0;
 
@@ -36,7 +38,7 @@
     }
 
     .widget-single {
-      margin: 1rem 0 0;
+      width: 100%;
     }
   }
 
@@ -45,12 +47,19 @@
     flex-flow: column wrap;
     flex: 0 0 19.75rem;
     justify-content: flex-start;
+    align-items: center;
 
     padding-left: 1rem;
 
     @media screen and (max-width: 1199px) {
       flex: 1 1 auto;
       padding-left: 0;
+    }
+
+    @media screen and (max-width: 1023px) {
+      .widget-recent {
+        max-width: $width-content;
+      }
     }
   }
 
@@ -66,11 +75,7 @@
     display: none;
   }
 
-  @media screen and (max-width: 1023px) {
-    max-width: $width-content;
-  }
-
   @media screen and (max-width: 479px) {
-    margin: 0;
+    width: 100%;
   }
 }

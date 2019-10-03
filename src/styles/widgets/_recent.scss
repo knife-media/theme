@@ -1,9 +1,10 @@
 .widget-recent {
   display: flex;
+  position: relative;
+
   flex-flow: column wrap;
   justify-content: space-between;
   flex: 1 1 auto;
-  position: relative;
 
   width: 100%;
   margin-top: 1rem;

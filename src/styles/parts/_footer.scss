@@ -5,7 +5,8 @@
 
   width: calc(100% - 2rem);
   max-width: $width-site - 2rem;
-  margin: 2rem 0;
+  margin: 2rem auto;
+  padding-top: 2rem;
 
   .footer__copy {
     display: block;
@@ -130,6 +131,7 @@
 
   @media screen and (max-width: 1023px) {
     max-width: $width-content;
-    margin: 1rem 0;
+    margin: 2rem auto;
+    padding-top: 0;
   }
 }

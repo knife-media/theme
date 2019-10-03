@@ -1,12 +1,14 @@
 .widget-club {
   display: flex;
-  flex-flow: row wrap;
-  justify-content: space-between;
   position: relative;
 
-  width: 100%;
+  flex-flow: row wrap;
+  justify-content: space-between;
+
+  width: calc(100% - 2rem);
   max-width: $width-site - 2rem;
-  margin: 1rem 1rem 0;
+
+  margin: 1rem auto 0;
   overflow: hidden;
 
   color: $color-white;
@@ -152,7 +154,7 @@
 
   &.widget-club--sidebar {
     align-self: flex-start;
-    margin: 1rem 0 0;
+    width: 100%;
 
     .widget-club__inner {
       width: 100%;
@@ -220,11 +222,12 @@
   }
 
   &.widget-club--entry {
-    width: calc(100% - 2rem);
-    max-width: $width-content;
-    margin: 0 1rem;
-    box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, .2);
+    width: 100%;
+    max-width: $width-content + 2rem;
 
+    margin-top: 0;
+
+    box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, .2);
     border-radius: 3px;
 
     .widget-club__inner {
@@ -263,6 +266,6 @@
   }
 
   @media screen and (max-width: 479px) {
-    margin: 1rem 0 0;
+    width: 100%;
   }
 }

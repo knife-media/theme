@@ -31,7 +31,7 @@ class Knife_Post_Lead {
     * @access  private
     * @var     array
     */
-    private static $post_type = ['post', 'club', 'select', 'generator', 'quiz', 'ask'];
+    private static $post_type = ['post', 'club', 'select', 'generator', 'quiz'];
 
 
     /**

@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.8
+ * @version 1.10
  */
 
 if (!defined('WPINC')) {
@@ -47,11 +47,6 @@ class Knife_Post_Info {
             $output = self::get_label($output);
         }
 
-        // Get asker info
-        if(in_array('asker', $options)) {
-            $output = self::get_asker($output);
-        }
-
         return $output;
     }
 
@@ -68,24 +63,6 @@ class Knife_Post_Info {
             $output = $output . sprintf('<a class="stamp stamp--club" href="%2$s">%1$s</a>',
                 esc_html(get_post_type_object($post_type)->labels->name),
                 esc_url(get_post_type_archive_link($post_type))
-            );
-        }
-
-        return $output;
-    }
-
-
-    /**
-     * Get akser info meta
-     *
-     * @since 1.8
-     */
-    private static function get_asker($output = '') {
-        $options = get_post_meta(get_the_ID(), '_knife-ask-options', true);
-
-        if(!empty($options['asker'])) {
-            $output = $output . preg_replace('~^([^,]+,?)(.*)$~iu', '<strong>$1</strong>$2',
-                strip_tags($options['asker'])
             );
         }
 
@@ -162,7 +139,7 @@ class Knife_Post_Info {
     private static function get_meta($options = [], $output = '') {
         // Get allowed meta options
         $options = array_intersect($options, [
-            'author', 'date', 'tag', 'tags', 'time', 'category', 'emoji', 'question'
+            'author', 'date', 'tag', 'tags', 'time', 'category', 'emoji'
         ]);
 
         $meta = [];
@@ -282,24 +259,6 @@ class Knife_Post_Info {
                     );
                 }
             }
-        }
-
-        return $output;
-    }
-
-
-    /**
-     * Get question number
-     *
-     * @since 1.7
-     */
-    private static function meta_question($output = '') {
-        $options = get_post_meta(get_the_ID(), '_knife-ask-options', true);
-
-        if(isset($options['counter'])) {
-            $output = sprintf('<span class="meta__item">%s</span>',
-                __('Вопрос ', 'knife-theme') . absint($options['counter'])
-            );
         }
 
         return $output;
