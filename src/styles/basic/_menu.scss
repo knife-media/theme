@@ -46,26 +46,6 @@
       }
     }
 
-    &.--jimny {
-      display: none;
-
-      width: 8rem;
-      height: 2rem;
-
-      text-indent: -9999rem;
-
-      background-image: url('/wp-content/uploads/2019/09/suzuki-jimny.png');
-      background-repeat: no-repeat;
-      background-size: contain;
-
-      transition: filter 0.25s;
-
-      @media screen and (max-width: 1023px) {
-        display: block;
-      }
-    }
-
-
     &.--top {
       margin: .25rem .5rem;
 
