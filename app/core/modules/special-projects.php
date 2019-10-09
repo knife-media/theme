@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.9
+ * @version 1.10
  */
 
 
@@ -44,6 +44,9 @@ class Knife_Special_Projects {
     public static function load_module() {
         // Register taxonomy
         add_action('init', [__CLASS__, 'register_taxonomy']);
+
+        // Try to update templates
+        add_action('init', [__CLASS__, 'update_templates']);
 
         // Add special options form fields
         add_action('admin_init', [__CLASS__, 'add_options_fields']);
@@ -83,6 +86,82 @@ class Knife_Special_Projects {
             'rewrite'               => ['slug' => self::$taxonomy],
             'meta_box_cb'           => [__CLASS__, 'print_metabox']
         ]);
+    }
+
+
+    /**
+     * Update templates
+     *
+     * @since 1.10
+     */
+    public static function update_templates() {
+        // Look for a suitable single template
+        add_filter('single_template', [__CLASS__, 'include_single']);
+
+        // Archive template
+        add_filter('taxonomy_template', [__CLASS__, 'include_archive']);
+    }
+
+
+    /**
+     * Include updated single template
+     *
+     * @since 1.10
+     */
+    public static function include_single($template) {
+        $post_id = get_queried_object_id();
+
+        if(has_term('', self::$taxonomy, $post_id)) {
+            // Loop over all tax terms
+            foreach(get_the_terms($post_id, self::$taxonomy) as $term) {
+                $ancestors = get_ancestors($term->term_id, self::$taxonomy, 'taxonomy');
+
+                // Get parent if exists
+                if(!empty($ancestors)) {
+                    $term = get_term($ancestors[0], self::$taxonomy);
+                }
+
+                // Try to find template if exists
+                $new_template = locate_template(["special/{$term->slug}/single.php"]);
+
+                if(!empty($new_template)) {
+                    // Enqueue custom styles for template
+                    self::enqueue_styles($term->slug);
+
+                    return $new_template;
+                }
+            }
+        }
+
+        return $template;
+    }
+
+
+    /**
+     * Include updated archive template
+     *
+     * @since 1.10
+     */
+    public static function include_archive($template) {
+        $object = get_queried_object();
+
+        if(is_tax(self::$taxonomy)) {
+            $term = get_queried_object();
+
+            if(!empty($term->slug)) {
+                // Try to find template if exists
+                $new_template = locate_template(["special/{$term->slug}/archive.php"]);
+
+                if(!empty($new_template)) {
+                    // Enqueue custom styles for template
+                    self::enqueue_styles($term->slug);
+
+                    return $new_template;
+                }
+            }
+        }
+
+        return $template;
     }
 
 
@@ -212,6 +291,44 @@ class Knife_Special_Projects {
         );
 
         return $title;
+    }
+
+
+    /**
+     * Add addition span tag for special projects title
+     */
+    public static function post_tagline($title, $post_id, $raw = true) {
+        $tagline = get_post_meta($post_id, self::$post_meta, true);
+
+        if(empty($tagline)) {
+            return $title;
+        }
+
+        if(is_admin() && $raw) {
+            return "{$title} {$tagline}";
+        }
+
+        return "{$title} <em>{$tagline}</em>";
+    }
+
+
+
+    /**
+     * Enqueue custom styles for special project
+     *
+     * @since 1.10
+     */
+    private static function enqueue_styles($term) {
+        $version = wp_get_theme()->get('Version');
+
+        if(defined('WP_DEBUG') && true === WP_DEBUG) {
+            $version = date('U');
+        }
+
+        $styles = get_template_directory_uri() . "/special/{$term}/styles.css";
+
+        // Let's add the file
+        wp_enqueue_style('knife-theme-' . $term, $styles, ['knife-theme'], $version);
     }
 
 

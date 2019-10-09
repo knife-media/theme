@@ -2,6 +2,7 @@
  * Append yandex rtb blocks
  *
  * @since 1.5
+ * @version 1.10
  */
 
 (function() {
@@ -13,11 +14,17 @@
       return false;
     }
 
+    var footer = document.querySelector('.entry-footer');
+
+    if(footer === null) {
+      return false;
+    }
+
     // Create rtb widget element
     var widget = document.createElement('div');
     widget.classList.add('entry-footer__rtb', 'widget-rtb');
     widget.id = 'yandex_rtb_' + knife_yandex_rtb;
-    document.querySelector('.entry-footer').appendChild(widget);
+    footer.appendChild(widget);
 
     // Add rtb to render queue
     window['yandexContextAsyncCallbacks'].push(function() {

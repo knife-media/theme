@@ -125,7 +125,7 @@ class Knife_Post_Tagline {
             return "{$title} {$tagline}";
         }
 
-        return "{$title} <em>{$tagline}</em>";
+        return "<span>{$title}</span> <em>{$tagline}</em>";
     }
 
 
