@@ -1,7 +1,6 @@
 .widget-transparent {
   display: flex;
   flex-flow: column wrap;
-  align-content: flex-end;
   position: relative;
 
   width: calc(100% - 2rem);
@@ -118,12 +117,11 @@
     position: relative;
 
     width: calc(50% - 1rem);
-    margin-bottom: 0;
+    margin-left: auto;
     overflow: hidden;
 
     color: $color-white;
     background-color: transparent;
-
 
     &:last-child {
       .widget-transparent__content {
@@ -135,6 +133,8 @@
       position: absolute;
       bottom: 0;
       left: 0;
+
+      margin: 0;
 
       .widget-transparent__content {
         border-bottom: none;
