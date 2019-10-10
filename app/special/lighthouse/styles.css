@@ -117,6 +117,17 @@
   color: var(--color-accent);
 }
 
+.entry-content h4 {
+  line-height: 1.375;
+}
+
+.entry-content h4 > * {
+    color: var(--color-title);
+    background-color: var(--color-mark);
+    box-shadow: .5rem 0 0 var(--color-mark), -.5rem 0 0 var(--color-mark);
+    padding: .25rem 0;
+}
+
 .entry-comments {
   margin-bottom: 2rem;
 }
