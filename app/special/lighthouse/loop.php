@@ -25,7 +25,10 @@
                     get_post_meta(get_the_ID(), 'post-hero', true)
                 );
 
-                the_excerpt();
+                printf(
+                    '<p class="unit__content-info">%s</p>',
+                    get_post_meta(get_the_ID(), 'post-info', true)
+                );
             ?>
         </div>
     </div>

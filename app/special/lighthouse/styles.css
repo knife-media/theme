@@ -210,7 +210,7 @@
   display: none;
 }
 
-.unit .unit__content p {
+.unit .unit__content .unit__content-info {
   display: block;
 
   margin-top: 1rem;
