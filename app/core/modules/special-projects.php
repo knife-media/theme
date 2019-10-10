@@ -45,14 +45,37 @@ class Knife_Special_Projects {
         // Register taxonomy
         add_action('init', [__CLASS__, 'register_taxonomy']);
 
+        // Include all functions.php for special terms
+        add_action('init', [__CLASS__, 'include_functions'], 12);
+
         // Try to update templates
-        add_action('init', [__CLASS__, 'update_templates']);
+        add_action('init', [__CLASS__, 'update_templates'], 12);
 
         // Add special options form fields
         add_action('admin_init', [__CLASS__, 'add_options_fields']);
 
         // Update archive caption title
         add_filter('get_the_archive_title', [__CLASS__, 'update_archive_title'], 15);
+    }
+
+
+    /**
+     * Try to require all functions.php for special terms
+     *
+     * @since 1.10
+     */
+    public static function include_functions() {
+        $terms = get_terms([
+            'taxonomy' => 'special'
+        ]);
+
+        foreach($terms as $term) {
+            $include = get_template_directory() . "/special/" . $term->slug;
+
+            if(file_exists($include . '/functions.php')) {
+                include $include . '/functions.php';
+            }
+        }
     }
 
 
@@ -292,25 +315,6 @@ class Knife_Special_Projects {
 
         return $title;
     }
-
-
-    /**
-     * Add addition span tag for special projects title
-     */
-    public static function post_tagline($title, $post_id, $raw = true) {
-        $tagline = get_post_meta($post_id, self::$post_meta, true);
-
-        if(empty($tagline)) {
-            return $title;
-        }
-
-        if(is_admin() && $raw) {
-            return "{$title} {$tagline}";
-        }
-
-        return "{$title} <em>{$tagline}</em>";
-    }
-
 
 
     /**

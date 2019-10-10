@@ -20,9 +20,9 @@
         <div class="unit__content">
             <?php
                 printf(
-                    '<a class="unit__content-link" href="%1$s">%2$s</a>',
+                    '<a class="unit__content-link" href="%1$s"><span>%2$s</span></a>',
                     esc_url(get_permalink()),
-                    get_the_title()
+                    get_post_meta(get_the_ID(), 'post-hero', true)
                 );
 
                 the_excerpt();

@@ -16,12 +16,12 @@ get_header(); ?>
                 <?php
                     printf(
                         '<img src="%s" alt="">',
-                        get_template_directory_uri() . "/special/lighthouse/images/logo.png",
+                        get_template_directory_uri() . "/special/lighthouse/images/logo-lighthouse.png",
                     );
 
                     printf(
                         '<a href="%s">%s</a>',
-                        get_site_url(null, '/special/lighthouse/'),
+                        get_term_link('lighthouse', 'special'),
                         _x('Дом с маяком', 'special: lighthouse', 'knife-theme')
                     );
                 ?>
@@ -31,6 +31,11 @@ get_header(); ?>
         <article <?php post_class('post'); ?> id="post-<?php the_ID(); ?>">
             <div class="entry-header">
                 <?php
+                    printf(
+                        '<p class="entry-header__emoji">%s</p>',
+                        get_post_meta(get_the_ID(), 'post-emoji', true)
+                    );
+
                     the_title(
                         '<h1 class="entry-header__title">',
                         '</h1>'
@@ -54,14 +59,25 @@ get_header(); ?>
                 ?>
             </div>
 
-            <?php if(comments_open()) : ?>
-                <div class="entry-comments">
-                    <div class="comments" id="hypercomments_widget"></div>
-                </div>
-            <?php endif; ?>
+            <div class="entry-footer">
+                <?php
+                    printf(
+                        '<div class="entry-footer__author"><p>%s</p> <p>%s</p></div>',
+                        _x('Подготовила специальный<br> корреспондент журнала «Нож»', 'special: lighthouse', 'knife-theme'),
+                        get_the_author_posts_link()
+                    );
+                ?>
+            </div>
         </article>
+
+        <nav class="navigate">
+            <?php
+                previous_post_link('%link', '%title', true, '', 'special');
+                next_post_link('%link', '%title', true, '', 'special');
+            ?>
+        </nav>
 
     <?php endwhile; ?>
 </div>
 
-<?php get_footer();
+<?php get_template_part('special/lighthouse/footer');

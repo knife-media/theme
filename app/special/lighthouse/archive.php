@@ -15,7 +15,7 @@ get_header(); ?>
             <?php
                 printf(
                     '<img src="%s" alt="">',
-                    get_template_directory_uri() . "/special/lighthouse/images/logo.png",
+                    get_template_directory_uri() . "/special/lighthouse/images/logo-lighthouse.png",
                 );
 
                 printf(
@@ -26,7 +26,7 @@ get_header(); ?>
                 printf(
                     '<p>%s</p>',
                     _x(
-                        'Истории детей, находящихся под опекой московского хосписа «Дом с маяком»',
+                        'Истории юношей и девушек, находящихся под опекой московского хосписа «дом с маяком»',
                         'special: lighthouse', 'knife-theme'
                     )
                 );
@@ -51,4 +51,4 @@ get_header(); ?>
     </div>
 </div>
 
-<?php get_footer();
+<?php get_template_part('special/lighthouse/footer');

@@ -67,12 +67,15 @@ class Knife_Similar_Posts {
         if(is_singular(self::$post_type)) {
             $post_id = get_the_ID();
 
-            // Check if promo post
-            $is_promo = get_post_meta($post_id, '_knife-promo', true);
-
-            if(in_category('news') || $is_promo) {
+            if(in_category('news') || has_term('', 'special')) {
                 return;
             }
+
+            // Check if promo post
+            if(get_post_meta($post_id, '_knife-promo', true)) {
+                return;
+            }
+
 
             $options = [
                 'title' => __('Читайте также', 'knife-theme'),
