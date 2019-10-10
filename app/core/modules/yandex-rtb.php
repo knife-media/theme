@@ -41,12 +41,16 @@ class Knife_Yandex_RTB {
      */
     public static function inject_object() {
         if(is_singular('post')) {
-            $yandex_rtb = get_theme_mod(self::$option_id);
-
-            // Check if promo post
             $is_promo = get_post_meta(get_the_ID(), '_knife-promo', true);
 
-            if(!$is_promo && strlen($yandex_rtb) > 0) {
+            // Check if promo or special post
+            if(has_term('', 'special') || $is_promo) {
+                return;
+            }
+
+            $yandex_rtb = get_theme_mod(self::$option_id);
+
+            if(strlen($yandex_rtb) > 0) {
                 wp_localize_script('knife-theme', 'knife_yandex_rtb', $yandex_rtb);
             }
         }
