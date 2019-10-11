@@ -61,10 +61,12 @@ get_header(); ?>
 
             <div class="entry-footer">
                 <?php
-                    printf(
-                        '<div class="entry-footer__author"><p>%s</p> <p>%s</p></div>',
-                        _x('Подготовила специальный<br> корреспондент журнала «Нож»', 'special: lighthouse', 'knife-theme'),
-                        get_the_author_posts_link()
+                    the_info(
+                        sprintf(
+                            '<div class="entry-footer__author"><p>%s</p>',
+                            _x('Подготовила специальный<br> корреспондент журнала «Нож»', 'special: lighthouse', 'knife-theme')
+                        ),
+                        '</div>', ['author']
                     );
                 ?>
             </div>
