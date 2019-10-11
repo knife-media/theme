@@ -303,8 +303,7 @@ class Knife_Special_Projects {
         }
 
         $styles = [
-            'background-color:' . $options['color'],
-            'color:' . self::get_text_color($options['color'])
+            'color:' . $options['color']
         ];
 
         $title = sprintf(
