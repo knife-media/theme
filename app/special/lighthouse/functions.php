@@ -23,8 +23,14 @@ add_action('previous_post_link', function($output, $format, $link, $prev) {
                 'order' => 'DESC'
             ]);
 
+            // Check post exists and not same as current
+            if(empty($posts[0]->ID) || $posts[0]->ID === $post->ID) {
+                return $output;
+            }
+
             $prev = $posts[0];
 
+            // Generate default output
             $output = sprintf('<a href="%s" rel="prev">%s</a>',
                 get_permalink($prev->ID),
                 get_the_title($prev->ID)
@@ -59,8 +65,14 @@ add_action('next_post_link', function($output, $format, $link, $next) {
                 'order' => 'ASC'
             ]);
 
+            // Check post exists and not same as current
+            if(empty($posts[0]->ID) || $posts[0]->ID === $post->ID) {
+                return $output;
+            }
+
             $next = $posts[0];
 
+            // Generate default output
             $output = sprintf('<a href="%s" rel="next">%s</a>',
                 get_permalink($next->ID),
                 get_the_title($next->ID)

@@ -163,7 +163,7 @@
 
 .entry-header .entry-header__title {
   font-size: 2rem;
-  line-height: 120%;
+  line-height: 125%;
 }
   @media screen and (max-width: 1023px) {
     .entry-header .entry-header__title {
@@ -184,6 +184,8 @@
   }
 
 .entry-header .entry-header__title > * {
+  padding: .075em 0;
+
   color: var(--color-title);
   background-color: var(--color-mark);
   box-shadow: .5rem 0 0 var(--color-mark), -.5rem 0 0 var(--color-mark);
@@ -211,13 +213,15 @@
 }
 
 .entry-content h4 {
-  line-height: 120%;
+  line-height: 1.5;
 }
 
 .entry-content h4 > * {
-    color: var(--color-title);
-    background-color: var(--color-mark);
-    box-shadow: .5rem 0 0 var(--color-mark), -.5rem 0 0 var(--color-mark);
+  padding: .25em 0;
+
+  color: var(--color-title);
+  background-color: var(--color-mark);
+  box-shadow: .5rem 0 0 var(--color-mark), -.5rem 0 0 var(--color-mark);
 }
 
 
