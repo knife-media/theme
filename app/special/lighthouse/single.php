@@ -16,7 +16,7 @@ get_header(); ?>
                 <?php
                     printf(
                         '<img src="%s" alt="">',
-                        get_template_directory_uri() . "/special/lighthouse/images/logo-lighthouse.png",
+                        get_template_directory_uri() . "/special/lighthouse/images/logo.png",
                     );
 
                     printf(
