@@ -29,9 +29,9 @@
     display: block;
 
     margin-top: 0;
-    font-size: 4rem;
+    font-size: 3rem;
     font-weight: 900;
-    line-height: 1.125;
+    line-height: 1.25;
     text-transform: uppercase;
 
     em {
@@ -40,19 +40,17 @@
 
     @media screen and (max-width: 1023px) {
       margin-bottom: .75rem;
-      font-size: 3.25rem;
+      font-size: 2.5rem;
     }
 
     @media screen and (max-width: 767px) {
       margin-bottom: 1rem;
-
-      font-size: 2.5rem;
-      line-height: 1.25;
+      font-size: 2rem;
     }
 
     @media screen and (max-width: 479px) {
-      font-size: 2rem;
-      line-height: 1.25;
+      font-size: 1.5rem;
+      line-height: 1.375;
     }
   }
 
