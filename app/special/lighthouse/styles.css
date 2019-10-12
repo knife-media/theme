@@ -475,6 +475,11 @@
   max-width: 100%;
   margin-bottom: 2rem;
 }
+  @media screen and (max-width: 1023px) {
+    .navigate {
+      margin-bottom: 1rem;
+    }
+  }
 
 .navigate a {
   padding: 1rem;

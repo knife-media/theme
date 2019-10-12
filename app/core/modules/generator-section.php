@@ -110,6 +110,9 @@ class Knife_Generator_Section {
 
         // Include generator options
         add_action('wp_enqueue_scripts', [__CLASS__, 'inject_generator'], 12);
+
+        // Add quiz post type to archives
+        add_action('pre_get_posts', [__CLASS__, 'update_archives'], 12);
     }
 
 
@@ -135,6 +138,7 @@ class Knife_Generator_Section {
             ],
             'label'                 => __('Генератор', 'knife-theme'),
             'supports'              => ['title', 'thumbnail', 'excerpt', 'comments'],
+            'taxonomies'            => ['post_tag', 'category'],
             'hierarchical'          => false,
             'public'                => true,
             'show_ui'               => true,
@@ -260,6 +264,34 @@ class Knife_Generator_Section {
         }
 
         return $template;
+    }
+
+
+    /**
+     * Append generator posts to archives
+     */
+    public static function update_archives($query) {
+        if(is_admin() || !$query->is_main_query()) {
+            return false;
+        }
+
+        // Is in archive
+        foreach(['tag', 'category', 'author', 'date', 'home', 'tax'] as $archive) {
+            $method = 'is_' . $archive;
+
+            if($query->$method()) {
+                $types = $query->get('post_type');
+
+                if(!is_array($types)) {
+                    $types = ['post'];
+                }
+
+                $types[] = self::$post_type;
+                $query->set('post_type', $types);
+
+                return false;
+            }
+        }
     }
 
 

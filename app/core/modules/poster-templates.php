@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.7
- * @version 1.9
+ * @version 1.10
  */
 
 if (!defined('WPINC')) {
@@ -17,11 +17,26 @@ class Knife_Poster_Templates {
     /**
      * Get poster templates
      */
-    public static function get_templates() {
-        $templates = [
-            'generic' => __('Универсальный шаблон', 'knife-theme'),
-            'snippet' => __('Сниппет для соцсетей', 'knife-theme')
-        ];
+    public static function get_templates($target = '') {
+        $include = get_template_directory() . '/core/include/posters';
+
+        // Define empty templates
+        $templates = [];
+
+        // Loop over all posters and parse headers
+        foreach(glob($include . "/*.php") as $poster) {
+            $data = get_file_data($poster, [
+                'target' => 'Target', 'title' => 'Poster name'
+            ]);
+
+            // Get filename
+            $path = pathinfo($poster);
+            $name = $path['filename'];
+
+            if(empty($target) || $target === $data['target']) {
+                $templates[$name] = $data['title'];
+            }
+        }
 
         return $templates;
     }
@@ -34,13 +49,14 @@ class Knife_Poster_Templates {
         $args = wp_parse_args($args, [
             'attributes' => [],
             'selected' => 0,
+            'target' => '',
             'echo' => true
         ]);
 
         $options = [];
 
         // Get availible templates
-        $templates = self::get_templates();
+        $templates = self::get_templates($args['target']);
 
         foreach($templates as $template => $label) {
             $options[] = sprintf('<option value="%1$s"%3$s>%2$s</option>',

@@ -166,9 +166,10 @@
                         <?php
                             if(method_exists('Knife_Poster_Templates', 'print_select')) {
                                 Knife_Poster_Templates::print_select([
+                                    'target' => 'generator',
                                     'attributes' => [
                                         'class' => 'item__image-template',
-                                        'data-item' => 'template'
+                                        'data-item' => 'template',
                                     ],
                                     'selected' => esc_attr($item['template'] ?? '')
                                 ]);

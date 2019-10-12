@@ -1,9 +1,9 @@
 <?php
 /**
- * Generic poster template
+ * Quiz poster template
  *
- * Common template with all availible variables
- * Set moderate contrast and brightness
+ * Poster name: Универсальный шаблон
+ * Target: quiz
  */
 
 $poster = new PHPImage();

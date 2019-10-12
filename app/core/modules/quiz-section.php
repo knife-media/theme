@@ -300,7 +300,7 @@ class Knife_Quiz_Section {
         }
 
         // Is in archive
-        foreach(['tag', 'category', 'author', 'date', 'home'] as $archive) {
+        foreach(['tag', 'category', 'author', 'date', 'home', 'tax'] as $archive) {
             $method = 'is_' . $archive;
 
             if($query->$method()) {

@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.7
+ * @version 1.10
  */
 
 
@@ -14,7 +14,7 @@ class Knife_Widget_Transparent extends WP_Widget {
     /**
      * Widget post types
      */
-    private $post_type = ['post', 'quiz'];
+    private $post_type = ['post', 'quiz', 'generator'];
 
 
     /**

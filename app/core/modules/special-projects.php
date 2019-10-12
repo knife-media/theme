@@ -27,6 +27,16 @@ class Knife_Special_Projects {
 
 
     /**
+     * Default post type with special taxonomy
+     *
+     * @since   1.10
+     * @access  private
+     * @var     array
+     */
+    private static $post_type = ['post', 'quiz', 'generator'];
+
+
+    /**
      * Unique meta to store custom term color
      *
      * @since   1.4
@@ -83,7 +93,7 @@ class Knife_Special_Projects {
      * Create custom taxonomy
      */
     public static function register_taxonomy() {
-        register_taxonomy(self::$taxonomy, 'post', [
+        register_taxonomy(self::$taxonomy, self::$post_type, [
             'labels' => [
                 'name'                       => __('Спецпроекты', 'knife-theme'),
                 'singular_name'              => __('Спецпроект', 'knife-theme'),
@@ -144,13 +154,13 @@ class Knife_Special_Projects {
                     $term = get_term($ancestors[0], self::$taxonomy);
                 }
 
+                // Enqueue custom styles for single
+                self::enqueue_styles($term->slug);
+
                 // Try to find template if exists
                 $new_template = locate_template(["special/{$term->slug}/single.php"]);
 
                 if(!empty($new_template)) {
-                    // Enqueue custom styles for template
-                    self::enqueue_styles($term->slug);
-
                     return $new_template;
                 }
             }
@@ -172,13 +182,13 @@ class Knife_Special_Projects {
             $term = get_queried_object();
 
             if(!empty($term->slug)) {
+                // Enqueue custom styles for archive
+                self::enqueue_styles($term->slug);
+
                 // Try to find template if exists
                 $new_template = locate_template(["special/{$term->slug}/archive.php"]);
 
                 if(!empty($new_template)) {
-                    // Enqueue custom styles for template
-                    self::enqueue_styles($term->slug);
-
                     return $new_template;
                 }
             }
