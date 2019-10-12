@@ -11,13 +11,6 @@ $poster->setDimensionsFromImage($image)->draw($image);
 $poster->resize(1200, 630, true, true);
 
 
-// Change brightness and contrast
-$filter = $poster->getResource();
-imagefilter($filter, IMG_FILTER_CONTRAST, 35);
-imagefilter($filter, IMG_FILTER_BRIGHTNESS, -85);
-$poster->setResource($filter);
-
-
 // Draw logo image
 $poster->draw(get_template_directory() . '/assets/images/logo-title.png', 40, 40);
 
