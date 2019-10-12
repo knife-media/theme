@@ -122,7 +122,7 @@ class Knife_Generator_Section {
     public static function register_type() {
         register_post_type(self::$post_type, [
             'labels'                    => [
-                'name'                  => __('Генератор', 'knife-theme'),
+                'name'                  => __('Генераторы', 'knife-theme'),
                 'singular_name'         => __('Генератор', 'knife-theme'),
                 'add_new'               => __('Добавить генератор', 'knife-theme'),
                 'menu_name'             => __('Генераторы', 'knife-theme'),
@@ -148,7 +148,7 @@ class Knife_Generator_Section {
             'show_in_admin_bar'     => true,
             'show_in_nav_menus'     => true,
             'can_export'            => true,
-            'has_archive'           => false,
+            'has_archive'           => true,
             'exclude_from_search'   => true,
             'publicly_queryable'    => true
         ]);

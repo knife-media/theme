@@ -107,8 +107,21 @@ class Knife_Post_Info {
      * @since 1.8
      */
     private static function get_head($output = '') {
+        $terms = get_the_terms(get_the_ID(), 'special');
+
+        // Check if has terms next
+        if(isset($terms[0])) {
+            $output = $output . sprintf('<a class="head" href="%2$s">%1$s</a>',
+                esc_html($terms[0]->name),
+                esc_url(get_term_link($terms[0]->term_id))
+            );
+
+            return $output;
+        }
+
         $is_promo = get_post_meta(get_the_ID(), '_knife-promo', true);
 
+        // Check if promo first
         if($is_promo) {
             $output = sprintf('<a class="head" href="%s">%s</a>',
                 esc_url(home_url('/promo/')),
@@ -120,6 +133,7 @@ class Knife_Post_Info {
 
         $tags = get_the_tags();
 
+        // Check for tags finally
         if(isset($tags[0])) {
             $output = $output . sprintf('<a class="head" href="%2$s">%1$s</a>',
                 esc_html($tags[0]->name),

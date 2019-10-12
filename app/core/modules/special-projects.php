@@ -338,10 +338,12 @@ class Knife_Special_Projects {
             $version = date('U');
         }
 
-        $styles = get_template_directory_uri() . "/special/{$term}/styles.css";
+        $styles = "/special/{$term}/styles.css";
 
-        // Let's add the file
-        wp_enqueue_style('knife-theme-' . $term, $styles, ['knife-theme'], $version);
+        // Let's add the file if exists
+        if(file_exists(get_template_directory() . $styles)) {
+            wp_enqueue_style('knife-theme-' . $term, get_template_directory_uri() . $styles, ['knife-theme'], $version);
+        }
     }
 
 

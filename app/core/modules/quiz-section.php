@@ -157,7 +157,7 @@ class Knife_Quiz_Section {
             'show_in_admin_bar'     => true,
             'show_in_nav_menus'     => true,
             'can_export'            => true,
-            'has_archive'           => false,
+            'has_archive'           => true,
             'publicly_queryable'    => true
         ]);
     }
