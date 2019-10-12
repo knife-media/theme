@@ -137,7 +137,7 @@ class Knife_Generator_Section {
                 'insert_into_item'      => __('Добавить в генератор', 'knife-theme')
             ],
             'label'                 => __('Генератор', 'knife-theme'),
-            'supports'              => ['title', 'thumbnail', 'excerpt', 'comments'],
+            'supports'              => ['title', 'thumbnail', 'excerpt', 'comments', 'author'],
             'taxonomies'            => ['post_tag', 'category'],
             'hierarchical'          => false,
             'public'                => true,
