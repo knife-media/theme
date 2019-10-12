@@ -39,7 +39,7 @@ $poster->textBox(mb_strtoupper($heading), [
 if(!empty($textbox['heading'])) {
     $poster->setLineHeight(1.075);
     $poster->textBox(mb_strtoupper($textbox['heading']), [
-        'x' => 40, 'y' => 290, 'width' => 950, 'fontSize' => 45, 'fontColor' => [253, 8, 64]
+        'x' => 40, 'y' => 290, 'width' => 950, 'height' => 250, 'fontSize' => 42, 'fontColor' => [253, 8, 64]
     ]);
 }
 
