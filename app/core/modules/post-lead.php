@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.2
- * @version 1.9
+ * @version 1.10
  */
 
 
@@ -17,12 +17,12 @@ if (!defined('WPINC')) {
 
 class Knife_Post_Lead {
    /**
-    * Backward compatibility meta name
+    * Lead text post meta
     *
     * @access  private
     * @var     string
     */
-    private static $post_meta = 'lead-text';
+    private static $post_meta = '_knife-lead';
 
 
    /**
