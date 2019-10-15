@@ -52,6 +52,29 @@ class Knife_Post_Info {
 
 
     /**
+     * Get entry caption
+     *
+     * @since 1.10
+     */
+    public static function get_tagline($output = '') {
+        $post_id = get_the_ID();
+
+        // Check special projects class and return template
+        if(method_exists('Knife_Special_Projects', 'compose_tagline')) {
+            $output = Knife_Special_Projects::compose_tagline($post_id, $output);
+        }
+
+        // Check if post promoted
+        if(method_exists('Knife_Promo_Manager', 'compose_tagline')) {
+            $output = Knife_Promo_Manager::compose_tagline($post_id, $output);
+        }
+
+        return $output;
+    }
+
+
+
+    /**
      * Get club about meta
      *
      * @since 1.8
@@ -234,17 +257,6 @@ class Knife_Post_Info {
      * Get primary post tag info
      */
     private static function meta_tag($output = '') {
-        $is_promo = get_post_meta(get_the_ID(), '_knife-promo', true);
-
-        if($is_promo) {
-            $output = sprintf('<a class="meta__item" href="%s">%s</a>',
-                esc_url(home_url('/promo/')),
-                __('Партнерский материал', 'knife-theme')
-            );
-
-            return $output;
-        }
-
         $tags = get_the_tags();
 
         if(isset($tags[0])) {

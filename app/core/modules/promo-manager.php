@@ -102,15 +102,16 @@ class Knife_Promo_Manager {
 
 
     /**
-     * Get promo board markup
+     * Compose caption promo template
+     *
+     * @since 1.9
      */
-    public static function get_promo($output = '') {
-        $post_id = get_the_ID();
-
-        // Check if post promoted
+    public static function compose_tagline($post_id, $output = '') {
         if(!get_post_meta($post_id, self::$meta_promo, true)) {
             return $output;
         }
+
+        $classes = 'tagline';
 
         // Get promo options
         $options = (array) get_post_meta($post_id, self::$meta_options, true);
@@ -120,11 +121,71 @@ class Knife_Promo_Manager {
             $options['color'] = '#fff';
         }
 
-        // Get promo parts
-        $output = self::compose_promo($options);
+        $partner = '';
+
+        // Add logo if exists
+        if(!empty($options['logo'])) {
+            $partner = $partner . sprintf(
+                '<img class="tagline__partner-logo" src="%s" alt="">',
+                esc_url($options['logo'])
+            );
+
+            $classes = $classes . ' tagline--logo';
+        }
+
+        // Add title if exists
+        if(!empty($options['title'])) {
+            $partner = $partner . sprintf(
+                '<span class="tagline__partner-title">%s</span>',
+                sanitize_text_field($options['title'])
+            );
+
+            $classes = $classes . ' tagline--title';
+        }
+
+        // Add required title
+        if(empty($options['text'])) {
+            $options['text'] = __('Партнерский материал', 'knife-theme');
+        }
+
+        $promo = sprintf(
+            '<span class="tagline__text">%s</span>',
+            sanitize_text_field($options['text'])
+        );
+
+        // Wrap logo and title
+        if(!empty($partner)) {
+            $promo = $promo . sprintf(
+                '<div class="tagline__partner">%s</div>', $partner
+            );
+        }
+
+        $styles = [
+            'background-color:' . $options['color'],
+            'color:' . self::get_text_color($options['color'])
+        ];
+
+        $styles = implode('; ', $styles);
+
+        // Return if link not defined
+        if(empty($options['link'])) {
+            $output = sprintf(
+                '<div class="%2$s" style="%3$s">%1$s</div>',
+                $promo, $classes, esc_attr($styles)
+            );
+
+            return $output;
+        }
+
+        $output = sprintf(
+            '<a href="%2$s" class="%3$s" target="_blank" rel="noopener" style="%4$s">%1$s</a>',
+            $promo, esc_url($options['link']),
+            $classes, esc_attr($styles)
+        );
 
         return $output;
     }
+
 
 
     /**
@@ -345,78 +406,6 @@ class Knife_Promo_Manager {
         }
 
         return $classes;
-    }
-
-
-    /**
-     * Affiliate helper method
-     *
-     * @since 1.9
-     */
-    private static function compose_promo($options, $partner = '') {
-        $classes = 'promo';
-
-        // Add logo if exists
-        if(!empty($options['logo'])) {
-            $partner = $partner . sprintf(
-                '<img class="promo__partner-logo" src="%s" alt="">',
-                esc_url($options['logo'])
-            );
-
-            $classes = $classes . ' promo--logo';
-        }
-
-        // Add title if exists
-        if(!empty($options['title'])) {
-            $partner = $partner . sprintf(
-                '<span class="promo__partner-title">%s</span>',
-                sanitize_text_field($options['title'])
-            );
-
-            $classes = $classes . ' promo--title';
-        }
-
-        // Add required title
-        if(empty($options['text'])) {
-            $options['text'] = __('Партнерский материал', 'knife-theme');
-        }
-
-        $promo = sprintf(
-            '<span class="promo__text">%s</span>',
-            sanitize_text_field($options['text'])
-        );
-
-        // Wrap logo and title
-        if(!empty($partner)) {
-            $promo = $promo . sprintf(
-                '<div class="promo__partner">%s</div>', $partner
-            );
-        }
-
-        $styles = [
-            'background-color:' . $options['color'],
-            'color:' . self::get_text_color($options['color'])
-        ];
-
-        $styles = implode('; ', $styles);
-
-        // Return if link not defined
-        if(empty($options['link'])) {
-            $output = sprintf(
-                '<div class="%2$s" style="%3$s">%1$s</div>',
-                $promo, $classes, esc_attr($styles)
-            );
-
-            return $output;
-        }
-
-        $output = sprintf(
-            '<a href="%2$s" class="%3$s" target="_blank" rel="noopener" style="%4$s">%1$s</a>',
-            $promo, esc_url($options['link']),
-            $classes, esc_attr($styles)
-        );
-
-        return $output;
     }
 
 

@@ -70,6 +70,56 @@ class Knife_Special_Projects {
 
 
     /**
+     * Compose entry-caption template
+     *
+     * @since 1.10
+     */
+    public static function compose_tagline($post_id, $output = '') {
+        if(!has_term('', self::$taxonomy, $post_id)) {
+            return $output;
+        }
+
+        // Loop over all tax terms
+        foreach(get_the_terms($post_id, self::$taxonomy) as $term) {
+            $ancestors = get_ancestors($term->term_id, self::$taxonomy, 'taxonomy');
+
+            // Get parent if exists
+            if(!empty($ancestors)) {
+                $term = get_term($ancestors[0], self::$taxonomy);
+            }
+
+            $options = get_term_meta($term->term_id, self::$term_meta, true);
+
+            if(empty($options['single'])) {
+                $output = sprintf(
+                    '<a class="tagline" href="%2$s"><span class="tagline__name">%1$s</span></a>',
+                    esc_html($term->name),
+                    esc_url(get_term_link($term->term_id))
+                );
+
+                break;
+            }
+
+            $styles = [
+                'background:' . $options['single'],
+                'color:' . self::get_text_color($options['single'])
+            ];
+
+            $output = sprintf(
+                '<a class="tagline" href="%2$s" style="%3$s"><span class="tagline__name">%1$s</span></a>',
+                esc_html($term->name),
+                esc_url(get_term_link($term->term_id)),
+                esc_attr(implode('; ', $styles))
+            );
+
+            break;
+        }
+
+        return $output;
+    }
+
+
+    /**
      * Try to require all functions.php for special terms
      *
      * @since 1.10
@@ -303,8 +353,8 @@ class Knife_Special_Projects {
 
         $options = get_term_meta(get_queried_object_id(), self::$term_meta, true);
 
-        if(empty($options['color'])) {
-            $title =  sprintf(
+        if(empty($options['archive'])) {
+            $title = sprintf(
                 '<h1 class="caption__title caption__title--%2$s">%1$s</h1>',
                 single_term_title('', false), esc_attr(self::$taxonomy)
             );
@@ -313,7 +363,7 @@ class Knife_Special_Projects {
         }
 
         $styles = [
-            'color:' . $options['color']
+            'color:' . $options['archive']
         ];
 
         $title = sprintf(

@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.9
+ * @version 1.10
  */
 ?>
 
@@ -67,7 +67,7 @@
     </div>
 
     <?php
-        the_promo(
+        the_tagline(
             '<div class="entry-caption">', '</div>'
         );
     ?>

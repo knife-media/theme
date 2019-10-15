@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.9
+ * @version 1.10
  */
 
 
@@ -86,15 +86,15 @@ if(!function_exists('the_lead')) :
 endif;
 
 
-if(!function_exists('the_promo')) :
+if(!function_exists('the_tagline')) :
     /**
-     * Public function using on templates to get promo bar
+     * Public function using on templates to get tagline
      *
-     * @since 1.9
+     * @since 1.10
      */
-    function the_promo($before = '', $after = '', $echo = true, $output = '') {
-        if(method_exists('Knife_Promo_Manager', 'get_promo')) {
-            $output = Knife_Promo_Manager::get_promo();
+    function the_tagline($before = '', $after = '', $echo = true, $output = '') {
+        if(method_exists('Knife_Post_Info', 'get_tagline')) {
+            $output = Knife_Post_Info::get_tagline();
         }
 
         // Check if output not empty

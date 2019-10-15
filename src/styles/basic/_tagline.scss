@@ -1,4 +1,4 @@
-.promo {
+.tagline {
   display: flex;
   flex-flow: row wrap;
   align-items: center;
@@ -10,7 +10,10 @@
   padding: .25rem 1rem;
   overflow: hidden;
 
-  .promo__text {
+  color: $color-text;
+  background-color: $color-white;
+
+  .tagline__text {
     display: block;
 
     margin: 0 1rem;
@@ -23,7 +26,16 @@
     text-transform: uppercase;
   }
 
-  .promo__partner {
+  .tagline__name {
+    display: block;
+
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.25;
+    text-transform: uppercase;
+  }
+
+  .tagline__partner {
     display: flex;
     align-items: center;
     flex-flow: row wrap;
@@ -34,7 +46,7 @@
 
     border-left: solid 1px;
 
-    .promo__partner-title {
+    .tagline__partner-title {
       display: block;
 
       font-size: 0.875rem;
@@ -43,7 +55,7 @@
       text-transform: uppercase;
     }
 
-    .promo__partner-logo {
+    .tagline__partner-logo {
       display: block;
 
       width: auto;
@@ -53,21 +65,21 @@
     }
   }
 
-  &.promo--logo {
+  &.tagline--logo {
     justify-content: flex-start;
     padding-left: calc(50% - #{$width-content / 2} - 1rem);
 
-    .promo__text {
+    .tagline__text {
       margin-right: 0;
     }
 
-    .promo__partner {
+    .tagline__partner {
       margin-left: 0;
       border-left: none;
     }
   }
 
-  &.promo--title {
+  &.tagline--title {
     justify-content: flex-start;
     padding-left: calc(50% - #{$width-content / 2} - 1rem);
   }
