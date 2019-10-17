@@ -20,20 +20,20 @@ class Knife_Special_Projects {
      * Unique slug using for taxonomy register and url
      *
      * @since   1.3
-     * @access  private
+     * @access  public
      * @var     string
      */
-    private static $taxonomy = 'special';
+    public static $taxonomy = 'special';
 
 
     /**
      * Default post type with special taxonomy
      *
      * @since   1.10
-     * @access  private
+     * @access  public
      * @var     array
      */
-    private static $post_type = ['post', 'quiz', 'generator'];
+    public static $post_type = ['post', 'quiz', 'generator'];
 
 
     /**
@@ -41,9 +41,9 @@ class Knife_Special_Projects {
      *
      * @since   1.4
      * @access  private
-     * @var     string
+     * @var     public
      */
-    private static $term_meta = '_knife-special-options';
+    public static $term_meta = '_knife-special-options';
 
 
     /**
@@ -66,56 +66,6 @@ class Knife_Special_Projects {
 
         // Update archive caption title
         add_filter('get_the_archive_title', [__CLASS__, 'update_archive_title'], 15);
-    }
-
-
-    /**
-     * Compose entry-caption template
-     *
-     * @since 1.10
-     */
-    public static function compose_tagline($post_id, $output = '') {
-        if(!has_term('', self::$taxonomy, $post_id)) {
-            return $output;
-        }
-
-        // Loop over all tax terms
-        foreach(get_the_terms($post_id, self::$taxonomy) as $term) {
-            $ancestors = get_ancestors($term->term_id, self::$taxonomy, 'taxonomy');
-
-            // Get parent if exists
-            if(!empty($ancestors)) {
-                $term = get_term($ancestors[0], self::$taxonomy);
-            }
-
-            $options = get_term_meta($term->term_id, self::$term_meta, true);
-
-            if(empty($options['single'])) {
-                $output = sprintf(
-                    '<a class="tagline" href="%2$s"><span class="tagline__name">%1$s</span></a>',
-                    esc_html($term->name),
-                    esc_url(get_term_link($term->term_id))
-                );
-
-                break;
-            }
-
-            $styles = [
-                'background:' . $options['single'],
-                'color:' . self::get_text_color($options['single'])
-            ];
-
-            $output = sprintf(
-                '<a class="tagline" href="%2$s" style="%3$s"><span class="tagline__name">%1$s</span></a>',
-                esc_html($term->name),
-                esc_url(get_term_link($term->term_id)),
-                esc_attr(implode('; ', $styles))
-            );
-
-            break;
-        }
-
-        return $output;
     }
 
 

@@ -59,19 +59,25 @@ class Knife_Post_Info {
     public static function get_tagline($output = '') {
         $post_id = get_the_ID();
 
-        // Check special projects class and return template
-        if(method_exists('Knife_Special_Projects', 'compose_tagline')) {
-            $output = Knife_Special_Projects::compose_tagline($post_id, $output);
+        if(class_exists('Knife_Promo_Manager')) {
+            $meta_promo = Knife_Promo_Manager::$meta_promo;
+
+            if(get_post_meta($post_id, $meta_promo, true)) {
+                return self::compose_promo_tagline($post_id, $output);
+            }
         }
 
-        // Check if post promoted
-        if(method_exists('Knife_Promo_Manager', 'compose_tagline')) {
-            $output = Knife_Promo_Manager::compose_tagline($post_id, $output);
+        // Check special projects class and return template
+        if(class_exists('Knife_Special_Projects')) {
+            $taxonomy = Knife_Special_Projects::$taxonomy;
+
+            if(has_term('', $taxonomy, $post_id)) {
+                return self::compose_special_tagline($post_id, $output);
+            }
         }
 
         return $output;
     }
-
 
 
     /**
@@ -130,28 +136,32 @@ class Knife_Post_Info {
      * @since 1.8
      */
     private static function get_head($output = '') {
-        $terms = get_the_terms(get_the_ID(), 'special');
+        if(class_exists('Knife_Promo_Manager')) {
+            $meta_promo = Knife_Promo_Manager::$meta_promo;
 
-        // Check if has terms next
-        if(isset($terms[0])) {
-            $output = $output . sprintf('<a class="head" href="%2$s">%1$s</a>',
-                esc_html($terms[0]->name),
-                esc_url(get_term_link($terms[0]->term_id))
-            );
+            // Check if promo first
+            if(get_post_meta(get_the_ID(), $meta_promo, true)) {
+                $output = sprintf('<a class="head" href="%s">%s</a>',
+                    trailingslashit(home_url(Knife_Promo_Manager::$query_var)),
+                    __('Партнерский материал', 'knife-theme')
+                );
 
-            return $output;
+                return $output;
+            }
         }
 
-        $is_promo = get_post_meta(get_the_ID(), '_knife-promo', true);
+        if(class_exists('Knife_Special_Projects')) {
+            $terms = get_the_terms(get_the_ID(), Knife_Special_Projects::$taxonomy);
 
-        // Check if promo first
-        if($is_promo) {
-            $output = sprintf('<a class="head" href="%s">%s</a>',
-                esc_url(home_url('/promo/')),
-                __('Партнерский материал', 'knife-theme')
-            );
+            // Check if has terms next
+            if(isset($terms[0])) {
+                $output = $output . sprintf('<a class="head" href="%2$s">%1$s</a>',
+                    esc_html($terms[0]->name),
+                    esc_url(get_term_link($terms[0]->term_id))
+                );
 
-            return $output;
+                return $output;
+            }
         }
 
         $tags = get_the_tags();
@@ -308,5 +318,161 @@ class Knife_Post_Info {
         }
 
         return $output;
+    }
+
+
+    /**
+     * Compose promo tagline
+     *
+     * @since 1.10
+     */
+    private static function compose_promo_tagline($post_id, $output = '') {
+        $classes = 'tagline';
+
+        // Get promo options
+        $options = (array) get_post_meta($post_id, Knife_Promo_Manager::$meta_options, true);
+
+        // Set default promo panel color
+        if(empty($options['color'])) {
+            $options['color'] = '#fff';
+        }
+
+        $partner = '';
+
+        // Add logo if exists
+        if(!empty($options['logo'])) {
+            $partner = $partner . sprintf(
+                '<img class="tagline__partner-logo" src="%s" alt="">',
+                esc_url($options['logo'])
+            );
+
+            $classes = $classes . ' tagline--logo';
+        }
+
+        // Add title if exists
+        if(!empty($options['title'])) {
+            $partner = $partner . sprintf(
+                '<span class="tagline__partner-title">%s</span>',
+                sanitize_text_field($options['title'])
+            );
+
+            $classes = $classes . ' tagline--title';
+        }
+
+        // Add required title
+        if(empty($options['text'])) {
+            $options['text'] = __('Партнерский материал', 'knife-theme');
+        }
+
+        $promo = sprintf(
+            '<span class="tagline__text">%s</span>',
+            sanitize_text_field($options['text'])
+        );
+
+        // Wrap logo and title
+        if(!empty($partner)) {
+            $promo = $promo . sprintf(
+                '<div class="tagline__partner">%s</div>', $partner
+            );
+        }
+
+        $styles = [
+            'background-color:' . $options['color'],
+            'color:' . self::get_text_color($options['color'])
+        ];
+
+        $styles = implode('; ', $styles);
+
+        // Return if link not defined
+        if(empty($options['link'])) {
+            $output = sprintf(
+                '<div class="%2$s" style="%3$s">%1$s</div>',
+                $promo, $classes, esc_attr($styles)
+            );
+
+            return $output;
+        }
+
+        $output = sprintf(
+            '<a href="%2$s" class="%3$s" target="_blank" rel="noopener" style="%4$s">%1$s</a>',
+            $promo, esc_url($options['link']),
+            $classes, esc_attr($styles)
+        );
+
+        return $output;
+    }
+
+
+    /**
+     * Compose special tagline
+     *
+     * @since 1.10
+     */
+    private static function compose_special_tagline($post_id, $output = '') {
+        $taxonomy = Knife_Special_Projects::$taxonomy;
+
+        // Loop over all tax terms
+        foreach(get_the_terms($post_id, $taxonomy) as $term) {
+            $ancestors = get_ancestors($term->term_id, $taxonomy, 'taxonomy');
+
+            // Get parent if exists
+            if(!empty($ancestors)) {
+                $term = get_term($ancestors[0], $taxonomy);
+            }
+
+            $options = get_term_meta($term->term_id, Knife_Special_Projects::$term_meta, true);
+
+            if(empty($options['single'])) {
+                $output = sprintf(
+                    '<a class="tagline" href="%2$s"><span class="tagline__name">%1$s</span></a>',
+                    esc_html($term->name),
+                    esc_url(get_term_link($term->term_id))
+                );
+
+                break;
+            }
+
+            $styles = [
+                'background:' . $options['single'],
+                'color:' . self::get_text_color($options['single'])
+            ];
+
+            $output = sprintf(
+                '<a class="tagline" href="%2$s" style="%3$s"><span class="tagline__name">%1$s</span></a>',
+                esc_html($term->name),
+                esc_url(get_term_link($term->term_id)),
+                esc_attr(implode('; ', $styles))
+            );
+
+            break;
+        }
+
+        return $output;
+    }
+
+
+    /**
+     * Get text color using relative luminance
+     *
+     * @link https://en.wikipedia.org/wiki/Relative_luminance
+     * @since 1.10
+     */
+    private static function get_text_color($color) {
+        $color = trim($color, '#');
+
+        if(strlen($color) == 3) {
+            $r = hexdec(substr($color, 0, 1) . substr($color, 0, 1));
+            $g = hexdec(substr($color, 1, 1) . substr($color, 1, 1));
+            $b = hexdec(substr($color, 2, 1) . substr($color, 2, 1));
+        } elseif(strlen($color) == 6) {
+            $r = hexdec(substr($color, 0, 2));
+            $g = hexdec(substr($color, 2, 2));
+            $b = hexdec(substr($color, 4, 2));
+        }
+
+        // Get relative luminance
+        $y = 0.2126*$r + 0.7152*$g + 0.0722*$b;
+
+        return $y > 128 ? '#000' : '#fff';
     }
 }

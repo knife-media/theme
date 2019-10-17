@@ -45,4 +45,10 @@
             );
         ?>
     </div>
+
+    <?php
+        the_tagline(
+            '<div class="entry-caption">', '</div>'
+        );
+    ?>
 </article>

@@ -17,37 +17,37 @@ class Knife_Promo_Manager {
     /**
      * Default post type with promo checkbox
      *
-     * @access  private
+     * @access  public
      * @var     array
      */
-    private static $post_type = ['post', 'club', 'quiz'];
+    public static $post_type = ['post', 'club', 'quiz'];
 
 
     /**
      * Unique meta to indicate if post promoted
      *
-     * @access  private
+     * @access  public
      * @var     string
      */
-    private static $meta_promo = '_knife-promo';
+    public static $meta_promo = '_knife-promo';
 
 
     /**
      * Unique meta to store promo options
      *
-     * @access  private
+     * @access  public
      * @var     string
      */
-    private static $meta_options = '_knife-promo-options';
+    public static $meta_options = '_knife-promo-options';
 
 
     /**
      * Archive query var
      *
-     * @access  private
+     * @access  public
      * @var     string
      */
-    private static $query_var = 'promo';
+    public static $query_var = 'promo';
 
 
     /**
@@ -99,93 +99,6 @@ class Knife_Promo_Manager {
         // Add promo tag to tag list
         add_filter('term_links-post_tag', [__CLASS__, 'add_promo_tag']);
     }
-
-
-    /**
-     * Compose caption promo template
-     *
-     * @since 1.9
-     */
-    public static function compose_tagline($post_id, $output = '') {
-        if(!get_post_meta($post_id, self::$meta_promo, true)) {
-            return $output;
-        }
-
-        $classes = 'tagline';
-
-        // Get promo options
-        $options = (array) get_post_meta($post_id, self::$meta_options, true);
-
-        // Set default promo panel color
-        if(empty($options['color'])) {
-            $options['color'] = '#fff';
-        }
-
-        $partner = '';
-
-        // Add logo if exists
-        if(!empty($options['logo'])) {
-            $partner = $partner . sprintf(
-                '<img class="tagline__partner-logo" src="%s" alt="">',
-                esc_url($options['logo'])
-            );
-
-            $classes = $classes . ' tagline--logo';
-        }
-
-        // Add title if exists
-        if(!empty($options['title'])) {
-            $partner = $partner . sprintf(
-                '<span class="tagline__partner-title">%s</span>',
-                sanitize_text_field($options['title'])
-            );
-
-            $classes = $classes . ' tagline--title';
-        }
-
-        // Add required title
-        if(empty($options['text'])) {
-            $options['text'] = __('Партнерский материал', 'knife-theme');
-        }
-
-        $promo = sprintf(
-            '<span class="tagline__text">%s</span>',
-            sanitize_text_field($options['text'])
-        );
-
-        // Wrap logo and title
-        if(!empty($partner)) {
-            $promo = $promo . sprintf(
-                '<div class="tagline__partner">%s</div>', $partner
-            );
-        }
-
-        $styles = [
-            'background-color:' . $options['color'],
-            'color:' . self::get_text_color($options['color'])
-        ];
-
-        $styles = implode('; ', $styles);
-
-        // Return if link not defined
-        if(empty($options['link'])) {
-            $output = sprintf(
-                '<div class="%2$s" style="%3$s">%1$s</div>',
-                $promo, $classes, esc_attr($styles)
-            );
-
-            return $output;
-        }
-
-        $output = sprintf(
-            '<a href="%2$s" class="%3$s" target="_blank" rel="noopener" style="%4$s">%1$s</a>',
-            $promo, esc_url($options['link']),
-            $classes, esc_attr($styles)
-        );
-
-        return $output;
-    }
-
 
 
     /**
@@ -406,32 +319,6 @@ class Knife_Promo_Manager {
         }
 
         return $classes;
-    }
-
-
-    /**
-     * Get text color using relative luminance
-     *
-     * @link https://en.wikipedia.org/wiki/Relative_luminance
-     * @since 1.9
-     */
-    private static function get_text_color($color) {
-        $color = trim($color, '#');
-
-        if(strlen($color) == 3) {
-            $r = hexdec(substr($color, 0, 1) . substr($color, 0, 1));
-            $g = hexdec(substr($color, 1, 1) . substr($color, 1, 1));
-            $b = hexdec(substr($color, 2, 1) . substr($color, 2, 1));
-        } elseif(strlen($color) == 6) {
-            $r = hexdec(substr($color, 0, 2));
-            $g = hexdec(substr($color, 2, 2));
-            $b = hexdec(substr($color, 4, 2));
-        }
-
-        // Get relative luminance
-        $y = 0.2126*$r + 0.7152*$g + 0.0722*$b;
-
-        return $y > 128 ? '#000' : '#fff';
     }
 }
 
