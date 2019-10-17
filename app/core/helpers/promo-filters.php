@@ -28,3 +28,29 @@ add_action('wp_enqueue_scripts', function() {
         set_query_var('similar_promo', $similar_promo);
     }
 }, 9);
+
+
+/**
+ * Telegram promo
+ * Add telegram internal promo button to news
+ */
+add_filter('the_content', function($content) {
+    if(!is_single() || !in_the_loop()) {
+        return $content;
+    }
+
+    if(!in_category('news') || has_post_format()) {
+        return $content;
+    }
+
+    $upload_dir = wp_upload_dir();
+
+    $promo_link = sprintf(
+        '<a class="promo promo--possum" href="%2$s" target="_blank">%1$s <img src="%3$s"></a>',
+        __('Подпишись на&nbsp;журнал «Нож» в&nbsp;Телеграме', 'knife-theme'),
+        esc_url('https://tgram.link/knifemedia'),
+        esc_url($upload_dir['baseurl'] . '/2019/10/possum.png')
+    );
+
+    return $content . $promo_link;
+});
