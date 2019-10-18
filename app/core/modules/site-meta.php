@@ -48,6 +48,22 @@ class Knife_Site_Meta {
         // Remove comments feed link
         // For the reason that we don't use comments in this theme we have to remove comments feed link from header
         add_filter('feed_links_show_comments_feed', '__return_false');
+
+        // Add google tagmanager script
+        add_action('wp_head', [__CLASS__, 'add_tagmanager'], 20);
+    }
+
+
+    /**
+     * Add tagmanager script to header
+     */
+    public static function add_tagmanager() {
+        if(defined('WP_DEBUG') && WP_DEBUG === false) {
+            $tagmanager_id = 'GTM-KZ7MHM';
+
+            $include = get_template_directory() . '/core/include';
+            include_once($include . '/templates/tagmanager-script.php');
+        }
     }
 
 
