@@ -27,8 +27,8 @@ class Knife_Content_Filters {
         // Remove all spans from content
         add_filter('content_save_pre', [__CLASS__, 'remove_span']);
 
-        // Remove extra p from shortcodes
-        add_filter('the_content', [__CLASS__, 'fix_shortcodes']);
+        // Replace card comment with entry-content
+        add_filter('the_content', [__CLASS__, 'show_cards']);
 
         // Disable embeds
         add_action('wp_enqueue_scripts', function() {
@@ -53,16 +53,14 @@ class Knife_Content_Filters {
 
 
     /**
-     * Remove extra p from shortcodes
+     * Replace card comment with entry-content
      */
-    public static function fix_shortcodes($content) {
-        $array = [
-            '<p>[' => '[',
-            ']</p>' => ']',
-            ']<br />' => ']'
-        ];
+    public static function show_cards($content) {
+        if(has_post_format('chat')) {
+            $content = str_replace('<!--card-->', '</div><div class="entry-content">', force_balance_tags($content));
+        }
 
-        return strtr($content, $array);
+        return $content;
     }
 
 

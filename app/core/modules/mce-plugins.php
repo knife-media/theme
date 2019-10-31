@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.2
- * @version 1.9
+ * @version 1.10
  */
 
 
@@ -16,6 +16,24 @@ if (!defined('WPINC')) {
 
 
 class Knife_MCE_Plugins {
+    /**
+     * Custom buttons plugins
+     *
+     * @since 1.10
+     */
+    private static $helpers = ['figure-helper'];
+
+
+    /**
+     * Custom helpers plugins
+     *
+     * @since 1.10
+     */
+    private static $buttons = [
+        'push-button', 'mark-button', 'quote-button', 'card-separator', 'similar-block', 'reference-block'
+    ];
+
+
     /**
      * Use this method instead of constructor to avoid multiple hook setting
      *
@@ -65,17 +83,11 @@ class Knife_MCE_Plugins {
         $include = get_template_directory_uri() . '/core/include';
 
         // Add custom plugins
-        $custom = [
-            'push-button' => $include . '/tinymce/push-button.js',
-            'mark-button' => $include . '/tinymce/mark-button.js',
-            'quote-button' => $include . '/tinymce/quote-button.js',
+        $custom = self::$helpers + self::$buttons;
 
-            'similar-block' => $include . '/tinymce/similar-block.js',
-            'reference-block' => $include . '/tinymce/reference-block.js',
-            'figure-helper' => $include . '/tinymce/figure-helper.js'
-        ];
-
-        $plugins = $plugins + $custom;
+        foreach($custom as $name) {
+            $plugins[$name] = $include . "/tinymce/{$name}.js";
+        }
 
         return $plugins;
     }
@@ -85,11 +97,15 @@ class Knife_MCE_Plugins {
      * Register buttons in editor panel
      */
     public static function register_buttons($buttons) {
-        $buttons = array_merge($buttons, [
-            'push-button', 'mark-button', 'quote-button', 'similar-block', 'reference-block'
-        ]);
+        $buttons = array_merge($buttons, self::$buttons);
 
+        // Remove blockquote button
         if(($key = array_search('blockquote', $buttons)) !== false) {
+            unset($buttons[$key]);
+        }
+
+        // Remove more button
+        if(($key = array_search('wp_more', $buttons)) !== false) {
             unset($buttons[$key]);
         }
 

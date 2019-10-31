@@ -33,9 +33,11 @@
         ?>
     </div>
 
-    <?php
-        the_content();
-    ?>
+    <div class="entry-content">
+        <?php
+            the_content();
+        ?>
+    </div>
 
     <?php if(comments_open()) : ?>
         <div class="entry-comments">

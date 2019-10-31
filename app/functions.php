@@ -221,9 +221,6 @@ require get_template_directory() . '/core/modules/short-manager.php';
 // Custom template tags for this theme.
 require get_template_directory() . '/core/helpers/template-tags.php';
 
-// Custom theme shortcodes
-require get_template_directory() . '/core/helpers/theme-shortcodes.php';
-
 // Add plugins snippets
 require get_template_directory() . '/core/helpers/plugin-snippets.php';
 
