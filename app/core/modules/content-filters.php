@@ -21,6 +21,12 @@ class Knife_Content_Filters {
         // Replace t.me links with custom telegram reditrecter
         add_filter('content_save_pre', [__CLASS__, 'replace_telegram_links']);
 
+        // Wrap pure iframes
+        add_filter('content_save_pre', [__CLASS__, 'wrap_iframe']);
+
+        // Remove all spans from content
+        add_filter('content_save_pre', [__CLASS__, 'remove_span']);
+
         // Remove extra p from shortcodes
         add_filter('the_content', [__CLASS__, 'fix_shortcodes']);
 
@@ -61,10 +67,33 @@ class Knife_Content_Filters {
 
 
     /**
+     * Wrap pure iframes with figure tag
+     */
+    public static function wrap_iframe($content) {
+        if(preg_match_all('~(<iframe.+?/iframe>)\s*(?!</figure)~is', $content, $matches)) {
+            // Loop through all pure frames
+            foreach($matches[1] as $iframe) {
+                $content = str_replace($iframe, '<figure class="figure figure--embed">' . $iframe . '</figure>', $content);
+            }
+        }
+
+        return $content;
+    }
+
+
+    /**
      * Remove extra &nbsp; from content on save
      */
     public static function remove_nbsp($content) {
         return preg_replace('~((&nbsp;|\s)+$)~is', '', $content);
+    }
+
+
+    /**
+     * Remove span from content
+     */
+    public static function remove_span($content) {
+        return preg_replace('~<span.*?>(.*?)</span>~is', '$1', $content);
     }
 }
 
