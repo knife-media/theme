@@ -28,7 +28,7 @@ class Knife_Content_Filters {
         add_filter('content_save_pre', [__CLASS__, 'remove_span']);
 
         // Replace card comment with entry-content
-        add_filter('the_content', [__CLASS__, 'show_cards']);
+        add_filter('the_content', [__CLASS__, 'show_cards'], 5);
 
         // Disable embeds
         add_action('wp_enqueue_scripts', function() {
