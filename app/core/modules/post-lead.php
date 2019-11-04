@@ -155,7 +155,13 @@ class Knife_Post_Lead {
             return delete_post_meta($post_id, self::$post_meta);
         }
 
-        return update_post_meta($post_id, self::$post_meta, $_REQUEST[self::$post_meta]);
+        // Sanitize post lead meta
+        $post_lead = wp_kses_post($_REQUEST[self::$post_meta]);
+
+        // Remove trailing spaces
+        $post_lead = preg_replace('~((&nbsp;| |\s)+$)~is', '', $post_lead);
+
+        update_post_meta($post_id, self::$post_meta, $post_lead);
     }
 }
 
