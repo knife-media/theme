@@ -46,7 +46,7 @@ class Knife_Content_Filters {
      * Replace t.me links with custom tgram.link host
      */
     public static function replace_telegram_links($content) {
-        $content = preg_replace('~href="https://t.me/~is', 'href="https://tgram.link/', wp_unslash($content));
+        $content = str_replace('~href="https://t.me/~is', 'href="https://tgram.link/', wp_unslash($content));
 
         return wp_slash($content);
     }
@@ -83,7 +83,7 @@ class Knife_Content_Filters {
      * Remove extra &nbsp; from content on save
      */
     public static function remove_nbsp($content) {
-        return preg_replace('~((&nbsp;|\s)+$)~is', '', $content);
+        return preg_replace('~((&nbsp;| |\s)+$)~is', '', $content);
     }
 
 
