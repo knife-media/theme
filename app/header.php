@@ -29,6 +29,8 @@
 <header class="header">
     <div class="header__inner">
         <div class="header__logo">
+            <a class="header__logo-promo" href="https://honor9x.knife.media/?utm_source=knife&utm_medium=button&utm_campaign=honor9x" target="_blank">Honor 9x</a>
+
             <a class="header__logo-link" href="<?php echo esc_url(home_url('/')); ?>">
                 <svg class="header__logo-image" fill="#000000" x="0" y="0" viewBox="0 0 111 31.8" xml:space="preserve">
                     <g>
