@@ -1,12 +1,40 @@
-@mixin blackout($opacity) {
+@mixin full-size($zindex: 2) {
   display: block;
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 2;
+  z-index: $zindex;
 
   width: 100%;
   height: 100%;
+}
 
-  background-color: rgba(0, 0, 0, $opacity);
+@mixin body-overflow {
+  position: fixed;
+  left: 0;
+
+  width: 100%;
+  overflow: hidden;
+}
+
+@mixin cross-button($size) {
+  &:after, &:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 2px;
+
+    height: 2px;
+    width: $size;
+
+    background-color: lighten($color-text, 20);
+  }
+
+  &:after {
+    transform: rotate(-45deg);
+  }
+
+  &:before {
+    transform: rotate(45deg);
+  }
 }

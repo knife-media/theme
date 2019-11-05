@@ -4,15 +4,12 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.4
+ * @version 1.10
  */
 
-get_header(); ?>
+get_header();
 
-<div class="block-wrapper">
-    <?php
-        get_template_part('partials/message');
-    ?>
-</div>
+// Add 404 message template part
+get_template_part('partials/message');
 
-<?php get_footer();
+get_footer();

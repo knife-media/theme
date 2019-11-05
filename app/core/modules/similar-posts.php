@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.5
- * @version 1.7
+ * @version 1.10
  */
 
 
@@ -25,11 +25,38 @@ class Knife_Similar_Posts {
 
 
     /**
+     * Default post type with similar aside
+     *
+     * @since   1.8
+     * @access  private
+     * @var     array
+     */
+    private static $post_type = ['post', 'club'];
+
+
+    /**
      * Init function instead of constructor
      */
     public static function load_module() {
         // Include similar posts data
         add_action('wp_enqueue_scripts', [__CLASS__, 'inject_object'], 12);
+
+        // Update links returned via tinymce
+        add_filter('wp_link_query', [__CLASS__, 'update_link_query'], 12);
+    }
+
+
+    /**
+     * Update links returned via tinymce
+     *
+     * @since 1.9
+     */
+    public static function update_link_query($results) {
+        foreach($results as &$result) {
+            $result['title'] = html_entity_decode($result['title']);
+        }
+
+        return $results;
     }
 
 
@@ -37,19 +64,37 @@ class Knife_Similar_Posts {
      * Inject similar posts data
      */
     public static function inject_object() {
-        if(is_singular('post')) {
-            // Check if promo post
-            $is_promo = get_post_meta(get_the_ID(), '_knife-promo', true);
+        if(is_singular(self::$post_type)) {
+            $post_id = get_the_ID();
 
-            if(in_category('news') || $is_promo) {
+            if(in_category('news') || has_term('', 'special')) {
                 return;
             }
 
-            $similar = self::get_similar(get_queried_object_id());
-
-            if($similar > 0) {
-                wp_localize_script('knife-theme', 'knife_similar_posts', $similar);
+            // Check if promo post
+            if(get_post_meta($post_id, '_knife-promo', true)) {
+                return;
             }
+
+
+            $options = [
+                'title' => __('Читайте также', 'knife-theme'),
+                'action' => __('Similar click', 'knife-theme')
+            ];
+
+            // Get similar if not cards
+            if(!has_post_format('chat', $post_id)) {
+                $similar = self::get_similar($post_id);
+
+                // Append promo
+                $similar = self::append_promo($similar);
+
+                if($similar > 0) {
+                    $options['similar'] = $similar;
+                }
+            }
+
+            wp_localize_script('knife-theme', 'knife_similar_posts', $options);
         }
     }
 
@@ -101,38 +146,39 @@ class Knife_Similar_Posts {
                 }
             }
 
-
             // Sort by tags count
             arsort($related);
 
-            // Get first 5 elements
-            $related = array_slice($related, 0, 5, true);
+            // Get first 9 elements
+            $related = array_slice($related, 0, 9, true);
 
             foreach($related as $id => $count) {
-                $relate_items = [
+                $similar[] = [
                     'title' => get_the_title($id),
                     'link' => get_permalink($id),
-                    'label' => get_post_field('post_name', $id),
-                    'action' => __('Similar click', 'knife-theme'),
-                    'head' => __('Читайте также:', 'knife-theme'),
-                    'count' => $count
                 ];
-
-                $relate_terms = get_the_tags($id);
-
-                if(is_array($relate_terms)) {
-                    $relate_term = end($relate_terms);
-
-                    if($relate_emoji = get_term_meta($relate_term->term_id, '_knife-term-emoji', true)) {
-                        $relate_items['emoji'] = $relate_emoji;
-                    }
-                }
-
-                $similar[] = $relate_items;
             }
+
+            // Update similar posts cache by post id
+            wp_cache_set($post_id, $similar, self::$cache_group);
         }
 
-        wp_cache_set($post_id, $similar, self::$cache_group);
+        return $similar;
+    }
+
+
+    /**
+     * Append similar promo links from query var if exists
+     */
+    private static function append_promo($similar) {
+        $similar_promo = get_query_var('similar_promo', []);
+
+        if(array_filter($similar_promo)) {
+            $similar = array_merge($similar_promo, $similar);
+        }
+
+        // Query var is no use any more
+        set_query_var('similar_promo', false);
 
         return $similar;
     }

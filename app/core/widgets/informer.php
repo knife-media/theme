@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.7
+ * @version 1.9
  */
 
 
@@ -31,7 +31,7 @@ class Knife_Widget_Informer extends WP_Widget {
             'link' => '',
             'emoji' => '',
             'color' => '#000000',
-            'background' => '#ffe64e'
+            'promo' => 0
         ];
 
         $instance = wp_parse_args((array) $instance, $defaults);
@@ -61,7 +61,7 @@ class Knife_Widget_Informer extends WP_Widget {
         $instance['link'] = esc_url($new_instance['link']);
         $instance['emoji'] = wp_encode_emoji($new_instance['emoji']);
         $instance['color'] = sanitize_hex_color($new_instance['color']);
-        $instance['background'] = sanitize_hex_color($new_instance['background']);
+        $instance['promo'] = $new_instance['promo'] ? 1 : 0;
 
         return $instance;
     }
@@ -76,7 +76,7 @@ class Knife_Widget_Informer extends WP_Widget {
             'link' => '',
             'emoji' => '',
             'color' => '#000000',
-            'background' => '#ffe64e'
+            'promo' => 0
         ];
 
         $instance = wp_parse_args((array) $instance, $defaults);
@@ -85,24 +85,33 @@ class Knife_Widget_Informer extends WP_Widget {
             '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"><small>%5$s</small></p>',
             esc_attr($this->get_field_id('title')),
             esc_attr($this->get_field_name('title')),
-            __('Заголовок информера', 'knife-theme'),
+            __('Заголовок информера:', 'knife-theme'),
             esc_attr($instance['title']),
              __('Отобразится на странице', 'knife-theme')
         );
 
         printf(
-            '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
+            '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"><small>%5$s</small></p>',
             esc_attr($this->get_field_id('link')),
             esc_attr($this->get_field_name('link')),
-            __('Ссылка с информера', 'knife-theme'),
-            esc_attr($instance['link'])
+            __('Ссылка с информера:', 'knife-theme'),
+            esc_attr($instance['link']),
+            __('Обязательно для заполнения', 'knife-theme')
+        );
+
+        printf(
+            '<p><input type="checkbox" id="%1$s" name="%2$s" class="checkbox"%4$s><label for="%1$s">%3$s</label></p>',
+            esc_attr($this->get_field_id('promo')),
+            esc_attr($this->get_field_name('promo')),
+            __('Партнерский материал:', 'knife-theme'),
+            checked($instance['promo'], 1, false)
         );
 
         printf(
             '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
             esc_attr($this->get_field_id('emoji')),
             esc_attr($this->get_field_name('emoji')),
-            __('Эмодзи', 'knife-theme'),
+            __('Эмодзи:', 'knife-theme'),
             esc_attr($instance['emoji'])
         );
 
@@ -110,16 +119,8 @@ class Knife_Widget_Informer extends WP_Widget {
             '<p><label for="%1$s">%3$s</label><input class="color-picker" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
             esc_attr($this->get_field_id('color')),
             esc_attr($this->get_field_name('color')),
-            __('Цвет текста', 'knife-theme'),
+            __('Цвет фона:', 'knife-theme'),
             esc_attr($instance['color'])
-        );
-
-        printf(
-            '<p><label for="%1$s">%3$s</label><input class="color-picker" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
-            esc_attr($this->get_field_id('background')),
-            esc_attr($this->get_field_name('background')),
-            __('Цвет фона', 'knife-theme'),
-            esc_attr($instance['background'])
         );
     }
 
@@ -131,13 +132,14 @@ class Knife_Widget_Informer extends WP_Widget {
         $options = [
             'href' => esc_url($instance['link']),
             'target' => '_blank',
+            'rel' => 'noopener',
             'data-action' => __('Informer click', 'knife-theme'),
             'data-label' => $instance['link']
         ];
 
         $options['style'] = implode('; ', [
-            'color: ' . $instance['color'],
-            'background-color: ' . $instance['background']
+            'background-color:' . $instance['color'],
+            'color:' . $this->get_text_color($instance['color'])
         ]);
 
         if($post_id > 0) {
@@ -152,6 +154,30 @@ class Knife_Widget_Informer extends WP_Widget {
         return $attributes;
     }
 
+
+    /**
+     * Get text color using relative luminance
+     *
+     * @link https://en.wikipedia.org/wiki/Relative_luminance
+     */
+    private function get_text_color($color) {
+        $color = trim($color, '#');
+
+        if(strlen($color) == 3) {
+            $r = hexdec(substr($color, 0, 1) . substr($color, 0, 1));
+            $g = hexdec(substr($color, 1, 1) . substr($color, 1, 1));
+            $b = hexdec(substr($color, 2, 1) . substr($color, 2, 1));
+        } elseif(strlen($color) == 6) {
+            $r = hexdec(substr($color, 0, 2));
+            $g = hexdec(substr($color, 2, 2));
+            $b = hexdec(substr($color, 4, 2));
+        }
+
+        // Get relative luminance
+        $y = 0.2126*$r + 0.7152*$g + 0.0722*$b;
+
+        return $y > 128 ? '#000' : '#fff';
+    }
 }
 
 

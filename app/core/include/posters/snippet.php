@@ -2,8 +2,8 @@
 /**
  * Snippet poster template
  *
- * Use for social image snippet
- * Logo and post title
+ * Poster name: Сниппет для соцсетей
+ * Target: social
  */
 
 $poster = new PHPImage();

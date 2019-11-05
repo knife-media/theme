@@ -16,6 +16,7 @@ $color-text: #111111;
 $color-light: #7ab9f9;
 $color-sheet: #faf9f3;
 $color-layer: #fff3db;
+$color-button: #ff0066;
 
 $color-success: #78bb13;
 $color-alert: #ab0f0f;
@@ -24,16 +25,10 @@ $color-club: #eaa728;
 $color-select: #01a849;
 $color-mark: #fae596;
 $color-quiz: #fff200;
-$color-ask: #d8334c;
-
 
 
 // Setup default styles
 @import "setup/*.scss";
-
-html {
-  scroll-behavior: smooth;
-}
 
 body {
   display: block;
@@ -47,14 +42,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: none;
 
-  &.is-search {
-    position: fixed;
-    left: 0;
-
-    width: 100%;
-    overflow: hidden;
-  }
-
   &.is-adminbar {
     padding-top: 32px;
 
@@ -65,25 +52,18 @@ body {
 
   &.is-navbar {
     @media screen and (max-width: 1023px) {
-      position: fixed;
-      left: 0;
+      @include body-overflow;
 
-      width: 100%;
-      overflow: hidden;
-
-      &:after {
-        content: "";
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 4;
-
-        width: 100%;
-        height: 100vh;
-
-        background: rgba(0, 0, 0, .75);
+      &:before {
+        content: '';
+        @include full-size(4);
+        background-color: rgba($color-black, .75);
       }
     }
+  }
+
+  &.is-search {
+    @include body-overflow;
   }
 }
 

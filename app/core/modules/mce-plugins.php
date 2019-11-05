@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.2
- * @version 1.5
+ * @version 1.10
  */
 
 
@@ -16,6 +16,24 @@ if (!defined('WPINC')) {
 
 
 class Knife_MCE_Plugins {
+    /**
+     * Custom buttons plugins
+     *
+     * @since 1.10
+     */
+    private static $helpers = ['figure-helper'];
+
+
+    /**
+     * Custom helpers plugins
+     *
+     * @since 1.10
+     */
+    private static $buttons = [
+        'push-button', 'mark-button', 'quote-button', 'card-separator', 'similar-block', 'reference-block'
+    ];
+
+
     /**
      * Use this method instead of constructor to avoid multiple hook setting
      *
@@ -64,9 +82,12 @@ class Knife_MCE_Plugins {
     public static function add_plugins($plugins) {
         $include = get_template_directory_uri() . '/core/include';
 
-        $plugins['pushbutton'] = $include . '/scripts/mce-pushbutton.js';
-        $plugins['markbutton'] = $include . '/scripts/mce-markbutton.js';
-        $plugins['quote'] = $include . '/scripts/mce-blockquote.js';
+        // Add custom plugins
+        $custom = self::$helpers + self::$buttons;
+
+        foreach($custom as $name) {
+            $plugins[$name] = $include . "/tinymce/{$name}.js";
+        }
 
         return $plugins;
     }
@@ -76,9 +97,15 @@ class Knife_MCE_Plugins {
      * Register buttons in editor panel
      */
     public static function register_buttons($buttons) {
-        array_push($buttons, 'pushbutton', 'markbutton', 'quote');
+        $buttons = array_merge($buttons, self::$buttons);
 
+        // Remove blockquote button
         if(($key = array_search('blockquote', $buttons)) !== false) {
+            unset($buttons[$key]);
+        }
+
+        // Remove more button
+        if(($key = array_search('wp_more', $buttons)) !== false) {
             unset($buttons[$key]);
         }
 
@@ -91,6 +118,7 @@ class Knife_MCE_Plugins {
      */
     public static function configure_tinymce($settings) {
         $settings['invalid_styles'] = 'color font-weight font-size';
+        $settings['valid_children'] = '-aside[aside]';
 
         return $settings;
     }

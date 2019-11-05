@@ -3,11 +3,11 @@
   align-items: flex-end;
   position: relative;
 
-  width: 100%;
+  width: calc(100% - 2rem);
   max-width: $width-site - 2rem;
   min-height: 15.625rem;
 
-  margin: 1rem 1rem 0;
+  margin: 1rem auto 0;
   padding-top: 2rem;
   overflow: hidden;
 
@@ -59,7 +59,8 @@
     @media screen and (max-width: 1023px) {
       &:after {
         content: '';
-        @include blackout(.375);
+        @include full-size();
+        background-color: rgba(0, 0, 0, .375);
       }
     }
   }
@@ -124,12 +125,9 @@
     }
 
     .widget-single__content-info {
-      display: flex;
       flex-flow: row nowrap;
       justify-content: space-between;
       align-items: flex-end;
-
-      width: 100%;
 
       .meta {
         color: $color-white;
@@ -185,7 +183,8 @@
 
     .widget-single__image:after {
       content: '';
-      @include blackout(.375);
+      @include full-size();
+      background-color: rgba(0, 0, 0, .375);
     }
 
     @media screen and (max-width: 1023px) {
@@ -194,9 +193,11 @@
   }
 
   &.widget-single--entry {
-    width: calc(100% - 2rem);
+    width: 100%;
     max-width: $width-content;
-    margin: 1rem;
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
 
     .widget-single__content-title {
       width: 100%;
@@ -214,15 +215,16 @@
 
     .widget-single__image:after {
       content: '';
-      @include blackout(.375);
+      @include full-size();
+      background-color: rgba(0, 0, 0, .375);
     }
 
-    @media screen and (max-width: 1023px) {
-      max-width: $width-content;
+    @media screen and (max-width: 767px) {
+      min-height: 12rem;
     }
   }
 
-  &.widget-single--poster {
+  &.widget-single--billboard {
     display: none;
   }
 
@@ -231,7 +233,7 @@
   }
 
   @media screen and (max-width: 479px) {
-    margin: 1rem 0 0;
+    width: 100%;
     padding-top: 25%;
   }
 }

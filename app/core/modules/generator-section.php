@@ -110,6 +110,9 @@ class Knife_Generator_Section {
 
         // Include generator options
         add_action('wp_enqueue_scripts', [__CLASS__, 'inject_generator'], 12);
+
+        // Add quiz post type to archives
+        add_action('pre_get_posts', [__CLASS__, 'update_archives'], 12);
     }
 
 
@@ -119,7 +122,7 @@ class Knife_Generator_Section {
     public static function register_type() {
         register_post_type(self::$post_type, [
             'labels'                    => [
-                'name'                  => __('Генератор', 'knife-theme'),
+                'name'                  => __('Генераторы', 'knife-theme'),
                 'singular_name'         => __('Генератор', 'knife-theme'),
                 'add_new'               => __('Добавить генератор', 'knife-theme'),
                 'menu_name'             => __('Генераторы', 'knife-theme'),
@@ -134,7 +137,8 @@ class Knife_Generator_Section {
                 'insert_into_item'      => __('Добавить в генератор', 'knife-theme')
             ],
             'label'                 => __('Генератор', 'knife-theme'),
-            'supports'              => ['title', 'thumbnail', 'excerpt', 'comments'],
+            'supports'              => ['title', 'thumbnail', 'excerpt', 'comments', 'author'],
+            'taxonomies'            => ['post_tag', 'category'],
             'hierarchical'          => false,
             'public'                => true,
             'show_ui'               => true,
@@ -144,7 +148,7 @@ class Knife_Generator_Section {
             'show_in_admin_bar'     => true,
             'show_in_nav_menus'     => true,
             'can_export'            => true,
-            'has_archive'           => false,
+            'has_archive'           => true,
             'exclude_from_search'   => true,
             'publicly_queryable'    => true
         ]);
@@ -260,6 +264,34 @@ class Knife_Generator_Section {
         }
 
         return $template;
+    }
+
+
+    /**
+     * Append generator posts to archives
+     */
+    public static function update_archives($query) {
+        if(is_admin() || !$query->is_main_query()) {
+            return false;
+        }
+
+        // Is in archive
+        foreach(['tag', 'category', 'author', 'date', 'home', 'tax'] as $archive) {
+            $method = 'is_' . $archive;
+
+            if($query->$method()) {
+                $types = $query->get('post_type');
+
+                if(!is_array($types)) {
+                    $types = ['post'];
+                }
+
+                $types[] = self::$post_type;
+                $query->set('post_type', $types);
+
+                return false;
+            }
+        }
     }
 
 

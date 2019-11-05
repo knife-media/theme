@@ -1,10 +1,11 @@
 @font-face {
   font-family: 'knife-icons';
   src:
-    url('fonts/knife-icons/knife-icons.ttf') format('truetype'),
-    url('fonts/knife-icons/knife-icons.woff') format('woff');
+    url('fonts/knife-icons/knife-icons.woff?20191001') format('woff'),
+    url('fonts/knife-icons/knife-icons.ttf?20191001') format('truetype');
   font-weight: normal;
   font-style: normal;
+  font-display: block;
 }
 
 .icon {
@@ -22,51 +23,51 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon--next:after {
-  content: "\e90d";
-}
-.icon--prev:after {
-  content: "\e90e";
-}
-.icon--odnoklassniki:after {
-  content: "\e902";
-}
-.icon--notify:after {
-  content: "\e909";
-}
-.icon--search:after {
+.icon--search:before {
   content: "\e900";
 }
-.icon--vkontakte:after {
-  content: "\e903";
-}
-.icon--facebook:after {
-  content: "\e904";
-}
-.icon--instagram:after {
-  content: "\e905";
-}
-.icon--twitter:after {
-  content: "\e906";
-}
-.icon--telegram:after {
-  content: "\e907";
-}
-.icon--zen:after {
-  content: "\e90f";
-}
-.icon--left:after {
+.icon--left:before {
   content: "\e901";
 }
-.icon--right:after {
+.icon--vkontakte:before {
+  content: "\e903";
+}
+.icon--facebook:before {
+  content: "\e90f";
+}
+.icon--zen:before {
+  content: "\e904";
+}
+.icon--odnoklassniki:before {
+  content: "\e902";
+}
+.icon--instagram:before {
+  content: "\e905";
+}
+.icon--twitter:before {
+  content: "\e906";
+}
+.icon--telegram:before {
+  content: "\e907";
+}
+.icon--right:before {
   content: "\e908";
 }
-.icon--loop:after {
+.icon--notify:before {
+  content: "\e909";
+}
+.icon--loop:before {
   content: "\e90a";
 }
-.icon--alert:after {
+.icon--alert:before {
   content: "\e90b";
 }
-.icon--done:after {
+.icon--done:before {
   content: "\e90c";
+}
+.icon--next:before {
+  content: "\e90d";
+}
+.icon--prev:before {
+  content: "\e90e";
 }

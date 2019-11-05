@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.5
- * @version 1.9
+ * @version 1.10
  */
 
 
@@ -34,22 +34,43 @@ class Knife_Site_Meta {
         add_action('wp_head', [__CLASS__, 'add_twitter_tags'], 5);
         add_action('wp_head', [__CLASS__, 'add_facebook_tags'], 5);
         add_action('wp_head', [__CLASS__, 'add_vk_tags'], 5);
-        add_action('wp_head', [__CLASS__, 'add_yandex_meta'], 6);
+        add_action('wp_head', [__CLASS__, 'add_telegram_tags'], 5);
+        add_action('wp_head', [__CLASS__, 'add_yandex_meta'], 5);
 
-        add_action('wp_head', [__CLASS__, 'add_mediator_meta'], 7);
+        add_action('wp_head', [__CLASS__, 'add_mediator_meta'], 9);
 
         // Add custom theme lang attributes
         add_filter('language_attributes', [__CLASS__, 'add_xmlns']);
 
         // Add footer description field to customizer
-        add_action('customize_register', [__CLASS__, 'add_customize_setting']);
+        add_action('customize_register', [__CLASS__, 'update_customize_settings']);
+
+        // Remove comments feed link
+        // For the reason that we don't use comments in this theme we have to remove comments feed link from header
+        add_filter('feed_links_show_comments_feed', '__return_false');
+
+        // Add google tagmanager script
+        add_action('wp_head', [__CLASS__, 'add_tagmanager'], 20);
+    }
+
+
+    /**
+     * Add tagmanager script to header
+     */
+    public static function add_tagmanager() {
+        if(defined('WP_DEBUG') && WP_DEBUG === false) {
+            $tagmanager_id = 'GTM-KZ7MHM';
+
+            $include = get_template_directory() . '/core/include';
+            include_once($include . '/templates/tagmanager-script.php');
+        }
     }
 
 
     /**
      * Footer description option
      */
-    public static function add_customize_setting($wp_customize) {
+    public static function update_customize_settings($wp_customize) {
         $wp_customize->add_setting(self::$footer_description);
 
         $wp_customize->add_section('knife_footer', [
@@ -65,6 +86,9 @@ class Knife_Site_Meta {
                  'priority' => 10
              ]
         ));
+
+        // Remove site icon controls from admin customizer
+        $wp_customize->remove_control('site_icon');
     }
 
 
@@ -319,6 +343,18 @@ class Knife_Site_Meta {
             '<meta property="vk:image" content="%s">',
             esc_attr($social_image[0])
         );
+
+        return self::print_tags($meta);
+    }
+
+
+    /**
+     * Add telegram meta tag
+     */
+    public static function add_telegram_tags() {
+        $meta = [
+            '<meta name="telegram:channel" content="@knifemedia">'
+        ];
 
         return self::print_tags($meta);
     }

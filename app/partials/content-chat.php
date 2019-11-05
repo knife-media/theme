@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.8
+ * @version 1.10
  */
 ?>
 
@@ -12,8 +12,8 @@
     <div class="entry-header">
         <?php
             the_info(
-                '<div class="entry-header__info">', '</div>',
-                ['promo', 'author', 'date', 'category', 'label']
+                '<div class="entry-header__info info">', '</div>',
+                ['author', 'date', 'category', 'label']
             );
 
             the_title(
@@ -33,9 +33,11 @@
         ?>
     </div>
 
-    <?php
-        the_content();
-    ?>
+    <div class="entry-content">
+        <?php
+            the_content();
+        ?>
+    </div>
 
     <?php if(comments_open()) : ?>
         <div class="entry-comments">
@@ -56,12 +58,9 @@
         ?>
     </div>
 
-    <?php if(get_the_archive_title()) : ?>
-        <div class="entry-caption">
-            <?php
-                the_archive_title();
-            ?>
-        </div>
-    <?php endif; ?>
+    <?php
+        the_tagline(
+            '<div class="entry-caption">', '</div>'
+        );
+    ?>
 </article>
-

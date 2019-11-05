@@ -22,7 +22,7 @@ class Knife_Distribute_Control {
      * @access  private
      * @var     array
      */
-    private static $post_type = ['post', 'club', 'quiz'];
+    private static $post_type = ['post', 'club', 'quiz', 'story'];
 
 
     /**

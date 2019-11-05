@@ -31,7 +31,7 @@ class Knife_Post_Tagline {
     * @access  private
     * @var     array
     */
-    private static $post_type = ['post', 'club', 'quiz'];
+    private static $post_type = ['post', 'club', 'quiz', 'generator'];
 
 
     /**
@@ -114,18 +114,18 @@ class Knife_Post_Tagline {
     /**
      * Filter the post title on the Posts screen, and on the front-end
      */
-    public static function post_tagline($title, $post_id) {
+    public static function post_tagline($title, $post_id, $raw = true) {
         $tagline = get_post_meta($post_id, self::$post_meta, true);
 
         if(empty($tagline)) {
             return $title;
         }
 
-        if(is_admin()) {
+        if(is_admin() && $raw) {
             return "{$title} {$tagline}";
         }
 
-        return "{$title} <em>{$tagline}</em>";
+        return "<span>{$title}</span> <em>{$tagline}</em>";
     }
 
 

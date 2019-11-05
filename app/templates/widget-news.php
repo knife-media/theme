@@ -17,7 +17,7 @@
             );
 
             the_info(
-                '<div class="widget-news__content-info">', '</div>',
+                '<div class="widget-news__content-info info">', '</div>',
                 ['time', 'date', 'tags']
             );
         ?>

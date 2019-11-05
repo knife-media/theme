@@ -30,16 +30,14 @@
         <?php foreach($items as $i => $item) : ?>
             <div class="item">
                 <?php
-                    printf('<p class="item__link"><strong>%s</strong><input name="%s[][link]" value="%s" type="text"></p>',
+                    printf('<p class="item__link"><strong>%s</strong><input data-item="link" value="%s" type="text"></p>',
                         __('Ссылка с карточки', 'knife-theme'),
-                        esc_attr(self::$meta_items),
                         sanitize_text_field($item['link'] ?? '')
                     );
 
-                    printf('<p class="item__title"><strong>%s</strong><textarea name="%s[][title]">%s</textarea></p>',
+                    printf('<p class="item__title"><strong>%s</strong><textarea data-item="title" >%s</textarea></p>',
                         __('Заголовок карточки', 'knife-theme'),
-                        esc_attr(self::$meta_items),
-                        sanitize_text_field($item['title'] ?? '')
+                        wp_kses($item['title'] ?? '', self::$title_html)
                     );
                 ?>
 
@@ -53,8 +51,7 @@
                     <figcaption class="item__poster-caption">+</figcaption>
 
                     <?php
-                        printf('<input class="item__poster-attachment" type="hidden" name="%s[][attachment]" value="%s">',
-                            esc_attr(self::$meta_items),
+                        printf('<input class="item__poster-attachment" type="hidden" data-item="attachment" value="%s">',
                             sanitize_text_field($item['attachment'] ?? '')
                         );
                     ?>

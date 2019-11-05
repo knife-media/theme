@@ -1,6 +1,7 @@
 .unit {
   display: block;
   position: relative;
+  z-index: 0;
 
   width: 100%;
   margin-top: 1rem;
@@ -47,10 +48,6 @@
     @media screen and (max-width: 1023px) {
       padding-top: 60%;
     }
-
-    @media screen and (max-width: 767px) {
-      padding-top: 75%;
-    }
   }
 
   .unit__content {
@@ -60,7 +57,7 @@
 
     width: 100%;
     height: 100%;
-    padding: 1rem 1.25rem 1.25rem;
+    padding: 1rem;
 
     background-color: $color-white;
 
@@ -105,12 +102,10 @@
     }
 
     .unit__content-info {
-      display: flex;
       flex-flow: row nowrap;
       justify-content: space-between;
       align-items: flex-end;
 
-      width: 100%;
       margin-top: 1.5rem;
 
       .meta {
@@ -126,10 +121,6 @@
         position: relative;
         z-index: 2;
       }
-    }
-
-    @media screen and (max-width: 1023px) {
-      padding: 1rem;
     }
   }
 
@@ -150,10 +141,6 @@
 
     @media screen and (max-width: 1023px) {
       padding-top: 60%;
-    }
-
-    @media screen and (max-width: 767px) {
-      padding-top: 75%;
     }
   }
 

@@ -8,11 +8,10 @@
   line-height: 1.375;
   text-decoration: none;
 
-  will-change: transform;
   -webkit-font-smoothing: antialiased;
 
   &:hover {
-    filter: brightness(120%);
+    filter: brightness(110%);
   }
 
   .entry-content & {
@@ -25,49 +24,41 @@
     border-radius: 3px;
   }
 
-  &.promo--club {
-    color: $color-text;
-    background-color: $color-club;
-  }
+  &.promo--possum {
+    padding-right: 10rem;
+    overflow: hidden;
 
-  &.promo--news {
-    padding-right: 6rem;
-
-    color: $color-white;
-    background-color: #f33;
-    background-image: url('images/yandex-news-button.svg');
-    background-size: 2rem 2rem;
-    background-repeat: no-repeat;
-    background-position: right 2rem center;
-  }
-
-  &.promo--skyeng {
-    padding-right: 7rem;
-    font-size: 1.625rem;
-    font-weight: 400;
+    font-size: 1.5rem;
+    font-weight: 700;
     line-height: 1.25;
 
     color: $color-white;
-    background: linear-gradient(to bottom, #3f76ea 0%, #3e71e0 100%);
+    background: linear-gradient(to bottom, #02ace5, #0094cc);
 
-    strong {
-      display: block;
-
-      font-weight: 700;
-    }
+    border-radius: 8px;
 
     img {
       position: absolute;
-      top: 2rem;
-      right: 2rem;
+      right: 0;
+      top: 0;
 
-      width: 60px;
-      height: auto;
+      height: 100%;
+      transform: translateX(50%) scale(3);
+
+      border-radius: 50%;
+
+      @media screen and (max-width: 479px) {
+        transform: translateX(50%) scale(1.5);
+      }
     }
 
     @media screen and (max-width: 767px) {
-      font-size: 1.25rem;
-      line-height: 1.375;
+      font-size: 1.375rem;
+    }
+
+    @media screen and (max-width: 479px) {
+      font-size: 1.125rem;
+      padding-right: 6rem;
     }
   }
 

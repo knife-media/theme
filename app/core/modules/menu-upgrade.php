@@ -44,7 +44,7 @@ class Knife_Menu_Upgrade {
         register_nav_menus([
             'main' => __('Верхнее меню', 'knife-theme'),
             'mobile' => __('Дополнительное меню', 'knife-theme'),
-            'footer' => __('Нижнее меню', 'knife-theme'),
+            'pages' => __('Служебное меню', 'knife-theme'),
             'social' => __('Меню социальных ссылок', 'knife-theme')
         ]);
     }
@@ -54,17 +54,7 @@ class Knife_Menu_Upgrade {
      * Add class to menu item link
      */
     public static function update_link_attributes($atts, $item, $args) {
-        if($args->theme_location === 'main') {
-            $atts['class'] = 'menu__item-link';
-        }
-
-        if($args->theme_location === 'mobile') {
-            $atts['class'] = 'menu__item-link';
-        }
-
-        if($args->theme_location === 'footer') {
-            $atts['class'] = 'footer__nav-link';
-        }
+        $atts['class'] = 'menu__item-link';
 
         if($args->theme_location === 'social') {
             $atts['class'] = 'social__item-link';
@@ -93,21 +83,14 @@ class Knife_Menu_Upgrade {
         // Redefine classes array
         $classes = [];
 
-        if($args->theme_location === 'main') {
-            $classes[] = 'menu__item';
-        }
-
-        if($args->theme_location === 'mobile') {
-            $classes[] = 'menu__item';
-        }
-
-        if($args->theme_location === 'footer') {
-            $classes[] = 'footer__nav-item';
-        }
+        // Set default item class
+        $item_class = 'menu__item';
 
         if($args->theme_location === 'social') {
-            $classes[] = 'social__item';
+            $item_class = 'social__item';
         }
+
+        $classes[] = $item_class;
 
         foreach((array) get_post_meta($item->ID, '_menu_item_classes', true) as $class) {
             if(!empty($class)) {

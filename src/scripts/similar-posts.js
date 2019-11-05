@@ -1,31 +1,25 @@
 /**
- * Append similar posts to single template
+ * Append similar contents to single template
  *
  * @since 1.5
+ * @version 1.10
  */
 
+
 (function() {
-  var post = document.querySelector('.entry-content');
+  var content = document.querySelector('.entry-content');
 
 
   /**
-   * Check if similar posts exist
+   * Check if similar contents exist
    */
-  if(typeof knife_similar_posts === 'undefined') {
+  if(typeof knife_similar_posts === 'undefined' || content === null) {
     return false;
   }
 
 
   /**
-   * Check if entry-content exists and it's long enough
-   */
-  if(post === null || post.children.length < 10) {
-    return false;
-  }
-
-
-  /**
-   * Shuffle similar posts array
+   * Shuffle similar contents array
    */
   var similar = (function(items) {
     for(var i = 0, c; i < items.length; i++) {
@@ -37,96 +31,105 @@
     }
 
     return items;
-  }(knife_similar_posts));
+  }(knife_similar_posts.similar || []));
 
 
   /**
    * Create similar block
    */
-  function appendSimilar(relative, similar) {
-    if(typeof similar.link === 'undefined' || typeof similar.title === 'undefined') {
-      return false;
+  function appendSimilar(following) {
+    var wrap = document.createElement('figure');
+    wrap.classList.add('figure', 'figure--similar');
+
+    var title = document.createElement('h4');
+    title.innerHTML = knife_similar_posts.title || '';
+    wrap.appendChild(title);
+
+    // Add similar items
+    for(var i = 0; i < similar.length && i < 3; i++) {
+      if(!similar[i].link || !similar[i].title) {
+        continue;
+      }
+
+      var item = document.createElement('p');
+      wrap.appendChild(item);
+
+      var link = document.createElement('a');
+      link.href = similar[i].link;
+      link.innerHTML = similar[i].title;
+      item.appendChild(link);
     }
 
-    var wrap = document.createElement('figure');
-    wrap.classList.add('similar');
-
-    var item = document.createElement('div');
-    item.classList.add('similar__item');
-    wrap.appendChild(item);
-
-    // Append emoji
-    (function(){
-      if(typeof similar.emoji === 'undefined') {
-        return false;
-      }
-
-      var emoji = document.createElement('div');
-      emoji.classList.add('similar__emoji');
-      emoji.innerHTML = similar.emoji;
-      wrap.appendChild(emoji);
-    })();
-
-    // Append head
-    (function(){
-      if(typeof similar.head === 'undefined') {
-        return false;
-      }
-
-      var head = document.createElement('div');
-      head.classList.add('similar__item-head');
-      head.innerHTML = similar.head;
-      item.appendChild(head);
-    })();
-
-    var link = document.createElement('a');
-    link.classList.add('similar__item-link');
-    link.href = similar.link;
-    link.innerHTML = similar.title;
-    item.appendChild(link);
-
-    // Append gtm action to similar link
-    (function() {
-      if(typeof similar.action === 'undefined') {
-        return false;
-      }
-
-      link.setAttribute('data-action', similar.action);
-    })();
-
-    // Append gtm label to similar link
-    (function() {
-      if(typeof similar.label === 'undefined') {
-        return false;
-      }
-
-      link.setAttribute('data-label', similar.label);
-    })();
-
-    relative.parentNode.insertBefore(wrap, relative.nextSibling);
+    following.parentNode.insertBefore(wrap, following.nextSibling);
   }
 
 
   /**
-   * Append 2 similar posts
+   * Create auto similar contents if need
    */
-  var range = Math.floor(post.children.length / 3);
-
-  for(var i = 0; i < 2; i++) {
-    if(typeof similar[i] === 'undefined') {
-      continue;
+  (function() {
+    // Check if entry-content exists and it's long enough
+    if(content.children.length < 10 || similar.length < 1) {
+      return false;
     }
 
-    for(var e = range; e < post.children.length - 5; e++) {
-      var relative = post.children[e];
+    // Find start point
+    var landmark = Math.floor(content.children.length / 1.5);
 
-      if(relative.tagName.toLowerCase() === 'p') {
-        appendSimilar(relative, similar[i]);
+    // Check if manual similar alread exists
+    if(content.querySelector('.figure--similar') !== null) {
+      return false;
+    }
 
-        break;
+    var allowed = ['p', 'blockquote'];
+
+    for(var i = landmark; i < content.children.length - 5; i++) {
+      var relative = content.children[i];
+
+      // Check if next tag in allowed list
+      if(allowed.indexOf(relative.tagName.toLowerCase()) < 0) {
+        continue;
+      }
+
+      if(typeof content.children[i - 1] === 'undefined') {
+        continue;
+      }
+
+      var following = content.children[i - 1];
+
+      // Check if prev tag in allowed list
+      if(allowed.indexOf(following.tagName.toLowerCase()) < 0) {
+        continue;
+      }
+
+      appendSimilar(following);
+      break;
+    }
+  })();
+
+
+  /**
+   * Append gtm attributes to all similar blocks
+   */
+  (function() {
+    // Check if action exists
+    if(typeof knife_similar_posts.action === 'undefined') {
+      return false;
+    }
+
+    var figure = content.querySelectorAll('.figure--similar') || [];
+
+    for(var i = 0; i < figure.length; i++) {
+      var items = figure[i].querySelectorAll('a');
+
+      // Set attributes for all similar links
+      for(var e = 0; e < items.length; e++) {
+        items[e].setAttribute('data-action', knife_similar_posts.action);
+
+        if(items[e].href) {
+          items[e].setAttribute('data-label', items[e].href);
+        }
       }
     }
-
-    range = Math.floor(post.children.length / 3) + e;
-  }
+  })();
 })();

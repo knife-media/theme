@@ -73,13 +73,13 @@ class Knife_Snippet_Image {
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public static function load_module() {
-        // Add custom distribute metabox
+        // Add snippet image metabox
         add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
 
         // Save metabox
         add_action('save_post', [__CLASS__, 'save_metabox'], 10, 2);
 
-        // Enqueue dashboard widget scripts
+        // Enqueue metabox scripts
         add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
 
         // Generate poster using ajax options
@@ -102,7 +102,6 @@ class Knife_Snippet_Image {
         $version = wp_get_theme()->get('Version');
         $include = get_template_directory_uri() . '/core/include';
 
-        // Metabox styles
         if(in_array($hook, ['post.php', 'post-new.php'])) {
             $post_id = get_the_ID();
 

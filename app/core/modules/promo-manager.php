@@ -6,6 +6,7 @@
  *
  * @package knife-theme
  * @since 1.8
+ * @version 1.10
  */
 
 if (!defined('WPINC')) {
@@ -16,28 +17,37 @@ class Knife_Promo_Manager {
     /**
      * Default post type with promo checkbox
      *
-     * @access  private
+     * @access  public
      * @var     array
      */
-    private static $post_type = ['post', 'club', 'quiz'];
+    public static $post_type = ['post', 'club', 'quiz'];
 
 
     /**
      * Unique meta to indicate if post promoted
      *
-     * @access  private
+     * @access  public
      * @var     string
      */
-    private static $meta_promo = '_knife-promo';
+    public static $meta_promo = '_knife-promo';
+
+
+    /**
+     * Unique meta to store promo options
+     *
+     * @access  public
+     * @var     string
+     */
+    public static $meta_options = '_knife-promo-options';
 
 
     /**
      * Archive query var
      *
-     * @access  private
+     * @access  public
      * @var     string
      */
-    private static $query_var = 'promo';
+    public static $query_var = 'promo';
 
 
     /**
@@ -72,16 +82,22 @@ class Knife_Promo_Manager {
         add_filter('get_the_archive_title', [__CLASS__, 'update_archive_title'], 12);
 
         // Update promo archive document title
-        add_filter('document_title_parts', [__CLASS__, 'update_title'], 10);
+        add_filter('document_title_parts', [__CLASS__, 'update_document_title'], 10);
 
         // Set is-promo class if need
         add_filter('body_class', [__CLASS__, 'set_body_class'], 11);
 
-        // Promo checkbox
-        add_action('post_submitbox_misc_actions', [__CLASS__, 'print_checkbox']);
+        // Add snippet image metabox
+        add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
 
         // Update promo post meta on save post
         add_action('save_post', [__CLASS__, 'save_metabox']);
+
+        // Enqueue metabox scripts
+        add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
+
+        // Add promo tag to tag list
+        add_filter('term_links-post_tag', [__CLASS__, 'add_promo_tag']);
     }
 
 
@@ -163,7 +179,7 @@ class Knife_Promo_Manager {
      */
     public static function update_archive_title($title) {
         if(get_query_var(self::$query_var)) {
-            $title = sprintf('<h1 class="tagline-title">%s</h1>',
+            $title = sprintf('<h1 class="caption__title">%s</h1>',
                 __('Партнерские материалы', 'knife-theme')
             );
         }
@@ -175,7 +191,7 @@ class Knife_Promo_Manager {
     /**
      * Update promo archive document title
      */
-    public static function update_title($title) {
+    public static function update_document_title($title) {
         if(get_query_var(self::$query_var)) {
             $title['title'] = __('Партнерские материалы', 'knife-theme');
         }
@@ -184,28 +200,68 @@ class Knife_Promo_Manager {
     }
 
 
-
     /**
-     * Print checkbox in post publish action section
+     * Add promo tag to tag list
+     *
+     * @since 1.9
      */
-    public static function print_checkbox() {
-        $post_id = get_the_ID();
+    public static function add_promo_tag($tags) {
+        $is_promo = get_post_meta(get_the_ID(), self::$meta_promo, true);
 
-        if(!in_array(get_post_type($post_id), self::$post_type)) {
-            return;
+        if($is_promo) {
+            $link = sprintf('<a href="%s" rel="tag">%s</a>',
+                esc_url(home_url(self::$query_var)),
+                __('партнерский материал', 'knife-theme')
+            );
+
+            array_unshift($tags, $link);
         }
 
-        $promo = get_post_meta($post_id, self::$meta_promo, true);
-
-        printf(
-            '<div class="misc-pub-section misc-pub-section-last"><label><input type="checkbox" name="%1$s" class="checkbox"%3$s> %2$s</label></div>',
-            esc_attr(self::$meta_promo),
-            __('Партнерский материал', 'knife-theme'),
-            checked($promo, 1, false)
-        );
+        return $tags;
+    }
 
 
-        wp_nonce_field('checkbox', self::$metabox_nonce);
+    /**
+     * Add snippet image metabox
+     */
+    public static function add_metabox() {
+        add_meta_box('knife-promo-metabox', __('Настройки промо', 'knife-theme'), [__CLASS__, 'display_metabox'], self::$post_type, 'side');
+    }
+
+
+    /**
+     * Enqueue assets for metabox
+     */
+    public static function enqueue_assets($hook) {
+        $version = wp_get_theme()->get('Version');
+        $include = get_template_directory_uri() . '/core/include';
+
+        if(in_array($hook, ['post.php', 'post-new.php'])) {
+            $post_id = get_the_ID();
+
+            // Current screen object
+            $screen = get_current_screen();
+
+            if(!in_array($screen->post_type, self::$post_type)) {
+                return;
+            }
+
+            // Insert color picker scripts
+            wp_enqueue_style('wp-color-picker');
+
+            // Insert admin scripts
+            wp_enqueue_script('knife-promo-metabox', $include . '/scripts/promo-metabox.js', ['jquery', 'wp-color-picker'], $version);
+        }
+    }
+
+
+    /**
+     * Display feed metabox
+     */
+    public static function display_metabox() {
+        $include = get_template_directory() . '/core/include';
+
+        include_once($include . '/templates/promo-metabox.php');
     }
 
 
@@ -217,7 +273,7 @@ class Knife_Promo_Manager {
             return;
         }
 
-        if(!wp_verify_nonce($_REQUEST[self::$metabox_nonce], 'checkbox')) {
+        if(!wp_verify_nonce($_REQUEST[self::$metabox_nonce], 'metabox')) {
             return;
         }
 
@@ -229,11 +285,24 @@ class Knife_Promo_Manager {
             return;
         }
 
+        // Update options
+        if(isset($_REQUEST[self::$meta_options])) {
+            $options = $_REQUEST[self::$meta_options];
+
+            // Add # to color if not exists
+            if(!empty($options['color'])) {
+                $options['color'] = sanitize_hex_color('#' . ltrim($options['color'], '#'));
+            }
+
+            update_post_meta($post_id, self::$meta_options, $options);
+        }
+
+        // Save promo meta
         if(empty($_REQUEST[self::$meta_promo])) {
             return delete_post_meta($post_id, self::$meta_promo);
         }
 
-        return update_post_meta($post_id, self::$meta_promo, 1);
+        update_post_meta($post_id, self::$meta_promo, 1);
     }
 
 

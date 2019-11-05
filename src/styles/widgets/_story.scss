@@ -3,9 +3,9 @@
   flex-flow: row wrap;
   justify-content: space-between;
 
-  width: 100%;
+  width: calc(100% - 2rem);
   max-width: $width-site - 2rem;
-  margin: 0 1rem;
+  margin: 0 auto;
 
   .widget-story__inner {
     width: calc(100% / 4 - .75rem);
@@ -52,7 +52,7 @@
     }
 
     @media screen and (max-width: 1023px) {
-      padding-top: 70%;
+      padding-top: 60%;
     }
   }
 
@@ -63,7 +63,7 @@
 
     width: 100%;
     height: 100%;
-    padding: 1rem 1.25rem 1.25rem;
+    padding: 1rem;
 
     font-size: 1.5rem;
     font-weight: 700;
@@ -101,8 +101,6 @@
 
     @media screen and (max-width: 1023px) {
       min-height: 8rem;
-
-      padding: 1rem;
     }
 
     @media screen and (max-width: 767px) {
@@ -128,7 +126,7 @@
     }
 
     @media screen and (max-width: 1023px) {
-      padding-top: 70%;
+      padding-top: 60%;
     }
   }
 
@@ -157,34 +155,10 @@
   }
 
   &.widget-story--entry {
-    padding: 0 1rem 1rem;
-
-    .widget-story__title {
-      font-size: 1.25rem;
-
-      @media screen and (max-width: 1199px) {
-        font-size: 1.125rem;
-      }
-
-      @media screen and (max-width: 1023px) {
-        font-size: 1.25rem;
-      }
-
-      @media screen and (max-width: 479px) {
-        font-size: 1.125rem;
-      }
-    }
-
-    .widget-story__inner {
-      width: calc(100% / 3 - .625rem);
-
-      @media screen and (max-width: 1023px) {
-        width: 100%;
-      }
-    }
+    display: none;
   }
 
-  &.widget-story--poster {
+  &.widget-story--billboard {
     display: none;
   }
 
@@ -193,6 +167,6 @@
   }
 
   @media screen and (max-width: 479px) {
-    margin: 1rem 0 0;
+    width: 100%;
   }
 }

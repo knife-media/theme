@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.4
- * @version 1.7
+ * @version 1.10
  */
 
 if (!defined('WPINC')) {
@@ -48,6 +48,15 @@ class Knife_Select_Links {
      * @var     string
      */
     private static $meta_items = '_knife-select-items';
+
+
+    /**
+     * Allowed html in title
+     *
+     * @access  private
+     * @var     array
+     */
+    private static $title_html = array('em' => []);
 
 
     /**
@@ -181,7 +190,7 @@ class Knife_Select_Links {
      * @since 1.5
      */
     public static function select_title($title, $post_id) {
-        if(!is_admin()) {
+        if(!is_admin() && get_post_type($post_id) === self::$post_type) {
             $words = explode(' ', ltrim($title));
 
             if(is_numeric($words[0])) {
@@ -206,8 +215,17 @@ class Knife_Select_Links {
             $post_id = url_to_postid($link);
 
             if($post_id > 0) {
+                $title = get_the_title();
+
+                if(method_exists('Knife_Post_Tagline', 'post_tagline')) {
+                    $post = get_post($post_id);
+
+                    // Get upgraded title with <em> tags
+                    $title = Knife_Post_Tagline::post_tagline($post->post_title, $post_id, false);
+                }
+
                 $data = [
-                    'title' => get_the_title($post_id),
+                    'title' => wp_kses($title, self::$title_html),
                     'poster' => strval(get_the_post_thumbnail_url($post_id)),
                     'attachment' => get_post_thumbnail_id($post_id)
                 ];
@@ -285,6 +303,8 @@ class Knife_Select_Links {
         $options = [
             'action' => esc_attr(self::$ajax_action),
             'nonce' => wp_create_nonce(self::$metabox_nonce),
+            'meta_items' => esc_attr(self::$meta_items),
+
             'choose' => __('Выберите изображение постера', 'knife-theme'),
             'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
         ];
@@ -343,20 +363,25 @@ class Knife_Select_Links {
         // Delete select post meta to create it again below
         delete_post_meta($post_id, $query);
 
-        foreach($_REQUEST[$query] as $item) {
-            foreach($item as $key => $value) {
-                if(isset($meta[$i]) && array_key_exists($key, $meta[$i])) {
-                    $i++;
-                }
+        foreach((array) $_REQUEST[$query] as $request) {
+            $item = [];
 
-                if(!empty($value)) {
-                    $meta[$i][$key] = sanitize_text_field($value);
-                }
+            if(isset($request['link'])) {
+                $item['link'] = sanitize_text_field($request['link']);
             }
-        }
 
-        foreach($meta as $item) {
-            add_post_meta($post_id, $query, $item);
+            if(isset($request['title'])) {
+                $item['title'] = wp_kses($request['title'], self::$title_html);
+            }
+
+            if(isset($request['attachment'])) {
+                $item['attachment'] = absint($request['attachment']);
+            }
+
+            // Add post meta if not empty
+            if(array_filter($item)) {
+                add_post_meta($post_id, $query, $item);
+            }
         }
     }
 
@@ -379,13 +404,13 @@ class Knife_Select_Links {
                 '<div class="unit__image">%s</div><div class="unit__content">%s</div>',
 
                 wp_get_attachment_image($attributes['attachment'], 'double', false,
-                    ['class' => 'unit__image-thumbnail']
+                    ['class' => 'unit__image-thumbnail', 'loading' => 'lazy']
                 ),
 
                 sprintf(
                     '<a class="unit__content-link" href="%1$s">%2$s</a>',
                     esc_url($attributes['link']),
-                    esc_html($attributes['title'])
+                    wp_kses($attributes['title'], self::$title_html)
                 )
             )
         );

@@ -12,7 +12,7 @@
     <?php
         if($internal) :
             the_info(
-                '<div class="widget-single__head">', '</div>',
+                '<div class="widget-single__head info">', '</div>',
                 ['head']
             );
         endif;
@@ -22,7 +22,7 @@
         <?php
             echo wp_get_attachment_image(
                 $instance['cover'], 'single', false,
-                ['class' => 'widget-single__image-thumbnail']
+                ['class' => 'widget-single__image-thumbnail', 'loading' => 'lazy']
             );
         ?>
     </div>
@@ -39,7 +39,7 @@
 
             if(empty($instance['button']) && $internal) :
                 the_info(
-                    '<div class="widget-single__content-info">', '</div>',
+                    '<div class="widget-single__content-info info">', '</div>',
                     ['author', 'label']
                 );
             else :
@@ -52,4 +52,10 @@
             endif;
         ?>
     </div>
+
+    <?php
+        if(!empty($instance['pixel'])) {
+            echo $instance['pixel'];
+        }
+    ?>
 </div>

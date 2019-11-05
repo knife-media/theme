@@ -107,7 +107,7 @@ class Knife_News_Manager {
      * Change posts_per_page for news category archive template
      */
     public static function update_count($query) {
-        if($query->is_main_query() && $query->is_category(self::$news_slug)) {
+        if($query->is_main_query() && get_query_var('category_name') === self::$news_slug) {
             $query->set('posts_per_page', 20);
         }
     }

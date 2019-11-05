@@ -16,21 +16,16 @@
 
     border: none;
 
+    &:after {
+      content: '';
+      @include full-size();
+    }
+
     img {
       display: block;
 
       max-width: 100%;
       margin: 0 auto;
-    }
-
-    &:after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-
-      width: 100%;
-      height: 100%;
     }
 
     &.widget-banner__link--desktop {
@@ -47,14 +42,36 @@
   }
 
   &.widget-banner--entry {
-    padding: 1rem;
+    align-items: center;
+
+    width: #{$width-content + 2rem};
+    padding: 3rem 1rem 1rem;
+    overflow: hidden;
+
+    box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, .2);
+    border-radius: 3px;
 
     .widget-banner__link {
       width: auto;
     }
+
+    .widget-banner__title {
+      @extend .head;
+
+      position: absolute;
+      top: 0;
+      left: 0;
+      cursor: default;
+
+      width: 100%;
+    }
+
+    @media screen and (max-width: 479px) {
+      padding: calc(2rem - 1px) 0 0;
+    }
   }
 
   &.widget-banner--sidebar {
-    margin-top: 1rem;
+    padding-top: 1rem;
   }
 }

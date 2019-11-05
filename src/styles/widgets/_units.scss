@@ -3,9 +3,10 @@
   flex-flow: row wrap;
   justify-content: space-between;
 
-  width: 100%;
+  width: calc(100% - 2rem);
   max-width: $width-site - 2rem;
-  margin: 0 1rem;
+
+  margin: 0 auto;
 
   &.widget-units--sidebar {
     margin: 0;
@@ -29,24 +30,7 @@
   }
 
   &.widget-units--entry {
-    padding: 0 1rem 1rem;
-
-    .unit__content-link {
-      font-size: 1.25rem;
-      line-height: 1.25;
-
-      @media screen and (max-width: 1199px) {
-        font-size: 1.125rem;
-      }
-
-      @media screen and (max-width: 1023px) {
-        font-size: 1.375rem;
-      }
-
-      @media screen and (max-width: 767px) {
-        font-size: 1.125rem;
-      }
-    }
+    display: none;
   }
 
   @media screen and (max-width: 1023px) {
@@ -54,6 +38,6 @@
   }
 
   @media screen and (max-width: 479px) {
-    margin: 0;
+    width: 100%;
   }
 }

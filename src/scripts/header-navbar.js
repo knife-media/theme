@@ -1,10 +1,16 @@
 (function() {
   var toggle = document.getElementById('toggle-menu');
-  var navbar = document.querySelector('.navbar');
+  var header = document.querySelector('.header');
 
   if(toggle === null) {
     return false;
   }
+
+
+  /**
+   * Save body scrollTop here
+   */
+  var scrollTop = 0;
 
 
   /**
@@ -13,29 +19,63 @@
   toggle.addEventListener('click', function(e) {
     e.preventDefault();
 
-    var expand = document.body.classList.contains('is-navbar');
+    var body = document.body;
 
     // Close search layer if opened
-    if(document.body.classList.contains('is-search')) {
+    if(body.classList.contains('is-search')) {
       document.getElementById('toggle-search').click();
     }
 
-    navbar.classList.toggle('navbar--expand');
     toggle.classList.toggle('toggle--expand');
 
-    document.body.classList.toggle('is-navbar');
+    // Set navbar expand class
+    header.querySelector('.navbar').classList.toggle('navbar--expand');
+
+    // Get first header parent child
+    var sibling = header.parentElement.firstChild;
+
+    // Close navbar menu
+    if(body.classList.contains('is-navbar')) {
+      body.classList.remove('is-navbar');
+      body.style.top = '';
+
+      while(sibling && sibling !== header) {
+        if(sibling.nodeType == 1) {
+          sibling.style.display = '';
+        }
+
+        sibling = sibling.nextSibling;
+      }
+
+      return window.scrollTo(0, scrollTop);
+    }
+
+    // Hide all elements before header
+    while(sibling && sibling !== header) {
+      if(sibling.nodeType == 1) {
+        sibling.style.display = 'none';
+      }
+
+      sibling = sibling.nextSibling;
+    }
+
+    scrollTop = window.scrollY;
+
+    body.classList.add('is-navbar');
+    body.style.top = -scrollTop + 'px';
   });
 
 
   /**
-   * Close menu on ESC
+   * Close menu on outside click
    */
-  window.addEventListener('keydown', function(e) {
-    e = e || window.event;
+  document.body.addEventListener('touchend', function(e) {
+    var source = e.target || e.srcElement;
 
-    if(navbar.classList.contains('navbar--expand') && e.keyCode === 27) {
+    if(this.classList.contains('is-navbar') && this === source) {
+      e.stopPropagation();
+
       return toggle.click();
     }
-  }, true);
-
+  });
 })();

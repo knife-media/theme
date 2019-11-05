@@ -12,7 +12,7 @@
             'hide_empty' => false,
             'name' => $tax_name,
             'orderby' => 'name',
-            'hierarchical' => false,
+            'hierarchical' => true,
             'show_option_none' => '&mdash;',
             'class' => 'widefat'
         ];

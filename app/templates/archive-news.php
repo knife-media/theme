@@ -4,27 +4,25 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.4
+ * @version 1.10
  */
 
 get_header(); ?>
 
-<div class="block-wrapper">
-   <div class="widget-news">
-       <?php
-            while(have_posts()) : the_post();
+<div class="widget-news">
+   <?php
+        while(have_posts()) : the_post();
 
-                get_template_part('templates/widget', 'news');
+            get_template_part('templates/widget', 'news');
 
-            endwhile;
-        ?>
-    </div>
+        endwhile;
+    ?>
 </div>
 
-<?php if(have_posts() && get_next_posts_link()) : ?>
-    <nav class="block-navigate">
+<?php if(have_posts()) : ?>
+    <nav class="navigate">
         <?php
-            next_posts_link(__('Больше новостей', 'knife-theme'));
+            next_posts_link(__('Следующие', 'knife-theme'));
         ?>
     </nav>
 <?php endif; ?>

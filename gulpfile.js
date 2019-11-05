@@ -17,7 +17,7 @@ gulp.task('styles', function(done) {
     .pipe(plumber())
     .pipe(sassGlob())
     .pipe(sass({errLogToConsole: true}))
-    .pipe(prefix({browsers: ['ie >= 9', 'ff >= 30', 'chrome >= 34', 'safari >= 7', 'opera >= 23', 'ios >= 7', 'android >= 4.4']}))
+    .pipe(prefix())
     .pipe(concat('styles.min.css'))
     .pipe(cleanCss({compatibility: 'ie9'}))
     .pipe(gulp.dest(path.assets))

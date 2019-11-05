@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.5
- * @version 1.7
+ * @version 1.10
  */
 
 
@@ -34,6 +34,7 @@ class Knife_Widget_Banner extends WP_Widget {
             'campaign' => '',
             'background' => '',
             'styles' => '',
+            'pixel' => '',
             'visibility' => 'default'
         ];
 
@@ -53,6 +54,11 @@ class Knife_Widget_Banner extends WP_Widget {
                 )
             );
 
+            // Show pixel code
+            if(!empty($instance['pixel'])) {
+                echo $instance['pixel'];
+            }
+
             echo $args['after_widget'];
         }
     }
@@ -69,6 +75,7 @@ class Knife_Widget_Banner extends WP_Widget {
             'campaign' => '',
             'background' => '',
             'styles' => '',
+            'pixel' => '',
             'visibility' => 'default'
         ];
 
@@ -80,7 +87,7 @@ class Knife_Widget_Banner extends WP_Widget {
             esc_attr($this->get_field_name('title')),
             __('Заголовок:', 'knife-theme'),
             esc_attr($instance['title']),
-            __('Не будет отображаться на странице', 'knife-theme')
+            __('Может отобразиться в плашке баннера', 'knife-theme')
         );
 
         printf(
@@ -100,7 +107,7 @@ class Knife_Widget_Banner extends WP_Widget {
             '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
             esc_attr($this->get_field_id('link')),
             esc_attr($this->get_field_name('link')),
-            __('Ссылка с баннера', 'knife-theme'),
+            __('Ссылка с баннера:', 'knife-theme'),
             esc_attr($instance['link'])
         );
 
@@ -116,7 +123,7 @@ class Knife_Widget_Banner extends WP_Widget {
             '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
             esc_attr($this->get_field_id('styles')),
             esc_attr($this->get_field_name('styles')),
-            __('Стили изображения', 'knife-theme'),
+            __('Стили изображения:', 'knife-theme'),
             esc_attr($instance['styles'])
         );
 
@@ -130,10 +137,18 @@ class Knife_Widget_Banner extends WP_Widget {
         );
 
         printf(
+            '<p><label for="%1$s">%3$s</label><textarea class="widefat" id="%1$s" name="%2$s">%4$s</textarea></p>',
+            esc_attr($this->get_field_id('pixel')),
+            esc_attr($this->get_field_name('pixel')),
+            __('Промерочный код:', 'knife-theme'),
+            esc_attr($instance['pixel'])
+        );
+
+        printf(
             '<p><label for="%1$s">%3$s</label><input class="color-picker" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
             esc_attr($this->get_field_id('background')),
             esc_attr($this->get_field_name('background')),
-            __('Цвет фона', 'knife-theme'),
+            __('Цвет фона:', 'knife-theme'),
             esc_attr($instance['background'])
         );
     }
@@ -149,6 +164,7 @@ class Knife_Widget_Banner extends WP_Widget {
         $instance['link'] = esc_url($new_instance['link']);
         $instance['image'] = esc_url($new_instance['image']);
         $instance['campaign'] = sanitize_text_field($new_instance['campaign']);
+        $instance['pixel'] = $new_instance['pixel'];
         $instance['styles'] = sanitize_text_field($new_instance['styles']);
         $instance['background'] = sanitize_hex_color($new_instance['background']);
         $instance['visibility'] = sanitize_text_field($new_instance['visibility']);
@@ -165,6 +181,12 @@ class Knife_Widget_Banner extends WP_Widget {
             'href' => esc_url($instance['link']),
             'target' => '_blank'
         ];
+
+        if(strlen($instance['title']) > 0) {
+            $options['data-title'] = esc_attr(
+                $instance['title']
+            );
+        }
 
         if(strlen($instance['campaign']) > 0) {
             $options['data-banner'] = esc_attr(

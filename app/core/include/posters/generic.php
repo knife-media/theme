@@ -1,9 +1,9 @@
 <?php
 /**
- * Generic poster template
+ * Quiz poster template
  *
- * Common template with all availible variables
- * Set moderate contrast and brightness
+ * Poster name: Универсальный шаблон
+ * Target: quiz
  */
 
 $poster = new PHPImage();
@@ -22,37 +22,41 @@ $poster->setResource($filter);
 $poster->draw(get_template_directory() . '/assets/images/logo-title.png', 40, 40);
 
 // Set font settings
-$poster->setAlignVertical('top');
+$poster->setAlignVertical('center');
 $poster->setFont(get_template_directory() . '/assets/fonts/formular/formular-medium.ttf');
-$poster->setLineHeight(1.25);
+$poster->setLineHeight(1);
 
 
-// Draw description
-if(!empty($textbox['description'])) {
-    $poster->textBox($textbox['description'], [
-        'x' => 40, 'y' => 445, 'width' => 950, 'height' => 100, 'fontSize' => 24
-    ]);
-}
+// Draw  title vertical line
+$poster->rectangle(190, 40, 2, 45, [255, 255, 255]);
 
 
-// Draw title
+// Draw post title
 if(!empty($textbox['title'])) {
     $poster->textBox($textbox['title'], [
-        'x' => 70, 'y' => 160, 'width' => 950, 'height' => 200, 'fontSize' => 24
+        'x' => 220, 'y' => 42, 'width' => 800, 'height' => 45, 'fontSize' => 24
     ]);
 }
 
-
-// Draw line
-$poster->rectangle(70, 230, 950, 2, [255, 255, 255]);
+$poster->setAlignVertical('top');
+$poster->setLineHeight(1.25);
 
 
 // Draw heading
 if(!empty($textbox['heading'])) {
     $poster->setLineHeight(1.125);
     $poster->textBox($textbox['heading'], [
-        'x' => 70, 'y' => 280, 'width' => 950, 'height' => 160, 'fontSize' => 42
+        'x' => 40, 'y' => 200, 'width' => 950, 'height' => 140, 'fontSize' => 42
     ]);
 }
+
+
+// Draw description
+if(!empty($textbox['description'])) {
+    $poster->textBox($textbox['description'], [
+        'x' => 40, 'y' => 445, 'width' => 950, 'height' => 200, 'fontSize' => 24
+    ]);
+}
+
 
 $poster->snapshot($basedir . $filename);

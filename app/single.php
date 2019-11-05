@@ -4,20 +4,18 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.9
+ * @version 1.10
  */
 
 get_header(); ?>
 
-<?php if(is_active_sidebar('knife-feature')) : ?>
-    <div class="block-wrapper">
-        <?php
-            dynamic_sidebar('knife-feature');
-        ?>
-    </div>
-<?php endif; ?>
+<?php
+    if(is_active_sidebar('knife-feature')) :
+        dynamic_sidebar('knife-feature');
+    endif;
+?>
 
-<div class="block-content">
+<div class="content">
     <?php
         while(have_posts()) : the_post();
 

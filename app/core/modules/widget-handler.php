@@ -62,9 +62,9 @@ class Knife_Widget_Handler {
 
         register_sidebar([
             'name'          => __('Баннер в шапке', 'knife-theme'),
-            'id'            => 'knife-poster',
+            'id'            => 'knife-billboard',
             'description'   => __('Добавленные виджеты появятся над главным меню.', 'knife-theme'),
-            'before_widget' => '<div class="widget-%2$s widget-%2$s--poster">',
+            'before_widget' => '<div class="widget-%2$s widget-%2$s--billboard">',
             'after_widget'  => '</div>'
         ]);
 

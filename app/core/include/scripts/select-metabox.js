@@ -13,6 +13,14 @@ jQuery(document).ready(function($) {
 
 
   /**
+   * Check required metabox options
+   */
+  if(typeof knife_select_metabox === 'undefined') {
+    return false;
+  }
+
+
+  /**
    * Show loader
    */
   function toggleLoader() {
@@ -39,27 +47,57 @@ jQuery(document).ready(function($) {
     box.find('.item:first').after(item);
 
     if(object.hasOwnProperty('title')) {
-      item.find('.option__title').val(object.title);
+      item.find('.item__title textarea').val(object.title);
     }
 
     if(object.hasOwnProperty('attachment') && object.attachment) {
-      item.find('.option__attachment').val(object.attachment);
+      item.find('.item__poster-attachment').val(object.attachment);
 
       if(object.hasOwnProperty('poster') && object.poster) {
-        showcase = $('<img />', {class: 'option__image', src: object.poster});
-        showcase.prependTo(item.find('.option--poster'));
+        showcase = $('<img />', {class: 'item__poster-image', src: object.poster});
+        showcase.prependTo(item.find('.item__poster'));
       }
     }
 
-    item.find('.option__link').val(input.val());
+    item.find('.item__link input').val(input.val());
     input.attr('value', '');
+
+    // Update name attributes
+    return sortItems();
+  }
+
+
+  /**
+   * Set items proper name attribute
+   */
+  function sortItems() {
+    if(typeof knife_select_metabox.meta_items === 'undefined') {
+      return alert(knife_select_metabox.error);
+    }
+
+    var meta_items = knife_select_metabox.meta_items;
+
+    box.find('.item:not(:first)').each(function(i) {
+      var item = $(this);
+
+      // Change fields name
+      item.find('[data-item]').each(function() {
+        var data = $(this).data('item');
+
+        // Create name attribute
+        var attr = meta_items + '[' + i + ']';
+        var name = attr + '[' + data + ']';
+
+        $(this).attr('name', name);
+      });
+    });
   }
 
 
   /**
    * Swap questions
    */
-  box.on('click', '.dashicons-arrow-up-alt', function(e) {
+  box.on('click', '.item__change', function(e) {
     e.preventDefault();
 
     var item = $(this).closest('.item');
@@ -70,6 +108,9 @@ jQuery(document).ready(function($) {
     }
 
     item.prev().insertAfter(item);
+
+    // Update name attributes
+    return sortItems();
   });
 
 
@@ -110,20 +151,20 @@ jQuery(document).ready(function($) {
   /**
    * Choose custom poster
    */
-  box.on('click', '.option--poster', function(e) {
+  box.on('click', '.item__poster', function(e) {
     var poster = $(this);
 
     // Open default wp.media image frame
     var frame = wp.media({
       title: knife_select_metabox.choose,
-      multiple: false
+      multiple: false,
     });
 
 
     // On open frame select current attachment
     frame.on('open',function() {
       var selection = frame.state().get('selection');
-      var attachment = poster.find('.option__attachment').val();
+      var attachment = poster.find('.item__poster-attachment').val();
 
       return selection.add(wp.media.attachment(attachment));
     });
@@ -133,7 +174,7 @@ jQuery(document).ready(function($) {
     frame.on('select', function() {
       var selection = frame.state().get('selection').first().toJSON();
 
-      poster.find('.option__attachment').val(selection.id);
+      poster.find('.item__poster-attachment').val(selection.id);
 
       if(typeof selection.sizes.thumbnail !== 'undefined') {
         selection = selection.sizes.thumbnail;
@@ -143,7 +184,7 @@ jQuery(document).ready(function($) {
         return poster.find('img').attr('src', selection.url);
       }
 
-      var showcase = $('<img />', {class: 'option__image', src: selection.url});
+      var showcase = $('<img />', {class: 'item__poster-image', src: selection.url});
 
       return showcase.prependTo(poster);
     });
@@ -167,9 +208,14 @@ jQuery(document).ready(function($) {
   /**
    * Remove item
    */
-  box.on('click', '.item .dashicons-trash', function(e) {
+  box.on('click', '.item__delete', function(e) {
     var item = $(this).closest('.item');
 
     return item.remove();
   });
+
+  /**
+   * Add name attributes on load
+   */
+    return sortItems();
 });

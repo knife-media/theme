@@ -23,7 +23,6 @@
   }
 
   .entry-header__info {
-    display: flex;
     flex-flow: row nowrap;
     align-items: center;
 
@@ -86,7 +85,7 @@
 
     a {
       color: $color-primary;
-      border-bottom: 1px solid $color-primary;
+      border-bottom: 1px solid;
 
       &:hover {
         border-bottom-color: transparent;

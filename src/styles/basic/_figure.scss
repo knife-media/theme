@@ -34,6 +34,18 @@
 
   &.figure--full {
     align-items: flex-start;
+
+    .alignleft {
+      align-self: flex-start;
+    }
+
+    .alignright {
+      align-self: flex-end;
+    }
+
+    .aligncenter {
+      align-self: center;
+    }
   }
 
   &.figure--embed {
@@ -127,16 +139,95 @@
     }
   }
 
-  &.figure--widget {
-    width: calc(100% + 2rem);
+  &.figure--club {
+    display: block;
+    position: relative;
+
+    width: $width-content;
     max-width: none;
+    margin-top: 2rem;
 
-    margin-left: -1rem;
-    margin-right: -1rem;
+    .button {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 500;
 
-    background: darken($color-white, 5);
+      color: $color-white;
+      background-color: $color-club;
 
+      &:hover {
+        filter: brightness(125%);
+      }
+
+      @media screen and (max-width: 767px) {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  &.figure--similar {
+    display: block;
+    cursor: default;
+
+    width: #{$width-content + 2rem};
+    overflow: hidden;
+    background: $color-white;
+    box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, .25);
+
+    border-radius: 3px;
+
+    @for $i from 1 through 4 {
+      h#{$i} {
+        @extend .head;
+
+        margin-bottom: 0;
+        -webkit-font-smoothing: antialiased;
+      }
+    }
+
+    p {
+      display: block;
+      position: relative;
+
+      padding: 1rem;
+
+      border-bottom: solid 1px rgba(100, 100, 100, .125);
+
+      a {
+        font-size: 1.125rem;
+        font-weight: 700;
+        line-height: 1.25;
+
+        color: $color-primary;
+
+        &:after {
+          content: '';
+          @include full-size();
+        }
+
+        @media screen and (max-width: 767px) {
+          font-size: 1rem;
+        }
+      }
+
+      em {
+        font-family: $font-serif;
+        font-weight: 400;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+
+  &.figure--widget {
+    width: 100%;
     -webkit-font-smoothing: antialiased;
+
+    h4 {
+      margin-bottom: 0;
+    }
 
     a {
       color: inherit;

@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.2
- * @version 1.9
+ * @version 1.10
  */
 
 
@@ -17,12 +17,12 @@ if (!defined('WPINC')) {
 
 class Knife_Post_Lead {
    /**
-    * Backward compatibility meta name
+    * Lead text post meta
     *
     * @access  private
     * @var     string
     */
-    private static $post_meta = 'lead-text';
+    private static $post_meta = '_knife-lead';
 
 
    /**
@@ -31,7 +31,7 @@ class Knife_Post_Lead {
     * @access  private
     * @var     array
     */
-    private static $post_type = ['post', 'club', 'select', 'generator', 'quiz', 'ask'];
+    private static $post_type = ['post', 'club', 'select', 'generator', 'quiz'];
 
 
     /**
@@ -81,7 +81,8 @@ class Knife_Post_Lead {
             'media_buttons' => true,
             'textarea_name' => self::$post_meta,
             'tinymce' => [
-                'toolbar1' => 'link'
+                'toolbar1' => 'link',
+                'toolbar2' => ''
             ],
             'quicktags' => [
                 'buttons' => 'link'
@@ -97,14 +98,11 @@ class Knife_Post_Lead {
     /**
      * Get lead post meta
      */
-    public static function get_lead($post = 0, $post_lead = '') {
-        if(!$post = get_post($post)) {
-            return $lead;
-        }
+    public static function get_lead($post_lead = '') {
+        // Get post lead
+        $post_lead = get_post_meta(get_the_ID(), self::$post_meta, true);
 
-        $post_lead = get_post_meta($post->ID, self::$post_meta, true);
-
-        if(strlen($post_lead) > 0) {
+        if(!empty($post_lead)) {
             $post_lead = wpautop($post_lead);
         }
 
@@ -157,7 +155,13 @@ class Knife_Post_Lead {
             return delete_post_meta($post_id, self::$post_meta);
         }
 
-        return update_post_meta($post_id, self::$post_meta, $_REQUEST[self::$post_meta]);
+        // Sanitize post lead meta
+        $post_lead = wp_kses_post($_REQUEST[self::$post_meta]);
+
+        // Remove trailing spaces
+        $post_lead = preg_replace('~((&nbsp;| |\s)+$)~is', '', $post_lead);
+
+        update_post_meta($post_id, self::$post_meta, $post_lead);
     }
 }
 

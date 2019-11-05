@@ -3,9 +3,9 @@
   flex-flow: row wrap;
   justify-content: flex-start;
 
-  width: 100%;
+  width: calc(100% - 2rem);
   max-width: $width-site - 2rem;
-  margin: 1rem 1rem 0;
+  margin: 1rem auto -2px;
 
  .widget-blunt__link {
     display: block;
@@ -62,10 +62,6 @@
       }
     }
 
-    &:last-child {
-      margin-bottom: 0;
-    }
-
     @media screen and (max-width: 1023px) {
       width: 100%;
       margin-right: 0;
@@ -73,7 +69,8 @@
   }
 
   &.widget-blunt--sidebar {
-    margin: 1rem 0 0;
+    align-self: flex-start;
+    width: 100%;
 
     .widget-blunt__inner {
       width: 100%;
@@ -88,26 +85,11 @@
     }
   }
 
-  &.widget-blunt--entry {
-    justify-content: center;
-
-    width: 100%;
-    max-width: none;
-    margin: 0;
-
-    background-color: $color-white;
-
-    .widget-blunt__inner {
-      width: 100%;
-      max-width: $width-content;
-    }
-
-    .widget-blunt__link {
-      width: 100%;
-    }
+  &.widget-blunt--billboard {
+    display: none;
   }
 
-  &.widget-blunt--poster {
+  &.widget-blunt--entry {
     display: none;
   }
 
@@ -116,6 +98,6 @@
   }
 
   @media screen and (max-width: 479px) {
-    margin: 1rem 0 0;
+    width: 100%;
   }
 }

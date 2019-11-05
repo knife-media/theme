@@ -1,9 +1,10 @@
 .widget-recent {
   display: flex;
+  position: relative;
+
   flex-flow: column wrap;
   justify-content: space-between;
   flex: 1 1 auto;
-  position: relative;
 
   width: 100%;
   margin-top: 1rem;
@@ -25,8 +26,6 @@
 
     .widget-recent__content-info {
       display: block;
-
-      width: 100%;
 
       .meta {
         font-size: .5625rem;
@@ -82,10 +81,21 @@
   &.widget-recent--entry {
     width: calc(100% - 2rem);
     max-width: $width-content;
-    margin: 1rem;
+    margin: 0 1rem;
+    box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, .2);
+
+    border-radius: 3px;
 
     .widget-recent__head {
       color: $color-white;
+    }
+
+    .widget-recent__content {
+      border-bottom: solid 1px rgba(100, 100, 100, .125);
+
+      &:last-of-type {
+        border-bottom: none;
+      }
     }
 
     .widget-recent__more {
@@ -103,7 +113,7 @@
     flex: 0 0 auto;
   }
 
-  &.widget-recent--poster {
+  &.widget-recent--billboard {
     display: none;
   }
 }

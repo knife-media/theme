@@ -4,12 +4,12 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.9
+ * @version 1.10
  */
 
 get_header(); ?>
 
-<div class="block-archive">
+<div class="archive">
    <?php
         if(have_posts()) :
             while(have_posts()) : the_post();
@@ -25,10 +25,11 @@ get_header(); ?>
     ?>
 </div>
 
-<?php if(have_posts() && get_next_posts_link()) : ?>
-    <nav class="block-navigate">
+<?php if(have_posts()) : ?>
+    <nav class="navigate">
         <?php
-            next_posts_link(__('Больше статей', 'knife-theme'));
+            previous_posts_link(__('Предыдущие', 'knife-theme'));
+            next_posts_link(__('Следующие', 'knife-theme'));
         ?>
     </nav>
 <?php endif; ?>

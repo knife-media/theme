@@ -4,6 +4,7 @@
  *
  * @package knife-theme
  * @since 1.4
+ * @version 1.9
  */
 ?>
 
@@ -11,14 +12,14 @@
     <div class="unit__inner">
         <?php
             the_info(
-                '<div class="unit__head">', '</div>',
+                '<div class="unit__head info">', '</div>',
                 ['head']
             );
         ?>
 
         <div class="unit__image">
             <?php
-                the_post_thumbnail($size, ['class' => 'unit__image-thumbnail']);
+                the_post_thumbnail($size, ['class' => 'unit__image-thumbnail', 'loading' => 'lazy']);
             ?>
         </div>
 
@@ -31,7 +32,7 @@
                 );
 
                 the_info(
-                    '<div class="unit__content-info">', '</div>',
+                    '<div class="unit__content-info info">', '</div>',
                     ['author', 'date', 'label']
                 );
             ?>

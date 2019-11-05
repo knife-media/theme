@@ -14,15 +14,6 @@
     display: block;
   }
 
-  .widget-script__banner {
-    display: flex;
-    justify-content: center;
-
-    width: 100%;
-    height: auto;
-    background: $color-black;
-  }
-
   &.widget-script--sidebar {
     margin-top: 1rem;
   }

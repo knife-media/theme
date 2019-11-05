@@ -54,3 +54,37 @@ figure {
 blockquote {
   margin: 0;
 }
+
+.figure--similar {
+  display: block;
+
+  margin: 1rem 0;
+  padding: 1rem;
+  box-shadow: 1px 1px 4px 0 rgba(0,0,0,.2);
+
+  border-top: solid 6px #1e488f;
+  border-radius: 3px;
+}
+
+.figure--similar h4 {
+  margin: 0 0 10px;
+}
+
+span[data-body] {
+  position: relative;
+
+  padding: 0 4px;
+  white-space: pre-wrap;
+  background: #f8f8f8;
+
+  border: solid 1px #cccccc;
+  border-radius: 2px;
+}
+
+.mce-content-body img[data-wp-more="card"] {
+  height: 16px;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAoCAMAAACyy+glAAAAGFBMVEXMzMzw8PDy8vL19fX7+/v8/Pz9/f3///8oGFuaAAAAL0lEQVR4AWNgJwEMGcWjikcVszFjBaxYFTMzYAVMBBWPKmZlxApYhk5CGlU8qhgABzYqyDupt8sAAAAASUVORK5CYII=);
+  background-repeat: repeat-x;
+  background-position: center;
+  background-size: 10px auto;
+}

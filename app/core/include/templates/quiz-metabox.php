@@ -439,6 +439,7 @@
                             <?php
                                 if(method_exists('Knife_Poster_Templates', 'print_select')) {
                                     Knife_Poster_Templates::print_select([
+                                        'target' => 'quiz',
                                         'attributes' => [
                                             'class' => 'result__image-template',
                                             'data-result' => 'template'

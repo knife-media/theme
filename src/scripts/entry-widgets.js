@@ -27,12 +27,36 @@
 
 
   /**
+   * Find post middle
+   */
+  var middle = Math.floor(post.children.length / 3);
+
+
+  /**
+   * Append title for widgets banner
+   */
+  for(var i = 0; i < widgets.children.length; i++) {
+    var widget = widgets.children[i];
+
+    if(widget.classList.contains('widget-banner')) {
+      var link = widget.querySelector('.widget-banner__link');
+
+      if(link.getAttribute('data-title')) {
+        var title = document.createElement('h4');
+
+        title.classList.add('widget-banner__title');
+        title.textContent = link.getAttribute('data-title');
+        widget.insertBefore(title, widget.firstChild);
+      }
+    }
+  }
+
+
+  /**
    * Try to move first widget to content middle
    */
-  var middle = Math.floor(post.children.length / 2);
-
   if(post.children.length > 8) {
-    var allowed = ['p', 'ul', 'ol', 'blockquote'];
+    var allowed = ['p', 'blockquote'];
 
     for(var i = middle; i < post.children.length; i++) {
       var relative = post.children[i];
@@ -53,13 +77,12 @@
         continue;
       }
 
+      // Create figure
       var figure = document.createElement('figure');
-
       figure.classList.add('figure', 'figure--widget');
       figure.appendChild(widgets.firstElementChild);
 
       post.insertBefore(figure, relative);
-
       break;
     }
   }

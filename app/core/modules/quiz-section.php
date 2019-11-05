@@ -157,7 +157,7 @@ class Knife_Quiz_Section {
             'show_in_admin_bar'     => true,
             'show_in_nav_menus'     => true,
             'can_export'            => true,
-            'has_archive'           => false,
+            'has_archive'           => true,
             'publicly_queryable'    => true
         ]);
     }
@@ -300,7 +300,7 @@ class Knife_Quiz_Section {
         }
 
         // Is in archive
-        foreach(['tag', 'category', 'author', 'date', 'home'] as $archive) {
+        foreach(['tag', 'category', 'author', 'date', 'home', 'tax'] as $archive) {
             $method = 'is_' . $archive;
 
             if($query->$method()) {
@@ -508,7 +508,7 @@ class Knife_Quiz_Section {
                     }
 
                     // Add blank and rel attributes to answer
-                    $answer = wp_targeted_link_rel(links_add_target($answer));
+                    $answer['message'] = wp_targeted_link_rel(links_add_target($answer['message']));
                 }
             }
 

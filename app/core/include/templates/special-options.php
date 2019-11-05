@@ -4,15 +4,15 @@
 
 <tr class="form-field hide-if-no-js">
     <th scope="row" valign="top">
-        <label><?php _e('Цвет фона шапки', 'knife-theme') ?></label>
+        <label><?php _e('Цвет шапки в архиве', 'knife-theme') ?></label>
     </th>
 
     <td>
-        <div class="knife-special-background">
+        <div class="knife-special-color">
             <?php
-                printf('<input type="text" name="%s[background]" value="%s">',
+                printf('<input type="text" name="%s[archive]" value="%s">',
                     esc_attr(self::$term_meta),
-                    sanitize_text_field($meta['background'] ?? '')
+                    sanitize_text_field($meta['archive'] ?? '')
                 );
             ?>
         </div>
@@ -21,15 +21,15 @@
 
 <tr class="form-field hide-if-no-js">
     <th scope="row" valign="top">
-        <label><?php _e('Цвет текста шапки', 'knife-theme') ?></label>
+        <label><?php _e('Цвет шапки записи', 'knife-theme') ?></label>
     </th>
 
     <td>
         <div class="knife-special-color">
             <?php
-                printf('<input type="text" name="%s[color]" value="%s">',
+                printf('<input type="text" name="%s[single]" value="%s">',
                     esc_attr(self::$term_meta),
-                    sanitize_hex_color($meta['color'] ?? '')
+                    sanitize_text_field($meta['single'] ?? '')
                 );
             ?>
         </div>

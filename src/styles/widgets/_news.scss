@@ -4,9 +4,10 @@
   justify-content: space-between;
   position: relative;
 
-  width: 100%;
+  width: calc(100% - 2rem);
   max-width: $width-site - 2rem;
-  margin: 0 1rem;
+
+  margin: 0 auto;
 
   .widget-news__inner {
     display: block;
@@ -35,13 +36,9 @@
     z-index: 1;
 
     height: 100%;
-    padding: 1.25rem;
+    padding: 1rem;
 
     background-color: $color-white;
-
-    @media screen and (max-width: 1023px) {
-      padding: 1rem;
-    }
   }
 
   .widget-news__content-link {
@@ -85,8 +82,6 @@
 
   .widget-news__content-info {
     display: block;
-
-    width: 100%;
     margin-top: 1rem;
 
     .meta {
@@ -117,6 +112,7 @@
   }
 
   @media screen and (max-width: 479px) {
-    margin: .5rem 0 0;
+    width: 100%;
+    margin: .5rem auto 0;
   }
 }
