@@ -8,6 +8,7 @@
 
 $poster = new ImageText();
 $poster->setDimensionsFromImage($image)->draw($image);
+$poster->setOutput('jpg');
 $poster->crop(1200, 630, true);
 
 
@@ -33,7 +34,7 @@ if(!empty($textbox['heading'])) {
     $poster->text([
         'text' => mb_strtoupper($textbox['heading']),
         'x' => 40, 'y' => 290, 'width' => 950, 'height' => 250,
-        'lineHeight' => 1.075, 'fontSize' => 42, 'fontColor' => [253, 8, 64]
+        'lineHeight' => 1, 'fontSize' => 42, 'fontColor' => [253, 8, 64]
     ]);
 }
 

@@ -1,14 +1,13 @@
 <?php
 /**
- * Long entry title template
+ * Short entry title template
  *
- * Poster name: Длинный заголовок записи
+ * Poster name: Заголовок справа от лого
  * Target: quiz
  */
 
 $poster = new ImageText();
 $poster->setDimensionsFromImage($image)->draw($image);
-$poster->setOutput('jpg');
 $poster->crop(1200, 630, true);
 
 
@@ -26,30 +25,23 @@ $poster->draw(get_template_directory() . '/assets/images/logo-title.png', 40, 40
 $poster->setFont(get_template_directory() . '/assets/fonts/formular/formular-medium.ttf');
 
 
+// Draw  title vertical line
+$poster->rectangle(190, 40, 2, 45, [255, 255, 255]);
+
 // Draw post title
 if(!empty($textbox['title'])) {
     $poster->text([
         'text' => $textbox['title'],
-        'x' => 40, 'y' => 180, 'width' => 800, 'height' => 45,
+        'x' => 220, 'y' => 40, 'width' => 800, 'height' => 45,
         'fontSize' => 24, 'lineHeight' => 1, 'verticalAlign' => 'center'
-    ], $boundary);
-
-    // Draw  title vertical line
-    $poster->rectangle(40, $boundary['height'] + 210, 950, 2, [255, 255, 255]);
+    ]);
 }
-
 
 // Draw heading
 if(!empty($textbox['heading'])) {
-    $y = 245;
-
-    if(isset($boundary['height'])) {
-        $y = $y + $boundary['height'];
-    }
-
     $poster->text([
         'text' => $textbox['heading'],
-        'x' => 40, 'y' => $y, 'width' => 950, 'height' => 160,
+        'x' => 40, 'y' => 240, 'width' => 950, 'height' => 160,
         'fontSize' => 38, 'lineHeight' => 1.25
     ], $boundary);
 }
@@ -57,7 +49,7 @@ if(!empty($textbox['heading'])) {
 
 // Draw description
 if(!empty($textbox['description'])) {
-    $y = 265;
+    $y = 270;
 
     if(isset($boundary['height'])) {
         $y = $y + $boundary['height'];

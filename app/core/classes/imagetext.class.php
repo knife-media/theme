@@ -288,9 +288,13 @@ class ImageText
 
         $info = new \stdClass();
 
+        if(!is_readable($file)) {
+            return false;
+        }
+
         list($width, $height, $type) = getimagesize($file);
 
-        switch($type){
+        switch($type) {
             case IMAGETYPE_GIF:
                 if ($returnResource) {
                     $info->resource = imagecreatefromgif($file);
@@ -318,14 +322,14 @@ class ImageText
 
         $info->type = $type;
 
-		if($this->type === null){
-			$this->type = $type;
+        if($this->type === null) {
+            $this->type = $type;
         }
 
-		$info->width = $width;
+        $info->width = $width;
         $info->height = $height;
 
-		return $info;
+        return $info;
     }
 
     /**
@@ -748,6 +752,7 @@ class ImageText
 
         $options = array_merge($defaults, $options);
 
+
         // Wrap text and find font size
         $options = $this->fitTobounds($options);
 
@@ -761,7 +766,7 @@ class ImageText
         $lines = explode("\n", $text);
 
         $fontHeight = $this->getFontHeight($fontSize, $angle, $fontFile, $lines);
-        $textHeight = $fontHeight * $this->lineHeight;
+        $textHeight = $fontHeight * $lineHeight;
 
         foreach ($lines as $index => $line) {
             $offsetx = 0;

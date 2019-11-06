@@ -8,6 +8,7 @@
 
 $poster = new ImageText();
 $poster->setDimensionsFromImage($image)->draw($image);
+$poster->setOutput('jpg');
 $poster->crop(1200, 630, true);
 
 
