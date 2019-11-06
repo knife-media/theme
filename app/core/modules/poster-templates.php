@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.7
- * @version 1.10
+ * @version 1.11
  */
 
 if (!defined('WPINC')) {
@@ -119,7 +119,7 @@ class Knife_Poster_Templates {
 
         // Append required PHPImage class
         if(!class_exists('PHPImage')) {
-            require(get_template_directory() . '/core/classes/phpimage.class.php');
+            require(get_template_directory() . '/core/classes/imagetext.class.php');
         }
 
         $upload = wp_upload_dir();

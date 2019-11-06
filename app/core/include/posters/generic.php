@@ -6,9 +6,9 @@
  * Target: quiz
  */
 
-$poster = new PHPImage();
+$poster = new ImageText();
 $poster->setDimensionsFromImage($image)->draw($image);
-$poster->resize(1200, 630, true, true);
+$poster->crop(1200, 630, true);
 
 
 // Change brightness and contrast
@@ -22,39 +22,43 @@ $poster->setResource($filter);
 $poster->draw(get_template_directory() . '/assets/images/logo-title.png', 40, 40);
 
 // Set font settings
-$poster->setAlignVertical('center');
 $poster->setFont(get_template_directory() . '/assets/fonts/formular/formular-medium.ttf');
-$poster->setLineHeight(1);
 
 
 // Draw  title vertical line
 $poster->rectangle(190, 40, 2, 45, [255, 255, 255]);
 
-
 // Draw post title
 if(!empty($textbox['title'])) {
-    $poster->textBox($textbox['title'], [
-        'x' => 220, 'y' => 42, 'width' => 800, 'height' => 45, 'fontSize' => 24
+    $poster->text([
+        'text' => $textbox['title'],
+        'x' => 220, 'y' => 42, 'width' => 800, 'height' => 45,
+        'fontSize' => 24, 'lineHeight' => 1
     ]);
 }
 
-$poster->setAlignVertical('top');
-$poster->setLineHeight(1.25);
-
-
 // Draw heading
 if(!empty($textbox['heading'])) {
-    $poster->setLineHeight(1.125);
-    $poster->textBox($textbox['heading'], [
-        'x' => 40, 'y' => 200, 'width' => 950, 'height' => 140, 'fontSize' => 42
-    ]);
+    $poster->text([
+        'text' => $textbox['heading'],
+        'x' => 40, 'y' => 240, 'width' => 950, 'height' => 160,
+        'fontSize' => 38, 'lineHeight' => 1.125
+    ], $boundary);
 }
 
 
 // Draw description
 if(!empty($textbox['description'])) {
-    $poster->textBox($textbox['description'], [
-        'x' => 40, 'y' => 445, 'width' => 950, 'height' => 200, 'fontSize' => 24
+    $y = 270;
+
+    if(isset($boundary['height'])) {
+        $y = $y + $boundary['height'];
+    }
+
+    $poster->text([
+        'text' => $textbox['description'],
+        'x' => 40, 'y' => $y, 'width' => 950, 'height' => 200,
+        'fontSize' => 24, 'lineHeight' => 1.125
     ]);
 }
 

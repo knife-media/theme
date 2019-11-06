@@ -6,9 +6,9 @@
  * Target: social
  */
 
-$poster = new PHPImage();
+$poster = new ImageText();
 $poster->setDimensionsFromImage($image)->draw($image);
-$poster->resize(1200, 630, true, true);
+$poster->crop(1200, 630, true);
 
 
 // Change brightness and contrast
@@ -25,11 +25,12 @@ $poster->draw(get_template_directory() . '/assets/images/logo-title.png', 40, 40
 // Draw title
 $poster->setAlignVertical('center');
 $poster->setFont(get_template_directory() . '/assets/fonts/formular/formular-medium.ttf');
-$poster->setLineHeight(1.125);
 
 if(!empty($textbox['title'])) {
-    $poster->textBox($textbox['title'], [
-        'x' => 40, 'y' => 140, 'width' => 1000, 'height' => 350, 'fontSize' => 36
+    $poster->text([
+        'text' => $textbox['title'],
+        'x' => 40, 'y' => 140, 'width' => 1000, 'height' => 350,
+        'fontSize' => 36, 'lineHeight' => 1.125
     ]);
 }
 
