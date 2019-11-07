@@ -2,7 +2,7 @@
 /**
  * Short entry title template
  *
- * Poster name: Заголовок справа от лого
+ * Poster name: Большое описание результата
  * Target: quiz
  */
 
@@ -42,7 +42,7 @@ if(!empty($textbox['title'])) {
 if(!empty($textbox['heading'])) {
     $poster->text([
         'text' => $textbox['heading'],
-        'x' => 40, 'y' => 240, 'width' => 950, 'height' => 140,
+        'x' => 40, 'y' => 190, 'width' => 950, 'height' => 140,
         'fontSize' => 38, 'lineHeight' => 1.5
     ], $boundary);
 }
@@ -50,7 +50,7 @@ if(!empty($textbox['heading'])) {
 
 // Draw description
 if(!empty($textbox['description'])) {
-    $y = 270;
+    $y = 220;
 
     if(isset($boundary['height'])) {
         $y = $y + $boundary['height'];
