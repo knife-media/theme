@@ -371,10 +371,20 @@ jQuery(document).ready(function($) {
       return alert(knife_quiz_metabox.error);
     }
 
+    // Create custom state
+    var state = wp.media.controller.Library.extend({
+      defaults: _.defaults({
+        filterable: 'all',
+      }, wp.media.controller.Library.prototype.defaults)
+    });
+
     // Open default wp.media image frame
     var frame = wp.media({
       title: knife_quiz_metabox.choose,
-      multiple: false
+      multiple: false,
+      states: [
+        new state()
+      ]
     });
 
     // On image select

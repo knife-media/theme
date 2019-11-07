@@ -160,10 +160,21 @@ jQuery(document).ready(function($) {
 
     var poster = $(this);
 
+    // Create custom state
+    var state = wp.media.controller.Library.extend({
+      defaults: _.defaults({
+        filterable: 'all',
+      }, wp.media.controller.Library.prototype.defaults)
+    });
+
+
     // Open default wp.media image frame
     var frame = wp.media({
       title: knife_generator_metabox.choose,
-      multiple: false
+      multiple: false,
+      states: [
+        new state()
+      ]
     });
 
 
