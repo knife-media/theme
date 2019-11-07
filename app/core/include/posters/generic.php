@@ -31,7 +31,7 @@ if(!empty($textbox['title'])) {
     $poster->text([
         'text' => $textbox['title'],
         'x' => 40, 'y' => 180, 'width' => 800, 'height' => 45,
-        'fontSize' => 24, 'lineHeight' => 1, 'verticalAlign' => 'center'
+        'fontSize' => 24, 'lineHeight' => 1.5, 'verticalAlign' => 'center'
     ], $boundary);
 
     // Draw  title vertical line
@@ -49,8 +49,8 @@ if(!empty($textbox['heading'])) {
 
     $poster->text([
         'text' => $textbox['heading'],
-        'x' => 40, 'y' => $y, 'width' => 950, 'height' => 160,
-        'fontSize' => 38, 'lineHeight' => 1.25
+        'x' => 40, 'y' => $y, 'width' => 950, 'height' => 140,
+        'fontSize' => 38, 'lineHeight' => 1.5
     ], $boundary);
 }
 
@@ -65,8 +65,8 @@ if(!empty($textbox['description'])) {
 
     $poster->text([
         'text' => $textbox['description'],
-        'x' => 40, 'y' => $y, 'width' => 950, 'height' => 200,
-        'fontSize' => 24, 'lineHeight' => 1.25
+        'x' => 40, 'y' => $y, 'width' => 950, 'height' => 140,
+        'fontSize' => 24, 'lineHeight' => 1.5
     ]);
 }
 

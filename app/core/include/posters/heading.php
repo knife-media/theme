@@ -1,8 +1,8 @@
 <?php
 /**
- * Short entry title template
+ * Less description template
  *
- * Poster name: Заголовок справа от лого
+ * Poster name: Постер без описания
  * Target: quiz
  */
 
@@ -42,26 +42,9 @@ if(!empty($textbox['title'])) {
 if(!empty($textbox['heading'])) {
     $poster->text([
         'text' => $textbox['heading'],
-        'x' => 40, 'y' => 240, 'width' => 950, 'height' => 140,
-        'fontSize' => 38, 'lineHeight' => 1.5
+        'x' => 40, 'y' => 140, 'width' => 950, 'height' => 400,
+        'alignVertical' => 'center', 'fontSize' => 52, 'lineHeight' => 1.375
     ], $boundary);
-}
-
-
-// Draw description
-if(!empty($textbox['description'])) {
-    $y = 270;
-    $height = 160;
-
-    if(isset($boundary['height'])) {
-        $y = $y + $boundary['height'];
-    }
-
-    $poster->text([
-        'text' => $textbox['description'],
-        'x' => 40, 'y' => $y, 'width' => 950, 'height' => 580 - $y,
-        'fontSize' => 24, 'lineHeight' => 1.5
-    ]);
 }
 
 

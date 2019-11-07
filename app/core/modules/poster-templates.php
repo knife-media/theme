@@ -117,9 +117,9 @@ class Knife_Poster_Templates {
             return new WP_Error('prepare', __('Не удалось найти вложение', 'knife-theme'));
         }
 
-        // Append required PHPImage class
-        if(!class_exists('PHPImage')) {
-            require(get_template_directory() . '/core/classes/imagetext.class.php');
+        // Append required ImageText class
+        if(!class_exists('ImageText')) {
+            require_once(get_template_directory() . '/core/classes/imagetext.class.php');
         }
 
         $upload = wp_upload_dir();
