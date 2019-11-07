@@ -30,7 +30,7 @@ $poster->setFont(get_template_directory() . '/assets/fonts/formular/formular-med
 if(!empty($textbox['title'])) {
     $poster->text([
         'text' => $textbox['title'],
-        'x' => 40, 'y' => 180, 'width' => 800, 'height' => 45,
+        'x' => 40, 'y' => 180, 'width' => 800, 'height' => 60,
         'fontSize' => 24, 'lineHeight' => 1.5, 'verticalAlign' => 'center'
     ], $boundary);
 
