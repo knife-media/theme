@@ -12,6 +12,25 @@
 
 
 /**
+ * HP promo
+ * Append link to similar posts via query variable
+ */
+add_action('wp_enqueue_scripts', function() {
+    if(is_singular('post')) {
+        $similar_promo = get_query_var('similar_promo', []);
+
+        $similar_promo[] = [
+            'title' => 'Пройди тест и выиграй поездку в Амстердам от HP',
+            'link' => 'https://knf.md/beyourself-more/',
+            'promo' => 1
+        ];
+
+        set_query_var('similar_promo', $similar_promo);
+    }
+}, 9);
+
+
+/**
  * Honor 9x promo
  * Append link to similar posts via query variable
  */
