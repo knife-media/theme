@@ -259,9 +259,15 @@
    * Show quiz item by index
    */
   function showItem(item, index, total) {
-    // Scroll to quiz parent
-    quiz.parentNode.scrollIntoView({block: 'start', behavior: 'smooth'});
+    // Scroll to quiz top
+    var rect = quiz.getBoundingClientRect();
 
+    // Get quiz offset
+    var offset = rect.top + window.pageYOffset || document.documentElement.scrollTop;
+
+    window.scroll({top: offset - 76, behavior: 'smooth'});
+
+    // Set quiz content
     var content = quiz.querySelector('.entry-quiz__content');
     if(item.hasOwnProperty('question')) {
       content.innerHTML = item.question;
