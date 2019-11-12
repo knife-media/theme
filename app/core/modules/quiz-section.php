@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.7
- * @version 1.9
+ * @version 1.11
  */
 
 if (!defined('WPINC')) {
@@ -122,6 +122,9 @@ class Knife_Quiz_Section {
 
         // Add quiz post type to archives
         add_action('pre_get_posts', [__CLASS__, 'update_archives'], 12);
+
+        // Redirect old quiz posts
+        add_action('template_redirect', [__CLASS__, 'redirect_old_quiz']);
     }
 
 
@@ -160,6 +163,26 @@ class Knife_Quiz_Section {
             'has_archive'           => true,
             'publicly_queryable'    => true
         ]);
+    }
+
+
+    /**
+     * Redirect old quiz posts to new post type if slug exists
+     *
+     * @since 1.11
+     */
+    public static function redirect_old_quiz() {
+        if(is_404()) {
+            $slug = get_query_var('name');
+
+            // Try to find quiz with certain slug
+            $page = get_page_by_path($slug, OBJECT, self::$post_type);
+
+            if(isset($page->ID)) {
+                wp_redirect(get_permalink($page->ID), 301);
+                exit;
+            }
+        }
     }
 
 
