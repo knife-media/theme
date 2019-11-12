@@ -31,7 +31,7 @@ if(!empty($textbox['title'])) {
     $poster->text([
         'text' => $textbox['title'],
         'x' => 40, 'y' => 140, 'width' => 1000, 'height' => 350,
-        'fontSize' => 36, 'lineHeight' => 1.125
+        'fontSize' => 36, 'lineHeight' => 1.5
     ]);
 }
 

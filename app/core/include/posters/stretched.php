@@ -1,6 +1,6 @@
 <?php
 /**
- * Short entry title template
+ * Large entry title template
  *
  * Poster name: Большое описание результата
  * Target: quiz
