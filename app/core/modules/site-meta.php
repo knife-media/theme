@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.5
- * @version 1.10
+ * @version 1.11
  */
 
 
@@ -309,7 +309,7 @@ class Knife_Site_Meta {
      */
     public static function add_twitter_tags() {
         $meta = [
-            '<meta name="twitter:card" content="summary">',
+            '<meta name="twitter:card" content="summary_large_image">',
             '<meta name="twitter:site" content="@knife_media">'
         ];
 
