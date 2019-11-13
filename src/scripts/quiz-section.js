@@ -259,11 +259,8 @@
    * Show quiz item by index
    */
   function showItem(item, index, total) {
-    // Scroll to quiz top
-    var rect = quiz.getBoundingClientRect();
-
     // Get quiz offset
-    var offset = rect.top + window.pageYOffset || document.documentElement.scrollTop;
+    var offset = quiz.getBoundingClientRect().top + window.pageYOffset;
 
     window.scroll({top: offset - 76, behavior: 'smooth'});
 
@@ -291,9 +288,12 @@
    * Show results
    */
   function showResult(result, hold) {
-    // Scroll to quiz parent
-    quiz.parentNode.scrollIntoView({block: 'start', behavior: 'smooth'});
+    // Get quiz offset
+    var offset = quiz.getBoundingClientRect().top + window.pageYOffset;
 
+    window.scroll({top: offset - 76, behavior: 'smooth'});
+
+    // Set quiz results
     if(result.hasOwnProperty('poster')) {
       var poster = document.createElement('img');
 
