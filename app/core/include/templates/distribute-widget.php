@@ -64,10 +64,10 @@
                         <span class="dashicons dashicons-clock"></span>
 
                         <?php
-                            $date = date('Y-m-d H:i:is', $timestamp);
+                            $timestamp = date('Y-m-d H:i:s', $timestamp);
 
                             printf('<strong>%s</strong>',
-                                get_date_from_gmt($date, 'd.m.Y H:i')
+                                get_date_from_gmt($timestamp, 'd.m.Y G:i')
                             );
 
                             printf('<a href="%s" target="_blank">%s</a>',
