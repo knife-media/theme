@@ -18,6 +18,7 @@
       title: 'Добавить аннотацию',
       onclick: function() {
         var node = editor.selection.getNode();
+        var $ = jQuery;
 
         editor.windowManager.open({
           title: 'Вставить аннотацию',

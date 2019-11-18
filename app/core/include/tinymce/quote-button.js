@@ -4,6 +4,8 @@
       icon: 'blockquote',
       title: 'Добавить цитату',
       onclick: function() {
+        var $ = jQuery;
+
         var fromElement = $(editor.selection.getStart());
         var lastElement = $(editor.selection.getEnd());
 

@@ -9,11 +9,11 @@
       editor.on('NodeChange', function (e) {
         // Check if manipulate with figure
         if (e.element.nodeName.toLowerCase() === 'figure') {
-          var content = $(editor.contentDocument);
+          var content = jQuery(editor.contentDocument);
 
           // Remove all empty figures
           content.find('figure').each(function(i, item) {
-            var figure = $(item);
+            var figure = jQuery(item);
 
             if (figure.children(':not(br)').length < 1) {
               figure.remove();
