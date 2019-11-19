@@ -56,6 +56,8 @@ body {
 
       &:before {
         content: '';
+        cursor: default;
+
         @include full-size(4);
         background-color: rgba($color-black, .75);
       }
