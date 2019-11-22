@@ -4,6 +4,7 @@
  *
  * @package knife-theme
  * @since 1.10
+ * @version 1.11
  */
 
 if (!defined('WPINC')) {
@@ -89,9 +90,11 @@ class Knife_Content_Filters {
 
     /**
      * Remove span from content
+     *
+     * Skip reference spans with data-body
      */
     public static function remove_span($content) {
-        return preg_replace('~<span.*?>(.*?)</span>~is', '$1', $content);
+        return preg_replace('~<span(?!\s+data-body).*?>(.*?)</span>~is', '$1', $content);
     }
 }
 
