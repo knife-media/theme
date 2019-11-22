@@ -103,7 +103,7 @@ class Knife_Widget_Informer extends WP_Widget {
             '<p><input type="checkbox" id="%1$s" name="%2$s" class="checkbox"%4$s><label for="%1$s">%3$s</label></p>',
             esc_attr($this->get_field_id('promo')),
             esc_attr($this->get_field_name('promo')),
-            __('Партнерский материал:', 'knife-theme'),
+            __('Партнерский материал', 'knife-theme'),
             checked($instance['promo'], 1, false)
         );
 
@@ -116,7 +116,7 @@ class Knife_Widget_Informer extends WP_Widget {
         );
 
         printf(
-            '<p><label for="%1$s">%3$s</label><input class="color-picker" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
+            '<p><label for="%1$s">%3$s</label><br><input class="color-picker" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
             esc_attr($this->get_field_id('color')),
             esc_attr($this->get_field_name('color')),
             __('Цвет фона:', 'knife-theme'),

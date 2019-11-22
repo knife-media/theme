@@ -33,26 +33,6 @@
 
 
   /**
-   * Append title for widgets banner
-   */
-  for(var i = 0; i < widgets.children.length; i++) {
-    var widget = widgets.children[i];
-
-    if(widget.classList.contains('widget-banner')) {
-      var link = widget.querySelector('.widget-banner__link');
-
-      if(link.getAttribute('data-title')) {
-        var title = document.createElement('h4');
-
-        title.classList.add('widget-banner__title');
-        title.textContent = link.getAttribute('data-title');
-        widget.insertBefore(title, widget.firstChild);
-      }
-    }
-  }
-
-
-  /**
    * Try to move first widget to content middle
    */
   if(post.children.length > 8) {

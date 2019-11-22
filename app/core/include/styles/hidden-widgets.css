@@ -75,8 +75,10 @@
 }
 
 .wp-core-ui .button.display-options {
+  display: inline-flex;
+  align-items: center;
+
   margin-right: 5px;
-  padding-top: 3px;
   color: #777;
   text-decoration: none;
 }
