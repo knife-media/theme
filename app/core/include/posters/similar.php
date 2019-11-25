@@ -1,8 +1,8 @@
 <?php
 /**
- * Short entry title template
+ * Increase description and title font size
  *
- * Poster name: Заголовок справа от лого
+ * Poster name: Крупный шрифт описания
  * Target: quiz
  */
 
@@ -42,15 +42,15 @@ if(!empty($textbox['title'])) {
 if(!empty($textbox['heading'])) {
     $poster->text([
         'text' => $textbox['heading'],
-        'x' => 40, 'y' => 240, 'width' => 950, 'height' => 140,
-        'fontSize' => 36, 'lineHeight' => 1.75
+        'x' => 40, 'y' => 220, 'width' => 950, 'height' => 140,
+        'fontSize' => 46, 'lineHeight' => 1.5
     ], $boundary);
 }
 
 
 // Draw description
 if(!empty($textbox['description'])) {
-    $y = 270;
+    $y = 250;
 
     if(isset($boundary['height'])) {
         $y = $y + $boundary['height'];
@@ -59,7 +59,7 @@ if(!empty($textbox['description'])) {
     $poster->text([
         'text' => $textbox['description'],
         'x' => 40, 'y' => $y, 'width' => 950, 'height' => 580 - $y,
-        'fontSize' => 24, 'lineHeight' => 1.5
+        'fontSize' => 36, 'lineHeight' => 1.625
     ]);
 }
 
