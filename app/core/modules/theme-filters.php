@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.10
+ * @version 1.11
  */
 
 if (!defined('WPINC')) {
@@ -63,6 +63,13 @@ class Knife_Theme_Filters {
 
         add_filter('wp_mail_from', function($email) {
             return "no-reply@knife.media";
+        });
+
+        // We don't need jquery in frontend now
+        add_action('wp_default_scripts', function($scripts) {
+            if(!is_admin()) {
+                $scripts->remove('jquery');
+            }
         });
     }
 
