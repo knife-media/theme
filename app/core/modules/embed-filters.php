@@ -46,7 +46,10 @@ class Knife_Embed_Filters {
         add_filter('pre_oembed_result', [__CLASS__, 'update_vimeo_embed'], 10, 2);
 
         // Replace custom video preloaders in feeds
-        add_filter('the_content_feed', [__CLASS__, 'replace_embeds'], 5);
+        add_filter('the_content_feed', [__CLASS__, 'replace_feed_embeds'], 5);
+
+        // Replace script figure
+        add_filter('the_content', [__CLASS__ , 'replace_script_embeds'], 12);
     }
 
 
@@ -62,6 +65,33 @@ class Knife_Embed_Filters {
         ];
 
         return $defaults;
+    }
+
+
+    /**
+     * Replace content script figure
+     *
+     * @since 1.11
+     */
+    public static function replace_script_embeds($content) {
+        if(strpos($content, 'figure--script') !== false) {
+            $regexp = '~<figure[^>]+data-script="([^"]+)"[^>]*>(.*?)</figure>~is';
+
+            $content = preg_replace_callback($regexp, function($matches) {
+                $figure = $matches[0];
+
+                if(isset($matches[1])) {
+                    $script = html_entity_decode($matches[1], ENT_QUOTES);
+
+                    // Create new figure
+                    $figure = '<figure class="figure figure--script">' . $script  . '</figure>';
+                }
+
+                return $figure;
+            }, $content);
+        }
+
+        return $content;
     }
 
 
@@ -236,7 +266,7 @@ class Knife_Embed_Filters {
      *
      * @since 1.5
      */
-    public static function replace_embeds($content) {
+    public static function replace_feed_embeds($content) {
         $content = preg_replace(
             '~<div class="embed\s.+?"\s+data-embed="([^"]+)".+?</div>~is',
             '<iframe src="$1" frameborder="0"></iframe>',

@@ -71,6 +71,10 @@
     }
   }
 
+  &.figure--script {
+    width: $width-content;
+  }
+
   &.figure--quote {
     width: $width-content + 1rem;
     margin-top: 0;

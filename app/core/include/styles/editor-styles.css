@@ -88,3 +88,15 @@ span[data-body] {
   background-position: center;
   background-size: 10px auto;
 }
+
+.mce-content-body img[data-wp-script] {
+  width: 640px;
+  max-width: 100%;
+  height: 30px;
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDUxMiA1MTIiIGZpbGw9IiM1NTVkNjYiPjxwYXRoIGQ9Ik0yODggMzY4bDQ4IDQ4IDE2MC0xNjAtMTYwLTE2MC00OCA0OCAxMTIgMTEyeiI+PC9wYXRoPjxwYXRoIGQ9Ik0yMjQgMTQ0bC00OC00OC0xNjAgMTYwIDE2MCAxNjAgNDgtNDgtMTEyLTExMnoiPjwvcGF0aD48L3N2Zz4=');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 20px auto;
+  background-color: #f3f3f3;
+  border: solid 1px #ddd;
+}
