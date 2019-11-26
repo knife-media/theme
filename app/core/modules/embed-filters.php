@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.2
- * @version 1.9
+ * @version 1.11
  */
 
 if (!defined('WPINC')) {
@@ -23,13 +23,21 @@ class Knife_Embed_Filters {
     public static function load_module() {
         // Common filters
         add_filter('embed_defaults', [__CLASS__, 'set_defaults']);
+
+        // Wrap all embeds
         add_filter('embed_oembed_html', [__CLASS__, 'append_markup'], 12, 3);
+
+        // Fix Yandex.Music iframe size
+        add_filter('embed_oembed_html', [__CLASS__, 'fix_yandex_embed'], 10, 3);
 
         // Instagram update
         add_filter('oembed_providers', [__CLASS__, 'hide_instagram_caption']);
 
         // Twitter update
         add_filter('oembed_providers', [__CLASS__, 'hide_twitter_thread']);
+
+        // Add Yandex.Music to whitelisted provider
+        add_filter('oembed_providers', [__CLASS__, 'whitelist_yandex_music']);
 
         // YouTube preloader
         add_filter('pre_oembed_result', [__CLASS__, 'update_youtube_embed'], 10, 2);
@@ -72,10 +80,23 @@ class Knife_Embed_Filters {
 
 
     /**
+     * Add Yandex.Music to whitelisted provider
+     *
+     * @link https://github.com/WordPress/WordPress/blob/8e9c4a116a1644f4a80f16c1d255fbb6140641a2/wp-includes/class-wp-oembed.php#L132
+     * @since 1.11
+     */
+    public static function whitelist_yandex_music($providers) {
+        $providers['#https?://music.yandex.ru.*#i'] = ['', true];
+
+        return $providers;
+    }
+
+
+    /**
      * Remove instagram embeds caption
      */
     public static function hide_instagram_caption($providers) {
-        $providers['#https?://(www\.)?instagr(\.am|am\.com)/(p|tv)/.*#i'] = array('https://api.instagram.com/oembed?hidecaption=true', true);
+        $providers['#https?://(www\.)?instagr(\.am|am\.com)/(p|tv)/.*#i'] = ['https://api.instagram.com/oembed?hidecaption=true', true];
 
         return $providers;
     }
@@ -87,9 +108,36 @@ class Knife_Embed_Filters {
      * @version 1.9
      */
     public static function hide_twitter_thread($providers) {
-        $providers['#https?://(www\.)?twitter\.com/\w{1,15}/status(es)?/.*#i'] = array('https://publish.twitter.com/oembed?hide_thread=true', true);
+        $providers['#https?://(www\.)?twitter\.com/\w{1,15}/status(es)?/.*#i'] = ['https://publish.twitter.com/oembed?hide_thread=true', true];
 
         return $providers;
+    }
+
+
+    /**
+     * Update Yandex.Music iframe sizes
+     *
+     * @since 1.11
+     */
+    public static function fix_yandex_embed($html, $url, $attr) {
+        if(preg_match('#https?://music.yandex.ru.*#i', $url)) {
+            // Find iframe src and height
+            preg_match('~\s+src=["\'](.*?)["\'].+?\s+height=["\'](.*?)["\']~i', $html, $match);
+
+            if(isset($match[1], $match[2])) {
+                $height = min($match[2], $attr['height']);;
+
+                // Make style attr
+                $styles = "border:0; width:100%; height:{$height}px;";
+
+                // Create new iframe
+                $html = sprintf(
+                    '<iframe src="%s" style="%s"></iframe>', $match[1], $styles
+                );
+            }
+        }
+
+        return $html;
     }
 
 
@@ -99,7 +147,7 @@ class Knife_Embed_Filters {
      * @since 1.5
      */
     public static function update_youtube_embed($result, $url) {
-        if(preg_match('%(?:youtube\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $url, $match)) {
+        if(preg_match('#(?:youtube\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})#i', $url, $match)) {
             $preview = "https://img.youtube.com/vi/{$match[1]}/default.jpg";
 
             foreach(['maxresdefault', 'hqdefault', 'mqdefault'] as $size) {
@@ -149,7 +197,7 @@ class Knife_Embed_Filters {
      * @since 1.5
      */
     public static function update_vimeo_embed($result, $url) {
-        if(preg_match('%https?://(?:.+\.)?vimeo\.com/(?:video/)?([\d]+).*%i', $url, $match)) {
+        if(preg_match('#https?://(?:.+\.)?vimeo\.com/(?:video/)?([\d]+).*#i', $url, $match)) {
             $request = wp_remote_get("https://vimeo.com/api/v2/video/{$match[1]}.json");
             $preview = '';
 
