@@ -43,7 +43,7 @@ if(!empty($textbox['heading'])) {
     $poster->text([
         'text' => $textbox['heading'],
         'x' => 40, 'y' => 240, 'width' => 950, 'height' => 140,
-        'fontSize' => 36, 'lineHeight' => 1.75
+        'fontSize' => 36, 'lineHeight' => 1.5
     ], $boundary);
 }
 

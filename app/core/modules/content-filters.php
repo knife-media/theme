@@ -13,6 +13,14 @@ if (!defined('WPINC')) {
 
 class Knife_Content_Filters {
     /**
+     * Regular expression to filter script figure
+     *
+     * @since 1.11
+     */
+    private static $script_regex = '~<figure[^>]+data-script="([^"]+)"[^>]*>(.*?)</figure>~is';
+
+
+    /**
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public static function load_module() {
@@ -28,8 +36,14 @@ class Knife_Content_Filters {
         // Remove all spans from content
         add_filter('content_save_pre', [__CLASS__, 'remove_span']);
 
+        // Filter scripts for unprivileged users
+        add_filter('content_save_pre', [__CLASS__, 'filter_scripts']);
+
         // Replace card comment with entry-content
         add_filter('the_content', [__CLASS__, 'show_cards'], 5);
+
+        // Replace script figure
+        add_filter('the_content', [__CLASS__ , 'replace_scripts'], 12);
 
         // Disable embeds
         add_action('wp_enqueue_scripts', function() {
@@ -41,6 +55,49 @@ class Knife_Content_Filters {
             wp_dequeue_style('wp-block-library');
         }, 11);
     }
+
+
+    /**
+     * Filter content unsafed scripts
+     *
+     * @since 1.11
+     */
+    public static function filter_scripts($content) {
+        if(current_user_can('unfiltered_html')) {
+            return $content;
+        }
+
+        $content = preg_replace(self::$script_regex, '', wp_unslash($content));
+
+        return wp_slash($content);
+    }
+
+
+    /**
+     * Replace content script figure
+     *
+     * @since 1.11
+     */
+    public static function replace_scripts($content) {
+        if(strpos($content, 'figure--script') !== false) {
+            // Decode figure scrilt data
+            $content = preg_replace_callback(self::$script_regex, function($matches) {
+                $figure = $matches[0];
+
+                if(isset($matches[1])) {
+                    $script = html_entity_decode($matches[1], ENT_QUOTES);
+
+                    // Create new figure
+                    $figure = '<figure class="figure figure--script">' . $script  . '</figure>';
+                }
+
+                return $figure;
+            }, $content);
+        }
+
+        return $content;
+    }
+
 
 
     /**
