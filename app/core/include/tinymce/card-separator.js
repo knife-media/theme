@@ -18,23 +18,24 @@
     editor.on('BeforeSetContent', function(event) {
       event.content = event.content.replace( /<!--card-->/g,
           '<img src="' + tinymce.Env.transparentSrc + '" data-wp-more="card" class="wp-more-tag" ' +
-            'alt="" data-mce-resize="false" data-mce-placeholder="1" />' );
+          'alt="" data-mce-resize="false" data-mce-placeholder="1" />'
+      );
     });
 
-    // Rreplace hr tag with comment
+    // Replace hr tag with comment
     editor.on('PostProcess', function(event) {
       if(!event.get) {
         return;
       }
 
-      event.content = event.content.replace(/<img[^>]+>/g, function(hr) {
-        var string;
+      event.content = event.content.replace(/<img[^>]+>/g, function(image) {
+        var html;
 
-        if(hr.indexOf('data-wp-more="card"') !== -1) {
-          string = '<!--card-->';
+        if(image.indexOf('data-wp-more="card"') !== -1) {
+          html = '<!--card-->';
         }
 
-        return string || hr;
+        return html || image;
       });
     });
   });
