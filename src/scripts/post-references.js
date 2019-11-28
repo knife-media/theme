@@ -81,8 +81,7 @@
       target.setAttribute('data-active', true);
       body.classList.add('is-reference');
 
-      // Add listener to close popup
-      popup.addEventListener('click', function(e) {
+      function closePopup(e) {
         var source = e.target || e.srcElement;
 
         if(source === popup || source.classList.contains('reference__content-close')) {
@@ -91,7 +90,13 @@
           target.removeAttribute('data-active');
           body.classList.remove('is-reference');
         }
-      });
+      }
+
+      // Add click listener to close popup
+      popup.addEventListener('click', closePopup);
+
+      // Close popup on touchend
+      popup.addEventListener('touchend', closePopup);
     }
   });
 })();
