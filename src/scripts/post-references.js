@@ -2,31 +2,30 @@
  * Add post references popup
  *
  * @since 1.10
+ * @version 1.11
  */
 
 (function() {
   var post = document.querySelector('.post');
 
-
-  /**
-   * Check if post element exists
-   */
   if(post === null) {
     return false;
   }
+
+  var body = document.body;
 
 
   /**
    * Create reference popup
    */
-  function createPopup(body) {
+  function createPopup(html) {
     var popup = document.createElement('div');
     popup.classList.add('reference');
     popup.setAttribute('id', 'reference');
 
     var content = document.createElement('div');
     content.classList.add('reference__content');
-    content.innerHTML = body;
+    content.innerHTML = html;
     popup.appendChild(content);
 
     var button = document.createElement('button')
@@ -34,7 +33,7 @@
     content.appendChild(button);
 
     // Append reference popup to body
-    document.body.appendChild(popup);
+    body.appendChild(popup);
 
     return popup;
   }
@@ -80,7 +79,7 @@
 
       // Set active target styles
       target.setAttribute('data-active', true);
-      document.body.classList.add('is-reference');
+      body.classList.add('is-reference');
 
       // Add listener to close popup
       popup.addEventListener('click', function(e) {
@@ -90,7 +89,7 @@
           popup.parentNode.removeChild(popup);
 
           target.removeAttribute('data-active');
-          document.body.classList.remove('is-reference');
+          body.classList.remove('is-reference');
         }
       });
     }

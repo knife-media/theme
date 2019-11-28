@@ -6,6 +6,8 @@
     return false;
   }
 
+  var body = document.body;
+
 
   /**
    * Save body scrollTop here
@@ -36,11 +38,11 @@
   function clickOutside(e) {
     var source = e.target || e.srcElement;
 
-    if(source === document.body) {
+    if(source === body) {
       e.stopPropagation();
 
       // Remove events
-      document.body.removeEventListener('click', clickOutside);
+      body.removeEventListener('click', clickOutside);
 
       return toggle.click();
     }
@@ -52,8 +54,6 @@
    */
   toggle.addEventListener('click', function(e) {
     e.preventDefault();
-
-    var body = document.body;
 
     // Close search layer if opened
     if(body.classList.contains('is-search')) {
