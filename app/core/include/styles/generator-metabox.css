@@ -255,6 +255,7 @@
 #knife-generator-box .item__text-description textarea {
   display: block;
   flex: 1;
+  resize: none;
 
   width: 100%;
   min-height: 100px;

@@ -135,10 +135,6 @@ class Knife_Short_Manager {
      * Display management page
      */
     public static function display_management_page() {
-        if(!current_user_can('unfiltered_html')) {
-            wp_die(__('Извините, у вас нет доступа к этому инструменту', 'knife-theme'));
-        }
-
         $include = get_template_directory() . '/core/include';
 
         // Include Short Links table class
@@ -249,7 +245,7 @@ class Knife_Short_Manager {
             }
         }
 
-        return add_settings_error('knife-short-actions', 'append',
+        add_settings_error('knife-short-actions', 'append',
             __('Не удалось добавить ссылку', 'knife-theme')
         );
     }

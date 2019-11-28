@@ -1,0 +1,44 @@
+#knife-similar-options .form-field {
+  max-width: 500px;
+  margin-bottom: 40px;
+}
+
+#knife-similar-options .form-items .item {
+  display: block;
+  position: relative;
+
+  max-width: 800px;
+  margin-top: 15px;
+  padding: 15px 10px;
+  padding-right: 30px;
+  background: #fff;
+
+  border: solid 1px #ddd;
+  border-radius: 2px;
+}
+
+#knife-similar-options .form-items .item-title {
+  display: block;
+
+  font-size: 16px;
+  line-height: 1.375;
+}
+
+#knife-similar-options .form-items .item-link {
+  display: inline-block;
+
+  margin-top: 5px;
+}
+
+#knife-similar-options .form-items .item-delete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+
+  font-size: 16px;
+  color: #a00;
+}
