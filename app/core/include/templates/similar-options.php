@@ -49,8 +49,13 @@
 
                     $delete_link = add_query_arg($delete_args, $admin_url);
 
-                    printf('<a class="item-delete dashicons dashicons-trash" href="%s"></a>',
-                        esc_url(wp_nonce_url($delete_link, 'knife-similar-delete'))
+                    printf('<a class="item-delete dashicons dashicons-trash" href="%s" onclick="%s"></a>',
+                        esc_url(wp_nonce_url($delete_link, 'knife-similar-delete')),
+
+                        sprintf(
+                            "return confirm('%s')",
+                            __('Уверены, что хотите удалить ссылку?', 'knife-theme')
+                        )
                     );
                 ?>
             </div>
