@@ -23,7 +23,7 @@
         <button class="button remove right" type="button" disabled><?php _e('Удалить', 'knife-theme'); ?></button>
     </p>
 
-    <p style="margin-bottom: 0;">
+    <p>
         <select class="size" name="<?php echo esc_attr(self::$post_meta); ?>[size]" style="width: 100%;" disabled>
         <?php
             foreach($sizes as $name => $title) {
@@ -31,6 +31,21 @@
             }
         ?>
         </select>
+    </p>
+
+    <p style="margin-bottom: 0;">
+        <?php
+            printf(
+                '<label style="display:inline-block; margin-right:10px; padding-bottom: 5px;">%s</label>',
+                __('Цвет фона: ', 'knife-theme')
+            );
+
+            printf(
+                '<input class="color-picker" name="%s[color]" type="text" value="%s">',
+                esc_attr(self::$post_meta),
+                sanitize_text_field($background['color'] ?? ''),
+            );
+        ?>
     </p>
 
     <?php

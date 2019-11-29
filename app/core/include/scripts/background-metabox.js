@@ -15,6 +15,12 @@ jQuery(document).ready(function($) {
 
 
   /**
+   * Define text color input as colorpicker
+   */
+  box.find('.color-picker').wpColorPicker();
+
+
+  /**
    * Toggle background
    */
   function toggleBackground() {
