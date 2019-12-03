@@ -486,6 +486,18 @@ class Knife_Distribute_Control {
             $message['message'] = wp_specialchars_decode($item['excerpt']) . "\n\n" . esc_url($link);
         }
 
+        // Add promo hashtag
+        if(class_exists('Knife_Promo_Manager')) {
+            $meta_promo = Knife_Promo_Manager::$meta_promo;
+
+            if(get_post_meta($post_id, $meta_promo, true)) {
+                $hashtag = __('#партнерскийматериал', 'knife-theme');
+
+                // Append hashtag to message
+                $message['message'] = $message['message'] . "\n\n" . $hashtag;
+            }
+        }
+
         $poster = false;
 
         if(!empty($item['attachment'])) {
@@ -539,6 +551,18 @@ class Knife_Distribute_Control {
 
         if(!empty($item['excerpt'])) {
             $message['text'] = wp_specialchars_decode($item['excerpt']) . "\n\n" . esc_url($link);
+        }
+
+        // Add promo hashtag
+        if(class_exists('Knife_Promo_Manager')) {
+            $meta_promo = Knife_Promo_Manager::$meta_promo;
+
+            if(get_post_meta($post_id, $meta_promo, true)) {
+                $hashtag = __('#партнерскийматериал', 'knife-theme');
+
+                // Append hashtag to message
+                $message['text'] = $message['text'] . "\n\n" . $hashtag;
+            }
         }
 
         $poster = false;
@@ -597,6 +621,18 @@ class Knife_Distribute_Control {
             $message['message'] = wp_specialchars_decode($item['excerpt']) . "\n\n" . esc_url($link);
         }
 
+        // Add promo hashtag
+        if(class_exists('Knife_Promo_Manager')) {
+            $meta_promo = Knife_Promo_Manager::$meta_promo;
+
+            if(get_post_meta($post_id, $meta_promo, true)) {
+                $hashtag = __('#партнерскийматериал', 'knife-theme');
+
+                // Append hashtag to message
+                $message['message'] = $message['message'] . "\n\n" . $hashtag;
+            }
+        }
+
         if(!empty($item['attachment'])) {
             $poster = get_attached_file($item['attachment']);
         }
@@ -631,6 +667,18 @@ class Knife_Distribute_Control {
 
         if(empty($message['status'])) {
             $message['status'] = esc_url($link);
+        }
+
+        // Add promo hashtag
+        if(class_exists('Knife_Promo_Manager')) {
+            $meta_promo = Knife_Promo_Manager::$meta_promo;
+
+            if(get_post_meta($post_id, $meta_promo, true)) {
+                $hashtag = __('#партнерскийматериал', 'knife-theme');
+
+                // Append hashtag to message
+                $message['status'] = $message['status'] . "\n\n" . $hashtag;
+            }
         }
 
         $poster = false;
