@@ -83,7 +83,7 @@ class Knife_MCE_Plugins {
         $include = get_template_directory_uri() . '/core/include';
 
         // Add custom plugins
-        $custom = self::$helpers + self::$buttons;
+        $custom = array_merge(self::$helpers, self::$buttons);
 
         foreach($custom as $name) {
             $plugins[$name] = $include . "/tinymce/{$name}.js";
