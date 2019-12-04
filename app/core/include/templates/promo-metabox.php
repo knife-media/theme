@@ -28,12 +28,12 @@
             );
 
             printf(
-                '<p><label>%2$s</label><input class="widefat" type="text" name="%1$s[logo]" value="%3$s">%4$s</p>',
+                '<p><label>%2$s</label><input class="logo widefat" type="text" name="%1$s[logo]" value="%3$s">%4$s</p>',
                 esc_attr(self::$meta_options),
                 __('Ссылка на логотип:', 'knife-theme'),
                 esc_url($options['logo'] ?? ''),
                 sprintf(
-                    '<small><a href="%s" target="_blank">%s</a></small>',
+                    '<small><a class="upload" href="%s" target="_blank">%s</a></small>',
                     esc_url(admin_url('/media-new.php')),
                     __('Загрузить изображение', 'knife-theme')
                 )

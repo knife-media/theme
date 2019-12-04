@@ -51,7 +51,7 @@ jQuery(document).ready(function($) {
 
     // Open default wp.media image frame
     var frame = wp.media({
-      title: knife_snippet_metabox.choose,
+      title: knife_snippet_metabox.choose || '',
       multiple: false,
       states: [
         new state()

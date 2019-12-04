@@ -47,11 +47,23 @@ jQuery(document).ready(function($) {
   box.on('click', 'button.select', function(e) {
     e.preventDefault();
 
-    var frame = wp.media({
-      title: knife_background_metabox.choose,
-      multiple: false
+    // Create custom state
+    var state = wp.media.controller.Library.extend({
+      defaults: _.defaults({
+        filterable: 'all',
+      }, wp.media.controller.Library.prototype.defaults)
     });
 
+    // Open default wp.media image frame
+    var frame = wp.media({
+      title: knife_background_metabox.choose || '',
+      multiple: false,
+      states: [
+        new state()
+      ]
+    });
+
+    // On image select
     frame.on('select', function() {
       var attachment = frame.state().get('selection').first().toJSON();
 

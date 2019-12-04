@@ -233,25 +233,34 @@ class Knife_Promo_Manager {
      * Enqueue assets for metabox
      */
     public static function enqueue_assets($hook) {
+        if(!in_array($hook, ['post.php', 'post-new.php'])) {
+            return;
+        }
+
+        // Current screen object
+        $screen = get_current_screen();
+
+        if(!in_array($screen->post_type, self::$post_type)) {
+            return;
+        }
+
         $version = wp_get_theme()->get('Version');
         $include = get_template_directory_uri() . '/core/include';
 
-        if(in_array($hook, ['post.php', 'post-new.php'])) {
-            $post_id = get_the_ID();
+        // Insert wp media scripts
+        wp_enqueue_media();
 
-            // Current screen object
-            $screen = get_current_screen();
+        // Insert color picker scripts
+        wp_enqueue_style('wp-color-picker');
 
-            if(!in_array($screen->post_type, self::$post_type)) {
-                return;
-            }
+        // Insert admin scripts
+        wp_enqueue_script('knife-promo-metabox', $include . '/scripts/promo-metabox.js', ['jquery', 'wp-color-picker'], $version);
 
-            // Insert color picker scripts
-            wp_enqueue_style('wp-color-picker');
+        $options = [
+            'choose' => __('Выберите спонсорский логотип', 'knife-theme')
+        ];
 
-            // Insert admin scripts
-            wp_enqueue_script('knife-promo-metabox', $include . '/scripts/promo-metabox.js', ['jquery', 'wp-color-picker'], $version);
-        }
+        wp_localize_script('knife-promo-metabox', 'knife_promo_metabox', $options);
     }
 
 
