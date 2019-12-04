@@ -33,7 +33,6 @@ class Knife_Site_Meta {
         add_action('wp_head', [__CLASS__, 'add_og_tags'], 5);
         add_action('wp_head', [__CLASS__, 'add_twitter_tags'], 5);
         add_action('wp_head', [__CLASS__, 'add_facebook_tags'], 5);
-        add_action('wp_head', [__CLASS__, 'add_vk_tags'], 5);
         add_action('wp_head', [__CLASS__, 'add_telegram_tags'], 5);
         add_action('wp_head', [__CLASS__, 'add_yandex_meta'], 5);
 
@@ -209,9 +208,6 @@ class Knife_Site_Meta {
     public static function add_og_tags() {
         $meta = [];
 
-        // Get social image array
-        $social_image = self::get_social_image();
-
         // Get description
         $description = self::get_description();
 
@@ -230,20 +226,25 @@ class Knife_Site_Meta {
             esc_attr($description)
         );
 
-        $meta[] = sprintf(
-            '<meta property="og:image" content="%s">',
-            esc_attr($social_image[0])
-        );
+        if(method_exists('Knife_Snippet_Image', 'get_social_image')) {
+            // Get social image array
+            $social_image = Knife_Snippet_Image::get_social_image();
 
-        $meta[] = sprintf(
-            '<meta property="og:image:width" content="%s">',
-            esc_attr($social_image[1])
-        );
+            $meta[] = sprintf(
+                '<meta property="og:image" content="%s">',
+                esc_attr($social_image[0])
+            );
 
-        $meta[] = sprintf(
-            '<meta property="og:image:height" content="%s">',
-            esc_attr($social_image[2])
-        );
+            $meta[] = sprintf(
+                '<meta property="og:image:width" content="%s">',
+                esc_attr($social_image[1])
+            );
+
+            $meta[] = sprintf(
+                '<meta property="og:image:height" content="%s">',
+                esc_attr($social_image[2])
+            );
+        }
 
         if(is_post_type_archive()) {
             $meta[] = sprintf(
@@ -313,6 +314,16 @@ class Knife_Site_Meta {
             '<meta name="twitter:site" content="@knife_media">'
         ];
 
+        if(method_exists('Knife_Snippet_Image', 'get_social_image')) {
+            // Get social image array
+            $social_image = Knife_Snippet_Image::get_social_image();
+
+            $meta[] = sprintf(
+                '<meta name="twitter:image" content="%s">',
+                esc_attr($social_image[0])
+            );
+        }
+
         return self::print_tags($meta);
     }
 
@@ -325,24 +336,6 @@ class Knife_Site_Meta {
             '<meta property="fb:app_id" content="1281081571902073">',
             '<meta property="fb:page_id" content="518169241541755">'
         ];
-
-        return self::print_tags($meta);
-    }
-
-
-    /**
-     * Add vk image
-     */
-    public static function add_vk_tags() {
-        $meta = [];
-
-        // Get social image
-        $social_image = self::get_social_image();
-
-        $meta[] = sprintf(
-            '<meta property="vk:image" content="%s">',
-            esc_attr($social_image[0])
-        );
 
         return self::print_tags($meta);
     }
@@ -368,7 +361,7 @@ class Knife_Site_Meta {
             $object_id = get_queried_object_id();
 
             if(has_excerpt($object_id)) {
-                return strip_tags(get_the_excerpt($object_id));
+                return trim(strip_tags(get_the_excerpt($object_id)));
             }
         }
 
@@ -387,37 +380,6 @@ class Knife_Site_Meta {
         }
 
         return get_bloginfo('description');
-    }
-
-
-    /**
-     * Get social image cover
-     */
-    private static function get_social_image() {
-        if(is_singular()) {
-            $object_id = get_queried_object_id();
-
-            // Custom social image storing via social-image plugin in post meta
-            $social_image = get_post_meta($object_id, '_social-image', true);
-
-            if(empty($social_image) && has_post_thumbnail()) {
-                return wp_get_attachment_image_src(get_post_thumbnail_id($object_id), 'outer');
-            }
-
-            $options = get_post_meta($object_id, '_social-image-options', true);
-
-            // Set size using options
-            $options = wp_parse_args($options, [
-                'width' => 1200,
-                'height' => 630
-            ]);
-
-            return array($social_image, $options['width'], $options['height']);
-        }
-
-        $social_image = get_template_directory_uri() . '/assets/images/poster-feature.png';
-
-        return array($social_image, 1200, 630);
     }
 
 

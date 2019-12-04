@@ -65,9 +65,9 @@ class Knife_Theme_Filters {
             return "no-reply@knife.media";
         });
 
-        // We don't need jquery in frontend now
+        // We don't need jquery for non logged in users
         add_action('wp_default_scripts', function($scripts) {
-            if(!is_admin()) {
+            if(!is_user_logged_in()) {
                 $scripts->remove('jquery');
             }
         });

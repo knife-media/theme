@@ -6,6 +6,7 @@
  *
  * @package knife-theme
  * @since 1.9
+ * @version 1.11
  */
 
 
@@ -84,6 +85,40 @@ class Knife_Snippet_Image {
 
         // Generate poster using ajax options
         add_action('wp_ajax_' . self::$ajax_action, [__CLASS__, 'generate_poster']);
+    }
+
+
+    /**
+     * Public function to get social image outside the module
+     *
+     * @since 1.11
+     */
+    public static function get_social_image() {
+        // Default social image
+        $social_image = get_template_directory_uri() . '/assets/images/poster-feature.png';
+
+        if(is_singular() && !is_front_page()) {
+            $object_id = get_queried_object_id();
+
+            // Custom social image storing via social-image plugin in post meta
+            $social_image = get_post_meta($object_id, self::$meta_image, true);
+
+            if(empty($social_image) && has_post_thumbnail()) {
+                return wp_get_attachment_image_src(get_post_thumbnail_id($object_id), 'outer');
+            }
+
+            $options = get_post_meta($object_id, self::$meta_options, true);
+
+            // Set size using options
+            $options = wp_parse_args($options, [
+                'width' => 1200,
+                'height' => 630
+            ]);
+
+            return array($social_image, $options['width'], $options['height']);
+        }
+
+        return array($social_image, 1200, 630);
     }
 
 
