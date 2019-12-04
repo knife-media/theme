@@ -2,11 +2,11 @@
 /**
  * Informer widget
  *
- * Informer line with optional emoji and custom colors
+ * Informer line with optional remark and custom colors
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.9
+ * @version 1.11
  */
 
 
@@ -29,9 +29,8 @@ class Knife_Widget_Informer extends WP_Widget {
         $defaults = [
             'title' => '',
             'link' => '',
-            'emoji' => '',
-            'color' => '#000000',
-            'promo' => 0
+            'remark' => '',
+            'color' => '#000000'
         ];
 
         $instance = wp_parse_args((array) $instance, $defaults);
@@ -59,9 +58,8 @@ class Knife_Widget_Informer extends WP_Widget {
 
         $instance['title'] = sanitize_text_field($new_instance['title']);
         $instance['link'] = esc_url($new_instance['link']);
-        $instance['emoji'] = wp_encode_emoji($new_instance['emoji']);
         $instance['color'] = sanitize_hex_color($new_instance['color']);
-        $instance['promo'] = $new_instance['promo'] ? 1 : 0;
+        $instance['remark'] = sanitize_text_field($new_instance['remark']);
 
         return $instance;
     }
@@ -74,9 +72,8 @@ class Knife_Widget_Informer extends WP_Widget {
         $defaults = [
             'title' => '',
             'link' => '',
-            'emoji' => '',
-            'color' => '#000000',
-            'promo' => 0
+            'remark' => '',
+            'color' => '#000000'
         ];
 
         $instance = wp_parse_args((array) $instance, $defaults);
@@ -100,19 +97,11 @@ class Knife_Widget_Informer extends WP_Widget {
         );
 
         printf(
-            '<p><input type="checkbox" id="%1$s" name="%2$s" class="checkbox"%4$s><label for="%1$s">%3$s</label></p>',
-            esc_attr($this->get_field_id('promo')),
-            esc_attr($this->get_field_name('promo')),
-            __('Партнерский материал', 'knife-theme'),
-            checked($instance['promo'], 1, false)
-        );
-
-        printf(
             '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
-            esc_attr($this->get_field_id('emoji')),
-            esc_attr($this->get_field_name('emoji')),
-            __('Эмодзи:', 'knife-theme'),
-            esc_attr($instance['emoji'])
+            esc_attr($this->get_field_id('remark')),
+            esc_attr($this->get_field_name('remark')),
+            __('Пометка:', 'knife-theme'),
+            esc_attr($instance['remark'])
         );
 
         printf(
@@ -132,20 +121,13 @@ class Knife_Widget_Informer extends WP_Widget {
         $options = [
             'href' => esc_url($instance['link']),
             'target' => '_blank',
-            'rel' => 'noopener',
-            'data-action' => __('Informer click', 'knife-theme'),
-            'data-label' => $instance['link']
+            'rel' => 'noopener'
         ];
 
         $options['style'] = implode('; ', [
             'background-color:' . $instance['color'],
             'color:' . $this->get_text_color($instance['color'])
         ]);
-
-        if($post_id > 0) {
-            unset($options['target']);
-            $options['data-label'] = get_post_field('post_name', $post_id);
-        }
 
         foreach($options as $key => $value) {
             $attributes[] = $key . '="' . esc_attr($value) . '"';

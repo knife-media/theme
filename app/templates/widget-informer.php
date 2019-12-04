@@ -13,17 +13,10 @@
 <a class="widget-informer__inner" <?php echo implode(' ', $options); ?>>
     <div class="widget-informer__content">
         <?php
-            if(!empty($instance['emoji'])) :
+            if(!empty($instance['remark'])) :
                 printf(
-                    '<span class="widget-informer__content-emoji">%s</span>',
-                    wp_encode_emoji($instance['emoji'])
-                );
-            endif;
-
-            if($instance['promo']) :
-                printf(
-                    '<p class="widget-informer__content-promo">%s</p>',
-                    __('Партнерский материал', 'knife-theme')
+                    '<p class="widget-informer__content-remark">%s</p>',
+                    esc_html($instance['remark'])
                 );
             endif;
 

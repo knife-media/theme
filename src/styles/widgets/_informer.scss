@@ -79,28 +79,7 @@
       }
     }
 
-    .widget-informer__content-emoji {
-      display: block;
-      cursor: default;
-      flex: 0 0 auto;
-
-      margin-right: 1rem;
-
-      font-size: 1.875rem;
-      line-height: 1;
-
-      @media screen and (max-width: 1023px) {
-        position: absolute;
-        font-size: 1.5rem;
-
-        & ~ * {
-          margin-left: 2.375rem;
-        }
-      }
-    }
-
-
-    .widget-informer__content-promo {
+    .widget-informer__content-remark {
       display: flex;
       align-items: flex-end;
       cursor: default;
@@ -132,7 +111,7 @@
       flex-flow: row wrap;
       padding: .75rem 4rem .75rem 1rem;
 
-      .widget-informer__content-promo {
+      .widget-informer__content-remark {
         margin-left: 0;
         margin-bottom: 0.5rem;
       }
@@ -140,10 +119,6 @@
       .widget-informer__content-title {
         margin-left: 0;
         font-size: 1.125rem;
-      }
-
-      .widget-informer__content-emoji {
-        display: none;
       }
     }
   }
