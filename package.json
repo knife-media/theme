@@ -1,6 +1,6 @@
 {
   "name": "knife-theme",
-  "version": "1.11.21",
+  "version": "1.11.22",
   "author": "Anton Lukin",
   "description": "Simple modern WordPress theme for community blog",
   "main": "gulpfile.js",
