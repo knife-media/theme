@@ -27,7 +27,7 @@ class Knife_Site_Meta {
      * Init function instead of constructor
      */
     public static function load_module() {
-        add_action('wp_head', [__CLASS__, 'add_header_icons'], 4);
+        add_action('wp_head', [__CLASS__, 'add_manifest'], 4);
         add_action('wp_head', [__CLASS__, 'add_seo_tags'], 4);
 
         add_action('wp_head', [__CLASS__, 'add_og_tags'], 5);
@@ -35,8 +35,6 @@ class Knife_Site_Meta {
         add_action('wp_head', [__CLASS__, 'add_facebook_tags'], 5);
         add_action('wp_head', [__CLASS__, 'add_telegram_tags'], 5);
         add_action('wp_head', [__CLASS__, 'add_yandex_meta'], 5);
-
-        add_action('wp_head', [__CLASS__, 'add_mediator_meta'], 9);
 
         // Add custom theme lang attributes
         add_filter('language_attributes', [__CLASS__, 'add_xmlns']);
@@ -100,63 +98,32 @@ class Knife_Site_Meta {
 
 
     /**
-     * Add header static icons
-     */
-    public static function add_header_icons() {
-        $meta = [];
-
-        // Get assets path
-        $path = get_template_directory_uri() . '/assets/images';
-
-        $meta[] = sprintf(
-            '<link rel="icon" type="image/png" sizes="32x32" href="%s" />',
-            esc_url($path . '/icon-32.png')
-        );
-
-        $meta[] = sprintf(
-            '<link rel="icon" type="image/png" sizes="192x192" href="%s" />',
-            esc_url($path . '/icon-192.png')
-        );
-
-        $meta[] = sprintf(
-            '<link rel="apple-touch-icon" sizes="180x180" href="%s" />',
-            esc_url($path . '/icon-180.png')
-        );
-
-        return self::print_tags($meta);
-    }
-
-
-    /**
-     * Add mediator tags to singular templates
+     * Add manifest and header icons
      *
-     * @link https://mediator.media/ru/install/
+     * @since 1.11
      */
-    public static function add_mediator_meta() {
+    public static function add_manifest() {
         $meta = [];
 
-        if(is_singular() && !is_page()) {
-            if(function_exists('get_coauthors')) {
-                foreach(get_coauthors() as $author) {
-                    $meta[] = sprintf(
-                        '<meta name="mediator_author" content="%s" />',
-                        esc_attr($author->display_name)
-                    );
-                }
-            }
+        $meta[] = sprintf(
+            '<link rel="manifest" href="%s">',
+            esc_url(home_url('/manifest.json'))
+        );
 
-            foreach(wp_get_post_tags(get_queried_object_id()) as $term) {
-                $meta[] = sprintf(
-                    '<meta name="mediator_theme" content="%s" />',
-                    esc_attr($term->name)
-                );
-            }
+        $meta[] = sprintf(
+            '<link rel="icon" type="image/png" sizes="32x32" href="%s">',
+            esc_url(home_url('/icon-32.png'))
+        );
 
-            $meta[] = sprintf(
-                '<meta name="mediator_published_time" content="%s" />',
-                substr_replace(get_the_time('c'), '', -3, 1)
-            );
-        }
+        $meta[] = sprintf(
+            '<link rel="icon" type="image/png" sizes="192x192" href="%s">',
+            esc_url(home_url('/icon-192.png'))
+        );
+
+        $meta[] = sprintf(
+            '<link rel="apple-touch-icon" sizes="180x180" href="%s">',
+            esc_url(home_url('/icon-180.png'))
+        );
 
         return self::print_tags($meta);
     }
