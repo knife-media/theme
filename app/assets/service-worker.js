@@ -84,10 +84,6 @@ self.__precacheManifest = [
     "revision": "caa6b9c740d25d59e16586ece1f8c0eb"
   },
   {
-    "url": "/wp-content/themes/knife/assets/images/yandex-news-button.svg",
-    "revision": "44de12a0129bd12ed3235eda35d68ef1"
-  },
-  {
     "url": "/wp-content/themes/knife/assets/images/youtube-button.svg",
     "revision": "2c8f4c8b8b089f531e3302fff2a98f23"
   },
