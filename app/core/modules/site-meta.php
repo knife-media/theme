@@ -106,7 +106,7 @@ class Knife_Site_Meta {
         $meta = [];
 
         $meta[] = sprintf(
-            '<link rel="manifest" href="%s">',
+            '<link rel="manifest" href="%s" crossorigin="use-credentials">',
             esc_url(home_url('/manifest.json'))
         );
 

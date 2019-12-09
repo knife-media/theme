@@ -39,4 +39,4 @@
   script.async = true;
   script.src = 'https://w.hypercomments.com/widget/hc/' + knife_comments_id + '/ru/widget.js';
   document.head.appendChild(script);
- })();
+})();
