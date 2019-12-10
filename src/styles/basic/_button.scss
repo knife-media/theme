@@ -5,7 +5,7 @@
   padding: 1rem 3rem;
 
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.125;
   text-align: center;
   text-decoration: none;
@@ -17,7 +17,6 @@
   border-radius: 2px;
 
   transition: .25s;
-  -webkit-font-smoothing: antialiased;
 
   &:hover {
     filter: brightness(125%);
