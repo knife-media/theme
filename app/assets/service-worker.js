@@ -29,7 +29,7 @@ self.addEventListener('message', (event) => {
 self.__precacheManifest = [
   {
     "url": "/wp-content/themes/knife/assets/scripts.min.js",
-    "revision": "b1d2c70bd384d7490357dbb8e519fd23"
+    "revision": "8f8b1f8e66a8e95c87996e6aebf3519a"
   },
   {
     "url": "/wp-content/themes/knife/assets/styles.min.css",
