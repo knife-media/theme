@@ -111,6 +111,11 @@ class Knife_Site_Meta {
         );
 
         $meta[] = sprintf(
+            '<link rel="shortcut icon" href="%s" crossorigin="use-credentials">',
+            esc_url(home_url('/favicon.ico'))
+        );
+
+        $meta[] = sprintf(
             '<link rel="icon" type="image/png" sizes="32x32" href="%s">',
             esc_url(home_url('/icon-32.png'))
         );
