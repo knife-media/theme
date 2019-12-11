@@ -147,6 +147,14 @@
   &.unit--double {
     width: calc(50% - .5rem);
 
+    .unit__inner {
+      padding-top: 60%;
+    }
+
+    .unit__image {
+      padding-top: 60%;
+    }
+
     @media screen and (max-width: 1023px) {
       width: 100%;
     }
