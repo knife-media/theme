@@ -19,17 +19,13 @@
   /**
    * Create params object by url
    */
-  function parseArgs(link) {
-    var object = {};
-
+  function parseOptions(link, options) {
     // Try to found params
     var found = link.match(/\/(\d+?)\/.+?\?(.+)$/) || [];
 
     if(found.length > 2) {
-      object = {
-        'ownerId': found[1],
-        'params': {}
-      }
+      options.ownerId = found[1];
+      options.params = {};
 
       var vars = found[2].split('&');
 
@@ -41,52 +37,120 @@
           continue;
         }
 
-        object.params[pair[0]] = decodeURIComponent(pair[1].replace(/\+/g, " "));
+        options.params[pair[0]] = decodeURIComponent(pair[1].replace(/\+/g, " "));
       }
     }
 
-    return object;
+    console.log(options);
+
+    return options;
+  }
+
+
+  /**
+   * Load commin banner
+   */
+  function loadCommonBanner(link, id, widget) {
+    var options = {};
+
+    // Add container id
+    options.containerId = 'adfox_' + id;
+
+    // Add callbacks
+    options = addCallbacks(options, widget);
+
+    // Parse options from link
+    options = parseOptions(link, options);
+
+    window['adfoxAsyncParams'] = window['adfoxAsyncParams'] || [];
+    window['adfoxAsyncParams'].push(options);
   }
 
 
   /**
    * Load adaptive banner
    */
-  function loadAdaptiveBanner(args) {
-      window['adfoxAsyncParamsAdaptive'] = window['adfoxAsyncParamsAdaptive'] || [];
+  function loadMobileBanner(link, id, widget) {
+    var options = {};
 
-      window['adfoxAsyncParamsAdaptive'].push([args, ['desktop', 'phone'], {
-        phoneWidth: 1023,
-        isAutoReloads: true
-      }]);
+    // Add container id
+    options.containerId = 'adfox_' + id;
+
+    // Add callbacks
+    options = addCallbacks(options, widget);
+
+    // Parse options from link
+    options = parseOptions(link, options);
+
+    window['adfoxAsyncParamsAdaptive'] = window['adfoxAsyncParamsAdaptive'] || [];
+    window['adfoxAsyncParamsAdaptive'].push([options, ['tablet', 'phone'], {
+      tabletWidth: 1023,
+      isAutoReloads: true
+    }]);
+  }
+
+
+  /**
+   * Load adaptive banner
+   */
+  function loadDesktopBanner(link, id, widget) {
+    var options = {};
+
+    // Add container id
+    options.containerId = 'adfox_' + id;
+
+    // Add callbacks
+    options = addCallbacks(options, widget);
+
+    // Parse options from link
+    options = parseOptions(link, options);
+
+    window['adfoxAsyncParamsAdaptive'] = window['adfoxAsyncParamsAdaptive'] || [];
+    window['adfoxAsyncParamsAdaptive'].push([options, ['desktop'], {
+      tabletWidth: 1023,
+      isAutoReloads: true
+    }]);
+  }
+
+
+  /**
+   * Add options callbacks
+   */
+  function addCallbacks(options, widget) {
+    // Remove on stub
+    options.onStub = function() {
+      widget.parentNode.removeChild(widget);
+    }
+
+    // Remove on error
+    options.onError = function() {
+      widget.parentNode.removeChild(widget);
+    }
+
+    // Add class on load
+    options.onLoad = function() {
+      widget.classList.add('widget-adfox--loaded');
+    }
+
+    return options;
   }
 
 
   /**
    * Load adfox banner
    */
-  function loadBanner(widget, args, adaptive) {
-    // Remove on stub
-    args.onStub = function() {
-      widget.parentNode.removeChild(widget);
+  function loadBanner(data, id, widget) {
+    if(data.common) {
+      return loadCommonBanner(data.common, id, widget);
     }
 
-    // Remove on error
-    args.onError = function() {
-      widget.parentNode.removeChild(widget);
+    if(data.mobile) {
+      loadMobileBanner(data.mobile, id, widget);
     }
 
-    // Add class on load
-    args.onLoad = function() {
-      widget.classList.add('widget-adfox--loaded');
+    if(data.desktop) {
+      loadDesktopBanner(data.desktop, id, widget);
     }
-
-    if(adaptive == '1') {
-      return loadAdaptiveBanner(args);
-    }
-
-    window['adfoxAsyncParams'] = window['adfoxAsyncParams'] || [];
-    window['adfoxAsyncParams'].push(args);
   }
 
 
@@ -94,19 +158,14 @@
    * Loop through adfox widgets to load them
    */
   for(var i = 0; i < widgets.length; i++) {
-    var banner = widgets[i].querySelector('[data-link]');
+    var banner = widgets[i].querySelector('div');
 
-    if(!banner.dataset.link) {
+    if(banner === null || banner.dataset.length === 0) {
       continue;
     }
 
-    var args = parseArgs(banner.dataset.link);
-
     // Create adfox banner with args
     var id = (Date.now().toString(10) + Math.random().toString(10).substr(2, 5));
-
-    // Set args container id
-    args.containerId = 'adfox_' + id;
 
     // Create new element
     var adfox = document.createElement('div');
@@ -116,7 +175,7 @@
     widgets[i].replaceChild(adfox, banner);
 
     // Load banner
-    loadBanner(widgets[i], args, banner.dataset.adaptive);
+    loadBanner(banner.dataset, id, widgets[i]);
   }
 
 

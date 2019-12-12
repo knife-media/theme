@@ -31,6 +31,40 @@
 
 
   /**
+   * Widget adaptive checkbox
+   */
+  var initAdaptiveCheckbox = function(widget) {
+    widget.find('.knife-widget-adaptive').change(function() {
+      var wrapper = $(this).parent();
+
+      wrapper.next().show();
+      wrapper.nextAll().slice(1, 3).hide();
+
+      if(this.checked) {
+        wrapper.next().hide();
+        wrapper.nextAll().slice(1, 3).show();
+      }
+    });
+
+    widget.find('.knife-widget-adaptive').trigger('change');
+  }
+
+  $(document).ready(function() {
+    $('#wp_inactive_widgets .widget:has(.knife-widget-adaptive)').each(function() {
+      initAdaptiveCheckbox($(this));
+    });
+
+    $('#widgets-right .widget:has(.knife-widget-adaptive)').each(function() {
+      initAdaptiveCheckbox($(this));
+    });
+
+    $(document).on('widget-added widget-updated', function(event, widget) {
+      initAdaptiveCheckbox($(this));
+    });
+  });
+
+
+  /**
    * Widget append button handler
    */
   var initWidgetButton = function(input) {
