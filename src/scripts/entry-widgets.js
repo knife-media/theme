@@ -57,12 +57,12 @@
         continue;
       }
 
-      // Create figure
-      var figure = document.createElement('figure');
-      figure.classList.add('figure', 'figure--widget');
-      figure.appendChild(widgets.firstElementChild);
+      // Create aside
+//      var aside = document.createElement('aside');
+//      aside.classList.add('aside', 'aside--widget');
+//      aside.appendChild(widgets.firstElementChild);
 
-      post.insertBefore(figure, relative);
+      post.insertBefore(widgets.firstElementChild, relative);
       break;
     }
   }

@@ -1,0 +1,9 @@
+.aside {
+  display: block;
+  position: relative;
+  z-index: 2;
+
+  &.aside--widget {
+    margin-bottom: 0;
+  }
+}

@@ -41,7 +41,40 @@
       }
     }
 
-    console.log(options);
+    return options;
+  }
+
+
+  /**
+   * Add options callbacks
+   */
+  function addCallbacks(options, widget) {
+    // Remove on stub
+    options.onStub = function() {
+      widget.classList.remove('widget-adfox--loaded');
+
+      if(typeof window.dynamicWidgets === 'function') {
+        window.dynamicWidgets();
+      }
+    }
+
+    // Remove on error
+    options.onError = function() {
+      widget.classList.remove('widget-adfox--loaded');
+
+      if(typeof window.dynamicWidgets === 'function') {
+        window.dynamicWidgets();
+      }
+    }
+
+    // Add class on load
+    options.onLoad = function() {
+      widget.classList.add('widget-adfox--loaded');
+
+      if(typeof window.dynamicWidgets === 'function') {
+        window.dynamicWidgets();
+      }
+    }
 
     return options;
   }
@@ -110,29 +143,6 @@
       tabletWidth: 1023,
       isAutoReloads: true
     }]);
-  }
-
-
-  /**
-   * Add options callbacks
-   */
-  function addCallbacks(options, widget) {
-    // Remove on stub
-    options.onStub = function() {
-      widget.parentNode.removeChild(widget);
-    }
-
-    // Remove on error
-    options.onError = function() {
-      widget.parentNode.removeChild(widget);
-    }
-
-    // Add class on load
-    options.onLoad = function() {
-      widget.classList.add('widget-adfox--loaded');
-    }
-
-    return options;
   }
 
 

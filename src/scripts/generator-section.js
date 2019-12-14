@@ -88,7 +88,7 @@
       });
     }
 
-    if(window.shareButtons === 'function') {
+    if(typeof window.shareButtons === 'function') {
       window.shareButtons();
     }
   }

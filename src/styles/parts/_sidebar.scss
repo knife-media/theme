@@ -12,7 +12,7 @@
     flex-flow: column nowrap;
     flex: 1 1 auto;
 
-    & > :last-child {
+    & > :first-child {
       position: sticky;
       top: 4.5rem;
     }

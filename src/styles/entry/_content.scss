@@ -284,16 +284,6 @@
     }
   }
 
-  aside {
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-
-    @media screen and (max-width: 767px) {
-      margin-top: 1rem;
-      margin-bottom: 1rem;
-    }
-  }
-
   iframe {
     max-width: 100%;
   }

@@ -141,7 +141,7 @@
 
     slide.querySelector('.glide__slide-content').appendChild(clone);
 
-    if(window.shareButtons === 'function') {
+    if(typeof window.shareButtons === 'function') {
       window.shareButtons();
     }
   });

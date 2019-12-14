@@ -1,0 +1,24 @@
+.widget-adfox {
+  display: none;
+  flex-flow: row wrap;
+  justify-content: center;
+  position: relative;
+
+  &.widget-adfox--loaded {
+    display: flex;
+  }
+
+  &.widget-adfox--sidebar {
+    margin-top: 1rem;
+  }
+
+  &.widget-adfox--entry {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+
+    @media screen and (max-width: 767px) {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+  }
+}
