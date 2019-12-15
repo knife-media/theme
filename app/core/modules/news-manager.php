@@ -49,9 +49,6 @@ class Knife_News_Manager {
         add_action('restrict_manage_posts', [__CLASS__, 'print_dropdown']);
         add_action('parse_query', [__CLASS__, 'process_dropdown']);
 
-        // Update related posts in sidebar
-        add_action('pre_get_posts', [__CLASS__, 'update_related']);
-
         // Set news_id
         $category = get_category_by_slug('news');
 
@@ -74,22 +71,6 @@ class Knife_News_Manager {
         }
 
         return $template;
-    }
-
-
-    /**
-     * Update related posts in sidebar
-     *
-     * @since 1.5
-     */
-    public static function update_related($query) {
-        if($query->get('query_type') === 'related') {
-            $query->set('category__not_in', [self::$news_id]);
-
-            if(in_category(self::$news_slug)) {
-                $query->set('post__in', [0]);
-            }
-        }
     }
 
 

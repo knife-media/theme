@@ -127,27 +127,7 @@
   }
 
   &.widget-story--sidebar {
-    margin: 0;
-
-    .widget-story__title {
-      font-size: 1.25rem;
-
-      @media screen and (max-width: 767px) {
-        font-size: 1.125rem;
-      }
-    }
-
-    .widget-story__inner {
-      width: 100%;
-
-      @media screen and (max-width: 1023px) {
-        width: calc(50% - .5rem);
-      }
-
-      @media screen and (max-width: 479px) {
-        width: 100%;
-      }
-    }
+    display: none;
   }
 
   &.widget-story--entry {

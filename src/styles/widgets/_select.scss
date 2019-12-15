@@ -1,17 +1,22 @@
 .widget-select {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: flex-start;
+  display: block;
   position: relative;
 
   width: calc(100% - 2rem);
   max-width: $width-site - 2rem;
 
   margin: 1rem auto 0;
-  padding: 0 0 1rem 1rem;
 
-  color: $color-select;
-  background-color: $color-white;
+  .widget-select__wrapper {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+
+    padding: 0 0 1rem 1rem;
+
+    color: $color-select;
+    background-color: $color-white;
+  }
 
   .widget-select__head {
     position: relative;
@@ -33,8 +38,8 @@
     padding: 1rem 1rem 1.5rem;
     overflow: hidden;
 
-    font-size: 1.375rem;
-    font-weight: 700;
+    font-size: 1.25rem;
+    font-weight: 500;
     line-height: 1.125;
 
     color: $color-select;
@@ -68,32 +73,14 @@
     }
 
     @media screen and (max-width: 767px) {
-      font-size: 1.25rem;
-    }
-
-    @media screen and (max-width: 479px) {
       width: calc(100% - 1rem);
       padding-bottom: 2rem;
+      font-size: 1.25rem;
     }
   }
 
   &.widget-select--sidebar {
-    margin: 1rem 0 0;
-
-    .widget-select__head {
-      color: $color-white;
-    }
-
-    .widget-select__link {
-      width: 100%;
-      padding: 1rem;
-      font-size: 1.125rem;
-
-      strong {
-        font-size: 5rem;
-        margin: 0 0 .25rem;
-      }
-    }
+    display: none;
   }
 
   &.widget-select--entry {

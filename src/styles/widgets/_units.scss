@@ -9,10 +9,16 @@
   margin: 0 auto;
 
   &.widget-units--sidebar {
-    margin: 0;
+    align-content: flex-start;
+
+    width: 100%;
 
     .unit {
       width: 100%;
+
+      .unit__head {
+        display: none;
+      }
 
       .unit__content-link {
         font-size: 1.25rem;

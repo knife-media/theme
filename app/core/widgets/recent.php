@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.7
+ * @version 1.11
  */
 
 
@@ -69,25 +69,9 @@ class Knife_Widget_Recent extends WP_Widget {
         if($query->have_posts()) {
             echo $args['before_widget'];
 
-            printf(
-                '<a class="widget-recent__head head" href="%2$s">%1$s</a>',
-                esc_html($instance['title']),
-                esc_url(get_category_link($this->news_id))
-            );
+            // Include recent widget template
+            include(get_template_directory() . '/templates/widget-recent.php');
 
-            while($query->have_posts()) {
-                $query->the_post();
-
-                include(get_template_directory() . '/templates/widget-recent.php');
-            }
-
-            printf(
-                '<a class="widget-recent__more button" href="%2$s">%1$s</a>',
-                __('Все новости', 'knife-theme'),
-                esc_url(get_category_link($this->news_id))
-            );
-
-            wp_reset_query();
             echo $args['after_widget'];
         }
     }

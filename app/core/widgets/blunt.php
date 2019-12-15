@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.7
- * @version 1.10
+ * @version 1.11
  */
 
 
@@ -59,13 +59,8 @@ class Knife_Widget_Blunt extends WP_Widget {
         if($query->have_posts()) {
             echo $args['before_widget'];
 
-            while($query->have_posts()) {
-                $query->the_post();
-
-                include(get_template_directory() . '/templates/widget-blunt.php');
-            }
-
-            wp_reset_query();
+            // Blunt widget template
+            include(get_template_directory() . '/templates/widget-blunt.php');
 
             echo $args['after_widget'];
         }

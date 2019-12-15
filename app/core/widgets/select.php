@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.5
- * @version 1.6
+ * @version 1.11
  */
 
 
@@ -59,22 +59,9 @@ class Knife_Widget_Select extends WP_Widget {
         if($query->have_posts()) {
             echo $args['before_widget'];
 
-            printf('<a class="widget-select__head head" href="%2$s">%1$s</a>',
-                esc_html($instance['title']),
-                esc_url(get_post_type_archive_link('select'))
-            );
+            // Include select widget
+            include(get_template_directory() . '/templates/widget-select.php');
 
-            while($query->have_posts()) {
-                $query->the_post();
-
-                printf(
-                    '<a class="widget-select__link" href="%1$s">%2$s</a>',
-                    esc_url(get_permalink()),
-                    get_the_title()
-                );
-            }
-
-            wp_reset_query();
             echo $args['after_widget'];
         }
     }

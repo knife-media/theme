@@ -2,15 +2,15 @@
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
-  flex: 1 1 auto;
   position: relative;
 
   width: 100%;
+  margin: 0 auto;
 
   color: $color-white;
   background-color: transparent;
 
-  .widget-informer__inner {
+  .widget-informer__wrapper {
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
@@ -100,7 +100,7 @@
   }
 
   &.widget-informer--sidebar {
-    flex: 0;
+    align-self: flex-start;
     margin-top: 1rem;
 
     .widget-informer__content {
@@ -122,5 +122,7 @@
   &.widget-informer--entry {
     width: 100%;
     max-width: $width-content;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
   }
 }

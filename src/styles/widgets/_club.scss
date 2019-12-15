@@ -1,18 +1,26 @@
 .widget-club {
-  display: flex;
+  display: block;
   position: relative;
-
-  flex-flow: row wrap;
-  justify-content: space-between;
 
   width: calc(100% - 2rem);
   max-width: $width-site - 2rem;
-
   margin: 1rem auto 0;
-  overflow: hidden;
 
-  color: $color-white;
-  background-color: $color-white;
+  .widget-club__wrapper {
+    display: flex;
+    position: relative;
+
+    align-self: flex-start;
+    justify-content: space-between;
+    flex-flow: row wrap;
+    flex: 0 0 auto;
+
+    width: 100%;
+    overflow: hidden;
+
+    color: $color-white;
+    background-color: $color-white;
+  }
 
   .widget-club__head {
     position: relative;
@@ -121,8 +129,8 @@
       }
 
       @media screen and (max-width: 1023px) {
-        width: 100%;
         max-width: 100%;
+        font-size: 1rem;
       }
 
       @media screen and (max-width: 767px) {
@@ -153,7 +161,7 @@
   }
 
   &.widget-club--sidebar {
-    align-self: flex-start;
+    align-items: flex-start;
     width: 100%;
 
     .widget-club__inner {
@@ -176,6 +184,11 @@
     .widget-club__more {
       padding-left: 0;
       padding-right: 0;
+
+      .widget-club__more-button {
+        font-size: 1rem;
+        font-weight: 500;
+      }
     }
 
     .widget-club__content {
@@ -225,10 +238,13 @@
     width: 100%;
     max-width: $width-content + 2rem;
 
-    margin-top: 0;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
 
-    box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, .2);
-    border-radius: 3px;
+    .widget-club__wrapper {
+      box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, .2);
+      border-radius: 3px;
+    }
 
     .widget-club__inner {
       width: 100%;
@@ -240,20 +256,11 @@
 
     .widget-club__content {
       padding: 1rem 0;
-
-      .widget-club__content-link {
-        font-size: 1.375rem;
-
-        @media screen and (max-width: 767px) {
-          font-size: 1.25rem;
-        }
-      }
     }
 
-
-    @media screen and (max-width: 479px) {
-      width: 100%;
-      margin: 0;
+    @media screen and (max-width: 767px) {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
     }
   }
 

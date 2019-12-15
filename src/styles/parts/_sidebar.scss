@@ -7,40 +7,6 @@
   padding-left: 1rem;
   color: $color-text;
 
-  .sidebar__widgets {
-    display: flex;
-    flex-flow: column nowrap;
-    flex: 1 1 auto;
-
-    & > :first-child {
-      position: sticky;
-      top: 4.5rem;
-    }
-  }
-
-  .sidebar__related {
-    display: flex;
-    flex-flow: column nowrap;
-    flex: 0 0 auto;
-
-    .unit {
-      width: 100%;
-
-      .unit__content-link {
-        font-size: 1.25rem;
-        line-height: 1.25;
-
-        @media screen and (max-width: 1023px) {
-          font-size: 1.375rem;
-        }
-
-        @media screen and (max-width: 767px) {
-          font-size: 1.125rem;
-        }
-      }
-    }
-  }
-
   @media screen and (max-width: 1023px) {
     flex: 1 1 auto;
 

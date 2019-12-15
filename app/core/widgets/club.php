@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.4
+ * @version 1.11
  */
 
 
@@ -56,25 +56,9 @@ class Knife_Widget_Club extends WP_Widget {
         if($query->have_posts()) {
             echo $args['before_widget'];
 
-            printf('<a class="widget-club__head head" href="%2$s">%1$s</a>',
-                esc_html($instance['title']),
-                esc_url(get_post_type_archive_link('club'))
-            );
+            // Widget club template
+            include(get_template_directory() . '/templates/widget-club.php');
 
-            while($query->have_posts()) {
-                $query->the_post();
-
-                include(get_template_directory() . '/templates/widget-club.php');
-            }
-
-            if(!empty($instance['link'])) {
-                printf('<div class="widget-club__more"><a class="widget-club__more-button button" href="%2$s">%1$s</a></div>',
-                    __('Написать в клуб', 'knife-theme'),
-                    esc_url($instance['link'])
-                );
-            }
-
-            wp_reset_query();
             echo $args['after_widget'];
         }
     }

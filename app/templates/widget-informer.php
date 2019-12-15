@@ -10,7 +10,7 @@
  */
 ?>
 
-<a class="widget-informer__inner" <?php echo implode(' ', $options); ?>>
+<a class="widget-informer__wrapper" <?php echo implode(' ', $options); ?>>
     <div class="widget-informer__content">
         <?php
             if(!empty($instance['remark'])) :

@@ -58,11 +58,11 @@
       }
 
       // Create aside
-//      var aside = document.createElement('aside');
-//      aside.classList.add('aside', 'aside--widget');
-//      aside.appendChild(widgets.firstElementChild);
+      var aside = document.createElement('aside');
+      aside.classList.add('aside', 'aside--widget');
+      aside.appendChild(widgets.firstElementChild);
 
-      post.insertBefore(widgets.firstElementChild, relative);
+      post.insertBefore(aside, relative);
       break;
     }
   }
