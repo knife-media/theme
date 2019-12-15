@@ -183,9 +183,7 @@
     @for $i from 1 through 4 {
       h#{$i} {
         @extend .head;
-
         margin-bottom: 0;
-        -webkit-font-smoothing: antialiased;
       }
     }
 

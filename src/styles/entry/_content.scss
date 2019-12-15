@@ -13,8 +13,6 @@
   color: $color-text;
   background-color: $color-white;
 
-  -webkit-font-smoothing: auto;
-
   & > * {
     max-width: 100%;
     width: $width-content;
@@ -337,10 +335,6 @@
         font-size: 1.125rem;
       }
     }
-  }
-
-  input, textarea {
-    -webkit-font-smoothing: antialiased;
   }
 
   span[data-body] {
