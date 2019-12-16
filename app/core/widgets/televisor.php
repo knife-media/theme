@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.4
- * @version 1.10
+ * @version 1.11
  */
 
 
@@ -216,6 +216,7 @@ class Knife_Widget_Televisor extends WP_Widget {
      * Show single post part
      */
     private function show_single($instance) {
+        $exclude = get_query_var('widget_exclude', []);
         $post_id = url_to_postid($instance['link']);
 
         $query = new WP_Query([
@@ -227,13 +228,24 @@ class Knife_Widget_Televisor extends WP_Widget {
         ]);
 
         if($query->have_posts()) {
-            $exclude = get_query_var('widget_exclude', []);
-            set_query_var('widget_exclude', array_merge($exclude, [$post_id]));
+            echo '<div class="widget-single">';
 
-            return $this->display_internal($instance, $query);
+            $query->the_post();
+
+            if(empty($instance['title'])) {
+                $instance['title'] = get_the_title();
+            }
+
+            $instance['link'] = get_permalink();
+
+            // Include single widget template
+            include(get_template_directory() . '/templates/widget-single.php');
+
+            set_query_var('widget_exclude', array_merge($exclude, wp_list_pluck($query->posts, 'ID')));
+            wp_reset_query();
+
+            echo '</div>';
         }
-
-        return $this->display_external($instance);
     }
 
 
@@ -261,41 +273,6 @@ class Knife_Widget_Televisor extends WP_Widget {
             echo '</div>';
         }
     }
-
-
-    /**
-     * Display template for internal single post
-     *
-     * @since 1.9
-     */
-    private function display_internal($instance, $query, $internal = true) {
-        $query->the_post();
-
-        if(empty($instance['title'])) {
-            $instance['title'] = get_the_title();
-        }
-
-        $instance['link'] = get_permalink();
-
-        echo '<div class="widget-single">';
-        include(get_template_directory() . '/templates/widget-single.php');
-        echo '</div>';
-
-        wp_reset_query();
-    }
-
-
-    /**
-     * Display template for external single post
-     *
-     * @since 1.9
-     */
-    private function display_external($instance, $internal = false) {
-        echo '<div class="widget-single">';
-        include(get_template_directory() . '/templates/widget-single.php');
-        echo '</div>';
-    }
-
 }
 
 

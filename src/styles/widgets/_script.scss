@@ -4,21 +4,22 @@
   justify-content: center;
   position: relative;
 
-  overflow: hidden;
-
-  p {
-    width: 100%;
-  }
-
-  img {
-    display: block;
-  }
-
   &.widget-script--sidebar {
+    flex: 1 1 auto;
     margin-top: 1rem;
+
+    & > * {
+      @include sticky-widget;
+    }
   }
 
   &.widget-script--entry {
-    overflow: visible;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+
+    @media screen and (max-width: 767px) {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
   }
 }

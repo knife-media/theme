@@ -52,28 +52,16 @@
     // Remove on stub
     options.onStub = function() {
       widget.classList.remove('widget-adfox--loaded');
-
-      if(typeof window.dynamicWidgets === 'function') {
-        window.dynamicWidgets();
-      }
     }
 
     // Remove on error
     options.onError = function() {
       widget.classList.remove('widget-adfox--loaded');
-
-      if(typeof window.dynamicWidgets === 'function') {
-        window.dynamicWidgets();
-      }
     }
 
     // Add class on load
     options.onLoad = function() {
       widget.classList.add('widget-adfox--loaded');
-
-      if(typeof window.dynamicWidgets === 'function') {
-        window.dynamicWidgets();
-      }
     }
 
     return options;

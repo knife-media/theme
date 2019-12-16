@@ -9,7 +9,12 @@
   }
 
   &.widget-adfox--sidebar {
+    flex: 1 1 auto;
     margin-top: 1rem;
+
+    &.widget-adfox--loaded > div {
+      @include sticky-widget;
+    }
   }
 
   &.widget-adfox--entry {

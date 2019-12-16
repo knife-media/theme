@@ -161,8 +161,12 @@
   }
 
   &.widget-club--sidebar {
-    align-items: flex-start;
+    flex: 1 1 auto;
     width: 100%;
+
+    .widget-club__wrapper {
+      @include sticky-widget;
+    }
 
     .widget-club__inner {
       width: 100%;

@@ -1,6 +1,5 @@
 .widget-single {
   display: flex;
-  align-items: flex-end;
   position: relative;
 
   width: calc(100% - 2rem);
@@ -8,10 +7,22 @@
   min-height: 15.625rem;
 
   margin: 1rem auto 0;
-  padding-top: 2rem;
-  overflow: hidden;
 
-  color: $color-white;
+  .widget-single__wrapper {
+    display: flex;
+    align-items: flex-end;
+    position: relative;
+
+    width: 100%;
+    padding-top: 2rem;
+    overflow: hidden;
+
+    color: $color-white;
+
+    @media screen and (max-width: 479px) {
+      padding-top: 25%;
+    }
+  }
 
   .widget-single__inner {
     display: block;
@@ -139,26 +150,6 @@
       }
     }
 
-    .widget-single__content-button {
-      display: flex;
-      align-self: flex-start;
-
-      padding: .75rem 2.5rem;
-
-      font-size: 1rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: $color-white;
-      background: linear-gradient(to bottom, #05d3b8 0%, #0fbaa3 100%);
-
-      border-radius: 3px;
-
-      @media screen and (max-width: 1023px) {
-        padding: .75rem 1.5rem;
-        font-size: .875rem;
-      }
-    }
-
     @media screen and (max-width: 1023px) {
       width: 100%;
       height: 100%;
@@ -178,38 +169,7 @@
   }
 
   &.widget-single--entry {
-    width: 100%;
-    max-width: $width-content;
-
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-
-    .widget-single__content-title {
-      width: 100%;
-      font-size: 1.5rem;
-      line-height: 1.25;
-
-      @media screen and (max-width: 767px) {
-        font-size: 1.25rem;
-      }
-
-      @media screen and (max-width: 479px) {
-        font-size: 1.125rem;
-      }
-    }
-
-    .widget-single__image:after {
-      content: '';
-      @include full-size();
-      background-color: rgba(0, 0, 0, .375);
-    }
-
-    @media screen and (max-width: 767px) {
-      min-height: 12rem;
-
-      margin-top: 1rem;
-      margin-bottom: 1rem;
-    }
+    display: none;
   }
 
   &.widget-single--billboard {
@@ -222,6 +182,5 @@
 
   @media screen and (max-width: 479px) {
     width: 100%;
-    padding-top: 25%;
   }
 }

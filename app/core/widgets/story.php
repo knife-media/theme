@@ -52,16 +52,12 @@ class Knife_Widget_Story extends WP_Widget {
         ]);
 
 
-        if($query->have_posts() && $query->found_posts >= $instance['posts_per_page']) {
+        if($query->have_posts()) {
             echo $args['before_widget'];
 
-            while($query->have_posts()) {
-                $query->the_post();
+            // Include widget story template
+            include(get_template_directory() . '/templates/widget-story.php');
 
-                include(get_template_directory() . '/templates/widget-story.php');
-            }
-
-            wp_reset_query();
             echo $args['after_widget'];
         }
     }

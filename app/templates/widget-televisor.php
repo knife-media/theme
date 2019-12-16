@@ -7,7 +7,7 @@
  */
 ?>
 
-<div class="widget-televisor__inner">
+<div class="widget-televisor__wrapper">
     <div class="widget-televisor__content">
         <?php
             $this->show_single($instance);

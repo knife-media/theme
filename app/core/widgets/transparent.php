@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.10
+ * @version 1.11
  */
 
 
@@ -21,6 +21,12 @@ class Knife_Widget_Transparent extends WP_Widget {
      * News category id
      */
     private $news_id = null;
+
+
+    /**
+     * Repeated emojis array
+     */
+    private $repeat_emoji = [];
 
 
     public function __construct() {
@@ -53,39 +59,14 @@ class Knife_Widget_Transparent extends WP_Widget {
 
         $instance = wp_parse_args((array) $instance, $defaults);
 
+        // Get query vars
         $query = new WP_Query($this->get_query($instance));
 
         if($query->have_posts()) {
             echo $args['before_widget'];
 
-            if(!empty($instance['title']) && !empty($instance['link'])) {
-                printf(
-                    '<div class="widget-transparent__head"><a class="head" href="%2$s">%1$s</a></div>',
-                    esc_html($instance['title']), esc_url($instance['link'])
-                );
-            }
-
-            $repeated = [];
-
-            while($query->have_posts()) {
-                $query->the_post();
-
-                $terms = get_the_tags(get_the_ID());
-
-                foreach(wp_list_pluck($terms, 'term_id') as $term_id) {
-                    $emoji = get_term_meta($term_id, '_knife-term-emoji', true);
-
-                    if(!in_array($term_id, $repeated)) {
-                        array_push($repeated, $term_id);
-
-                        break;
-                    }
-                }
-
-                include(get_template_directory() . '/templates/widget-transparent.php');
-            }
-
-            wp_reset_query();
+            // Inclute transparent widget template
+            include(get_template_directory() . '/templates/widget-transparent.php');
 
             echo $args['after_widget'];
         }
@@ -182,6 +163,28 @@ class Knife_Widget_Transparent extends WP_Widget {
             __('Пропустить записей:', 'knife-theme'),
             esc_attr($instance['offset'])
         );
+    }
+
+
+    /**
+     * Get tag emoji
+     *
+     * @since 1.11
+     */
+    private function get_emoji($post_id, $emoji = '') {
+        $terms = get_the_tags($post_id);
+
+        foreach(wp_list_pluck($terms, 'term_id') as $term_id) {
+            $emoji = get_term_meta($term_id, '_knife-term-emoji', true);
+
+            if(!in_array($term_id, $this->repeat_emoji)) {
+                array_push($this->repeat_emoji, $term_id);
+
+                break;
+            }
+        }
+
+        return $emoji;
     }
 
 

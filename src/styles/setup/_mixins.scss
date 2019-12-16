@@ -17,6 +17,12 @@
   overflow: hidden;
 }
 
+@mixin sticky-widget() {
+  position: sticky;
+  top: 4.5rem;
+  align-self: flex-start;
+}
+
 @mixin cross-button($size) {
   &:after, &:before {
     content: '';

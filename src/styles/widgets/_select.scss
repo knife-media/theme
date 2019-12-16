@@ -72,10 +72,10 @@
       width: calc(100% / 2 - 1rem);
     }
 
-    @media screen and (max-width: 479px) {
+    @media screen and (max-width: 767px) {
       width: calc(100% - 1rem);
       padding-bottom: 2rem;
-      font-size: 1.25rem;
+      font-size: 1.125rem;
     }
   }
 

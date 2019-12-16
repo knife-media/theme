@@ -7,7 +7,7 @@
  */
 ?>
 
-<div class="widget-news__inner">
+<div class="widget-news__wrapper">
     <div class="widget-news__content">
         <?php
             printf(

@@ -1,6 +1,5 @@
 .widget-transparent {
-  display: flex;
-  flex-flow: column wrap;
+  display: block;
   position: relative;
 
   width: calc(100% - 2rem);
@@ -8,7 +7,13 @@
 
   margin: 1rem auto 0;
 
-  border-top: solid 1px $color-white;
+  .widget-transparent__wrapper {
+    display: flex;
+    flex-flow: column wrap;
+    position: relative;
+
+    border-top: solid 1px $color-white;
+  }
 
   .widget-transparent__head {
     position: absolute;
@@ -110,7 +115,6 @@
       border-bottom: none;
     }
   }
-
 
   .widget-transparent__inner {
     display: flex;
