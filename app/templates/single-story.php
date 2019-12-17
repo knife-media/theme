@@ -17,23 +17,25 @@ get_header(); ?>
 ?>
 
 <div class="widget-story">
-    <?php
-        $stories = new WP_Query([
-            'post_type' => 'story',
-            'post__not_in' => [$post->ID],
-            'posts_per_page' => 4
-        ]);
+    <div class="widget-story__wrapper">
+        <?php
+            $stories = new WP_Query([
+                'post_type' => 'story',
+                'post__not_in' => [$post->ID],
+                'posts_per_page' => 4
+            ]);
 
-        if($stories->have_posts()) :
-            while($stories->have_posts()) : $stories->the_post();
+            if($stories->have_posts()) :
+                while($stories->have_posts()) : $stories->the_post();
 
-                get_template_part('templates/widget', 'story');
+                    get_template_part('partials/loop', 'story');
 
-            endwhile;
+                endwhile;
 
-            wp_reset_query();
-        endif;
-    ?>
+                wp_reset_query();
+            endif;
+        ?>
+    </div>
 </div>
 
 <nav class="navigate">
