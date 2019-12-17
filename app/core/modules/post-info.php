@@ -86,7 +86,7 @@ class Knife_Post_Info {
      * @since 1.8
      */
     private static function get_club($output = '') {
-        $post_type = get_post_type(get_the_id());
+        $post_type = get_post_type(get_the_ID());
 
         if($post_type === 'club') {
             $output = $output . sprintf('<a class="stamp stamp--club" href="%2$s">%1$s</a>',

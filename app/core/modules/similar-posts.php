@@ -106,7 +106,7 @@ class Knife_Similar_Posts {
     public static function print_checkbox() {
         $post_id = get_the_ID();
 
-        if(!in_array(get_post_type($post_id), self::$post_type)) {
+        if(get_post_type($post_id) !== 'post') {
             return;
         }
 
@@ -127,6 +127,10 @@ class Knife_Similar_Posts {
      * @since 1.11
      */
     public static function save_meta($post_id) {
+        if(get_post_type($post_id) !== 'post') {
+            return;
+        }
+
         if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return;
         }
@@ -236,7 +240,11 @@ class Knife_Similar_Posts {
             return;
         }
 
-        $hidden = get_post_meta($post_id, self::$post_meta, true);
+        $hidden = true;
+
+        if(get_post_type($post_id) === 'post') {
+            $hidden = get_post_meta($post_id, self::$post_meta, true);
+        }
 
         // Get similar if not cards
         $similar = self::get_similar($post_id);
