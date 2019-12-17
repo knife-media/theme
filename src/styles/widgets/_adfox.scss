@@ -4,12 +4,8 @@
   justify-content: center;
   position: relative;
 
-  &.widget-adfox--loaded {
-    display: flex;
-  }
-
   &.widget-adfox--sidebar {
-    flex: 1 1 auto;
+    flex: 20 1 auto;
     margin-top: 1rem;
 
     &.widget-adfox--loaded > div {
@@ -25,5 +21,9 @@
       margin-top: 1rem;
       margin-bottom: 1rem;
     }
+  }
+
+  &.widget-adfox--loaded {
+    display: flex;
   }
 }
