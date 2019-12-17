@@ -24,23 +24,42 @@
     }
   }
 
-  .entry-footer__relap {
+  .entry-footer__similar {
     display: block;
     position: relative;
 
-    padding: 0 2rem;
+    padding: 0;
     background-color: transparent;
 
-    .relap-knife_media__top-container {
-      animation: fade-in .5s linear forwards;
+    p {
+      display: block;
+
+      width: 100%;
+      margin-top: 2px;
+      padding: 1rem 2rem;
+
+      background: $color-sheet;
+
+      @media screen and (max-width: 767px) {
+        padding: 1rem;
+      }
     }
 
-    .relap-knife_media__top-container {
-      margin-top: 0 !important;
+    a {
+      font-family: $font-regular;
+      font-size: 1.125rem;
+      font-weight: 700;
+      line-height: 1.25;
+
+      text-decoration: none;
+      letter-spacing: 0.25px;
+
+      color: $color-text;
     }
 
-    @media screen and (max-width: 767px) {
-      padding: 0 1rem;
+    em {
+      font-family: $font-serif;
+      font-weight: 400;
     }
   }
 

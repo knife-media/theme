@@ -193,9 +193,6 @@ require get_template_directory() . '/core/modules/google-search.php';
 // Hypercomments settings
 require get_template_directory() . '/core/modules/comments-load.php';
 
-// Relap links settings
-require get_template_directory() . '/core/modules/relap-links.php';
-
 // Yandex RTB loader
 require get_template_directory() . '/core/modules/yandex-rtb.php';
 

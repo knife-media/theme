@@ -31,7 +31,7 @@ class Knife_Similar_Posts {
      * @access  private
      * @var     array
      */
-    private static $post_type = ['post', 'club'];
+    private static $post_type = ['post', 'club', 'quiz', 'generator'];
 
 
     /**
@@ -65,6 +65,16 @@ class Knife_Similar_Posts {
 
 
     /**
+     * Post meta to store similar exclude option
+     *
+     * @access  private
+     * @var     string
+     * @since   1.11
+     */
+    private static $post_meta = '_knife_similar_hide';
+
+
+    /**
      * Init function instead of constructor
      */
     public static function load_module() {
@@ -79,6 +89,57 @@ class Knife_Similar_Posts {
 
         // Process required actions for settings page
         add_action('current_screen', [__CLASS__, 'init_settings_page']);
+
+        // Add option to hide similar posts
+        add_action('post_submitbox_misc_actions', [__CLASS__, 'print_checkbox']);
+
+        // Update hide similar posts meta
+        add_action('save_post', [__CLASS__, 'save_meta']);
+    }
+
+
+    /**
+     * Prints checkbox in post publish action section
+     *
+     * @since 1.11
+     */
+    public static function print_checkbox() {
+        $post_id = get_the_ID();
+
+        if(!in_array(get_post_type($post_id), self::$post_type)) {
+            return;
+        }
+
+        $hidden = get_post_meta($post_id, self::$post_meta, true);
+
+        printf(
+            '<div class="misc-pub-section misc-pub-section-last"><label><input type="checkbox" name="%1$s" class="checkbox"%3$s> %2$s</label></div>',
+            esc_attr(self::$post_meta),
+            __('Скрыть блок похожих записей', 'knife-theme'),
+            checked($hidden, 1, false)
+        );
+    }
+
+
+    /**
+     * Save feed post meta
+     *
+     * @since 1.11
+     */
+    public static function save_meta($post_id) {
+        if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+            return;
+        }
+
+        if(!current_user_can('edit_post', $post_id)) {
+            return;
+        }
+
+        if(empty($_REQUEST[self::$post_meta])) {
+            return delete_post_meta($post_id, self::$post_meta);
+        }
+
+        return update_post_meta($post_id, self::$post_meta, 1);
     }
 
 
@@ -138,7 +199,6 @@ class Knife_Similar_Posts {
     }
 
 
-
     /**
      * Display management page
      *
@@ -170,38 +230,28 @@ class Knife_Similar_Posts {
      * Inject similar posts data
      */
     public static function inject_object() {
-        if(is_singular(self::$post_type)) {
-            $post_id = get_the_ID();
+        $post_id = get_the_ID();
 
-            if(in_category('news') || has_term('', 'special')) {
-                return;
-            }
-
-            // Check if promo post
-            if(get_post_meta($post_id, '_knife-promo', true)) {
-                return;
-            }
-
-
-            $options = [
-                'title' => __('Читайте также', 'knife-theme'),
-                'action' => __('Similar click', 'knife-theme')
-            ];
-
-            // Get similar if not cards
-            if(!has_post_format('chat', $post_id)) {
-                $similar = self::get_similar($post_id);
-
-                // Append promo
-                $similar = self::append_promo($similar);
-
-                if($similar > 0) {
-                    $options['similar'] = $similar;
-                }
-            }
-
-            wp_localize_script('knife-theme', 'knife_similar_posts', $options);
+        if(!is_singular(self::$post_type)) {
+            return;
         }
+
+        $hidden = get_post_meta($post_id, self::$post_meta, true);
+
+        // Get similar if not cards
+        $similar = self::get_similar($post_id);
+
+        // Append promo
+        $similar = self::append_promo($similar);
+
+        $options = [
+            'title' => __('Читайте также', 'knife-theme'),
+            'hidden' => absint($hidden),
+            'similar' => $similar
+        ];
+
+        // Add similar options to page
+        wp_localize_script('knife-theme', 'knife_similar_posts', $options);
     }
 
 
@@ -240,8 +290,8 @@ class Knife_Similar_Posts {
 
             // Add value to promo items
             $promo[] = [
-                'link' => sanitize_text_field($_POST['link']),
-                'title' => wp_kses($_POST['title'], $allowed_html)
+                'title' => wp_kses($_POST['title'], $allowed_html),
+                'link' => sanitize_text_field($_POST['link'])
             ];
 
             if(update_option(self::$option_promo, $promo)) {
@@ -340,8 +390,8 @@ class Knife_Similar_Posts {
             // Sort by tags count
             arsort($related);
 
-            // Get first 9 elements
-            $related = array_slice($related, 0, 9, true);
+            // Get first 15 elements
+            $related = array_slice($related, 0, 15, true);
 
             foreach($related as $id => $count) {
                 $similar[] = [
@@ -359,7 +409,7 @@ class Knife_Similar_Posts {
 
 
     /**
-     * Append similar promo links from query var if exists
+     * Append similar promo links from options
      */
     private static function append_promo($similar) {
         $promo = get_option(self::$option_promo, []);
