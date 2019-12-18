@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.6
- * @version 1.9
+ * @version 1.11
  */
 
 if (!defined('WPINC')) {
@@ -306,6 +306,7 @@ class Knife_Generator_Section {
         }
 
         $options = wp_parse_args($_REQUEST, [
+            'template' => '',
             'post_id' => 0,
             'attachment' => 0
         ]);

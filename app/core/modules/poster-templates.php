@@ -105,11 +105,6 @@ class Knife_Poster_Templates {
             return new WP_Error('prepare', __('Шаблон генерации не задан', 'knife-theme'));
         }
 
-        // Check if poster template file exists
-        if(!file_exists(get_template_directory() . $options['include'])) {
-            return new WP_Error('prepare', __('Не удалось найти файл шаблона', 'knife-theme'));
-        }
-
         $image = get_attached_file($options['attachment']);
 
         // Check image url by attachment id
