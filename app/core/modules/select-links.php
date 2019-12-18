@@ -29,7 +29,7 @@ class Knife_Select_Links {
      * @access  private
      * @var     string
      */
-    private static $metabox_nonce = 'knife-select-nonce';
+    private static $ajax_nonce = 'knife-select-nonce';
 
 
    /**
@@ -206,7 +206,7 @@ class Knife_Select_Links {
      * Get postid by url using admin side ajax
      */
     public static function get_post_by_url() {
-        check_admin_referer(self::$metabox_nonce, 'nonce');
+        check_admin_referer(self::$ajax_nonce, 'nonce');
 
         if(isset($_POST['link'])) {
             $link = sanitize_text_field($_POST['link']);
@@ -302,7 +302,7 @@ class Knife_Select_Links {
 
         $options = [
             'action' => esc_attr(self::$ajax_action),
-            'nonce' => wp_create_nonce(self::$metabox_nonce),
+            'nonce' => wp_create_nonce(self::$ajax_nonce),
             'meta_items' => esc_attr(self::$meta_items),
 
             'choose' => __('Выберите изображение постера', 'knife-theme'),
@@ -328,14 +328,6 @@ class Knife_Select_Links {
      */
     public static function save_metabox($post_id) {
         if(get_post_type($post_id) !== self::$post_type) {
-            return;
-        }
-
-        if(!isset($_REQUEST[self::$metabox_nonce])) {
-            return;
-        }
-
-        if(!wp_verify_nonce($_REQUEST[self::$metabox_nonce], 'metabox')) {
             return;
         }
 

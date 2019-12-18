@@ -31,7 +31,7 @@ class Knife_Distribute_Control {
      * @access  private
      * @var     string
      */
-    private static $metabox_nonce = 'knife-distribute-nonce';
+    private static $ajax_nonce = 'knife-distribute-nonce';
 
 
    /**
@@ -149,7 +149,7 @@ class Knife_Distribute_Control {
             $options = [
                 'post_id' => absint($post_id),
                 'action' => esc_attr(self::$ajax_action),
-                'nonce' => wp_create_nonce(self::$metabox_nonce),
+                'nonce' => wp_create_nonce(self::$ajax_nonce),
                 'meta_items' => esc_attr(self::$meta_items),
 
                 'choose' => __('Выберите изображение', 'knife-theme'),
@@ -185,7 +185,7 @@ class Knife_Distribute_Control {
      * Create result posters using ajax options
      */
     public static function cancel_scheduled() {
-        check_admin_referer(self::$metabox_nonce, 'nonce');
+        check_admin_referer(self::$ajax_nonce, 'nonce');
 
         foreach(['uniqid', 'post_id'] as $required) {
             if(empty($_POST[$required])) {
@@ -259,19 +259,15 @@ class Knife_Distribute_Control {
      * Save post options
      */
     public static function save_metabox($post_id, $post) {
-        if(!isset($_REQUEST[self::$metabox_nonce])) {
-            return;
-        }
-
-        if(!wp_verify_nonce($_REQUEST[self::$metabox_nonce], 'metabox')) {
-            return;
-        }
-
         if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return;
         }
 
         if(empty($_REQUEST[self::$meta_items])) {
+            return;
+        }
+
+        if(!current_user_can('edit_post', $post_id)) {
             return;
         }
 

@@ -16,8 +16,6 @@
                 $channels[$name] = $settings;
             }
         }
-
-        wp_nonce_field('metabox', self::$metabox_nonce);
     ?>
 
     <div class="box box--items">

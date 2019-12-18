@@ -51,8 +51,6 @@
             esc_attr(self::$zen_publish),
             sanitize_text_field($zen_publish)
         );
-
-        wp_nonce_field('metabox', self::$metabox_nonce);
     ?>
 </div>
 

@@ -11,8 +11,6 @@
         if(empty($options['text'])) {
             $options['text'] = get_the_title();
         }
-
-        wp_nonce_field('metabox', self::$metabox_nonce);
     ?>
 
     <div class="snippet">

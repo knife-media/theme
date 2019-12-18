@@ -35,16 +35,6 @@ class Knife_Post_Tagline {
 
 
     /**
-     * Tagline save nonce
-     *
-     * @since   1.5
-     * @access  private
-     * @var     string
-     */
-    private static $input_nonce = 'knife-tagline-nonce';
-
-
-    /**
      * Use this method instead of constructor to avoid multiple hook setting
      *
      * @since 1.3
@@ -106,8 +96,6 @@ class Knife_Post_Tagline {
             esc_attr(self::$post_meta),
             __('Подзаголовок', 'knife-theme')
         );
-
-        wp_nonce_field('input', self::$input_nonce);
     }
 
 
@@ -157,14 +145,6 @@ class Knife_Post_Tagline {
      */
     public static function save_meta($post_id) {
         if(!in_array(get_post_type($post_id), self::$post_type)) {
-            return;
-        }
-
-        if(!isset($_REQUEST[self::$input_nonce])) {
-            return;
-        }
-
-        if(!wp_verify_nonce($_REQUEST[self::$input_nonce], 'input')) {
             return;
         }
 

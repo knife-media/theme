@@ -35,15 +35,6 @@ class Knife_Extra_Feeds {
 
 
     /**
-     * Checkbox save nonce
-     *
-     * @access  private
-     * @var     string
-     */
-    private static $metabox_nonce = 'knife-feed-nonce';
-
-
-    /**
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public static function load_module() {
@@ -114,14 +105,6 @@ class Knife_Extra_Feeds {
      * Save feed post meta
      */
     public static function save_metabox($post_id) {
-        if(!isset($_REQUEST[self::$metabox_nonce])) {
-            return;
-        }
-
-        if(!wp_verify_nonce($_REQUEST[self::$metabox_nonce], 'metabox')) {
-            return;
-        }
-
         if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return;
         }

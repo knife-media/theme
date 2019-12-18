@@ -14,8 +14,6 @@
             __('Партнерский материал', 'knife-theme'),
             checked($promo, 1, false)
         );
-
-        wp_nonce_field('metabox', self::$metabox_nonce);
     ?>
 
     <div class="promo hidden">

@@ -38,7 +38,7 @@ class Knife_Generator_Section {
      * @access  private
      * @var     string
      */
-    private static $metabox_nonce = 'knife-generator-nonce';
+    private static $ajax_nonce = 'knife-generator-nonce';
 
 
    /**
@@ -299,7 +299,7 @@ class Knife_Generator_Section {
      * Generate poster using ajax options
      */
     public static function generate_poster() {
-        check_admin_referer(self::$metabox_nonce, 'nonce');
+        check_admin_referer(self::$ajax_nonce, 'nonce');
 
         if(!method_exists('Knife_Poster_Templates', 'create_poster')) {
             wp_send_json_error(__('Модуль генерации не найден', 'knife-theme'));
@@ -360,7 +360,7 @@ class Knife_Generator_Section {
         $options = [
             'post_id' => absint($post_id),
             'action' => esc_attr(self::$ajax_action),
-            'nonce' => wp_create_nonce(self::$metabox_nonce),
+            'nonce' => wp_create_nonce(self::$ajax_nonce),
             'meta_items' => esc_attr(self::$meta_items),
 
             'choose' => __('Выберите изображение постера', 'knife-theme'),
@@ -386,14 +386,6 @@ class Knife_Generator_Section {
      */
     public static function save_metabox($post_id) {
         if(get_post_type($post_id) !== self::$post_type) {
-            return;
-        }
-
-        if(!isset($_REQUEST[self::$metabox_nonce])) {
-            return;
-        }
-
-        if(!wp_verify_nonce($_REQUEST[self::$metabox_nonce], 'metabox')) {
             return;
         }
 

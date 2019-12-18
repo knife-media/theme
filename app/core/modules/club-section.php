@@ -75,16 +75,6 @@ class Knife_Club_Section {
 
 
     /**
-     * Checkbox save nonce
-     *
-     * @since   1.5
-     * @access  private
-     * @var     string
-     */
-    private static $metabox_nonce = 'knife-club-form-nonce';
-
-
-    /**
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public static function load_module() {
@@ -407,8 +397,6 @@ class Knife_Club_Section {
             __('Добавить форму заявки в клуб', 'knife-theme'),
             checked($form, 1, false)
         );
-
-        wp_nonce_field('checkbox', self::$metabox_nonce);
     }
 
 
@@ -416,14 +404,6 @@ class Knife_Club_Section {
      * Save feed post meta
      */
     public static function save_metabox($post_id) {
-        if(!isset($_REQUEST[self::$metabox_nonce])) {
-            return;
-        }
-
-        if(!wp_verify_nonce($_REQUEST[self::$metabox_nonce], 'checkbox')) {
-            return;
-        }
-
         if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return;
         }

@@ -35,16 +35,6 @@ class Knife_Post_Lead {
 
 
     /**
-     * Lead save nonce
-     *
-     * @since   1.5
-     * @access  private
-     * @var     string
-     */
-    private static $metabox_nonce = 'knife-lead-nonce';
-
-
-    /**
      * Use this method instead of constructor to avoid multiple hook setting
      *
      * @since 1.3
@@ -90,8 +80,6 @@ class Knife_Post_Lead {
             'editor_height' => 100,
             'drag_drop_upload' => false
         ]);
-
-        wp_nonce_field('metabox', self::$metabox_nonce);
     }
 
 
@@ -131,14 +119,6 @@ class Knife_Post_Lead {
      */
     public static function save_metabox($post_id) {
         if(!in_array(get_post_type($post_id), self::$post_type)) {
-            return;
-        }
-
-        if(!isset($_REQUEST[self::$metabox_nonce])) {
-            return;
-        }
-
-        if(!wp_verify_nonce($_REQUEST[self::$metabox_nonce], 'metabox')) {
             return;
         }
 

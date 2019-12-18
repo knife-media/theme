@@ -49,10 +49,9 @@
     </p>
 
     <?php
-         printf('<input class="image" type="hidden" name="%s[image]" value="%s">',
+        printf(
+            '<input class="image" type="hidden" name="%s[image]" value="%s">',
             esc_attr(self::$post_meta), esc_url($background['image'])
         );
-
-        wp_nonce_field('metabox', self::$metabox_nonce);
     ?>
 </div>

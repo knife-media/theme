@@ -37,7 +37,7 @@ class Knife_User_Meta {
      * @access  private
      * @var     string
      */
-    private static $options_nonce = 'knife-user-options-nonce';
+    private static $ajax_nonce = 'knife-user-options-nonce';
 
 
     /**
@@ -159,7 +159,7 @@ class Knife_User_Meta {
         $options = [
             'user_id' => $user_id,
             'action' => esc_attr(self::$ajax_action),
-            'nonce' => wp_create_nonce(self::$options_nonce),
+            'nonce' => wp_create_nonce(self::$ajax_nonce),
             'choose' => __('Выберите фото пользователя', 'knife-theme'),
             'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
         ];
@@ -172,7 +172,7 @@ class Knife_User_Meta {
      * Get postid by url using admin side ajax
      */
     public static function generate_user_photo() {
-        check_admin_referer(self::$options_nonce, 'nonce');
+        check_admin_referer(self::$ajax_nonce, 'nonce');
 
         if(!isset($_POST['poster'], $_POST['user_id'])) {
             wp_send_json_error();

@@ -51,15 +51,6 @@ class Knife_Promo_Manager {
 
 
     /**
-     * Checkbox save nonce
-     *
-     * @access  private
-     * @var     string
-     */
-    private static $metabox_nonce = 'knife-promo-nonce';
-
-
-    /**
      * Init function instead of constructor
      */
     public static function load_module() {
@@ -278,14 +269,6 @@ class Knife_Promo_Manager {
      * Save promo post meta
      */
     public static function save_metabox($post_id) {
-        if(!isset($_REQUEST[self::$metabox_nonce])) {
-            return;
-        }
-
-        if(!wp_verify_nonce($_REQUEST[self::$metabox_nonce], 'metabox')) {
-            return;
-        }
-
         if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return;
         }
