@@ -93,15 +93,6 @@
    * Click listener for answers
    */
   function addAnswerListener(answers, vote, cl) {
-    var message = null;
-
-    // Create message field if need
-    if(knife_quiz_options.hasOwnProperty('message') && knife_quiz_options.message) {
-      message = document.createElement('div');
-      message.classList.add('entry-quiz__vote-message');
-    }
-
-    // Set default quiz format if not exists
     if(!knife_quiz_options.hasOwnProperty('format')) {
       knife_quiz_options.format = 'binary';
     }
@@ -121,12 +112,6 @@
       var answer = answers[target.dataset.answer];
       vote.classList.add('entry-quiz__vote--complete');
 
-      // Show message if exists
-      if(message && answer.hasOwnProperty('message') && answer.message) {
-        message.innerHTML = answer.message;
-        vote.appendChild(message);
-      }
-
       switch(knife_quiz_options.format) {
         case 'category':
           if(answer.hasOwnProperty('category') && answer.category) {
@@ -141,23 +126,26 @@
             // Assign to hold currently max key
             hold = Object.keys(ranking).reduce(function(a, b) {
               return ranking[a] > ranking[b] ? a : b
-            })
+            });
           }
 
-          return target.classList.add(cl + '--selected');
+          target.classList.add(cl + '--selected');
+          break;
 
         case 'points':
           if(answer.hasOwnProperty('points') && answer.points) {
             hold = hold + parseInt(answer.points)
           }
 
-          return target.classList.add(cl + '--selected');
+          target.classList.add(cl + '--selected');
+          break;
 
         case 'binary':
           if(answer.hasOwnProperty('binary') && answer.binary) {
             hold = hold + 1;
 
-            return target.classList.add(cl + '--correct');
+            target.classList.add(cl + '--correct');
+            break;
           }
 
           // Loop through answers to find and mark correct
@@ -169,8 +157,22 @@
             }
           }
 
-          return target.classList.add(cl + '--wrong');
+          target.classList.add(cl + '--wrong');
+          break;
       }
+
+      // Show message field if exists or trigger button click
+      if(knife_quiz_options.hasOwnProperty('message') && knife_quiz_options.message) {
+        var message = document.createElement('div');
+        message.classList.add('entry-quiz__vote-message');
+
+        if(answer.message) {
+          message.innerHTML = answer.message;
+          return vote.appendChild(message);
+        }
+      }
+
+      return button.click();
     });
   }
 
