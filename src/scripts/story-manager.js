@@ -2,10 +2,11 @@
  * Create story using Glide slider
  *
  * @since 1.3
+ * @version 1.11
  */
 
 (function() {
-  var story = document.getElementById('glide');
+  var story = document.getElementById('story');
 
 
   /**
@@ -21,7 +22,7 @@
    *
    * @link https://github.com/glidejs/glide/issues/224
    */
-  if(story.querySelectorAll('.glide__slide').length < 1) {
+  if(story.querySelectorAll('.entry-story__slide').length < 1) {
     return false;
   }
 
@@ -29,9 +30,19 @@
   /*
    * Create Glide instance with custom options
    */
-  var glide = new Glide('.glide', {
+  var glide = new Glide('.entry-story', {
     gap: 0, rewind: false, touchAngle: 60, swipeThreshold: 60,
     dragThreshold: false,
+
+    classes: {
+      slider: 'entry-story--slider',
+      swipeable: 'entry-story--swipeable',
+      direction: {
+        ltr: 'entry-story--ltr',
+        rtl: 'entry-story--rtl'
+      }
+    },
+
     breakpoints: {
       767: {
         dragThreshold: true
@@ -56,10 +67,10 @@
 
     for (var i = 0, item; item = knife_story_stories[i]; i++) {
       var wrap = document.createElement('div');
-      wrap.classList.add('glide__slide-wrap');
+      wrap.classList.add('entry-story__slide-wrap');
 
       var slide = document.createElement('div');
-      slide.classList.add('glide__slide-content');
+      slide.classList.add('entry-story__slide-content');
 
       // Append kicker
       (function(){
@@ -68,7 +79,7 @@
         }
 
         var kicker = document.createElement('div');
-        kicker.classList.add('glide__slide-kicker');
+        kicker.classList.add('entry-story__slide-kicker');
         kicker.innerHTML = item.kicker;
 
         wrap.appendChild(kicker);
@@ -81,7 +92,7 @@
         }
 
         var image = document.createElement('div');
-        image.classList.add('glide__slide-image');
+        image.classList.add('entry-story__slide-image');
         image.style.setProperty('background-image', 'url(' + item.image + ')');
         image.style.setProperty('--image-ratio', item.ratio);
 
@@ -95,19 +106,19 @@
         }
 
         var entry = document.createElement('div');
-        entry.classList.add('glide__slide-entry');
+        entry.classList.add('entry-story__slide-entry');
         entry.innerHTML = item.entry;
 
         slide.appendChild(entry);
       })();
 
       var block = document.createElement('div');
-      block.classList.add('glide__slide');
+      block.classList.add('entry-story__slide');
       block.appendChild(wrap);
 
       wrap.appendChild(slide);
 
-      story.querySelector('.glide__slides').appendChild(block);
+      story.querySelector('.entry-story__slides').appendChild(block);
     }
   });
 
@@ -116,7 +127,7 @@
    * Apend share buttons to the last slide
    */
   glide.on('mount.before', function() {
-    var slides = story.querySelectorAll('.glide__slide');
+    var slides = story.querySelectorAll('.entry-story__slide');
 
     if(slides.length < 1) {
       return false;
@@ -131,15 +142,7 @@
     var clone = share.cloneNode(true);
     var slide = slides[slides.length - 1];
 
-    if(typeof knife_story_options.action !== 'undefined') {
-      var links = clone.querySelectorAll('.share__link');
-
-      for (var i = 0, link; link = links[i]; i++) {
-        link.setAttribute('data-action', knife_story_options.action);
-      }
-    }
-
-    slide.querySelector('.glide__slide-content').appendChild(clone);
+    slide.querySelector('.entry-story__slide-content').appendChild(clone);
 
     if(typeof window.shareButtons === 'function') {
       window.shareButtons();
@@ -152,11 +155,11 @@
    */
   glide.on('mount.before', function() {
     var bullets = document.createElement('div');
-    bullets.classList.add('glide__bullets');
+    bullets.classList.add('entry-story__bullets');
 
-    for (var i = 0; i < story.querySelectorAll('.glide__slide').length; i++) {
+    for (var i = 0; i < story.querySelectorAll('.entry-story__slide').length; i++) {
       var item = document.createElement('span');
-      item.classList.add('glide__bullets-item');
+      item.classList.add('entry-story__bullets-item');
 
       bullets.appendChild(item);
     }
@@ -178,9 +181,9 @@
     options.href = link.href;
 
     var empty = document.createElement('div');
-    empty.classList.add('glide__slide', 'glide__slide--empty');
+    empty.classList.add('entry-story__slide', 'entry-story__slide--empty');
 
-    return story.querySelector('.glide__slides').appendChild(empty);
+    return story.querySelector('.entry-story__slides').appendChild(empty);
   });
 
 
@@ -190,7 +193,7 @@
   glide.on('mount.before', function() {
     ['prev', 'next'].forEach(function(cl, i) {
       var control = document.createElement('div');
-      control.classList.add('glide__control', 'glide__control--' + cl);
+      control.classList.add('entry-story__control', 'entry-story__control--' + cl);
       control.classList.add();
 
       var icon = document.createElement('span');
@@ -200,13 +203,13 @@
       story.appendChild(control);
     });
 
-    story.querySelector('.glide__control--next').addEventListener('click', function(e) {
+    story.querySelector('.entry-story__control--next').addEventListener('click', function(e) {
       e.preventDefault();
 
       glide.go('>');
     });
 
-    story.querySelector('.glide__control--prev').addEventListener('click', function(e) {
+    story.querySelector('.entry-story__control--prev').addEventListener('click', function(e) {
       e.preventDefault();
 
       glide.go('<');
@@ -223,18 +226,17 @@
   });
 
 
-
   /**
    * Add bullets events
    */
   glide.on(['mount.after', 'run'], function() {
-    var bullets = story.querySelectorAll('.glide__bullets-item');
+    var bullets = story.querySelectorAll('.entry-story__bullets-item');
 
     for (var i = 0, bullet; bullet = bullets[i]; i++) {
-      bullet.classList.remove('glide__bullets-item--active');
+      bullet.classList.remove('entry-story__bullets-item--active');
 
       if(glide.index === i) {
-        bullet.classList.add('glide__bullets-item--active');
+        bullet.classList.add('entry-story__bullets-item--active');
       }
     }
   });
@@ -244,7 +246,7 @@
    * Add last slide index to options
    */
   glide.on('mount.after', function() {
-    var slides = story.querySelectorAll('.glide__slide');
+    var slides = story.querySelectorAll('.entry-story__slide');
     options.count = slides.length - 1
   });
 
@@ -253,12 +255,12 @@
    * Manage prev slider control
    */
   glide.on(['mount.after', 'run'], function(move) {
-    var prev = story.querySelector('.glide__control--prev');
+    var prev = story.querySelector('.entry-story__control--prev');
 
-    prev.classList.remove('glide__control--disabled');
+    prev.classList.remove('entry-story__control--disabled');
 
     if(glide.index === 0) {
-      prev.classList.add('glide__control--disabled');
+      prev.classList.add('entry-story__control--disabled');
     }
   });
 
@@ -267,12 +269,12 @@
    * Manage next slider control
    */
   glide.on('run', function(move) {
-    var next = story.querySelector('.glide__control--next');
+    var next = story.querySelector('.entry-story__control--next');
 
-    next.classList.remove('glide__control--disabled');
+    next.classList.remove('entry-story__control--disabled');
 
     if(glide.index === options.count) {
-      next.classList.add('glide__control--disabled');
+      next.classList.add('entry-story__control--disabled');
     }
   });
 
@@ -282,7 +284,7 @@
    */
   glide.on('run', function(move) {
     if(glide.index === options.count && options.href) {
-      story.classList.remove('glide--active');
+      story.classList.remove('entry-story--active');
     }
   });
 
@@ -317,7 +319,7 @@
         e.preventDefault();
       }
 
-      if(story.classList.contains('glide--dragging')) {
+      if(story.classList.contains('entry-story--dragging')) {
         e.preventDefault();
       }
     }, true);
@@ -329,19 +331,19 @@
    */
   glide.on('build.after', function() {
     if(typeof knife_story_options.background === 'undefined' || knife_story_options.background.length < 1) {
-      return story.classList.add('glide--active');
+      return story.classList.add('entry-story--active');
     }
 
     var image = new Image();
     image.addEventListener('load', function() {
-      return story.classList.add('glide--active');
+      return story.classList.add('entry-story--active');
     });
 
     image.src = knife_story_options.background;
 
 
     var media = document.createElement('div');
-    media.classList.add('glide__backdrop');
+    media.classList.add('entry-story__backdrop');
     media.style.backgroundImage = 'url(' + knife_story_options.background  + ')';
 
     // Append blur element
@@ -378,7 +380,7 @@
       }
 
       var shadow = document.createElement('div');
-      shadow.classList.add('glide__shadow');
+      shadow.classList.add('entry-story__shadow');
       shadow.style.backgroundColor = 'rgba(0, 0, 0, ' + alpha + ')';
 
       media.appendChild(shadow);

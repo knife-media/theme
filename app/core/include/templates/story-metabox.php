@@ -13,8 +13,6 @@
 
         // Upgrade with default vaules
         array_unshift($stories, []);
-
-        wp_nonce_field('metabox', self::$metabox_nonce);
     ?>
 
 

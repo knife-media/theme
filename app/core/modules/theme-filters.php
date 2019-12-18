@@ -33,9 +33,6 @@ class Knife_Theme_Filters {
         // Remove private posts from archives and home page
         add_action('pre_get_posts', [__CLASS__, 'remove_private_posts']);
 
-        // Fix the_tags output
-        add_filter('the_tags', [__CLASS__, 'update_the_tags']);
-
         // Update annoying body classes
         add_filter('body_class', [__CLASS__, 'update_body_classes'], 10, 2);
 
@@ -233,16 +230,6 @@ class Knife_Theme_Filters {
         }
 
         return $classes;
-    }
-
-
-    /**
-     * Update the_tags output
-     *
-     * @since 1.10
-     */
-    public static function update_the_tags($tags) {
-        return str_replace('href="', 'class="tags__link" href="', $tags);
     }
 
 

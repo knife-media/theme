@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.7
+ * @version 1.11
  */
 
 if (!defined('WPINC')) {
@@ -42,16 +42,6 @@ class Knife_Story_Manager {
      * @var     array
      */
     private static $meta_options = ['background', 'shadow', 'blur'];
-
-
-    /**
-     * Metabox save nonce
-     *
-     * @since   1.5
-     * @access  private static
-     * @var     string
-     */
-    private static $metabox_nonce = 'knife-story-nonce';
 
 
     /*
@@ -168,7 +158,7 @@ class Knife_Story_Manager {
      */
     public static function inject_dependences() {
         if(is_singular(self::$post_type)) {
-            $version = '3.2.6';
+            $version = '3.4.1';
             $include = get_template_directory_uri() . '/assets';
 
             // Enqueue swiper js to bottom
@@ -190,8 +180,6 @@ class Knife_Story_Manager {
             foreach(self::$meta_options as $item) {
                 $options[$item] = get_post_meta($post_id, self::$meta_items . "-{$item}", true);
             }
-
-            $options['action'] = __('Share story — last', 'knife-media');
 
             // Add stories options object
             wp_localize_script('knife-theme', 'knife_story_options', $options);
@@ -280,7 +268,12 @@ class Knife_Story_Manager {
      * Add story manage metabox
      */
     public static function add_metabox() {
-        add_meta_box('knife-story-metabox', __('Настройки истории', 'knife-theme'), [__CLASS__, 'display_metabox'], self::$post_type, 'normal', 'high');
+        add_meta_box(
+            'knife-story-metabox',
+            __('Настройки истории', 'knife-theme'),
+            [__CLASS__, 'display_metabox'],
+            self::$post_type, 'normal', 'high'
+        );
     }
 
 
@@ -299,14 +292,6 @@ class Knife_Story_Manager {
      */
     public static function save_metabox($post_id) {
         if(get_post_type($post_id) !== self::$post_type) {
-            return;
-        }
-
-        if(!isset($_REQUEST[self::$metabox_nonce])) {
-            return;
-        }
-
-        if(!wp_verify_nonce($_REQUEST[self::$metabox_nonce], 'metabox')) {
             return;
         }
 

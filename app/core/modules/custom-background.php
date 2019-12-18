@@ -42,7 +42,7 @@ class Knife_Custom_Background {
      * @access  private
      * @var     array
      */
-    private static $post_type = ['post', 'club', 'select', 'generator', 'quiz'];
+    private static $post_type = ['post', 'club', 'select', 'generator', 'quiz', 'story'];
 
 
     /**
@@ -234,8 +234,11 @@ class Knife_Custom_Background {
         // Insert wp media scripts
         wp_enqueue_media();
 
+        // Insert color picker scripts
+        wp_enqueue_style('wp-color-picker');
+
         // Insert admin scripts
-        wp_enqueue_script('knife-background-metabox', $include . '/scripts/background-metabox.js', ['jquery'], $version);
+        wp_enqueue_script('knife-background-metabox', $include . '/scripts/background-metabox.js', ['jquery', 'wp-color-picker'], $version);
 
         $options = [
             'choose' => __('Выберите фоновое изображение', 'knife-theme')
