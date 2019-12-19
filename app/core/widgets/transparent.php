@@ -143,18 +143,6 @@ class Knife_Widget_Transparent extends WP_Widget {
         );
 
 
-        // Terms filter
-        printf(
-            '<ul class="cat-checklist categorychecklist knife-widget-termlist" id="%1$s">%2$s</ul>',
-            esc_attr($this->get_field_id('termlist')),
-            wp_terms_checklist(0, [
-                'taxonomy' => 'post_tag',
-                'selected_cats' => $instance['termlist'],
-                'echo' => false
-            ])
-        );
-
-
         // Posts offset
         printf(
             '<p><label for="%1$s">%3$s</label> <input class="tiny-text" id="%1$s" name="%2$s" type="number" value="%4$s"></p>',
@@ -162,6 +150,21 @@ class Knife_Widget_Transparent extends WP_Widget {
             esc_attr($this->get_field_name('offset')),
             __('Пропустить записей:', 'knife-theme'),
             esc_attr($instance['offset'])
+        );
+
+
+        $checklist = wp_terms_checklist(0, [
+            'taxonomy' => 'post_tag',
+            'selected_cats' => $instance['termlist'],
+            'echo' => false
+        ]);
+
+
+        // Terms filter
+        printf(
+            '<ul class="cat-checklist categorychecklist knife-widget-termlist" id="%1$s">%2$s</ul>',
+            esc_attr($this->get_field_id('termlist')),
+            preg_replace('~id="[^"]+"~', '', $checklist)
         );
     }
 
