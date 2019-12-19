@@ -66,10 +66,4 @@
       break;
     }
   }
-
-
-  /**
-   * Remove entry-inpost block
-   */
-  return widgets.parentNode.removeChild(widgets);
 })();
