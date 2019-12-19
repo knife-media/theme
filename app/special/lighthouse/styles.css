@@ -226,33 +226,35 @@
 
 
 /**
- * entry-footer styles
+ * entry-content author styles
  */
-.entry-footer .entry-footer__author {
+.entry-content__author {
   display: block;
 
-  margin-top: 0;
+  margin-top: 2rem;
   font-size: .875rem;
 
   background-color: transparent;
 }
   @media screen and (max-width: 479px) {
-    .entry-footer .entry-footer__author {
+    .entry-content__author {
       font-size: .75rem;
     }
   }
 
-.entry-footer .entry-footer__author .meta {
+.entry-content__author .meta {
   font-size: inherit;
 }
 
-.entry-footer .entry-footer__author .meta__item {
+.entry-content__author .meta__item {
   font-size: 1.25em;
   font-weight: 700;
 
   color: var(--color-title);
   background-color: var(--color-mark);
   box-shadow: .5rem 0 0 var(--color-mark), -.5rem 0 0 var(--color-mark);
+
+  border-bottom: none;
 }
 
 

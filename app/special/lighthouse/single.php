@@ -56,14 +56,10 @@ get_header(); ?>
             <div class="entry-content">
                 <?php
                     the_content();
-                ?>
-            </div>
 
-            <div class="entry-footer">
-                <?php
                     the_info(
                         sprintf(
-                            '<div class="entry-footer__author"><p>%s</p>',
+                            '<div class="entry-content__author"><p>%s</p>',
                             _x('Подготовила специальный<br> корреспондент журнала «Нож»', 'special: lighthouse', 'knife-theme')
                         ),
                         '</div>', ['author']
