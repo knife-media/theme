@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.2
- * @version 1.9
+ * @version 1.11
  */
 
 
@@ -37,6 +37,17 @@ class Knife_Widget_Handler {
 
         // Enqueue article widgets
         add_action('wp_enqueue_scripts', [__CLASS__, 'inject_article'], 12);
+
+        // Clear cache
+        add_action('added_post_meta', [__CLASS__, 'clear_cache']);
+        add_action('deleted_post_meta', [__CLASS__, 'clear_cache']);
+        add_action('updated_post_meta', [__CLASS__, 'clear_cache']);
+        add_action('deleted_post', [__CLASS__, 'clear_cache']);
+        add_action('save_post', [__CLASS__, 'clear_cache']);
+        add_action('widget_update_callback', [__CLASS__, 'clear_cache']);
+
+        // Cache widget output
+        add_filter('widget_display_callback', [__CLASS__, 'cache_widget'], 10, 3);
     }
 
 
@@ -156,6 +167,57 @@ class Knife_Widget_Handler {
         foreach(glob($include . "/*.php") as $widget) {
             include_once($include . basename($widget));
         }
+    }
+
+
+    /**
+     * Remove widgets cache on save or delete post
+     *
+     * @since 1.11
+     */
+    public static function clear_cache($instance) {
+        $sidebars = get_option('sidebars_widgets');
+
+        foreach($sidebars as $sidebar) {
+            if(is_array($sidebar)) {
+                foreach($sidebar as $widget) {
+                    delete_transient($widget);
+                }
+            }
+        }
+
+        return $instance;
+    }
+
+
+    /**
+     * Cache widget output
+     */
+    public static function cache_widget($instance, $widget, $args) {
+        if(false === $instance) {
+            return $instance;
+        }
+
+        // Skip cache on preview
+        if($widget->is_preview()) {
+            return $instance;
+        }
+
+        // Get cached version
+        $cached_widget = get_transient($widget->id);
+
+        if(false === $cached_widget) {
+            ob_start();
+
+            $widget->widget($args, $instance);
+            $cached_widget = ob_get_clean();
+
+            set_transient($widget->id, $cached_widget, 24 * HOUR_IN_SECONDS);
+        }
+
+        echo $cached_widget;
+
+        return false;
     }
 }
 
