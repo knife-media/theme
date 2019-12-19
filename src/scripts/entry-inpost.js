@@ -1,5 +1,5 @@
 /**
- * Smart display entry widgets
+ * Smart display entry inpost widgets
  *
  * @since 1.9
  */
@@ -16,7 +16,7 @@
   }
 
 
-  var widgets = document.querySelector('.entry-widgets');
+  var widgets = document.querySelector('.entry-inpost');
 
   /**
    * Check if entry-widgets block has at least one widget
@@ -69,11 +69,7 @@
 
 
   /**
-   * Show entry-widgets block or remove if empty
+   * Remove entry-inpost block
    */
-  if(widgets.children.length > 0) {
-    return widgets.classList.add('entry-widgets--expand')
-  }
-
   return widgets.parentNode.removeChild(widgets);
 })();

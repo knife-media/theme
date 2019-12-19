@@ -46,6 +46,14 @@
         ?>
     </div>
 
+    <?php if(is_active_sidebar('knife-bottom')) : ?>
+        <div class="entry-bottom">
+            <?php
+                dynamic_sidebar('knife-bottom');
+            ?>
+        </div>
+    <?php endif; ?>
+
     <?php
         the_tagline(
             '<div class="entry-caption">', '</div>'
