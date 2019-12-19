@@ -77,6 +77,14 @@
       margin-top: 0;
     }
 
+    .entry-comments + .entry-bottom {
+      margin-top: 0;
+    }
+
+    .entry-footer + .entry-bottom {
+      margin-top: 0;
+    }
+
     .entry-content > .figure--toc {
       width: calc(100% + 2rem);
       max-width: none;
