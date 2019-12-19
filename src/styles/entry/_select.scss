@@ -35,7 +35,7 @@
     strong {
       display: block;
 
-      font-size: 10rem;
+      font-size: 12rem;
       font-weight: 500;
       line-height: .875;
       color: $color-select;
@@ -43,7 +43,7 @@
       transform: translateX(-.025em);
 
       @media screen and (max-width: 767px) {
-        font-size: 6rem;
+        font-size: 5rem;
       }
     }
 
