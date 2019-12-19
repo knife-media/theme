@@ -101,7 +101,11 @@
     display: none;
   }
 
-  &.widget-blunt--entry {
+  &.widget-blunt--inpost {
+    display: none;
+  }
+
+  &.widget-blunt--bottom {
     display: none;
   }
 

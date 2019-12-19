@@ -8,7 +8,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.10
+ * @version 1.11
  */
 
 get_header(); ?>
@@ -17,13 +17,13 @@ get_header(); ?>
     if(is_active_sidebar('knife-feature')) :
         dynamic_sidebar('knife-feature');
     endif;
+
+    if(is_active_sidebar('knife-frontal')) :
+        dynamic_sidebar('knife-frontal');
+    endif;
 ?>
 
 <?php if(is_active_sidebar('knife-frontal')) : ?>
-    <?php
-        dynamic_sidebar('knife-frontal');
-    ?>
-
     <nav class="navigate">
         <?php
             printf('<a class="button" href="%2$s">%1$s</a>',

@@ -131,15 +131,19 @@
     }
   }
 
+  &.widget-story--billboard {
+    display: none;
+  }
+
   &.widget-story--sidebar {
     display: none;
   }
 
-  &.widget-story--entry {
+  &.widget-story--inpost {
     display: none;
   }
 
-  &.widget-story--billboard {
+  &.widget-story--bottom {
     display: none;
   }
 

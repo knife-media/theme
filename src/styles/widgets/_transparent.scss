@@ -187,15 +187,19 @@
     }
   }
 
+  &.widget-transparent--billboard {
+    display: none;
+  }
+
   &.widget-transparent--sidebar {
     display: none;
   }
 
-  &.widget-transparent--entry {
+  &.widget-transparent--inpost {
     display: none;
   }
 
-  &.widget-transparent--billboard {
+  &.widget-transparent--bottom {
     display: none;
   }
 

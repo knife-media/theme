@@ -164,15 +164,19 @@
     }
   }
 
+  &.widget-single--billboard {
+    display: none;
+  }
+
   &.widget-single--sidebar {
     display: none;
   }
 
-  &.widget-single--entry {
+  &.widget-single--inpost {
     display: none;
   }
 
-  &.widget-single--billboard {
+  &.widget-single--bottom {
     display: none;
   }
 

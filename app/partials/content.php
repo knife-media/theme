@@ -39,10 +39,10 @@
         ?>
     </div>
 
-    <?php if(is_active_sidebar('knife-entry')) : ?>
-        <div class="entry-widgets">
+    <?php if(is_active_sidebar('knife-inpost')) : ?>
+        <div class="entry-inpost">
             <?php
-                dynamic_sidebar('knife-entry');
+                dynamic_sidebar('knife-inpost');
             ?>
         </div>
     <?php endif; ?>
@@ -65,6 +65,14 @@
             );
         ?>
     </div>
+
+    <?php if(is_active_sidebar('knife-bottom')) : ?>
+        <div class="entry-bottom">
+            <?php
+                dynamic_sidebar('knife-bottom');
+            ?>
+        </div>
+    <?php endif; ?>
 
     <?php
         the_tagline(

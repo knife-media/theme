@@ -79,15 +79,19 @@
     }
   }
 
+  &.widget-select--billboard {
+    display: none;
+  }
+
   &.widget-select--sidebar {
     display: none;
   }
 
-  &.widget-select--entry {
+  &.widget-select--inpost {
     display: none;
   }
 
-  &.widget-select--billboard {
+  &.widget-select--bottom {
     display: none;
   }
 

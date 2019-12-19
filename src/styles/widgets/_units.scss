@@ -34,7 +34,11 @@
     }
   }
 
-  &.widget-units--entry {
+  &.widget-units--inpost {
+    display: none;
+  }
+
+  &.widget-units--bottom {
     display: none;
   }
 

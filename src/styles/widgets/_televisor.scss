@@ -73,15 +73,19 @@
     }
   }
 
+  &.widget-televisor--billboard {
+    display: none;
+  }
+
   &.widget-televisor--sidebar {
     display: none;
   }
 
-  &.widget-televisor--entry {
+  &.widget-televisor--inpost {
     display: none;
   }
 
-  &.widget-televisor--billboard {
+  &.widget-televisor--bottom {
     display: none;
   }
 

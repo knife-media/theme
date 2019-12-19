@@ -1,4 +1,4 @@
-.entry-widgets {
+.entry-inpost {
   display: none;
   flex-flow: row wrap;
   justify-content: center;
@@ -8,16 +8,4 @@
   width: 100%;
   padding: 0 1rem 1rem;
   background-color: $color-white;
-
-  &.entry-widgets--expand {
-    display: flex;
-
-    & > * {
-      margin-bottom: 1rem;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-  }
 }

@@ -119,7 +119,14 @@
     }
   }
 
-  &.widget-informer--entry {
+  &.widget-informer--inpost {
+    width: 100%;
+    max-width: $width-content;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  &.widget-informer--bottom {
     width: 100%;
     max-width: $width-content;
     margin-top: 1rem;

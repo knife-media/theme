@@ -38,13 +38,15 @@ class Knife_Widget_Handler {
         // Enqueue article widgets
         add_action('wp_enqueue_scripts', [__CLASS__, 'inject_article'], 12);
 
-        // Clear cache
+        // Clear cache on save post
         add_action('added_post_meta', [__CLASS__, 'clear_cache']);
         add_action('deleted_post_meta', [__CLASS__, 'clear_cache']);
         add_action('updated_post_meta', [__CLASS__, 'clear_cache']);
         add_action('deleted_post', [__CLASS__, 'clear_cache']);
         add_action('save_post', [__CLASS__, 'clear_cache']);
-        add_action('widget_update_callback', [__CLASS__, 'clear_cache']);
+
+        // Clear cache on widget update
+        add_action('update_option_sidebars_widgets', [__CLASS__, 'clear_cache']);
 
         // Cache widget output
         add_filter('widget_display_callback', [__CLASS__, 'cache_widget'], 10, 3);
@@ -82,16 +84,24 @@ class Knife_Widget_Handler {
         register_sidebar([
             'name'          => __('Сайдбар', 'knife-theme'),
             'id'            => 'knife-sidebar',
-            'description'   => __('Добавленные виджеты появятся в сайдбаре внутри постов.', 'knife-theme'),
+            'description'   => __('Добавленные виджеты появятся в сайдбаре на странице постов.', 'knife-theme'),
             'before_widget' => '<div class="widget-%2$s widget-%2$s--sidebar">',
             'after_widget'  => '</div>'
         ]);
 
         register_sidebar([
             'name'          => __('Внутри записи', 'knife-theme'),
-            'id'            => 'knife-entry',
+            'id'            => 'knife-inpost',
             'description'   => __('Добавленные виджеты появятся в равномерно внутри поста.', 'knife-theme'),
-            'before_widget' => '<div class="widget-%2$s widget-%2$s--entry">',
+            'before_widget' => '<div class="widget-%2$s widget-%2$s--inpost">',
+            'after_widget'  => '</div>'
+        ]);
+
+        register_sidebar([
+            'name'          => __('Подвал записи', 'knife-theme'),
+            'id'            => 'knife-bottom',
+            'description'   => __('Добавленные виджеты появятся внизу на странице поста.', 'knife-theme'),
+            'before_widget' => '<div class="widget-%2$s widget-%2$s--bottom">',
             'after_widget'  => '</div>'
         ]);
     }
@@ -175,18 +185,18 @@ class Knife_Widget_Handler {
      *
      * @since 1.11
      */
-    public static function clear_cache($instance) {
+    public static function clear_cache() {
         $sidebars = get_option('sidebars_widgets');
 
         foreach($sidebars as $sidebar) {
-            if(is_array($sidebar)) {
-                foreach($sidebar as $widget) {
-                    delete_transient($widget);
-                }
+            if(!is_array($sidebar)) {
+                continue;
+            }
+
+            foreach($sidebar as $widget) {
+                delete_transient($widget);
             }
         }
-
-        return $instance;
     }
 
 

@@ -87,7 +87,15 @@
     margin-top: .5rem;
   }
 
-  &.widget-recent--entry {
+  &.widget-recent--sidebar {
+    flex: 1 1 auto;
+
+    .widget-recent__wrapper {
+      @include sticky-widget;
+    }
+  }
+
+  &.widget-recent--inpost {
     width: calc(100% - 2rem);
     max-width: $width-content;
     margin-top: 2rem;
@@ -124,15 +132,11 @@
     }
   }
 
-  &.widget-recent--sidebar {
-    flex: 1 1 auto;
-
-    .widget-recent__wrapper {
-      @include sticky-widget;
-    }
+  &.widget-recent--billboard {
+    display: none;
   }
 
-  &.widget-recent--billboard {
+  &.widget-recent--bottom {
     display: none;
   }
 }

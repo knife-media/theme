@@ -238,7 +238,7 @@
     }
   }
 
-  &.widget-club--entry {
+  &.widget-club--inpost {
     width: 100%;
     max-width: $width-content + 2rem;
 
@@ -265,6 +265,33 @@
     @media screen and (max-width: 767px) {
       margin-top: 1rem;
       margin-bottom: 1rem;
+    }
+  }
+
+  &.widget-club--bottom {
+    width: 100%;
+    max-width: $width-content + 4rem;
+    margin: 0 auto 1.5rem;
+
+    .widget-club__wrapper {
+      box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, .2);
+      border-radius: 3px;
+    }
+
+    .widget-club__inner {
+      width: 100%;
+    }
+
+    .widget-club__more {
+      padding: 0;
+    }
+
+    .widget-club__content {
+      padding: 1rem 0;
+    }
+
+    @media screen and (max-width: 767px) {
+      margin: 0 auto 1rem;
     }
   }
 

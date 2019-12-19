@@ -1,0 +1,27 @@
+.entry-bottom {
+  display: block;
+  position: relative;
+
+  width: 100%;
+  overflow: hidden;
+
+  color: $color-text;
+  background-color: $color-white;
+
+  & > * {
+    display: block;
+    position: relative;
+
+    width: 100%;
+    max-width: $width-content + 4rem;
+    margin: 0 auto 1.5rem;
+    padding: .75rem 2rem;
+
+    background-color: $color-sheet;
+
+    @media screen and (max-width: 767px) {
+      margin: 0 auto 1rem;
+      padding: .5rem 1rem;
+    }
+  }
+}
