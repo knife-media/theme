@@ -16,8 +16,8 @@
             );
 
             the_share(
-                '<div class="entry-generator__share share">', '</div>',
-                __('Share generator — results', 'knife-theme')
+                '<div class="entry-generator__share share">',
+                '</div>'
             );
 
             the_lead(
@@ -40,8 +40,8 @@
             );
 
             the_share(
-                '<div class="entry-footer__share share">', '</div>',
-                __('Share generator — bottom', 'knife-theme')
+                '<div class="entry-footer__share share">',
+                '</div>'
             );
         ?>
     </div>

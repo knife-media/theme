@@ -27,8 +27,8 @@
             );
 
             the_share(
-                '<div class="entry-header__share share">', '</div>',
-                __('Share cards — top', 'knife-theme')
+                '<div class="entry-header__share share">',
+                '</div>'
             );
         ?>
     </div>
@@ -52,8 +52,8 @@
             );
 
             the_share(
-                '<div class="entry-footer__share share">', '</div>',
-                __('Share cards — bottom', 'knife-theme')
+                '<div class="entry-footer__share share">',
+                '</div>'
             );
         ?>
     </div>

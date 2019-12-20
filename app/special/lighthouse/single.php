@@ -47,8 +47,8 @@ get_header(); ?>
                     );
 
                     the_share(
-                        '<div class="entry-header__share share">', '</div>',
-                        __('Share aside — top', 'knife-theme')
+                        '<div class="entry-header__share share">',
+                        '</div>'
                     );
                 ?>
             </div>

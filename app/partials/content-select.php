@@ -22,8 +22,8 @@
             );
 
             the_share(
-                '<div class="entry-select__share share">', '</div>',
-                __('Share select — top', 'knife-theme')
+                '<div class="entry-select__share share">',
+                '</div>'
             );
         ?>
 
@@ -43,8 +43,8 @@
     <div class="entry-footer">
         <?php
             the_share(
-                '<div class="entry-footer__share share">', '</div>',
-                __('Share select — bottom', 'knife-theme')
+                '<div class="entry-footer__share share">',
+                '</div>'
             );
         ?>
     </div>

@@ -16,9 +16,9 @@ if(!function_exists('the_share')) :
      *
      * @since 1.3
      */
-    function the_share($before = '', $after = '', $action = '', $echo = true, $output = '') {
+    function the_share($before = '', $after = '', $echo = true, $output = '') {
         if(method_exists('Knife_Share_Buttons', 'get_buttons')) {
-            $output = Knife_Share_Buttons::get_buttons($action);
+            $output = Knife_Share_Buttons::get_buttons();
         }
 
         // Check if output not empty

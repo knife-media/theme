@@ -31,8 +31,8 @@
                                 );
 
                                 the_share(
-                                    '<div class="entry-story__slide-share share">', '</div>',
-                                    __('Share story — first', 'knife-theme')
+                                    '<div class="entry-story__slide-share share">',
+                                    '</div>'
                                 );
                             ?>
                         </div>

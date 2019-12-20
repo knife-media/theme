@@ -22,8 +22,8 @@
             );
 
             the_share(
-                '<div class="entry-quiz__share share">', '</div>',
-                __('Share quiz — top', 'knife-theme')
+                '<div class="entry-quiz__share share">',
+                '</div>'
             );
 
             the_lead(

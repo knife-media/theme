@@ -6,20 +6,18 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.8
- */
-
+ * @version 1.11
+*/
 
 if (!defined('WPINC')) {
     die;
 }
 
-
 class Knife_Share_Buttons {
     /**
      * Print social share buttons template
      */
-    public static function get_buttons($action, $output = '') {
+    public static function get_buttons($output = '') {
         $settings = self::get_settings();
 
         foreach($settings as $network => $data) {
@@ -28,18 +26,13 @@ class Knife_Share_Buttons {
                 esc_html($data['text']), $network
             );
 
-            $atts = sprintf(' data-action="%1$s" data-label="%2$s"',
-                esc_attr($action),
-                esc_attr($network)
-            );
-
             $link = sprintf($data['link'],
                 esc_url(get_permalink()),
                 urlencode(strip_tags(get_the_title()))
             );
 
-            $item = sprintf('<a class="share__link share__link--%3$s" href="%2$s" target="_blank"%4$s>%1$s</a>',
-                $text, esc_url($link), esc_attr($network), $atts
+            $item = sprintf('<a class="share__link share__link--%3$s" href="%2$s" data-label="%3$s" target="_blank">%1$s</a>',
+                $text, esc_url($link), esc_attr($network)
             );
 
             $output = $output . $item;
