@@ -35,9 +35,6 @@ class Knife_Widget_Handler {
         // Hide default widgets title
         add_filter('widget_title', '__return_empty_string');
 
-        // Enqueue article widgets
-        add_action('wp_enqueue_scripts', [__CLASS__, 'inject_article'], 12);
-
         // Clear cache on save post
         add_action('added_post_meta', [__CLASS__, 'clear_cache']);
         add_action('deleted_post_meta', [__CLASS__, 'clear_cache']);
@@ -46,7 +43,7 @@ class Knife_Widget_Handler {
         add_action('save_post', [__CLASS__, 'clear_cache']);
 
         // Clear cache on widget update
-        add_action('update_option_sidebars_widgets', [__CLASS__, 'clear_cache']);
+        add_filter('widget_update_callback', [__CLASS__, 'update_widget']);
 
         // Cache widget output
         add_filter('widget_display_callback', [__CLASS__, 'cache_widget'], 10, 3);
@@ -134,16 +131,6 @@ class Knife_Widget_Handler {
 
 
     /**
-     * Inject widget from knife-article sidebar
-     *
-     * @since 1.9
-     */
-    public static function inject_article() {
-
-    }
-
-
-    /**
      * Enqueue assets to admin post screen only
      */
     public static function add_assets($hook) {
@@ -197,6 +184,18 @@ class Knife_Widget_Handler {
                 delete_transient($widget);
             }
         }
+    }
+
+
+    /**
+     * Update widget callback
+     *
+     * @since 1.11
+     */
+    public static function update_widget($instance) {
+        self::clear_cache();
+
+        return $instance;
     }
 
 
