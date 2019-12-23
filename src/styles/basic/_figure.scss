@@ -103,19 +103,22 @@
     }
 
     ul, ol {
-      padding-left: 1.5rem;
+      padding-left: 2rem;
       list-style-position: outside;
+
+      @media screen and (max-width: 767px) {
+        padding-left: 1.5rem;
+      }
     }
 
     li {
       margin-top: 1rem;
-      font-size: 1.25rem;
+      font-size: 1rem;
       font-weight: 500;
       line-height: 1.25;
 
       @media screen and (max-width: 767px) {
         margin-top: .75rem;
-        font-size: 1rem;
       }
     }
   }
