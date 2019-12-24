@@ -366,26 +366,24 @@ class Knife_Similar_Posts {
         if($post_terms = get_the_tags($post_id)) {
             $the_terms = wp_list_pluck($post_terms, 'term_id');
 
-            // Get posts with primary tag
-            $the_posts = get_posts([
+            $query_args = [
                 'posts_per_page' => -1,
                 'tag_id' => $the_terms[0],
                 'post__not_in' => [$post_id],
                 'post_status' => 'publish',
                 'ignore_sticky_posts' => true,
-                'tax_query' => [
-                    [
-                        'taxonomy' => 'category',
-                        'field'    => 'slug',
-                        'terms'    => ['news'],
-                        'operator' => 'NOT IN'
-                    ]
-                ]
-            ]);
+            ];
 
             $related = [];
 
-            foreach(wp_list_pluck($the_posts, 'ID') as $id) {
+            if(property_exists('Knife_News_Manager', 'news_id')) {
+                $query_args['category__not_in'] = Knife_News_Manager::$news_id;
+            }
+
+            // Get posts with primary tag
+            $the_posts = wp_list_pluck(get_posts($query_args), 'ID');
+
+            foreach($the_posts as $id) {
                 $related[$id] = 0;
 
                 foreach(get_the_terms($id, 'post_tag') as $tag) {
