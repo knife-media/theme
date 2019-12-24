@@ -121,6 +121,24 @@
         margin-top: .75rem;
       }
     }
+
+    h2 + ul, h2 + ol {
+      margin-top: 1.5rem;
+      padding-left: 2.5rem;
+
+      & > li {
+        font-size: 1.25rem;
+
+        @media screen and (max-width: 767px) {
+          font-size: 1rem;
+        }
+      }
+
+      @media screen and (max-width: 767px) {
+        margin-top: 1rem;
+        padding-left: 1.5rem;
+      }
+    }
   }
 
   &.figure--inner {
@@ -162,6 +180,28 @@
       &:hover {
         filter: brightness(125%);
       }
+    }
+  }
+
+  &.figure--card {
+    width: calc(100% + 2rem);
+    max-width: none;
+    margin: 0 -1rem;
+    padding: 2rem 1rem;
+
+    background-color: lighten(desaturate($color-mark, 20), 10);
+
+    &:first-child {
+      margin-top: -3rem;
+    }
+
+    &:last-child {
+      margin-bottom: -3rem;
+    }
+
+    @media screen and (max-width: 767px) {
+      margin: -1.5rem -1rem;
+      padding: 1rem;
     }
   }
 
