@@ -122,7 +122,7 @@ class Knife_MCE_Plugins {
 
         // Remove all attributes and bad tags
         $settings['paste_preprocess'] = "function(plugin, args){
-            var whitelist = 'p,span,strong,em,h1,h2,h3,h4,h5,h6,ul,li,ol,a';
+            var whitelist = 'p,span,strong,em,h1,h2,h3,h4,h5,h6,ul,li,ol,a,b';
             var stripped = jQuery('<div>' + args.content + '</div>');
             var els = stripped.find('*').not(whitelist);
             for (var i = els.length - 1; i >= 0; i--) {
