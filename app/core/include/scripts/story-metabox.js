@@ -5,47 +5,57 @@ jQuery(document).ready(function($) {
 
   var box = $('#knife-story-box');
 
+
   /**
-   * Use this variable as storage for current editor id
+   * Check required metabox options
+   */
+  if(typeof knife_story_metabox.error === 'undefined') {
+    return false;
+  }
+
+
+  /**
+   * Use this variable to store for current editor id
    */
   box.data('editor', 1);
 
 
   /**
-   * Sort items
+   * Update wp.editor using editorId
    */
-  box.sortable({
-    items: '.item',
-    handle: '.item__field-drag',
-    placeholder: 'dump',
-    axis: 'y'
-  }).disableSelection();
-
-
-  /**
-   * Create wp.editor using item element
-   */
-  function createEditor(el) {
-    var textarea = el.find('.item__entry');
-    var editorId = textarea.attr('id');
-
-    if(typeof editorId === 'undefined') {
-      editorId = 'knife-story-editor-' + box.data('editor');
-      textarea.attr('id', editorId);
-
-      box.data().editor++;
-    } else {
-      wp.editor.remove(editorId);
+  function updateEditor(el) {
+    if(typeof knife_story_metabox.editor === 'undefined') {
+      knife_story_metabox.editor = 'html';
     }
 
-    wp.editor.initialize(editorId, {
-      tinymce: true,
-      quicktags: true,
-      mediaButtons: false,
-      tinymce: {
-        toolbar1: 'formatselect,bold,italic,bullist,numlist,link',
-        block_formats: 'Paragraph=p;Heading 2=h2;Heading 3=h3;Heading 4=h4'
+    $.each(el.find('.wp-editor-area'), function(i, editor) {
+      var textarea = $(editor);
+      var editorId = textarea.attr('id');
+
+      if(typeof editorId === 'undefined') {
+        editorId = 'knife-story-editor-' + box.data('editor');
+        textarea.attr('id', editorId);
+
+        box.data().editor++;
+      } else {
+        wp.editor.remove(editorId);
       }
+
+      wp.editor.initialize(editorId, {
+        tinymce: {
+          toolbar1: 'link',
+          invalid_styles: 'color font-weight font-size',
+          init_instance_callback: function() {
+            if(window.tinymce && window.switchEditors) {
+              window.switchEditors.go(editorId, knife_story_metabox.editor);
+            }
+          }
+        },
+        quicktags: {
+          buttons: 'link'
+        },
+        mediaButtons: false
+      });
     });
   }
 
@@ -119,10 +129,6 @@ jQuery(document).ready(function($) {
     e.preventDefault();
 
     $(this).closest('.item').remove();
-
-    if(box.find('.item').length === 1) {
-      box.find('.actions__add').trigger('click');
-    }
   });
 
 
@@ -167,10 +173,10 @@ jQuery(document).ready(function($) {
   /**
    * Add story background
    */
-  box.on('click', '.option__background', function(e) {
+  box.on('click', '.manage__background', function(e) {
     e.preventDefault();
 
-    var background = box.find('.option__background');
+    var background = box.find('.manage__background');
 
     // Open default wp.media image frame
     var frame = wp.media({
@@ -182,17 +188,48 @@ jQuery(document).ready(function($) {
     frame.on('select', function() {
       var selection = frame.state().get('selection').first().toJSON();
 
-      background.find('.option__background-media').val(selection.url);
+      background.find('.manage__background-media').val(selection.url);
 
       // Show preview
-      displayImage(background, selection.url, 'option__background-image');
+      displayImage(background, selection.url, 'manage__background-image');
 
       // Set shadow on image creation
-      box.find('.option__range').trigger('change');
+      box.find('.manage__range').trigger('change');
     });
 
     return frame.open();
   });
+
+
+  /**
+   * Set items proper name attribute
+   */
+  function sortItems(callback) {
+    if(typeof knife_story_metabox.meta_items === 'undefined') {
+      return alert(knife_story_metabox.error);
+    }
+
+    var meta_items = knife_story_metabox.meta_items;
+
+    box.find('.item:not(:first)').each(function(i) {
+      var item = $(this);
+
+      // Change fields name
+      item.find('[data-item]').each(function() {
+        var data = $(this).data('item');
+
+        // Create name attribute
+        var attr = meta_items + '[' + i + ']';
+        var name = attr + '[' + data + ']';
+
+        $(this).attr('name', name);
+      });
+    });
+
+    if(typeof callback === 'function') {
+      return callback();
+    }
+  }
 
 
   /**
@@ -202,21 +239,25 @@ jQuery(document).ready(function($) {
     e.preventDefault();
 
     var item = box.find('.item:first').clone();
+
+    // Insert after last item
     box.find('.item:last').after(item);
 
-    return createEditor(item);
+    sortItems(function() {
+      updateEditor(item);
+    });
   });
 
 
   /**
    * Shadow range
    */
-  box.on('change', '.option__range--shadow', function(e) {
-    var blank = box.find('.option__background-blank');
+  box.on('change', '.manage__item-shadow', function(e) {
+    var blank = box.find('.manage__background-blank');
     var shade = parseInt($(this).val()) / 100;
 
-    if(box.find('.option__background-image').length < 1) {
-      return blinkClass(blank, 'option__background-blank--error');
+    if(box.find('.manage__background-image').length < 1) {
+      return blinkClass(blank, 'manage__background-blank--error');
     }
 
     blank.css('background-color', 'rgba(0, 0, 0, ' + shade + ')');
@@ -226,47 +267,47 @@ jQuery(document).ready(function($) {
   /**
    * Blur range
    */
-  box.on('change', '.option__range--blur', function(e) {
-    var blank = box.find('.option__background-blank');
+  box.on('change', '.manage__item-blur', function(e) {
+    var blank = box.find('.manage__background-blank');
 
-    if(box.find('.option__background-image').length < 1) {
-      return blinkClass(blank, 'option__background-blank--error');
+    if(box.find('.manage__background-image').length < 1) {
+      return blinkClass(blank, 'manage__background-blank--error');
     }
 
-    var image = box.find('.option__background-image');
+    var image = box.find('.manage__background-image');
 
     image.css('filter', 'blur(' + $(this).val() + 'px)');
   });
 
 
   /**
-   * Reinit wp editor on drag
+   * Set text color input as colorpicker
    */
-  box.on('sortstop', function(event, ui) {
-    return createEditor(ui.item);
-  });
+  box.find('.manage__item-color').wpColorPicker();
 
 
   /**
-   * Init wp editors
+   * Onload set up
    */
-  box.find('.item:not(:first)').each(function(i, el) {
-    var item = $(this);
+  (function() {
+    // Sort items and update editor
+    sortItems(function() {
+      box.find('.item:not(:first)').each(function(i) {
+        var item = $(this);
 
-    return createEditor(item);
-  });
+        // Update item editor
+        updateEditor(item);
+      });
+    });
 
 
-  /**
-   * Set background range on load
-   */
-  box.find('.option__range').trigger('change');
+    // Set shadow range
+    box.find('.manage__item-shadow').trigger('change');
 
+    // Set blur range
+    box.find('.manage__item-blur').trigger('change');
 
-  /**
-   * Show at least one item box on load
-   */
-  if(box.find('.item').length === 1) {
-    box.find('.actions__add').trigger('click');
-  }
+    // Show items
+    box.find('.box--items').addClass('box--expand');
+  })();
 });

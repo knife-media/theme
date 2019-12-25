@@ -2,19 +2,74 @@
     <?php
         // get stories array
         $post_id = get_the_ID();
-        $stories = get_post_meta($post_id, self::$meta_items . '-stories');
 
-        $options = [];
+        // Story options
+        $options = get_post_meta($post_id, self::$meta_options, true);
 
-        // get options
-        foreach(self::$meta_options as $item) {
-            $options[$item] = get_post_meta($post_id, self::$meta_items . "-{$item}", true);
-        }
+        // Story items
+        $stories = get_post_meta($post_id, self::$meta_items);
 
         // Upgrade with default vaules
         array_unshift($stories, []);
     ?>
 
+
+    <div class="box box--manage">
+        <div class="manage manage--background">
+            <figure class="manage__background">
+                <?php
+                    if(!empty($options['background'])) {
+                        printf(
+                            '<img class="manage__background-image" src="%s" alt="">',
+                            esc_url($options['background'])
+                        );
+                    }
+
+                    printf(
+                        '<figcaption class="manage__background-blank">%s</figcaption>',
+                        __('Выбрать изображение', 'knife-theme')
+                    );
+
+                    printf('<input class="manage__background-media" type="hidden" name="%s[background]" value="%s">',
+                        esc_attr(self::$meta_options),
+                        esc_url($options['background'] ?? '')
+                    );
+                ?>
+            </figure>
+        </div>
+
+        <div class="manage manage--settings">
+            <div class="manage__item">
+                <?php
+                    printf('<label>%s</label><input class="manage__item-shadow" type="range" name="%s[shadow]" min="0" max="100" step="5" value="%s">',
+                        __('Затемнение фона', 'knife-theme'),
+                        esc_attr(self::$meta_options),
+                        absint($options['shadow'] ?? 0)
+                    );
+                ?>
+            </div>
+
+            <div class="manage__item">
+                <?php
+                    printf('<label>%s</label><input class="manage__item-blur" type="range" name="%s[blur]" min="0" max="10" step="1" value="%s">',
+                        __('Размытие фона', 'knife-theme'),
+                        esc_attr(self::$meta_options),
+                        absint($options['blur'] ?? 0)
+                    );
+                ?>
+            </div>
+
+            <div class="manage__item">
+                <?php
+                    printf('<label>%s</label><input class="manage__item-color" name="%s[color]" value="%s">',
+                        __('Цвет фона', 'knife-theme'),
+                        esc_attr(self::$meta_options),
+                        sanitize_hex_color($options['color'] ?? '')
+                    );
+                ?>
+            </div>
+        </div>
+    </div>
 
     <div class="box box--items">
 
@@ -27,23 +82,32 @@
                         );
                     }
 
-                    printf('<input class="item__media" type="hidden" name="%1$s" value="%2$s">',
-                        self::$meta_items . '-stories[][media]',
+                    printf('<input class="item__media" data-item="media" type="hidden" value="%s">',
                         esc_attr($story['media'] ?? '')
                     );
 
-                    printf('<textarea class="item__entry" name="%1$s">%2$s</textarea>',
-                        self::$meta_items . '-stories[][entry]',
-                        esc_attr($story['entry'] ?? '')
+                    printf('<textarea class="item__entry wp-editor-area" data-item="entry">%s</textarea>',
+                        wp_kses_post($story['entry'] ?? '')
                     );
                 ?>
 
                 <div class="item__field">
-                    <span class="item__field-drag"></span>
-                    <span class="item__field-image" title="<?php _e('Добавить медиафайл', 'knife-theme'); ?>"></span>
-                    <span class="item__field-clear" title="<?php _e('Удалить медиафайл', 'knife-theme'); ?>"></span>
+                    <?php
+                        printf(
+                            '<span class="item__field-image" title="%s"></span>',
+                            __('Добавить медиафайл', 'knife-theme')
+                        );
 
-                    <span class="item__field-trash" title="<?php _e('Удалить слайд', 'knife-theme'); ?>"></span>
+                        printf(
+                            '<span class="item__field-clear" title="%s"></span>',
+                            __('Удалить медиафайл', 'knife-theme')
+                        );
+
+                        printf(
+                            '<span class="item__field-trash" title="%s"></span>',
+                            __('Удалить слайд', 'knife-theme')
+                        );
+                    ?>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -51,50 +115,10 @@
     </div>
 
     <div class="box box--actions">
-        <button class="actions__add button"><?php _e('Добавить слайд в историю', 'knife-theme'); ?></button>
+        <?php
+            printf('<button class="actions__add button" type="button">%s</button>',
+                __('Добавить элемент', 'knife-theme')
+            );
+        ?>
     </div>
-
-    <div class="box box--options">
-        <div class="option option--background">
-            <figure class="option__background">
-                <?php if(!empty($options['background'])) : ?>
-                    <img class="option__background-image" src="<?php echo $options['background']; ?>" alt="">
-                <?php endif; ?>
-
-                <figcaption class="option__background-blank"><?php _e('Выбрать изображение', 'knife-theme'); ?></figcaption>
-
-                <?php
-                    printf('<input class="option__background-media" type="hidden" name="%s" value="%s">',
-                        self::$meta_items . '-background',
-                        $options['background']
-                    );
-                ?>
-            </figure>
-        </div>
-
-        <div class="option option--settings">
-            <div class="option__item">
-                <label class="option__label"><?php _e('Затемнение фона', 'knife-theme'); ?></label>
-
-                <?php
-                    printf('<input class="option__range option__range--shadow" type="range" name="%1$s" min="0" max="100" step="5" value="%2$s">',
-                        self::$meta_items . '-shadow',
-                        absint($options['shadow'])
-                    );
-                ?>
-            </div>
-
-            <div class="option__item">
-                <label class="option__label"><?php _e('Размытие фона', 'knife-theme'); ?></label>
-
-                <?php
-                    printf('<input class="option__range option__range--blur" type="range" name="%1$s" min="0" max="10" step="1" value="%2$s">',
-                        self::$meta_items . '-blur',
-                        absint($options['blur'])
-                    );
-                ?>
-            </div>
-        </div>
-    </div>
-
 </div>
