@@ -9,10 +9,6 @@ jQuery(document).ready(function($) {
   /**
    * Check required metabox options
    */
-  if(typeof knife_snippet_metabox === 'undefined') {
-    return false;
-  }
-
   if(typeof knife_snippet_metabox.error === 'undefined') {
     return false;
   }

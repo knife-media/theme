@@ -134,39 +134,41 @@ class Knife_Snippet_Image {
      * Enqueue assets for metabox
      */
     public static function enqueue_assets($hook) {
+        $post_id = get_the_ID();
+
+        if(!in_array($hook, ['post.php', 'post-new.php'])) {
+            return;
+        }
+
         $version = wp_get_theme()->get('Version');
         $include = get_template_directory_uri() . '/core/include';
 
-        if(in_array($hook, ['post.php', 'post-new.php'])) {
-            $post_id = get_the_ID();
+        // Current screen object
+        $screen = get_current_screen();
 
-            // Current screen object
-            $screen = get_current_screen();
-
-            if(!in_array($screen->post_type, self::$post_type)) {
-                return;
-            }
-
-            // Insert wp media scripts
-            wp_enqueue_media();
-
-            // Insert admin styles
-            wp_enqueue_style('knife-snippet-metabox', $include . '/styles/snippet-metabox.css', [], $version);
-
-            // Insert admin scripts
-            wp_enqueue_script('knife-snippet-metabox', $include . '/scripts/snippet-metabox.js', ['jquery'], $version);
-
-            $options = [
-                'post_id' => absint($post_id),
-                'action' => esc_attr(self::$ajax_action),
-                'nonce' => wp_create_nonce(self::$ajax_nonce),
-
-                'choose' => __('Выберите изображение', 'knife-theme'),
-                'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
-            ];
-
-            wp_localize_script('knife-snippet-metabox', 'knife_snippet_metabox', $options);
+        if(!in_array($screen->post_type, self::$post_type)) {
+            return;
         }
+
+        // Insert wp media scripts
+        wp_enqueue_media();
+
+        // Insert admin styles
+        wp_enqueue_style('knife-snippet-metabox', $include . '/styles/snippet-metabox.css', [], $version);
+
+        // Insert admin scripts
+        wp_enqueue_script('knife-snippet-metabox', $include . '/scripts/snippet-metabox.js', ['jquery'], $version);
+
+        $options = [
+            'post_id' => absint($post_id),
+            'action' => esc_attr(self::$ajax_action),
+            'nonce' => wp_create_nonce(self::$ajax_nonce),
+
+            'choose' => __('Выберите изображение', 'knife-theme'),
+            'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
+        ];
+
+        wp_localize_script('knife-snippet-metabox', 'knife_snippet_metabox', $options);
     }
 
 

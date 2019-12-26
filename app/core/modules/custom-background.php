@@ -85,7 +85,10 @@ class Knife_Custom_Background {
      */
     public static function add_metabox() {
         if(current_user_can('unfiltered_html')) {
-            add_meta_box('knife-background-metabox', __('Произвольный фон страницы'), [__CLASS__, 'display_metabox'], self::$post_type, 'side');
+            add_meta_box('knife-background-metabox',
+                __('Произвольный фон страницы', 'knife-theme'),
+                [__CLASS__, 'display_metabox'], self::$post_type, 'side'
+            );
 
             // Enqueue post metabox scripts
             add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_metabox_assets']);

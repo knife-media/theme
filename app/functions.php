@@ -116,7 +116,7 @@ require get_template_directory() . '/core/modules/widget-handler.php';
 require get_template_directory() . '/core/modules/hidden-widgets.php';
 
 // Allow mutiple guest authors per post
-require get_template_directory() . '/core/modules/guest-authors.php';
+require get_template_directory() . '/core/modules/authors-manager.php';
 
 // Upgrade theme menus
 require get_template_directory() . '/core/modules/menu-upgrade.php';
