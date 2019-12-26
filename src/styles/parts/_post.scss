@@ -84,27 +84,21 @@
     .entry-footer + .entry-bottom {
       margin-top: 0;
     }
-
-    .entry-content > .figure--toc {
-      width: calc(100% + 2rem);
-      max-width: none;
-      margin: -3rem -1rem;
-      padding: 2rem 1rem;
-
-      background-color: lighten(desaturate($color-mark, 20), 10);
-
-      @media screen and (max-width: 767px) {
-        margin: -1.5rem -1rem;
-        padding: 1rem;
-      }
-    }
   }
 
   &.post--quiz {
     flex: 0 1 44rem;
     align-items: center;
 
-    .entry-comments, .entry-footer, .entry-bottom {
+    .entry-comments {
+      background-color: transparent;
+    }
+
+    .entry-footer {
+      background-color: transparent;
+    }
+
+    .entry-bottom {
       background-color: transparent;
     }
   }

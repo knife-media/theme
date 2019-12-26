@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.7
+ * @version 1.11
  */
 
 if (!defined('WPINC')) {
@@ -20,7 +20,7 @@ class Knife_News_Manager {
      * @access  private
      * @var     string
      */
-    private static $news_slug = 'news';
+    public static $news_slug = 'news';
 
     /**
      * News category id
@@ -28,7 +28,7 @@ class Knife_News_Manager {
      * @access  private
      * @var     int
      */
-    private static $news_id = null;
+    public static $news_id = null;
 
 
     /**

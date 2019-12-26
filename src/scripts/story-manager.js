@@ -27,6 +27,14 @@
   }
 
 
+  /**
+   * Check if items exist
+   */
+  if(typeof knife_story_items === 'undefined' || knife_story_items.length < 1) {
+    return false;
+  }
+
+
   /*
    * Create Glide instance with custom options
    */
@@ -61,11 +69,7 @@
    * Add slides
    */
   glide.on('mount.before', function() {
-    if(typeof knife_story_stories === 'undefined' || knife_story_stories.length < 1) {
-      return false;
-    }
-
-    for (var i = 0, item; item = knife_story_stories[i]; i++) {
+    for (var i = 0, item; item = knife_story_items[i]; i++) {
       var wrap = document.createElement('div');
       wrap.classList.add('entry-story__slide-wrap');
 
@@ -327,6 +331,19 @@
 
 
   /**
+   * Set background color
+   */
+  glide.on('build.after', function() {
+    if(typeof knife_story_options.color === 'undefined' || knife_story_options.color.length < 1) {
+      return false;
+    }
+
+    story.style.backgroundColor = knife_story_options.color;
+  });
+
+
+
+  /**
    * Set custom background
    */
   glide.on('build.after', function() {
@@ -340,7 +357,6 @@
     });
 
     image.src = knife_story_options.background;
-
 
     var media = document.createElement('div');
     media.classList.add('entry-story__backdrop');

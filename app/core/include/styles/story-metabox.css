@@ -2,7 +2,13 @@
   display: block;
 }
 
-#knife-story-box .box {
+#knife-stoty-box .box--items {
+  display: none;
+  position: relative;
+}
+
+#knife-stoty-box .box--expand {
+  display: block;
   position: relative;
 }
 
@@ -10,31 +16,38 @@
   margin-top: 15px;
 }
 
-#knife-story-box .box--options {
+#knife-story-box .box--manage {
   display: flex;
   flex-flow: row nowrap;
 
-  margin: 25px -12px -12px;
+  margin: -6px -12px 12px -12px;
   padding: 15px;
 
   background: #f5f5f5;
-
-  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
 }
 
 @media screen and (max-width: 1199px) {
-  #knife-story-box .box--options {
+  #knife-story-box .box--manage {
     flex-flow: column wrap;
   }
 }
 
-#knife-story-box .option {
+#knife-story-box .manage {
   display: flex;
   position: relative;
   flex-flow: column nowrap;
 }
 
-  #knife-story-box .option__label {
+  #knife-story-box .manage__item-shadow,
+  #knife-story-box .manage__item-blur {
+    display: block;
+
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  #knife-story-box .manage__item > label {
     display: block;
     cursor: default;
 
@@ -42,20 +55,7 @@
     font-weight: 600;
   }
 
-  #knife-story-box .option__range {
-    display: block;
-
-    width: 100%;
-    margin-bottom: 20px;
-  }
-
-  #knife-story-box .option__howto {
-    margin-top: 5px;
-    margin-bottom: 7px;
-    text-align: right;
-  }
-
-  #knife-story-box .option__background {
+  #knife-story-box .manage__background {
     display: flex;
     position: relative;
     cursor: pointer;
@@ -66,9 +66,11 @@
 
     width: 100%;
     height: 190px;
+
+    border-radius: 3px;
   }
 
-  #knife-story-box .option__background-image {
+  #knife-story-box .manage__background-image {
     display: block;
     position: absolute;
     top: 0;
@@ -82,7 +84,7 @@
     object-position: top;
   }
 
-  #knife-story-box .option__background-blank {
+  #knife-story-box .manage__background-blank {
     display: flex;
     position: absolute;
     top: 0;
@@ -99,61 +101,46 @@
 
     border: dashed 2px #ddd;
   }
-    #knife-story-box .option__background-blank--error {
+    #knife-story-box .manage__background-blank--error {
       border-color: #a00;
     }
 
-  #knife-story-box .option__background-blank:hover {
+  #knife-story-box .manage__background-blank:hover {
     transition: border .2s;
 
     border-color: #0073aa;
   }
 
-  #knife-story-box .option__background-image + .option__background-blank {
+  #knife-story-box .manage__background-image + .manage__background-blank {
     z-index: 3;
 
     width: 100%;
     height: 100%;
-
     text-indent: -9999rem;
 
     border: none;
   }
 
-#knife-story-box .option--settings {
+#knife-story-box .manage--settings {
   flex: 1 1 auto;
-
   max-width: 400px;
 }
 
-#knife-story-box .option--background {
+#knife-story-box .manage--background {
   flex: 0 0 300px;
   margin-right: 30px;
 }
 
 @media screen and (max-width: 1199px) {
-  #knife-story-box .option--background {
+  #knife-story-box .manage--background {
     flex: 0 0 auto;
     margin-right: 0;
     margin-bottom: 40px;
   }
 
-  #knife-story-box .option--settings {
+  #knife-story-box .manage--settings {
     max-width: 100%;
   }
-}
-
-
-#knife-story-box .dump {
-  display: block;
-  box-sizing: border-box;
-
-  width: 100%;
-  height: 286px;
-  margin: 15px 0;
-
-  border: 2px dashed #ddd;
-  border-radius 3px;
 }
 
 #knife-story-box .item {
@@ -173,10 +160,9 @@
   border: 1px solid #ddd;
   border-radius: 3px;
 }
-
-#knife-story-box .item:first-child {
-  display: none;
-}
+  #knife-story-box .item:first-child {
+    display: none;
+  }
 
 #knife-story-box .item__field {
   display: flex;
@@ -190,8 +176,7 @@
 
   #knife-story-box .item__field-image,
   #knife-story-box .item__field-trash,
-  #knife-story-box .item__field-clear,
-  #knife-story-box .item__field-drag {
+  #knife-story-box .item__field-clear {
     display: block;
     cursor: pointer;
 
@@ -204,17 +189,8 @@
     text-align: center;
   }
 
-  #knife-story-box .item__field-drag {
-    cursor: move;
-
-    margin-top: 13px;
-  }
-    #knife-story-box .item__field-drag:before {
-      content: "\f333";
-    }
-
   #knife-story-box .item__field-image {
-    margin-top: 10px;
+    margin-top: 16px;
     font-size: 16px;
   }
     #knife-story-box .item__field-image:before {
@@ -223,7 +199,6 @@
 
   #knife-story-box .item__field-clear {
     display: none;
-
     margin-top: 10px;
   }
     #knife-story-box .item__field-clear:before {
@@ -250,15 +225,9 @@
 #knife-story-box .item__entry {
   display: block;
   flex: 1;
-  outline: none;
 
   width: 100%;
   height: 152px;
-  padding: 8px;
-
-  line-height: 1.5;
-  font-family: Consolas,Monaco,monospace;
-  font-size: 13px;
 }
 
 #knife-story-box .item__image {
@@ -274,6 +243,8 @@
   margin: 6px 0 0 10px;
   padding: 0;
   overflow: hidden;
+
+  border-radius: 3px;
 }
 
 @media screen and (max-width: 600px) {

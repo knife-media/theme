@@ -6,6 +6,7 @@
  *
  * @package knife-theme
  * @since 1.7
+ * @version 1.11
  * @link https://yandex.ru/support/news/feed.html
  * @link https://yandex.ru/support/zen/website/rss-modify.html
  */
@@ -43,6 +44,9 @@ class Knife_Extra_Feeds {
 
         // Alter feed main query loop
         add_action('pre_get_posts', [__CLASS__, 'update_query']);
+
+        // Show only news in yandex-news feed
+        add_action('pre_get_posts', [__CLASS__, 'update_yandex_feed']);
 
         // Upgrade post author with coauthors plugin
         add_filter('the_author', [__CLASS__, 'upgrade_author']);
@@ -125,6 +129,21 @@ class Knife_Extra_Feeds {
             update_post_meta($post_id, self::$zen_exclude, 1);
         } else {
             delete_post_meta($post_id, self::$zen_exclude);
+        }
+    }
+
+
+    /**
+     * Update yandex.news feed
+     *
+     * @since 1.11
+     */
+    public static function update_yandex_feed($query) {
+        if($query->is_main_query() && $query->is_feed('yandex-news')) {
+            // Check if news id exists
+            if(property_exists('Knife_News_Manager', 'news_id')) {
+                $query->set('category__in', Knife_News_Manager::$news_id);
+            }
         }
     }
 

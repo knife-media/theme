@@ -9,10 +9,6 @@ jQuery(document).ready(function($) {
   /**
    * Check required metabox options
    */
-  if(typeof knife_quiz_metabox === 'undefined') {
-    return false;
-  }
-
   if(typeof knife_quiz_metabox.error === 'undefined') {
     return false;
   }
@@ -187,7 +183,7 @@ jQuery(document).ready(function($) {
    * Update wp.editor using editorId
    */
   function updateEditor(el) {
-    if(typeof knife_quiz_metabox.choose === 'undefined') {
+    if(typeof knife_quiz_metabox.editor === 'undefined') {
       knife_quiz_metabox.editor = 'html';
     }
 
@@ -914,6 +910,7 @@ jQuery(document).ready(function($) {
         );
       });
     });
+
 
     // Sort results and update editor
     sortResults(function() {

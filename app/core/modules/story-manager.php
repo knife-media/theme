@@ -27,21 +27,21 @@ class Knife_Story_Manager {
     /**
      * Meta key to store stories in post meta
      *
-     * @since   1.3
+     * @since   1.11
      * @access  private
      * @var     string
      */
-    private static $meta_items = '_knife-story';
+    private static $meta_items = '_knife-story-items';
 
 
     /**
-     * Availible stories options
+     * Meta key to store options in post meta
      *
-     * @since   1.3
+     * @since   1.11
      * @access  private
-     * @var     array
+     * @var     string
      */
-    private static $meta_options = ['background', 'shadow', 'blur'];
+    private static $meta_options = '_knife-story-options';
 
 
     /*
@@ -139,14 +139,19 @@ class Knife_Story_Manager {
         // Insert wp media scripts
         wp_enqueue_media();
 
+        // Insert color picker scripts
+        wp_enqueue_style('wp-color-picker');
+
         // Insert admin styles
         wp_enqueue_style('knife-story-metabox', $include . '/styles/story-metabox.css', [], $version);
 
         // Insert admin scripts
-        wp_enqueue_script('knife-story-metabox', $include . '/scripts/story-metabox.js', ['jquery', 'jquery-ui-sortable'], $version);
+        wp_enqueue_script('knife-story-metabox', $include . '/scripts/story-metabox.js', ['jquery', 'wp-color-picker'], $version);
 
         $options = [
-            'choose' => __('Выберите фоновое изображение', 'knife-theme')
+            'meta_items' => esc_attr(self::$meta_items),
+            'choose' => __('Выберите фоновое изображение', 'knife-theme'),
+            'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
         ];
 
         wp_localize_script('knife-story-metabox', 'knife_story_metabox', $options);
@@ -173,19 +178,17 @@ class Knife_Story_Manager {
     public static function inject_stories() {
         if(is_singular(self::$post_type)) {
             $post_id = get_the_ID();
-            $stories = self::convert_stories($post_id);
 
-            $options = [];
-
-            foreach(self::$meta_options as $item) {
-                $options[$item] = get_post_meta($post_id, self::$meta_items . "-{$item}", true);
-            }
+            // Get options
+            $options = get_post_meta($post_id, self::$meta_options, true);
 
             // Add stories options object
             wp_localize_script('knife-theme', 'knife_story_options', $options);
 
             // Add stories items
-            wp_localize_script('knife-theme', 'knife_story_stories', $stories);
+            wp_localize_script('knife-theme', 'knife_story_items',
+                (array) self::convert_stories($post_id)
+            );
         }
     }
 
@@ -304,35 +307,20 @@ class Knife_Story_Manager {
         }
 
 
-        // Update stories meta
-        self::update_stories(self::$meta_items . '-stories', $post_id);
-
-        // Update other story options
-        foreach(self::$meta_options as $option) {
-            $query = self::$meta_items . "-{$option}";
-
-            if(isset($_REQUEST[$query])) {
-                // Get value by query
-                $value = $_REQUEST[$query];
-
-                if(in_array($option, ['shadow', 'blur'])) {
-                    $value = absint($value);
-                }
-
-                if($option === 'background') {
-                    $value = esc_url($value);
-                }
-
-                update_post_meta($post_id, $query, $value);
-            }
+        // Update options
+        if(isset($_REQUEST[self::$meta_options])) {
+            update_post_meta($post_id, self::$meta_options, $_REQUEST[self::$meta_options]);
         }
+
+        // Update stories meta
+        self::update_items(self::$meta_items, $post_id);
     }
 
 
     /**
      * Update stories meta from post-metabox
      */
-    private static function update_stories($query, $post_id, $meta = [], $i = 0) {
+    private static function update_items($query, $post_id) {
         if(empty($_REQUEST[$query])) {
             return;
         }
@@ -340,26 +328,21 @@ class Knife_Story_Manager {
         // Delete stories post meta to create it again below
         delete_post_meta($post_id, $query);
 
-        foreach($_REQUEST[$query] as $story) {
-            foreach($story as $key => $value) {
-                if(isset($meta[$i]) && array_key_exists($key, $meta[$i])) {
-                    $i++;
-                }
+        foreach((array) $_REQUEST[$query] as $request) {
+            $item = [];
 
-                if(strlen($value) > 0) {
-                    if($key === 'entry') {
-                        $meta[$i][$key] = wp_kses_post($value);
-                    }
-
-                    if($key === 'media') {
-                        $meta[$i][$key] = absint($value);
-                    }
-                }
+            if(isset($request['media'])) {
+                $item['media'] = sanitize_text_field($request['media']);
             }
-        }
 
-        foreach($meta as $key => $item) {
-            add_post_meta($post_id, $query, $item);
+            if(isset($request['entry'])) {
+                $item['entry'] = wp_kses_post($request['entry']);
+            }
+
+            // Add post meta if not empty
+            if(array_filter($item)) {
+                add_post_meta($post_id, $query, $item);
+            }
         }
     }
 
@@ -368,31 +351,35 @@ class Knife_Story_Manager {
      * Convert stories post meta to object
      */
     private static function convert_stories($post_id, $stories = []) {
-        $items = get_post_meta($post_id, self::$meta_items . '-stories');
+        $items = [];
 
-        foreach($items as $i => $slide) {
-            if(!empty($slide['media'])) {
-                $media = wp_get_attachment_image_src($slide['media'], 'inner');
+        foreach(get_post_meta($post_id, self::$meta_items) as $meta) {
+            $item = [];
+
+            if(!empty($meta['media'])) {
+                $media = wp_get_attachment_image_src($meta['media'], 'inner');
 
                 if(is_array($media) && count($media) > 2) {
                     // Calculate image ratio using width and height
                     $ratio = $media[2] / max($media[1], 1);
 
-                    $stories[$i]['image'] = $media[0];
-                    $stories[$i]['ratio'] = $ratio;
+                    $item['image'] = $media[0];
+                    $item['ratio'] = $ratio;
                 }
             }
 
-            if(!empty($slide['entry'])) {
-                $stories[$i]['entry'] = apply_filters('the_content', $slide['entry']);
+            if(!empty($meta['entry'])) {
+                $item['entry'] = apply_filters('the_content', $meta['entry']);
             }
 
             if($title = get_the_title($post_id)) {
-                $stories[$i]['kicker'] = esc_html($title);
+                $item['kicker'] = esc_html($title);
             }
+
+            $items[] = $item;
         }
 
-        return $stories;
+        return $items;
     }
 }
 

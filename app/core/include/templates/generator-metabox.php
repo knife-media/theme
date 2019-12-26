@@ -38,7 +38,6 @@
                 ?>
             </p>
 
-
             <p class="manage__input">
                 <strong><?php _e('Текст на кнопке', 'knife-theme'); ?></strong>
 

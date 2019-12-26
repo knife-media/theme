@@ -55,24 +55,7 @@ class Knife_MCE_Plugins {
         if(get_user_option('rich_editing') === 'true') {
             add_filter('mce_buttons', [__CLASS__, 'register_buttons']);
             add_filter('mce_external_plugins', [__CLASS__, 'add_plugins']);
-
-            add_action('admin_enqueue_scripts', [__CLASS__, 'add_scripts']);
         }
-    }
-
-
-    /**
-     * Add tinymce configure scripts
-     */
-    public static function add_scripts($hook) {
-        if(!in_array($hook, ['post.php', 'post-new.php'])) {
-            return;
-        }
-
-        $version = wp_get_theme()->get('Version');
-        $include = get_template_directory_uri() . '/core/include';
-
-        wp_enqueue_script('knife-mce-reinit', $include . '/scripts/mce-reinit.js', [], $version);
     }
 
 
@@ -119,6 +102,19 @@ class Knife_MCE_Plugins {
     public static function configure_tinymce($settings) {
         $settings['invalid_styles'] = 'color font-weight font-size';
         $settings['valid_children'] = '-aside[aside]';
+
+        // Remove all attributes and bad tags
+        $settings['paste_preprocess'] = "function(plugin, args) {
+            var whitelist = 'p,span,strong,em,h1,h2,h3,h4,h5,h6,ul,li,ol,a,b';
+            var stripped = jQuery('<div>' + args.content + '</div>');
+            var els = stripped.find('*').not(whitelist);
+            for (var i = els.length - 1; i >= 0; i--) {
+              var e = els[i];
+              jQuery(e).replaceWith(e.innerHTML);
+            }
+            stripped.find('*').removeAttr('id').removeAttr('class');
+            args.content = stripped.html();
+          }";
 
         return $settings;
     }
