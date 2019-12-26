@@ -202,7 +202,7 @@
                             <option value="now"><?php _e('Отправить сразу', 'knife-theme'); ?></option>
 
                             <?php
-                                for($i = 0; $i < 5; $i++) {
+                                for($i = 0; $i < 20; $i++) {
                                     $date = strtotime("+ $i days", current_time('timestamp'));
 
                                     printf('<option value="%s">%s</option>',
