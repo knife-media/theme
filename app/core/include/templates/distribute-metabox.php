@@ -144,7 +144,7 @@
                         <?php
                             printf(
                                 '<textarea class="item__snippet-excerpt" data-item="excerpt" placeholder="%s">%s</textarea>',
-                                __('Напишите подвдоку для соцсетей', 'knife-theme'),
+                                __('Напишите подводку для соцсетей', 'knife-theme'),
                                 sanitize_textarea_field($item['excerpt'])
                             );
                         ?>
