@@ -43,8 +43,9 @@ jQuery(document).ready(function($) {
 
       wp.editor.initialize(editorId, {
         tinymce: {
-          toolbar1: 'link',
+          toolbar1: 'formatselect,link',
           invalid_styles: 'color font-weight font-size',
+          block_formats: 'Paragraph=p;Heading 4=h4',
           init_instance_callback: function() {
             if(window.tinymce && window.switchEditors) {
               window.switchEditors.go(editorId, knife_story_metabox.editor);

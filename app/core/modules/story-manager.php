@@ -336,7 +336,7 @@ class Knife_Story_Manager {
             }
 
             if(isset($request['entry'])) {
-                $item['entry'] = sanitize_textarea_field($request['entry']);
+                $item['entry'] = wp_kses_post($request['entry']);
             }
 
             // Add post meta if not empty

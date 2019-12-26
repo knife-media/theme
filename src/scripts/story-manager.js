@@ -331,6 +331,19 @@
 
 
   /**
+   * Set background color
+   */
+  glide.on('build.after', function() {
+    if(typeof knife_story_options.color === 'undefined' || knife_story_options.color.length < 1) {
+      return false;
+    }
+
+    story.style.backgroundColor = knife_story_options.color;
+  });
+
+
+
+  /**
    * Set custom background
    */
   glide.on('build.after', function() {
@@ -344,7 +357,6 @@
     });
 
     image.src = knife_story_options.background;
-
 
     var media = document.createElement('div');
     media.classList.add('entry-story__backdrop');
