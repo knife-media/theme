@@ -4,23 +4,21 @@
 
         // Get post authors meta
         $authors = get_post_meta($post_id, self::$post_meta);
-    ?>
 
-    <div class="authors">
-        <?php
+        printf(
+            '<input class="authors-input" type="text" placeholder="%s">',
+            __('Поиск автора', 'knife-theme')
+        );
+
+        foreach($authors as $author) {
+            $user = get_userdata($author);
+
             printf(
-                '<input class="authors-input" type="text" placeholder="%s">',
-                __('Поиск автора', 'knife-theme')
+                '<p class="authors-item">%s<input type="hidden" name="%s[]" value="%s"></p>',
+                esc_html($user->display_name),
+                esc_attr(self::$post_meta),
+                esc_attr($user->ID)
             );
-
-            foreach($authors as $author) {
-                $user = get_userdata($author);
-
-                printf(
-                    '<div class="authors-item">%s</div>',
-                    esc_html($user->display_name)
-                );
-            }
-        ?>
-    </div>
+        }
+    ?>
 </div>

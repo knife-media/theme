@@ -14,6 +14,14 @@ jQuery(document).ready(function($) {
 
 
   /**
+   * Skip if no post meta
+   */
+  if(typeof knife_authors_metabox.post_meta === 'undefined') {
+    return false;
+  }
+
+
+  /**
    * Find form input
    */
   var input = box.find('.authors-input');
@@ -29,10 +37,21 @@ jQuery(document).ready(function($) {
       return false;
     }
 
+    var meta = knife_authors_metabox.post_meta + '[]';
 
+    // Create item element
+    var item = $('<p/>', {'class': 'authors-item'});
+    item.html(author[1]);
+    item.appendTo(box);
+
+    // Create user input
+    var user = $('<input/>', {'type': 'hidden', 'name': meta});
+    user.val(author[0]);
+    user.appendTo(item);
 
     return input.val('');
   }
+
 
   /**
    * Use suggest jQuery plugin on authors input
@@ -43,6 +62,14 @@ jQuery(document).ready(function($) {
     matchClass: 'knife-authors-match',
     onSelect: selectAuthor
   }
+
+
+  /**
+   * Item remove handler
+   */
+  box.on('click', '.authors-item', function() {
+    return $(this).remove();
+  });
 
 
   /**

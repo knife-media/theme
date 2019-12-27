@@ -39,6 +39,9 @@ class Knife_Authors_Manager {
         // Add guest authors metabox
         add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
 
+        // Save authors post meta
+        add_action('save_post', [__CLASS__, 'save_metabox'], 10, 2);
+
         // Enqueue post metabox scripts
         add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
 
@@ -58,6 +61,35 @@ class Knife_Authors_Manager {
             __('Авторы', 'knife-theme'),
             [__CLASS__, 'display_metabox'], get_post_type(), 'side'
         );
+    }
+
+
+    /**
+     * Save authors post meta
+     */
+    public static function save_metabox($post_id, $post) {
+        if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+            return;
+        }
+
+        if(!current_user_can('edit_post', $post_id)) {
+            return;
+        }
+
+        // Delete all authors values
+        delete_post_meta($post_id, self::$post_meta);
+
+        // Add post author if empty array
+        if(empty($_REQUEST[self::$post_meta])) {
+            return add_post_meta($post_id, self::$post_meta, $post->post_author);
+        }
+
+        $authors = (array) $_REQUEST[self::$post_meta];
+
+        // Add authors array from metabox input
+        foreach($authors as $author) {
+            add_post_meta($post_id, self::$post_meta, absint($author));
+        }
     }
 
 
@@ -84,7 +116,7 @@ class Knife_Authors_Manager {
         wp_enqueue_script('knife-authors-metabox', $include . '/scripts/authors-metabox.js', ['jquery'], $version);
 
         $options = [
-            'post_id' => absint($post_id),
+            'post_meta' => esc_attr(self::$post_meta),
             'action' => esc_attr(self::$ajax_action),
             'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
         ];
@@ -132,7 +164,7 @@ class Knife_Authors_Manager {
         $users = get_users($args);
 
         foreach($users as $user) {
-             echo "<b>{$user->id}:</b>{$user->display_name}\n";
+             echo "<b>{$user->ID}:</b>{$user->display_name}\n";
         }
 
         wp_die();

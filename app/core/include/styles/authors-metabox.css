@@ -1,4 +1,4 @@
-#knife-authors-box .authors {
+#knife-authors-box {
   display: block;
   position: relative;
 
@@ -9,7 +9,6 @@
 
 #knife-authors-box .authors-input {
   display: block;
-
   width: 100%;
 }
 
