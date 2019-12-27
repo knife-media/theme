@@ -12,13 +12,7 @@
                 '<input class="authors-input" type="text" placeholder="%s">',
                 __('Поиск автора', 'knife-theme')
             );
-        ?>
 
-        <span class="spinner"></span>
-    </div>
-
-    <div class="authors">
-        <?php
             foreach($authors as $author) {
                 $user = get_userdata($author);
 

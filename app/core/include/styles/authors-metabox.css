@@ -18,15 +18,15 @@
     position: absolute;
     z-index: 10000;
 
-    width: 252px;
-    margin: 0;
+    width: 246px;
+    margin: 0 3px;
     padding: 0;
     overflow: hidden;
 
     list-style: none;
     background-color: #fff;
 
-    border: 1px solid #5b9dd9;
+    border: 1px solid #007cba;
 }
 
 .knife-authors-suggest li {

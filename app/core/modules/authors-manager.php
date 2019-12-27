@@ -118,24 +118,24 @@ class Knife_Authors_Manager {
         $search = sanitize_text_field(strtolower($_REQUEST['q']));
 
         $args = [
-            'count_total' => false,
+            'number' => 20,
+            'fields' => ['ID', 'display_name'],
             'search' => sprintf('*%s*', $search),
             'search_columns' => [
                 'ID',
                 'display_name',
                 'user_email',
                 'user_login',
-            ],
-            'fields' => 'all_with_meta',
+            ]
         ];
 
         $users = get_users($args);
 
-        foreach($users as $id => $user) {
-            echo "<b>{$id}</b>{$user->data->display_name}\n";
+        foreach($users as $user) {
+             echo "<b>{$user->id}:</b>{$user->display_name}\n";
         }
 
-        exit;
+        wp_die();
     }
 }
 

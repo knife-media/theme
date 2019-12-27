@@ -23,7 +23,15 @@ jQuery(document).ready(function($) {
    * On input change
    */
   function selectAuthor() {
-    console.log(this.value);
+    var author = this.value.split(':', 2);
+
+    if(author.length < 2) {
+      return false;
+    }
+
+
+
+    return input.val('');
   }
 
   /**
