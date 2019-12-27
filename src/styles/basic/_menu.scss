@@ -100,6 +100,25 @@
       }
     }
 
+    &.--vtb {
+      display: none;
+
+      width: 8rem;
+      height: 2rem;
+
+      text-indent: -9999rem;
+
+      background-image: url('/wp-content/uploads/2019/12/vtb-button.png');
+      background-repeat: no-repeat;
+      background-size: contain;
+
+      transition: filter 0.25s;
+
+      @media screen and (max-width: 1023px) {
+        display: block;
+      }
+    }
+
     @media screen and (max-width: 1199px) {
       font-size: 1rem;
     }
