@@ -66,7 +66,7 @@
     var embed = target.parentElement;
 
     // Check if parent element embed
-    if(!element.classList.contains('embed')) {
+    if(!embed.classList.contains('embed')) {
       return;
     }
 
