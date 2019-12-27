@@ -264,7 +264,7 @@
     // Get quiz offset
     var offset = quiz.getBoundingClientRect().top + window.pageYOffset;
 
-    window.scroll({top: offset - 76, behavior: 'smooth'});
+    window.scrollTo({top: offset - 76, behavior: 'smooth'});
 
     // Set quiz content
     var content = quiz.querySelector('.entry-quiz__content');
@@ -293,7 +293,7 @@
     // Get quiz offset
     var offset = quiz.getBoundingClientRect().top + window.pageYOffset;
 
-    window.scroll({top: offset - 76, behavior: 'smooth'});
+    window.scrollTo({top: offset - 76, behavior: 'smooth'});
 
     // Set quiz results
     if(result.hasOwnProperty('poster')) {
