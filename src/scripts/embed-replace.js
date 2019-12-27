@@ -58,11 +58,17 @@
   post.addEventListener('click', function(e) {
     var target = e.target || e.srcElement;
 
-    if(!target.parentNode.classList.contains('embed')) {
+    // Check if parent element exists
+    if(target.parentElement === null) {
       return;
     }
 
-    var embed = target.parentNode;
+    var embed = target.parentElement;
+
+    // Check if parent element embed
+    if(!element.classList.contains('embed')) {
+      return;
+    }
 
     if(embed.hasAttribute('data-embed')) {
       e.preventDefault();
