@@ -37,6 +37,13 @@ jQuery(document).ready(function($) {
       return false;
     }
 
+    // Try to find clone
+    var find = box.find('.authors-item input[value="' + author[0] + '"]');
+
+    if(find.length > 0) {
+      find.closest('.authors-item').remove();
+    }
+
     var meta = knife_authors_metabox.post_meta + '[]';
 
     // Create item element
@@ -44,10 +51,13 @@ jQuery(document).ready(function($) {
     item.html(author[1]);
     item.appendTo(box);
 
+    var span = $('<span/>', {'class': 'authors-delete'});
+    span.prependTo(item);
+
     // Create user input
     var user = $('<input/>', {'type': 'hidden', 'name': meta});
     user.val(author[0]);
-    user.appendTo(item);
+    user.prependTo(item);
 
     return input.val('');
   }
@@ -67,8 +77,8 @@ jQuery(document).ready(function($) {
   /**
    * Item remove handler
    */
-  box.on('click', '.authors-item', function() {
-    return $(this).remove();
+  box.on('click', '.authors-delete', function() {
+    $(this).closest('.authors-item').remove();
   });
 
 

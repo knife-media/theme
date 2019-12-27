@@ -12,6 +12,39 @@
   width: 100%;
 }
 
+#knife-authors-box .authors-item {
+  display: block;
+  position: relative;
+  cursor: default;
+
+  margin: 15px 0 0;
+  padding-left: 25px;
+  font-weight: 600;
+}
+
+#knife-authors-box .authors-delete {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+}
+
+#knife-authors-box .authors-delete:before {
+    content: "\f153";
+    display: block;
+
+    height: 20px;
+    width: 20px;
+
+    color: #0073aa;
+    font: normal 16px/20px dashicons;
+    text-align: center;
+    -webkit-font-smoothing: antialiased;
+
+    border-radius: 50%;
+}
+
 .knife-authors-suggest {
     display: none;
     position: absolute;

@@ -14,10 +14,13 @@
             $user = get_userdata($author);
 
             printf(
-                '<p class="authors-item">%s<input type="hidden" name="%s[]" value="%s"></p>',
-                esc_html($user->display_name),
-                esc_attr(self::$post_meta),
-                esc_attr($user->ID)
+                '<p class="authors-item">%s<span class="authors-delete"></span>%s</p>',
+                sprintf(
+                    '<input type="hidden" name="%s[]" value="%s">',
+                    esc_attr(self::$post_meta),
+                    esc_attr($user->ID)
+                ),
+                esc_html($user->display_name)
             );
         }
     ?>
