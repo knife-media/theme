@@ -20,7 +20,7 @@ class Knife_Authors_Manager {
      * @access  private
      * @var     string
      */
-    private static $post_meta = '_knife-authors';
+    public static $post_meta = '_knife-authors';
 
 
     /**
@@ -50,6 +50,42 @@ class Knife_Authors_Manager {
 
         // Suggest authors on metabox input
         add_action('wp_ajax_' . self::$ajax_action, [__CLASS__, 'suggest_authors']);
+
+        // Show custom author in feeds
+        add_filter('the_author', [__CLASS__, 'replace_feed_author']);
+
+        // Fix author query
+        add_action('parse_query', [__CLASS__, 'fix_author_posts']);
+
+        // Update author data
+        add_action('wp', [__CLASS__, 'update_authordata']);
+
+        // Hooks to update posts author column
+        add_filter('manage_posts_columns', [__CLASS__, 'filter_posts_columns']);
+        add_filter('manage_pages_columns', [__CLASS__, 'filter_posts_columns']);
+        add_action('manage_posts_custom_column', [__CLASS__, 'filter_posts_custom_column']);
+        add_action('manage_pages_custom_column', [__CLASS__, 'filter_posts_custom_column']);
+
+        // Hooks to modify the published post number count on the Users WP List Table
+        add_filter('manage_users_columns', [__CLASS__, 'filter_users_columns']);
+        add_filter('manage_users_custom_column', [__CLASS__, 'filter_users_custom_column'], 10, 3);
+
+        // Show corrent user posts counter
+        add_filter('get_usernumposts', [__CLASS__, 'count_user_posts'], 10, 2);
+    }
+
+
+    /**
+     * Update author data for author archive
+     *
+     * @link https://github.com/WordPress/WordPress/blob/master/wp-includes/class-wp.php#L595
+     */
+    public static function update_authordata() {
+        global $authordata;
+
+        if(is_author()) {
+            $authordata = get_userdata(get_queried_object_id());
+        }
     }
 
 
@@ -164,10 +200,184 @@ class Knife_Authors_Manager {
         $users = get_users($args);
 
         foreach($users as $user) {
-             echo "<b>{$user->ID}:</b>{$user->display_name}\n";
+            printf("<b>%d:</b>%s\n", $user->ID, esc_html($user->display_name));
         }
 
         wp_die();
+    }
+
+
+    /**
+     * Replace author field for feeds
+     */
+    public static function replace_feed_author($name) {
+        if(is_feed() && !is_admin()) {
+            $authors = get_post_meta(get_the_ID(), self::$post_meta);
+
+            if(!empty($authors)) {
+                $output = [];
+
+                foreach($authors as $author) {
+                    $user = get_userdata($author);
+
+                    // Add display name to data
+                    $output[] = esc_html($user->display_name);
+                }
+
+                $name = implode(', ', $output);
+            }
+        }
+
+        return $name;
+    }
+
+
+    /**
+     * Fix post list by author
+     */
+    public static function fix_author_posts($query) {
+        if($query->is_author()) {
+            $author = $query->get('author');
+
+            if(empty($author)) {
+                $user = get_user_by('slug', $query->get('author_name'));
+
+                // Set id by author name
+                if(isset($user->ID)) {
+                    $author = $user->ID;
+                }
+
+                $query->set('author_name', null);
+            }
+
+            // Set meta query based on meta
+            $query->set('meta_query', [[
+                'key' => self::$post_meta,
+                'value' => absint($author)
+            ]]);
+
+            $query->set('author', null);
+
+            // Update queried object
+            $query->queried_object_id = $author;
+            $query->queried_object = get_userdata($author);
+        }
+    }
+
+
+    /**
+     * Add guest authors column to post lists
+     */
+    public static function filter_posts_columns($columns) {
+        $new_columns = [];
+
+        foreach($columns as $key => $value ) {
+            $new_columns[$key] = $value;
+
+            if($key === 'title') {
+                $new_columns['guestauthor'] = __('Авторы', 'knife-theme');
+            }
+
+            if($key === 'author') {
+                unset($new_columns[$key]);
+            }
+        }
+
+        return $new_columns;
+    }
+
+
+    /**
+     * Add custom authors to 'authors' column on edit pages
+     */
+    public static function filter_posts_custom_column($column) {
+        if($column === 'guestauthor') {
+            global $post;
+
+            // Get authors
+            $authors = get_post_meta($post->ID, self::$post_meta);
+
+            if(empty($authors)) {
+                $authors[] = $post->post_author;
+            }
+
+            $output = [];
+
+            foreach($authors as $author) {
+                $user = get_userdata($author);
+
+                // Create args array for url composing
+                $args = [
+                    'post_type' => $post->post_type,
+                    'author' => $user->ID
+                ];
+
+                $output[] = sprintf('<a href="%s">%s</a>',
+                    esc_url(add_query_arg($args, admin_url('edit.php'))),
+                    esc_html($user->display_name)
+                );
+            }
+
+            echo implode(', ', $output);
+        }
+    }
+
+
+    /**
+     * Unset the post count column because it's going to be inaccurate and provide our own
+     */
+    public static function filter_users_columns($columns) {
+        $new_columns = [];
+
+        // Unset and add our column while retaining the order of the columns
+        foreach($columns as $name => $title) {
+            if($name === 'posts') {
+                $new_columns['guestauthor'] = __('Записи', 'knife-theme');
+                continue;
+            }
+
+            $new_columns[$name] = $title;
+        }
+
+        return $new_columns;
+    }
+
+
+    /**
+     * Provide an accurate count when looking up the number of published posts for a user
+     */
+    public static function filter_users_custom_column($output, $column, $user_id) {
+        if($column !== 'guestauthor') {
+            return $output;
+        }
+
+        // We filter count_user_posts() so it provides an accurate number
+        $count = count_user_posts($user_id);
+
+        if($count === 0) {
+            return '0';
+        }
+
+        $value = sprintf('<a href="%s" class="edit">%d</a>',
+            esc_url(add_query_arg(['author' => $user_id], admin_url('edit.php'))),
+            absint($count)
+        );
+
+        return $output . $value;
+    }
+
+
+
+    /**
+     * Filter the count_users_posts() core function to include our correct count.
+     */
+    public static function count_user_posts($count, $user_id) {
+        $query = new WP_Query([
+            'meta_key' => self::$post_meta,
+            'meta_value' => $user_id
+        ]);
+
+        return $query->found_posts;
     }
 }
 

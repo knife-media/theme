@@ -48,9 +48,6 @@ class Knife_Extra_Feeds {
         // Show only news in yandex-news feed
         add_action('pre_get_posts', [__CLASS__, 'update_yandex_feed']);
 
-        // Upgrade post author with coauthors plugin
-        add_filter('the_author', [__CLASS__, 'upgrade_author']);
-
         // Remove unused images attributes
         add_filter('wp_get_attachment_image_attributes', [__CLASS__, 'image_attributes'], 10, 3);
 
@@ -195,18 +192,6 @@ class Knife_Extra_Feeds {
         }
 
         return $attr;
-    }
-
-
-    /**
-     * Update author using coauthors function if the plugin activated
-     */
-    public static function upgrade_author($author) {
-        if(is_feed() && function_exists('coauthors')) {
-            $author = coauthors(', ', ', ', null, null, false);
-        }
-
-        return $author;
     }
 
 

@@ -125,11 +125,11 @@ class Knife_News_Manager {
         global $pagenow;
 
         if(!is_admin() || $pagenow !== 'edit.php' || empty($_GET['cat'])) {
-            return false;
+            return;
         }
 
         if(isset($_GET['post_type']) && $_GET['post_type'] !== 'post') {
-            return false;
+            return;
         }
 
         $classics = get_category_by_slug('classics');

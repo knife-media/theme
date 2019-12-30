@@ -6,17 +6,5 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.9
+ * @version 1.11
  */
-
-
-/**
- * Add custom meta class to couathors posts link
- *
- * @link https://github.com/Automattic/Co-Authors-Plus/blob/master/template-tags.php#L272
- */
-add_filter('coauthors_posts_link', function($args) {
-    $args['class'] = 'meta__item';
-
-    return $args;
-});
