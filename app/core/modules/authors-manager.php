@@ -72,6 +72,18 @@ class Knife_Authors_Manager {
 
         // Show corrent user posts counter
         add_filter('get_usernumposts', [__CLASS__, 'count_user_posts'], 10, 2);
+
+        add_action('user_profile_update_errors', function($errors) {
+            $errors->remove('empty_email');
+        }, 10, 3);
+
+        add_filter('pre_user_email', function($email) {
+            if(empty($email)) {
+                $email = uniqid() . "@knife.support";
+            }
+
+            return $email;
+        });
     }
 
 
@@ -130,34 +142,41 @@ class Knife_Authors_Manager {
 
 
     /**
-     * Enqueue assets for metabox
+     * Enqueue admin side assets
      */
     public static function enqueue_assets($hook) {
         $post_id = get_the_ID();
 
-        if(!in_array($hook, ['post.php', 'post-new.php'])) {
-            return;
-        }
-
         $version = wp_get_theme()->get('Version');
         $include = get_template_directory_uri() . '/core/include';
 
-        // Auto suggest
-        wp_enqueue_script('suggest');
+        // Add assets for metabox only
+        if(in_array($hook, ['post.php', 'post-new.php'])) {
+            // Auto suggest
+            wp_enqueue_script('suggest');
 
-        // Insert admin styles
-        wp_enqueue_style('knife-authors-metabox', $include . '/styles/authors-metabox.css', [], $version);
+            // Insert metabox styles
+            wp_enqueue_style('knife-authors-metabox', $include . '/styles/authors-metabox.css', [], $version);
 
-        // Insert admin scripts
-        wp_enqueue_script('knife-authors-metabox', $include . '/scripts/authors-metabox.js', ['jquery'], $version);
+            // Insert metabox scripts
+            wp_enqueue_script('knife-authors-metabox', $include . '/scripts/authors-metabox.js', ['jquery'], $version);
 
-        $options = [
-            'post_meta' => esc_attr(self::$post_meta),
-            'action' => esc_attr(self::$ajax_action),
-            'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
-        ];
+            $options = [
+                'post_meta' => esc_attr(self::$post_meta),
+                'action' => esc_attr(self::$ajax_action),
+                'error' => __('Непредвиденная ошибка сервера', 'knife-theme')
+            ];
 
-        wp_localize_script('knife-authors-metabox', 'knife_authors_metabox', $options);
+            wp_localize_script('knife-authors-metabox', 'knife_authors_metabox', $options);
+        }
+
+        // Insert common styles
+        wp_enqueue_style('knife-authors-common', $include . '/styles/authors-common.css', [], $version);
+
+        // Add assets for user screen only
+        if(in_array($hook, ['user-edit.php', 'user-new.php'])) {
+            wp_enqueue_script('knife-authors-user', $include . '/scripts/authors-user.js', ['jquery'], $version);
+        }
     }
 
 
@@ -275,7 +294,7 @@ class Knife_Authors_Manager {
             $new_columns[$key] = $value;
 
             if($key === 'title') {
-                $new_columns['guestauthor'] = __('Авторы', 'knife-theme');
+                $new_columns['authors-name'] = __('Авторы', 'knife-theme');
             }
 
             if($key === 'author') {
@@ -291,7 +310,7 @@ class Knife_Authors_Manager {
      * Add custom authors to 'authors' column on edit pages
      */
     public static function filter_posts_custom_column($column) {
-        if($column === 'guestauthor') {
+        if($column === 'authors-name') {
             global $post;
 
             // Get authors
@@ -332,7 +351,7 @@ class Knife_Authors_Manager {
         // Unset and add our column while retaining the order of the columns
         foreach($columns as $name => $title) {
             if($name === 'posts') {
-                $new_columns['guestauthor'] = __('Записи', 'knife-theme');
+                $new_columns['authors-count'] = __('Записи', 'knife-theme');
                 continue;
             }
 
@@ -347,7 +366,7 @@ class Knife_Authors_Manager {
      * Provide an accurate count when looking up the number of published posts for a user
      */
     public static function filter_users_custom_column($output, $column, $user_id) {
-        if($column !== 'guestauthor') {
+        if($column !== 'authors-count') {
             return $output;
         }
 
