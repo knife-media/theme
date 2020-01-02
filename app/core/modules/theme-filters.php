@@ -120,10 +120,16 @@ class Knife_Theme_Filters {
 
             remove_action('wp_head', 'wp_generator');
             remove_action('wp_head', 'wlwmanifest_link');
-            remove_action('wp_head', 'rsd_link' );
-            remove_action('wp_head', 'adjacent_posts_rel_link', 10, 0 );
-            remove_action('wp_head', 'rest_output_link_wp_head', 10 );
-            remove_action('wp_head', 'wp_oembed_add_discovery_links', 10 );
+            remove_action('wp_head', 'rsd_link');
+            remove_action('wp_head', 'adjacent_posts_rel_link', 10, 0);
+            remove_action('wp_head', 'rest_output_link_wp_head', 10);
+            remove_action('wp_head', 'wp_oembed_add_discovery_links', 10);
+        });
+
+        // Remove unused HTTP headers
+        add_action('init', function() {
+            remove_action('template_redirect', 'rest_output_link_header', 11);
+            remove_action('template_redirect', 'wp_shortlink_header', 11);
         });
 
         // Change wp_die errors status code for logged-in users
