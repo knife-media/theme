@@ -144,7 +144,7 @@
                         <?php
                             printf(
                                 '<textarea class="item__snippet-excerpt" data-item="excerpt" placeholder="%s">%s</textarea>',
-                                __('Напишите подвдоку для соцсетей', 'knife-theme'),
+                                __('Напишите подводку для соцсетей', 'knife-theme'),
                                 sanitize_textarea_field($item['excerpt'])
                             );
                         ?>
@@ -202,7 +202,7 @@
                             <option value="now"><?php _e('Отправить сразу', 'knife-theme'); ?></option>
 
                             <?php
-                                for($i = 0; $i < 5; $i++) {
+                                for($i = 0; $i < 20; $i++) {
                                     $date = strtotime("+ $i days", current_time('timestamp'));
 
                                     printf('<option value="%s">%s</option>',

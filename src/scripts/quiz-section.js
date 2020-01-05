@@ -42,6 +42,18 @@
 
 
   /**
+   * Smooth scroll
+   */
+  function smoothScroll(to) {
+    if('scrollBehavior' in document.documentElement.style) {
+      return window.scrollTo({top: to, behavior: 'smooth'});
+    }
+
+    window.scrollTo(to, 0);
+  }
+
+
+  /**
    * Replace share links
    */
   function replaceShare(result, index) {
@@ -264,7 +276,8 @@
     // Get quiz offset
     var offset = quiz.getBoundingClientRect().top + window.pageYOffset;
 
-    window.scroll({top: offset - 76, behavior: 'smooth'});
+    // Try to scroll smoothly
+    smoothScroll(offset - 76);
 
     // Set quiz content
     var content = quiz.querySelector('.entry-quiz__content');
@@ -293,7 +306,8 @@
     // Get quiz offset
     var offset = quiz.getBoundingClientRect().top + window.pageYOffset;
 
-    window.scroll({top: offset - 76, behavior: 'smooth'});
+    // Try to scroll smoothy
+    smoothScroll(offset - 76);
 
     // Set quiz results
     if(result.hasOwnProperty('poster')) {

@@ -36,7 +36,13 @@
       // Get title offset
       var offset = rect.top + window.pageYOffset || document.documentElement.scrollTop;
 
-      window.scroll({top: offset - 76, behavior: 'smooth'});
+      // Check if can scroll smoothly
+      if('scrollBehavior' in document.documentElement.style) {
+        return window.scrollTo({top: offset - 76, behavior: 'smooth'});
+      }
+
+      window.scrollTo(offset - 76, 0);
+      window.scrollTo({top: offset - 76, behavior: 'smooth'});
     });
   }
 })();
