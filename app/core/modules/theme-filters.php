@@ -108,6 +108,15 @@ class Knife_Theme_Filters {
             remove_meta_box('dashboard_primary', 'dashboard', 'normal');
         });
 
+        // Remove comments and trackbacks metaboxes
+        add_action('admin_init', function() {
+            remove_meta_box('commentsdiv', 'post', 'normal');
+            remove_meta_box('commentsdiv', 'page', 'normal');
+
+            remove_meta_box('trackbacksdiv', 'post', 'normal');
+            remove_meta_box('trackbacksdiv', 'page', 'normal');
+        });
+
         // Remove fcking emojis and wordpress meta for security reasons
         add_action('init', function() {
             remove_action('wp_head', 'print_emoji_detection_script', 7);
@@ -124,6 +133,7 @@ class Knife_Theme_Filters {
             remove_action('wp_head', 'adjacent_posts_rel_link', 10, 0);
             remove_action('wp_head', 'rest_output_link_wp_head', 10);
             remove_action('wp_head', 'wp_oembed_add_discovery_links', 10);
+
         });
 
         // Remove unused HTTP headers
