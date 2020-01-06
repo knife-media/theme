@@ -83,7 +83,7 @@ jQuery(document).ready(function($) {
       return alert(message);
     });
 
-    xhr.error(function() {
+    xhr.fail(function() {
       spinner.removeClass('is-active');
 
       return alert(knife_distribute_metabox.error);

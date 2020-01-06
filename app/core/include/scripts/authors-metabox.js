@@ -28,17 +28,53 @@ jQuery(document).ready(function($) {
 
 
   /**
-   * On input change
+   * Action to create new author
    */
-  function selectAuthor() {
-    var author = this.value.split(':', 2);
+  function createAuthor(author) {
+    var verify = knife_authors_metabox.verify || '';
 
-    if(author.length < 2) {
-      return false;
+    if(!confirm(verify)) {
+      return false
     }
 
+    var data = {
+      'action': knife_authors_metabox.action,
+      'nonce': knife_authors_metabox.nonce || '',
+      'author': author
+    }
+
+    // Disable input
+    input.prop('readonly', true);
+
+    var xhr = $.ajax({method: 'POST', url: ajaxurl, data: data}, 'json');
+
+    xhr.done(function(answer) {
+      input.prop('readonly', false);
+
+      if(answer.success) {
+        return appendAuthor(answer.data.id, answer.data.author);
+      }
+
+      var message = answer.data || knife_authors_metabox.error;
+
+      // Show error message
+      return alert(message);
+    });
+
+    xhr.fail(function() {
+      input.prop('readonly', false);
+
+      return alert(knife_authors_metabox.error);
+    });
+  }
+
+
+  /**
+   * Append author to list
+   */
+  function appendAuthor(id, author) {
     // Try to find clone
-    var find = box.find('.authors-item input[value="' + author[0] + '"]');
+    var find = box.find('.authors-item input[value="' + id + '"]');
 
     if(find.length > 0) {
       find.closest('.authors-item').remove();
@@ -48,7 +84,7 @@ jQuery(document).ready(function($) {
 
     // Create item element
     var item = $('<p/>', {'class': 'authors-item'});
-    item.html(author[1]);
+    item.html(author);
     item.appendTo(box);
 
     var span = $('<span/>', {'class': 'authors-delete'});
@@ -56,10 +92,30 @@ jQuery(document).ready(function($) {
 
     // Create user input
     var user = $('<input/>', {'type': 'hidden', 'name': meta});
-    user.val(author[0]);
+    user.val(id);
     user.prependTo(item);
+  }
 
-    return input.val('');
+
+  /**
+   * On input change
+   */
+  function selectAuthor() {
+    var author = this.value.split(':', 2);
+
+    // Clear input
+    input.val('');
+
+    if(author.length < 2) {
+      return false;
+    }
+
+    if(author[0].indexOf('+') === 0) {
+      return createAuthor(author[1]);
+    }
+
+    // Append author to list
+    appendAuthor(author[0], author[1]);
   }
 
 

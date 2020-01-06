@@ -169,7 +169,7 @@ jQuery(document).ready(function($) {
       return warning.html(answer.data).show();
     });
 
-    xhr.error(function() {
+    xhr.fail(function() {
       toggleLoader(result);
 
       return warning.html(knife_quiz_metabox.error).show();

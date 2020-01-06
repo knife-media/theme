@@ -68,8 +68,13 @@
     text-align: left;
 }
 
-.knife-authors-suggest li b {
+.knife-authors-suggest li i {
   display: none;
+}
+
+.knife-authors-suggest li b {
+  margin-left: 5px;
+  font-weight: 600;
 }
 
 .knife-authors-select {
