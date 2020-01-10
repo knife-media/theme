@@ -23,6 +23,15 @@ class Knife_Authors_Manager {
     public static $post_meta = '_knife-authors';
 
 
+   /**
+     * Default post type lead text availible
+     *
+     * @access  private
+     * @var     array
+     */
+    private static $post_type = ['post', 'club', 'select', 'generator', 'quiz'];
+
+
     /**
      * Ajax action
      *
@@ -119,7 +128,8 @@ class Knife_Authors_Manager {
     public static function add_metabox() {
         add_meta_box('knife-authors-metabox',
             __('Авторы', 'knife-theme'),
-            [__CLASS__, 'display_metabox'], get_post_type(), 'side'
+            [__CLASS__, 'display_metabox'],
+            self::$post_type, 'side'
         );
     }
 
@@ -128,6 +138,10 @@ class Knife_Authors_Manager {
      * Save authors post meta
      */
     public static function save_metabox($post_id, $post) {
+        if(!in_array(get_post_type($post_id), self::$post_type)) {
+            return;
+        }
+
         if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return;
         }

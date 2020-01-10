@@ -190,6 +190,9 @@ require get_template_directory() . '/core/modules/primary-tag.php';
 // Insert lead metabox to admin post screen
 require get_template_directory() . '/core/modules/post-lead.php';
 
+// Mark adult content posts
+require get_template_directory() . '/core/modules/adult-content.php';
+
 // Custom search engine settings
 require get_template_directory() . '/core/modules/google-search.php';
 

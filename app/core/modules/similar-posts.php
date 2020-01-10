@@ -113,7 +113,7 @@ class Knife_Similar_Posts {
         $hidden = get_post_meta($post_id, self::$post_meta, true);
 
         printf(
-            '<div class="misc-pub-section misc-pub-section-last"><label><input type="checkbox" name="%1$s" class="checkbox"%3$s> %2$s</label></div>',
+            '<div class="misc-pub-section"><label><input type="checkbox" name="%1$s" class="checkbox"%3$s> %2$s</label></div>',
             esc_attr(self::$post_meta),
             __('Скрыть блок похожих записей', 'knife-theme'),
             checked($hidden, 1, false)
@@ -122,7 +122,7 @@ class Knife_Similar_Posts {
 
 
     /**
-     * Save feed post meta
+     * Save post meta
      *
      * @since 1.11
      */

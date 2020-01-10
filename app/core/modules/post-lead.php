@@ -17,20 +17,20 @@ if (!defined('WPINC')) {
 
 class Knife_Post_Lead {
    /**
-    * Lead text post meta
-    *
-    * @access  private
-    * @var     string
-    */
+     * Lead text post meta
+     *
+     * @access  private
+     * @var     string
+     */
     private static $post_meta = '_knife-lead';
 
 
    /**
-    * Default post type lead text availible
-    *
-    * @access  private
-    * @var     array
-    */
+     * Default post type lead text availible
+     *
+     * @access  private
+     * @var     array
+     */
     private static $post_type = ['post', 'club', 'select', 'generator', 'quiz'];
 
 
@@ -55,7 +55,11 @@ class Knife_Post_Lead {
      * Add lead-text metabox
      */
     public static function add_metabox() {
-        add_meta_box('knife-lead-metabox', __('Лид текст', 'knife-theme'), [__CLASS__, 'print_metabox'], self::$post_type, 'normal', 'high');
+        add_meta_box('knife-lead-metabox',
+            __('Лид текст', 'knife-theme'),
+            [__CLASS__, 'print_metabox'],
+            self::$post_type, 'normal', 'high'
+        );
     }
 
 
