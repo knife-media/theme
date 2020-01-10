@@ -9,10 +9,6 @@ jQuery(document).ready(function($) {
   /**
    * Check required metabox options
    */
-  if(typeof knife_snippet_metabox === 'undefined') {
-    return false;
-  }
-
   if(typeof knife_snippet_metabox.error === 'undefined') {
     return false;
   }
@@ -178,7 +174,7 @@ jQuery(document).ready(function($) {
       return warning.html(answer.data).show();
     });
 
-    xhr.error(function() {
+    xhr.fail(function() {
       toggleLoader();
 
       return warning.html(knife_snippet_metabox.error).show();

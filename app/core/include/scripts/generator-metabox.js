@@ -142,7 +142,7 @@ jQuery(document).ready(function($) {
       return warning.html(answer.data).show();
     });
 
-    xhr.error(function() {
+    xhr.fail(function() {
       toggleLoader(item);
 
       return warning.html(knife_generator_metabox.error).show();

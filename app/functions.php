@@ -115,6 +115,9 @@ require get_template_directory() . '/core/modules/widget-handler.php';
 // Widget visibility handler
 require get_template_directory() . '/core/modules/hidden-widgets.php';
 
+// Allow mutiple guest authors per post
+require get_template_directory() . '/core/modules/authors-manager.php';
+
 // Upgrade theme menus
 require get_template_directory() . '/core/modules/menu-upgrade.php';
 
@@ -220,4 +223,3 @@ require get_template_directory() . '/core/helpers/plugin-snippets.php';
 
 // Custom template filters for promo projects
 require get_template_directory() . '/core/helpers/promo-filters.php';
-

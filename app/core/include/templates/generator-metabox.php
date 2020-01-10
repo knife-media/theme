@@ -118,7 +118,7 @@
 
     <div class="box box--items">
 
-        <?php foreach($items as $i => $item) : ?>
+        <?php foreach($items as $item) : ?>
             <div class="item">
                 <div class="item__text">
                     <?php

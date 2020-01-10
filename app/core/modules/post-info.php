@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.10
+ * @version 1.11
  */
 
 if (!defined('WPINC')) {
@@ -59,7 +59,7 @@ class Knife_Post_Info {
     public static function get_tagline($output = '') {
         $post_id = get_the_ID();
 
-        if(class_exists('Knife_Promo_Manager')) {
+        if(property_exists('Knife_Promo_Manager', 'meta_promo')) {
             $meta_promo = Knife_Promo_Manager::$meta_promo;
 
             if(get_post_meta($post_id, $meta_promo, true)) {
@@ -68,7 +68,7 @@ class Knife_Post_Info {
         }
 
         // Check special projects class and return template
-        if(class_exists('Knife_Special_Projects')) {
+        if(property_exists('Knife_Special_Projects', 'taxonomy')) {
             $taxonomy = Knife_Special_Projects::$taxonomy;
 
             if(has_term('', $taxonomy, $post_id)) {
@@ -136,7 +136,7 @@ class Knife_Post_Info {
      * @since 1.8
      */
     private static function get_head($output = '') {
-        if(class_exists('Knife_Promo_Manager')) {
+        if(property_exists('Knife_Promo_Manager', 'meta_promo')) {
             $meta_promo = Knife_Promo_Manager::$meta_promo;
 
             // Check if promo first
@@ -150,7 +150,7 @@ class Knife_Post_Info {
             }
         }
 
-        if(class_exists('Knife_Special_Projects')) {
+        if(property_exists('Knife_Special_Projects', 'taxonomy')) {
             $terms = get_the_terms(get_the_ID(), Knife_Special_Projects::$taxonomy);
 
             // Check if has terms next
@@ -212,9 +212,23 @@ class Knife_Post_Info {
     /**
      * Get post author info
      */
-    private static function meta_author() {
-        if(function_exists('coauthors_posts_links')) {
-            return coauthors_posts_links('', '', null, null, false);
+    private static function meta_author($output = '') {
+        if(property_exists('Knife_Authors_Manager', 'post_meta')) {
+            $authors = get_post_meta(get_the_ID(), Knife_Authors_Manager::$post_meta);
+
+            if(!empty($authors)) {
+                foreach($authors as $author) {
+                    $user = get_userdata($author);
+
+                    $output = $output . sprintf(
+                        '<a class="meta__item" href="%s" rel="author">%s</a>',
+                        esc_url(get_author_posts_url($user->ID, $user->user_nicename)),
+                        esc_html($user->display_name)
+                    );
+                }
+
+                return $output;
+            }
         }
 
         return get_the_author_posts_link();

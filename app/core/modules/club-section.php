@@ -97,9 +97,6 @@ class Knife_Club_Section {
         // Add club settings to customizer
         add_action('customize_register', [__CLASS__, 'add_customize_setting']);
 
-        // Handle create role settings link
-        add_action('after_switch_theme', [__CLASS__, 'create_role']);
-
         // Update archive caption description
         add_filter('get_the_archive_description', [__CLASS__, 'update_archive_description'], 12);
 
@@ -114,54 +111,6 @@ class Knife_Club_Section {
 
         // Append club link to post content
         add_filter('the_content', [__CLASS__, 'insert_club_link']);
-    }
-
-
-    /**
-     * Create new user role
-     */
-    public static function create_role() {
-        if(get_role('club_user') === null) {
-            $roles = [
-                'administrator' => true,
-                'editor' => true,
-                'club_user' => false
-            ];
-
-            add_role('club_user', __('Участник клуба', 'knife-theme'), [
-                'read' => true,
-                'edit_posts' => false,
-                'delete_posts' => false,
-                'publish_posts' => false,
-                'upload_files' => false,
-            ]);
-
-
-            foreach($roles as $name => $can_edit) {
-                if(!$role = get_role($name)) {
-                    continue;
-                }
-
-                $role->add_cap('read');
-                $role->add_cap('read_club_item');
-                $role->add_cap('edit_club_item');
-                $role->add_cap('edit_club_items');
-
-                if($can_edit === false) {
-                    continue;
-                }
-
-                $role->add_cap('read_private static_club_items');
-                $role->add_cap('edit_others_club_items');
-                $role->add_cap('edit_published_club_items');
-                $role->add_cap('edit_private static_club_items');
-                $role->add_cap('publish_club_items');
-                $role->add_cap('delete_club_items');
-                $role->add_cap('delete_others_club_items');
-                $role->add_cap('delete_private static_club_items');
-                $role->add_cap('delete_published_club_items');
-            }
-        }
     }
 
 
