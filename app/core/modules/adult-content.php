@@ -20,7 +20,7 @@ class Knife_Adult_Content {
      * @access  private
      * @var     string
      */
-    private static $post_meta = '_knife_adult_content';
+    private static $post_meta = '_knife-adult-content';
 
 
    /**
