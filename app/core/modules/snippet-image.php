@@ -19,10 +19,10 @@ class Knife_Snippet_Image {
    /**
     * Backward compatibility social image meta name
     *
-    * @access  private
+    * @access  public
     * @var     string
     */
-    private static $meta_image = '_social-image';
+    public static $meta_image = '_social-image';
 
 
    /**
@@ -37,10 +37,10 @@ class Knife_Snippet_Image {
     /**
      * Default post type with snippet image metabox
      *
-     * @access  private
+     * @access  public
      * @var     array
      */
-    private static $post_type = ['post', 'club', 'quiz', 'select', 'story', 'generator'];
+    public static $post_type = ['post', 'club', 'quiz', 'select', 'story', 'generator'];
 
 
     /**

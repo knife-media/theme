@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.5
- * @version 1.8
+ * @version 1.11
  */
 
 
@@ -18,21 +18,21 @@ class Knife_Terms_Emoji {
     /**
      * Unique meta to store custom term emoji
      *
-     * @since   1.5
-     * @access  private
+     * @access  public
      * @var     string
+     * @since   1.5
      */
-    private static $term_meta = '_knife-term-emoji';
+    public static $term_meta = '_knife-term-emoji';
 
 
     /**
      * Taxes term emoji availible
      *
-     * @since   1.5
-     * @access  private
+     * @access  public
      * @var     array
+     * @since   1.5
      */
-    private static $taxonomies = ['post_tag', 'label'];
+    public static $taxonomies = ['post_tag', 'label'];
 
 
     /**

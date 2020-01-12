@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.2
- * @version 1.10
+ * @version 1.11
  */
 
 
@@ -19,19 +19,19 @@ class Knife_Post_Lead {
    /**
      * Lead text post meta
      *
-     * @access  private
+     * @access  public
      * @var     string
      */
-    private static $post_meta = '_knife-lead';
+    public static $meta_lead = '_knife-lead';
 
 
    /**
      * Default post type lead text availible
      *
-     * @access  private
+     * @access  public
      * @var     array
      */
-    private static $post_type = ['post', 'club', 'select', 'generator', 'quiz'];
+    public static $post_type = ['post', 'club', 'select', 'generator', 'quiz'];
 
 
     /**
@@ -69,11 +69,11 @@ class Knife_Post_Lead {
      * @link https://wordpress.stackexchange.com/a/292324/126253
      */
     public static function print_metabox($post, $box) {
-        $lead = get_post_meta($post->ID, self::$post_meta, true);
+        $lead = get_post_meta($post->ID, self::$meta_lead, true);
 
         wp_editor($lead, 'knife-lead-editor', [
             'media_buttons' => true,
-            'textarea_name' => self::$post_meta,
+            'textarea_name' => self::$meta_lead,
             'tinymce' => [
                 'toolbar1' => 'link',
                 'toolbar2' => ''
@@ -92,7 +92,7 @@ class Knife_Post_Lead {
      */
     public static function get_lead($post_lead = '') {
         // Get post lead
-        $post_lead = get_post_meta(get_the_ID(), self::$post_meta, true);
+        $post_lead = get_post_meta(get_the_ID(), self::$meta_lead, true);
 
         if(!empty($post_lead)) {
             $post_lead = wpautop($post_lead);
@@ -135,17 +135,17 @@ class Knife_Post_Lead {
         }
 
         // Save lead-text meta
-        if(empty($_REQUEST[self::$post_meta])) {
-            return delete_post_meta($post_id, self::$post_meta);
+        if(empty($_REQUEST[self::$meta_lead])) {
+            return delete_post_meta($post_id, self::$meta_lead);
         }
 
         // Sanitize post lead meta
-        $post_lead = wp_kses_post($_REQUEST[self::$post_meta]);
+        $post_lead = wp_kses_post($_REQUEST[self::$meta_lead]);
 
         // Remove trailing spaces
         $post_lead = preg_replace('~((&nbsp;| |\s)+$)~is', '', $post_lead);
 
-        update_post_meta($post_id, self::$post_meta, $post_lead);
+        update_post_meta($post_id, self::$meta_lead, $post_lead);
     }
 }
 

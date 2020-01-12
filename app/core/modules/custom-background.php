@@ -18,41 +18,41 @@ class Knife_Custom_Background {
     /**
      * Unique meta to store custom term background
      *
-     * @since   1.3
-     * @access  private
+     * @access  public
      * @var     string
+     * @since   1.3
      */
-    private static $term_meta = '_knife-term-background';
+    public static $term_meta = '_knife-term-background';
 
 
     /**
      * Default taxes term background availible
      *
+     * @access  public
+     * @var     array
      * @since   1.3
-     * @access  private
-     * @var     string
      */
-    private static $taxonomies = ['special'];
+    public static $taxonomies = ['special'];
 
 
     /**
      * Default post type with custom background metabox
      *
-     * @since   1.7
-     * @access  private
+     * @access  public
      * @var     array
+     * @since   1.7
      */
-    private static $post_type = ['post', 'club', 'select', 'generator', 'quiz', 'story'];
+    public static $post_type = ['post', 'club', 'select', 'generator', 'quiz', 'story'];
 
 
     /**
      * Unique meta to store post background options
      *
-     * @since   1.7
-     * @access  private
+     * @access  public
      * @var     string
+     * @since   1.7
      */
-    private static $post_meta = '_knife-background';
+    public static $meta_background = '_knife-background';
 
 
     /**
@@ -270,14 +270,14 @@ class Knife_Custom_Background {
         }
 
         // Save background meta
-        if(empty($_REQUEST[self::$post_meta])) {
-            return delete_post_meta($post_id, self::$post_meta);
+        if(empty($_REQUEST[self::$meta_background])) {
+            return delete_post_meta($post_id, self::$meta_background);
         }
 
         // Filter empty values
-        $background = array_filter($_REQUEST[self::$post_meta]);
+        $background = array_filter($_REQUEST[self::$meta_background]);
 
-        return update_post_meta($post_id, self::$post_meta, $background);
+        return update_post_meta($post_id, self::$meta_background, $background);
     }
 
 
@@ -309,7 +309,7 @@ class Knife_Custom_Background {
         $object_id = get_queried_object_id();
 
         if(is_singular(self::$post_type)) {
-            $background = (array) get_post_meta($object_id, self::$post_meta, true);
+            $background = (array) get_post_meta($object_id, self::$meta_background, true);
 
             if(array_filter($background)) {
                 return $background;

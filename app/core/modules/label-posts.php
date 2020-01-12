@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.5
- * @version 1.8
+ * @version 1.11
  */
 
 
@@ -20,20 +20,20 @@ class Knife_Label_Posts {
      * Unique slug using for taxonomy register and url
      *
      * @since   1.5
-     * @access  private
+     * @access  public
      * @var     string
      */
-    private static $taxonomy = 'label';
+    public static $taxonomy = 'label';
 
 
     /**
      * Default post type with posts labels
      *
      * @since   1.8
-     * @access  private
+     * @access  public
      * @var     array
      */
-    private static $post_type = ['post', 'quiz'];
+    public static $post_type = ['post', 'quiz'];
 
 
     /**

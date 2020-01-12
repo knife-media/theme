@@ -17,19 +17,19 @@ class Knife_Authors_Manager {
     /**
      * Post meta to store authors array
      *
-     * @access  private
+     * @access  public
      * @var     string
      */
-    public static $post_meta = '_knife-authors';
+    public static $meta_authors = '_knife-authors';
 
 
    /**
      * Default post type lead text availible
      *
-     * @access  private
+     * @access  public
      * @var     array
      */
-    private static $post_type = ['post', 'club', 'select', 'generator', 'quiz'];
+    public static $post_type = ['post', 'club', 'select', 'generator', 'quiz'];
 
 
     /**
@@ -151,18 +151,18 @@ class Knife_Authors_Manager {
         }
 
         // Delete all authors values
-        delete_post_meta($post_id, self::$post_meta);
+        delete_post_meta($post_id, self::$meta_authors);
 
         // Add post author if empty array
-        if(empty($_REQUEST[self::$post_meta])) {
-            return add_post_meta($post_id, self::$post_meta, $post->post_author);
+        if(empty($_REQUEST[self::$meta_authors])) {
+            return add_post_meta($post_id, self::$meta_authors, $post->post_author);
         }
 
-        $authors = (array) $_REQUEST[self::$post_meta];
+        $authors = (array) $_REQUEST[self::$meta_authors];
 
         // Add authors array from metabox input
         foreach($authors as $author) {
-            add_post_meta($post_id, self::$post_meta, absint($author));
+            add_post_meta($post_id, self::$meta_authors, absint($author));
         }
     }
 
@@ -188,7 +188,7 @@ class Knife_Authors_Manager {
             wp_enqueue_script('knife-authors-metabox', $include . '/scripts/authors-metabox.js', ['jquery'], $version);
 
             $options = [
-                'post_meta' => esc_attr(self::$post_meta),
+                'post_meta' => esc_attr(self::$meta_authors),
                 'action' => esc_attr(self::$ajax_action),
                 'nonce' => wp_create_nonce(self::$ajax_nonce),
 
@@ -277,7 +277,7 @@ class Knife_Authors_Manager {
      */
     public static function replace_feed_author($name) {
         if(is_feed() && !is_admin()) {
-            $authors = get_post_meta(get_the_ID(), self::$post_meta);
+            $authors = get_post_meta(get_the_ID(), self::$meta_authors);
 
             if(!empty($authors)) {
                 $output = [];
@@ -317,7 +317,7 @@ class Knife_Authors_Manager {
 
             // Set meta query based on meta
             $query->set('meta_query', [[
-                'key' => self::$post_meta,
+                'key' => self::$meta_authors,
                 'value' => absint($author)
             ]]);
 
@@ -360,7 +360,7 @@ class Knife_Authors_Manager {
             global $post;
 
             // Get authors
-            $authors = get_post_meta($post->ID, self::$post_meta);
+            $authors = get_post_meta($post->ID, self::$meta_authors);
 
             if(empty($authors)) {
                 $authors[] = $post->post_author;
@@ -456,7 +456,7 @@ class Knife_Authors_Manager {
         }
 
         $query = "SELECT COUNT(*) as counts FROM {$wpdb->postmeta} WHERE meta_key = %s AND meta_value = %d";
-        $results = $wpdb->get_row($wpdb->prepare($query, self::$post_meta, $user_id));
+        $results = $wpdb->get_row($wpdb->prepare($query, self::$meta_authors, $user_id));
 
         // Retrieve counts
         $counts = $results->counts;

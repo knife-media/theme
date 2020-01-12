@@ -18,10 +18,10 @@ class Knife_Story_Manager {
      * Unique slug using for custom post type register and url
      *
      * @since   1.3
-     * @access  private
+     * @access  public
      * @var     string
      */
-    private static $post_type = 'story';
+    public static $post_type = 'story';
 
 
     /**

@@ -4,6 +4,7 @@
  *
  * @package knife-theme
  * @since 1.7
+ * @version 1.11
  */
 
 
@@ -16,10 +17,10 @@ class Knife_User_Meta {
     /**
      * Unique meta to store user photo
      *
-     * @access  private
+     * @access  public
      * @var     string
      */
-    private static $user_photo = '_knife-user-photo';
+    public static $user_photo = '_knife-user-photo';
 
 
    /**

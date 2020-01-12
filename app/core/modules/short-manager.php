@@ -6,6 +6,7 @@
  *
  * @package knife-theme
  * @since 1.8
+ * @version 1.11
  */
 
 if (!defined('WPINC')) {
@@ -16,10 +17,10 @@ class Knife_Short_Manager {
     /**
      * Management page slug
      *
-     * @access  private
+     * @access  public
      * @var     string
      */
-    private static $page_slug = 'knife-short';
+    public static $page_slug = 'knife-short';
 
 
     /**

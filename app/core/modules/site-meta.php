@@ -48,6 +48,9 @@ class Knife_Site_Meta {
 
         // Add google tagmanager script
         add_action('wp_head', [__CLASS__, 'add_tagmanager'], 20);
+
+        // Include to page current page parameters
+        add_action('wp_enqueue_scripts', [__CLASS__, 'inject_parameters'], 12);
     }
 
 
@@ -322,6 +325,118 @@ class Knife_Site_Meta {
         ];
 
         return self::print_tags($meta);
+    }
+
+
+    /**
+     * Inject current page parameters for external systems
+     *
+     * @since 1.11
+     */
+    public static function inject_parameters() {
+        $meta = [];
+
+        if(is_singular() && !is_front_page()) {
+            $meta = self::get_singular_parameters($meta);
+        }
+
+        if(is_archive()) {
+            $meta = self::get_archive_parameters($meta);
+        }
+
+        if(is_front_page()) {
+            $meta['template'] = 'front';
+        }
+
+        // Add custom meta parameters
+        wp_localize_script('knife-theme', 'knife_meta_parameters', $meta);
+    }
+
+
+    /**
+     * Get singular custom meta parameters
+     *
+     * @since 1.11
+     */
+    private static function get_singular_parameters($meta) {
+        // Append post id
+        $meta['postid'] = get_the_ID();
+
+        // Append template
+        $meta['template'] = get_post_type();
+
+        if(property_exists('Knife_Adult_Content', 'meta_adult')) {
+            $adult = get_post_meta($meta['postid'], Knife_Adult_Content::$meta_adult, true);
+
+            // Add adult content meta
+            $meta['adult'] = (int) $adult;
+        }
+
+        if(property_exists('Knife_Promo_Manager', 'meta_promo')) {
+            $promo = get_post_meta($meta['postid'], Knife_Promo_Manager::$meta_promo, true);
+
+            // Add adult content meta
+            $meta['promo'] = (int) $promo;
+        }
+
+        if(property_exists('Knife_Special_Projects', 'taxonomy')) {
+            $terms = get_the_terms($meta['postid'], Knife_Special_Projects::$taxonomy);
+
+            // Get only first term
+            if(isset($terms[0]->slug)) {
+                $meta['special'] = $terms[0]->slug;
+            }
+        }
+
+        $cats = get_the_category($meta['postid']);
+
+        // Append categories
+        if(is_array($cats) && count($cats) > 0) {
+            $meta['cats'] = implode(':', wp_list_pluck($cats, 'category_nicename'));
+        }
+
+        $tags = get_the_tags($meta['postid']);
+
+        // Append tags
+        if(is_array($tags) && count($tags) > 0) {
+            $meta['tags'] = implode(':', wp_list_pluck($tags, 'slug'));
+        }
+
+        return $meta;
+    }
+
+
+    /**
+     * Get archive custom meta parameters
+     *
+     * @since 1.11
+     */
+    private static function get_archive_parameters($meta) {
+        $object = get_queried_object();
+
+        // Append template
+        $meta['template'] = 'archive';
+
+        if(empty($object->slug)) {
+            return $meta;
+        }
+
+        if(property_exists('Knife_Special_Projects', 'taxonomy')) {
+            // Check if in special tax
+            if(is_tax(Knife_Special_Projects::$taxonomy)) {
+                $meta['special'] = $object->slug;
+            }
+        }
+
+        if(is_category()) {
+            $meta['cats'] = $object->slug;
+        }
+
+        if(is_tag()) {
+            $meta['tags'] = $object->slug;
+        }
+
+        return $meta;
     }
 
 

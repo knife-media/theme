@@ -17,19 +17,19 @@ class Knife_Quiz_Section {
     /**
      * Unique slug using for custom post type register and url
      *
-     * @access  private
+     * @access  public
      * @var     string
      */
-    private static $post_type = 'quiz';
+    public static $post_type = 'quiz';
 
 
     /**
      * Quiz share query var
      *
-     * @access  private
+     * @access  public
      * @var     string
      */
-    private static $query_var = 'share';
+    public static $query_var = 'share';
 
 
     /**

@@ -17,19 +17,19 @@ class Knife_Adult_Content {
     /**
      * Post meta to store adult content option
      *
-     * @access  private
+     * @access  public
      * @var     string
      */
-    private static $post_meta = '_knife-adult-content';
+    public static $meta_adult = '_knife-adult-content';
 
 
    /**
      * Default post type lead text availible
      *
-     * @access  private
+     * @access  public
      * @var     array
      */
-    private static $post_type = ['post', 'club', 'select', 'generator', 'quiz'];
+    public static $post_type = ['post', 'club', 'select', 'generator', 'quiz'];
 
 
     /**
@@ -54,11 +54,11 @@ class Knife_Adult_Content {
             return;
         }
 
-        $adult = get_post_meta($post_id, self::$post_meta, true);
+        $adult = get_post_meta($post_id, self::$meta_adult, true);
 
         printf(
             '<div class="misc-pub-section"><label><input type="checkbox" name="%1$s" class="checkbox"%3$s> %2$s</label></div>',
-            esc_attr(self::$post_meta),
+            esc_attr(self::$meta_adult),
             __('Содержимое для взрослых', 'knife-theme'),
             checked($adult, 1, false)
         );
@@ -81,11 +81,11 @@ class Knife_Adult_Content {
             return;
         }
 
-        if(empty($_REQUEST[self::$post_meta])) {
-            return delete_post_meta($post_id, self::$post_meta);
+        if(empty($_REQUEST[self::$meta_adult])) {
+            return delete_post_meta($post_id, self::$meta_adult);
         }
 
-        return update_post_meta($post_id, self::$post_meta, 1);
+        return update_post_meta($post_id, self::$meta_adult, 1);
     }
 }
 

@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.4
- * @version 1.10
+ * @version 1.11
  */
 
 if (!defined('WPINC')) {
@@ -17,10 +17,10 @@ class Knife_Select_Links {
     /**
      * Unique slug using for custom post type register and url
      *
-     * @access  private
+     * @access  public
      * @var     string
      */
-    private static $post_type = 'select';
+    public static $post_type = 'select';
 
 
     /**

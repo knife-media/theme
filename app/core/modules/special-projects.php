@@ -19,9 +19,9 @@ class Knife_Special_Projects {
     /**
      * Unique slug using for taxonomy register and url
      *
-     * @since   1.3
      * @access  public
      * @var     string
+     * @since   1.3
      */
     public static $taxonomy = 'special';
 
@@ -29,9 +29,9 @@ class Knife_Special_Projects {
     /**
      * Default post type with special taxonomy
      *
-     * @since   1.10
      * @access  public
      * @var     array
+     * @since   1.10
      */
     public static $post_type = ['post', 'quiz', 'generator'];
 
@@ -39,9 +39,9 @@ class Knife_Special_Projects {
     /**
      * Unique meta to store custom term color
      *
-     * @since   1.4
      * @access  private
      * @var     public
+     * @since   1.4
      */
     public static $term_meta = '_knife-special-options';
 

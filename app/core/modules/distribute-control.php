@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.8
- * @version 1.9
+ * @version 1.11
  */
 
 
@@ -19,10 +19,10 @@ class Knife_Distribute_Control {
     /**
      * Default post type with social distribute metabox
      *
-     * @access  private
+     * @access  public
      * @var     array
      */
-    private static $post_type = ['post', 'club', 'quiz', 'story'];
+    public static $post_type = ['post', 'club', 'quiz', 'story'];
 
 
     /**

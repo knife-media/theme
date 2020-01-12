@@ -17,7 +17,7 @@ class Knife_News_Manager {
     /**
      * Unique slug using for news category url
      *
-     * @access  private
+     * @access  public
      * @var     string
      */
     public static $news_slug = 'news';
@@ -25,8 +25,8 @@ class Knife_News_Manager {
     /**
      * News category id
      *
-     * @access  private
-     * @var     int
+     * @access  public
+     * @var     int|null
      */
     public static $news_id = null;
 

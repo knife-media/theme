@@ -213,8 +213,8 @@ class Knife_Post_Info {
      * Get post author info
      */
     private static function meta_author($output = '') {
-        if(property_exists('Knife_Authors_Manager', 'post_meta')) {
-            $authors = get_post_meta(get_the_ID(), Knife_Authors_Manager::$post_meta);
+        if(property_exists('Knife_Authors_Manager', 'meta_authors')) {
+            $authors = get_post_meta(get_the_ID(), Knife_Authors_Manager::$meta_authors);
 
             if(!empty($authors)) {
                 foreach($authors as $author) {

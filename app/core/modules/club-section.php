@@ -6,7 +6,7 @@
 *
 * @package knife-theme
 * @since 1.3
-* @version 1.9
+* @version 1.11
 */
 
 
@@ -19,10 +19,10 @@ class Knife_Club_Section {
     /**
      * Unique slug using for custom post type register and url
      *
-     * @access  private
+     * @access  public
      * @var     string
      */
-    private static $post_type = 'club';
+    public static $post_type = 'club';
 
 
    /**
@@ -64,13 +64,13 @@ class Knife_Club_Section {
     private static $option_request = 'knife_club_request_id';
 
 
-   /**
-    * Ajax action
-    *
-    * @since   1.7
-    * @access  private
-    * @var     string
-    */
+    /**
+     * Ajax action
+     *
+     * @since   1.7
+     * @access  private
+     * @var     string
+     */
     private static $ajax_request = 'knife-club-request';
 
 

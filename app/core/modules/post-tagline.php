@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.2
- * @version 1.7
+ * @version 1.11
  */
 
 
@@ -16,22 +16,22 @@ if (!defined('WPINC')) {
 
 
 class Knife_Post_Tagline {
-   /**
-    * Post meta name
-    *
-    * @access  private
-    * @var     string
-    */
-    private static $post_meta = '_knife-tagline';
+    /**
+     * Post meta name
+     *
+     * @access  public
+     * @var     string
+     */
+    public static $meta_tagline = '_knife-tagline';
 
 
-   /**
-    * Default post type tagline availible
-    *
-    * @access  private
-    * @var     array
-    */
-    private static $post_type = ['post', 'club', 'quiz', 'generator'];
+    /**
+     * Default post type tagline availible
+     *
+     * @access  public
+     * @var     array
+     */
+    public static $post_type = ['post', 'club', 'quiz', 'generator'];
 
 
     /**
@@ -87,13 +87,13 @@ class Knife_Post_Tagline {
             return;
         }
 
-        $tagline = get_post_meta($post_id, self::$post_meta, true);
+        $tagline = get_post_meta($post_id, self::$meta_tagline, true);
         $tagline = sanitize_text_field($tagline);
 
         printf(
             '<input id="knife-tagline-input" type="text" class="large-text" value="%1$s" name="%2$s" placeholder="%3$s">',
             esc_attr($tagline),
-            esc_attr(self::$post_meta),
+            esc_attr(self::$meta_tagline),
             __('Подзаголовок', 'knife-theme')
         );
     }
@@ -103,7 +103,7 @@ class Knife_Post_Tagline {
      * Filter the post title on the Posts screen, and on the front-end
      */
     public static function post_tagline($title, $post_id, $raw = true) {
-        $tagline = get_post_meta($post_id, self::$post_meta, true);
+        $tagline = get_post_meta($post_id, self::$meta_tagline, true);
 
         if(empty($tagline)) {
             return $title;
@@ -127,7 +127,7 @@ class Knife_Post_Tagline {
             return $title;
         }
 
-        $tagline = get_post_meta($post->ID, self::$post_meta, true);
+        $tagline = get_post_meta($post->ID, self::$meta_tagline, true);
         $tagline = sanitize_text_field($tagline);
 
         if(empty($tagline)) {
@@ -157,11 +157,11 @@ class Knife_Post_Tagline {
         }
 
         // Save tagline meta
-        if(empty($_REQUEST[self::$post_meta])) {
-            return delete_post_meta($post_id, self::$post_meta);
+        if(empty($_REQUEST[self::$meta_tagline])) {
+            return delete_post_meta($post_id, self::$meta_tagline);
         }
 
-        return update_post_meta($post_id, self::$post_meta, trim($_REQUEST[self::$post_meta]));
+        return update_post_meta($post_id, self::$meta_tagline, trim($_REQUEST[self::$meta_tagline]));
     }
 }
 

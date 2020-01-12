@@ -27,11 +27,11 @@ class Knife_Similar_Posts {
     /**
      * Default post type with similar aside
      *
-     * @since   1.8
-     * @access  private
+     * @access  public
      * @var     array
+     * @since   1.8
      */
-    private static $post_type = ['post', 'club', 'quiz', 'generator'];
+    public static $post_type = ['post', 'club', 'quiz', 'generator'];
 
 
     /**
@@ -67,11 +67,11 @@ class Knife_Similar_Posts {
     /**
      * Post meta to store similar exclude option
      *
-     * @access  private
+     * @access  public
      * @var     string
      * @since   1.11
      */
-    private static $post_meta = '_knife_similar_hide';
+    public static $meta_similar = '_knife_similar_hide';
 
 
     /**
@@ -110,11 +110,11 @@ class Knife_Similar_Posts {
             return;
         }
 
-        $hidden = get_post_meta($post_id, self::$post_meta, true);
+        $hidden = get_post_meta($post_id, self::$meta_similar, true);
 
         printf(
             '<div class="misc-pub-section"><label><input type="checkbox" name="%1$s" class="checkbox"%3$s> %2$s</label></div>',
-            esc_attr(self::$post_meta),
+            esc_attr(self::$meta_similar),
             __('Скрыть блок похожих записей', 'knife-theme'),
             checked($hidden, 1, false)
         );
@@ -139,11 +139,11 @@ class Knife_Similar_Posts {
             return;
         }
 
-        if(empty($_REQUEST[self::$post_meta])) {
-            return delete_post_meta($post_id, self::$post_meta);
+        if(empty($_REQUEST[self::$meta_similar])) {
+            return delete_post_meta($post_id, self::$meta_similar);
         }
 
-        return update_post_meta($post_id, self::$post_meta, 1);
+        return update_post_meta($post_id, self::$meta_similar, 1);
     }
 
 
@@ -243,7 +243,7 @@ class Knife_Similar_Posts {
         $hidden = true;
 
         if(get_post_type($post_id) === 'post') {
-            $hidden = get_post_meta($post_id, self::$post_meta, true);
+            $hidden = get_post_meta($post_id, self::$meta_similar, true);
         }
 
         // Get similar if not cards

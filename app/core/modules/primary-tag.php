@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.7
+ * @version 1.11
  */
 
 
@@ -16,22 +16,22 @@ if (!defined('WPINC')) {
 
 
 class Knife_Primary_Tag {
-   /**
-    * Post meta name
-    *
-    * @access  private
-    * @var     string
-    */
-    private static $post_meta = 'primary-tag';
+    /**
+     * Post meta name
+     *
+     * @access  public
+     * @var     string
+     */
+    public static $meta_primary = 'primary-tag';
 
 
-   /**
-    * Post types primary tag availible
-    *
-    * @access  private
-    * @var     array
-    */
-    private static $post_type = ['post', 'generator', 'quiz'];
+    /**
+     * Post types primary tag availible
+     *
+     * @access  public
+     * @var     array
+     */
+    public static $post_type = ['post', 'generator', 'quiz'];
 
 
     /**
@@ -76,7 +76,7 @@ class Knife_Primary_Tag {
         ];
 
         // get current primary term
-        $term_id = get_post_meta($post_id, self::$post_meta, true);
+        $term_id = get_post_meta($post_id, self::$meta_primary, true);
 
         if($term_id && $term = get_term($term_id)) {
             $options['primary'] = $term->name;
@@ -103,11 +103,11 @@ class Knife_Primary_Tag {
         }
 
         // Save meta
-        if(isset($_REQUEST[self::$post_meta])) {
-            $term = get_term_by('name', $_REQUEST[self::$post_meta], 'post_tag');
+        if(isset($_REQUEST[self::$meta_primary])) {
+            $term = get_term_by('name', $_REQUEST[self::$meta_primary], 'post_tag');
 
             if($term && $term->term_id > 0) {
-                update_post_meta($post_id, self::$post_meta, $term->term_id);
+                update_post_meta($post_id, self::$meta_primary, $term->term_id);
             }
         }
     }
@@ -123,7 +123,7 @@ class Knife_Primary_Tag {
             return $items;
         }
 
-        if($primary = get_post_meta($post->ID, self::$post_meta, true)) {
+        if($primary = get_post_meta($post->ID, self::$meta_primary, true)) {
             $sorted = [];
 
             foreach($items as $item) {
