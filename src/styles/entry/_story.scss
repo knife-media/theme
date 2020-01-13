@@ -206,14 +206,6 @@
 
       width: 100%;
       max-width: 40rem;
-
-      strong {
-        font-weight: 400;
-      }
-
-      em {
-        font-weight: 400;
-      }
     }
 
     .entry-story__slide-kicker {
@@ -260,46 +252,16 @@
       font-size: 1rem;
       font-weight: 500;
 
-      h1, h2 {
-        margin: 1rem 0;
-
-        font-size: 2.5rem;
-        line-height: 1.075;
-
-        @media screen and (max-width: 767px) {
-          font-size: 2rem;
-          line-height: 1.125;
-        }
-
-        @media screen and (max-width: 479px) {
-          margin: .75rem 0;
-          font-size: 1.5rem;
-          line-height: 1.25;
-        }
+      strong, b, em, i {
+        font-weight: 500;
+        font-style: normal;
       }
 
-      h3 {
+      h1, h2, h3, h4, li {
         margin: 1rem 0;
 
         font-size: 1.5rem;
-        line-height: 1.25;
-
-        @media screen and (max-width: 767px) {
-          font-size: 1.375rem;
-          line-height: 1.25;
-        }
-
-        @media screen and (max-width: 479px) {
-          margin: .75rem 0;
-          font-size: 1.25rem;
-          line-height: 1.375;
-        }
-      }
-
-      h4, li {
-        margin: 1rem 0;
-
-        font-size: 1.5rem;
+        font-weight: 500;
         line-height: 1.25;
 
         @media screen and (max-width: 1023px) {
@@ -335,11 +297,11 @@
       p {
         margin: 1rem 0;
         font-size: 1rem;
+        font-weight: 500;
 
         @media screen and (max-width: 479px) {
           margin: .75rem 0;
           font-size: .875rem;
-          font-weight: 500;
         }
       }
 
