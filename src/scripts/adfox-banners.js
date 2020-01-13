@@ -24,7 +24,7 @@
       return params;
     }
 
-    var targets = ['template', 'postid', 'special', 'cats', 'tags', 'adult', 'promo'];
+    var targets = ['template', 'postid', 'special', 'category', 'tags', 'adult', 'promo'];
 
     for(var i = 0, n = 1; i < targets.length; i++, n++) {
       var target = targets[i];

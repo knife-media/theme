@@ -36,6 +36,9 @@ class Knife_Site_Meta {
         add_action('wp_head', [__CLASS__, 'add_telegram_tags'], 5);
         add_action('wp_head', [__CLASS__, 'add_yandex_meta'], 5);
 
+        // Add google tagmanager script
+        add_action('wp_head', [__CLASS__, 'add_tagmanager'], 20);
+
         // Add custom theme lang attributes
         add_filter('language_attributes', [__CLASS__, 'add_xmlns']);
 
@@ -46,9 +49,6 @@ class Knife_Site_Meta {
         // For the reason that we don't use comments in this theme we have to remove comments feed link from header
         add_filter('feed_links_show_comments_feed', '__return_false');
 
-        // Add google tagmanager script
-        add_action('wp_head', [__CLASS__, 'add_tagmanager'], 20);
-
         // Include to page current page parameters
         add_action('wp_enqueue_scripts', [__CLASS__, 'inject_parameters'], 12);
     }
@@ -58,9 +58,7 @@ class Knife_Site_Meta {
      * Add tagmanager script to header
      */
     public static function add_tagmanager() {
-        if(defined('WP_DEBUG') && WP_DEBUG === false) {
-            $tagmanager_id = 'GTM-KZ7MHM';
-
+        if(defined('KNIFE_TAGMANAGER')) {
             $include = get_template_directory() . '/core/include';
             include_once($include . '/templates/tagmanager-script.php');
         }
@@ -379,6 +377,18 @@ class Knife_Site_Meta {
             $meta['promo'] = (int) $promo;
         }
 
+        if(property_exists('Knife_Authors_Manager', 'meta_authors')) {
+            $authors = get_post_meta($meta['postid'], Knife_Authors_Manager::$meta_authors);
+
+            $users = get_users([
+                'include' => $authors,
+                'fields' => ['user_nicename']
+            ]);
+
+            // Add authors content meta
+            $meta['authors'] = implode(':', wp_list_pluck($users, 'user_nicename'));
+        }
+
         if(property_exists('Knife_Special_Projects', 'taxonomy')) {
             $terms = get_the_terms($meta['postid'], Knife_Special_Projects::$taxonomy);
 
@@ -388,11 +398,11 @@ class Knife_Site_Meta {
             }
         }
 
-        $cats = get_the_category($meta['postid']);
+        $category = get_the_category($meta['postid']);
 
         // Append categories
-        if(is_array($cats) && count($cats) > 0) {
-            $meta['cats'] = implode(':', wp_list_pluck($cats, 'category_nicename'));
+        if(is_array($category) && count($category) > 0) {
+            $meta['category'] = implode(':', wp_list_pluck($category, 'category_nicename'));
         }
 
         $tags = get_the_tags($meta['postid']);
@@ -429,7 +439,7 @@ class Knife_Site_Meta {
         }
 
         if(is_category()) {
-            $meta['cats'] = $object->slug;
+            $meta['category'] = $object->slug;
         }
 
         if(is_tag()) {
