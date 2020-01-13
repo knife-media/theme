@@ -103,18 +103,12 @@ class Knife_MCE_Plugins {
         $settings['invalid_styles'] = 'color font-weight font-size';
         $settings['valid_children'] = '-aside[aside]';
 
-        // Remove all attributes and bad tags
-        $settings['paste_preprocess'] = "function(plugin, args) {
-            var whitelist = 'p,span,strong,em,h1,h2,h3,h4,h5,h6,ul,li,ol,a,b';
-            var stripped = jQuery('<div>' + args.content + '</div>');
-            var els = stripped.find('*').not(whitelist);
-            for (var i = els.length - 1; i >= 0; i--) {
-              var e = els[i];
-              jQuery(e).replaceWith(e.innerHTML);
-            }
-            stripped.find('*').removeAttr('id').removeAttr('class');
-            args.content = stripped.html();
-          }";
+        $include = get_template_directory() . '/core/include';
+
+        // Add paste preprocess script if exists
+        if(file_exists($include . '/tinymce/paste-preprocess.js')) {
+            $settings['paste_preprocess'] = file_get_contents($include . '/tinymce/paste-preprocess.js');
+        }
 
         return $settings;
     }
