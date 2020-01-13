@@ -27,7 +27,7 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
                 $paged = 1;
             }
 
-            $limit = 50;
+            $limit = 25;
             $offset = $limit * ($paged - 1);
 
             $query = "SELECT SQL_CALC_FOUND_ROWS p.*, IFNULL(m2.meta_value, p.post_date_gmt) as zen_date

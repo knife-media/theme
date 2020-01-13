@@ -199,12 +199,11 @@ class Knife_Extra_Feeds {
     public static function load_template() {
         $feed = get_query_var('feed');
 
-        // Get feed path
-        $path = get_template_directory() . '/core/include/feeds/' . $feed . '.php';
+        // Feeds templates path
+        $path = get_template_directory() . '/core/include/feeds/';
 
-        if(file_exists($path)) {
-            require $path;
-        }
+        // Include if exists
+        include_once($path . $feed . '.php');
     }
 
 
@@ -213,7 +212,7 @@ class Knife_Extra_Feeds {
     */
     public static function update_query($query) {
         if($query->is_main_query() && $query->is_feed()) {
-            $query->set('posts_per_rss', 50);
+            $query->set('posts_per_rss', 25);
         }
     }
 

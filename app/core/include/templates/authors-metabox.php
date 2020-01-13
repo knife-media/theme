@@ -3,7 +3,7 @@
         $post_id = get_the_ID();
 
         // Get post authors meta
-        $authors = get_post_meta($post_id, self::$post_meta);
+        $authors = get_post_meta($post_id, self::$meta_authors);
 
         printf(
             '<input class="authors-input" type="text" placeholder="%s">',
@@ -17,7 +17,7 @@
                 '<p class="authors-item">%s<span class="authors-delete"></span>%s</p>',
                 sprintf(
                     '<input type="hidden" name="%s[]" value="%s">',
-                    esc_attr(self::$post_meta),
+                    esc_attr(self::$meta_authors),
                     esc_attr($user->ID)
                 ),
                 esc_html($user->display_name)

@@ -17,29 +17,53 @@
 
 
   /**
+   * Get custom widgets targets
+   */
+  function addTargets(params) {
+    if(typeof knife_meta_parameters === 'undefined') {
+      return params;
+    }
+
+    var targets = ['template', 'postid', 'special', 'cats', 'tags', 'adult', 'promo'];
+
+    for(var i = 0, n = 1; i < targets.length; i++, n++) {
+      var target = targets[i];
+
+      params['puid' + n] = knife_meta_parameters[target] || '';
+    }
+
+    return params;
+  }
+
+
+  /**
    * Create params object by url
    */
   function parseOptions(link, options) {
     // Try to found params
     var found = link.match(/\/(\d+?)\/.+?\?(.+)$/) || [];
 
-    if(found.length > 2) {
-      options.ownerId = found[1];
-      options.params = {};
-
-      var vars = found[2].split('&');
-
-      for (var i = 0; i < vars.length; i++) {
-        var pair = vars[i].split('=');
-
-        // Skip empty and specific keys
-        if(pair.length == 1 || pair[0] === 'pr') {
-          continue;
-        }
-
-        options.params[pair[0]] = decodeURIComponent(pair[1].replace(/\+/g, " "));
-      }
+    if(found.length <= 2) {
+      return options;
     }
+
+    var vars = found[2].split('&');
+
+    options.ownerId = found[1];
+    options.params = {};
+
+    for (var i = 0; i < vars.length; i++) {
+      var pair = vars[i].split('=');
+
+      // Skip empty and specific keys
+      if(pair.length == 1 || pair[0] === 'pr') {
+        continue;
+      }
+
+      options.params[pair[0]] = decodeURIComponent(pair[1].replace(/\+/g, " "));
+    }
+
+    options.params = addTargets(options.params);
 
     return options;
   }
