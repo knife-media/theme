@@ -483,10 +483,12 @@ class Knife_Quiz_Section {
             return;
         }
 
-
         // Update options
         if(isset($_REQUEST[self::$meta_options])) {
             $options = wp_kses_post_deep($_REQUEST[self::$meta_options]);
+
+            // Remove slashes
+            $options = stripslashes_deep($options);
 
             if(isset($options['remark'])) {
                 $options['remark'] = wp_targeted_link_rel(links_add_target($options['remark']));
@@ -514,7 +516,10 @@ class Knife_Quiz_Section {
         // Delete quiz post meta to create it again below
         delete_post_meta($post_id, $query);
 
-        foreach($_REQUEST[$query] as $item) {
+        // Remove slashes
+        $items = stripslashes_deep($_REQUEST[$query]);
+
+        foreach($items as $item) {
             // Filter answer array
             if(isset($item['answers']) && is_array($item['answers'])) {
                 foreach($item['answers'] as $i => &$answer) {
@@ -524,7 +529,14 @@ class Knife_Quiz_Section {
                     }
 
                     // Add blank and rel attributes to answer
-                    $answer['message'] = wp_targeted_link_rel(links_add_target($answer['message']));
+                    if(!empty($answer['message'])) {
+                        $answer['message'] = wp_targeted_link_rel(links_add_target($answer['message']));
+                    }
+
+                    // Strip tags from choice
+                    if(!empty($answer['choice'])) {
+                        $answer['choice'] = strip_tags($answer['choice']);
+                    }
                 }
             }
 
@@ -552,7 +564,10 @@ class Knife_Quiz_Section {
         // Delete quiz post meta to create it again below
         delete_post_meta($post_id, $query);
 
-        foreach($_REQUEST[$query] as $result) {
+        // Remove slashes
+        $results = stripslashes_deep($_REQUEST[$query]);
+
+        foreach($results as $result) {
             // We should unset empty posters array
             if(isset($result['posters']) && !array_filter($result['posters'])) {
                 unset($result['posters']);
