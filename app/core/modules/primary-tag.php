@@ -117,27 +117,29 @@ class Knife_Primary_Tag {
      * Move primary tag to first position
      */
     public static function sort_tags($items) {
-        global $post;
+        $post_id = get_the_ID();
 
         if(!is_array($items)) {
             return $items;
         }
 
-        if($primary = get_post_meta($post->ID, self::$meta_primary, true)) {
-            $sorted = [];
+        $primary = get_post_meta($post_id, self::$meta_primary, true);
 
-            foreach($items as $item) {
-                if($item->term_id === (int) $primary) {
-                    array_unshift($sorted, $item);
-                } else {
-                    $sorted[] = $item;
-                }
-            }
-
-            $items = $sorted;
+        if(empty($primary)) {
+            return $items;
         }
 
-        return $items;
+        $sorted = [];
+
+        foreach($items as $item) {
+            if($item->term_id === (int) $primary) {
+                array_unshift($sorted, $item);
+            } else {
+                $sorted[] = $item;
+            }
+        }
+
+        return $sorted;
     }
 }
 
