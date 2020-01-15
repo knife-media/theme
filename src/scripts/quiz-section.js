@@ -2,7 +2,7 @@
  * Quiz post type front-end handler
  *
  * @since 1.7
- * @version 1.8
+ * @version 1.11
  */
 
 (function() {
@@ -72,11 +72,9 @@
       return false;
     }
 
-    var title = quiz.querySelector('.entry-quiz__title').textContent;
-
     var matches = [
       knife_quiz_options.permalink.replace(/\/?$/, '/') + index + '/',
-      result.heading || title
+      quiz.querySelector('.entry-quiz__title').textContent || ''
     ];
 
     var links = quiz.querySelectorAll('.share > .share__link');
