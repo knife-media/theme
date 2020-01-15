@@ -173,10 +173,7 @@ class Knife_Extra_Feeds {
      */
     public static function update_yandex_feed($query) {
         if($query->is_main_query() && $query->is_feed('yandex-news')) {
-            // Check if news id exists
-            if(property_exists('Knife_News_Manager', 'news_id')) {
-                $query->set('category__in', Knife_News_Manager::$news_id);
-            }
+            $query->set('category_name', 'news');
         }
     }
 

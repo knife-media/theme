@@ -372,13 +372,10 @@ class Knife_Similar_Posts {
                 'post__not_in' => [$post_id],
                 'post_status' => 'publish',
                 'ignore_sticky_posts' => true,
+                'category_name' => 'longreads'
             ];
 
             $related = [];
-
-            if(property_exists('Knife_News_Manager', 'news_id')) {
-                $query_args['category__not_in'] = Knife_News_Manager::$news_id;
-            }
 
             // Get posts with primary tag
             $the_posts = wp_list_pluck(get_posts($query_args), 'ID');
