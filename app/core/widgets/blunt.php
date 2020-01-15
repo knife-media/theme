@@ -20,7 +20,7 @@ class Knife_Widget_Blunt extends WP_Widget {
     /**
      * Blunt posts tag
      */
-    private $term_slug = 'bluntmedia';
+    private $blunt_name = 'blunt';
 
 
     /**
@@ -49,7 +49,7 @@ class Knife_Widget_Blunt extends WP_Widget {
         $instance = wp_parse_args((array) $instance, $defaults);
 
         $query = new WP_Query([
-            'tag' => $this->term_slug,
+            'category_name' => $this->blunt_name,
             'post_type' => $this->post_type,
             'posts_per_page' => $instance['posts_per_page'],
             'post_status' => 'publish',

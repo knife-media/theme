@@ -18,15 +18,15 @@ class Knife_Widget_Televisor extends WP_Widget {
 
 
     /**
-     * News category id
+     * Longreads category slug
      */
-    private $news_id = null;
+    private $longreads_name = 'longreads';
 
 
     /**
-     * Exclude tags
+     * News category slug
      */
-    private $tag__not_in = [];
+    private $news_name = 'news';
 
 
     /**
@@ -38,16 +38,6 @@ class Knife_Widget_Televisor extends WP_Widget {
             'description' => __('Выводит телевизор из 4 постов и блока новостей', 'knife-theme'),
             'customize_selective_refresh' => true
         ];
-
-        $cat = get_category_by_slug('news');
-        if(isset($cat->term_id)) {
-            $this->news_id = $cat->term_id;
-        }
-
-        $tag = get_term_by('slug', 'bluntmedia', 'post_tag');
-        if(isset($tag->term_id)) {
-            $this->tag__not_in[] = (int) $tag->term_id;
-        }
 
         parent::__construct('knife_widget_televisor', __('[НОЖ] Телевизор', 'knife-theme'), $widget_ops);
     }
@@ -171,7 +161,7 @@ class Knife_Widget_Televisor extends WP_Widget {
         extract($instance);
 
         $query = [
-            'category__not_in' => $this->news_id,
+            'category_name' => $this->longreads_name,
             'posts_per_page' => 3,
             'post_type' => $this->post_type,
             'post_status' => 'publish',
@@ -254,8 +244,7 @@ class Knife_Widget_Televisor extends WP_Widget {
      */
     private function show_recent($instance) {
         $query = new WP_Query([
-            'cat' => $this->news_id,
-            'tag__not_in' => $this->tag__not_in,
+            'category_name' => $this->news_name,
             'post_status' => 'publish',
             'ignore_sticky_posts' => 1,
             'posts_per_page' => $instance['posts_per_page']

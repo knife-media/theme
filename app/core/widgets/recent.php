@@ -12,15 +12,9 @@
 
 class Knife_Widget_Recent extends WP_Widget {
     /**
-     * News category id
+     * News category slug
      */
-    private $news_id = null;
-
-
-    /**
-     * Exclude tags
-     */
-    private $tag__not_in = [];
+    private $news_name = 'news';
 
 
     /**
@@ -32,16 +26,6 @@ class Knife_Widget_Recent extends WP_Widget {
             'description' => __('Выводит последние посты c датой и тегом по выбранной категории.', 'knife-theme'),
             'customize_selective_refresh' => true
         ];
-
-        $cat = get_category_by_slug('news');
-        if(isset($cat->term_id)) {
-            $this->news_id = $cat->term_id;
-        }
-
-        $tag = get_term_by('slug', 'bluntmedia', 'post_tag');
-        if(isset($tag->term_id)) {
-            $this->tag__not_in[] = (int) $tag->term_id;
-        }
 
         parent::__construct('knife_widget_recent', __('[НОЖ] Новости', 'knife-theme'), $widget_ops);
     }
@@ -59,8 +43,7 @@ class Knife_Widget_Recent extends WP_Widget {
         $instance = wp_parse_args((array) $instance, $defaults);
 
         $query = new WP_Query([
-            'cat' => $this->news_id,
-            'tag__not_in' => $this->tag__not_in,
+            'category_name' => $this->news_name,
             'posts_per_page' => $instance['posts_per_page'],
             'post_status' => 'publish',
             'ignore_sticky_posts' => 1

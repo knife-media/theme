@@ -18,9 +18,9 @@ class Knife_Widget_Transparent extends WP_Widget {
 
 
     /**
-     * News category id
+     * Longreads category slug
      */
-    private $news_id = null;
+    private $longreads_name = 'longreads';
 
 
     /**
@@ -35,12 +35,6 @@ class Knife_Widget_Transparent extends WP_Widget {
             'description' => __('Выводит список из четырех прозрачных постов со стикерами.', 'knife-theme'),
             'customize_selective_refresh' => true
         ];
-
-        $term = get_category_by_slug('news');
-
-        if(isset($term->term_id)) {
-            $this->news_id = $term->term_id;
-        }
 
         parent::__construct('knife_widget_transparent', __('[НОЖ] Прозрачный', 'knife-theme'), $widget_ops);
     }
@@ -199,7 +193,7 @@ class Knife_Widget_Transparent extends WP_Widget {
 
         $query = [
             'offset' => $offset,
-            'category__not_in' => $this->news_id,
+            'category_name' => $this->longreads_name,
             'posts_per_page' => 4,
             'post_status' => 'publish',
             'ignore_sticky_posts' => 1,

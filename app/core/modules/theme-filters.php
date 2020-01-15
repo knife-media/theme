@@ -30,6 +30,9 @@ class Knife_Theme_Filters {
         // Update archive template description
         add_action('get_the_archive_description', [__CLASS__, 'update_archive_description']);
 
+        // Remove longreads archive title
+        add_action('get_the_archive_title', [__CLASS__, 'remove_longreads_title'], 12);
+
         // Remove private posts from archives and home page
         add_action('pre_get_posts', [__CLASS__, 'remove_private_posts']);
 
@@ -315,6 +318,18 @@ class Knife_Theme_Filters {
         }
 
         return sprintf('<h1 class="caption__title">%s</h1>', $title);
+    }
+
+
+    /**
+     * Remove archive title for longreads
+     *
+     * @since 1.11
+     */
+    public static function remove_longreads_title($title) {
+        if(is_category('longreads')) {
+            return '';
+        }
     }
 
 

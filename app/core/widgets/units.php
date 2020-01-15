@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.4
- * @version 1.10
+ * @version 1.11
  */
 
 
@@ -18,9 +18,9 @@ class Knife_Widget_Units extends WP_Widget {
 
 
     /**
-     * News category id
+     * Longreads category slug
      */
-    private $news_id = null;
+    private $longreads_name = 'longreads';
 
 
     /**
@@ -32,12 +32,6 @@ class Knife_Widget_Units extends WP_Widget {
             'description' => __('Выводит полосу по заданному критерию в виде карточек.', 'knife-theme'),
             'customize_selective_refresh' => true
         ];
-
-        $term = get_category_by_slug('news');
-
-        if(isset($term->term_id)) {
-            $this->news_id = $term->term_id;
-        }
 
         parent::__construct('knife_widget_units', __('[НОЖ] Карточки', 'knife-theme'), $widget_ops);
     }
@@ -158,7 +152,7 @@ class Knife_Widget_Units extends WP_Widget {
         extract($instance);
 
         $query = [
-            'category__not_in' => $this->news_id,
+            'category_name' => $this->longreads_name,
             'posts_per_page' => $posts_per_page,
             'post_type' => $this->post_type,
             'offset' => $offset,

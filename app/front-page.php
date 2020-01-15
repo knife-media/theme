@@ -26,9 +26,9 @@ get_header(); ?>
 <?php if(is_active_sidebar('knife-frontal')) : ?>
     <nav class="navigate">
         <?php
-            printf('<a class="button" href="%2$s">%1$s</a>',
-                __('Все статьи', 'knife-theme'),
-                esc_url(home_url('/longreads/page/2'))
+            printf('<a class="button" href="%s/page/2/">%s</a>',
+                untrailingslashit(get_category_link(get_category_by_slug('longreads'))),
+                __('Все статьи', 'knife-theme')
             );
         ?>
     </nav>

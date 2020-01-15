@@ -11,9 +11,9 @@
 <div class="widget-recent__wrapper">
     <?php
         printf(
-            '<a class="widget-recent__head head" href="%2$s">%1$s</a>',
-            esc_html($instance['title']),
-            esc_url(get_category_link($this->news_id))
+            '<a class="widget-recent__head head" href="%s">%s</a>',
+            esc_url(get_category_link(get_category_by_slug($this->news_name))),
+            esc_html($instance['title'])
         );
     ?>
 
@@ -26,7 +26,7 @@
                 );
 
                 printf(
-                    '<a class="widget-recent__content-link" href="%1$s">%2$s</a>',
+                    '<a class="widget-recent__content-link" href="%s">%s</a>',
                     esc_url(get_permalink()),
                     get_the_title()
                 );
@@ -36,9 +36,9 @@
 
     <?php
         printf(
-            '<a class="widget-recent__more button" href="%2$s">%1$s</a>',
-            __('Все новости', 'knife-theme'),
-            esc_url(get_category_link($this->news_id))
+            '<a class="widget-recent__more button" href="%s">%s</a>',
+            esc_url(get_category_link(get_category_by_slug($this->news_name))),
+            __('Все новости', 'knife-theme')
         );
     ?>
 

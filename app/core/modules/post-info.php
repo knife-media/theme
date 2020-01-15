@@ -186,7 +186,7 @@ class Knife_Post_Info {
     private static function get_meta($options = [], $output = '') {
         // Get allowed meta options
         $options = array_intersect($options, [
-            'author', 'date', 'tag', 'tags', 'time', 'category', 'emoji'
+            'author', 'date', 'tag', 'tags', 'time', 'emoji'
         ]);
 
         $meta = [];
@@ -232,23 +232,6 @@ class Knife_Post_Info {
         }
 
         return get_the_author_posts_link();
-    }
-
-
-    /**
-     * Get post category info
-     */
-    private static function meta_category($output = '') {
-        $cats = get_the_category();
-
-        if(isset($cats[0])) {
-            $output = sprintf('<a class="meta__item" href="%2$s">%1$s</a>',
-                esc_html($cats[0]->cat_name),
-                esc_url(get_category_link($cats[0]->term_id))
-            );
-        }
-
-        return $output;
     }
 
 
