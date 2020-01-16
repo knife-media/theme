@@ -98,16 +98,16 @@ class Knife_Snippet_Image {
         $social_image = get_template_directory_uri() . '/assets/images/poster-feature.png';
 
         if(is_singular() && !is_front_page()) {
-            $object_id = get_queried_object_id();
+            $post_id = get_queried_object_id();
 
             // Custom social image storing via social-image plugin in post meta
-            $social_image = get_post_meta($object_id, self::$meta_image, true);
+            $social_image = get_post_meta($post_id, self::$meta_image, true);
 
             if(empty($social_image) && has_post_thumbnail()) {
-                return wp_get_attachment_image_src(get_post_thumbnail_id($object_id), 'outer');
+                return wp_get_attachment_image_src(get_post_thumbnail_id($post_id), 'outer');
             }
 
-            $options = get_post_meta($object_id, self::$meta_options, true);
+            $options = get_post_meta($post_id, self::$meta_options, true);
 
             // Set size using options
             $options = wp_parse_args($options, [
@@ -134,7 +134,7 @@ class Knife_Snippet_Image {
      * Enqueue assets for metabox
      */
     public static function enqueue_assets($hook) {
-        $post_id = get_the_ID();
+        global $post;
 
         if(!in_array($hook, ['post.php', 'post-new.php'])) {
             return;
@@ -160,7 +160,7 @@ class Knife_Snippet_Image {
         wp_enqueue_script('knife-snippet-metabox', $include . '/scripts/snippet-metabox.js', ['jquery'], $version);
 
         $options = [
-            'post_id' => absint($post_id),
+            'post_id' => absint($post->ID),
             'action' => esc_attr(self::$ajax_action),
             'nonce' => wp_create_nonce(self::$ajax_nonce),
 

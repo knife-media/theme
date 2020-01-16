@@ -243,7 +243,10 @@ class Knife_Select_Links {
      */
     public static function update_content($content) {
         if(is_singular(self::$post_type) && in_the_loop()) {
-            $units = get_post_meta(get_the_ID(), self::$meta_items);
+            $post_id = get_the_ID();
+
+            // Get select units
+            $units = get_post_meta($post_id, self::$meta_items);
 
             foreach($units as $unit) {
                 $content = self::append_unit($unit, $content);
@@ -278,13 +281,13 @@ class Knife_Select_Links {
     * Enqueue assets to admin post screen only
     */
     public static function enqueue_assets($hook) {
+        global $post;
+
         if(!in_array($hook, ['post.php', 'post-new.php'])) {
             return;
         }
 
-        $post_id = get_the_ID();
-
-        if(get_post_type($post_id) !== self::$post_type) {
+        if(get_post_type($post->ID) !== self::$post_type) {
             return;
         }
 

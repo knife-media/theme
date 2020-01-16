@@ -103,14 +103,12 @@ class Knife_Similar_Posts {
      *
      * @since 1.11
      */
-    public static function print_checkbox() {
-        $post_id = get_the_ID();
-
-        if(get_post_type($post_id) !== 'post') {
+    public static function print_checkbox($post) {
+        if(get_post_type($post->ID) !== 'post') {
             return;
         }
 
-        $hidden = get_post_meta($post_id, self::$meta_similar, true);
+        $hidden = get_post_meta($post->ID, self::$meta_similar, true);
 
         printf(
             '<div class="misc-pub-section"><label><input type="checkbox" name="%1$s" class="checkbox"%3$s> %2$s</label></div>',
@@ -234,7 +232,7 @@ class Knife_Similar_Posts {
      * Inject similar posts data
      */
     public static function inject_object() {
-        $post_id = get_the_ID();
+        $post_id = get_queried_object_id();
 
         if(!is_singular(self::$post_type)) {
             return;

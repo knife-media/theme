@@ -171,8 +171,6 @@ class Knife_Authors_Manager {
      * Enqueue admin side assets
      */
     public static function enqueue_assets($hook) {
-        $post_id = get_the_ID();
-
         $version = wp_get_theme()->get('Version');
         $include = get_template_directory_uri() . '/core/include';
 

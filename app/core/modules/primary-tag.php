@@ -55,13 +55,13 @@ class Knife_Primary_Tag {
      * Enqueue assets to admin post screen only
      */
     public static function add_assets($hook) {
+        global $post;
+
         if(!in_array($hook, ['post.php', 'post-new.php'])) {
             return;
         }
 
-        $post_id = get_the_ID();
-
-        if(!in_array(get_post_type($post_id), self::$post_type)) {
+        if(!in_array(get_post_type($post->ID), self::$post_type)) {
             return;
         }
 
@@ -76,7 +76,7 @@ class Knife_Primary_Tag {
         ];
 
         // get current primary term
-        $term_id = get_post_meta($post_id, self::$meta_primary, true);
+        $term_id = get_post_meta($post->ID, self::$meta_primary, true);
 
         if($term_id && $term = get_term($term_id)) {
             $options['primary'] = $term->name;
@@ -117,13 +117,13 @@ class Knife_Primary_Tag {
      * Move primary tag to first position
      */
     public static function sort_tags($items) {
-        $post_id = get_the_ID();
+        global $post;
 
-        if(!is_array($items)) {
+        if(empty($post->ID) || !is_array($items)) {
             return $items;
         }
 
-        $primary = get_post_meta($post_id, self::$meta_primary, true);
+        $primary = get_post_meta($post->ID, self::$meta_primary, true);
 
         if(empty($primary)) {
             return $items;

@@ -102,13 +102,13 @@ class Knife_Extra_Feeds {
      * Enqueue assets to admin post screen only
      */
     public static function add_assets($hook) {
+        global $post;
+
         if(!in_array($hook, ['post.php', 'post-new.php'])) {
             return;
         }
 
-        $post_id = get_the_ID();
-
-        if(get_post_type($post_id) !== 'post') {
+        if(get_post_type($post->ID) !== 'post') {
             return;
         }
 

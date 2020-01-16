@@ -36,6 +36,9 @@ class Knife_Site_Meta {
         add_action('wp_head', [__CLASS__, 'add_telegram_tags'], 5);
         add_action('wp_head', [__CLASS__, 'add_yandex_meta'], 5);
 
+        // Add JSON-LD microdata
+        add_action('wp_head', [__CLASS__, 'add_json_microdata'], 9);
+
         // Add google tagmanager script
         add_action('wp_head', [__CLASS__, 'add_tagmanager'], 20);
 
@@ -51,6 +54,44 @@ class Knife_Site_Meta {
 
         // Include to page current page parameters
         add_action('wp_enqueue_scripts', [__CLASS__, 'inject_parameters'], 12);
+    }
+
+
+    /**
+     * Add JSON-LD microdata for singular templates
+     *
+     * @since 1.11
+     */
+    public static function add_json_microdata() {
+        $schema = [
+            '@context' => 'http://schema.org',
+            '@type' => 'NewsArticle'
+        ];
+
+        if(is_singular()) {
+            $post_id = get_queried_object_id();
+
+            if(has_category('longreads', $post_id)) {
+                $schema['@type'] = 'Article';
+            }
+
+            $schema['url'] = get_permalink($post_id);
+
+            // Set unique id with text element in anchor
+            $schema['@id'] = $schema['url'] . '#post-' . $post_id;
+
+            // Set post title
+            $schema['headline'] = strip_tags(get_the_title($post_id));
+
+            // Set post date
+            $schema['datePublished'] = get_the_date('c', $post_id);
+
+            // Set post modified date
+            $schema['dateModified'] = get_the_modified_date('c', $post_id);
+
+            $include = get_template_directory() . '/core/include';
+            include_once($include . '/templates/json-microdata.php');
+        }
     }
 
 
@@ -358,7 +399,7 @@ class Knife_Site_Meta {
      */
     private static function get_singular_parameters($meta) {
         // Append post id
-        $meta['postid'] = get_the_ID();
+        $meta['postid'] = get_queried_object_id();
 
         // Append template
         $meta['template'] = get_post_type();

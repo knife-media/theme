@@ -326,14 +326,12 @@ class Knife_Club_Section {
     /**
      * Prints checkbox in post publish action section
      */
-    public static function print_checkbox() {
-        $post_id = get_the_ID();
-
-        if(get_post_type($post_id) !== 'page') {
+    public static function print_checkbox($post) {
+        if(get_post_type($post->ID) !== 'page') {
             return;
         }
 
-        $form = get_post_meta($post_id, self::$meta_form, true);
+        $form = get_post_meta($post->ID, self::$meta_form, true);
 
         printf(
             '<p class="post-attributes-label-wrapper"><span class="post-attributes-label">%s</span></p>',
@@ -377,7 +375,7 @@ class Knife_Club_Section {
             return;
         }
 
-        $post_id = get_the_ID();
+        $post_id = get_queried_object_id();
 
         if(!get_post_meta($post_id, self::$meta_form, true)) {
             return;

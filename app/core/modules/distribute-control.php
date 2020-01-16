@@ -126,11 +126,10 @@ class Knife_Distribute_Control {
             wp_enqueue_style('knife-distribute-widget', $include . '/styles/distribute-widget.css', [], $version);
         }
 
+        global $post;
+
         // Metabox styles
         if(in_array($hook, ['post.php', 'post-new.php'])) {
-            $post_id = get_the_ID();
-
-            // Current screen object
             $screen = get_current_screen();
 
             if(!in_array($screen->post_type, self::$post_type)) {
@@ -147,7 +146,7 @@ class Knife_Distribute_Control {
             wp_enqueue_script('knife-distribute-metabox', $include . '/scripts/distribute-metabox.js', ['jquery'], $version);
 
             $options = [
-                'post_id' => absint($post_id),
+                'post_id' => absint($post->ID),
                 'action' => esc_attr(self::$ajax_action),
                 'nonce' => wp_create_nonce(self::$ajax_nonce),
                 'meta_items' => esc_attr(self::$meta_items),

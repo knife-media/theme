@@ -120,13 +120,13 @@ class Knife_Story_Manager {
      * Enqueue assets to admin post screen only
      */
     public static function enqueue_assets($hook) {
+        global $post;
+
         if(!in_array($hook, ['post.php', 'post-new.php'])) {
             return;
         }
 
-        $post_id = get_the_ID();
-
-        if(get_post_type($post_id) !== self::$post_type) {
+        if(get_post_type($post->ID) !== self::$post_type) {
             return;
         }
 
@@ -177,7 +177,7 @@ class Knife_Story_Manager {
      */
     public static function inject_stories() {
         if(is_singular(self::$post_type)) {
-            $post_id = get_the_ID();
+            $post_id = get_queried_object_id();
 
             // Get options
             $options = get_post_meta($post_id, self::$meta_options, true);

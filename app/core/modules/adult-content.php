@@ -47,8 +47,8 @@ class Knife_Adult_Content {
     /**
      * Prints checkbox in post publish action section
      */
-    public static function print_checkbox() {
-        $post_id = get_the_ID();
+    public static function print_checkbox($post) {
+        $post_id = $post->ID;
 
         if(!in_array(get_post_type($post_id), self::$post_type)) {
             return;

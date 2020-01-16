@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.8
- * @version 1.10
+ * @version 1.11
  */
 
 if (!defined('WPINC')) {
@@ -197,11 +197,17 @@ class Knife_Promo_Manager {
      * @since 1.9
      */
     public static function add_promo_tag($tags) {
-        $is_promo = get_post_meta(get_the_ID(), self::$meta_promo, true);
+        global $post;
+
+        if(empty($post->ID)) {
+            return $tags;
+        }
+
+        $is_promo = get_post_meta($post->ID, self::$meta_promo, true);
 
         if($is_promo) {
             $link = sprintf('<a href="%s" rel="tag">%s</a>',
-                esc_url(home_url(self::$query_var)),
+                esc_url(trailingslashit(home_url(self::$query_var))),
                 __('партнерский материал', 'knife-theme')
             );
 

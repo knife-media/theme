@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.10
+ * @version 1.11
  */
 
 
@@ -301,7 +301,10 @@ class Knife_Special_Projects {
             return $title;
         }
 
-        $options = get_term_meta(get_queried_object_id(), self::$term_meta, true);
+        $term_id = get_queried_object_id();
+
+        // Get term meta
+        $options = get_term_meta($term_id, self::$term_meta, true);
 
         if(empty($options['archive'])) {
             $title = sprintf(

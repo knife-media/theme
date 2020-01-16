@@ -59,13 +59,13 @@ class Knife_Post_Tagline {
      * Enqueue assets to admin post screen only
      */
     public static function add_assets($hook) {
+        global $post;
+
         if(!in_array($hook, ['post.php', 'post-new.php'])) {
             return;
         }
 
-        $post_id = get_the_ID();
-
-        if(!in_array(get_post_type($post_id), self::$post_type)) {
+        if(!in_array(get_post_type($post->ID), self::$post_type)) {
             return;
         }
 
@@ -80,14 +80,12 @@ class Knife_Post_Tagline {
     /**
      * Shows tagline input right after post title form on admin page
      */
-    public static function print_input() {
-        $post_id = get_the_ID();
-
-        if(!in_array(get_post_type($post_id), self::$post_type)) {
+    public static function print_input($post) {
+        if(!in_array(get_post_type($post->ID), self::$post_type)) {
             return;
         }
 
-        $tagline = get_post_meta($post_id, self::$meta_tagline, true);
+        $tagline = get_post_meta($post->ID, self::$meta_tagline, true);
         $tagline = sanitize_text_field($tagline);
 
         printf(

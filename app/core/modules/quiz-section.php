@@ -222,9 +222,9 @@ class Knife_Quiz_Section {
      * Include quiz meta options, items and results
      */
     public static function inject_object() {
-        if(is_singular(self::$post_type)) {
-            $post_id = get_the_ID();
+        $post_id = get_queried_object_id();
 
+        if(is_singular(self::$post_type)) {
             $options = (array) get_post_meta($post_id, self::$meta_options, true);
 
             if(!is_array($options)) {
@@ -267,7 +267,7 @@ class Knife_Quiz_Section {
         $share = get_query_var(self::$query_var);
 
         if(is_singular(self::$post_type) && strlen($share) > 0) {
-            $post_id = get_the_ID();
+            $post_id = get_queried_object_id();
 
             // Get quiz options
             $options = get_post_meta($post_id, self::$meta_options, true);
@@ -354,13 +354,13 @@ class Knife_Quiz_Section {
     * Enqueue assets to admin post screen only
     */
     public static function enqueue_assets($hook) {
+        global $post;
+
         if(!in_array($hook, ['post.php', 'post-new.php'])) {
             return;
         }
 
-        $post_id = get_the_ID();
-
-        if(get_post_type($post_id) !== self::$post_type) {
+        if(get_post_type($post->ID) !== self::$post_type) {
             return;
         }
 
@@ -380,7 +380,7 @@ class Knife_Quiz_Section {
         wp_enqueue_script('knife-quiz-metabox', $include . '/scripts/quiz-metabox.js', ['jquery', 'jquery-ui-sortable'], $version);
 
         $options = [
-            'post_id' => absint($post_id),
+            'post_id' => absint($post->ID),
             'action' => esc_attr(self::$ajax_action),
             'nonce' => wp_create_nonce(self::$ajax_nonce),
             'meta_items' => esc_attr(self::$meta_items),
