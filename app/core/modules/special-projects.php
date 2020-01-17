@@ -297,33 +297,31 @@ class Knife_Special_Projects {
      * @since 1.4
      */
     public static function update_archive_title($title) {
-        if(!is_tax(self::$taxonomy)) {
-            return $title;
-        }
+        if(is_tax(self::$taxonomy)) {
+            $term_id = get_queried_object_id();
 
-        $term_id = get_queried_object_id();
+            // Get term meta
+            $options = get_term_meta($term_id, self::$term_meta, true);
 
-        // Get term meta
-        $options = get_term_meta($term_id, self::$term_meta, true);
+            if(empty($options['archive'])) {
+                $title = sprintf(
+                    '<h1 class="caption__title caption__title--%2$s">%1$s</h1>',
+                    single_term_title('', false), esc_attr(self::$taxonomy)
+                );
 
-        if(empty($options['archive'])) {
+                return $title;
+            }
+
+            $styles = [
+                'color:' . $options['archive']
+            ];
+
             $title = sprintf(
-                '<h1 class="caption__title caption__title--%2$s">%1$s</h1>',
-                single_term_title('', false), esc_attr(self::$taxonomy)
+                '<h1 class="caption__title caption__title--%2$s" style="%3$s">%1$s</h1>',
+                single_term_title('', false), esc_attr(self::$taxonomy),
+                esc_attr(implode('; ', $styles))
             );
-
-            return $title;
         }
-
-        $styles = [
-            'color:' . $options['archive']
-        ];
-
-        $title = sprintf(
-            '<h1 class="caption__title caption__title--%2$s" style="%3$s">%1$s</h1>',
-            single_term_title('', false), esc_attr(self::$taxonomy),
-            esc_attr(implode('; ', $styles))
-        );
 
         return $title;
     }

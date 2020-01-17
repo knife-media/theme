@@ -24,17 +24,18 @@ class Knife_Theme_Filters {
         // Add widget size query var
         add_action('the_post', [__CLASS__, 'update_archive_item'], 10, 2);
 
-        // Update archive template title
-        add_action('get_the_archive_title', [__CLASS__, 'update_archive_title']);
-
-        // Update archive template description
-        add_action('get_the_archive_description', [__CLASS__, 'update_archive_description']);
-
         // Remove longreads archive title
-        add_action('get_the_archive_title', [__CLASS__, 'remove_longreads_title'], 12);
+        add_action('wp', [__CLASS__, 'remove_longreads_title']);
 
         // Remove private posts from archives and home page
         add_action('pre_get_posts', [__CLASS__, 'remove_private_posts']);
+
+
+        // Update archive template title
+        add_filter('get_the_archive_title', [__CLASS__, 'update_archive_title']);
+
+        // Update archive template description
+        add_filter('get_the_archive_description', [__CLASS__, 'update_archive_description']);
 
         // Update annoying body classes
         add_filter('body_class', [__CLASS__, 'update_body_classes'], 10, 2);
@@ -69,6 +70,14 @@ class Knife_Theme_Filters {
         add_action('wp_default_scripts', function($scripts) {
             if(!is_user_logged_in()) {
                 $scripts->remove('jquery');
+            }
+        });
+
+
+
+        add_action('pre_get_posts', function($query) {
+            if(is_tax('label', 'editorial')) {
+                $query->set('orderby', 'rand');
             }
         });
     }
@@ -326,9 +335,9 @@ class Knife_Theme_Filters {
      *
      * @since 1.11
      */
-    public static function remove_longreads_title($title) {
+    public static function remove_longreads_title() {
         if(is_category('longreads')) {
-            return '';
+            add_action('get_the_archive_title', '__return_empty_string');
         }
     }
 

@@ -171,13 +171,17 @@ class Knife_Widget_Transparent extends WP_Widget {
     private function get_emoji($post_id, $emoji = '') {
         $terms = get_the_tags($post_id);
 
-        foreach(wp_list_pluck($terms, 'term_id') as $term_id) {
-            $emoji = get_term_meta($term_id, '_knife-term-emoji', true);
+        if(property_exists('Knife_Terms_Emoji', 'term_meta')) {
+            $term_meta = Knife_Terms_Emoji::$term_meta;
 
-            if(!in_array($term_id, $this->repeat_emoji)) {
-                array_push($this->repeat_emoji, $term_id);
+            foreach(wp_list_pluck($terms, 'term_id') as $term_id) {
+                $emoji = get_term_meta($term_id, $term_meta, true);
 
-                break;
+                if(!in_array($term_id, $this->repeat_emoji)) {
+                    array_push($this->repeat_emoji, $term_id);
+
+                    break;
+                }
             }
         }
 

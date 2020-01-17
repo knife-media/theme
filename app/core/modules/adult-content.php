@@ -37,7 +37,7 @@ class Knife_Adult_Content {
      */
     public static function load_module() {
         // Add option to mark adult content
-        add_action('post_submitbox_misc_actions', [__CLASS__, 'print_checkbox'], 9);
+        add_action('post_submitbox_misc_actions', [__CLASS__, 'print_checkbox'], 12);
 
         // Update adult posts meta
         add_action('save_post', [__CLASS__, 'save_meta']);
@@ -48,13 +48,11 @@ class Knife_Adult_Content {
      * Prints checkbox in post publish action section
      */
     public static function print_checkbox($post) {
-        $post_id = $post->ID;
-
-        if(!in_array(get_post_type($post_id), self::$post_type)) {
+        if(!in_array(get_post_type($post->ID), self::$post_type)) {
             return;
         }
 
-        $adult = get_post_meta($post_id, self::$meta_adult, true);
+        $adult = get_post_meta($post->ID, self::$meta_adult, true);
 
         printf(
             '<div class="misc-pub-section"><label><input type="checkbox" name="%1$s" class="checkbox"%3$s> %2$s</label></div>',

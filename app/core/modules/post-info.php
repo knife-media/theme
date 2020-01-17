@@ -86,7 +86,10 @@ class Knife_Post_Info {
      * @since 1.8
      */
     private static function get_club($output = '') {
-        $post_type = get_post_type(get_the_ID());
+        $post_id = get_the_ID();
+
+        // Get post type info
+        $post_type = get_post_type($post_id);
 
         if($post_type === 'club') {
             $output = $output . sprintf('<a class="stamp stamp--club" href="%2$s">%1$s</a>',
@@ -186,7 +189,7 @@ class Knife_Post_Info {
     private static function get_meta($options = [], $output = '') {
         // Get allowed meta options
         $options = array_intersect($options, [
-            'author', 'date', 'tag', 'tags', 'time', 'emoji'
+            'author', 'date', 'tag', 'tags', 'time'
         ]);
 
         $meta = [];
@@ -213,25 +216,23 @@ class Knife_Post_Info {
      * Get post author info
      */
     private static function meta_author($output = '') {
+        $post_id = get_the_ID();
+
         if(property_exists('Knife_Authors_Manager', 'meta_authors')) {
-            $authors = get_post_meta(get_the_ID(), Knife_Authors_Manager::$meta_authors);
+            $authors = (array) get_post_meta($post_id, Knife_Authors_Manager::$meta_authors);
 
-            if(!empty($authors)) {
-                foreach($authors as $author) {
-                    $user = get_userdata($author);
+            foreach($authors as $author) {
+                $user = get_userdata($author);
 
-                    $output = $output . sprintf(
-                        '<a class="meta__item" href="%s" rel="author">%s</a>',
-                        esc_url(get_author_posts_url($user->ID, $user->user_nicename)),
-                        esc_html($user->display_name)
-                    );
-                }
-
-                return $output;
+                $output = $output . sprintf(
+                    '<a class="meta__item" href="%s" rel="author">%s</a>',
+                    esc_url(get_author_posts_url($user->ID, $user->user_nicename)),
+                    esc_html($user->display_name)
+                );
             }
         }
 
-        return get_the_author_posts_link();
+        return $output;
     }
 
 
