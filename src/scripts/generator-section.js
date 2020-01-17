@@ -2,7 +2,7 @@
  * Random generator post type handler
  *
  * @since 1.6
- * @version 1.9
+ * @version 1.11
  */
 
 (function() {
@@ -95,13 +95,6 @@
 
 
   /**
-   * Load poster
-   */
-  function loadPoster(item) {
-  }
-
-
-  /**
    * Create loader
    */
   (function() {
@@ -157,7 +150,7 @@
     var item = knife_generator_items[rand];
 
     // Update generator repeat button text
-    if(typeof knife_generator_options.button_repeat !== 'undefined') {
+    if(knife_generator_options.hasOwnProperty('button_repeat')) {
       button.textContent = knife_generator_options.button_repeat;
     }
 
@@ -166,6 +159,7 @@
       replaceShare(rand + 1);
     }
 
+    // Show content only if required
     var content = generator.querySelector('.entry-generator__content');
 
     if(content === null) {
@@ -176,54 +170,55 @@
 
     content.innerHTML = item.description || '';
 
+    if(knife_generator_options.hasOwnProperty('notext') && knife_generator_options.notext) {
+      content.parentNode.removeChild(content);
+    }
+
     // Add generator loader class
     generator.classList.add('entry-generator--loader');
 
-
     // Don't show poster for blank items
-    if(knife_generator_options.blank === 'undefined' || !knife_generator_options.blank) {
-      var poster = generator.querySelector('.entry-generator__poster');
+    if(knife_generator_options.hasOwnProperty('blank') && knife_generator_options.blank) {
+      var heading = generator.querySelector('.entry-generator__title');
 
-      if(poster !== null) {
-        poster.parentNode.removeChild(poster);
+      if(heading === null) {
+        heading = document.createElement('div');
+        heading.classList.add('entry-generator__title');
+
+        generator.insertBefore(heading, generator.firstChild);
       }
 
-      if(typeof item.poster !== 'undefined') {
-        poster = new Image();
+      heading.innerHTML = item.heading || '';
 
-        poster.classList.add('entry-generator__poster');
-        generator.insertBefore(poster, generator.firstChild);
+      setTimeout(function() {
+        generator.classList.remove('entry-generator--loader');
+      }, 600);
 
-        poster.addEventListener('load', function() {
-          setTimeout(function() {
-            generator.classList.remove('entry-generator--loader');
-          }, 600);
-        });
-
-        poster.setAttribute('alt', item.heading || '');
-        poster.setAttribute('src', item.poster);
-
-        return generator.classList.add('entry-generator--poster');
-      }
+      return generator.classList.add('entry-generator--blank')
     }
 
-    // Show heading if blank settings or no poster
-    var heading = generator.querySelector('.entry-generator__title');
+    var poster = generator.querySelector('.entry-generator__poster');
 
-    if(heading === null) {
-      heading = document.createElement('div');
-      heading.classList.add('entry-generator__title');
-
-      generator.insertBefore(heading, generator.firstChild);
+    if(poster !== null) {
+      poster.parentNode.removeChild(poster);
     }
 
-    heading.innerHTML = item.heading || '';
+    if(typeof item.poster !== 'undefined') {
+      poster = new Image();
 
-    setTimeout(function() {
-      generator.classList.remove('entry-generator--loader');
-    }, 600);
+      poster.classList.add('entry-generator__poster');
+      generator.insertBefore(poster, generator.firstChild);
 
+      poster.addEventListener('load', function() {
+        setTimeout(function() {
+          generator.classList.remove('entry-generator--loader');
+        }, 600);
+      });
 
-    return generator.classList.add('entry-generator--blank');
+      poster.setAttribute('alt', item.heading || '');
+      poster.setAttribute('src', item.poster);
+
+      return generator.classList.add('entry-generator--poster');
+    }
   });
 })();

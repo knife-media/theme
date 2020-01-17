@@ -226,6 +226,8 @@
   }
 
   &.entry-generator--loader {
+    min-height: 30rem;
+
     & > * {
       opacity: 0;
     }

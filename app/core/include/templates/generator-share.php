@@ -12,8 +12,8 @@
 
     <?php if($poster) : ?>
         <meta property="og:image" content="<?php echo esc_attr($poster); ?>">
-        <meta property="og:image:width" content="800">
-        <meta property="og:image:height" content="420">
+        <meta property="og:image:width" content="1200">
+        <meta property="og:image:height" content="630">
     <?php endif; ?>
 
     <meta name="twitter:card" content="photo">

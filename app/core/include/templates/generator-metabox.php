@@ -38,6 +38,16 @@
                 ?>
             </p>
 
+            <p class="manage__check">
+                <?php
+                    printf('<label><input data-manage="notext" type="checkbox" name="%s[notext]" value="1"%s>%s</label>',
+                        esc_attr(self::$meta_options),
+                        checked(isset($options['notext']), true, false),
+                        __('Не показывать описание под постером', 'knife-theme')
+                    );
+                ?>
+            </p>
+
             <p class="manage__input">
                 <strong><?php _e('Текст на кнопке', 'knife-theme'); ?></strong>
 
