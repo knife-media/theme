@@ -37,7 +37,7 @@
                 );
 
                 the_info(
-                    '<div class="widget-single__content-info info">', '</div>',
+                    '<div class="widget-single__content-info">', '</div>',
                     ['author', 'best']
                 );
             ?>

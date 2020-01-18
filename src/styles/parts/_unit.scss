@@ -103,7 +103,6 @@
 
     .unit__content-info {
       display: flex;
-      flex-flow: row nowrap;
       justify-content: space-between;
       align-items: flex-end;
       position: relative;
@@ -112,6 +111,10 @@
       padding-right: 1.5rem;
 
       color: $color-primary;
+
+      .meta--best {
+        font-size: 1.25rem;
+      }
     }
   }
 
@@ -123,10 +126,6 @@
     padding-top: 75%;
 
     color: $color-text;
-
-    .meta--best {
-      font-size: 1.25rem;
-    }
 
     &:hover {
       .unit__image-thumbnail {
