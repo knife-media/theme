@@ -14,13 +14,5 @@
 
   @at-root #{selector-unify(&, a)} {
     cursor: pointer;
-
-    &:hover {
-      filter: brightness(120%);
-    }
-  }
-
-  @media screen and (max-width: 767px) {
-    margin-right: .5rem;
   }
 }

@@ -136,17 +136,15 @@
     }
 
     .widget-single__content-info {
-      flex-flow: row nowrap;
+      display: flex;
       justify-content: space-between;
       align-items: flex-end;
+      position: relative;
 
-      .meta {
-        color: $color-white;
+      color: $color-white;
 
-        a {
-          position: relative;
-          z-index: 2;
-        }
+      .meta--best {
+        font-size: 1.25rem;
       }
     }
 

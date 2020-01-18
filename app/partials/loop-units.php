@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.9
+ * @version 1.11
  */
 ?>
 
@@ -12,7 +12,7 @@
     <div class="unit__inner">
         <?php
             the_info(
-                '<div class="unit__head info">', '</div>',
+                '<div class="unit__head">', '</div>',
                 ['head']
             );
         ?>
@@ -35,8 +35,8 @@
                 );
 
                 the_info(
-                    '<div class="unit__content-info info">', '</div>',
-                    ['author', 'date', 'label']
+                    '<div class="unit__content-info">', '</div>',
+                    ['author', 'date', 'best']
                 );
             ?>
         </div>

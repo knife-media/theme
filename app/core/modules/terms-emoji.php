@@ -32,7 +32,7 @@ class Knife_Terms_Emoji {
      * @var     array
      * @since   1.5
      */
-    public static $taxonomies = ['post_tag', 'label'];
+    public static $taxonomies = ['post_tag'];
 
 
     /**

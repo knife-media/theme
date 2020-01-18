@@ -12,8 +12,8 @@
     <div class="entry-header">
         <?php
             the_info(
-                '<div class="entry-header__info info">', '</div>',
-                ['club', 'author', 'date', 'label']
+                '<div class="entry-header__info">', '</div>',
+                ['club', 'author', 'date', 'best']
             );
 
             the_title(
