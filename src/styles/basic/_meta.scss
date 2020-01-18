@@ -7,8 +7,6 @@
   font-weight: 500;
   letter-spacing: .25px;
 
-  color: $color-primary;
-
   & > * {
     display: inline-block;
     cursor: default;
@@ -16,6 +14,18 @@
     white-space: nowrap;
 
     border-bottom: none;
+  }
+
+  & > a {
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+
+    transition: filter 0.25s;
+
+    &:hover {
+      filter: brightness(120%);
+    }
   }
 
   .meta__item {
@@ -34,11 +44,31 @@
     }
   }
 
-  & > a {
-    cursor: pointer;
+  &.meta--best {
+    position: absolute;
+    top: 50%;
+    right: 0;
 
-    &:hover {
-      filter: brightness(150%);
+    font-size: 1.5rem;
+    transform: translateY(-50%);
+
+    @media screen and (max-width: 767px) {
+      font-size: 1.25rem;
+    }
+  }
+
+  &.meta--club {
+    flex: 0 0 auto;
+
+    margin: .25rem .75rem .25rem 0;
+
+    .meta__item {
+      padding: .1875rem .375rem;
+
+      color: $color-white;
+      background-color: $color-club;
+
+      border-radius: 3px;
     }
   }
 }

@@ -26,24 +26,13 @@
     display: flex;
     flex-flow: row wrap;
     align-items: center;
+    position: relative;
 
     min-height: 2rem;
     margin: -.25rem auto;
+    padding-right: 2rem;
 
-    .meta {
-      color: $color-text;
-    }
-
-    .label {
-      min-height: 2rem;
-      margin-left: auto;
-
-      font-size: 1.5rem;
-
-      @media screen and (max-width: 767px) {
-        font-size: 1.25rem;
-      }
-    }
+    color: $color-text;
   }
 
   .entry-quiz__share {

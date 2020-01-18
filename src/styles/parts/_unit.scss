@@ -102,25 +102,16 @@
     }
 
     .unit__content-info {
+      display: flex;
       flex-flow: row nowrap;
       justify-content: space-between;
       align-items: flex-end;
+      position: relative;
 
       margin-top: 1.5rem;
+      padding-right: 1.5rem;
 
-      .meta {
-        color: $color-primary;
-
-        a.meta__item {
-          position: relative;
-          z-index: 2;
-        }
-      }
-
-      .label {
-        position: relative;
-        z-index: 2;
-      }
+      color: $color-primary;
     }
   }
 
@@ -132,6 +123,10 @@
     padding-top: 75%;
 
     color: $color-text;
+
+    .meta--best {
+      font-size: 1.25rem;
+    }
 
     &:hover {
       .unit__image-thumbnail {
