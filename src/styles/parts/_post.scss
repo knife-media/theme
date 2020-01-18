@@ -35,6 +35,10 @@
     .entry-comments > * {
       max-width: calc(#{$width-wide} + 4rem);
     }
+
+    .entry-bottom > * {
+      max-width: calc(#{$width-wide} + 4rem);
+    }
   }
 
   &.post--select {
@@ -45,6 +49,10 @@
     }
 
     .entry-comments > * {
+      max-width: calc(#{$width-wide} + 4rem);
+    }
+
+    .entry-bottom > * {
       max-width: calc(#{$width-wide} + 4rem);
     }
   }
