@@ -21,7 +21,7 @@ class Knife_Best_Posts {
      * @access  public
      * @var     string
      */
-    public static $meta_best = '_knife-best-post';
+    public static $meta_best = '_knife-best';
 
 
     /**
