@@ -6,7 +6,7 @@
 *
 * @package knife-theme
 * @since 1.3
-* @version 1.11
+* @version 1.12
 */
 
 
@@ -35,31 +35,11 @@ class Knife_Club_Section {
 
 
     /**
-     * Unique option key to store telegram chat id
-     *
-     * @since   1.7
-     * @access  private
-     * @var     string
-     */
-    private static $option_chat = 'knife_club_telegram_chat';
-
-
-    /**
-     * Unique option key to store club button link
-     *
-     * @since   1.7
-     * @access  private
-     * @var     string
-     */
-    private static $button_link = 'knife_club_button_link';
-
-
-    /**
      * Unique option key to store current request id
      *
-     * @since   1.7
      * @access  private
      * @var     string
+     * @since   1.7
      */
     private static $option_request = 'knife_club_request_id';
 
@@ -67,9 +47,9 @@ class Knife_Club_Section {
     /**
      * Ajax action
      *
-     * @since   1.7
      * @access  private
      * @var     string
+     * @since   1.7
      */
     private static $ajax_request = 'knife-club-request';
 
@@ -94,9 +74,6 @@ class Knife_Club_Section {
         add_action('wp_ajax_' . self::$ajax_request, [__CLASS__, 'submit_request']);
         add_action('wp_ajax_nopriv_' . self::$ajax_request, [__CLASS__, 'submit_request']);
 
-        // Add club settings to customizer
-        add_action('customize_register', [__CLASS__, 'add_customize_setting']);
-
         // Update archive caption description
         add_filter('get_the_archive_description', [__CLASS__, 'update_archive_description'], 12);
 
@@ -111,6 +88,11 @@ class Knife_Club_Section {
 
         // Append club link to post content
         add_filter('the_content', [__CLASS__, 'insert_club_link']);
+
+        // Define club settings if still not
+        if(!defined('KNIFE_CLUB')) {
+            define('KNIFE_CLUB', []);
+        }
     }
 
 
@@ -148,56 +130,19 @@ class Knife_Club_Section {
 
 
     /**
-     * Add club settings to customizer
-     */
-    public static function add_customize_setting($wp_customize) {
-        $wp_customize->add_section('knife_club', [
-            'title' => __('Настройки клуба','knife-theme'),
-            'priority' => 200,
-        ]);
-
-        $wp_customize->add_setting(self::$option_chat);
-        $wp_customize->add_setting(self::$option_request);
-        $wp_customize->add_setting(self::$button_link);
-
-
-        $wp_customize->add_control(new WP_Customize_Control($wp_customize,
-            self::$option_chat, [
-                 'label' => __('ID чата в Telegram', 'knife-theme'),
-                 'section' => 'knife_club'
-             ]
-        ));
-
-        $wp_customize->add_control(new WP_Customize_Control($wp_customize,
-            self::$button_link, [
-                 'label' => __('Ссылка с кнопки в архиве', 'knife-theme'),
-                 'section' => 'knife_club'
-             ]
-        ));
-
-        $wp_customize->add_control(new WP_Customize_Control($wp_customize,
-            self::$option_request, [
-                 'label' => __('ID последней заявки', 'knife-theme'),
-                 'section' => 'knife_club'
-             ]
-        ));
-    }
-
-
-    /**
      * Add button to description
      */
     public static function update_archive_description($description) {
         if(is_post_type_archive(self::$post_type)) {
-            $button_link = get_theme_mod(self::$button_link);
+            $club_link = self::get_club_page();
 
-            if(strlen($button_link) > 0) {
-                $button = sprintf('<div class="caption__button caption__button--club"><a class="button" href="%2$s">%1$s</a></div>',
+            if(!empty($club_link)) {
+                $button_link = sprintf('<div class="caption__button caption__button--club"><a class="button" href="%2$s">%1$s</a></div>',
                     __('Присоединиться', 'knife-theme'),
-                    esc_url($button_link)
+                    esc_url($club_link)
                 );
 
-                $description = $description . $button;
+                $description = $description . $button_link;
             }
         }
 
@@ -285,12 +230,12 @@ class Knife_Club_Section {
      */
     public static function insert_club_link($content) {
         if(is_singular(self::$post_type) && in_the_loop()) {
-            $button_link = get_theme_mod(self::$button_link, '');
+            $club_link = self::get_club_page();
 
-            if(strlen($button_link) > 0) {
+            if(!empty($club_link)) {
                 $promo_link = sprintf('<figure class="figure figure--club"><a class="button" href="%2$s">%1$s</a>',
                     __('Присоединиться к клубу', 'knife-theme'),
-                    esc_url($button_link)
+                    esc_url($club_link)
                 );
 
                 $content = $content . $promo_link;
@@ -452,8 +397,11 @@ class Knife_Club_Section {
 
 
         if(method_exists('Knife_Social_Delivery', 'send_telegram')) {
-            $chat_id = sanitize_text_field(get_theme_mod(self::$option_chat, ''));
-            $request = absint(get_theme_mod(self::$option_request, 0)) + 1;
+            // Try to find chat in config
+            $chat_id = KNIFE_CLUB['chat'] ?? '';
+
+            // Set reuqest id
+            $request = absint(get_option(self::$option_request, 313)) + 1;
 
             $message = [
                 'text' => self::get_request($fields, $request),
@@ -463,7 +411,7 @@ class Knife_Club_Section {
             $response = Knife_Social_Delivery::send_telegram($chat_id, $message);
 
             if(!is_wp_error($response)) {
-                set_theme_mod(self::$option_request, $request);
+                update_option(self::$option_request, $request, false);
                 wp_send_json_success(__('Сообщение успешно отправлено', 'knife-theme'));
             }
         }
@@ -518,6 +466,28 @@ class Knife_Club_Section {
         include_once($include . '/templates/club-request.php');
 
         return ob_get_clean();
+    }
+
+
+    /**
+     * Get page link with club form
+     *
+     * @since 1.12
+     */
+    private static function get_club_page($link = false) {
+        $pages = get_posts([
+            'post_type' => 'page',
+            'meta_key' => self::$meta_form,
+            'meta_value' => 1,
+            'posts_per_page' => 1,
+            'fields' => 'ids'
+        ]);
+
+        if(isset($pages[0])) {
+            $link =  get_permalink($pages[0]);
+        }
+
+        return $link;
     }
 }
 
