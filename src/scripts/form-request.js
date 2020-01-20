@@ -2,6 +2,7 @@
  * User requests form
  *
  * @since 1.7
+ * @version 1.12
  */
 
 (function() {
@@ -172,12 +173,12 @@
 
 
   // Get option from global settings
-  function getOption(option, def) {
+  function getOption(option, alternate) {
     if(knife_form_request.hasOwnProperty(option)) {
       return knife_form_request[option];
     }
 
-    return def || '';
+    return alternate || '';
   }
 
 

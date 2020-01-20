@@ -43,9 +43,11 @@ class Knife_Google_Search {
      * Include app id for Google Custom Search API to knife-theme js script
      */
     public static function inject_object() {
-        if(!empty(KNIFE_GCSE['id'])) {
-            wp_localize_script('knife-theme', 'knife_search_id', KNIFE_GCSE['id']);
+        if(empty(KNIFE_GCSE['id'])) {
+            return;
         }
+
+        wp_localize_script('knife-theme', 'knife_search_id', KNIFE_GCSE['id']);
     }
 
 

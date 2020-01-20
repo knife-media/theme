@@ -42,9 +42,11 @@ class Knife_Comments_Load {
      * Pass Hypercomments id to js
      */
     public static function inject_object() {
-        if(!empty(KNIFE_COMMENTS['id'])) {
-            wp_localize_script('knife-theme', 'knife_comments_id', KNIFE_COMMENTS['id']);
+        if(empty(KNIFE_COMMENTS['id'])) {
+            return;
         }
+
+        wp_localize_script('knife-theme', 'knife_comments_id', KNIFE_COMMENTS['id']);
     }
 }
 

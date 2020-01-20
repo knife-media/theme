@@ -1,0 +1,67 @@
+.mistype {
+  @include popup-center(20);
+  background: rgba($color-black, .75);
+
+  .mistype__popup {
+    display: block;
+    position: relative;
+
+    width: 30rem;
+    margin: 2rem 1.5rem;
+    padding: 1.25rem;
+
+    color: $color-text;
+    background-color: $color-white;
+
+    border-radius: 3px;
+
+    animation: upswing .25s ease-out;
+
+    .mistype__popup-heading {
+      display: block;
+
+      margin-bottom: .5rem;
+      font-size: 1.25rem;
+      font-weight: 500;
+    }
+
+    .mistype__popup-marked {
+      display: block;
+
+      margin-bottom: .75rem;
+    }
+
+    .mistype__popup-comment {
+      display: block;
+      outline: 0;
+      appearance: none;
+      resize: vertical;
+
+      width: 100%;
+      height: 4rem;
+      padding: .375rem .5rem;
+
+      font-size: 0.875rem;
+      line-height: 1.5;
+
+      background-color: $color-white;
+
+      border: solid 1px darken($color-white, 10);
+      border-radius: 2px;
+
+      &::placeholder {
+        color: darken($color-white, 25);
+      }
+    }
+
+    .mistype__popup-submit {
+      display: block;
+
+      width: auto;
+      margin-top: 1rem;
+      padding: .75rem 1.5rem;
+
+      font-size: .875rem;
+    }
+  }
+}
