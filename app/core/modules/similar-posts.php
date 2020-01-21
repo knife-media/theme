@@ -75,6 +75,16 @@ class Knife_Similar_Posts {
 
 
     /**
+     * Categories to show in units
+     *
+     * @access  private
+     * @var     array
+     * @since   1.12
+     */
+    private static $category = ['longreads', 'play'];
+
+
+    /**
      * Init function instead of constructor
      */
     public static function load_module() {
@@ -365,18 +375,25 @@ class Knife_Similar_Posts {
             $the_terms = wp_list_pluck($post_terms, 'term_id');
 
             $query_args = [
-                'posts_per_page' => -1,
+                'posts_per_page' => 100,
                 'tag_id' => $the_terms[0],
                 'post__not_in' => [$post_id],
                 'post_status' => 'publish',
                 'ignore_sticky_posts' => true,
-                'category_name' => 'longreads'
+                'tax_query' => [
+                    [
+                        'taxonomy' => 'category',
+                        'field' => 'slug',
+                        'terms' => self::$category
+                    ]
+                ],
+                'fields' => 'ids'
             ];
 
             $related = [];
 
             // Get posts with primary tag
-            $the_posts = wp_list_pluck(get_posts($query_args), 'ID');
+            $the_posts = get_posts($query_args);
 
             foreach($the_posts as $id) {
                 $related[$id] = 0;
