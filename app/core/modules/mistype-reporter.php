@@ -79,6 +79,7 @@ class Knife_Mistype_Reporter {
 
             $message = [
                 'text' => self::get_message(wp_unslash($_REQUEST)),
+                'disable_web_page_preview' => true,
                 'parse_mode' => 'HTML'
             ];
 
@@ -91,28 +92,22 @@ class Knife_Mistype_Reporter {
     /**
      * Get message from request fields
      */
-    private static function get_message($fields) {
-        $fields = wp_parse_args($fields, [
-            'marked' => '',
-            'location' => ''
-        ]);
-
-        $text = sprintf("%s \n%s \n\n%s \n",
-            __('<strong>Добавлено сообщение об ошибкe</strong>', 'knife-theme'),
-            esc_html($fields['marked']), esc_html($fields['location'])
-        );
+    private static function get_message($fields, $text = []) {
+        // Add marked if not empty
+        if(!empty($fields['marked'])) {
+            $text[] = __("<strong>Сообщение об ошибкe</strong>\n", 'knife-theme') . esc_html($fields['marked']);
+        }
 
         // Add comment if not empty
         if(!empty($fields['comment'])) {
-            $comment = sprintf(
-                __('<strong>Комментарий:</strong> %s', 'knife-theme'),
-                esc_html(stripslashes($fields['comment']))
-            );
-
-            $text = $text . $comment;
+            $text[] = __("<strong>Комментарий</strong>\n", 'knife-theme') . esc_html($fields['comment']);
         }
 
-        return $text;
+        if(!empty($fields['location'])) {
+            $text[] = esc_html($fields['location']);
+        }
+
+        return implode("\n\n", $text);
     }
 }
 
