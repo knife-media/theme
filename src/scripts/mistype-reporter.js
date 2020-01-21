@@ -10,7 +10,6 @@
     return false;
   }
 
-
   // Get option from global settings
   function getOption(option, alternate) {
     if(knife_mistype_reporter.hasOwnProperty(option)) {
@@ -22,11 +21,76 @@
 
 
   /**
+   * Destroy popup
+   */
+  function destroyPopup() {
+    var mistype = document.querySelector('.mistype');
+
+    if(mistype.parentNode) {
+      mistype.parentNode.removeChild(mistype);
+    }
+  }
+
+
+  /**
+   * Close popup on ESC button
+   */
+  function closePopup(e) {
+    if(e.keyCode === 27) {
+      // Remove this listener
+      document.removeEventListener('keydown', closePopup);
+
+      var mistype = document.querySelector('.mistype');
+
+      // Remove mistype element
+      if(mistype.parentNode) {
+        mistype.parentNode.removeChild(mistype);
+      }
+    }
+  }
+
+
+  /**
+   * Send ajax request
+   */
+  function sendRequest(selection, comment) {
+    var formData = {
+      'comment': comment,
+      'marked': selection,
+      'location': document.location.href
+    }
+
+    // First of all append required params
+    var postData = 'action=' + getOption('action') + '&nonce=' + getOption('nonce');
+
+    // Get params from data
+    for(key in formData) {
+      postData += '&' + key + '=' + formData[key];
+    }
+
+
+    // Send request
+    var request = new XMLHttpRequest();
+    request.open('POST', getOption('ajaxurl'));
+    request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=utf-8');
+
+    request.send(postData);
+  }
+
+
+  /**
    * Show reporter popup
    */
   function showPopup(selection) {
-    var mistype = document.createElement('div');
+    var mistype = document.querySelector('.mistype');
+
+    if(mistype !== null) {
+      mistype.parentNode.removeChild(mistype);
+    }
+
+    mistype = document.createElement('div');
     mistype.classList.add('mistype');
+    document.body.appendChild(mistype);
 
     // Create popup modal
     var popup = document.createElement('div');
@@ -49,6 +113,7 @@
     var comment = document.createElement('textarea');
     comment.classList.add('mistype__popup-comment');
     comment.setAttribute('placeholder', getOption('textarea'));
+    comment.setAttribute('maxlength', 300);
     popup.appendChild(comment);
 
     // Add send button
@@ -57,7 +122,24 @@
     submit.textContent = getOption('button', 'Send');
     popup.appendChild(submit);
 
-    document.body.appendChild(mistype);
+    submit.addEventListener('click', function(e) {
+      e.preventDefault();
+
+      // Send AJAX request
+      sendRequest(selection, comment.value);
+
+      // Remove mistype popup
+      mistype.parentNode.removeChild(mistype);
+    });
+
+    // Add close button
+    var close = document.createElement('button');
+    close.classList.add('mistype__popup-close');
+    close.addEventListener('click', destroyPopup);
+    popup.appendChild(close);
+
+    // Add ESC listener
+    document.addEventListener('keydown', closePopup, true);
   }
 
 
@@ -65,12 +147,12 @@
    * Event listener on keydown
    */
   document.addEventListener('keydown', function(e) {
-    if(event.ctrlKey && event.keyCode == 13) {
+    if(e.ctrlKey && e.keyCode == 13) {
       var selection = window.getSelection().toString();
 
       // If selection not empty
       if(selection.length > 0) {
-        showPopup(selection);
+        showPopup(selection.substring(0, 300));
       }
     }
   });

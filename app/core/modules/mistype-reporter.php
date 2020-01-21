@@ -72,18 +72,47 @@ class Knife_Mistype_Reporter {
             wp_send_json_error(__('Ошибка безопасности. Попробуйте еще раз', 'knife-theme'));
         }
 
+
         if(method_exists('Knife_Social_Delivery', 'send_telegram')) {
             // Try to find chat in config
             $chat_id = KNIFE_MISTYPE['chat'] ?? '';
 
             $message = [
-                'text' => '',
+                'text' => self::get_message(wp_unslash($_REQUEST)),
                 'parse_mode' => 'HTML'
             ];
 
             // Don't need to process errors now
             $response = Knife_Social_Delivery::send_telegram($chat_id, $message);
         }
+    }
+
+
+    /**
+     * Get message from request fields
+     */
+    private static function get_message($fields) {
+        $fields = wp_parse_args($fields, [
+            'marked' => '',
+            'location' => ''
+        ]);
+
+        $text = sprintf("%s \n%s \n\n%s \n",
+            __('<strong>Добавлено сообщение об ошибкe</strong>', 'knife-theme'),
+            esc_html($fields['marked']), esc_html($fields['location'])
+        );
+
+        // Add comment if not empty
+        if(!empty($fields['comment'])) {
+            $comment = sprintf(
+                __('<strong>Комментарий:</strong> %s', 'knife-theme'),
+                esc_html(stripslashes($fields['comment']))
+            );
+
+            $text = $text . $comment;
+        }
+
+        return $text;
     }
 }
 

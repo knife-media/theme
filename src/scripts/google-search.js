@@ -230,7 +230,7 @@
   /**
    * Close search on ESC
    */
-  window.addEventListener('keydown', function(e) {
+  document.addEventListener('keydown', function(e) {
     e = e || window.event;
 
     if(e.keyCode === 27 && search.classList.contains('search--expand')) {
