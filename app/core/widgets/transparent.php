@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.11
+ * @version 1.12
  */
 
 
@@ -18,9 +18,9 @@ class Knife_Widget_Transparent extends WP_Widget {
 
 
     /**
-     * Longreads category slug
+     * Categories to show in units
      */
-    private $longreads_name = 'longreads';
+    private $category = ['longreads', 'play'];
 
 
     /**
@@ -197,15 +197,22 @@ class Knife_Widget_Transparent extends WP_Widget {
 
         $query = [
             'offset' => $offset,
-            'category_name' => $this->longreads_name,
             'posts_per_page' => 4,
             'post_status' => 'publish',
             'ignore_sticky_posts' => 1,
-            'tax_query' => [[
-                'field' => 'id',
-                'taxonomy' => 'post_tag',
-                'terms' => $termlist
-            ]]
+            'tax_query' => [
+                'relation' => 'AND',
+                [
+                    'field' => 'id',
+                    'taxonomy' => 'post_tag',
+                    'terms' => $termlist
+                ],
+                [
+                    'taxonomy' => 'category',
+                    'field' => 'slug',
+                    'terms' => $this->category
+                ]
+            ]
         ];
 
         return $query;
