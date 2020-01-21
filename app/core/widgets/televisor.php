@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.4
- * @version 1.11
+ * @version 1.12
  */
 
 
@@ -18,9 +18,9 @@ class Knife_Widget_Televisor extends WP_Widget {
 
 
     /**
-     * Longreads category slug
+     * Categories to show in units
      */
-    private $longreads_name = 'longreads';
+    private $category = ['longreads', 'play'];
 
 
     /**
@@ -161,11 +161,17 @@ class Knife_Widget_Televisor extends WP_Widget {
         extract($instance);
 
         $query = [
-            'category_name' => $this->longreads_name,
             'posts_per_page' => 3,
             'post_type' => $this->post_type,
             'post_status' => 'publish',
-            'ignore_sticky_posts' => 1
+            'ignore_sticky_posts' => 1,
+            'tax_query' => [
+                [
+                    'taxonomy' => 'category',
+                    'field' => 'slug',
+                    'terms' => $this->category
+                ]
+            ]
         ];
 
         // Check option to show posts only unique posts
