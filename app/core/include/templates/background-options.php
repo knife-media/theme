@@ -49,7 +49,7 @@
             </p>
 
             <p style="margin-top: 10px;">
-                <select class="size" name="<?php echo esc_attr(self::$term_meta); ?>[size]" style="width: 100%;" disabled>
+                <select class="size" name="<?php echo esc_attr(self::$term_meta); ?>[size]" style="width: 100%; max-width: 100%;" disabled>
                 <?php
                     foreach($sizes as $name => $title) {
                         printf('<option value="%1$s"%3$s>%2$s</option>', $name, $title, selected($background['size'], $name, false));

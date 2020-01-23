@@ -135,20 +135,14 @@
     e.preventDefault();
 
     var formData = new FormData(form);
-
-    // First of all append required params
-    var postData = 'action=' + getOption('action') + '&nonce=' + getOption('nonce');
-
-    // Get params from post fields
-    formData.forEach(function(value, key) {
-      postData += '&' + key + '=' + value;
-    });
+    formData.append('action', getOption('action'))
+    formData.append('nonce', getOption('nonce'))
 
 
     // Send request
     var request = new XMLHttpRequest();
     request.open('POST', getOption('ajaxurl'));
-    request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=utf-8');
+    request.send(formData);
 
     request.onload = function() {
       requestEvent(true);
@@ -165,8 +159,6 @@
 
       return displayWarning(response.data);
     }
-
-    request.send(postData);
 
     return requestEvent(false);
   }

@@ -10,7 +10,7 @@
   margin-top: 1rem;
 
   font-family: 'Montserrat', sans-serif;
-  background-color: #fa431b;
+  background-color: #202032;
 
   border-radius: .625rem;
 }
@@ -25,7 +25,7 @@
 .content .post {
   flex: 0 1 58rem;
 
-  background-color: #f2f2e9;
+  background-color: #f0efed;
   border-radius: .625rem;
 }
 
@@ -49,6 +49,7 @@
   position: relative;
 
   max-width: 100%;
+  margin: 1rem 0;
   text-align: center;
 
   color: #f0efed;
@@ -59,9 +60,10 @@
   }
 
 .caption .caption__description h1 {
+  max-width: 50rem;
   margin-bottom: 1rem;
 
-  font-size: 3.75rem;
+  font-size: 3rem;
   font-weight: 700;
   line-height: 1.125;
 }
@@ -87,8 +89,8 @@
   display: block;
 
   width: 100%;
-  font-size: 1rem;
-  font-weight: 700;
+  font-size: 1.625rem;
+  font-weight: 500;
 }
   @media screen and (max-width: 767px) {
     .caption .caption__description p {
@@ -126,7 +128,7 @@
   margin-right: 1rem;
 }
   .is-archive .caption .caption__description img {
-    width: 8rem;
+    width: 6rem;
     margin-right: 0;
     margin-bottom: 1rem;
   }
@@ -135,22 +137,28 @@
 /**
  * entry-header styles
  */
-.entry-header .entry-header__emoji {
+.entry-header .entry-header__image {
   display: block;
 
   margin-top: -1rem;
-  margin-bottom: -1rem;
-  font-size: 2.5rem;
 }
+
+.entry-header .entry-header__image img {
+  display: block;
+
+  width: 3rem;
+  height: auto;
+}
+
   @media screen and (max-width: 767px) {
-    .entry-header .entry-header__emoji {
-      font-size: 2rem;
+    .entry-header .entry-header__image img {
+      width: 2rem;
     }
   }
 
 .entry-header .entry-header__title {
   font-size: 2rem;
-  line-height: 125%;
+  line-height: 1.25;
 }
   @media screen and (max-width: 1023px) {
     .entry-header .entry-header__title {
@@ -171,11 +179,11 @@
   }
 
 .entry-header .entry-header__title > * {
-  padding: .075em 0;
+  padding: .075rem 0;
 
-  color: #363b3b;
-  background-color: #e0ff00;
-  box-shadow: .5rem 0 0 #e0ff00, -.5rem 0 0 #e0ff00;
+  color: #333;
+  background-color: #fff;
+  box-shadow: .5rem 0 0 #fff, -.5rem 0 0 #fff;
 }
 
 .entry-header .entry-header__title em {
@@ -188,7 +196,7 @@
 }
 
 .entry-header .entry-header__lead a {
-  color: #fa431b;
+  color: #202032;
 }
 
 
@@ -196,7 +204,7 @@
  * entry-content styles
  */
 .entry-content a {
-  color: #fa431b;
+  color: #202032;
 }
 
 .entry-content h4 {
@@ -206,9 +214,9 @@
 .entry-content h4 > * {
   padding: .25em 0;
 
-  color: #363b3b;
-  background-color: #e0ff00;
-  box-shadow: .5rem 0 0 #e0ff00, -.5rem 0 0 #e0ff00;
+  color: #333;
+  background-color: #fff;
+  box-shadow: .5rem 0 0 #fff, -.5rem 0 0 #fff;
 }
 
 
@@ -236,10 +244,6 @@
 .entry-content__author .meta__item {
   font-size: 1.25em;
   font-weight: 700;
-
-  color: #363b3b;
-  background-color: #e0ff00;
-  box-shadow: .5rem 0 0 #e0ff00, -.5rem 0 0 #e0ff00;
 
   border-bottom: none;
 }
@@ -271,34 +275,18 @@
 }
 
 .unit .unit__image {
-  mask-size: contain;
-  mask-repeat: no-repeat;
-  -webkit-mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-
   padding-top: 100%;
-  transform: scale(1.05);
+  transform: scale(.8);
   background-color: transparent;
-}
 
-.unit:nth-child(3n+1) .unit__image {
-  mask-image: url('images/mask-1.svg');
-  -webkit-mask-image: url('images/mask-1.svg');
-}
-
-.unit:nth-child(3n+2) .unit__image {
-  mask-image: url('images/mask-2.svg');
-  -webkit-mask-image: url('images/mask-2.svg');
-}
-
-.unit:nth-child(3n) .unit__image {
-  mask-image: url('images/mask-3.svg');
-  -webkit-mask-image: url('images/mask-3.svg');
+  border-radius: 50%;
 }
 
 .unit .unit__content {
   align-items: center;
   justify-content: flex-start;
+
+  padding: 2rem 0;
   background-color: transparent;
 }
 
@@ -320,22 +308,24 @@
   }
 
 .unit .unit__content .unit__content-link span {
-  color: #363b3b;
-  background-color: #e0ff00;
-  box-shadow: 10px 0 0 #e0ff00, -10px 0 0 #e0ff00;
+  padding: .075rem 0;
+
+  color: #333;
+  background-color: #fff;
+  box-shadow: .5rem 0 0 #fff, -.5rem 0 0 #fff;
 }
 
 .unit .unit__content .unit__content-info {
   display: block;
 
-  margin-top: 1rem;
+  margin-top: .5rem;
   padding-right: 0;
 
   text-align: center;
-  font-size: 1rem;
+  font-size: 1.25rem;
   font-weight: 500;
 
-  color: #363b3b;
+  color: #333;
 }
   @media screen and (max-width: 767px) {
     .unit .unit__content .unit__content-info {
@@ -358,6 +348,7 @@
 .footer {
   flex-flow: row nowrap;
   max-width: 58rem;
+  margin-top: 1.5rem;
   padding-top: 0;
 }
   @media screen and (max-width: 767px) {
@@ -372,88 +363,13 @@
 
   flex: 0 0 auto;
   width: auto;
-  margin-bottom: auto;
-  padding-right: 2rem;
+  margin: auto;
 }
-  @media screen and (max-width: 1023px) {
-    .footer .footer__logo {
-      display: flex;
-    }
-  }
-
-  @media screen and (max-width: 767px) {
-    .footer .footer__logo {
-      margin-top: auto;
-    }
-  }
 
 .footer .footer__logo .footer__logo-image {
   width: auto;
-  height: 2rem;
+  height: 2.5rem;
 }
-
-.footer .footer__logo .footer__logo-cross {
-  display: block;
-  fill: #ffffff;
-
-  width: 1rem;
-  height: 1rem;
-
-  margin: 0 1rem;
-}
-
-.footer .footer__logo .footer__logo-special {
-  width: auto;
-  height: 2rem;
-}
-
-.footer .footer__copy {
-  flex: 1 1 auto;
-  width: auto;
-
-  font-weight: 400;
-  font-size: 0.6875rem;
-  line-height: 1.25;
-}
-  @media screen and (max-width: 767px) {
-    .footer .footer__copy {
-      order: 2;
-      margin-top: 1rem;
-    }
-  }
-
-.footer .footer__button {
-  flex: 0 0 auto;
-  margin-left: auto;
-  padding-left: 2rem;
-}
-  @media screen and (max-width: 479px) {
-    .footer .footer__button {
-      order: 3;
-      flex: 1 1 auto;
-
-      margin-top: 1rem;
-      padding-left: 0;
-    }
-  }
-
-.footer .footer__button .button {
-  padding: 1rem;
-  font-size: 1rem;
-  text-transform: uppercase;
-
-  color: #202032;
-  background: #ffffff;
-
-  border: none;
-  border-radius: .625rem;
-}
-  @media screen and (max-width: 767px) {
-    .footer .footer__button .button {
-      font-size: .875rem;
-    }
-  }
-
 
 
 /**
@@ -476,7 +392,7 @@
   font-weight: 700;
   text-transform: uppercase;
 
-  background: #ffc600;
+  background: #fff;
   color: #202032;
 
   border: none;

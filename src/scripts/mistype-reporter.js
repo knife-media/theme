@@ -54,27 +54,20 @@
    * Send ajax request
    */
   function sendRequest(selection, comment) {
-    var formData = {
-      'comment': comment,
-      'marked': selection,
-      'location': document.location.href
-    }
+    var formData = new FormData();
+    formData.append('action', getOption('action'))
+    formData.append('nonce', getOption('nonce'))
 
-    // First of all append required params
-    var postData = 'action=' + getOption('action') + '&nonce=' + getOption('nonce');
-
-    // Get params from data
-    for(key in formData) {
-      postData += '&' + key + '=' + formData[key];
-    }
+    // Add form fields
+    formData.append('comment', comment);
+    formData.append('marked', selection);
+    formData.append('location', document.location.href)
 
 
     // Send request
     var request = new XMLHttpRequest();
     request.open('POST', getOption('ajaxurl'));
-    request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=utf-8');
-
-    request.send(postData);
+    request.send(formData);
   }
 
 
