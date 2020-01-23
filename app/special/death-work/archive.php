@@ -20,7 +20,7 @@ get_header(); ?>
 
                 printf(
                     '<h1>%s</h1>',
-                    _x('Как работать с трупами и не сойти с ума', 'special: death-work', 'knife-theme')
+                    _x('Как работать с трупами и не сойти с ума', 'special: death-work', 'knife-theme')
                 );
 
                 printf(

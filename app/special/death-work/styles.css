@@ -81,7 +81,7 @@
 
   @media screen and (max-width: 479px) {
     .caption .caption__description h1 {
-      font-size: 1.75rem;
+      font-size: 1.625rem;
     }
   }
 
@@ -95,12 +95,6 @@
   @media screen and (max-width: 767px) {
     .caption .caption__description p {
       font-size: .875rem;
-    }
-  }
-
-  @media screen and (max-width: 479px) {
-    .caption .caption__description p {
-      font-size: .75rem;
     }
   }
 
@@ -131,6 +125,12 @@
     width: 6rem;
     margin-right: 0;
     margin-bottom: 1rem;
+  }
+
+  @media screen and (max-width: 767px) {
+    .is-archive .caption .caption__description img {
+      width: 4.5rem;
+    }
   }
 
 
@@ -377,6 +377,11 @@
   width: auto;
   height: 2.5rem;
 }
+  @media screen and (max-width: 1023px) {
+    .footer .footer__logo .footer__logo-image {
+      height: 2rem;
+    }
+  }
 
 
 /**
