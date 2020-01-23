@@ -25,7 +25,7 @@ get_header(); ?>
 
                 printf(
                     '<p>%s</p>',
-                    _x('Три истории людей непростых профессий', 'special: death-work', 'knife-theme')
+                    _x('Истории людей непростых профессий', 'special: death-work', 'knife-theme')
                 );
             ?>
         </div>
