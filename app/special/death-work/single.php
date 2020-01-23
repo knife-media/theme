@@ -17,7 +17,7 @@ get_header(); ?>
                     printf(
                         '<a href="%s">%s</a>',
                         get_term_link('death-work', 'special'),
-                        _x('Как работать с трупами и не сойти с ума', 'special: death-work', 'knife-theme')
+                        _x('Как работать с трупами и не сойти с ума', 'special: death-work', 'knife-theme')
                     );
                 ?>
             </div>

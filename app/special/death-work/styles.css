@@ -24,8 +24,8 @@
 
 .content .post {
   flex: 0 1 58rem;
-
   background-color: #f0efed;
+
   border-radius: .625rem;
 }
 
@@ -69,19 +69,19 @@
 }
   @media screen and (max-width: 1023px) {
     .caption .caption__description h1 {
-      font-size: 3rem;
+      font-size: 2.5rem;
     }
   }
 
   @media screen and (max-width: 767px) {
     .caption .caption__description h1 {
-      font-size: 2.5rem;
+      font-size: 2rem;
     }
   }
 
   @media screen and (max-width: 479px) {
     .caption .caption__description h1 {
-      font-size: 2rem;
+      font-size: 1.75rem;
     }
   }
 
@@ -112,13 +112,13 @@
 }
   @media screen and (max-width: 1023px) {
     .caption .caption__description a {
-      font-size: 1.5rem;
+      font-size: 1.375rem;
     }
   }
 
   @media screen and (max-width: 479px) {
     .caption .caption__description a {
-      font-size: 1.25rem;
+      font-size: 1.125rem;
     }
   }
 
@@ -354,6 +354,7 @@
   @media screen and (max-width: 767px) {
     .footer {
       flex-flow: row wrap;
+      padding: 0;
     }
   }
 
@@ -365,6 +366,12 @@
   width: auto;
   margin: auto;
 }
+  @media screen and (max-width: 1023px) {
+    .footer .footer__logo {
+      display: flex;
+      margin: auto;
+    }
+  }
 
 .footer .footer__logo .footer__logo-image {
   width: auto;
