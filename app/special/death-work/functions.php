@@ -13,7 +13,30 @@
 add_action('previous_post_link', function($output, $format, $link, $prev) {
     global $post;
 
-    if(has_term('death-work', 'special', $post) && isset($prev->ID)) {
+    if(has_term('death-work', 'special', $post)) {
+        // Check if previous post exists
+        if(empty($prev->ID)) {
+            $posts = get_posts([
+                'special' => 'death-work',
+                'posts_per_page' => 1,
+                'orderby' => 'date',
+                'order' => 'DESC'
+            ]);
+
+            // Check post exists and not same as current
+            if(empty($posts[0]->ID) || $posts[0]->ID === $post->ID) {
+                return $output;
+            }
+
+            $prev = $posts[0];
+
+            // Generate default output
+            $output = sprintf('<a href="%s" rel="prev">%s</a>',
+                get_permalink($prev->ID),
+                get_the_title($prev->ID)
+            );
+        }
+
         // Find hero name post meta
         $hero = get_post_meta($prev->ID, 'post-info', true);
 
@@ -32,7 +55,30 @@ add_action('previous_post_link', function($output, $format, $link, $prev) {
 add_action('next_post_link', function($output, $format, $link, $next) {
     global $post;
 
-    if(has_term('death-work', 'special', $post) && isset($next->ID)) {
+    if(has_term('death-work', 'special', $post)) {
+        // Check if next post exists
+        if(empty($next->ID)) {
+            $posts = get_posts([
+                'special' => 'death-work',
+                'posts_per_page' => 1,
+                'orderby' => 'date',
+                'order' => 'ASC'
+            ]);
+
+            // Check post exists and not same as current
+            if(empty($posts[0]->ID) || $posts[0]->ID === $post->ID) {
+                return $output;
+            }
+
+            $next = $posts[0];
+
+            // Generate default output
+            $output = sprintf('<a href="%s" rel="next">%s</a>',
+                get_permalink($next->ID),
+                get_the_title($next->ID)
+            );
+        }
+
         // Find hero name post meta
         $hero = get_post_meta($next->ID, 'post-info', true);
 
