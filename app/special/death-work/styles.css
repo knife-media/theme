@@ -426,4 +426,8 @@
     .navigate a {
       font-size: .75rem;
     }
+
+    .navigate a:last-child {
+      display: none;
+    }
   }
