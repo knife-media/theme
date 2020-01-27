@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.11
+ * @version 1.12
  */
 
 
@@ -22,7 +22,7 @@ class Knife_Primary_Tag {
      * @access  public
      * @var     string
      */
-    public static $meta_primary = 'primary-tag';
+    public static $meta_primary = '_knife-primary-tag';
 
 
     /**
