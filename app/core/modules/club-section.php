@@ -174,7 +174,19 @@ class Knife_Club_Section {
             return $content;
         }
 
-        $user_id = get_the_author_meta('ID');
+        $post_id = get_the_ID();
+
+        if(!property_exists('Knife_Authors_Manager', 'meta_authors')) {
+            return $content;
+        }
+
+        $users = (array) get_post_meta($post_id, Knife_Authors_Manager::$meta_authors);
+
+        if(count($users) < 1)  {
+            return $content;
+        }
+
+        $user = get_userdata($users[0]);
 
         // Allowed description tags
         $allowed = array(
@@ -193,31 +205,28 @@ class Knife_Club_Section {
 
             sprintf(
                 __('Автор <a href="%1$s">%2$s</a>', 'knife-theme'),
-                esc_url(get_author_posts_url($user_id)),
-                esc_html(get_the_author())
+                esc_url(get_author_posts_url($user->ID, $user->user_nicename)),
+                esc_html($user->display_name)
             ),
 
             sprintf(
                 '<p class="author__description">%s</p>',
-                wp_kses(get_the_author_meta('description'), $allowed)
+                wp_kses(get_the_author_meta('description', $user->ID), $allowed)
             )
         );
 
         // Add photo if exists
-        $photo = get_user_meta($user_id, '_knife-user-photo', true);
+        $photo = get_user_meta($user->ID, '_knife-user-photo', true);
 
         if(strlen($photo) > 0) {
             $author[] = sprintf(
                 '<img class="author__photo" src="%2$s" alt="%1$s">',
-                esc_html(get_the_author()),
+                esc_html($user->display_name),
                 esc_url($photo)
             );
         }
 
-        $output = sprintf(
-            '<div class="author">%s</div>',
-            implode("\n", $author)
-        );
+        $output = sprintf('<div class="author">%s</div>', implode("\n", $author));
 
         return $output . $content;
     }
