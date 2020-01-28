@@ -72,6 +72,7 @@ class Knife_Primary_Tag {
         wp_enqueue_script('knife-primary-tagbox', $include . '/scripts/primary-tagbox.js', ['jquery'], $version);
 
         $options = [
+            'meta' => self::$meta_primary,
             'howto' => __('Выберите главную метку поста. Она отобразится на карточке', 'knife-theme')
         ];
 
