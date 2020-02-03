@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.8
- * @version 1.11
+ * @version 1.12
  */
 
 
@@ -536,7 +536,7 @@ class Knife_Distribute_Control {
         }
 
         $message = [
-            'parse_mode' => 'Markdown',
+            'parse_mode' => 'MarkdownV2',
             'text' => esc_url($link)
         ];
 
@@ -561,6 +561,10 @@ class Knife_Distribute_Control {
         }
 
         $poster = false;
+
+        // Escape special chars in text
+        // @link https://core.telegram.org/bots/api#markdownv2-style
+        $message['text'] = preg_replace('/([_*\[\]\(\)~`>#+-=|{}.!])/', '\\' . '\\$1', $message['text']);
 
         if(!empty($item['attachment']) && mb_strlen($message['text']) < 1024) {
             $poster = get_attached_file($item['attachment']);
