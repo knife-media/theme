@@ -2,7 +2,7 @@
 /**
  * Views manager
  *
- * Collect views from Google Analytics
+ * Collect and display page views from Google Analytics
  *
  * @package knife-theme
  * @since 1.12
@@ -12,14 +12,23 @@ if (!defined('WPINC')) {
     die;
 }
 
-class Knife_Analytics_Manager {
+class Knife_Views_Manager {
     /**
      * Management page slug
      *
      * @access  public
      * @var     string
      */
-    public static $page_slug = 'knife-analytics';
+    public static $page_slug = 'knife-views';
+
+
+    /**
+     * Store tools page base_id screen
+     *
+     * @access  private
+     * @var     string
+     */
+    private static $screen_base = null;
 
 
     /**
@@ -28,7 +37,7 @@ class Knife_Analytics_Manager {
      * @access  private
      * @var     object
      */
-    private static $analytics_db = null;
+    private static $views_db = null;
 
 
     /**
@@ -37,7 +46,7 @@ class Knife_Analytics_Manager {
      * @access  private
      * @var     string
      */
-    private static $per_page = 'knife_analytics_per_page';
+    private static $per_page = 'knife_views_per_page';
 
 
     /**
@@ -45,28 +54,95 @@ class Knife_Analytics_Manager {
      */
     public static function load_module() {
         // Add managment menu page
-#        add_action('admin_menu', [__CLASS__, 'add_management_page'], 20);
+        add_action('admin_menu', [__CLASS__, 'add_management_page'], 25);
+
+        // Init views manager action before page load
+        add_action('current_screen', [__CLASS__, 'init_views_actions']);
 
         // Save links per page screen option
-#        add_filter('set-screen-option', [__CLASS__, 'save_screen_options'], 10, 3);
+        add_filter('set-screen-option', [__CLASS__, 'save_screen_options'], 10, 3);
 
-        // Define short links settings if still not
-        if(!defined('KNIFE_ANALYTICS')) {
-            define('KNIFE_ANALYTICS', []);
+        // Insert new post to views table
+        add_action('knife_schedule_views', [__CLASS__, 'start_task'], 10, 3);
+
+        // Schedule insertion to views table
+        add_action('transition_post_status', [__CLASS__, 'schedule_insertion'], 10, 3);
+
+        // Define views links settings if still not
+        if(!defined('KNIFE_VIEWS')) {
+            define('KNIFE_VIEWS', []);
         }
     }
 
 
     /**
-     * Add short links management page
+     * Add views page
      */
     public static function add_management_page() {
         $hookname = add_management_page(
-            __('Сокращатель ссылок', 'knife-theme'),
-            __('Сокращатель ссылок', 'knife-theme'),
-            'unfiltered_html', self::$page_slug,
+            __('Статистика постов', 'knife-theme'),
+            __('Статистика постов', 'knife-theme'),
+            'publish_posts', self::$page_slug,
             [__CLASS__, 'display_management_page']
         );
+
+        // Set tools page base_id screen
+        self::$screen_base = $hookname;
+    }
+
+
+    /**
+     * Views table actions
+     */
+    public static function init_views_actions() {
+        $current_screen = get_current_screen();
+
+        if($current_screen->base !== self::$screen_base) {
+            return;
+        }
+
+        if(!current_user_can('publish_posts')) {
+            wp_die(__('Извините, у вас нет доступа к этому инструменту', 'knife-theme'));
+        }
+
+        // Init second database connection
+        self::connect_views_db();
+
+        // Add screen options
+        add_action('load-' . self::$screen_base, [__CLASS__, 'add_screen_options']);
+    }
+
+
+    /**
+     * Start scheduled task
+     */
+    public static function start_task($post_id) {
+        $status = get_post_status($post_id);
+
+        // Init views database commection
+        self::connect_views_db();
+
+        // Get views db instance
+        $db = self::$views_db;
+
+        if($status === 'trash') {
+            return $db->delete('posts', compact('post_id'));
+        }
+
+        $slug = wp_make_link_relative(get_permalink($post_id));
+        $publish = get_post_field('post_date', $post_id);
+
+        if($status === 'publish') {
+            return $db->replace('posts', compact('post_id', 'slug', 'publish'));
+        }
+    }
+
+
+    /**
+     * Schedule new post to views table
+     */
+    public static function schedule_insertion($new_status, $old_status, $post) {
+        wp_schedule_single_event(time() + 60, 'knife_schedule_views', [$post->ID]);
     }
 
 
@@ -89,17 +165,15 @@ class Knife_Analytics_Manager {
     public static function display_management_page() {
         $include = get_template_directory() . '/core/include';
 
-        // Include Short Links table class
-        include_once($include . '/tables/short-links.php');
+        // Include Views Manager table class
+        include_once($include . '/tables/views-manager.php');
 
-        // Get short links table instance
-        $table = new Knife_Short_Links_Table(self::$short_db, self::$per_page);
-
-        $table->process_actions();
+        // Get views links table instance
+        $table = new Knife_Views_Managers_Table(self::$views_db, self::$per_page);
         $table->prepare_items();
 
         // Include options template to show table
-        include_once($include . '/templates/short-options.php');
+        include_once($include . '/templates/views-options.php');
     }
 
 
@@ -116,9 +190,9 @@ class Knife_Analytics_Manager {
     /**
      * Create custom database connection
      */
-    private static function connect_short_db() {
+    private static function connect_views_db() {
         // Mix with default values
-        $conf = wp_parse_args(KNIFE_SHORT, [
+        $conf = wp_parse_args(KNIFE_VIEWS, [
             'host' => DB_HOST,
             'name' => DB_NAME,
             'user' => DB_USER,
@@ -133,119 +207,7 @@ class Knife_Analytics_Manager {
             wp_die($db->error);
         }
 
-        self::$short_db = $db;
-    }
-
-
-    /**
-     * Short links actions handler
-     */
-    private static function process_short_link() {
-        $action = isset($_POST['action']) ? sanitize_key($_POST['action']) : '';
-
-        if($action === self::$page_slug . '-append') {
-            self::append_short_link();
-        }
-    }
-
-
-    /**
-     * Append short link
-     */
-    private static function append_short_link() {
-        check_admin_referer('knife-short-append');
-
-        $db = self::$short_db;
-
-        // Check if required values not empty
-        if(!empty($_POST['keyword']) && !empty($_POST['url'])) {
-            $data = [
-                'url' => $_POST['url'],
-                'ip' => $_SERVER['REMOTE_ADDR']
-            ];
-
-            $data['keyword'] = self::get_link_keyword(
-                sanitize_key($_POST['keyword'])
-            );
-
-            if($data['keyword'] === false) {
-                return add_settings_error('knife-short-actions', 'append',
-                    __('Короткий адрес уже существует', 'knife-theme')
-                );
-            }
-
-            $data['title'] = self::get_link_title(
-                sanitize_text_field($_POST['url'])
-            );
-
-            if($db->insert('urls', $data)) {
-                return add_settings_error('knife-short-actions', 'append',
-                    __('Ссылка успешно добавлена', 'knife-theme'), 'updated'
-                );
-            }
-        }
-
-        add_settings_error('knife-short-actions', 'append',
-            __('Не удалось добавить ссылку', 'knife-theme')
-        );
-    }
-
-
-    /**
-     * Check keyword existance
-     */
-    private static function get_link_keyword($keyword) {
-        $db = self::$short_db;
-
-        // Cut and replace dashes
-        $keyword = str_replace('_', '-', substr($keyword, 0, 200));
-
-        // Make verification request
-        $query = $db->prepare('SELECT id FROM urls WHERE keyword = %s', $keyword);
-
-        if($db->get_var($query) === null) {
-            return $keyword;
-        }
-
-        return false;
-    }
-
-
-    /**
-     * Get page title
-     *
-     * Return post title if the url from this site
-     * Else try to fecth page title using remote api
-     */
-    private static function get_link_title($url) {
-        $post_id = url_to_postid($url);
-
-        if($post_id > 0) {
-            return esc_html(get_the_title($post_id));
-        }
-
-        $response = wp_safe_remote_get(esc_url_raw($url), [
-            'timeout' => 3
-        ]);
-
-        $title = $url;
-
-        // Try to fetch page content by url
-        if(wp_remote_retrieve_response_code($response) === 200) {
-            $content = wp_remote_retrieve_body($response);
-
-            // Find page title in the content
-            if(preg_match('~<title[^>]*>(.+?)</title>~iU', $content, $string)) {
-                $title = esc_html(trim($string[1]));
-            }
-        }
-
-        // Cut title if too long
-        if(mb_strlen($title) > 100) {
-            $title = mb_substr($title, 0, 100) . '…';
-        }
-
-        return $title;
+        self::$views_db = $db;
     }
 }
 
@@ -253,4 +215,4 @@ class Knife_Analytics_Manager {
 /**
  * Load current module environment
  */
-Knife_Analytics_Manager::load_module();
+Knife_Views_Manager::load_module();

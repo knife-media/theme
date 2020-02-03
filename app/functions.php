@@ -217,6 +217,9 @@ require get_template_directory() . '/core/modules/extra-feeds.php';
 // Return short links manager with simple stat
 require get_template_directory() . '/core/modules/short-manager.php';
 
+// Collect and display page views from Google Analytics
+require get_template_directory() . '/core/modules/views-manager.php';
+
 // Send typo errors to telegram private channel
 require get_template_directory() . '/core/modules/mistype-reporter.php';
 
