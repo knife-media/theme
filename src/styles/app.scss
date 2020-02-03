@@ -84,8 +84,11 @@ body {
 // Import entry styles
 @import "entry/*.scss";
 
+// Import tagline caption styles
+@import "tagline/*.scss";
+
 // Import widgets styles
 @import "widgets/*.scss";
 
-// Import tagline caption styles
-@import "tagline/*.scss";
+// Import adfox banners styles
+@import "adfox/*.scss";

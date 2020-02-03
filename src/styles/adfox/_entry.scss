@@ -1,0 +1,31 @@
+.adfox-entry {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+
+  width: 42rem;
+  max-width: 100%;
+  padding: 3rem 1rem 1rem;
+  overflow: hidden;
+
+  background: $color-white;
+  box-shadow: 1px 1px 4px 0 rgba($color-black, 0.25);
+
+  border-radius: 3px;
+
+  .adfox-entry__title {
+      position: absolute;
+      top: 0;
+      left: 0;
+      cursor: default;
+
+      width: 100%;
+      font-size: 0.5625rem;
+      font-weight: 500;
+  }
+
+  @media screen and (max-width: 479px) {
+    padding: calc(2rem - 1px) 0 0;
+  }
+}
