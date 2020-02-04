@@ -536,7 +536,7 @@ class Knife_Distribute_Control {
         }
 
         $message = [
-            'parse_mode' => 'MarkdownV2',
+            'parse_mode' => 'HTML',
             'text' => esc_url($link)
         ];
 
@@ -545,7 +545,13 @@ class Knife_Distribute_Control {
         }
 
         if(!empty($item['excerpt'])) {
-            $message['text'] = wp_specialchars_decode($item['excerpt']) . "\n\n" . esc_url($link);
+            $message['text'] = wp_specialchars_decode($item['excerpt']);
+
+            // Replace markdown entity with HTML tags
+            $message['text'] = preg_replace('/\*(.+?)\*/s', '<b>$1</b>', $message['text']);
+            $message['text'] = preg_replace('/_(.+?)_/s', '<i>$1</i>', $message['text']);
+
+            $message['text'] = $message['text'] . "\n\n" . esc_url($link);
         }
 
         // Add promo hashtag
@@ -561,10 +567,6 @@ class Knife_Distribute_Control {
         }
 
         $poster = false;
-
-        // Escape special chars in text
-        // @link https://core.telegram.org/bots/api#markdownv2-style
-        $message['text'] = preg_replace('/([_*\[\]\(\)~`>#+-=|{}.!])/', '\\' . '\\$1', $message['text']);
 
         if(!empty($item['attachment']) && mb_strlen($message['text']) < 1024) {
             $poster = get_attached_file($item['attachment']);
