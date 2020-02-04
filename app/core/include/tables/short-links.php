@@ -4,6 +4,7 @@
  *
  * @package knife-theme
  * @since 1.8
+ * @version 1.12
  */
 
 if (!defined('WPINC')) {
@@ -232,7 +233,7 @@ class Knife_Short_Links_Table extends WP_List_Table {
         }
 
         if(isset($_REQUEST['order'])) {
-            if(in_array(strtoupper($_REQUEST['order']), array('ASC', 'DESC'), true)) {
+            if(in_array(strtoupper($_REQUEST['order']), ['ASC', 'DESC'], true)) {
                 $args['order'] = strtoupper($_REQUEST['order']);
             }
         }
@@ -254,9 +255,9 @@ class Knife_Short_Links_Table extends WP_List_Table {
             $args['total_items'] = $db->get_var("SELECT FOUND_ROWS()");
         }
 
-        $this->set_pagination_args(array(
+        $this->set_pagination_args([
             'total_items' => $args['total_items'],
             'per_page' => $args['per_page']
-        ));
+        ]);
     }
 }

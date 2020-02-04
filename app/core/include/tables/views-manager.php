@@ -62,31 +62,8 @@ class Knife_Views_Managers_Table extends WP_List_Table {
      */
     public function column_title($item) {
         $markup = sprintf(
-            '<a href="%1$s" class="row-title" target="_blank">%2$s</a><em>%1$s</em>',
-            esc_url(get_permalink($item['ID'])),
-            esc_html(get_the_title($item['ID']))
-        );
-
-        return $markup;
-    }
-
-
-    /**
-     * Keyword column render
-     */
-    public function column_keyword($item) {
-        $conf = KNIFE_SHORT;
-
-        if(empty($conf['url'])) {
-            return $item['keyword'];
-        }
-
-        $link = trailingslashit($conf['url']) . $item['keyword'];
-
-        $markup = sprintf(
-            '<a href="%s" target="_blank">%s</a>',
-            esc_url(trailingslashit($link)),
-            esc_html($item['keyword'])
+            '<a href="%1$s" class="row-title" target="_blank">%s</a>',
+            esc_html(get_the_title($item['post_id']))
         );
 
         return $markup;
@@ -97,14 +74,7 @@ class Knife_Views_Managers_Table extends WP_List_Table {
      * Fix timestamp format
      */
     public function column_publish($item) {
-        $publish = strtotime($item['publish']);
-        $current = current_time('publish');
-
-        if($current >= $publish && $publish - $current < DAY_IN_SECONDS) {
-            return sprintf(__('%s назад', 'knife-theme'), human_time_diff($current, $publish));
-        }
-
-        return date_i18n(get_option('date_format'), $publish);
+        return get_the_date('d.m.Y', $item['post_id']);
     }
 
 
@@ -113,10 +83,10 @@ class Knife_Views_Managers_Table extends WP_List_Table {
      */
     public function get_columns() {
         $columns = [
-            'title' => __('Название', 'knife-theme'),
-            'pageviews' => __('Короткий адрес', 'knife-theme'),
-            'uniqueviews' => __('Дата', 'knife-theme'),
-            'publish' => __('Переходы', 'knife-theme')
+            'title' => __('Заголовок', 'knife-theme'),
+            'pageviews' => __('Просмотры', 'knife-theme'),
+            'uniqueviews' => __('Уникальные просмотры', 'knife-theme'),
+            'publish' => __('Дата публикации', 'knife-theme')
         ];
 
         return $columns;
@@ -127,19 +97,7 @@ class Knife_Views_Managers_Table extends WP_List_Table {
      * Return columns that may be used to sort table
      */
     public function get_sortable_columns() {
-        $columns = [
-            'pageviews' => [
-                'pageviews', true
-            ],
-
-            'uniqueviews' => [
-                'uniqueviews', true
-            ],
-
-            'publish' => [
-                'publish', true
-            ]
-        ];
+        $columns = [];
 
         return $columns;
     }
@@ -149,21 +107,19 @@ class Knife_Views_Managers_Table extends WP_List_Table {
      * Get rows from database and prepare them to be showed in table
      */
     public function prepare_items() {
-        global $wpdb;
-
         $this->_column_headers = [
             $this->get_columns(), [], $this->get_sortable_columns()
         ];
 
-        $db = $wpdb;
+        $db = $this->views_db;
 
         $args = [
-            'orderby' => 'post_date',
+            'orderby' => 'date',
             'order' => 'desc',
+            'post_type' => 'any',
             'paged' => 0,
-            'where' => "post_status = 'publish'",
-            'per_page' => 20,
-            'total_items' => 0,
+            'posts_per_page' => 20,
+            'fields' => 'ids'
         ];
 
         $args['per_page'] = $this->get_items_per_page($this->per_page);
@@ -172,38 +128,38 @@ class Knife_Views_Managers_Table extends WP_List_Table {
             $args['paged'] = max(0, intval($_REQUEST['paged'] - 1) * $args['per_page']);
         }
 
-        if(isset($_REQUEST['orderby'])) {
-            if(array_key_exists($_REQUEST['orderby'], $this->get_sortable_columns())) {
-                $args['orderby'] = $_REQUEST['orderby'];
+        $query = new WP_Query($args);
+
+        // Glue returned posts
+        $posts = implode(',', $query->posts);
+
+        // Create select query
+        $views = $db->get_results("SELECT * FROM posts WHERE post_id IN ({$posts})", ARRAY_A);
+
+        // Get array coumn by post_id
+        $pluck = wp_list_pluck($views, 'post_id');
+
+        foreach($query->posts as $id) {
+            $item = [
+                'post_id' => $id,
+                'pageviews' => 0,
+                'uniqueviews' => 0
+            ];
+
+            $key = array_search($id, $pluck);
+
+            if($key !== false) {
+                $item = wp_parse_args($views[$key], $item);
             }
+
+            // Add to items
+            $this->items[] = $item;
         }
 
-        if(isset($_REQUEST['order'])) {
-            if(in_array(strtoupper($_REQUEST['order']), array('ASC', 'DESC'), true)) {
-                $args['order'] = strtoupper($_REQUEST['order']);
-            }
-        }
 
-        if(isset($_REQUEST['s']) && strlen($_REQUEST['s']) > 0) {
-            $args['where'] = $db->prepare("CONCAT(keyword, url, title) LIKE %s",
-                '%' . $db->esc_like($_REQUEST['s']) . '%'
-            );
-        }
-
-        $query = sprintf(
-            "SELECT SQL_CALC_FOUND_ROWS * FROM wp_posts WHERE %s ORDER BY %s %s LIMIT %d OFFSET %d",
-            $args['where'], $args['orderby'], $args['order'], $args['per_page'], $args['paged']
-        );
-
-        $this->items = $db->get_results($query, ARRAY_A);
-
-        if(!$db->last_error) {
-            $args['total_items'] = $db->get_var("SELECT FOUND_ROWS()");
-        }
-
-        $this->set_pagination_args(array(
-            'total_items' => $args['total_items'],
-            'per_page' => $args['per_page']
-        ));
+        $this->set_pagination_args([
+            'total_items' => $query->found_posts,
+            'per_page' => $args['posts_per_page']
+        ]);
     }
 }

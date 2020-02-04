@@ -108,6 +108,9 @@ class Knife_Views_Manager {
         // Init second database connection
         self::connect_views_db();
 
+        // Add scripts to admin page
+        add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
+
         // Add screen options
         add_action('load-' . self::$screen_base, [__CLASS__, 'add_screen_options']);
     }
@@ -174,6 +177,18 @@ class Knife_Views_Manager {
 
         // Include options template to show table
         include_once($include . '/templates/views-options.php');
+    }
+
+
+    /**
+     * Enqueue assets to admin certain screen only
+     */
+    public static function enqueue_assets($hook) {
+        $version = wp_get_theme()->get('Version');
+        $include = get_template_directory_uri() . '/core/include';
+
+        // Insert admin styles
+        wp_enqueue_style('knife-views-options', $include . '/styles/views-options.css', [], $version);
     }
 
 
