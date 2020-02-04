@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.2
- * @version 1.11
+ * @version 1.12
  */
 
 
@@ -44,6 +44,9 @@ class Knife_Widget_Handler {
 
         // Clear cache on widget update
         add_filter('widget_update_callback', [__CLASS__, 'update_widget']);
+
+        // Clear cache on widget reorder
+        add_action('wp_ajax_widgets-order', [__CLASS__, 'clear_cache'], 1);
 
         // Cache widget output
         add_filter('widget_display_callback', [__CLASS__, 'cache_widget'], 10, 3);

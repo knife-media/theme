@@ -1,7 +1,7 @@
 jQuery(document).ready(function($) {
   var box = $('#tagsdiv-post_tag');
 
-  if(box.length < 1 || typeof knife_primary_tagbox === 'undefined') {
+  if(typeof knife_primary_tagbox === 'undefined' || box.length < 1) {
     return false;
   }
 
@@ -9,7 +9,6 @@ jQuery(document).ready(function($) {
   var delimiter = (window.tagsSuggestL10n && window.tagsSuggestL10n.tagDelimiter) || ',';
 
   var checklist = box.find('.tagchecklist');
-
 
   /**
    * Parse tags
@@ -33,8 +32,8 @@ jQuery(document).ready(function($) {
     }).appendTo(block);
 
     $('<select>', {
-      'name': 'primary-tag',
-      'style': 'width: 98%'
+      'style': 'width: 98%',
+      'name': knife_primary_tagbox.meta
     }).appendTo(block);
 
     block.appendTo(box.find('.tagsdiv'));

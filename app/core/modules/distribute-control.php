@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.8
- * @version 1.11
+ * @version 1.12
  */
 
 
@@ -536,7 +536,7 @@ class Knife_Distribute_Control {
         }
 
         $message = [
-            'parse_mode' => 'Markdown',
+            'parse_mode' => 'HTML',
             'text' => esc_url($link)
         ];
 
@@ -545,7 +545,13 @@ class Knife_Distribute_Control {
         }
 
         if(!empty($item['excerpt'])) {
-            $message['text'] = wp_specialchars_decode($item['excerpt']) . "\n\n" . esc_url($link);
+            $message['text'] = wp_specialchars_decode($item['excerpt']);
+
+            // Replace markdown entity with HTML tags
+            $message['text'] = preg_replace('/\*(.+?)\*/s', '<b>$1</b>', $message['text']);
+            $message['text'] = preg_replace('/_(.+?)_/s', '<i>$1</i>', $message['text']);
+
+            $message['text'] = $message['text'] . "\n\n" . esc_url($link);
         }
 
         // Add promo hashtag
