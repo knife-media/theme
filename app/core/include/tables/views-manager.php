@@ -62,7 +62,8 @@ class Knife_Views_Managers_Table extends WP_List_Table {
      */
     public function column_title($item) {
         $markup = sprintf(
-            '<a href="%1$s" class="row-title" target="_blank">%s</a>',
+            '<a href="%s" class="row-title" target="_blank">%s</a>',
+            esc_url(get_permalink($item['post_id'])),
             esc_html(get_the_title($item['post_id']))
         );
 
