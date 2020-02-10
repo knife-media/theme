@@ -118,6 +118,7 @@ class Knife_Views_Managers_Table extends WP_List_Table {
             'orderby' => 'date',
             'order' => 'desc',
             'post_type' => 'any',
+            'post_status' => 'publish',
             'paged' => 0,
             'posts_per_page' => 20,
             'fields' => 'ids'
@@ -126,7 +127,7 @@ class Knife_Views_Managers_Table extends WP_List_Table {
         $args['per_page'] = $this->get_items_per_page($this->per_page);
 
         if(isset($_REQUEST['paged'])) {
-            $args['paged'] = max(0, intval($_REQUEST['paged'] - 1) * $args['per_page']);
+            $args['paged'] = intval($_REQUEST['paged']);
         }
 
         $query = new WP_Query($args);
