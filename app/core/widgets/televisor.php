@@ -103,7 +103,7 @@ class Knife_Widget_Televisor extends WP_Widget {
             esc_attr($this->get_field_name('link')),
             __('Ссылка с фичера:', 'knife-theme'),
             esc_attr($instance['link']),
-            __('На внешний ресурс или запись c этого сайта', 'knife-theme')
+            __('На запись c этого сайта', 'knife-theme')
         );
 
 

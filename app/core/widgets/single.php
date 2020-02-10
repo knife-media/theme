@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.11
+ * @version 1.12
  */
 
 
@@ -101,7 +101,7 @@ class Knife_Widget_Single extends WP_Widget {
             esc_attr($this->get_field_name('link')),
             __('Ссылка:', 'knife-theme'),
             esc_attr($instance['link']),
-            __('На внешний ресурс или запись c этого сайта', 'knife-theme')
+            __('На запись c этого сайта', 'knife-theme')
         );
 
         if($cover = wp_get_attachment_url($instance['cover'])) {
