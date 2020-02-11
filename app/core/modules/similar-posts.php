@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.5
- * @version 1.11
+ * @version 1.12
  */
 
 
@@ -387,6 +387,7 @@ class Knife_Similar_Posts {
                         'terms' => self::$category
                     ]
                 ],
+                'orderby' => 'rand',
                 'fields' => 'ids'
             ];
 
@@ -398,7 +399,7 @@ class Knife_Similar_Posts {
             foreach($the_posts as $id) {
                 $related[$id] = 0;
 
-                foreach(get_the_terms($id, 'post_tag') as $tag) {
+                foreach(wp_get_post_terms($id, 'post_tag') as $tag) {
                     if(in_array($tag->term_id, $the_terms)) {
                         $related[$id] = $related[$id] + 1;
                     }
