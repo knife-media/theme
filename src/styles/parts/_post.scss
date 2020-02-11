@@ -41,22 +41,6 @@
     }
   }
 
-  &.post--select {
-    flex: 1 1 auto;
-
-    .entry-footer > * {
-      max-width: calc(#{$width-wide} + 4rem);
-    }
-
-    .entry-comments > * {
-      max-width: calc(#{$width-wide} + 4rem);
-    }
-
-    .entry-bottom > * {
-      max-width: calc(#{$width-wide} + 4rem);
-    }
-  }
-
   &.post--chat {
     flex: 0 1 48rem;
     align-items: center;

@@ -8,7 +8,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.10
+ * @version 1.12
  */
 
 
@@ -135,9 +135,6 @@ require get_template_directory() . '/core/modules/news-manager.php';
 
 // Story post type
 require get_template_directory() . '/core/modules/story-manager.php';
-
-// Select post type
-require get_template_directory() . '/core/modules/select-links.php';
 
 // Quiz post type
 require get_template_directory() . '/core/modules/quiz-section.php';
