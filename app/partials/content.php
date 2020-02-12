@@ -4,38 +4,36 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.11
+ * @version 1.12
  */
 ?>
 
 <article <?php post_class('post'); ?> id="post-<?php the_ID(); ?>">
-    <div class="entry-header">
+    <div class="entry-content">
         <?php
             the_info(
-                '<div class="entry-header__info">', '</div>',
+                '<div class="entry-content__info">', '</div>',
                 ['club', 'author', 'date', 'best']
             );
 
             the_title(
-                '<h1 class="entry-header__title">',
+                '<h1 class="entry-content__title">',
                 '</h1>'
             );
 
             the_lead(
-                '<div class="entry-header__lead">',
+                '<div class="entry-content__lead">',
                 '</div>'
             );
 
             the_share(
-                '<div class="entry-header__share share">',
+                '<div class="entry-content__share share">',
                 '</div>'
             );
-        ?>
-    </div>
 
-    <div class="entry-content">
-        <?php
+            echo '<div class="entry-content__editor editor">';
             the_content();
+            echo '</div>';
         ?>
     </div>
 
