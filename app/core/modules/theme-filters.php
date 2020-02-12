@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.11
+ * @version 1.12
  */
 
 if (!defined('WPINC')) {
@@ -130,29 +130,26 @@ class Knife_Theme_Filters {
         });
 
         // Remove fcking emojis and wordpress meta for security reasons
-        add_action('init', function() {
-            remove_action('wp_head', 'print_emoji_detection_script', 7);
-            remove_action('admin_print_scripts', 'print_emoji_detection_script');
-            remove_action('wp_print_styles', 'print_emoji_styles');
-            remove_action('admin_print_styles', 'print_emoji_styles');
-            remove_filter('the_content_feed', 'wp_staticize_emoji');
-            remove_filter('comment_text_rss', 'wp_staticize_emoji');
-            remove_filter('wp_mail', 'wp_staticize_emoji_for_email');
+        remove_action('wp_head', 'print_emoji_detection_script', 7);
+        remove_action('admin_print_scripts', 'print_emoji_detection_script');
+        remove_action('wp_print_styles', 'print_emoji_styles');
+        remove_action('admin_print_styles', 'print_emoji_styles');
+        remove_filter('the_content_feed', 'wp_staticize_emoji');
+        remove_filter('comment_text_rss', 'wp_staticize_emoji');
+        remove_filter('wp_mail', 'wp_staticize_emoji_for_email');
 
-            remove_action('wp_head', 'wp_generator');
-            remove_action('wp_head', 'wlwmanifest_link');
-            remove_action('wp_head', 'rsd_link');
-            remove_action('wp_head', 'adjacent_posts_rel_link', 10, 0);
-            remove_action('wp_head', 'rest_output_link_wp_head', 10);
-            remove_action('wp_head', 'wp_oembed_add_discovery_links', 10);
-
-        });
+        // Remove wp_head default actions
+        remove_action('wp_head', 'wp_generator');
+        remove_action('wp_head', 'wlwmanifest_link');
+        remove_action('wp_head', 'rsd_link');
+        remove_action('wp_head', 'adjacent_posts_rel_link');
+        remove_action('wp_head', 'adjacent_posts_rel_link_wp_head');
+        remove_action('wp_head', 'rest_output_link_wp_head');
+        remove_action('wp_head', 'wp_oembed_add_discovery_links');
 
         // Remove unused HTTP headers
-        add_action('init', function() {
-            remove_action('template_redirect', 'rest_output_link_header', 11);
-            remove_action('template_redirect', 'wp_shortlink_header', 11);
-        });
+        remove_action('template_redirect', 'rest_output_link_header', 11);
+        remove_action('template_redirect', 'wp_shortlink_header', 11);
 
         // Change wp_die errors status code for logged-in users
         add_filter('wp_die_handler', function($handler) {

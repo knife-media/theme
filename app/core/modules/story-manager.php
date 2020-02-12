@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.11
+ * @version 1.12
  */
 
 if (!defined('WPINC')) {
@@ -77,6 +77,21 @@ class Knife_Story_Manager {
 
         // Include slider options
         add_action('wp_enqueue_scripts', [__CLASS__, 'inject_stories'], 12);
+
+        // Add adjacent posts links to header
+        add_action('get_header', [__CLASS__, 'add_adjacent_links']);
+    }
+
+
+    /**
+     * Add adjacent links for story post type only
+     *
+     * @since 1.12
+     */
+    public static function add_adjacent_links() {
+        if(is_singular(self::$post_type)) {
+            add_action('wp_head', 'adjacent_posts_rel_link_wp_head', 11);
+        }
     }
 
 
