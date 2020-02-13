@@ -224,7 +224,7 @@ class Knife_Widget_Handler {
             $widget->widget($args, $instance);
             $cached_widget = ob_get_clean();
 
-            set_transient($widget->id, $cached_widget, 24 * HOUR_IN_SECONDS);
+            set_transient($widget->id, $cached_widget, 10 * DAY_IN_SECONDS);
         }
 
         echo $cached_widget;

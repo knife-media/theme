@@ -71,17 +71,27 @@ class Knife_Similar_Posts {
      * @var     string
      * @since   1.11
      */
-    public static $meta_similar = '_knife_similar_hide';
+    public static $meta_hidden = '_knife_similar_hide';
 
 
     /**
-     * Categories to show in units
+     * Categories to show in similar
      *
      * @access  private
      * @var     array
      * @since   1.12
      */
     private static $category = ['longreads', 'play'];
+
+
+    /**
+     * Post meta to store similar posts
+     *
+     * @access  public
+     * @var     string
+     * @since   1.12
+     */
+    public static $meta_similar = '_knife_similar';
 
 
     /**
@@ -105,6 +115,12 @@ class Knife_Similar_Posts {
 
         // Update hide similar posts meta
         add_action('save_post', [__CLASS__, 'save_meta']);
+
+        // Regenerate similar for post
+        add_action('knife_schedule_similar', [__CLASS__, 'generate_similar']);
+
+        // Regenerate similar post publish
+        add_action('transition_post_status', [__CLASS__, 'create_similar'], 10, 3);
     }
 
 
@@ -118,11 +134,11 @@ class Knife_Similar_Posts {
             return;
         }
 
-        $hidden = get_post_meta($post->ID, self::$meta_similar, true);
+        $hidden = get_post_meta($post->ID, self::$meta_hidden, true);
 
         printf(
             '<div class="misc-pub-section"><label><input type="checkbox" name="%1$s" class="checkbox"%3$s> %2$s</label></div>',
-            esc_attr(self::$meta_similar),
+            esc_attr(self::$meta_hidden),
             __('Скрыть блок похожих записей', 'knife-theme'),
             checked($hidden, 1, false)
         );
@@ -147,11 +163,11 @@ class Knife_Similar_Posts {
             return;
         }
 
-        if(empty($_REQUEST[self::$meta_similar])) {
-            return delete_post_meta($post_id, self::$meta_similar);
+        if(empty($_REQUEST[self::$meta_hidden])) {
+            return delete_post_meta($post_id, self::$meta_hidden);
         }
 
-        return update_post_meta($post_id, self::$meta_similar, 1);
+        return update_post_meta($post_id, self::$meta_hidden, 1);
     }
 
 
@@ -239,6 +255,24 @@ class Knife_Similar_Posts {
 
 
     /**
+     * Create similar on post publish
+     *
+     * @since 1.12
+     */
+    public static function create_similar($new_status, $old_status, $post) {
+        if(!in_array($post->post_type, self::$post_type)) {
+            return;
+        }
+
+        if($new_status !== 'publish') {
+            return;
+        }
+
+        self::generate_similar($post->ID);
+    }
+
+
+    /**
      * Inject similar posts data
      */
     public static function inject_object() {
@@ -248,22 +282,33 @@ class Knife_Similar_Posts {
             return;
         }
 
+        // Get similar from meta
+        $meta = get_post_meta($post_id, self::$meta_similar, true);
+
+        // Set default meta values
+        $meta = wp_parse_args($meta, [
+            'similar' => [],
+            'updated' => 0
+        ]);
+
+        // Schedule updation if required
+        if($meta['updated'] < strtotime('-10 days')) {
+            wp_schedule_single_event(time() + 60, 'knife_schedule_similar', [$post_id]);
+        }
+
         $hidden = true;
 
         if(get_post_type($post_id) === 'post') {
-            $hidden = get_post_meta($post_id, self::$meta_similar, true);
+            $hidden = get_post_meta($post_id, self::$meta_hidden, true);
         }
 
-        // Get similar if not cards
-        $similar = self::get_similar($post_id);
-
         // Append promo
-        $similar = self::append_promo($similar);
+        $meta['similar'] = self::append_promo($meta['similar']);
 
         $options = [
             'title' => __('Читайте также', 'knife-theme'),
             'hidden' => absint($hidden),
-            'similar' => $similar
+            'similar' => $meta['similar']
         ];
 
         // Add similar options to page
@@ -361,13 +406,7 @@ class Knife_Similar_Posts {
      *
      * Using get_the_tags function to retrieve terms with primary tag first
      */
-    private static function get_similar($post_id) {
-        $similar = wp_cache_get($post_id, self::$cache_group);
-
-        if($similar !== false) {
-            return $similar;
-        }
-
+    public static function generate_similar($post_id) {
         $similar = [];
 
         // Get given post tags
@@ -375,7 +414,7 @@ class Knife_Similar_Posts {
             $the_terms = wp_list_pluck($post_terms, 'term_id');
 
             $query_args = [
-                'posts_per_page' => 100,
+                'posts_per_page' => -1,
                 'tag_id' => $the_terms[0],
                 'post__not_in' => [$post_id],
                 'post_status' => 'publish',
@@ -387,7 +426,6 @@ class Knife_Similar_Posts {
                         'terms' => self::$category
                     ]
                 ],
-                'orderby' => 'rand',
                 'fields' => 'ids'
             ];
 
@@ -418,12 +456,14 @@ class Knife_Similar_Posts {
                     'link' => get_permalink($id),
                 ];
             }
-
-            // Update similar posts cache by post id
-            wp_cache_set($post_id, $similar, self::$cache_group);
         }
 
-        return $similar;
+        $meta = [
+            'updated' => time(),
+            'similar' => $similar
+        ];
+
+        update_post_meta($post_id, self::$meta_similar, $meta);
     }
 
 

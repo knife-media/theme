@@ -47,7 +47,7 @@ class Knife_Primary_Tag {
         add_action('save_post', [__CLASS__, 'save_meta'], 15);
 
         // Move primary tag to first position
-        add_filter('get_the_tags', [__CLASS__, 'sort_tags']);
+        add_filter('get_the_terms', [__CLASS__, 'sort_tags'], 10, 3);
     }
 
 
@@ -117,26 +117,24 @@ class Knife_Primary_Tag {
     /**
      * Move primary tag to first position
      */
-    public static function sort_tags($items) {
-        global $post;
-
-        if(empty($post->ID) || !is_array($items)) {
-            return $items;
+    public static function sort_tags($terms, $post_id, $taxonomy) {
+        if(!is_array($terms) || $taxonomy !== 'post_tag') {
+            return $terms;
         }
 
-        $primary = get_post_meta($post->ID, self::$meta_primary, true);
+        $primary = get_post_meta($post_id, self::$meta_primary, true);
 
         if(empty($primary)) {
-            return $items;
+            return $terms;
         }
 
         $sorted = [];
 
-        foreach($items as $item) {
-            if($item->term_id === (int) $primary) {
-                array_unshift($sorted, $item);
+        foreach($terms as $term) {
+            if($term->term_id === (int) $primary) {
+                array_unshift($sorted, $term);
             } else {
-                $sorted[] = $item;
+                $sorted[] = $term;
             }
         }
 

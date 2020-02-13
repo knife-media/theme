@@ -63,7 +63,7 @@ class Knife_Views_Manager {
         add_filter('set-screen-option', [__CLASS__, 'save_screen_options'], 10, 3);
 
         // Insert new post to views table
-        add_action('knife_schedule_views', [__CLASS__, 'start_task'], 10, 3);
+        add_action('knife_schedule_views', [__CLASS__, 'start_task']);
 
         // Schedule insertion to views table
         add_action('transition_post_status', [__CLASS__, 'schedule_insertion'], 10, 3);
