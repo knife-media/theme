@@ -27,8 +27,14 @@ get_header(); ?>
             <div class="entry-header">
                 <?php
                     printf(
-                        '<h1 class="enrty-header__title">%s</h1>',
-                        get_post_meta(get_the_ID(), 'post-hero', true)
+                        '<h1 class="entry-header__title"><strong>%s</strong>%s</h1>',
+                        get_post_meta(get_the_ID(), 'post-hero', true),
+
+                        sprintf(
+                            '<a href="%s" target="_blank" rel="noopener">%s</a>',
+                            get_post_meta(get_the_ID(), 'post-link', true),
+                            get_post_meta(get_the_ID(), 'post-info', true)
+                        )
                     );
 
                     the_lead(
@@ -47,12 +53,9 @@ get_header(); ?>
                 <?php
                     the_content();
 
-                    the_info(
-                        sprintf(
-                            '<div class="entry-content__author"><p>%s</p>',
-                            _x('Автор материала', 'special: death-work', 'knife-theme')
-                        ),
-                        '</div>', ['author']
+                    printf(
+                        '<div class="entry-content__author"><span>%s</span></div>',
+                        _x('Подготовила Агата Коровина', 'special: new-business', 'knife-theme')
                     );
                 ?>
             </div>
