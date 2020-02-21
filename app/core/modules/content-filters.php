@@ -114,11 +114,7 @@ class Knife_Content_Filters {
      * Replace card comment with entry-content
      */
     public static function show_cards($content) {
-        if(has_post_format('chat')) {
-            $content = str_replace('<!--card-->', '</div><div class="entry-content">', force_balance_tags($content));
-        }
-
-        return $content;
+        return str_replace('<!--card-->', '</div><div class="entry-content">', force_balance_tags($content));
     }
 
 

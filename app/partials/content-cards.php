@@ -1,14 +1,13 @@
 <?php
 /**
- * Cards no-sidebar post format content template
+ * Cards no-sidebar post template content template
  *
  * @package knife-theme
- * @since 1.1
- * @version 1.11
+ * @since 1.12
  */
 ?>
 
-<article <?php post_class('post'); ?> id="post-<?php the_ID(); ?>">
+<article <?php post_class('post post--cards'); ?> id="post-<?php the_ID(); ?>">
     <div class="entry-header">
         <?php
             the_info(

@@ -1,6 +1,9 @@
 <?php
 /**
- * Template for display single post
+ * Template Name: Без сайдбара
+ * Template Post Type: post
+ *
+ * Template for displaying aside post format
  *
  * @package knife-theme
  * @since 1.1
@@ -19,7 +22,7 @@ get_header(); ?>
     <?php
         while(have_posts()) : the_post();
 
-            get_template_part('partials/content');
+            get_template_part('partials/content', 'aside');
 
         endwhile;
     ?>

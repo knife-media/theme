@@ -60,9 +60,6 @@ add_action('after_switch_theme', function() {
  * Add required theme support tags
  */
 add_action('after_setup_theme', function() {
-    // Post formats
-    add_theme_support('post-formats', ['aside', 'chat']);
-
     // Let wordpress generate page title
     add_theme_support('title-tag');
 

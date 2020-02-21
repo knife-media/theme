@@ -205,14 +205,6 @@ class Knife_Theme_Filters {
      * @since 1.10
      */
     public static function update_post_classes($classes, $class) {
-        $type = get_post_type();
-
-        if(post_type_supports($type, 'post-formats')) {
-            $type = get_post_format() ? : 'standard';
-        }
-
-        $class[] = 'post--' . $type;
-
         return $class;
     }
 
@@ -247,11 +239,7 @@ class Knife_Theme_Filters {
         }
 
         if(is_singular('post')) {
-            if(has_post_format()) {
-                $classes[] = 'is-' . get_post_format();
-            } else {
-                $classes[] = 'is-post';
-            }
+            $classes[] = 'is-post';
         }
 
         return $classes;
