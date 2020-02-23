@@ -4,11 +4,11 @@
  *
  * @package knife-theme
  * @since 1.7
- * @version 1.11
+ * @version 1.12
  */
 ?>
 
-<article <?php post_class('post'); ?> id="post-<?php the_ID(); ?>">
+<article <?php post_class('post post--cards'); ?> id="post-<?php the_ID(); ?>">
     <div class="entry-quiz" id="quiz">
         <?php
             the_info(
