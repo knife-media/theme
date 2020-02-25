@@ -97,6 +97,11 @@ class Knife_Site_Meta {
         // Add text parameter only for posts
         if(get_post_type($post_id) === 'post') {
             $content = get_the_content(null, false, $post_id);
+
+            if(method_exists('Knife_Post_Lead', 'get_lead')) {
+                $content = Knife_Post_Lead::get_lead($post_id) . $content;
+            }
+
             $content = preg_replace('~[ \t\r\n]+~', ' ', $content);
 
             // Strip content tags
