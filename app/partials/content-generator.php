@@ -4,10 +4,11 @@
  *
  * @package knife-theme
  * @since 1.6
+ * @version 1.12
  */
 ?>
 
-<article <?php post_class('post'); ?> id="post-<?php the_ID(); ?>">
+<article <?php post_class('post post--generator'); ?> id="post-<?php the_ID(); ?>">
     <div class="entry-generator" id="generator">
         <?php
             the_title(

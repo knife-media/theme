@@ -4,11 +4,11 @@
  *
  * @package knife-theme
  * @since 1.4
- * @version 1.11
+ * @version 1.12
  */
 ?>
 
-<article <?php post_class('post'); ?> id="post-<?php the_ID(); ?>">
+<article <?php post_class('post post--story'); ?> id="post-<?php the_ID(); ?>">
     <div class="entry-story" id="story">
         <div class="entry-story__loader">
             <span class="entry-story__loader-bounce"></span>
