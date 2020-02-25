@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.5
- * @version 1.11
+ * @version 1.12
  */
 
 
@@ -37,7 +37,7 @@ class Knife_Site_Meta {
         add_action('wp_head', [__CLASS__, 'add_yandex_meta'], 5);
 
         // Add JSON-LD microdata
-        add_action('wp_head', [__CLASS__, 'add_json_microdata'], 9);
+        add_action('wp_head', [__CLASS__, 'add_json_microdata'], 25);
 
         // Add google tagmanager script
         add_action('wp_head', [__CLASS__, 'add_tagmanager'], 20);
@@ -63,35 +63,50 @@ class Knife_Site_Meta {
      * @since 1.11
      */
     public static function add_json_microdata() {
+        // Show microdata only for singular
+        if(!is_singular()) {
+            return;
+        }
+
+        // Get singular post id
+        $post_id = get_queried_object_id();
+
         $schema = [
             '@context' => 'http://schema.org',
             '@type' => 'NewsArticle'
         ];
 
-        if(is_singular()) {
-            $post_id = get_queried_object_id();
-
-            if(has_category('longreads', $post_id)) {
-                $schema['@type'] = 'Article';
-            }
-
-            $schema['url'] = get_permalink($post_id);
-
-            // Set unique id with text element in anchor
-            $schema['@id'] = $schema['url'] . '#post-' . $post_id;
-
-            // Set post title
-            $schema['headline'] = strip_tags(get_the_title($post_id));
-
-            // Set post date
-            $schema['datePublished'] = get_the_date('c', $post_id);
-
-            // Set post modified date
-            $schema['dateModified'] = get_the_modified_date('c', $post_id);
-
-            $include = get_template_directory() . '/core/include';
-            include_once($include . '/templates/json-microdata.php');
+        if(has_category('longreads', $post_id)) {
+            $schema['@type'] = 'Article';
         }
+
+        $schema['url'] = get_permalink($post_id);
+
+        // Set unique id with text element in anchor
+        $schema['@id'] = $schema['url'] . '#post-' . $post_id;
+
+        // Set post date
+        $schema['datePublished'] = get_the_date('c', $post_id);
+
+        // Set post modified date
+        $schema['dateModified'] = get_the_modified_date('c', $post_id);
+
+        // Set post title
+        $schema['headline'] = wp_strip_all_tags(get_the_title($post_id));
+
+        // Add text parameter only for posts
+        if(get_post_type($post_id) === 'post') {
+            $content = get_the_content(null, false, $post_id);
+            $content = preg_replace('~[ \t\r\n]+~', ' ', $content);
+
+            // Strip content tags
+            $schema['text'] = wp_strip_all_tags($content);
+        }
+
+        printf(
+            '<script type="application/ld+json">%s</script>',
+            json_encode($schema, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE)
+        );
     }
 
 
