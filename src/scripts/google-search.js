@@ -51,11 +51,11 @@
     });
 
     // Update fake results on search input
-    document.getElementById('search-input').oninput = function() {
+    document.getElementById('search-input').addEventListener('input', function() {
       var element = google.search.cse.element.getElement(holder);
 
       element.execute(this.value);
-    }
+    });
 
     // Create observer to detect new results in gsce fake block
     var observer = window.MutationObserver || window.WebKitMutationObserver;
@@ -237,5 +237,16 @@
       return toggle.click();
     }
   }, true);
+
+
+  if(document.querySelector('.findings')) {
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = 'https://cse.google.com/cse.js?cx=' + knife_search_id;
+
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  }
 
 })();
