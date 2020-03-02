@@ -9,7 +9,7 @@
 get_header(); ?>
 
 <div class="gcse">
-    <div class="gcse-search"></div>
+    <div class="gcse-search" data-linkTarget="_blank" data-mobileLayout="disabled"></div>
 </div>
 
 <?php get_footer();

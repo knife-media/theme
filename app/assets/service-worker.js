@@ -33,7 +33,7 @@ self.__precacheManifest = [
   },
   {
     "url": "/wp-content/themes/knife/assets/styles.min.css",
-    "revision": "4ffc02cdaa406c284cbc200bc089ca67"
+    "revision": "81adca45ca635aa9732d021183364a64"
   },
   {
     "url": "/wp-content/themes/knife/assets/images/icon-180.png",

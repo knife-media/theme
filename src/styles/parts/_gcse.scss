@@ -140,7 +140,7 @@
   .gsc-option-menu-item {
     display: block;
 
-    margin: 0 .25rem;
+    margin: 0 .5rem 0 0;
     padding: 0;
 
     background: transparent;
@@ -171,6 +171,10 @@
     font-weight: 500;
 
     color: $color-text;
+
+    @media screen and (max-width: 479px) {
+      display: none;
+    }
   }
 
   .gsc-results {
