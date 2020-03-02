@@ -6,7 +6,6 @@
 
   .toggle__icon {
     opacity: 1;
-
     transition: opacity .25s ease-in-out;
   }
 
@@ -65,14 +64,12 @@
 
     .toggle__line:nth-child(3) {
       left: -100%;
-
       opacity: 0;
     }
   }
 
   &.toggle--hidden {
     visibility: hidden;
-
     opacity: 0;
   }
 }

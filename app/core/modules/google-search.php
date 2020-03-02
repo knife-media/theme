@@ -16,6 +16,16 @@ if (!defined('WPINC')) {
 
 class Knife_Google_Search {
     /**
+     * Search page query var
+     *
+     * @access  public
+     * @var     string
+     * @since   1.12
+     */
+    public static $query_var = 'search';
+
+
+    /**
      * Init function instead of constructor
      *
      * @since 1.4
@@ -27,6 +37,21 @@ class Knife_Google_Search {
         // Disable default search
         add_action('parse_query', [__CLASS__, 'disable_search'], 9);
 
+        // Create custom search page rewrite url
+        add_action('init', [__CLASS__, 'add_search_rule']);
+
+        // Add search query tag
+        add_action('query_vars', [__CLASS__, 'append_search_var']);
+
+        // Include archive template for search results
+        add_filter('template_include', [__CLASS__, 'include_search']);
+
+        // Update search results archive document title
+        add_filter('document_title_parts', [__CLASS__, 'update_document_title']);
+
+        // Set is-gcse class if need
+        add_filter('body_class', [__CLASS__, 'set_body_class'], 11);
+
         // Add search popover to footer
         add_action('wp_footer', function() {
             get_search_form();
@@ -36,6 +61,61 @@ class Knife_Google_Search {
         if(!defined('KNIFE_GCSE')) {
             define('KNIFE_GCSE', []);
         }
+    }
+
+    /**
+     * Create custom search rule
+     *
+     * @since 1.12
+     */
+    public static function add_search_rule() {
+        add_rewrite_rule(
+            sprintf('^%s/?$', self::$query_var),
+            sprintf('index.php?%s=1', self::$query_var),
+            'top'
+        );
+    }
+
+
+    /**
+     * Disable wordpress based search to reduce CPU load and prevent DDOS attacks
+     */
+    public static function disable_search($query) {
+        if(!is_admin() && $query->is_search()) {
+            $query->set('s', '');
+            $query->is_search = false;
+            $query->is_404 = true;
+        }
+    }
+
+
+    /**
+     * Append search query tag to availible query vars
+     *
+     * @since 1.12
+     */
+    public static function append_search_var($query_vars) {
+        $query_vars[] = self::$query_var;
+
+        return $query_vars;
+    }
+
+
+    /**
+     * Include template for search results
+     *
+     * @since 1.12
+     */
+    public static function include_search($template) {
+        if(get_query_var(self::$query_var)) {
+            $new_template = locate_template(['search.php']);
+
+            if(!empty($new_template)) {
+                return $new_template;
+            }
+        }
+
+        return $template;
     }
 
 
@@ -52,14 +132,28 @@ class Knife_Google_Search {
 
 
     /**
-     * Disable wordpress based search to reduce CPU load and prevent DDOS attacks
+     * Update search archive document title
+     *
+     * @since 1.12
      */
-    public static function disable_search($query) {
-        if(!is_admin() && $query->is_search()) {
-            $query->set('s', '');
-            $query->is_search = false;
-            $query->is_404 = true;
+    public static function update_document_title($title) {
+        if(get_query_var(self::$query_var)) {
+            $title['title'] = __('Поиск по материалам', 'knife-theme');
         }
+
+        return $title;
+    }
+
+
+    /**
+     * Set is-gcse body class
+     */
+    public static function set_body_class($classes = []) {
+        if(get_query_var(self::$query_var)) {
+            $classes[] = 'is-gcse';
+        }
+
+        return $classes;
     }
 }
 
