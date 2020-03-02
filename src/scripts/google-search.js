@@ -77,27 +77,12 @@
   /**
    * Init Google CSE script
    */
-  function initCSE(gcse_id) {
-    // Create fake div for google results
-    var fake = document.createElement("div");
-
-    fake.id = holder;
-    fake.style.display = 'none';
-
-    // Append fake div to base selector
-    search.appendChild(fake);
-
-    // Prepare gcse callback
-    window.__gcse = {
-      parsetags: 'explicit',
-      callback: pushResults
-    };
-
+  function initCSE() {
     // Load gsce to page
     var gcse = document.createElement('script');
     gcse.type = 'text/javascript';
     gcse.async = true;
-    gcse.src = 'https://cse.google.com/cse.js?cx=' + gcse_id;
+    gcse.src = 'https://cse.google.com/cse.js?cx=' + knife_search_id;
 
     var s = document.getElementsByTagName('script')[0];
     s.parentNode.insertBefore(gcse, s);
@@ -116,7 +101,14 @@
       result.removeChild(result.firstChild);
     }
 
-    if(document.getElementById('search-input').value.length > 0) {
+    // Hide button
+    var button = document.getElementById('search-button');
+    button.classList.remove('search__button--visible');
+
+    // Get input value
+    var value = document.getElementById('search-input').value;
+
+    if(value.length > 0) {
       function appendResults(source) {
         var data = {
           link: source.querySelector('a.gs-title').href,
@@ -141,7 +133,7 @@
         return result.appendChild(link);
       }
 
-      if (source.length == 1 && source[0].classList.contains('gs-no-results-result')) {
+      if(source.length == 1 && source[0].classList.contains('gs-no-results-result')) {
         var head = document.createElement('p');
         head.className = 'search__results-head';
         head.appendChild(document.createTextNode(source[0].textContent));
@@ -156,6 +148,10 @@
 
         appendResults(source[i]);
       }
+
+      // Show button
+      button.href = '/search/#gsc.q=' + value;
+      button.classList.add('search__button--visible');
     }
   }
 
@@ -165,6 +161,11 @@
    */
   toggle.addEventListener('click', function(e) {
     e.preventDefault();
+
+    // Skip for separate search page
+    if(document.body.classList.contains('is-gcse')) {
+      return false;
+    }
 
     var input = document.getElementById('search-input');
 
@@ -217,7 +218,22 @@
     body.style.top = -scrollTop + 'px';
 
     if(typeof window.__gcse === 'undefined') {
-      initCSE(knife_search_id);
+      // Create fake div for google results
+      var fake = document.createElement("div");
+
+      fake.id = holder;
+      fake.style.display = 'none';
+
+      // Append fake div to base selector
+      search.appendChild(fake);
+
+      // Prepare gcse callback
+      window.__gcse = {
+        parsetags: 'explicit',
+        callback: pushResults
+      };
+
+      initCSE();
     }
 
     // Focus search input avoid ios header jumps
@@ -239,14 +255,11 @@
   }, true);
 
 
-  if(document.querySelector('.findings')) {
-    var gcse = document.createElement('script');
-    gcse.type = 'text/javascript';
-    gcse.async = true;
-    gcse.src = 'https://cse.google.com/cse.js?cx=' + knife_search_id;
-
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(gcse, s);
+  /**
+   * Init search on separate page
+   */
+  if(document.querySelector('.gcse')) {
+    initCSE();
   }
 
 })();

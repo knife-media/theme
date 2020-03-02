@@ -103,6 +103,11 @@
       line-height: 1;
       color: $color-black;
 
+      .is-gcse & {
+        cursor: default;
+        color: rgba($color-text, .5);
+      }
+
       @media screen and (max-width: 1023px) {
         height: 1.375rem;
         font-size: 1.375rem;
