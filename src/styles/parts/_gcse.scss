@@ -189,6 +189,24 @@
       border: none;
     }
 
+    .gs-spelling {
+      padding: 0 .25rem;
+
+      font-size: 1rem;
+      font-weight: 500;
+
+      a {
+        text-decoration: none;
+        color: $color-primary;
+      }
+    }
+
+    .gs-spelling-original {
+      margin-top: .25rem;
+      font-size: .875rem;
+      font-weight: 400;
+    }
+
     .gsc-result {
       margin: 0;
       padding: 1.5rem 0;
