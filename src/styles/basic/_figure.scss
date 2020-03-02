@@ -266,4 +266,49 @@
       }
     }
   }
+
+  &.figure--flipper {
+    display: block;
+    cursor: default;
+
+    width: #{$width-content + 2rem};
+    overflow: hidden;
+    background: $color-white;
+    box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, .25);
+
+    border-radius: 6px;
+
+    p {
+      display: block;
+      position: relative;
+
+      padding: 1rem;
+
+      a {
+        font-size: 1.125rem;
+        font-weight: 700;
+        line-height: 1.25;
+
+        color: $color-primary;
+
+        &:after {
+          content: '';
+          @include full-size();
+        }
+
+        @media screen and (max-width: 767px) {
+          font-size: 1rem;
+        }
+      }
+
+      em {
+        font-family: $font-serif;
+        font-weight: 400;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
 }
