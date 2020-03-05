@@ -328,6 +328,14 @@
       &:last-child {
         transform: rotateX(180deg) translateX(-100%);
       }
+
+      @media screen and (max-width: 767px) {
+        font-size: 1.25rem;
+      }
+
+      @media screen and (max-width: 479px) {
+        font-size: 1.125rem;
+      }
     }
 
     @for $i from 1 through 4 {
@@ -338,11 +346,27 @@
     }
 
     h2 {
-      font-size: 5rem;
+      font-size: 4rem;
+
+      @media screen and (max-width: 767px) {
+        font-size: 3.5rem;
+      }
+
+      @media screen and (max-width: 479px) {
+        font-size: 3rem;
+      }
     }
 
     h3 {
       font-size: 2rem;
+
+      @media screen and (max-width: 767px) {
+        font-size: 1.75rem;
+      }
+
+      @media screen and (max-width: 479px) {
+        font-size: 1.5rem;
+      }
     }
 
     h5 {
@@ -359,6 +383,18 @@
         transform: translateX(15%);
 
         border-top: solid 1px rgba($color-text, .5);
+
+        @media screen and (max-width: 479px) {
+          margin-top: 0.5rem;
+        }
+      }
+
+      @media screen and (max-width: 767px) {
+        font-size: .875rem;
+      }
+
+      @media screen and (max-width: 479px) {
+        font-size: .8125rem;
       }
     }
 
