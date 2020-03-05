@@ -24,7 +24,7 @@ class Knife_Adult_Content {
 
 
    /**
-     * Default post type lead text availible
+     * Default post type with adult content
      *
      * @access  public
      * @var     array
@@ -48,7 +48,7 @@ class Knife_Adult_Content {
      * Prints checkbox in post publish action section
      */
     public static function print_checkbox($post) {
-        if(!in_array(get_post_type($post->ID), self::$post_type)) {
+        if(!in_array($post->post_type, self::$post_type)) {
             return;
         }
 

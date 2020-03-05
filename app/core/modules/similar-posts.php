@@ -130,7 +130,7 @@ class Knife_Similar_Posts {
      * @since 1.11
      */
     public static function print_checkbox($post) {
-        if(get_post_type($post->ID) !== 'post') {
+        if($post->post_type !== 'post') {
             return;
         }
 

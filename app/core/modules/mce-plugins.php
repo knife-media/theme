@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.2
- * @version 1.11
+ * @version 1.12
  */
 
 
@@ -30,7 +30,13 @@ class Knife_MCE_Plugins {
      * @since 1.10
      */
     private static $buttons = [
-        'push-button', 'mark-button', 'quote-button', 'card-separator', 'similar-block', 'reference-block', 'script-embed'
+        'push-button',
+        'mark-button',
+        'quote-button',
+        'card-separator',
+        'similar-block',
+        'reference-block',
+        'script-embed'
     ];
 
 

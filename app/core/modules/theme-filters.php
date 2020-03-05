@@ -73,8 +73,6 @@ class Knife_Theme_Filters {
             }
         });
 
-
-
         add_action('pre_get_posts', function($query) {
             if(is_tax('label', 'editorial')) {
                 $query->set('orderby', 'rand');
@@ -196,6 +194,27 @@ class Knife_Theme_Filters {
         }
 
         return str_replace(array_keys($names), array_values($names), $text);
+    }
+
+
+    /**
+     * Print styles checkbox in posts
+     *
+     * @since 1.12
+     */
+    public static function print_styles_checkbox($template, $post) {
+        if($post->post_type !== 'post') {
+            return;
+        }
+
+        $form = get_post_meta($post->ID, 'dsf', true);
+
+        printf(
+            '<label><input type="checkbox" name="%1$s" class="checkbox"%3$s> %2$s</label>',
+            esc_attr('sdf'),
+            __('Добавить форму заявки в клуб', 'knife-theme'),
+            checked($form, 1, false)
+        );
     }
 
 

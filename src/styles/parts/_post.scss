@@ -78,6 +78,39 @@
     }
   }
 
+  &.post--feature {
+    flex: 0 1 48rem;
+    align-items: center;
+
+    .entry-header {
+      padding: 2rem 1rem;
+
+      @media screen and (max-width: 767px) {
+        padding: 1.5rem 1rem;
+      }
+    }
+
+    .entry-content {
+      padding: 1rem;
+
+      @media screen and (max-width: 767px) {
+        padding: 1rem;
+      }
+    }
+
+    .entry-content + .entry-comments {
+      margin-top: 1rem;
+    }
+
+    .entry-content + .entry-footer {
+      margin-top: 1rem;
+    }
+
+    .entry-content + .entry-bottom {
+      margin-top: 1rem;
+    }
+  }
+
   &.post--quiz {
     flex: 0 1 44rem;
     align-items: center;

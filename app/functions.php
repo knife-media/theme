@@ -187,6 +187,9 @@ require get_template_directory() . '/core/modules/post-lead.php';
 // Mark adult content posts
 require get_template_directory() . '/core/modules/adult-content.php';
 
+// Add custom post styles
+require get_template_directory() . '/core/modules/post-styles.php';
+
 // Custom search engine settings
 require get_template_directory() . '/core/modules/google-search.php';
 

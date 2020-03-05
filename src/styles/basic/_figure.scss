@@ -266,4 +266,140 @@
       }
     }
   }
+
+  &.figure--stretch {
+    width: 100%;
+  }
+
+  &.figure--flipper {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: stretch;
+    cursor: pointer;
+
+    transition: .5s transform;
+    transform-style: preserve-3d;
+
+    & + .figure--flipper {
+      margin-top: -1rem;
+
+      @media screen and (max-width: 767px) {
+        margin-top: 0;
+      }
+    }
+
+    aside {
+      display: flex;
+      flex-flow: column wrap;
+      align-items: center;
+      justify-content: center;
+
+      user-select: none;
+      position: relative;
+      z-index: 4;
+
+      min-width: 100%;
+      padding: 1.5rem;
+      overflow: hidden;
+
+      font-size: 1.375rem;
+      font-weight: 500;
+      line-height: 1.25;
+      text-align: center;
+
+      backface-visibility: hidden;
+      background-color: $color-white;
+      box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, .25);
+
+      border-radius: 6px;
+
+      & > * {
+        margin-bottom: 1rem;
+      }
+
+      & > :first-child {
+        margin-top: 0;
+      }
+
+      & > :last-child {
+        margin-bottom: 0;
+      }
+
+      &:last-child {
+        transform: rotateX(180deg) translateX(-100%);
+      }
+
+      @media screen and (max-width: 767px) {
+        font-size: 1.25rem;
+      }
+
+      @media screen and (max-width: 479px) {
+        font-size: 1.125rem;
+      }
+    }
+
+    @for $i from 1 through 4 {
+      h#{$i} {
+        margin-top: 0;
+        line-height: 1;
+      }
+    }
+
+    h2 {
+      font-size: 4rem;
+
+      @media screen and (max-width: 767px) {
+        font-size: 3.5rem;
+      }
+
+      @media screen and (max-width: 479px) {
+        font-size: 3rem;
+      }
+    }
+
+    h3 {
+      font-size: 2rem;
+
+      @media screen and (max-width: 767px) {
+        font-size: 1.75rem;
+      }
+
+      @media screen and (max-width: 479px) {
+        font-size: 1.5rem;
+      }
+    }
+
+    h5 {
+      font-size: 1rem;
+      font-weight: 500;
+      color: lighten($color-text, 70);
+
+      &:before {
+        content: '';
+        display: block;
+
+        width: 75%;
+        margin: 1rem 0;
+        transform: translateX(15%);
+
+        border-top: solid 1px rgba($color-text, .5);
+
+        @media screen and (max-width: 479px) {
+          margin-top: 0.5rem;
+        }
+      }
+
+      @media screen and (max-width: 767px) {
+        font-size: .875rem;
+      }
+
+      @media screen and (max-width: 479px) {
+        font-size: .8125rem;
+      }
+    }
+
+    &.figure--rotate {
+      transform: rotateX(-180deg);
+    }
+  }
 }
