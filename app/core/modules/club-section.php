@@ -281,7 +281,7 @@ class Knife_Club_Section {
      * Prints checkbox in post publish action section
      */
     public static function print_checkbox($post) {
-        if(get_post_type($post->ID) !== 'page') {
+        if($post->post_type !== 'page') {
             return;
         }
 

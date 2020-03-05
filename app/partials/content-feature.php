@@ -1,35 +1,40 @@
 <?php
 /**
- * Single quiz post type content template
+ * Feature no-sidebar post template content template
  *
  * @package knife-theme
- * @since 1.7
- * @version 1.12
+ * @since 1.12
  */
 ?>
 
-<article <?php post_class('post post--quiz'); ?> id="post-<?php the_ID(); ?>">
-    <div class="entry-quiz" id="quiz">
+<article <?php post_class('post post--feature'); ?> id="post-<?php the_ID(); ?>">
+    <div class="entry-header">
         <?php
             the_info(
-                '<div class="entry-quiz__info">', '</div>',
+                '<div class="entry-header__info">', '</div>',
                 ['author', 'date', 'best']
             );
 
             the_title(
-                '<h1 class="entry-quiz__title">',
+                '<h1 class="entry-header__title">',
                 '</h1>'
             );
 
-            the_share(
-                '<div class="entry-quiz__share share">',
+            the_lead(
+                '<div class="entry-header__lead">',
                 '</div>'
             );
 
-            the_lead(
-                '<div class="entry-quiz__content">',
+            the_share(
+                '<div class="entry-header__share share">',
                 '</div>'
             );
+        ?>
+    </div>
+
+    <div class="entry-content">
+        <?php
+            the_content();
         ?>
     </div>
 
@@ -43,6 +48,11 @@
         <?php
             the_tags(
                 '<div class="entry-footer__tags tags">', null, '</div>'
+            );
+
+            the_share(
+                '<div class="entry-footer__share share">',
+                '</div>'
             );
         ?>
     </div>

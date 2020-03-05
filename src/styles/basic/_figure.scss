@@ -267,48 +267,103 @@
     }
   }
 
+  &.figure--stretch {
+    width: 100%;
+  }
+
   &.figure--flipper {
-    display: block;
-    cursor: default;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: stretch;
+    cursor: pointer;
 
-    width: #{$width-content + 2rem};
-    overflow: hidden;
-    background: $color-white;
-    box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, .25);
+    transition: .5s transform;
+    transform-style: preserve-3d;
 
-    border-radius: 6px;
+    & + .figure--flipper {
+      margin-top: -1rem;
 
-    p {
-      display: block;
+      @media screen and (max-width: 767px) {
+        margin-top: 0;
+      }
+    }
+
+    aside {
+      display: flex;
+      flex-flow: column wrap;
+      align-items: center;
+      justify-content: center;
+
+      user-select: none;
       position: relative;
+      z-index: 4;
 
-      padding: 1rem;
+      min-width: 100%;
+      padding: 1.5rem;
+      overflow: hidden;
 
-      a {
-        font-size: 1.125rem;
-        font-weight: 700;
-        line-height: 1.25;
+      font-size: 1.375rem;
+      font-weight: 500;
+      line-height: 1.25;
+      text-align: center;
 
-        color: $color-primary;
+      backface-visibility: hidden;
+      background-color: $color-white;
+      box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, .25);
 
-        &:after {
-          content: '';
-          @include full-size();
-        }
+      border-radius: 6px;
 
-        @media screen and (max-width: 767px) {
-          font-size: 1rem;
-        }
+      & > * {
+        margin-bottom: 1rem;
       }
 
-      em {
-        font-family: $font-serif;
-        font-weight: 400;
+      & > :first-child {
+        margin-top: 0;
+      }
+
+      & > :last-child {
+        margin-bottom: 0;
       }
 
       &:last-child {
-        border-bottom: none;
+        transform: rotateX(180deg) translateX(-100%);
       }
+    }
+
+    @for $i from 1 through 4 {
+      h#{$i} {
+        margin-top: 0;
+        line-height: 1;
+      }
+    }
+
+    h2 {
+      font-size: 5rem;
+    }
+
+    h3 {
+      font-size: 2rem;
+    }
+
+    h5 {
+      font-size: 1rem;
+      font-weight: 500;
+      color: lighten($color-text, 70);
+
+      &:before {
+        content: '';
+        display: block;
+
+        width: 75%;
+        margin: 1rem 0;
+        transform: translateX(15%);
+
+        border-top: solid 1px rgba($color-text, .5);
+      }
+    }
+
+    &.figure--rotate {
+      transform: rotateX(-180deg);
     }
   }
 }
