@@ -519,6 +519,14 @@ class Knife_Quiz_Section {
         // Remove slashes
         $items = stripslashes_deep($_REQUEST[$query]);
 
+        // Define allowed img attribites
+        $allowed = [
+            'src' => [],
+            'style' => [],
+            'class' => [],
+            'alt' => []
+        ];
+
         foreach($items as $item) {
             // Filter answer array
             if(isset($item['answers']) && is_array($item['answers'])) {
@@ -533,9 +541,9 @@ class Knife_Quiz_Section {
                         $answer['message'] = wp_targeted_link_rel(links_add_target($answer['message']));
                     }
 
-                    // Strip tags from choice
+                    // Remove all tags except img from choice
                     if(!empty($answer['choice'])) {
-                        $answer['choice'] = strip_tags($answer['choice']);
+                        $answer['choice'] = wp_kses($answer['choice'], ['img' => $allowed]);
                     }
                 }
             }
