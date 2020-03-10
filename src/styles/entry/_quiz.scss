@@ -259,6 +259,10 @@
         background-color: rgba($color-black, .85);
       }
 
+      img {
+        pointer-events: none;
+      }
+
       @media screen and (max-width: 767px) {
         min-height: 2rem;
         margin-top: 1rem;
