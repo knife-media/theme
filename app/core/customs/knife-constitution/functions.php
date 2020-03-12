@@ -1,8 +1,15 @@
 <?php
+/**
+ * Knife-constitution: functions
+ *
+ * @package knife-theme
+ * @since 1.12
+ */
 
 if (!defined('WPINC')) {
     die;
 }
+
 
 /**
  * Add form to certain post

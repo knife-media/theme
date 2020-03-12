@@ -6,6 +6,10 @@
  * @since 1.12
  */
 
+if (!defined('WPINC')) {
+    die;
+}
+
 
 /**
  * Replace the title in prev post button with hero name

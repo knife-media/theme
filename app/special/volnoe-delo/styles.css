@@ -1,0 +1,81 @@
+:root {
+  --color-special: #00a08c;
+  --color-background: #fff;
+}
+
+/**
+ * caption styles
+ */
+.caption .caption__description {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  max-width: 100%;
+  margin: 1rem 0 0;
+  padding: 0 1rem;
+  text-align: center;
+
+  color: var(--color-special);
+  background: var(--color-background);
+  text-transform: uppercase;
+
+  border-radius: .625rem;
+}
+
+.caption .caption__description h1 {
+  margin-bottom: 1rem;
+
+  font-size: 1.125rem;
+  line-height: 1.125;
+  text-transform: uppercase;
+}
+
+  @media screen and (max-width: 767px) {
+    .caption .caption__description h1 {
+      font-size: 1rem;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    .caption .caption__description h1 {
+      font-size: .875rem;
+    }
+  }
+
+.caption .caption__description img {
+  width: 9rem;
+  height: auto;
+  margin: .75rem 0;
+}
+  @media screen and (max-width: 767px) {
+    .caption .caption__description img {
+      width: 7rem;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    .caption .caption__description img {
+      width: 5rem;
+    }
+  }
+
+.footer:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+
+  width: 100vw;
+  height: 100%;
+
+  background-color: var(--color-special);
+  transform: translateX(-50%);
+}
+
+.footer > * {
+  position: relative;
+  z-index: 2;
+}

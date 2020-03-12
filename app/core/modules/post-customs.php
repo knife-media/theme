@@ -15,15 +15,6 @@ if (!defined('WPINC')) {
 
 class Knife_Post_Customs {
     /**
-     * Post meta to store adult content option
-     *
-     * @access  public
-     * @var     string
-     */
-    public static $meta_customs = '_knife-post-customs';
-
-
-   /**
      * Default post type lead text availible
      *
      * @access  public
@@ -36,12 +27,6 @@ class Knife_Post_Customs {
      * Init function instead of constructor
      */
     public static function load_module() {
-        // Add option to show customs
-        add_action('post_submitbox_misc_actions', [__CLASS__, 'print_checkbox'], 15);
-
-        // Update adult posts meta
-        add_action('save_post', [__CLASS__, 'save_meta']);
-
         // Process custom posts ajax requests
         if(wp_doing_ajax()) {
             add_action('init', [__CLASS__, 'process_ajax']);
@@ -49,26 +34,10 @@ class Knife_Post_Customs {
 
         // Load custom post functions
         add_action('wp', [__CLASS__, 'load_functions']);
-    }
 
-
-    /**
-     * Process custom posts ajax requests
-     */
-    public static function process_ajax() {
-        $action = (isset($_REQUEST['action'])) ? $_REQUEST['action'] : '';
-
-        if(strpos($action, 'knife-customs-') === 0) {
-            $name = str_replace('knife-customs-', '', $action);
-
-            // Get custom post functions file
-            $functions = "/core/customs/{$name}/functions.php";
-
-            // Let's add the file if exists
-            if(file_exists(get_template_directory() .  $functions)) {
-                // Require ajax customs
-                require_once(get_template_directory() .  $functions);
-            }
+        // Define post customs settings if still not
+        if(!defined('KNIFE_CUSTOMS')) {
+            define('KNIFE_CUSTOMS', []);
         }
     }
 
@@ -86,7 +55,7 @@ class Knife_Post_Customs {
         // Get post name
         $name = $object->post_name;
 
-        if(get_post_meta($object->ID, self::$meta_customs, true)) {
+        if(array_key_exists($name, KNIFE_CUSTOMS)) {
             $functions = "/core/customs/{$name}/functions.php";
 
             // Let's add the file if exists
@@ -99,45 +68,39 @@ class Knife_Post_Customs {
 
 
     /**
-     * Prints checkbox in post publish action section
+     * Process custom posts ajax requests
      */
-    public static function print_checkbox($post) {
-        if(!in_array($post->post_type, self::$post_type)) {
+    public static function process_ajax() {
+        $action = (isset($_REQUEST['action'])) ? $_REQUEST['action'] : '';
+
+        if(strpos($action, 'knife-customs-') !== 0) {
             return;
         }
 
-        $customs = get_post_meta($post->ID, self::$meta_customs, true);
+        $name = str_replace('knife-customs-', '', $action);
 
-        printf(
-            '<div class="misc-pub-section"><label><input type="checkbox" name="%1$s" class="checkbox"%3$s> %2$s</label></div>',
-            esc_attr(self::$meta_customs),
-            __('Загружать модификации поста', 'knife-theme'),
-            checked($customs, 1, false)
-        );
-    }
+        // Get custom post functions file
+        $ajax = "/core/customs/{$name}/ajax.php";
 
+        // Let's add the file if exists
+        if(file_exists(get_template_directory() . $ajax)) {
+            // Require ajax customs
+            add_action('wp_ajax_' . $action, function() use ($action, $ajax) {
+                if(!check_ajax_referer($action, 'nonce', false)) {
+                    wp_send_json_error(__('Ошибка безопасности. Попробуйте еще раз', 'knife-theme'));
+                }
 
-    /**
-     * Save post meta
-     */
-    public static function save_meta($post_id) {
-        if(!in_array(get_post_type($post_id), self::$post_type)) {
-            return;
+                require(get_template_directory() . $ajax);
+            });
+
+            add_action('wp_ajax_nopriv_' . $action, function() use ($action, $ajax) {
+                if(!check_ajax_referer($action, 'nonce', false)) {
+                    wp_send_json_error(__('Ошибка безопасности. Попробуйте еще раз', 'knife-theme'));
+                }
+
+                require(get_template_directory() . $ajax);
+            });
         }
-
-        if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
-            return;
-        }
-
-        if(!current_user_can('edit_post', $post_id)) {
-            return;
-        }
-
-        if(empty($_REQUEST[self::$meta_customs])) {
-            return delete_post_meta($post_id, self::$meta_customs);
-        }
-
-        return update_post_meta($post_id, self::$meta_customs, 1);
     }
 }
 
