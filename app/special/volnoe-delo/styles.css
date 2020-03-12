@@ -62,7 +62,7 @@
     }
   }
 
-.footer:before {
+.is-archive .footer:before {
   content: '';
   position: absolute;
   top: 0;
@@ -75,7 +75,7 @@
   transform: translateX(-50%);
 }
 
-.footer > * {
+.is-archive .footer > * {
   position: relative;
   z-index: 2;
 }
