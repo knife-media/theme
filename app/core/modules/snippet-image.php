@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.9
- * @version 1.11
+ * @version 1.12
  */
 
 
@@ -16,21 +16,21 @@ if (!defined('WPINC')) {
 
 
 class Knife_Snippet_Image {
-   /**
-    * Backward compatibility social image meta name
-    *
-    * @access  public
-    * @var     string
-    */
+    /**
+     * Backward compatibility social image meta name
+     *
+     * @access  public
+     * @var     string
+     */
     public static $meta_image = '_social-image';
 
 
-   /**
-    * Backward compatibility options meta name
-    *
-    * @access  private
-    * @var     string
-    */
+    /**
+     * Backward compatibility options meta name
+     *
+     * @access  private
+     * @var     string
+     */
     private static $meta_options = '_social-image-options';
 
 
@@ -41,6 +41,26 @@ class Knife_Snippet_Image {
      * @var     array
      */
     public static $post_type = ['post', 'club', 'quiz', 'select', 'story', 'generator'];
+
+
+    /**
+     * Unique meta to store custom term snippet
+     *
+     * @access  public
+     * @var     string
+     * @since   1.12
+     */
+    public static $term_meta = '_knife-term-snippet';
+
+
+    /**
+     * Default taxes term snippets availible
+     *
+     * @access  public
+     * @var     array
+     * @since   1.12
+     */
+    public static $taxonomies = ['special'];
 
 
     /**
@@ -85,6 +105,9 @@ class Knife_Snippet_Image {
 
         // Generate poster using ajax options
         add_action('wp_ajax_' . self::$ajax_action, [__CLASS__, 'generate_poster']);
+
+        // Add snippet term fields
+        add_action('admin_init', [__CLASS__, 'add_term_fields']);
     }
 
 
@@ -94,20 +117,21 @@ class Knife_Snippet_Image {
      * @since 1.11
      */
     public static function get_social_image() {
+        $object_id = get_queried_object_id();
+
         // Default social image
         $social_image = get_template_directory_uri() . '/assets/images/poster-feature.png';
 
+        // Get snippet for singular posts
         if(is_singular() && !is_front_page()) {
-            $post_id = get_queried_object_id();
-
             // Custom social image storing via social-image plugin in post meta
-            $social_image = get_post_meta($post_id, self::$meta_image, true);
+            $social_image = get_post_meta($object_id, self::$meta_image, true);
 
             if(empty($social_image) && has_post_thumbnail()) {
-                return wp_get_attachment_image_src(get_post_thumbnail_id($post_id), 'outer');
+                return wp_get_attachment_image_src(get_post_thumbnail_id($object_id), 'outer');
             }
 
-            $options = get_post_meta($post_id, self::$meta_options, true);
+            $options = get_post_meta($object_id, self::$meta_options, true);
 
             // Set size using options
             $options = wp_parse_args($options, [
@@ -118,7 +142,42 @@ class Knife_Snippet_Image {
             return array($social_image, $options['width'], $options['height']);
         }
 
+        // Get snippet for taxonomy
+        if(is_tax(self::$taxonomies)) {
+            // Try to find snippet
+            $snippet = get_term_meta($object_id, self::$term_meta, true);
+
+            if($snippet) {
+                return array($snippet, 1200, 630);
+            }
+        }
+
         return array($social_image, 1200, 630);
+    }
+
+
+    /**
+     * Add tax terms snippet field
+     *
+     * @since 1.12
+     */
+    public static function add_term_fields() {
+        foreach(self::$taxonomies as $tax) {
+            add_action("{$tax}_edit_form_fields", [__CLASS__, 'print_term_row'], 8, 2);
+            add_action("edited_{$tax}", [__CLASS__, 'save_term']);
+        }
+    }
+
+
+    /**
+     * Display term snippet row
+     *
+     * @since 1.12
+     */
+    public static function print_term_row($term, $taxonomy) {
+        $include = get_template_directory() . '/core/include';
+
+        include_once($include . '/templates/snippet-options.php');
     }
 
 
@@ -127,6 +186,27 @@ class Knife_Snippet_Image {
      */
     public static function add_metabox() {
         add_meta_box('knife-snippet-metabox', __('Изображение соцсети', 'knife-theme'), [__CLASS__, 'display_metabox'], self::$post_type, 'side');
+    }
+
+
+    /**
+     * Save term options
+     *
+     * @since 1.12
+     */
+    public static function save_term($term_id) {
+        if(!current_user_can('edit_term', $term_id)) {
+            return;
+        }
+
+        if(empty($_REQUEST[self::$term_meta])) {
+            return delete_term_meta($term_id, self::$term_meta);
+        }
+
+        // Sanitize request field
+        $snippet = sanitize_text_field($_REQUEST[self::$term_meta]);
+
+        return update_term_meta($term_id, self::$term_meta, $snippet);
     }
 
 
