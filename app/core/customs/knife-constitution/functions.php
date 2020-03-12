@@ -19,26 +19,18 @@ add_action('wp_enqueue_scripts', function() {
     $action = 'knife-customs-knife-constitution';
 
     $fields = [
-        'subject' => [
-            'element' => 'input',
-            'type' => 'text',
-            'required' => '',
-            'maxlength' => 100,
-            'placeholder' => __('О чем хотите писать', 'knife-theme')
-        ],
-
         'text' => [
             'element' => 'textarea',
             'required' => '',
-            'placeholder' => __('Текст поста целиком без форматирования', 'knife-theme')
+            'placeholder' => __('Я считаю, что обязательно нужно…', 'knife-theme')
         ]
     ];
 
     $options = [
         'ajaxurl' => esc_url(admin_url('admin-ajax.php')),
-        'warning' => __('Не удалось отправить заявку. Попробуйте еще раз', 'knife-theme'),
+        'warning' => __('Не удалось отправить предложение. Попробуйте еще раз', 'knife-theme'),
         'button' => __('Отправить', 'knife-theme'),
-        'heading' => __('Отправить заявку', 'knife-theme'),
+        'heading' => __('Внести предложение', 'knife-theme'),
         'action' => $action,
         'fields' => $fields,
         'nonce' => wp_create_nonce($action)

@@ -11,23 +11,16 @@ if (!defined('WPINC')) {
 }
 
 
-$fields = [];
-
-foreach(['subject', 'text'] as $key) {
-    if(empty($_REQUEST[$key])) {
-        wp_send_json_error(__('Все поля формы обязательны к заполнению', 'knife-theme'));
-    }
-
-    $fields[$key] = stripslashes_deep($_REQUEST[$key]);
+if(empty($_REQUEST['text'])) {
+    wp_send_json_error(__('Все поля формы обязательны к заполнению', 'knife-theme'));
 }
-
 
 if(method_exists('Knife_Social_Delivery', 'send_telegram')) {
     // Try to find chat in config
     $chat_id = KNIFE_CUSTOMS['knife-constitution']['chat'];
 
     $message = [
-        'text' => $fields['text'],
+        'text' => wp_unslash($_REQUEST['text']),
         'parse_mode' => 'HTML'
     ];
 
