@@ -25,15 +25,6 @@ class Knife_Club_Section {
     public static $post_type = 'club';
 
 
-   /**
-    * Club form meta
-    *
-    * @access  private
-    * @var     string
-    */
-    private static $meta_form = '_knife-club-form';
-
-
     /**
      * Unique option key to store current request id
      *
@@ -133,17 +124,13 @@ class Knife_Club_Section {
      * Add button to description
      */
     public static function update_archive_description($description) {
-        if(is_post_type_archive(self::$post_type)) {
-            $club_link = self::get_club_page();
+        if(is_post_type_archive(self::$post_type) && !empty(KNIFE_CLUB['page'])) {
+            $button_link = sprintf('<div class="caption__button caption__button--club"><a class="button" href="%2$s">%1$s</a></div>',
+                __('Присоединиться', 'knife-theme'),
+                trailingslashit(site_url(KNIFE_CLUB['page']))
+            );
 
-            if(!empty($club_link)) {
-                $button_link = sprintf('<div class="caption__button caption__button--club"><a class="button" href="%2$s">%1$s</a></div>',
-                    __('Присоединиться', 'knife-theme'),
-                    esc_url($club_link)
-                );
-
-                $description = $description . $button_link;
-            }
+            $description = $description . $button_link;
         }
 
         return $description;
@@ -238,17 +225,17 @@ class Knife_Club_Section {
      * @since 1.4
      */
     public static function insert_club_link($content) {
+        if(empty(KNIFE_CLUB['page'])) {
+            return $content;
+        }
+
         if(is_singular(self::$post_type) && in_the_loop()) {
-            $club_link = self::get_club_page();
+            $promo_link = sprintf('<figure class="figure figure--club"><a class="button" href="%2$s">%1$s</a>',
+                __('Присоединиться к клубу', 'knife-theme'),
+                trailingslashit(site_url(KNIFE_CLUB['page']))
+            );
 
-            if(!empty($club_link)) {
-                $promo_link = sprintf('<figure class="figure figure--club"><a class="button" href="%2$s">%1$s</a>',
-                    __('Присоединиться к клубу', 'knife-theme'),
-                    esc_url($club_link)
-                );
-
-                $content = $content . $promo_link;
-            }
+            $content = $content . $promo_link;
         }
 
         return $content;
@@ -278,60 +265,10 @@ class Knife_Club_Section {
 
 
     /**
-     * Prints checkbox in post publish action section
-     */
-    public static function print_checkbox($post) {
-        if($post->post_type !== 'page') {
-            return;
-        }
-
-        $form = get_post_meta($post->ID, self::$meta_form, true);
-
-        printf(
-            '<p class="post-attributes-label-wrapper"><span class="post-attributes-label">%s</span></p>',
-            __('Дополнительные настройки', 'knife-media')
-        );
-
-        printf(
-            '<label><input type="checkbox" name="%1$s" class="checkbox"%3$s> %2$s</label>',
-            esc_attr(self::$meta_form),
-            __('Добавить форму заявки в клуб', 'knife-theme'),
-            checked($form, 1, false)
-        );
-    }
-
-
-    /**
-     * Save feed post meta
-     */
-    public static function save_metabox($post_id) {
-        if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
-            return;
-        }
-
-        if(!current_user_can('edit_page', $post_id)) {
-            return;
-        }
-
-        if(empty($_REQUEST[self::$meta_form])) {
-            return delete_post_meta($post_id, self::$meta_form);
-        }
-
-        return update_post_meta($post_id, self::$meta_form, 1);
-    }
-
-
-    /**
      * Append user form to page content
      */
     public static function inject_object() {
-        if(!is_singular('page')) {
-            return;
-        }
-
-        $post_id = get_queried_object_id();
-
-        if(!get_post_meta($post_id, self::$meta_form, true)) {
+        if(empty(KNIFE_CLUB['page']) || !is_page(KNIFE_CLUB['page'])) {
             return;
         }
 
@@ -475,28 +412,6 @@ class Knife_Club_Section {
         include_once($include . '/templates/club-request.php');
 
         return ob_get_clean();
-    }
-
-
-    /**
-     * Get page link with club form
-     *
-     * @since 1.12
-     */
-    private static function get_club_page($link = false) {
-        $pages = get_posts([
-            'post_type' => 'page',
-            'meta_key' => self::$meta_form,
-            'meta_value' => 1,
-            'posts_per_page' => 1,
-            'fields' => 'ids'
-        ]);
-
-        if(isset($pages[0])) {
-            $link =  get_permalink($pages[0]);
-        }
-
-        return $link;
     }
 }
 

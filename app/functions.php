@@ -106,6 +106,9 @@ require get_template_directory() . '/core/modules/theme-filters.php';
 // Content filters
 require get_template_directory() . '/core/modules/content-filters.php';
 
+// Add per post customs
+require get_template_directory() . '/core/modules/post-customs.php';
+
 // Add custom theme widgets from common hanlder
 require get_template_directory() . '/core/modules/widget-handler.php';
 
@@ -186,9 +189,6 @@ require get_template_directory() . '/core/modules/post-lead.php';
 
 // Mark adult content posts
 require get_template_directory() . '/core/modules/adult-content.php';
-
-// Add custom post styles
-require get_template_directory() . '/core/modules/post-styles.php';
 
 // Custom search engine settings
 require get_template_directory() . '/core/modules/google-search.php';
