@@ -205,7 +205,7 @@
   // Set form title
   var heading = getOption('heading');
   if(heading.length > 0) {
-    var title = document.createElement('h3');
+    var title = document.createElement('h4');
     title.classList.add('form__heading');
     title.textContent = heading;
     form.appendChild(title);
