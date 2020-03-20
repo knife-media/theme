@@ -1,6 +1,6 @@
 <?php
 /**
- * Volnoe delo: archive template
+ * Coronavirus: archive template
  *
  * @package knife-theme
  * @since 1.12
@@ -13,13 +13,13 @@ get_header(); ?>
         <div class="caption__description">
             <?php
                 printf(
-                    '<img src="%s" alt="">',
-                    get_template_directory_uri() . "/special/volnoe-delo/images/logo.png",
+                    '<h1>%s</h1>',
+                    _x('Коронавирус', 'special: coronavirus', 'knife-theme')
                 );
 
                 printf(
-                    '<h1>%s</h1>',
-                    _x('Специальный проект фонда «Вольное дело» Олега Дерипаски и журнала «Нож»', 'special: volnoe delo', 'knife-theme')
+                    '<p>%s</p>',
+                    _x('В этом разделе мы собираем все материалы о пандемии: как не заболеть, чем заняться дома, какого экономического эффекта ждать от пандемии и как правильно оценивать ситуацию', 'special: coronavirus', 'knife-theme')
                 );
             ?>
         </div>
