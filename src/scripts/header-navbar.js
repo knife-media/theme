@@ -55,11 +55,6 @@
   toggle.addEventListener('click', function(e) {
     e.preventDefault();
 
-    // Close search layer if opened
-    if(body.classList.contains('is-search')) {
-      document.getElementById('toggle-search').click();
-    }
-
     toggle.classList.toggle('toggle--expand');
 
     // Set navbar expand class

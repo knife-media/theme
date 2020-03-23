@@ -77,11 +77,9 @@
             ?>
         </nav>
 
-        <button class="header__button header__button--search toggle toggle--search" id="toggle-search">
-            <span class="toggle__line"></span>
-            <span class="toggle__line"></span>
+        <a href="/search/" class="header__button header__button--search">
             <span class="toggle__icon icon icon--search"></span>
-        </button>
+        </a>
 
         <button class="header__button header__button--menu toggle toggle--menu" id="toggle-menu">
             <span class="toggle__line"></span>

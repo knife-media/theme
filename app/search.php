@@ -8,7 +8,7 @@
 
 get_header(); ?>
 
-<div class="gcse">
+<div class="search">
     <div class="gcse-search" data-linkTarget="_blank" data-mobileLayout="disabled"></div>
 </div>
 

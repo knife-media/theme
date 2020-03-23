@@ -95,20 +95,20 @@
     &.header__button--search {
       display: flex;
       justify-content: center;
+      align-items: center;
 
-      height: 1.25rem;
+      height: 1.375rem;
       width: 1.375rem;
       font-size: 1rem;
       line-height: 1;
       color: $color-black;
 
-      .is-gcse & {
+      .is-search & {
         cursor: default;
         color: rgba($color-text, .5);
       }
 
       @media screen and (max-width: 1023px) {
-        height: 1.375rem;
         font-size: 1.375rem;
       }
 

@@ -52,11 +52,6 @@ class Knife_Google_Search {
         // Set is-gcse class if need
         add_filter('body_class', [__CLASS__, 'set_body_class'], 11);
 
-        // Add search popover to footer
-        add_action('wp_footer', function() {
-            get_search_form();
-        });
-
         // Define google search settings if still not
         if(!defined('KNIFE_GCSE')) {
             define('KNIFE_GCSE', []);
@@ -150,7 +145,7 @@ class Knife_Google_Search {
      */
     public static function set_body_class($classes = []) {
         if(get_query_var(self::$query_var)) {
-            $classes[] = 'is-gcse';
+            $classes[] = 'is-search';
         }
 
         return $classes;
