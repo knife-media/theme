@@ -104,7 +104,7 @@ class Knife_Content_Filters {
      * Replace t.me links with custom tgram.link host
      */
     public static function replace_telegram_links($content) {
-        $content = str_replace('~href="https://t.me/~is', 'href="https://tgram.link/', wp_unslash($content));
+        $content = str_replace('href="https://t.me/', 'href="https://tgram.link/', wp_unslash($content));
 
         return wp_slash($content);
     }
