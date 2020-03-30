@@ -402,4 +402,23 @@
       transform: rotateX(-180deg);
     }
   }
+
+  &.figure--promo {
+    display: block;
+    position: relative;
+
+    width: $width-content;
+    max-width: 100%;
+
+    .button {
+      margin: 0;
+
+      color: $color-white;
+      background-color: $color-primary;
+
+      &:hover {
+        filter: brightness(125%);
+      }
+    }
+  }
 }

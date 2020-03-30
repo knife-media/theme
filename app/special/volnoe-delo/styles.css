@@ -1,7 +1,44 @@
-:root {
-  --color-special: #00a08c;
-  --color-background: #fff;
+/**
+ * promo button styles
+ */
+.content .figure--promo {
+  display: block;
 }
+
+.content .figure--promo .button {
+  display: block;
+  padding-left: 6rem;
+
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.375;
+  color: #fff;
+
+  text-transform: uppercase;
+  text-align: left;
+
+  background-color: #00a08c;
+  background-image: url('images/button-logo.png');
+  background-size: 4rem auto;
+  background-repeat: no-repeat;
+  background-position: 1rem center;
+
+  border-radius: .5rem;
+}
+
+.content .figure--promo .button strong {
+  display: block;
+}
+
+  @media screen and (max-width: 767px) {
+    .content .figure--promo .button {
+      padding-left: 1rem;
+      font-size: 0.875rem;
+      line-height: 1.5;
+
+      background-image: none;
+    }
+  }
 
 /**
  * caption styles
@@ -18,8 +55,8 @@
   padding: 0 1rem;
   text-align: center;
 
-  color: var(--color-special);
-  background: var(--color-background);
+  color: #00a08c;
+  background: #fff;
   text-transform: uppercase;
 
   border-radius: .625rem;
@@ -62,8 +99,9 @@
     }
   }
 
-.is-archive .footer:before {
+.footer:before {
   content: '';
+
   position: absolute;
   top: 0;
   left: 50%;
@@ -71,11 +109,11 @@
   width: 100vw;
   height: 100%;
 
-  background-color: var(--color-special);
+  background-color: #00a08c;
   transform: translateX(-50%);
 }
 
-.is-archive .footer > * {
+.footer > * {
   position: relative;
   z-index: 2;
 }
