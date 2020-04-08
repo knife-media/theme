@@ -441,13 +441,15 @@ class Knife_Site_Meta {
         if(property_exists('Knife_Authors_Manager', 'meta_authors')) {
             $authors = get_post_meta($meta['postid'], Knife_Authors_Manager::$meta_authors);
 
-            $users = get_users([
-                'include' => $authors,
-                'fields' => ['user_nicename']
-            ]);
+            if($authors) {
+                $users = get_users([
+                    'include' => $authors,
+                    'fields' => ['user_nicename']
+                ]);
 
-            // Add authors content meta
-            $meta['authors'] = implode(':', wp_list_pluck($users, 'user_nicename'));
+                // Add authors content meta
+                $meta['authors'] = implode(':', wp_list_pluck($users, 'user_nicename'));
+            }
         }
 
         if(property_exists('Knife_Special_Projects', 'taxonomy')) {
