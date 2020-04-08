@@ -42,6 +42,30 @@
       display: block;
     }
 
+    .header__logo-promo {
+      display: block;
+
+      width: 8rem;
+      height: 2rem;
+      margin-right: 1rem;
+
+      text-indent: -9999rem;
+
+      background-image: url('/wp-content/uploads/2020/04/lexus-button.png');
+      background-repeat: no-repeat;
+      background-size: contain;
+
+      transition: filter 0.25s;
+
+      &:hover {
+        filter: brightness(110%);
+      }
+
+      @media screen and (max-width: 1023px) {
+        display: none;
+      }
+    }
+
     .header__logo-image {
       display: block;
 
