@@ -37,6 +37,9 @@ class Knife_Google_Search {
         // Disable default search
         add_action('parse_query', [__CLASS__, 'disable_search'], 9);
 
+        // Update query virtual page
+        add_action('parse_query', [__CLASS__, 'update_query_vars']);
+
         // Create custom search page rewrite url
         add_action('init', [__CLASS__, 'add_search_rule']);
 
@@ -80,6 +83,21 @@ class Knife_Google_Search {
             $query->set('s', '');
             $query->is_search = false;
             $query->is_404 = true;
+        }
+    }
+
+
+    /**
+     * Update query_vars for search archive
+     *
+     * @since 1.12
+     */
+    public static function update_query_vars() {
+        global $wp_query;
+
+        if(array_key_exists(self::$query_var, $wp_query->query_vars)) {
+            $wp_query->is_archive = true;
+            $wp_query->is_home = false;
         }
     }
 

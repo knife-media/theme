@@ -9,7 +9,12 @@
 get_header(); ?>
 
 <div class="search">
-    <div class="gcse-search" data-linkTarget="_blank" data-mobileLayout="disabled"></div>
+    <?php
+        printf(
+            '<div class="gcse-search" data-linkTarget="_blank" data-mobileLayout="disabled" data-placeholder="%s"></div>',
+            __('Поиск по сайту', 'knife-theme')
+        );
+    ?>
 </div>
 
 <?php get_footer();

@@ -6,18 +6,29 @@
     return false;
   }
 
+  var search = document.querySelector('.search .gcse-search');
+
+  if(search === null) {
+    return false;
+  }
 
   /**
    * Init search on separate page
    */
-  if(document.querySelector('.search')) {
-    // Load gsce to page
-    var gcse = document.createElement('script');
-    gcse.type = 'text/javascript';
-    gcse.async = true;
-    gcse.src = 'https://cse.google.com/cse.js?cx=' + knife_search_id;
+  var placeholder = search.getAttribute('data-placeholder');
 
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(gcse, s);
-  }
+  window.__gcse = {
+    callback: function() {
+      document.querySelector('input.gsc-input').placeholder = placeholder;
+    }
+  };
+
+  // Load gsce to page
+  var gcse = document.createElement('script');
+  gcse.type = 'text/javascript';
+  gcse.async = true;
+  gcse.src = 'https://cse.google.com/cse.js?cx=' + knife_search_id;
+
+  var s = document.getElementsByTagName('script')[0];
+  s.parentNode.insertBefore(gcse, s);
 })();
