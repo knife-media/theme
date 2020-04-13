@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.7
- * @version 1.11
+ * @version 1.12
  * @link https://yandex.ru/support/news/feed.html
  * @link https://yandex.ru/support/zen/website/rss-modify.html
  */
@@ -304,19 +304,19 @@ class Knife_Extra_Feeds {
      * Add post content images
      */
     private static function get_images($content, $post_id) {
-        preg_match_all('~<img.+?src="(.+?)"~is', $content, $images, PREG_PATTERN_ORDER);
-
         $enclosure = [];
+
+        // Add thumbnail as enclosure of exists
+        if(has_post_thumbnail($post_id)) {
+            $enclosure[] = get_the_post_thumbnail_url($post_id, 'outer');
+        }
+
+        preg_match_all('~<img.+?src="(.+?)"~is', $content, $images, PREG_PATTERN_ORDER);
 
         foreach($images[1] as $link) {
             if(!empty($link)) {
                 $enclosure[] = $link;
             }
-        }
-
-        // Add thumbnail as enclosure if post does not contain images
-        if(empty($enclosure) && has_post_thumbnail($post_id)) {
-            $enclosure[] = get_the_post_thumbnail_url($post_id, 'outer');
         }
 
         return $enclosure;
