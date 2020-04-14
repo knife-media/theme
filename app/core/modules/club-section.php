@@ -52,12 +52,6 @@ class Knife_Club_Section {
         // Register club post type
         add_action('init', [__CLASS__, 'register_type']);
 
-        // Print checkbox user form
-        add_action('page_attributes_misc_attributes', [__CLASS__, 'print_checkbox']);
-
-        // Save user form post meta
-        add_action('save_post', [__CLASS__, 'save_metabox']);
-
         // Append user form to content
         add_filter('wp_enqueue_scripts', [__CLASS__, 'inject_object'], 12);
 
