@@ -3,7 +3,7 @@
  * Template Name: Избранное
  * Template Post Type: post
  *
- * Template for displaying featured post without sidebar
+ * Template for displaying selected post without sidebar
  *
  * @package knife-theme
  * @since 1.12
@@ -21,7 +21,7 @@ get_header(); ?>
     <?php
         while(have_posts()) : the_post();
 
-            get_template_part('partials/content', 'feature');
+            get_template_part('partials/content', 'selected');
 
         endwhile;
     ?>

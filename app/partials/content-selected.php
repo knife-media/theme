@@ -1,13 +1,13 @@
 <?php
 /**
- * Feature no-sidebar post template content template
+ * Selected no-sidebar post template content template
  *
  * @package knife-theme
  * @since 1.12
  */
 ?>
 
-<article <?php post_class('post post--feature'); ?> id="post-<?php the_ID(); ?>">
+<article <?php post_class('post post--selected'); ?> id="post-<?php the_ID(); ?>">
     <div class="entry-header">
         <?php
             the_info(

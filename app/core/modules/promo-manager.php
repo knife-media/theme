@@ -73,7 +73,7 @@ class Knife_Promo_Manager {
         add_filter('get_the_archive_title', [__CLASS__, 'update_archive_title'], 12);
 
         // Update promo archive document title
-        add_filter('document_title_parts', [__CLASS__, 'update_document_title'], 10);
+        add_filter('document_title_parts', [__CLASS__, 'update_document_title']);
 
         // Set is-promo class if need
         add_filter('body_class', [__CLASS__, 'set_body_class'], 11);
