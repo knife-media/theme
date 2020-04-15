@@ -34,21 +34,13 @@
 
 
   /**
-   * Fix title first letter case
-   */
-  function updateTitle(string) {
-    return string.charAt(0).toLowerCase() + string.slice(1)
-  }
-
-
-  /**
    * Compose cents card
    */
   function appendCard(item, card, counter) {
     card.innerHTML = nl2p(item.content);
 
     var title = document.createElement('h2');
-    title.innerHTML = updateTitle(item.title);
+    title.innerHTML = item.title;
     title.setAttribute('data-counter', '#' + counter);
     card.insertBefore(title, card.firstElementChild);
 

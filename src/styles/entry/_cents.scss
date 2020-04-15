@@ -41,6 +41,7 @@
     font-size: 1.5rem;
     font-style: italic;
     font-family: $font-serif;
+    line-height: 1.25;
 
     &:before {
       content: attr(data-counter);
@@ -51,7 +52,13 @@
       font-weight: 500;
       font-family: $font-regular;
 
-      line-height: 1;
+      @media screen and (max-width: 767px) {
+        font-size: 1.75rem;
+      }
+    }
+
+    @media screen and (max-width: 767px) {
+      font-size: 1.375rem;
     }
   }
 

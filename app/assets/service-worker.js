@@ -33,7 +33,7 @@ self.__precacheManifest = [
   },
   {
     "url": "/wp-content/themes/knife/assets/styles.min.css",
-    "revision": "b7b29760d8b9d9963e372672b427674b"
+    "revision": "92b986f6759f9c01a43c7d07f4ec0195"
   },
   {
     "url": "/wp-content/themes/knife/assets/images/header-cents.jpg",
@@ -105,7 +105,7 @@ self.__precacheManifest = [
   },
   {
     "url": "/wp-content/themes/knife/assets/fonts/formular/formular-black.woff",
-    "revision": "d41d8cd98f00b204e9800998ecf8427e"
+    "revision": "7f90f62e636d90856e6441ba18f249c4"
   },
   {
     "url": "/wp-content/themes/knife/assets/fonts/formular/formular-black.woff2",
