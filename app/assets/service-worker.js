@@ -29,11 +29,15 @@ self.addEventListener('message', (event) => {
 self.__precacheManifest = [
   {
     "url": "/wp-content/themes/knife/assets/scripts.min.js",
-    "revision": "8bb52dc3793f82a70bec704e3b193259"
+    "revision": "41b7d3adebf15f1adb5cc16e03f2389c"
   },
   {
     "url": "/wp-content/themes/knife/assets/styles.min.css",
-    "revision": "8c55d98b9c749a0254e302b96d718761"
+    "revision": "fccd41c05fa1c6aea598e638ed4f53b0"
+  },
+  {
+    "url": "/wp-content/themes/knife/assets/images/header-cents.jpg",
+    "revision": "8ccc0a19a49d4f247e6362d5319eb761"
   },
   {
     "url": "/wp-content/themes/knife/assets/images/icon-180.png",

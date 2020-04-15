@@ -139,4 +139,13 @@
   &.post--aside {
     flex: 1 1 auto;
   }
+
+  &.post--cents {
+    flex: 0 1 48rem;
+    align-items: center;
+
+    & > * {
+      margin-top: 1rem;
+    }
+  }
 }

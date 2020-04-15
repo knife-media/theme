@@ -145,6 +145,9 @@ require get_template_directory() . '/core/modules/generator-section.php';
 // Best posts markup
 require get_template_directory() . '/core/modules/best-posts.php';
 
+// Cents page handler
+require get_template_directory() . '/core/modules/cents-page.php';
+
 // Special projects taxonomy settings
 require get_template_directory() . '/core/modules/special-projects.php';
 
