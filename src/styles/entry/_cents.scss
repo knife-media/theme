@@ -52,13 +52,23 @@
       font-weight: 500;
       font-family: $font-regular;
 
+      line-height: 1.5;
+
       @media screen and (max-width: 767px) {
         font-size: 1.75rem;
+      }
+
+      @media screen and (max-width: 479px) {
+        font-size: 1.5rem;
       }
     }
 
     @media screen and (max-width: 767px) {
       font-size: 1.375rem;
+    }
+
+    @media screen and (max-width: 479px) {
+      font-size: 1.25rem;
     }
   }
 
@@ -171,6 +181,7 @@
   }
 
   @media screen and (max-width: 767px) {
+    padding: 1.5rem 1rem;
     font-size: .9375rem;
   }
 
