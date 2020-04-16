@@ -166,6 +166,10 @@
     }
   }
 
+  & ~ .entry-header:nth-child(n) {
+    display: block;
+  }
+
   @media screen and (max-width: 767px) {
     font-size: .9375rem;
   }

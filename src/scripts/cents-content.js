@@ -67,15 +67,17 @@
     }
   }
 
+  var header = post.querySelector('.entry-header');
+
   /**
    * Create cards
    */
   for(var i = 0; i < knife_cents_cards.length; i++) {
     var card = document.createElement('div');
     card.classList.add('entry-cents');
-    post.insertBefore(card, post.lastElementChild);
+    post.insertBefore(card, header);
 
     // Append card content to item
-    appendCard(knife_cents_cards[i], card, i + 1);
+    appendCard(knife_cents_cards[i], card, knife_cents_cards.length - i);
   }
 })();

@@ -29,11 +29,11 @@ self.addEventListener('message', (event) => {
 self.__precacheManifest = [
   {
     "url": "/wp-content/themes/knife/assets/scripts.min.js",
-    "revision": "41b7d3adebf15f1adb5cc16e03f2389c"
+    "revision": "cf353c22cbada89dcc86ec38106f5372"
   },
   {
     "url": "/wp-content/themes/knife/assets/styles.min.css",
-    "revision": "92b986f6759f9c01a43c7d07f4ec0195"
+    "revision": "aeb3bcd2f166e9fe6a4a4b98623870e0"
   },
   {
     "url": "/wp-content/themes/knife/assets/images/header-cents.jpg",
@@ -105,7 +105,7 @@ self.__precacheManifest = [
   },
   {
     "url": "/wp-content/themes/knife/assets/fonts/formular/formular-black.woff",
-    "revision": "7f90f62e636d90856e6441ba18f249c4"
+    "revision": "d41d8cd98f00b204e9800998ecf8427e"
   },
   {
     "url": "/wp-content/themes/knife/assets/fonts/formular/formular-black.woff2",
