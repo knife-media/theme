@@ -9,6 +9,19 @@
   height: 100%;
 }
 
+@mixin full-pseudo($zindex: 2) {
+  content: '';
+
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: $zindex;
+
+  width: 100%;
+  height: 100%;
+}
+
 @mixin popup-center($zindex: 20) {
   display: flex;
   align-items: center;

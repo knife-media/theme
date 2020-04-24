@@ -27,8 +27,9 @@
                 );
 
                 printf(
-                    '<div class="widget-cents__content">%s</div>',
-                    wpautop(esc_html($post['content']))
+                    '<div class="widget-cents__content" data-folded="%2$s">%1$s</div>',
+                    wpautop(esc_html($post['content'])),
+                    __('Читать дальше', 'knife-theme')
                 );
             ?>
         </div>

@@ -17,7 +17,9 @@
 
   .widget-cents__title {
     display: flex;
+    flex-flow: column wrap;
     align-items: center;
+    justify-content: center;
     position: relative;
 
     width: auto;
@@ -36,11 +38,29 @@
     background-color: $color-cents;
 
     border-radius: .5rem;
+
+    @media screen and (max-width: 1023px) {
+      width: 100%;
+      min-height: 3rem;
+
+      margin-right: 0;
+      font-size: 1.125rem;
+    }
+
+    @media screen and (max-width: 767px) {
+      font-size: 1rem;
+    }
+
+    @media screen and (max-width: 479px) {
+      border-radius: 0;
+    }
   }
 
   .widget-cents__inner {
     display: flex;
+    flex-flow: column wrap;
     align-items: center;
+    justify-content: center;
     position: relative;
 
     width: auto;
@@ -57,6 +77,23 @@
     background-color: $color-white;
 
     border-radius: .5rem;
+
+    @media screen and (max-width: 1023px) {
+      display: none;
+
+      width: 100%;
+
+      margin-right: 0;
+      padding: 1rem;
+
+      &:nth-child(2) {
+        display: flex;
+      }
+    }
+
+    @media screen and (max-width: 479px) {
+      border-radius: 0;
+    }
   }
 
   .widget-cents__link {
@@ -82,33 +119,77 @@
 
       line-height: 1.5;
 
-      @media screen and (max-width: 767px) {
-        font-size: 1.75rem;
-      }
-
-      @media screen and (max-width: 479px) {
-        font-size: 1.5rem;
+      @media screen and (max-width: 1023px) {
+        display: none;
       }
     }
 
     &:after {
-      content: '';
+      @include full-pseudo;
 
-      @include full-size();
+      @media screen and (max-width: 1023px) {
+        display: none;
+      }
     }
 
     @media screen and (max-width: 1023px) {
       width: 100%;
-      font-size: 1.25rem;
     }
 
     @media screen and (max-width: 767px) {
-      font-size: 1.125rem;
+      font-size: 1.25rem;
     }
   }
 
   .widget-cents__content {
     display: none;
+    position: relative;
+
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+
+    p {
+      margin-top: .75rem;
+    }
+
+    @media screen and (max-width: 1023px) {
+      display: block;
+    }
+
+    @media screen and (max-width: 767px) {
+      font-size: .9375rem;
+    }
+  }
+
+  .widget-cents__folded {
+    display: none;
+    position: relative;
+
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+
+    p {
+      margin-top: .75rem;
+    }
+
+    strong {
+      color: $color-text;
+      font-weight: 700;
+    }
+
+    & + .widget-cents__content {
+      display: none;
+    }
+
+    @media screen and (max-width: 1023px) {
+      display: block;
+    }
+
+    @media screen and (max-width: 767px) {
+      font-size: .9375rem;
+    }
   }
 
   &.widget-cents--sidebar {
