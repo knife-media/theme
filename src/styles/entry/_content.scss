@@ -80,6 +80,16 @@
     margin-top: 2.5rem;
     font-weight: 400;
 
+    &:target {
+      margin-top: -4.75rem;
+      padding-top: 4.75rem;
+
+      @media screen and (max-width: 767px) {
+        margin-top: -4.25rem;
+        padding-top: 4.25rem;
+      }
+    }
+
     em, i {
       font-family: $font-serif;
       font-style: italic;
@@ -137,7 +147,7 @@
     line-height: 1.25;
 
     @media screen and (max-width: 767px) {
-      font-size: 1.375rem;
+      font-size: 1.25rem;
     }
   }
 

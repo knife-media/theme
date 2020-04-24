@@ -1,50 +1,74 @@
 .entry-cents {
   display: block;
   position: relative;
-  order: 2;
 
   width: 100%;
-  padding: 2rem 1rem;
+  padding: 1rem;
+  text-align: center;
 
-  line-height: 1.65;
-  font-size: 1rem;
-  font-weight: 400;
+  color: $color-white;
+  background-color: $color-black;
 
-  color: $color-text;
-  background-color: $color-white;
+  background-image: url('images/header-cents.jpg');
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  background-position: center 4rem;
+  background-size: 48rem auto;
 
   border-radius: .5rem;
 
-  & > * {
-    max-width: 100%;
+  .entry-cents__title {
+    display: block;
+
     width: $width-content;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 1rem;
+    max-width: 100%;
+    margin: 3rem auto 0.5rem;
+
+    font-size: 5rem;
+    font-weight: 700;
+    line-height: 1.075;
+    text-transform: uppercase;
+
+    @media screen and (max-width: 1023px) {
+      margin-top: 2rem;
+      font-size: 4rem;
+    }
 
     @media screen and (max-width: 767px) {
-      margin-bottom: .75rem;
+      margin-top: 1rem;
+      font-size: 3rem;
+    }
+
+    @media screen and (max-width: 479px) {
+      font-size: 2.5rem;
     }
   }
 
-  & > :first-child {
-    margin-top: 0;
-  }
-
-  & > :last-child {
-    margin-bottom: 0;
-  }
-
-  h2 {
+  .entry-cents__lead {
     display: block;
 
-    font-size: 1.5rem;
-    font-style: italic;
-    font-family: $font-serif;
-    line-height: 1.25;
+    width: $width-content;
+    max-width: 100%;
+    margin: 0 auto 0.5rem;
 
-    &:before {
-      content: attr(data-counter);
+    font-size: 1rem;
+
+    @media screen and (max-width: 767px) {
+      font-size: .875rem;
+    }
+
+    @media screen and (max-width: 479px) {
+      font-size: .75rem;
+    }
+  }
+
+  & ~ .entry-content {
+    padding: 2rem 1rem;
+    border-radius: .5rem;
+
+    h3:before {
+      content: attr(data-before);
       display: block;
 
       font-size: 2rem;
@@ -63,126 +87,26 @@
       }
     }
 
-    @media screen and (max-width: 767px) {
-      font-size: 1.375rem;
+    .figure {
+      margin-top: 0;
     }
 
-    @media screen and (max-width: 479px) {
-      font-size: 1.25rem;
-    }
-  }
+    .button {
+      color: $color-black;
+      background-color: $color-cents;
 
-  figure a {
-    display: flex;
-    align-items: center;
-    position: relative;
-
-    width: 100%;
-    min-height: 3.25rem;
-    padding: 1rem 1.5rem;
-
-    text-align: left;
-    text-transform: uppercase;
-
-    color: $color-black;
-    background-color: $color-cents;
-
-    font-size: 1rem;
-    font-weight: 500;
-
-    border: solid 1px $color-white;
-    border-radius: .5rem;
-
-    span {
-      display: block;
-
-      margin-right: 3rem;
-      font-size: 0.75rem;
-
-      &:after {
-        content: '';
-        position: absolute;
-        top: 0;
-
-        height: 100%;
-        width: 2px;
-        margin-left: 1.5rem;
-
-        background: $color-white;
-
-        @media screen and (max-width: 479px) {
-          margin-left: 1rem;
-        }
-      }
-
-      @media screen and (max-width: 479px) {
-        margin-right: 2rem;
-        font-size: 0.625rem;
-      }
-    }
-
-    @media screen and (max-width: 479px) {
-      padding: 0.5rem 1rem;
-      font-size: 0.875rem;
-    }
-  }
-
-  & ~ .entry-header {
-    padding: 1rem;
-    text-align: center;
-
-    color: $color-white;
-    background-color: $color-black;
-
-    background-image: url('images/header-cents.jpg');
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-    background-size: 100% auto;
-    background-position: center 4rem;
-    background-size: 48rem auto;
-
-    border-radius: .5rem;
-
-    & > * {
-      margin: 0.5rem auto;
-    }
-
-    .entry-header__title {
-      margin-top: 3rem;
-      font-size: 5rem;
-      text-transform: uppercase;
-
-      @media screen and (max-width: 1023px) {
-        margin-top: 2rem;
-        font-size: 4rem;
-      }
-
-      @media screen and (max-width: 767px) {
-        margin-top: 1rem;
-        font-size: 2.5rem;
+      &:hover {
+        background-color: darken($color-cents, 15);
       }
     }
 
     @media screen and (max-width: 767px) {
-      font-size: .875rem;
-    }
-
-    @media screen and (max-width: 479px) {
-      font-size: .75rem;
+      padding: 1.5rem 1rem;
     }
 
     @media screen and (max-width: 479px) {
       border-radius: 0;
     }
-  }
-
-  & ~ .entry-header:nth-child(n) {
-    display: block;
-  }
-
-  @media screen and (max-width: 767px) {
-    padding: 1.5rem 1rem;
-    font-size: .9375rem;
   }
 
   @media screen and (max-width: 479px) {

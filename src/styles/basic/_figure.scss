@@ -209,7 +209,15 @@
 
     @media screen and (max-width: 767px) {
       margin: -1.5rem -1rem;
-      padding: 1rem;
+      padding: 0 1rem;
+
+      &:first-child {
+        margin-top: -1.5rem;
+      }
+
+      &:last-child {
+        margin-bottom: -1.5rem;
+      }
     }
   }
 
@@ -409,6 +417,63 @@
 
     width: $width-content;
     max-width: 100%;
+
+    .button {
+      display: flex;
+      align-items: center;
+      position: relative;
+
+      width: 100%;
+      margin: 0;
+      height: 3.25rem;
+      padding: 0 1.5rem;
+
+      text-align: left;
+      text-transform: uppercase;
+
+      font-size: 1rem;
+      font-weight: 500;
+
+      border: solid 1px $color-white;
+      border-radius: .5rem;
+
+      &:before {
+        content: attr(data-before);
+        display: flex;
+        align-items: center;
+
+        height: 100%;
+        margin-right: 1.5rem;
+        padding-right: 1.5rem;
+
+        font-size: .75rem;
+
+        border-right: solid 2px $color-white;
+
+        @media screen and (max-width: 767px) {
+          height: auto;
+          margin: 0 0 .25rem;
+          border-right: 0;
+        }
+
+        @media screen and (max-width: 479px) {
+          font-size: .625rem;
+        }
+      }
+
+      @media screen and (max-width: 767px) {
+        display: block;
+
+        height: auto;
+        padding: .75rem 1rem;
+
+        line-height: 1.375;
+      }
+
+      @media screen and (max-width: 479px) {
+        font-size: .875rem;
+      }
+    }
   }
 
   &.figure--promo {

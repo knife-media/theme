@@ -14,31 +14,102 @@ if (!defined('WPINC')) {
 
 class Knife_Cents_Page {
     /**
-     * Store cents posts from database
+     * Post meta to store cents posts
      *
-     * @access  private
-     * @var     array
+     * @access  public
+     * @var     string
      */
-    private static $cents_cards = [];
+    public static $meta_cents = '_knife-cents';
 
 
     /**
      * Init function instead of constructor
      */
     public static function load_module() {
-        // Try to load data from remote db
-        add_action('wp', [__CLASS__, 'load_cents']);
+        // Schedule event to update from remote db
+        add_action('wp', [__CLASS__, 'schedule_sync']);
+
+        // Add schedule interval
+        add_filter('cron_schedules', [__CLASS__, 'add_cron_interval']);
 
         // Include template for cents posts
         add_filter('template_include', [__CLASS__, 'include_template']);
 
+        // Schedule event action
+        add_action('knife_schedule_cents', [__CLASS__, 'sync_database']);
 
-        // Include posts to page
-        add_action('wp_enqueue_scripts', [__CLASS__, 'inject_object'], 12);
+        // Update entry-content with cents posts
+        add_filter('the_content', [__CLASS__, 'show_cents'], 5);
 
         // Define cents settings if still not
         if(!defined('KNIFE_CENTS')) {
             define('KNIFE_CENTS', []);
+        }
+    }
+
+
+    /**
+     * Schedule cents sync event
+     */
+    public static function schedule_sync() {
+        if(!wp_next_scheduled('knife_schedule_cents')) {
+            wp_schedule_event(time(), 'minutely', 'knife_schedule_cents');
+        }
+    }
+
+
+    /**
+     * Add cron interval for every minute execution
+     */
+    public static function add_cron_interval($schedules) {
+        if(empty($schedules['minutely'])) {
+            $schedules['minutely'] = [
+                'interval' => 60,
+                'display' => __('Каждую минуту', 'knife-theme')
+            ];
+        }
+
+        return $schedules;
+    }
+
+
+    /**
+     * Sync database on cron event
+     */
+    public static function sync_database() {
+        if(empty(KNIFE_CENTS['page'])) {
+            return false;
+        }
+
+        // Get page object by slug
+        $page = get_page_by_path(KNIFE_CENTS['page']);
+
+        if(empty($page->ID)) {
+            return false;
+        }
+
+        // Mix with default values
+        $conf = wp_parse_args(KNIFE_CENTS, [
+            'host' => DB_HOST,
+            'name' => DB_NAME,
+            'user' => DB_USER,
+            'password' => DB_PASSWORD
+        ]);
+
+        // Create custom db connection
+        $db = new wpdb($conf['user'], $conf['password'], $conf['name'], $conf['host']);
+        $db->hide_errors();
+
+        if(!empty($db->error)) {
+            return false;
+        }
+
+        // Get cards from remote database
+        $query = "SELECT title, content, source, link FROM messages ORDER BY created DESC";
+        $cents = $db->get_results($query, ARRAY_A);
+
+        if(!empty($cents)) {
+            update_post_meta($page->ID, self::$meta_cents, $cents);
         }
     }
 
@@ -62,65 +133,72 @@ class Knife_Cents_Page {
 
 
     /**
-     * Try to load data from remote db
+     * Update entry-content with cents posts
      */
-    public static function load_cents() {
-        global $wp_query;
-
+    public static function show_cents($content) {
         if(empty(KNIFE_CENTS['page']) || !is_page(KNIFE_CENTS['page'])) {
-            return;
+            return $content;
         }
 
-        // Mix with default values
-        $conf = wp_parse_args(KNIFE_CENTS, [
-            'host' => DB_HOST,
-            'name' => DB_NAME,
-            'user' => DB_USER,
-            'password' => DB_PASSWORD
-        ]);
+        $page_id = get_the_ID();
 
-        // Create custom db connection
-        $db = new wpdb($conf['user'], $conf['password'], $conf['name'], $conf['host']);
-        $db->hide_errors();
+        // Get post cents from post meta
+        $cents = get_post_meta($page_id, self::$meta_cents, true);
 
-        if(isset($db->error)) {
-            wp_die($db->error);
+        if(empty($cents)) {
+            return $content;
         }
 
-        // Get cards from remote database
-        $query = "SELECT title, content, source, link FROM messages ORDER BY created DESC";
-        $cards = $db->get_results($query, ARRAY_A);
+        // Create new content from cards
+        $content = self::create_cards($cents, '</div><div class="entry-content">');
 
-        if(count($cards) === 0) {
-            $wp_query->set_404();
-
-            status_header(404);
-            nocache_headers();
-        }
-
-        self::$cents_cards = $cards;
+        return $content;
     }
 
 
     /**
-     * Include cents posts
+     * Create cards using post cents data
      */
-    public static function inject_object() {
-        $cards = self::$cents_cards;
+    private static function create_cards($cents, $separator) {
+        $cards = [];
 
-        if(count($cards) === 0) {
-            return;
+        foreach($cents as $i => $cent) {
+            $title = sprintf(
+                '<h3 id="%1$d" data-before="#%1$d"><em>%2$s</em></h3>',
+                count($cents) - $i, esc_html($cent['title'])
+            );
+
+            // Append title to content
+            $card = $title . wpautop(esc_html($cent['content']));
+
+            // Add source button if exists
+            if(!empty($cent['link']) && !empty($cent['source'])) {
+                $card = $card . self::create_button($cent['link'], $cent['source']);
+            }
+
+            $cards[] = $card;
         }
 
-        // Add cents posts
-        wp_localize_script('knife-theme', 'knife_cents_cards', self::$cents_cards);
+        return implode($separator, $cards);
+    }
 
-        $options = [
-            'label' => __('Источник', 'knife-theme')
-        ];
 
-        // Add cents options
-        wp_localize_script('knife-theme', 'knife_cents_options', $options);
+    /**
+     * Append button to cards if need
+     */
+    private static function create_button($link, $source) {
+        $button = sprintf(
+            '<a class="button" href="%2$s" target="_blank" data-before="%3$s">%1$s</a>',
+            esc_html($source), esc_url($link),
+            __('Источник ', 'knife-theme')
+        );
+
+        $figure = sprintf(
+            '<figure class="figure figure--source">%s</figure>',
+            wp_targeted_link_rel($button)
+        );
+
+        return $figure;
     }
 }
 

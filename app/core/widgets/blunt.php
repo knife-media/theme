@@ -42,7 +42,6 @@ class Knife_Widget_Blunt extends WP_Widget {
      */
     public function widget($args, $instance) {
         $defaults = [
-            'title' => '',
             'posts_per_page' => 8
         ];
 
@@ -72,7 +71,6 @@ class Knife_Widget_Blunt extends WP_Widget {
      */
     public function form($instance) {
         $defaults = [
-            'title' => '',
             'posts_per_page' => 8
         ];
 
@@ -103,9 +101,7 @@ class Knife_Widget_Blunt extends WP_Widget {
      */
     public function update($new_instance, $old_instance) {
         $instance = $old_instance;
-
         $instance['posts_per_page'] = absint($new_instance['posts_per_page']);
-        $instance['title'] = sanitize_text_field($new_instance['title']);
 
         return $instance;
     }
