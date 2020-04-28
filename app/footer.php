@@ -59,6 +59,12 @@
 
 </footer>
 
+<?php
+    if(is_active_sidebar('knife-flexible')) :
+        dynamic_sidebar('knife-flexible');
+    endif;
+?>
+
 <?php wp_footer(); ?>
 </body>
 </html>

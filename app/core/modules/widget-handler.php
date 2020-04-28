@@ -104,6 +104,14 @@ class Knife_Widget_Handler {
             'before_widget' => '<div class="widget-%2$s widget-%2$s--bottom">',
             'after_widget'  => '</div>'
         ]);
+
+        register_sidebar([
+            'name'          => __('Скрипты и счетчики', 'knife-theme'),
+            'id'            => 'knife-flexible',
+            'description'   => __('Добавленные виджеты загрузятся в последнюю очередь. Для скриптов и счетчиков.', 'knife-theme'),
+            'before_widget' => '<div class="widget-%2$s widget-%2$s--flexible">',
+            'after_widget'  => '</div>'
+        ]);
     }
 
 

@@ -50,15 +50,15 @@
   align-self: flex-start;
 }
 
-@mixin cross-button($size) {
+@mixin cross-button($width, $height: 2px) {
   &:after, &:before {
     content: '';
     position: absolute;
-    top: 50%;
-    left: 2px;
+    top: calc(50% - #{$height / 2});
+    left: calc(50% - #{$width / 2});
 
-    height: 2px;
-    width: $size;
+    height: $height;
+    width: $width;
 
     background-color: lighten($color-text, 20);
   }
