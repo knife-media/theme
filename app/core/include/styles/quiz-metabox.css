@@ -227,6 +227,7 @@
     position: relative;
 
     margin: 0;
+    margin-right: 10px;
     padding-top: 15px;
 
     border-top: solid 1px rgba(0, 0, 0, 0.1);
@@ -416,6 +417,10 @@
   display: flex;
 }
 
+#knife-quiz-box .answer--dynamic .answer__options {
+  display: none;
+}
+
 #knife-quiz-box .answer--poster .answer__delete {
   top: auto;
   bottom: 15px;
@@ -452,7 +457,7 @@
     display: block;
 
     width: 100%;
-    margin: auto 0 10px;
+    margin: 5px 0;
     font-size: 13px;
     font-weight: 600;
     color: #333;
@@ -887,6 +892,26 @@
     transition: border .25s, box-shadow .25s;
   }
 
+#knife-quiz-box .result__dynamic {
+  display: none;
+  cursor: default;
+  flex: 1 1 100%;
+
+  margin: 10px;
+  padding: 10px 30px 0 0;
+
+  border-top: 1px solid #ddd;
+}
+  #knife-quiz-box .result__dynamic-title {
+    display: block;
+
+    margin-bottom: 5px;
+    font-weight: 600;
+  }
+
+  #knife-quiz-box .result__dynamic-field {
+    width: 100%;
+  }
 
 #knife-quiz-box .result--binary .result__scores {
   display: flex;
@@ -898,6 +923,14 @@
 
 #knife-quiz-box .result--category .result__category {
   display: flex;
+}
+
+#knife-quiz-box .result--dynamic .result__dynamic {
+  display: block;
+}
+
+#knife-quiz-box .result--dynamic .result__image {
+  display: none;
 }
 
 #knife-quiz-box .result--details .result__details {

@@ -2,7 +2,7 @@
  * Quiz post type front-end handler
  *
  * @since 1.7
- * @version 1.11
+ * @version 1.12
  */
 
 (function() {
@@ -42,6 +42,12 @@
 
 
   /**
+   * Store poster name code
+   */
+  var dynamic = '';
+
+
+  /**
    * Smooth scroll
    */
   function smoothScroll(to) {
@@ -56,7 +62,7 @@
   /**
    * Replace share links
    */
-  function replaceShare(result, index) {
+  function replaceShare(result, index, dynamic) {
     // Check quiz share links
     if(typeof knife_quiz_options.share_links === 'undefined') {
       return false;
@@ -72,11 +78,18 @@
       return false;
     }
 
-    var matches = [
-      knife_quiz_options.permalink.replace(/\/?$/, '/') + index + '/',
-      quiz.querySelector('.entry-quiz__title').textContent || ''
-    ];
+    var permalink = knife_quiz_options.permalink.replace(/\/?$/, '/') + index + '/';
 
+    if(dynamic.length > 0) {
+      permalink = permalink + dynamic + '/';
+    }
+
+    var title = quiz.querySelector('.entry-quiz__title').textContent || '';
+
+    // Create substitution array
+    var matches = [permalink, title];
+
+    // Get all links by class
     var links = quiz.querySelectorAll('.share > .share__link');
 
     for(var i = 0, link; link = links[i]; i++) {
@@ -123,6 +136,14 @@
       vote.classList.add('entry-quiz__vote--complete');
 
       switch(knife_quiz_options.format) {
+        case 'dynamic':
+          if(answer.hasOwnProperty('dynamic') && answer.dynamic) {
+            dynamic = dynamic.concat(answer.dynamic);
+          }
+
+          target.classList.add(cl + '--selected');
+          break;
+
         case 'category':
           if(answer.hasOwnProperty('category') && answer.category) {
             var score = 0;
@@ -311,6 +332,11 @@
     if(result.hasOwnProperty('poster')) {
       var poster = document.createElement('img');
 
+      // Update poster if dynamic
+      if(dynamic.length > 0) {
+        result.poster = result.poster.replace('*', dynamic);
+      }
+
       poster.classList.add('entry-quiz__poster');
       poster.setAttribute('src', result.poster);
 
@@ -319,7 +345,7 @@
 
     var share = quiz.querySelector('.entry-quiz__share');
     if(document.body.contains(share)) {
-      replaceShare(result, hold);
+      replaceShare(result, hold, dynamic);
     }
 
     var vote = quiz.querySelector('.entry-quiz__vote');
@@ -344,7 +370,6 @@
       quiz.classList.add('entry-quiz--center');
     }
   })();
-
 
 
   /**

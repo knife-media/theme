@@ -428,7 +428,7 @@ jQuery(document).ready(function($) {
    * Toggle format options
    */
   function toggleFormat(option) {
-    $.each(['binary', 'points', 'category'], function(i, v) {
+    $.each(['binary', 'points', 'category', 'dynamic'], function(i, v) {
       // Remove answers modificators
       box.find('.answer').removeClass(
           'answer--' + v

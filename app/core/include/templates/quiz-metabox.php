@@ -19,6 +19,8 @@
         // Define available categories array
         $categories = [];
 
+        // Define ava
+
         // Add empty item
         array_unshift($items, []);
 
@@ -56,6 +58,13 @@
                     esc_attr(self::$meta_options),
                     checked($options['format'], 'category', false),
                     __('Наиболее часто выбираемый ответ', 'knife-theme')
+                );
+
+                printf(
+                    '<p class="manage__radio"><label><input data-format="dynamic" type="radio" name="%1$s[format]" value="dynamic"%2$s>%3$s</label></p>',
+                    esc_attr(self::$meta_options),
+                    checked($options['format'], 'dynamic', false),
+                    __('Динамический результат ответа', 'knife-theme')
                 );
 
                 printf(
@@ -288,6 +297,7 @@
                     checked(isset($options['norepeat']), true, false),
                     __('Скрыть кнопку повторного прохождения', 'knife-theme')
                 );
+
             ?>
         </div>
 
@@ -345,6 +355,10 @@
 
                     if(!array_key_exists('category', $result)) {
                         $result['category'] = '';
+                    }
+
+                    if(!array_key_exists('dynamic', $result)) {
+                        $result['dynamic'] = '';
                     }
                 ?>
 
@@ -504,6 +518,19 @@
                     </select>
                 </div>
 
+                <div class="result__dynamic">
+                    <?php
+                        printf(
+                            '<strong class="result__dynamic-title">%s</strong>',
+                            __('Ссылка на генератор постера', 'knife-theme')
+                        );
+
+                        printf(
+                            '<input class="result__dynamic-field" data-result="dynamic" type="text" value="%s">',
+                            esc_attr($result['dynamic'])
+                        );
+                    ?>
+                </div>
 
                 <span class="result__delete dashicons dashicons-trash" title="<?php _e('Удалить результат', 'knife-theme'); ?>"></span>
             </div>
