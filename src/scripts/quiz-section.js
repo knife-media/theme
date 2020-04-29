@@ -137,15 +137,15 @@
 
       switch(knife_quiz_options.format) {
         case 'dynamic':
-          if(answer.hasOwnProperty('dynamic') && answer.dynamic) {
-            dynamic = dynamic.concat(answer.dynamic);
+          if(answer.hasOwnProperty('dynamic')) {
+            dynamic = dynamic + answer.dynamic.toString();
           }
 
           target.classList.add(cl + '--selected');
           break;
 
         case 'category':
-          if(answer.hasOwnProperty('category') && answer.category) {
+          if(answer.hasOwnProperty('category')) {
             var score = 0;
 
             if(ranking.hasOwnProperty(answer.category)) {
