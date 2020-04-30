@@ -105,7 +105,7 @@ self.__precacheManifest = [
   },
   {
     "url": "/wp-content/themes/knife/assets/fonts/formular/formular-black.woff",
-    "revision": "7f90f62e636d90856e6441ba18f249c4"
+    "revision": "d41d8cd98f00b204e9800998ecf8427e"
   },
   {
     "url": "/wp-content/themes/knife/assets/fonts/formular/formular-black.woff2",
