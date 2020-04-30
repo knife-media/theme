@@ -268,7 +268,8 @@ class Knife_Similar_Posts {
             return;
         }
 
-        self::generate_similar($post->ID);
+        // Schedule similar generation right now
+        wp_schedule_single_event(time(), 'knife_schedule_similar', [$post->ID]);
     }
 
 
