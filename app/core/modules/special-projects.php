@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.11
+ * @version 1.12
  */
 
 
@@ -279,12 +279,15 @@ class Knife_Special_Projects {
             return delete_term_meta($term_id, self::$term_meta);
         }
 
-        $meta = [];
+        $data = $_REQUEST[self::$term_meta];
 
-        foreach($_REQUEST[self::$term_meta] as $key => $value) {
-            if(!empty($value)) {
-                $meta[$key] = sanitize_hex_color($value);
-            }
+        // Sanitize meta
+        if(isset($data['single'])) {
+            $meta['single'] = sanitize_hex_color($data['single']);
+        }
+
+        if(isset($data['hidden'])) {
+            $meta['hidden'] = absint($data['hidden']);
         }
 
         update_term_meta($term_id, self::$term_meta, $meta);

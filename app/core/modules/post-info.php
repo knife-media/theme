@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.11
+ * @version 1.12
  */
 
 if (!defined('WPINC')) {
@@ -150,14 +150,18 @@ class Knife_Post_Info {
         if(property_exists('Knife_Special_Projects', 'taxonomy')) {
             $terms = get_the_terms(get_the_ID(), Knife_Special_Projects::$taxonomy);
 
-            // Check if has terms next
-            if(isset($terms[0])) {
-                $special = sprintf('<a class="head" href="%2$s">%1$s</a>',
-                    esc_html($terms[0]->name),
-                    esc_url(get_term_link($terms[0]->term_id))
-                );
+             // Check if post has terms
+            if(isset($terms[0]) && property_exists('Knife_Special_Projects', 'term_meta')) {
+                $options = get_term_meta($terms[0]->term_id, Knife_Special_Projects::$term_meta, true);
 
-                return $output . $special;
+                if(empty($options['hidden'])) {
+                    $special = sprintf('<a class="head" href="%2$s">%1$s</a>',
+                        esc_html($terms[0]->name),
+                        esc_url(get_term_link($terms[0]->term_id))
+                    );
+
+                    return $output . $special;
+                }
             }
         }
 
@@ -390,7 +394,14 @@ class Knife_Post_Info {
                 $term = get_term($ancestors[0], $taxonomy);
             }
 
-            $options = get_term_meta($term->term_id, Knife_Special_Projects::$term_meta, true);
+            // Don't show hidden special
+            if(property_exists('Knife_Special_Projects', 'term_meta')) {
+                $options = get_term_meta($term->term_id, Knife_Special_Projects::$term_meta, true);
+
+                if(!empty($options['hidden'])) {
+                    break;
+                }
+            }
 
             if(empty($options['single'])) {
                 $output = sprintf(
