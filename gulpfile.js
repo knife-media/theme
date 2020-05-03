@@ -35,29 +35,37 @@ gulp.task('scripts', (done) => {
 
 
 gulp.task('vendor', (done) => {
-  gulp.src('node_modules/workbox-sw/build/workbox-sw.js')
+  gulp.src('node_modules/workbox-sw/build/workbox-sw.js.*')
     .pipe(gulp.dest('app/assets/vendor/'));
 
   gulp.src('node_modules/@glidejs/glide/dist/glide.min.js')
     .pipe(gulp.dest('app/assets/vendor/'));
+
+  done();
 })
 
 
 gulp.task('images', (done) => {
   gulp.src('src/images/**/*')
     .pipe(gulp.dest('app/assets/images/'));
+
+  done();
 })
 
 
 gulp.task('video', (done) => {
   gulp.src('src/video/**/*')
     .pipe(gulp.dest('app/assets/video/'));
+
+  done();
 })
 
 
 gulp.task('fonts', (done) => {
   gulp.src('src/fonts/**/*.{ttf,woff,woff2}')
     .pipe(gulp.dest('app/assets/fonts/'));
+
+  done();
 })
 
 
@@ -66,10 +74,10 @@ gulp.task('workbox', (done) => {
 
   workboxBuild.generateSW({
     globDirectory: 'app/assets',
-    importWorkboxFrom: 'disabled',
     importScripts: [
       theme + 'vendor/workbox-sw.js'
     ],
+    sourcemap: false,
     modifyURLPrefix: {
       '': theme
     },
@@ -92,4 +100,4 @@ gulp.task('watch', function() {
 })
 
 
-gulp.task('default', gulp.parallel('styles', 'scripts', 'vendor', 'images', 'fonts', 'video', 'workbox', 'watch'));
+gulp.task('default', gulp.series('styles', 'scripts', 'images', 'fonts', 'video', 'workbox', 'vendor', 'watch'));
