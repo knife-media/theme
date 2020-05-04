@@ -81,6 +81,7 @@ gulp.task('workbox', (done) => {
     modifyURLPrefix: {
       '': theme
     },
+    inlineWorkboxRuntime: true,
     globPatterns: [
       'scripts.min.js',
       'styles.min.css',
@@ -100,4 +101,4 @@ gulp.task('watch', function() {
 })
 
 
-gulp.task('default', gulp.series('styles', 'scripts', 'images', 'fonts', 'video', 'workbox', 'vendor', 'watch'));
+gulp.task('default', gulp.series('styles', 'scripts', 'images', 'fonts', 'video', 'vendor', 'workbox', 'watch'));

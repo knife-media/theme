@@ -2,6 +2,7 @@
  * Adfox banners loader
  *
  * @since 1.11
+ * @version 1.12
  */
 
 (function() {
@@ -13,6 +14,27 @@
    */
   if(widgets.length < 1) {
     return false;
+  }
+
+
+  /**
+   * Get cookie by name
+   */
+  function getCookie(name) {
+    var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+
+    return value ? value[2] : '';
+  }
+
+
+  /**
+   * Set cookie
+   */
+  function setCookie(name, value, hours) {
+    var d = new Date;
+
+    d.setTime(d.getTime() + 60 * 60 * 1000 * hours);
+    document.cookie = name + "=" + value + ";path=/;expires=" + d.toGMTString();
   }
 
 
@@ -31,6 +53,9 @@
 
       params['puid' + n] = knife_meta_parameters[target] || '';
     }
+
+    // Add custom close target
+    params['puid' + n] = getCookie('adfox-close');
 
     return params;
   }
@@ -177,6 +202,58 @@
 
 
   /**
+   * Manual banner close event
+   */
+  function closeBanner(e) {
+    var target = e.target || e.srcElement;
+
+    if(!target.hasAttribute('data-close')) {
+      return;
+    }
+
+    e.preventDefault();
+
+    var items = [];
+
+    // Try to find all closed by cookie
+    var close = getCookie('adfox-close');
+
+    // Split items from cookie
+    if(close.length > 0) {
+      items = close.split(':');
+    }
+
+    if(items.indexOf(target.dataset.close) < 0){
+      items.push(target.dataset.close);
+    }
+
+    // Set cookie with banner id from data-close
+    setCookie('adfox-close', items.join(':'), 12);
+
+    // Remove banner content
+    while(this.firstChild) {
+      this.removeChild(this.lastChild);
+    }
+  }
+
+
+  /**
+   * Banner click event listener
+   */
+  function sendEvent(e) {
+    var target = e.target || e.srcElement;
+
+    if(!target.hasAttribute('data-event')) {
+      return;
+    }
+
+    // Load image with event src
+    var image = document.createElement('img');
+    image.src = target.dataset.event;
+  }
+
+
+  /**
    * Loop through adfox widgets to load them
    */
   for(var i = 0; i < widgets.length; i++) {
@@ -195,6 +272,12 @@
 
     // Replace banner with new element
     widgets[i].replaceChild(adfox, banner);
+
+    // Send click events
+    adfox.addEventListener('click', sendEvent);
+
+    // Handle close events
+    adfox.addEventListener('click', closeBanner);
 
     // Load banner
     loadBanner(banner.dataset, id, widgets[i]);
