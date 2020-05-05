@@ -18,27 +18,6 @@
 
 
   /**
-   * Get cookie by name
-   */
-  function getCookie(name) {
-    var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-
-    return value ? value[2] : '';
-  }
-
-
-  /**
-   * Set cookie
-   */
-  function setCookie(name, value, hours) {
-    var d = new Date;
-
-    d.setTime(d.getTime() + 60 * 60 * 1000 * hours);
-    document.cookie = name + "=" + value + ";path=/;expires=" + d.toGMTString();
-  }
-
-
-  /**
    * Get custom widgets targets
    */
   function addTargets(params) {
@@ -53,9 +32,6 @@
 
       params['puid' + n] = knife_meta_parameters[target] || '';
     }
-
-    // Add custom close target
-    params['puid' + n] = getCookie('adfox-close');
 
     return params;
   }
@@ -109,7 +85,18 @@
     }
 
     // Add class on load
-    options.onLoad = function() {
+    options.onLoad = function(handle) {
+      var params = handle.bundleParams;
+
+      // Remove loaded class if exists
+      widget.classList.remove('widget-adfox--loaded');
+
+      console.log(params);
+      // Destroy if banner hidden
+      if(params.bannerId && hiddenBanner(params.bannerId)) {
+        return handle.destroy();
+      }
+
       widget.classList.add('widget-adfox--loaded');
     }
 
@@ -202,6 +189,44 @@
 
 
   /**
+   * Check closed banner
+   */
+  function hiddenBanner(banner) {
+    // Get close items from storage
+    var close = localStorage.getItem('adfox-close');
+
+    // Check if items exist
+    if(close === null) {
+      return false;
+    }
+
+    var items = JSON.parse(close);
+
+    // Current time in ms
+    var now = new Date().getTime();
+
+    // Indicates hidden lifetime
+    var hidden = 0;
+
+    for(key in items) {
+      if(banner === key) {
+        hidden = items[key];
+      }
+
+      if(now > items[key]) {
+        delete items[key];
+      }
+    }
+
+    // Set updated items to storage
+    localStorage.setItem('adfox-close', JSON.stringify(items));
+
+    // If banner still hidden
+    return (hidden > now);
+  }
+
+
+  /**
    * Manual banner close event
    */
   function closeBanner(e) {
@@ -213,22 +238,21 @@
 
     e.preventDefault();
 
-    var items = [];
+    var items = {};
 
-    // Try to find all closed by cookie
-    var close = getCookie('adfox-close');
+    // Get close items from storage
+    var close = localStorage.getItem('adfox-close');
 
-    // Split items from cookie
-    if(close.length > 0) {
-      items = close.split(':');
+    // Convert items to array
+    if(close !== null) {
+      items = JSON.parse(close);
     }
 
-    if(items.indexOf(target.dataset.close) < 0){
-      items.push(target.dataset.close);
-    }
+    // Add new banner timestamp forward 8 hours
+    items[target.dataset.close] = new Date().getTime() + 1000 * 3600 * 8;
 
-    // Set cookie with banner id from data-close
-    setCookie('adfox-close', items.join(':'), 12);
+    // Set items to storage
+    localStorage.setItem('adfox-close', JSON.stringify(items));
 
     // Remove banner content
     while(this.firstChild) {
