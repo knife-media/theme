@@ -91,7 +91,6 @@
       // Remove loaded class if exists
       widget.classList.remove('widget-adfox--loaded');
 
-      console.log(params);
       // Destroy if banner hidden
       if(params.bannerId && hiddenBanner(params.bannerId)) {
         return handle.destroy();
