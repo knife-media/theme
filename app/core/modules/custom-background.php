@@ -42,7 +42,7 @@ class Knife_Custom_Background {
      * @var     array
      * @since   1.7
      */
-    public static $post_type = ['post', 'club', 'select', 'generator', 'quiz', 'story'];
+    public static $post_type = ['post', 'club', 'select', 'generator', 'quiz', 'story', 'page'];
 
 
     /**

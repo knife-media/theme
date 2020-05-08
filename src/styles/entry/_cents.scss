@@ -3,20 +3,26 @@
   position: relative;
 
   width: 100%;
-  padding: 1rem;
-  text-align: center;
+  padding: 2rem 1rem;
 
-  color: $color-white;
-  background-color: $color-black;
-
-  background-image: url('images/header-cents.jpg');
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-  background-size: 100% auto;
-  background-position: center 4rem;
-  background-size: 48rem auto;
+  color: $color-text;
+  background-color: $color-white;
 
   border-radius: .5rem;
+
+  &:first-child {
+    padding: 1rem;
+    text-align: center;
+
+    color: $color-white;
+    background-color: $color-black;
+
+    background-image: url('images/cents-header.jpg');
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    background-position: center 0;
+    background-size: 50rem auto;
+  }
 
   .entry-cents__title {
     display: block;
@@ -63,12 +69,28 @@
     }
   }
 
-  & ~ .entry-content {
-    padding: 2rem 1rem;
-    border-radius: .5rem;
+  .entry-cents__anchor {
+    display: block;
 
-    h3:before {
-      content: attr(data-before);
+    width: $width-content;
+    max-width: 100%;
+    margin: 0 auto 1rem;
+
+    font-size: 1.5rem;
+    line-height: 1.25;
+
+    &:target {
+      margin-top: -6rem;
+      padding-top: 6rem;
+
+      @media screen and (max-width: 767px) {
+        margin-top: -4.75rem;
+        padding-top: 4.75rem;
+      }
+    }
+
+    &:before {
+      content: '#' attr(id);
       display: block;
 
       font-size: 2rem;
@@ -76,7 +98,7 @@
       font-weight: 500;
       font-family: $font-regular;
 
-      line-height: 1.5;
+      line-height: 1.25;
 
       @media screen and (max-width: 767px) {
         font-size: 1.75rem;
@@ -87,8 +109,85 @@
       }
     }
 
-    .figure {
-      margin-top: 0;
+    em {
+      font-family: $font-serif;
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    @media screen and (max-width: 767px) {
+      font-size: 1.25rem;
+    }
+  }
+
+  .entry-cents__content {
+    display: flex;
+    flex-flow: column wrap;
+    position: relative;
+
+    min-height: 7.5rem;
+    line-height: 1.65;
+    font-size: 1rem;
+    font-weight: 400;
+
+    & > * {
+      max-width: 100%;
+      width: $width-content;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 1rem;
+
+      @media screen and (max-width: 767px) {
+        margin-bottom: .75rem;
+      }
+    }
+
+    .figure--source {
+      margin-top: auto;
+      margin-bottom: 0;
+    }
+
+    .figure--share {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      width: 3rem;
+      height: 100%;
+
+      @media screen and (max-width: 1023px) {
+        position: relative;
+
+        width: $width-content;
+        height: auto;
+        margin: .75rem auto 0;
+      }
+    }
+
+    .share {
+      position: sticky;
+      top: 4rem;
+      flex-flow: column nowrap;
+
+      .share__text {
+        display: none;
+      }
+
+      .share__link {
+        margin: .5rem 0 0;
+
+        @media screen and (max-width: 1023px) {
+          margin-right: .625rem;
+        }
+      }
+
+      @media screen and (max-width: 1023px) {
+        position: relative;
+        top: auto;
+
+        flex-flow: row nowrap;
+      }
     }
 
     .button {
@@ -101,12 +200,12 @@
     }
 
     @media screen and (max-width: 767px) {
-      padding: 1.5rem 1rem;
+      font-size: .9375rem;
     }
+  }
 
-    @media screen and (max-width: 479px) {
-      border-radius: 0;
-    }
+  @media screen and (max-width: 767px) {
+    padding: 1.5rem 1rem;
   }
 
   @media screen and (max-width: 479px) {

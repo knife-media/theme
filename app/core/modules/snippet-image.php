@@ -40,7 +40,7 @@ class Knife_Snippet_Image {
      * @access  public
      * @var     array
      */
-    public static $post_type = ['post', 'club', 'quiz', 'select', 'story', 'generator'];
+    public static $post_type = ['post', 'club', 'quiz', 'select', 'story', 'generator', 'page'];
 
 
     /**

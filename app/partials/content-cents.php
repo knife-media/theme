@@ -22,7 +22,7 @@
         ?>
     </div>
 
-    <div class="entry-content">
+    <div class="entry-cents">
         <?php
             the_content();
         ?>

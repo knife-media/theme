@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.11
+ * @version 1.12
 */
 
 if (!defined('WPINC')) {
@@ -17,8 +17,11 @@ class Knife_Share_Buttons {
     /**
      * Print social share buttons template
      */
-    public static function get_buttons($output = '') {
-        $settings = self::get_settings();
+    public static function get_buttons($settings = [], $output = '') {
+        // Get default settings
+        if(empty($settings)) {
+            $settings = self::update_settings();
+        }
 
         foreach($settings as $network => $data) {
             $text = sprintf(
@@ -26,13 +29,9 @@ class Knife_Share_Buttons {
                 esc_html($data['text']), $network
             );
 
-            $link = sprintf($data['link'],
-                esc_url(get_permalink()),
-                urlencode(strip_tags(get_the_title()))
-            );
-
-            $item = sprintf('<a class="share__link share__link--%3$s" href="%2$s" data-label="%3$s" target="_blank">%1$s</a>',
-                $text, esc_url($link), esc_attr($network)
+            $item = sprintf(
+                '<a class="share__link share__link--%3$s" href="%2$s" data-label="%3$s" target="_blank">%1$s</a>',
+                $text, esc_url($data['link']), esc_attr($network)
             );
 
             $output = $output . $item;
@@ -69,6 +68,25 @@ class Knife_Share_Buttons {
                 'text' => __('Твитнуть', 'knife-theme')
             ]
         ];
+
+        return $settings;
+    }
+
+
+    /**
+     * Update settings with default data
+     *
+     * @since 1.12
+     */
+    private static function update_settings() {
+        $settings = self::get_settings();
+
+        foreach($settings as $network => &$data) {
+            $data['link'] = sprintf($data['link'],
+                urlencode(get_permalink()),
+                urlencode(strip_tags(get_the_title()))
+            );
+        }
 
         return $settings;
     }

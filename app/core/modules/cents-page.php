@@ -45,6 +45,11 @@ class Knife_Cents_Page {
         if(!defined('KNIFE_CENTS')) {
             define('KNIFE_CENTS', []);
         }
+
+        // Die if php-mb not installed
+        if(!function_exists('mb_strlen')) {
+            wp_die(__('Для нормальной работы темы необходимо установить модуль php-mb', 'knife-theme'));
+        }
     }
 
 
@@ -150,7 +155,7 @@ class Knife_Cents_Page {
         }
 
         // Create new content from cards
-        $content = self::create_cards($cents, '</div><div class="entry-content">');
+        $content = self::create_cards($cents, '</div><div class="entry-cents">');
 
         return $content;
     }
@@ -163,23 +168,67 @@ class Knife_Cents_Page {
         $cards = [];
 
         foreach($cents as $i => $cent) {
-            $title = sprintf(
-                '<h3 id="%1$d" data-before="#%1$d"><em>%2$s</em></h3>',
-                count($cents) - $i, esc_html($cent['title'])
+            $index = count($cents) - $i;
+
+            $anchor = sprintf(
+                '<h2 class="entry-cents__anchor" id="%1$d"><em>%2$s</em></h2>',
+                absint($index), esc_html($cent['title'])
             );
 
-            // Append title to content
-            $card = $title . wpautop(esc_html($cent['content']));
+            // Add paragraph to content
+            $content = wpautop(esc_html($cent['content']));
 
             // Add source button if exists
             if(!empty($cent['link']) && !empty($cent['source'])) {
-                $card = $card . self::create_button($cent['link'], $cent['source']);
+                $content = $content . self::create_button($cent['link'], $cent['source']);
             }
 
-            $cards[] = $card;
+            // Append share buttons
+            if(method_exists('Knife_Share_Buttons', 'get_settings')) {
+                $content = $content . self::append_share($index, $cent);
+            }
+
+            // Wrap content
+            $content = sprintf('<div class="entry-cents__content">%s</div>', $content);
+
+            // Add heading to content
+            $cards[] = $anchor . $content;
         }
 
         return implode($separator, $cards);
+    }
+
+
+    /**
+     * Append share buttons
+     */
+    private static function append_share($index, $cent) {
+        $settings = Knife_Share_Buttons::get_settings();
+
+        // Remove facebook here
+        unset($settings['facebook']);
+
+        // Update default settings
+        foreach($settings as $network => &$data) {
+            $title = $cent['title'];
+
+            // Update title for network
+            if($network === 'telegram') {
+                $title = $cent['content'];
+            }
+
+            // Set sharing ling with hash param
+            $link = esc_url(get_permalink() . "#" . $index);
+
+            $data['link'] = sprintf($data['link'], urlencode($link), urlencode($title));
+        }
+
+        $share = sprintf(
+            '<figure class="figure figure--share"><div class="share">%s</div></figure>',
+            Knife_Share_Buttons::get_buttons($settings)
+        );
+
+        return $share;
     }
 
 
