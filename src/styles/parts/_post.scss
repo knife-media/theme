@@ -6,6 +6,7 @@
   position: relative;
 
   max-width: 100%;
+  overflow: hidden;
 
   & > :first-child {
     margin-top: 1rem;
@@ -143,6 +144,8 @@
   &.post--cents {
     flex: 0 1 50rem;
     align-items: center;
+
+    overflow: visible;
 
     & > * {
       margin-top: 1rem;
