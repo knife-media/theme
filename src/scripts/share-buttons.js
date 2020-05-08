@@ -40,7 +40,7 @@
       top = Math.round(screen.height / 3 - params.height / 2);
     }
 
-    var win = window.open(url, params.id, 'left=' + left + ',top=' + top + ',' +
+    window.open(url, params.id, 'left=' + left + ',top=' + top + ',' +
       'width=' + params.width + ',height=' + params.height + ',personalbar=0,toolbar=0,scrollbars=1,resizable=1');
   }
 
