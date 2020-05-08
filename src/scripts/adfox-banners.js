@@ -2,6 +2,7 @@
  * Adfox banners loader
  *
  * @since 1.11
+ * @version 1.12
  */
 
 (function() {
@@ -84,7 +85,17 @@
     }
 
     // Add class on load
-    options.onLoad = function() {
+    options.onLoad = function(handle) {
+      var params = handle.bundleParams;
+
+      // Remove loaded class if exists
+      widget.classList.remove('widget-adfox--loaded');
+
+      // Destroy if banner hidden
+      if(params.bannerId && hiddenBanner(params.bannerId)) {
+        return handle.destroy();
+      }
+
       widget.classList.add('widget-adfox--loaded');
     }
 
@@ -177,6 +188,95 @@
 
 
   /**
+   * Check closed banner
+   */
+  function hiddenBanner(banner) {
+    // Get close items from storage
+    var close = localStorage.getItem('adfox-close');
+
+    // Check if items exist
+    if(close === null) {
+      return false;
+    }
+
+    var items = JSON.parse(close);
+
+    // Current time in ms
+    var now = new Date().getTime();
+
+    // Indicates hidden lifetime
+    var hidden = 0;
+
+    for(key in items) {
+      if(banner === key) {
+        hidden = items[key];
+      }
+
+      if(now > items[key]) {
+        delete items[key];
+      }
+    }
+
+    // Set updated items to storage
+    localStorage.setItem('adfox-close', JSON.stringify(items));
+
+    // If banner still hidden
+    return (hidden > now);
+  }
+
+
+  /**
+   * Manual banner close event
+   */
+  function closeBanner(e) {
+    var target = e.target || e.srcElement;
+
+    if(!target.hasAttribute('data-close')) {
+      return;
+    }
+
+    e.preventDefault();
+
+    var items = {};
+
+    // Get close items from storage
+    var close = localStorage.getItem('adfox-close');
+
+    // Convert items to array
+    if(close !== null) {
+      items = JSON.parse(close);
+    }
+
+    // Add new banner timestamp forward 8 hours
+    items[target.dataset.close] = new Date().getTime() + 1000 * 3600 * 8;
+
+    // Set items to storage
+    localStorage.setItem('adfox-close', JSON.stringify(items));
+
+    // Remove banner content
+    while(this.firstChild) {
+      this.removeChild(this.lastChild);
+    }
+  }
+
+
+  /**
+   * Banner click event listener
+   */
+  function sendEvent(e) {
+    var target = e.target || e.srcElement;
+
+    if(!target.hasAttribute('data-event')) {
+      return;
+    }
+
+    // Load image with event src
+    var image = document.createElement('img');
+    image.src = target.dataset.event;
+  }
+
+
+  /**
    * Loop through adfox widgets to load them
    */
   for(var i = 0; i < widgets.length; i++) {
@@ -195,6 +295,12 @@
 
     // Replace banner with new element
     widgets[i].replaceChild(adfox, banner);
+
+    // Send click events
+    adfox.addEventListener('click', sendEvent);
+
+    // Handle close events
+    adfox.addEventListener('click', closeBanner);
 
     // Load banner
     loadBanner(banner.dataset, id, widgets[i]);
