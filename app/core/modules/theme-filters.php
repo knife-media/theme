@@ -52,6 +52,9 @@ class Knife_Theme_Filters {
         // Remove auto suggestions
         add_filter('redirect_canonical', [__CLASS__, 'remove_autosuggest']);
 
+        // Fix non-latin filenames
+        add_action('sanitize_file_name', [__CLASS__, 'sanitize_file_name'], 12);
+
         // Remove annoying [...] in excerpts
         add_filter('excerpt_more', function($more) {
             return '&hellip;';
@@ -93,6 +96,18 @@ class Knife_Theme_Filters {
         }
 
         return $url;
+    }
+
+
+    /**
+     * Fix non-latin file name chars
+     *
+     * Process right after https://github.com/antonlukin/rus-package
+     *
+     * @since 1.12
+     */
+    public static function sanitize_file_name($name) {
+        return preg_replace('#[^a-z0-9.-_]#i', '', $name);
     }
 
 
