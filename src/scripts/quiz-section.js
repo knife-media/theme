@@ -2,7 +2,7 @@
  * Quiz post type front-end handler
  *
  * @since 1.7
- * @version 1.12
+ * @version 1.13
  */
 
 (function() {
@@ -30,9 +30,9 @@
 
 
   /**
-   * Hold victorious result in this var
+   * Hold victorious advance in this var
    */
-  var hold = 0;
+  var advance = 0;
 
 
   /**
@@ -62,7 +62,7 @@
   /**
    * Replace share links
    */
-  function replaceShare(result, index, dynamic) {
+  function replaceShare(result, dynamic) {
     // Check quiz share links
     if(typeof knife_quiz_options.share_links === 'undefined') {
       return false;
@@ -78,7 +78,7 @@
       return false;
     }
 
-    var permalink = knife_quiz_options.permalink.replace(/\/?$/, '/') + index + '/';
+    var permalink = knife_quiz_options.permalink.replace(/\/?$/, '/') + result.index + '/';
 
     if(dynamic.length > 0) {
       permalink = permalink + dynamic + '/';
@@ -154,8 +154,8 @@
 
             ranking[answer.category] = score + 1;
 
-            // Assign to hold currently max key
-            hold = Object.keys(ranking).reduce(function(a, b) {
+            // Assign to advance currently max key
+            advance = Object.keys(ranking).reduce(function(a, b) {
               return ranking[a] > ranking[b] ? a : b
             });
           }
@@ -165,7 +165,7 @@
 
         case 'points':
           if(answer.hasOwnProperty('points') && answer.points) {
-            hold = hold + parseInt(answer.points)
+            advance = advance + parseInt(answer.points)
           }
 
           target.classList.add(cl + '--selected');
@@ -173,7 +173,7 @@
 
         case 'binary':
           if(answer.hasOwnProperty('binary') && answer.binary) {
-            hold = hold + 1;
+            advance = advance + 1;
 
             target.classList.add(cl + '--correct');
             break;
@@ -321,7 +321,7 @@
   /**
    * Show results
    */
-  function showResult(result, hold) {
+  function showResult(result) {
     // Get quiz offset
     var offset = quiz.getBoundingClientRect().top + window.pageYOffset;
 
@@ -345,7 +345,7 @@
 
     var share = quiz.querySelector('.entry-quiz__share');
     if(document.body.contains(share)) {
-      replaceShare(result, hold, dynamic);
+      replaceShare(result, dynamic);
     }
 
     var vote = quiz.querySelector('.entry-quiz__vote');
@@ -444,8 +444,24 @@
 
 
     if(quiz.classList.contains('entry-quiz--results') === false) {
-      // Check if result exists
-      if(typeof knife_quiz_results[hold] === 'object') {
+      var results = [];
+
+      // Try to find correct results
+      for(var i = 0; i < knife_quiz_results.length; i++) {
+        var result = knife_quiz_results[i];
+
+        // Save current index
+        result.index = i;
+
+        if(!result.hasOwnProperty('advance') || result.advance === advance) {
+          results.push(result);
+        }
+      }
+
+      // Check if results exist
+      if(results.length > 0) {
+        var random = results[Math.floor(Math.random() * results.length)];
+
         quiz.classList.remove('entry-quiz--item');
 
         if(knife_quiz_options.hasOwnProperty('button_repeat')) {
@@ -458,7 +474,7 @@
 
         quiz.classList.add('entry-quiz--results');
 
-        return showResult(knife_quiz_results[hold], hold);
+        return showResult(random);
       }
     }
 

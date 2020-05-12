@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.7
- * @version 1.12
+ * @version 1.13
  */
 
 if (!defined('WPINC')) {
@@ -235,12 +235,12 @@ class Knife_Quiz_Section {
 
             // Add quiz items
             wp_localize_script('knife-theme', 'knife_quiz_items',
-                (array) self::retrieve_items($post_id, $options)
+                self::retrieve_items($post_id, $options)
             );
 
             // Add quiz results
             wp_localize_script('knife-theme', 'knife_quiz_results',
-                (object) self::retrieve_results($post_id, $options)
+                self::retrieve_results($post_id, $options)
             );
 
             if(method_exists('Knife_Share_Buttons', 'get_settings')) {
@@ -653,6 +653,11 @@ class Knife_Quiz_Section {
 
             $points = array_map('intval', $points);
 
+            // Set blank points if format does not use them
+            if(in_array($options['format'],  ['category', 'dynamic'])) {
+                $points = $blanks;
+            }
+
             for($i = $points['from']; $points['to'] >= $i; $i++) {
                 $result = [];
 
@@ -691,15 +696,14 @@ class Knife_Quiz_Section {
                     continue;
                 }
 
+                $result['advance'] = $i;
+
                 // Generate results only for category format
                 if($options['format'] === 'category') {
                     // Check if category exists
                     if(!empty($meta['category'])) {
-                        $category = mb_substr($meta['category'], 0, 1);
-                        $results[$category] = $result;
+                        $result['advance'] = mb_substr($meta['category'], 0, 1);
                     }
-
-                    continue;
                 }
 
                 // Generate results only for dynamic format
@@ -707,13 +711,11 @@ class Knife_Quiz_Section {
                     // Check if dynamic exists
                     if(!empty($meta['dynamic'])) {
                         $result['poster'] = esc_url($meta['dynamic']);
-                        $results[] = $result;
+                        unset($result['advance']);
                     }
-
-                    continue;
                 }
 
-                $results[$i] = $result;
+                $results[] = $result;
             }
         }
 
