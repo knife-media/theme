@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.12
+ * @version 1.13
  */
 
 if (!defined('WPINC')) {
@@ -52,8 +52,12 @@ class Knife_Theme_Filters {
         // Remove auto suggestions
         add_filter('redirect_canonical', [__CLASS__, 'remove_autosuggest']);
 
+        // Update permalink on post creation
+        add_filter('editable_slug', [__CLASS__, 'update_slug'], 12);
+
         // Fix non-latin filenames
         add_action('sanitize_file_name', [__CLASS__, 'sanitize_file_name'], 12);
+
 
         // Remove annoying [...] in excerpts
         add_filter('excerpt_more', function($more) {
@@ -96,6 +100,16 @@ class Knife_Theme_Filters {
         }
 
         return $url;
+    }
+
+
+    /**
+     * Remove dashes from sample permalink
+     *
+     * @since 1.13
+     */
+    public static function update_slug($slug) {
+        return preg_replace('/[^a-z0-9]/i', '-', $slug);
     }
 
 
