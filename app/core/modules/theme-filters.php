@@ -30,6 +30,8 @@ class Knife_Theme_Filters {
         // Remove private posts from archives and home page
         add_action('pre_get_posts', [__CLASS__, 'remove_private_posts']);
 
+        // Add excerpts for pages
+        add_action('init', [__CLASS__, 'add_pages_excerpts']);
 
         // Update archive template title
         add_filter('get_the_archive_title', [__CLASS__, 'update_archive_title']);
@@ -122,6 +124,15 @@ class Knife_Theme_Filters {
      */
     public static function sanitize_file_name($name) {
         return preg_replace('#[^a-z0-9.-_]#i', '', $name);
+    }
+
+    /**
+     * Add excerpts for pages
+     *
+     * @since 1.13
+     */
+    public static function add_pages_excerpts() {
+        add_post_type_support('page', 'excerpt');
     }
 
 
