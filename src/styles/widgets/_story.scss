@@ -51,9 +51,8 @@
       object-fit: cover;
       object-position: center;
 
+      will-change: transform;
       transition: opacity .25s;
-
-      -webkit-backface-visibility: hidden;
     }
 
     @media screen and (max-width: 1023px) {
