@@ -17,6 +17,6 @@
 
   // Try to load comments
   var xhr = new XMLHttpRequest();
-  xhr.open('GET', '/id/comments?post=' + post, false);
+  xhr.open('GET', '/id/comments?post=' + post);
   xhr.send();
 })();
