@@ -11,6 +11,8 @@
   border-radius: .5rem;
 
   &:first-child {
+    z-index: 2;
+
     padding: 1rem;
     text-align: center;
 
