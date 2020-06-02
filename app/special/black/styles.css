@@ -11,9 +11,7 @@
 /**
  * header styles
  */
-.header {
-  position: relative;
-
+.is-archive .header {
   font-family: 'Bramb', sans-serif;
   font-size: 2rem;
 
@@ -22,36 +20,36 @@
 }
 
 @media screen and (max-width: 1023px) {
-  .header {
+  .is-archive .header {
     font-size: 1.75rem;
   }
 }
 
 @media screen and (max-width: 767px) {
-  .header {
+  .is-archive .header {
     font-size: 1.5rem;
   }
 }
 
-.header .header__button.header__button--search {
+.is-archive .header__button.header__button--search {
   display: none;
 }
 
-.header .header__button.header__button--menu {
+.is-archive .header__button.header__button--menu {
   display: none;
 }
 
-.header .header__navbar {
+.is-archive .header__navbar {
   display: none;
 }
 
-.header .header__logo {
+.is-archive .header__logo {
   margin: auto;
   color: #fff;
   background-color: #101010;
 }
 
-.header .header__logo  .header__logo-link::after {
+.is-archive .header__logo .header__logo-link::after {
   content: "НОЖ";
 }
 
@@ -72,11 +70,11 @@
 /**
  * caption styles
  */
-.caption {
+.is-archive .caption {
   font-family: 'Bramb', sans-serif;
 }
 
-.caption .caption__description {
+.is-archive .caption__description {
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
@@ -94,7 +92,7 @@
   border-radius: .625rem;
 }
 
-.caption .caption__description h1 {
+.is-archive .caption__description h1 {
   margin-bottom: .5rem;
   font-size: 3.25rem;
   font-weight: 400;
@@ -102,37 +100,37 @@
   text-transform: uppercase;
 }
 
-.caption .caption__description p {
+.is-archive .caption__description p {
   font-size: 1.25rem;
   max-width: 42rem;
 }
 
 @media screen and (max-width: 1023px) {
-  .caption .caption__description h1 {
+  .is-archive .caption__description h1 {
     font-size: 3rem;
   }
 
-  .caption .caption__description p {
+  .is-archive .caption__description p {
     font-size: 1.125rem;
   }
 }
 
 @media screen and (max-width: 767px) {
-  .caption .caption__description h1 {
+  .is-archive .caption__description h1 {
     font-size: 2.5rem;
   }
 
-  .caption .caption__description p {
+  .is-archive .caption__description p {
     font-size: 1rem;
   }
 }
 
 @media screen and (max-width: 479px) {
-  .caption .caption__description h1 {
+  .is-archive .caption__description h1 {
     font-size: 2rem;
   }
 
-  .caption .caption__description p {
+  .is-archive .caption__description p {
     font-size: 0.875rem;
   }
 }
@@ -141,29 +139,29 @@
 /**
  * unit styles
  */
-.unit {
+.is-archive .unit {
   overflow: hidden;
   border-radius: .625rem;
 }
 
-.unit .unit__inner {
+.is-archive .unit__inner {
   padding-top: 60%;
 }
 
-.unit .unit__image {
+.is-archive .unit__image {
   padding-top: 60%;
 }
 
-.unit .unit__head {
+.is-archive .unit__head {
   display: none;
 }
 
-.unit .unit__content {
+.is-archive .unit__content {
   color: #fff;
   background-color: #101010;
 }
 
-.unit .unit__content .unit__content-link {
+.is-archive .unit__content .unit__content-link {
   padding-bottom: 1rem;
   text-align: center;
 
@@ -172,35 +170,35 @@
 }
 
 @media screen and (max-width: 1023px) {
-  .unit .unit__content .unit__content-link {
+  .is-archive .unit__content .unit__content-link {
     font-size: 1.75rem;
   }
 }
 
 @media screen and (max-width: 767px) {
-  .unit .unit__content .unit__content-link {
+  .is-archive .unit__content .unit__content-link {
     padding-bottom: .5rem;
     font-size: 1.5rem;
   }
 }
 
 @media screen and (max-width: 479px) {
-  .unit .unit__content .unit__content-link {
+  .is-archive .unit__content .unit__content-link {
     font-size: 1.5rem;
   }
 }
 
 @media screen and (max-width: 359px) {
-  .unit .unit__content .unit__content-link {
+  .is-archive .unit__content .unit__content-link {
     font-size: 1.375rem;
   }
 }
 
-.unit .unit__content .unit__content-link em {
+.is-archive .unit__content .unit__content-link em {
   font-family: 'Bramb', sans-serif;
 }
 
-.unit .unit__content .unit__content-info {
+.is-archive .unit .unit__content .unit__content-info {
   display: none;
 }
 
@@ -208,11 +206,11 @@
 /**
  * navigate styles
  */
-.navigate {
+.is-archive .navigate {
   width: calc(100% - 2rem);
 }
 
-.navigate a {
+.is-archive .navigate a {
   font-family: 'Bramb', sans-serif;
 
   color: #fff;
@@ -225,6 +223,6 @@
 /**
  * footer styles
  */
-.footer {
+ .is-archive .footer {
   padding: 0;
 }
