@@ -133,7 +133,13 @@
 
   @media screen and (max-width: 479px) {
     .unit .unit__content .unit__content-link {
-      font-size: 1.25rem;
+      font-size: 1.5rem;
+    }
+  }
+
+  @media screen and (max-width: 359px) {
+    .unit .unit__content .unit__content-link {
+      font-size: 1.375rem;
     }
   }
 
