@@ -9,6 +9,40 @@
 
 
 /**
+ * header styles
+ */
+ .header {
+  position: relative;
+  padding: 0.5rem 0;
+
+  font-family: 'Bramb', sans-serif;
+  font-size: 2rem;
+
+  color: #fff;
+  background-color: #101010;
+}
+  @media screen and (max-width: 1023px) {
+    .header {
+      font-size: 1.75rem;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .header {
+      font-size: 1.5rem;
+    }
+  }
+
+.header::after {
+  content: "НОЖ";
+}
+
+.header .header__inner {
+  display: none;
+}
+
+
+/**
  * archive styles
  */
 .archive {
