@@ -7,13 +7,15 @@
 (function () {
   var selectors = [
     '.widget-single .widget-single__content-title',
-    '.widget-units .unit__content-link',
     '.widget-cents .widget-cents__link',
     '.widget-story .widget-story__title-link',
     '.widget-blunt .widget-blunt__link',
     '.widget-transparent .widget-transparent__content-link',
     '.widget-club .widget-club__content-link',
     '.widget-recent .widget-recent__content-link',
+    '.widget-news .widget-news__content-link',
+    '.unit .unit__content-link',
+    '.entry-header .entry-header__lead',
     '.entry-header .entry-header__title',
     '.entry-header .entry-header__link p',
     '.entry-content p',
@@ -37,8 +39,6 @@
     }
   }
 
-  console.log(data);
-
   // Send request
   var request = new XMLHttpRequest();
   request.open('POST', '/russify/', true);
@@ -53,6 +53,8 @@
     if (!response.results) {
       return console.error('Can not parse /russify/ response');
     }
+
+    return false;
 
     for (var i = 0; i < response.results.length; i++) {
       var find = document.querySelector('[data-russify="' + i + '"]');
