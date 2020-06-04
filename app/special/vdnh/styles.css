@@ -1,8 +1,3 @@
-:root {
-  --color-special: #f7333f;
-  --color-background: #fff;
-}
-
 /**
  * caption styles
  */
@@ -18,8 +13,8 @@
   padding: 0 1rem;
   text-align: center;
 
-  color: var(--color-special);
-  background: var(--color-background);
+  color: #f7333f;
+  background: #fff;
   text-transform: uppercase;
   box-shadow: 0 0 1.5rem #a90711;
 
@@ -72,7 +67,7 @@
   width: 100vw;
   height: 100%;
 
-  background-color: var(--color-special);
+  background-color: #f7333f;
   transform: translateX(-50%);
 }
 

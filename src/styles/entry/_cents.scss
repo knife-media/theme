@@ -11,6 +11,8 @@
   border-radius: .5rem;
 
   &:first-child {
+    z-index: 2;
+
     padding: 1rem;
     text-align: center;
 
@@ -21,7 +23,7 @@
     background-repeat: no-repeat;
     background-size: 100% auto;
     background-position: center 0;
-    background-size: 50rem auto;
+    background-size: cover;
   }
 
   .entry-cents__title {
@@ -29,7 +31,7 @@
 
     width: $width-content;
     max-width: 100%;
-    margin: 3rem auto 0.5rem;
+    margin: 2.5rem auto 0.5rem;
 
     font-size: 5rem;
     font-weight: 700;
@@ -60,11 +62,19 @@
 
     font-size: 1rem;
 
+    a {
+      border-bottom: solid 1px;
+
+      &:hover {
+        border-bottom-color: transparent;
+      }
+    }
+
     @media screen and (max-width: 767px) {
       font-size: .875rem;
     }
 
-    @media screen and (max-width: 479px) {
+    @media screen and (max-width: 359px) {
       font-size: .75rem;
     }
   }

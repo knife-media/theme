@@ -319,6 +319,13 @@
         margin: 0 auto;
       }
 
+      small {
+        display: block;
+
+        font-weight: 400;
+        font-size: small;
+      }
+
       @media screen and (max-width: 767px) {
         margin-top: 1rem;
         padding-top: 1rem;

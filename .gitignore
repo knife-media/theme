@@ -1,3 +1,6 @@
 node_modules/
-src/fonts/formular/
-app/assets/fonts/formular/
+formular-*.woff
+formular-*.woff2
+formular-*.ttf
+bramb-*.woff
+bramb-*.woff2

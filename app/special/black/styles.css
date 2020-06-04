@@ -1,0 +1,228 @@
+@font-face {
+  font-family: 'Bramb';
+  src: url('fonts/bramb-regular.woff2') format('woff2'),
+    url('fonts/bramb-regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-stretch: normal;
+}
+
+
+/**
+ * header styles
+ */
+.is-archive .header {
+  font-family: 'Bramb', sans-serif;
+  font-size: 2rem;
+
+  color: #fff;
+  background-color: #101010;
+}
+
+@media screen and (max-width: 1023px) {
+  .is-archive .header {
+    font-size: 1.75rem;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .is-archive .header {
+    font-size: 1.5rem;
+  }
+}
+
+.is-archive .header__button.header__button--search {
+  display: none;
+}
+
+.is-archive .header__button.header__button--menu {
+  display: none;
+}
+
+.is-archive .header__navbar {
+  display: none;
+}
+
+.is-archive .header__logo {
+  margin: auto;
+  color: #fff;
+  background-color: #101010;
+}
+
+.is-archive .header__logo .header__logo-link::after {
+  content: "НОЖ";
+}
+
+.header .header__logo .header__logo-image {
+  display: none;
+}
+
+
+/**
+ * archive styles
+ */
+.archive {
+  width: calc(100% - 2rem);
+  font-family: 'Bramb', sans-serif;
+}
+
+
+/**
+ * caption styles
+ */
+.is-archive .caption {
+  font-family: 'Bramb', sans-serif;
+}
+
+.is-archive .caption__description {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  max-width: 100%;
+  margin: 1rem 0 0;
+  padding: 1rem 2rem;
+  text-align: center;
+
+  color: #fff;
+  background-color: #101010;
+
+  border-radius: .625rem;
+}
+
+.is-archive .caption__description h1 {
+  margin-bottom: .5rem;
+  font-size: 3.25rem;
+  font-weight: 400;
+  line-height: 1.125;
+  text-transform: uppercase;
+}
+
+.is-archive .caption__description p {
+  font-size: 1.25rem;
+  max-width: 42rem;
+}
+
+@media screen and (max-width: 1023px) {
+  .is-archive .caption__description h1 {
+    font-size: 3rem;
+  }
+
+  .is-archive .caption__description p {
+    font-size: 1.125rem;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .is-archive .caption__description h1 {
+    font-size: 2.5rem;
+  }
+
+  .is-archive .caption__description p {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  .is-archive .caption__description h1 {
+    font-size: 2rem;
+  }
+
+  .is-archive .caption__description p {
+    font-size: 0.875rem;
+  }
+}
+
+
+/**
+ * unit styles
+ */
+.is-archive .unit {
+  overflow: hidden;
+  border-radius: .625rem;
+}
+
+.is-archive .unit__inner {
+  padding-top: 60%;
+}
+
+.is-archive .unit__image {
+  padding-top: 60%;
+}
+
+.is-archive .unit__head {
+  display: none;
+}
+
+.is-archive .unit__content {
+  color: #fff;
+  background-color: #101010;
+}
+
+.is-archive .unit__content .unit__content-link {
+  padding-bottom: 1rem;
+  text-align: center;
+
+  font-weight: 400;
+  font-size: 1.875rem;
+}
+
+@media screen and (max-width: 1023px) {
+  .is-archive .unit__content .unit__content-link {
+    font-size: 1.75rem;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .is-archive .unit__content .unit__content-link {
+    padding-bottom: .5rem;
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  .is-archive .unit__content .unit__content-link {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (max-width: 359px) {
+  .is-archive .unit__content .unit__content-link {
+    font-size: 1.375rem;
+  }
+}
+
+.is-archive .unit__content .unit__content-link em {
+  font-family: 'Bramb', sans-serif;
+}
+
+.is-archive .unit .unit__content .unit__content-info {
+  display: none;
+}
+
+
+/**
+ * navigate styles
+ */
+.is-archive .navigate {
+  width: calc(100% - 2rem);
+}
+
+.is-archive .navigate a {
+  font-family: 'Bramb', sans-serif;
+
+  color: #fff;
+  background-color: #101010;
+  border-color: #101010;
+  border-radius: .625rem;
+}
+
+
+/**
+ * footer styles
+ */
+ .is-archive .footer {
+  padding: 0;
+}
