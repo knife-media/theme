@@ -60,6 +60,40 @@
     }
   }
 
+  &.promo--russify {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    cursor: pointer;
+
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 15;
+
+
+    width: 5rem;
+    height: 5rem;
+    padding: 0;
+
+    font-size: .75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+
+    color: $color-white;
+    background: linear-gradient(to bottom, #fe3801, #1c00ff,#fe3801);
+    background-size: 100% 200%;
+    background-position: 0 0;
+
+    animation: gradient 1s infinite;
+    border-radius: 1rem;
+
+    &.promo--freeze {
+      animation: none;
+    }
+  }
+
   @media screen and (max-width: 767px) {
     padding: 1rem;
     font-size: 1.125rem;
