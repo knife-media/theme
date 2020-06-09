@@ -5,6 +5,12 @@
  */
 
 (function () {
+  // Check if lables exists
+  if (typeof knife_russify === 'undefined') {
+    return false;
+  }
+
+
   var selectors = [
     '.widget-single .widget-single__content-title',
     '.widget-cents .widget-cents__link',
@@ -26,42 +32,76 @@
     '.entry-content h5',
   ];
 
-  var data = [], k = 0;
+  var headings = []
 
-  for (var i = 0; i < selectors.length; i++) {
-    var tags = document.querySelectorAll(selectors[i]);
+  var button = document.createElement('button');
+  button.classList.add('promo', 'promo--russify');
+  button.textContent = knife_russify.button || '';
+  document.body.appendChild(button);
 
-    for (var j = 0; j < tags.length; j++, k++) {
-      tags[j].setAttribute('data-russify', k);
+  function getHeadings() {
+    for (var i = 0, k = 0; i < selectors.length; i++) {
+      var tags = document.querySelectorAll(selectors[i]);
 
-      // Save tags html to text
-      data[k] = tags[j].innerHTML;
+      for (var j = 0; j < tags.length; j++, k++) {
+        tags[j].setAttribute('data-russify', k);
+
+        // Save tags html to text
+        headings[k] = tags[j].innerHTML;
+      }
     }
+
+    return headings;
   }
 
-  // Send request
-  var request = new XMLHttpRequest();
-  request.open('POST', '/russify/', true);
-  request.setRequestHeader("Content-Type", "application/json");
-  request.onload = function () {
-    if (request.status !== 200) {
-      return console.error('Error while /russify/ loading');
+  function setRussified() {
+    headings = getHeadings();
+
+    var request = new XMLHttpRequest();
+    request.open('POST', '/russify/', true);
+    request.setRequestHeader("Content-Type", "application/json");
+    request.onload = function () {
+      if (request.status !== 200) {
+        return console.error('Error while /russify/ loading');
+      }
+
+      var response = JSON.parse(request.responseText);
+
+      if (!response.results) {
+        return console.error('Can not parse /russify/ response');
+      }
+
+      for (var i = 0; i < response.results.length; i++) {
+        var find = document.querySelector('[data-russify="' + i + '"]');
+
+        find.innerHTML = response.results[i];
+      }
+
+      button.textContent = knife_russify.getback || '';
     }
 
-    var response = JSON.parse(request.responseText);
+    button.classList.add('promo--freeze');
+    button.textContent = knife_russify.process || '';
+    request.send(JSON.stringify(headings));
+  }
 
-    if (!response.results) {
-      return console.error('Can not parse /russify/ response');
+  // Handle button click
+  button.addEventListener('click', function(e) {
+    e.preventDefault();
+
+    if (headings.length === 0) {
+      return setRussified();
     }
 
-    return false;
-
-    for (var i = 0; i < response.results.length; i++) {
+    for (var i = 0; i < headings.length; i++) {
       var find = document.querySelector('[data-russify="' + i + '"]');
 
-      find.innerHTML = response.results[i];
+      find.innerHTML = headings[i];
     }
-  }
 
-  request.send(JSON.stringify(data));
+    headings = [];
+
+    button.classList.remove('promo--freeze');
+    button.textContent = knife_russify.button || '';
+  });
 })();
