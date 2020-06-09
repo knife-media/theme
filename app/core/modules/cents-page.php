@@ -214,7 +214,7 @@ class Knife_Cents_Page {
 
             // Update title for network
             if($network === 'telegram') {
-                $title = $cent['content'];
+                $title = str_replace(["\n", "  "], " ", $cent['content']);
             }
 
             // Set sharing ling with hash param
