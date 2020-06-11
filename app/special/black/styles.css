@@ -104,8 +104,8 @@ body.is-archive:after {
   padding: 1rem 2rem;
   text-align: center;
 
-  color: #101010;
-  background-color: #fff;
+  color: #fff;
+  background-color: #101010;
 
   border-radius: .625rem;
 }
@@ -122,7 +122,7 @@ body.is-archive:after {
   margin-bottom: .5rem;
   text-indent: -9999rem;
 
-  background-image: url('images/logo-black.png');
+  background-image: url('images/logo-white.png');
   background-repeat: no-repeat;
   background-size: contain;
 }
@@ -183,8 +183,8 @@ body.is-archive:after {
 }
 
 .is-archive .unit__content {
-  color: #101010;
-  background-color: #fff;
+  color: #fff;
+  background-color: #101010;
 }
 
 .is-archive .unit__content .unit__content-link {
@@ -210,9 +210,9 @@ body.is-archive:after {
 .is-archive .navigate a {
   font-family: 'Montserrat Alternates', sans-serif;
 
-  color: #101010;
-  background-color: #fff;
-  border-color: #fff;
+  color: #fff;
+  background-color: #101010;
+  border-color: #101010;
   border-radius: .625rem;
 }
 
