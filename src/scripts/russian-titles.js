@@ -10,7 +10,6 @@
     return false;
   }
 
-
   var selectors = [
     '.widget-single .widget-single__content-title',
     '.widget-cents .widget-cents__link',
@@ -24,6 +23,8 @@
     '.entry-header .entry-header__lead',
     '.entry-header .entry-header__title',
     '.entry-header .entry-header__link p',
+    '.entry-cents h2',
+    '.entry-cents p',
     '.entry-content p',
     '.entry-content h1',
     '.entry-content h2',
