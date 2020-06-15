@@ -5,14 +5,14 @@
  * @version 1.7
  */
 
-(function() {
+(function () {
   var post = document.querySelector('.post');
 
 
   /**
    * Check if post element exists
    */
-  if(post === null) {
+  if (post === null) {
     return false;
   }
 
@@ -44,7 +44,7 @@
     iframe.setAttribute('frameborder', '0');
     iframe.setAttribute('src', embed.dataset.embed);
 
-    iframe.addEventListener('load', function() {
+    iframe.addEventListener('load', function () {
       loader.parentNode.removeChild(loader);
     });
 
@@ -55,26 +55,26 @@
   /**
    * Click listeners for embeds
    */
-  post.addEventListener('click', function(e) {
+  post.addEventListener('click', function (e) {
     var target = e.target || e.srcElement;
 
     // Check if parent element exists
-    if(target.parentElement === null) {
+    if (target.parentElement === null) {
       return;
     }
 
     var embed = target.parentElement;
 
     // Check if parent element embed
-    if(!embed.classList.contains('embed')) {
+    if (!embed.classList.contains('embed')) {
       return;
     }
 
-    if(embed.hasAttribute('data-embed')) {
+    if (embed.hasAttribute('data-embed')) {
       e.preventDefault();
 
       // Remove all embed child nodes
-      while(embed.firstChild) {
+      while (embed.firstChild) {
         embed.removeChild(embed.firstChild);
       }
 

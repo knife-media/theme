@@ -1,4 +1,4 @@
-jQuery(document).ready(function($) {
+jQuery(document).ready(function ($) {
   var field = $('#email').closest('tr');
 
   // Remove required to avoid errors

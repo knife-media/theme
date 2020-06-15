@@ -1,7 +1,7 @@
-jQuery(document).ready(function($) {
+jQuery(document).ready(function ($) {
   var box = $('#tagsdiv-post_tag');
 
-  if(typeof knife_primary_tagbox === 'undefined' || box.length < 1) {
+  if (typeof knife_primary_tagbox === 'undefined' || box.length < 1) {
     return false;
   }
 
@@ -16,15 +16,17 @@ jQuery(document).ready(function($) {
   function parseTags() {
     var thetags = box.find('.the-tags').val();
 
-    if($('#knife-primary-tag').length) {
+    if ($('#knife-primary-tag').length) {
       $('#knife-primary-tag').remove();
     }
 
-    if(thetags.length < 1) {
+    if (thetags.length < 1) {
       return false;
     }
 
-    var block = $('<div>', {'id': 'knife-primary-tag'});
+    var block = $('<div>', {
+      'id': 'knife-primary-tag'
+    });
 
     $('<p>', {
       'class': 'howto',
@@ -39,12 +41,15 @@ jQuery(document).ready(function($) {
     block.appendTo(box.find('.tagsdiv'));
 
 
-    $.each(thetags.split(delimiter), function(key, val) {
+    $.each(thetags.split(delimiter), function (key, val) {
       val = $.trim(val);
 
-      var obj = {'value': val, 'html': val};
+      var obj = {
+        'value': val,
+        'html': val
+      };
 
-      if(val === selected)
+      if (val === selected)
         obj.selected = selected;
 
       $('<option>', obj).appendTo(block.find('select'));
@@ -57,7 +62,7 @@ jQuery(document).ready(function($) {
    */
   var observer = window.MutationObserver || window.WebKitMutationObserver;
 
-  view = new observer(function(mutations) {
+  view = new observer(function (mutations) {
     return parseTags();
   });
 

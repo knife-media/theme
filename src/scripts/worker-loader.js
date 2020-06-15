@@ -5,12 +5,12 @@
  * @version 1.12
  */
 
-(function() {
-  if('serviceWorker' in navigator) {
+(function () {
+  if ('serviceWorker' in navigator) {
     var host = document.location.host;
 
     // Check if subdomain
-    if(host.match(/\./g).length > 1) {
+    if (host.match(/\./g).length > 1) {
       return false;
     }
 

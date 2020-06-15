@@ -87,7 +87,7 @@
   }
 
   // Handle button click
-  button.addEventListener('click', function(e) {
+  button.addEventListener('click', function (e) {
     e.preventDefault();
 
     if (headings.length === 0) {

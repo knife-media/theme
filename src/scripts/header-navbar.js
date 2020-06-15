@@ -1,8 +1,8 @@
-(function() {
+(function () {
   var toggle = document.getElementById('toggle-menu');
   var header = document.querySelector('.header');
 
-  if(toggle === null) {
+  if (toggle === null) {
     return false;
   }
 
@@ -22,8 +22,8 @@
     // Get first header parent child
     var sibling = header.parentElement.firstChild;
 
-    while(sibling && sibling !== header) {
-      if(sibling.nodeType == 1) {
+    while (sibling && sibling !== header) {
+      if (sibling.nodeType == 1) {
         sibling.style.display = display;
       }
 
@@ -38,7 +38,7 @@
   function clickOutside(e) {
     var source = e.target || e.srcElement;
 
-    if(source === body) {
+    if (source === body) {
       e.stopPropagation();
 
       // Remove events
@@ -52,7 +52,7 @@
   /**
    * Toggle menu bar
    */
-  toggle.addEventListener('click', function(e) {
+  toggle.addEventListener('click', function (e) {
     e.preventDefault();
 
     toggle.classList.toggle('toggle--expand');
@@ -61,7 +61,7 @@
     header.querySelector('.navbar').classList.toggle('navbar--expand');
 
     // Close navbar menu
-    if(body.classList.contains('is-navbar')) {
+    if (body.classList.contains('is-navbar')) {
       body.classList.remove('is-navbar');
       body.style.top = '';
 

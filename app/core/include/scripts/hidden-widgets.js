@@ -1,7 +1,7 @@
-jQuery( function( $ ) {
+jQuery(function ($) {
   var widgets_shell = $('div#widgets-right');
 
-  if(!widgets_shell.length || !$(widgets_shell).find('.widget-control-actions').length) {
+  if (!widgets_shell.length || !$(widgets_shell).find('.widget-control-actions').length) {
     widgets_shell = $('form#customize-controls');
   }
 
@@ -18,17 +18,17 @@ jQuery( function( $ ) {
       .prependTo($displayOptionsButton.parent());
   }
 
-  $('.widget').each(function() {
+  $('.widget').each(function () {
     moveWidgetVisibilityButton($(this));
   });
 
-  $(document).on('widget-added', function(e, $widget) {
-    if($widget.find('div.widget-control-actions a.display-options').length === 0) {
+  $(document).on('widget-added', function (e, $widget) {
+    if ($widget.find('div.widget-control-actions a.display-options').length === 0) {
       moveWidgetVisibilityButton($widget);
     }
   });
 
-  widgets_shell.on('click.widgetconditions', 'a.add-condition', function(e) {
+  widgets_shell.on('click.widgetconditions', 'a.add-condition', function (e) {
     e.preventDefault();
 
     var $condition = $(this).closest('div.condition');
@@ -49,20 +49,20 @@ jQuery( function( $ ) {
     $(this).toggleClass('active');
     $widget.toggleClass('expanded');
 
-    if($(this).hasClass('active')) {
+    if ($(this).hasClass('active')) {
       return $widget.find('input[name=widget-conditions-visible]').val('1');
     }
 
     return $widget.find('input[name=widget-conditions-visible]').val('0');
   });
 
-  widgets_shell.on('click.widgetconditions', 'a.delete-condition', function( e ) {
+  widgets_shell.on('click.widgetconditions', 'a.delete-condition', function (e) {
     e.preventDefault();
 
-    var $condition = $( this ).closest('div.condition');
+    var $condition = $(this).closest('div.condition');
 
-    if($condition.is(':first-child') && $condition.is(':last-child')) {
-      $( this ).closest('div.widget').find('a.display-options').click();
+    if ($condition.is(':first-child') && $condition.is(':last-child')) {
+      $(this).closest('div.widget').find('a.display-options').click();
 
       return $condition.find('select.conditions-rule-major').val('').change();
     }
@@ -70,27 +70,27 @@ jQuery( function( $ ) {
     return $condition.detach();
   });
 
-  widgets_shell.on('click.widgetconditions', 'div.widget-top', function() {
-    var $widget = $( this ).closest('div.widget');
+  widgets_shell.on('click.widgetconditions', 'div.widget-top', function () {
+    var $widget = $(this).closest('div.widget');
     var $displayOptionsButton = $widget.find('a.display-options');
 
-    if($displayOptionsButton.hasClass('active')) {
+    if ($displayOptionsButton.hasClass('active')) {
       $displayOptionsButton.attr('opened', 'true');
     }
 
-    if($displayOptionsButton.attr('opened')) {
+    if ($displayOptionsButton.attr('opened')) {
       $displayOptionsButton.removeAttr('opened');
       $widget.toggleClass('expanded');
     }
   });
 
-  $(document).on('change.widgetconditions', 'select.conditions-rule-major', function() {
-    var $conditionsRuleMajor = $ (this);
+  $(document).on('change.widgetconditions', 'select.conditions-rule-major', function () {
+    var $conditionsRuleMajor = $(this);
     var $conditionsRuleMinor = $conditionsRuleMajor.siblings('select.conditions-rule-minor:first');
     var $conditionsRuleHasChildren = $conditionsRuleMajor.siblings('span.conditions-rule-has-children');
 
-    if($conditionsRuleMajor.val()) {
-      if($conditionsRuleMajor.val() !== 'page') {
+    if ($conditionsRuleMajor.val()) {
+      if ($conditionsRuleMajor.val() !== 'page') {
         $conditionsRuleHasChildren.hide().html('');
       }
 
@@ -103,7 +103,7 @@ jQuery( function( $ ) {
         major: $conditionsRuleMajor.val()
       };
 
-      return jQuery.post(ajaxurl, data, function(html) {
+      return jQuery.post(ajaxurl, data, function (html) {
         $conditionsRuleMinor.html(html).removeAttr('disabled');
       });
     }
@@ -112,19 +112,19 @@ jQuery( function( $ ) {
     $conditionsRuleHasChildren.hide().html('');
   });
 
-  $(document).on('change.widgetconditions', 'select.conditions-rule-minor', function() {
-    var $conditionsRuleMinor = $ (this);
+  $(document).on('change.widgetconditions', 'select.conditions-rule-minor', function () {
+    var $conditionsRuleMinor = $(this);
     var $conditionsRuleMajor = $conditionsRuleMinor.siblings('select.conditions-rule-major');
     var $conditionsRuleHasChildren = $conditionsRuleMinor.siblings('span.conditions-rule-has-children');
 
-    if($conditionsRuleMajor.val() === 'page') {
+    if ($conditionsRuleMajor.val() === 'page') {
       var data = {
         action: 'widget_conditions_has_children',
         major: $conditionsRuleMajor.val(),
         minor: $conditionsRuleMinor.val()
       };
 
-      return jQuery.post(ajaxurl, data, function(html) {
+      return jQuery.post(ajaxurl, data, function (html) {
         $conditionsRuleHasChildren.html(html).show();
       });
     }

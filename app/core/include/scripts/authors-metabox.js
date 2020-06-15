@@ -1,5 +1,5 @@
-jQuery(document).ready(function($) {
-  if(typeof knife_authors_metabox.error === 'undefined') {
+jQuery(document).ready(function ($) {
+  if (typeof knife_authors_metabox.error === 'undefined') {
     return false;
   }
 
@@ -8,7 +8,7 @@ jQuery(document).ready(function($) {
   /**
    * Skip if no action
    */
-  if(typeof knife_authors_metabox.action === 'undefined') {
+  if (typeof knife_authors_metabox.action === 'undefined') {
     return false;
   }
 
@@ -16,7 +16,7 @@ jQuery(document).ready(function($) {
   /**
    * Skip if no post meta
    */
-  if(typeof knife_authors_metabox.post_meta === 'undefined') {
+  if (typeof knife_authors_metabox.post_meta === 'undefined') {
     return false;
   }
 
@@ -33,7 +33,7 @@ jQuery(document).ready(function($) {
   function createAuthor(author) {
     var verify = knife_authors_metabox.verify || '';
 
-    if(!confirm(verify)) {
+    if (!confirm(verify)) {
       return false
     }
 
@@ -46,12 +46,16 @@ jQuery(document).ready(function($) {
     // Disable input
     input.prop('readonly', true);
 
-    var xhr = $.ajax({method: 'POST', url: ajaxurl, data: data}, 'json');
+    var xhr = $.ajax({
+      method: 'POST',
+      url: ajaxurl,
+      data: data
+    }, 'json');
 
-    xhr.done(function(answer) {
+    xhr.done(function (answer) {
       input.prop('readonly', false);
 
-      if(answer.success) {
+      if (answer.success) {
         return appendAuthor(answer.data.id, answer.data.author);
       }
 
@@ -61,7 +65,7 @@ jQuery(document).ready(function($) {
       return alert(message);
     });
 
-    xhr.fail(function() {
+    xhr.fail(function () {
       input.prop('readonly', false);
 
       return alert(knife_authors_metabox.error);
@@ -76,22 +80,29 @@ jQuery(document).ready(function($) {
     // Try to find clone
     var find = box.find('.authors-item input[value="' + id + '"]');
 
-    if(find.length > 0) {
+    if (find.length > 0) {
       find.closest('.authors-item').remove();
     }
 
     var meta = knife_authors_metabox.post_meta + '[]';
 
     // Create item element
-    var item = $('<p/>', {'class': 'authors-item'});
+    var item = $('<p/>', {
+      'class': 'authors-item'
+    });
     item.html(author);
     item.appendTo(box);
 
-    var span = $('<span/>', {'class': 'authors-delete'});
+    var span = $('<span/>', {
+      'class': 'authors-delete'
+    });
     span.prependTo(item);
 
     // Create user input
-    var user = $('<input/>', {'type': 'hidden', 'name': meta});
+    var user = $('<input/>', {
+      'type': 'hidden',
+      'name': meta
+    });
     user.val(id);
     user.prependTo(item);
   }
@@ -106,11 +117,11 @@ jQuery(document).ready(function($) {
     // Clear input
     input.val('');
 
-    if(author.length < 2) {
+    if (author.length < 2) {
       return false;
     }
 
-    if(author[0].indexOf('+') === 0) {
+    if (author[0].indexOf('+') === 0) {
       return createAuthor(author[1]);
     }
 
@@ -133,7 +144,7 @@ jQuery(document).ready(function($) {
   /**
    * Item remove handler
    */
-  box.on('click', '.authors-delete', function() {
+  box.on('click', '.authors-delete', function () {
     $(this).closest('.authors-item').remove();
   });
 

@@ -6,11 +6,11 @@
  */
 
 
-(function() {
+(function () {
   /**
    * Check if similar contents exist
    */
-  if(typeof knife_similar_posts === 'undefined') {
+  if (typeof knife_similar_posts === 'undefined') {
     return false;
   }
 
@@ -18,13 +18,13 @@
   /**
    * Shuffle similar contents array
    */
-  var similar = (function(items) {
-    for(var i = 0, c; i < items.length; i++) {
-        c = Math.floor(Math.random() * i);
+  var similar = (function (items) {
+    for (var i = 0, c; i < items.length; i++) {
+      c = Math.floor(Math.random() * i);
 
-        var temp = items[i];
-        items[i] = items[c];
-        items[c] = temp;
+      var temp = items[i];
+      items[i] = items[c];
+      items[c] = temp;
     }
 
     return items;
@@ -60,11 +60,11 @@
    *
    * @since 1.11
    */
-  (function() {
+  (function () {
     var footer = document.querySelector('.entry-footer');
 
     // Skip if no footer or similar to short
-    if(footer === null || similar.length < counter + 4) {
+    if (footer === null || similar.length < counter + 4) {
       return false;
     }
 
@@ -72,8 +72,8 @@
     widget.classList.add('entry-footer__similar');
 
     // Add similar items
-    for(var i = counter; i < counter + 4; i++) {
-      if(!similar[i].link || !similar[i].title) {
+    for (var i = counter; i < counter + 4; i++) {
+      if (!similar[i].link || !similar[i].title) {
         continue;
       }
 
@@ -91,19 +91,19 @@
   /**
    * Create auto similar contents if need
    */
-  (function() {
+  (function () {
     // Check if hidden is not true
     var content = document.querySelectorAll('.entry-content');
 
     // Skip cards and posts with hidden meta
-    if(content.length !== 1 || knife_similar_posts.hidden == 1) {
+    if (content.length !== 1 || knife_similar_posts.hidden == 1) {
       return false;
     }
 
     var children = content[0].children;
 
     // Check if entry-content long enough and similar links exist
-    if(children.length < 15 || similar.length < counter + 3) {
+    if (children.length < 15 || similar.length < counter + 3) {
       return false;
     }
 
@@ -116,18 +116,18 @@
     var following = null;
 
     // Find following tag
-    for(var i = landmark; i < children.length - 5; i++) {
+    for (var i = landmark; i < children.length - 5; i++) {
       // Check if next tag in allowed list
-      if(allowed.indexOf(children[i].tagName.toLowerCase()) < 0) {
+      if (allowed.indexOf(children[i].tagName.toLowerCase()) < 0) {
         continue;
       }
 
-      if(typeof children[i - 1] === 'undefined') {
+      if (typeof children[i - 1] === 'undefined') {
         continue;
       }
 
       // Check if prev tag in allowed list
-      if(allowed.indexOf(children[i - 1].tagName.toLowerCase()) < 0) {
+      if (allowed.indexOf(children[i - 1].tagName.toLowerCase()) < 0) {
         continue;
       }
 
@@ -136,7 +136,7 @@
     }
 
     // Let's insert similar posts if following found
-    if(following === null) {
+    if (following === null) {
       return false;
     }
 
@@ -148,8 +148,8 @@
     figure.appendChild(title);
 
     // Add similar items
-    for(var i = counter; i < counter + 3; i++) {
-      if(!similar[i].link || !similar[i].title) {
+    for (var i = counter; i < counter + 3; i++) {
+      if (!similar[i].link || !similar[i].title) {
         continue;
       }
 

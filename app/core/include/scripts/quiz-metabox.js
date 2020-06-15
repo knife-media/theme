@@ -1,5 +1,5 @@
-jQuery(document).ready(function($) {
-  if(typeof wp === 'undefined' || typeof wp.media === 'undefined') {
+jQuery(document).ready(function ($) {
+  if (typeof wp === 'undefined' || typeof wp.media === 'undefined') {
     return false;
   }
 
@@ -9,7 +9,7 @@ jQuery(document).ready(function($) {
   /**
    * Check required metabox options
    */
-  if(typeof knife_quiz_metabox.error === 'undefined') {
+  if (typeof knife_quiz_metabox.error === 'undefined') {
     return false;
   }
 
@@ -24,7 +24,7 @@ jQuery(document).ready(function($) {
    * Add class for short time
    */
   function blinkClass(element, cl) {
-    element.addClass(cl).delay(500).queue(function(){
+    element.addClass(cl).delay(500).queue(function () {
       element.removeClass(cl).dequeue();
     });
   }
@@ -48,10 +48,10 @@ jQuery(document).ready(function($) {
    * Update poster fields
    */
   function updatePosters(result, points, posters) {
-    if(typeof posters === 'undefined') {
+    if (typeof posters === 'undefined') {
       posters = {};
 
-      result.find('input[data-poster]').each(function() {
+      result.find('input[data-poster]').each(function () {
         var score = $(this).data('poster');
 
         posters[score] = $(this).val();
@@ -67,7 +67,7 @@ jQuery(document).ready(function($) {
     // Clear posters to recreate them below
     fields.empty();
 
-    for(var i = points.from; i <= points.to; i++) {
+    for (var i = points.from; i <= points.to; i++) {
       var poster = clone.clone();
 
       // Set points in title
@@ -75,17 +75,18 @@ jQuery(document).ready(function($) {
 
       // Set input attributes
       poster.find('.poster__field').attr({
-        'value': '', 'data-poster': i
+        'value': '',
+        'data-poster': i
       });
 
-      if(typeof posters[i] !== 'undefined') {
+      if (typeof posters[i] !== 'undefined') {
         poster.find('.poster__field').val(posters[i]);
       }
 
       fields.append(poster);
     }
 
-    if(fields.children().length === 0) {
+    if (fields.children().length === 0) {
       fields.append(clone);
     }
 
@@ -105,12 +106,12 @@ jQuery(document).ready(function($) {
     }
 
     // Add required poster fields
-    $.each(['attachment', 'template'], function(i, v) {
+    $.each(['attachment', 'template'], function (i, v) {
       data[v] = result.find('[data-result="' + v + '"]').val();
     });
 
     // Add achievment if need
-    if(result.hasClass('result--achievment')) {
+    if (result.hasClass('result--achievment')) {
       data.achievment = result.find('[data-result="achievment"]').val();
     }
 
@@ -119,9 +120,9 @@ jQuery(document).ready(function($) {
 
     data.textbox.title = $('#title').val() || '';
 
-    if($('#knife-tagline-input').val()) {
+    if ($('#knife-tagline-input').val()) {
       // If title not emnpty
-      if(data.textbox.title) {
+      if (data.textbox.title) {
         data.textbox.title = data.textbox.title + ' ';
       }
 
@@ -129,7 +130,7 @@ jQuery(document).ready(function($) {
     }
 
     // Add required poster fields
-    $.each(['heading', 'description'], function(i, v) {
+    $.each(['heading', 'description'], function (i, v) {
       data.textbox[v] = result.find('[data-result="' + v + '"]').val();
     });
 
@@ -138,23 +139,27 @@ jQuery(document).ready(function($) {
     var warning = result.find('.result__image-warning');
     warning.html('').hide();
 
-    var xhr = $.ajax({method: 'POST', url: ajaxurl, data: data}, 'json');
+    var xhr = $.ajax({
+      method: 'POST',
+      url: ajaxurl,
+      data: data
+    }, 'json');
 
-    xhr.done(function(answer) {
+    xhr.done(function (answer) {
       toggleLoader(result);
 
-      if(typeof answer.data === 'undefined') {
+      if (typeof answer.data === 'undefined') {
         return warning.html(knife_quiz_metabox.error).show();
       }
 
       answer.success = answer.success || false;
 
-      if(answer.success === true && typeof answer.data === 'object') {
+      if (answer.success === true && typeof answer.data === 'object') {
         var poster = result.find('.result__image-poster');
 
-        $.each(answer.data, function(i, image) {
+        $.each(answer.data, function (i, image) {
           // Create image if not exists
-          if(poster.find('img').length === 0) {
+          if (poster.find('img').length === 0) {
             $('<img />').prependTo(poster);
           }
 
@@ -169,7 +174,7 @@ jQuery(document).ready(function($) {
       return warning.html(answer.data).show();
     });
 
-    xhr.fail(function() {
+    xhr.fail(function () {
       toggleLoader(result);
 
       return warning.html(knife_quiz_metabox.error).show();
@@ -183,15 +188,15 @@ jQuery(document).ready(function($) {
    * Update wp.editor using editorId
    */
   function updateEditor(el) {
-    if(typeof knife_quiz_metabox.editor === 'undefined') {
+    if (typeof knife_quiz_metabox.editor === 'undefined') {
       knife_quiz_metabox.editor = 'html';
     }
 
-    $.each(el.find('.wp-editor-area'), function(i, editor) {
+    $.each(el.find('.wp-editor-area'), function (i, editor) {
       var textarea = $(editor);
       var editorId = textarea.attr('id');
 
-      if(typeof editorId === 'undefined') {
+      if (typeof editorId === 'undefined') {
         editorId = 'knife-quiz-editor-' + box.data('editor');
         textarea.attr('id', editorId);
 
@@ -204,8 +209,8 @@ jQuery(document).ready(function($) {
         tinymce: {
           toolbar1: 'link',
           invalid_styles: 'color font-weight font-size',
-          init_instance_callback: function() {
-            if(window.tinymce && window.switchEditors) {
+          init_instance_callback: function () {
+            if (window.tinymce && window.switchEditors) {
               window.switchEditors.go(editorId, knife_quiz_metabox.editor);
             }
           }
@@ -223,20 +228,20 @@ jQuery(document).ready(function($) {
    * Update questions order
    */
   function sortQuestions(callback) {
-    if(typeof knife_quiz_metabox.meta_items === 'undefined') {
+    if (typeof knife_quiz_metabox.meta_items === 'undefined') {
       return alert(knife_quiz_metabox.error);
     }
 
     var meta_items = knife_quiz_metabox.meta_items;
 
-    box.find('.item:not(:first)').each(function(i) {
+    box.find('.item:not(:first)').each(function (i) {
       var item = $(this);
 
       // Update question title
       item.find('.item__title > span').text(i + 1);
 
       // Change fields name
-      item.find('[data-item]').each(function() {
+      item.find('[data-item]').each(function () {
         var data = $(this).data('item');
 
         // Create name attribute
@@ -248,7 +253,7 @@ jQuery(document).ready(function($) {
       item.data('number', i);
     });
 
-    if(typeof callback === 'function') {
+    if (typeof callback === 'function') {
       return callback();
     }
   }
@@ -258,7 +263,7 @@ jQuery(document).ready(function($) {
    * Update answers order
    */
   function sortAnswers(item) {
-    if(typeof knife_quiz_metabox.meta_items === 'undefined') {
+    if (typeof knife_quiz_metabox.meta_items === 'undefined') {
       return alert(knife_quiz_metabox.error);
     }
 
@@ -267,17 +272,17 @@ jQuery(document).ready(function($) {
     // Get item number
     var number = item.data('number');
 
-    $.each(item.find('.answer:not(:first)'), function(i) {
+    $.each(item.find('.answer:not(:first)'), function (i) {
       var answer = $(this);
 
       // Loop through answers fields
-      answer.find('[data-answer]').each(function() {
+      answer.find('[data-answer]').each(function () {
         var data = $(this).data('answer');
 
         // Create name attribute
         var name = meta_items;
 
-        $.each([number, 'answers', i, data], function(j, v) {
+        $.each([number, 'answers', i, data], function (j, v) {
           name = name + '[' + v + ']';
         });
 
@@ -291,20 +296,20 @@ jQuery(document).ready(function($) {
    * Update results order
    */
   function sortResults(callback) {
-    if(typeof knife_quiz_metabox.meta_results === 'undefined') {
+    if (typeof knife_quiz_metabox.meta_results === 'undefined') {
       return alert(knife_quiz_metabox.error);
     }
 
     var meta_results = knife_quiz_metabox.meta_results;
 
-    box.find('.result:not(:first)').each(function(i) {
+    box.find('.result:not(:first)').each(function (i) {
       var result = $(this);
 
       // Update question title
       result.find('.result__title > span').text(i + 1);
 
       // Change fields name
-      result.find('[data-result]').each(function() {
+      result.find('[data-result]').each(function () {
         var data = $(this).data('result');
 
         // Create name attribute
@@ -316,7 +321,7 @@ jQuery(document).ready(function($) {
       result.data('number', i);
     });
 
-    if(typeof callback === 'function') {
+    if (typeof callback === 'function') {
       return callback();
     }
   }
@@ -326,7 +331,7 @@ jQuery(document).ready(function($) {
    * Update posters order
    */
   function sortPosters(result) {
-    if(typeof knife_quiz_metabox.meta_results === 'undefined') {
+    if (typeof knife_quiz_metabox.meta_results === 'undefined') {
       return alert(knife_quiz_metabox.error);
     }
 
@@ -339,19 +344,19 @@ jQuery(document).ready(function($) {
     var number = result.data('number');
 
     // Loop through answers fields
-    result.find('[data-poster]').each(function() {
+    result.find('[data-poster]').each(function () {
       var data = $(this).data('poster');
 
       // Create name attribute
       var name = meta_results;
 
-      $.each([number, 'posters', data], function(i, v) {
+      $.each([number, 'posters', data], function (i, v) {
         name = name + '[' + v + ']';
       });
 
       $(this).attr('name', name);
 
-      if($(this).val().length === 0) {
+      if ($(this).val().length === 0) {
         result.find('.result__scores-warning').show();
         return false;
       }
@@ -363,7 +368,7 @@ jQuery(document).ready(function($) {
    * Image append
    */
   function appendImage(poster, attachment, thumbnail, callback) {
-    if(typeof knife_quiz_metabox.choose === 'undefined') {
+    if (typeof knife_quiz_metabox.choose === 'undefined') {
       return alert(knife_quiz_metabox.error);
     }
 
@@ -384,25 +389,25 @@ jQuery(document).ready(function($) {
     });
 
     // On image select
-    frame.on('select', function() {
+    frame.on('select', function () {
       var selection = frame.state().get('selection').first().toJSON();
 
       // Set hidden inputs values
       poster.find(attachment).val(selection.id);
 
       // Set thumbnail as selection if exists
-      if(thumbnail && typeof selection.sizes[thumbnail] !== 'undefined') {
+      if (thumbnail && typeof selection.sizes[thumbnail] !== 'undefined') {
         selection = selection.sizes[thumbnail];
       }
 
       // Create image if not exists
-      if(poster.find('img').length === 0) {
+      if (poster.find('img').length === 0) {
         $('<img />').prependTo(poster);
       }
 
       poster.find('img').attr('src', selection.url);
 
-      if(typeof callback === 'function') {
+      if (typeof callback === 'function') {
         return callback(selection.url);
       }
     });
@@ -428,15 +433,15 @@ jQuery(document).ready(function($) {
    * Toggle format options
    */
   function toggleFormat(option) {
-    $.each(['binary', 'points', 'category', 'dynamic'], function(i, v) {
+    $.each(['binary', 'points', 'category', 'dynamic'], function (i, v) {
       // Remove answers modificators
       box.find('.answer').removeClass(
-          'answer--' + v
+        'answer--' + v
       );
 
       // Remove result modificators
       box.find('.result').removeClass(
-          'result--' + v
+        'result--' + v
       );
     });
 
@@ -474,7 +479,7 @@ jQuery(document).ready(function($) {
 
     toggle.prop('disabled', false);
 
-    if(format === 'category') {
+    if (format === 'category') {
       toggle.prop('checked', false);
       toggle.prop('disabled', true);
     }
@@ -500,7 +505,7 @@ jQuery(document).ready(function($) {
   /**
    * Manage checkbox answer trigger
    */
-  box.on('change', '.manage input[data-manage]', function() {
+  box.on('change', '.manage input[data-manage]', function () {
     var option = $(this);
 
     return toggleManage(option);
@@ -510,7 +515,7 @@ jQuery(document).ready(function($) {
   /**
    * Format radio trigger
    */
-  box.on('change', '.manage input[data-format]', function() {
+  box.on('change', '.manage input[data-format]', function () {
     var option = $(this);
 
     return toggleFormat(option);
@@ -520,7 +525,7 @@ jQuery(document).ready(function($) {
   /**
    * Summary checkbox trigger
    */
-  box.on('change', '.summary input[data-summary]', function() {
+  box.on('change', '.summary input[data-summary]', function () {
     var option = $(this);
 
     return toggleSummary(option);
@@ -530,7 +535,7 @@ jQuery(document).ready(function($) {
   /**
    * Details radio trigger
    */
-  box.on('change', '.summary input[data-details]', function() {
+  box.on('change', '.summary input[data-details]', function () {
     var option = $(this);
 
     return toggleDetails(option);
@@ -540,14 +545,14 @@ jQuery(document).ready(function($) {
   /**
    * Update results category list on answer change
    */
-  box.on('change', '.answer input[data-answer]', function() {
+  box.on('change', '.answer input[data-answer]', function () {
     var option = $(this);
 
-    if(option.data('answer') === 'category') {
+    if (option.data('answer') === 'category') {
       var answer = option.val();
 
-      box.find('.result .result__category-field').each(function(i, select) {
-        if($(select).find('option[value=' + answer + ']').length === 0) {
+      box.find('.result .result__category-field').each(function (i, select) {
+        if ($(select).find('option[value=' + answer + ']').length === 0) {
           $(select).append('<option value="' + answer + '">' + answer + '</option>');
         }
       });
@@ -558,7 +563,7 @@ jQuery(document).ready(function($) {
   /**
    * Add new question
    */
-  box.on('click', '.action--item', function(e) {
+  box.on('click', '.action--item', function (e) {
     e.preventDefault();
 
     var item = box.find('.item:first').clone();
@@ -566,7 +571,7 @@ jQuery(document).ready(function($) {
     // Insert after last item
     box.find('.item:last').after(item);
 
-    sortQuestions(function() {
+    sortQuestions(function () {
       updateEditor(item);
     });
   });
@@ -575,21 +580,21 @@ jQuery(document).ready(function($) {
   /**
    * Swap questions
    */
-  box.on('click', '.item__change', function(e) {
+  box.on('click', '.item__change', function (e) {
     e.preventDefault();
 
     var item = $(this).closest('.item');
 
     // Don't swap first element
-    if(item.index() === 1) {
+    if (item.index() === 1) {
       return false;
     }
 
     var prev = item.prev().insertAfter(item);
 
-    sortQuestions(function() {
+    sortQuestions(function () {
       // Sort answers
-      box.find('.item:not(:first)').each(function(i) {
+      box.find('.item:not(:first)').each(function (i) {
         sortAnswers($(this));
       });
 
@@ -602,14 +607,14 @@ jQuery(document).ready(function($) {
   /**
    * Remove question
    */
-  box.on('click', '.item__delete', function(e) {
+  box.on('click', '.item__delete', function (e) {
     e.preventDefault();
 
     var item = $(this).closest('.item');
 
-    sortQuestions(function() {
+    sortQuestions(function () {
       // Sort answers
-      box.find('.item:not(:first)').each(function(i) {
+      box.find('.item:not(:first)').each(function (i) {
         sortAnswers($(this));
       });
 
@@ -624,7 +629,7 @@ jQuery(document).ready(function($) {
   /**
    * Add answer to question
    */
-  box.on('click', '.item__manage-add', function(e) {
+  box.on('click', '.item__manage-add', function (e) {
     e.preventDefault();
 
     var item = $(this).closest('.item');
@@ -638,7 +643,7 @@ jQuery(document).ready(function($) {
     // Show answers button
     item.find('.item__manage-toggle').attr('disabled', false);
 
-    if(!item.find('.item__answers').hasClass('item__answers--expand')) {
+    if (!item.find('.item__answers').hasClass('item__answers--expand')) {
       item.find('.item__manage-toggle').trigger('click');
     }
 
@@ -649,7 +654,7 @@ jQuery(document).ready(function($) {
   /**
    * Remove answer
    */
-  box.on('click', '.answer__delete', function(e) {
+  box.on('click', '.answer__delete', function (e) {
     e.preventDefault();
 
     var item = $(this).closest('.item');
@@ -669,7 +674,7 @@ jQuery(document).ready(function($) {
   /**
    * Toggle answers
    */
-  box.on('click', '.item__manage-toggle', function(e) {
+  box.on('click', '.item__manage-toggle', function (e) {
     e.preventDefault();
 
     var button = $(this);
@@ -693,7 +698,7 @@ jQuery(document).ready(function($) {
   /**
    * Choose answer image
    */
-  box.on('click', '.answer__poster', function(e) {
+  box.on('click', '.answer__poster', function (e) {
     e.preventDefault();
 
     var poster = $(this);
@@ -705,7 +710,7 @@ jQuery(document).ready(function($) {
   /**
    * Add new result
    */
-  box.on('click', '.action--result', function(e) {
+  box.on('click', '.action--result', function (e) {
     e.preventDefault();
 
     var result = box.find('.result:first').clone();
@@ -713,9 +718,9 @@ jQuery(document).ready(function($) {
     // Insert after last item
     box.find('.result:last').after(result);
 
-    sortResults(function() {
+    sortResults(function () {
       // Sort posters
-      box.find('.result:not(:first)').each(function(i) {
+      box.find('.result:not(:first)').each(function (i) {
         sortPosters($(this));
       });
 
@@ -728,14 +733,14 @@ jQuery(document).ready(function($) {
   /**
    * Remove result
    */
-  box.on('click', '.result__delete', function(e) {
+  box.on('click', '.result__delete', function (e) {
     e.preventDefault();
 
     var result = $(this).closest('.result');
 
-    sortResults(function() {
+    sortResults(function () {
       // Sort posters
-      box.find('.result:not(:first)').each(function(i) {
+      box.find('.result:not(:first)').each(function (i) {
         sortPosters($(this));
       });
 
@@ -750,15 +755,15 @@ jQuery(document).ready(function($) {
   /**
    * Choose result poster
    */
-  box.on('click', '.result__image-poster', function(e) {
+  box.on('click', '.result__image-poster', function (e) {
     e.preventDefault();
 
     var poster = $(this);
 
-    appendImage(poster, '.result__image-attachment', false, function(url) {
+    appendImage(poster, '.result__image-attachment', false, function (url) {
       var result = poster.closest('.result');
 
-      result.find('input[data-poster]').each(function() {
+      result.find('input[data-poster]').each(function () {
         $(this).attr('value', url);
       });
     });
@@ -768,7 +773,7 @@ jQuery(document).ready(function($) {
   /**
    * Generate button click
    */
-  box.on('click', '.result__image-generate', function(e) {
+  box.on('click', '.result__image-generate', function (e) {
     e.preventDefault();
 
     var points = {};
@@ -776,14 +781,14 @@ jQuery(document).ready(function($) {
     // Select closest result
     var result = $(this).closest('.result');
 
-    $.each(['from', 'to'], function(i, v) {
+    $.each(['from', 'to'], function (i, v) {
       points[v] = parseInt(result.find('[data-result="' + v + '"]').val());
     });
 
     // Get scores fields
     var fields = result.find('.result__scores-field');
 
-    if(points.from > points.to) {
+    if (points.from > points.to) {
       return blinkClass(fields, 'result__scores-field--error')
     }
 
@@ -792,7 +797,7 @@ jQuery(document).ready(function($) {
     // Get attachment value
     var attachment = result.find('.result__image-attachment').val();
 
-    if(attachment.length === 0) {
+    if (attachment.length === 0) {
       return blinkClass(caption, 'result__image-caption--error');
     }
 
@@ -803,7 +808,7 @@ jQuery(document).ready(function($) {
   /**
    * Show posters fields
    */
-  box.on('click', '.result__image-manual', function(e) {
+  box.on('click', '.result__image-manual', function (e) {
     e.preventDefault();
 
     var points = {};
@@ -811,21 +816,21 @@ jQuery(document).ready(function($) {
     // Select closest result
     var result = $(this).closest('.result');
 
-    $.each(['from', 'to'], function(i, v) {
+    $.each(['from', 'to'], function (i, v) {
       points[v] = parseInt(result.find('[data-result="' + v + '"]').val());
     });
 
     // Get scores fields
     var fields = result.find('.result__scores-field');
 
-    if(points.from > points.to) {
+    if (points.from > points.to) {
       return blinkClass(fields, 'result__scores-field--error')
     }
 
     // Toggle posters class
     result.toggleClass('result--posters');
 
-    if(result.hasClass('result--posters')) {
+    if (result.hasClass('result--posters')) {
       updatePosters(result, points);
     }
   });
@@ -834,8 +839,8 @@ jQuery(document).ready(function($) {
   /**
    * Show posters fields
    */
-  box.on('change', '.result__scores input', function(e) {
-    if($(this).val().length === 0) {
+  box.on('change', '.result__scores input', function (e) {
+    if ($(this).val().length === 0) {
       return false;
     }
 
@@ -844,15 +849,15 @@ jQuery(document).ready(function($) {
     // Select closest result
     var result = $(this).closest('.result');
 
-    $.each(['from', 'to'], function(i, v) {
+    $.each(['from', 'to'], function (i, v) {
       points[v] = parseInt(result.find('[data-result="' + v + '"]').val());
     });
 
-    if(points.to - points.from > 15) {
+    if (points.to - points.from > 15) {
       return blinkClass($(this), 'result__scores-field--error')
     }
 
-    if(points.from > points.to) {
+    if (points.from > points.to) {
       return blinkClass($(this), 'result__scores-field--error')
     }
 
@@ -863,25 +868,25 @@ jQuery(document).ready(function($) {
   /**
    * Display poster field
    */
-  box.on('click', '.poster__display', function(e) {
+  box.on('click', '.poster__display', function (e) {
     e.preventDefault();
 
     var field = $(this).siblings('.poster__field');
 
-    if(field.val().length === 0) {
+    if (field.val().length === 0) {
       return blinkClass(field, 'poster__field--error');
     }
 
     var poster = $(this).closest('.result').find('.result__image-poster');
 
     // Create image if not exists
-    if(poster.find('img').length === 0) {
+    if (poster.find('img').length === 0) {
       $('<img />').prependTo(poster);
     }
 
     var image = poster.find('img');
 
-    image.load(function() {
+    image.load(function () {
       image.fadeIn(100);
     });
 
@@ -892,10 +897,10 @@ jQuery(document).ready(function($) {
   /**
    * Onload set up
    */
-  (function() {
+  (function () {
     // Sort questions and update editor
-    sortQuestions(function() {
-      box.find('.item:not(:first)').each(function(i) {
+    sortQuestions(function () {
+      box.find('.item:not(:first)').each(function (i) {
         var item = $(this);
 
         // Sort answers
@@ -913,8 +918,8 @@ jQuery(document).ready(function($) {
 
 
     // Sort results and update editor
-    sortResults(function() {
-      box.find('.result:not(:first)').each(function(i) {
+    sortResults(function () {
+      box.find('.result:not(:first)').each(function (i) {
         var result = $(this);
 
         // Sort posters
@@ -927,28 +932,28 @@ jQuery(document).ready(function($) {
 
 
     // Set manage classes
-    box.find('.manage input[data-manage]').each(function() {
+    box.find('.manage input[data-manage]').each(function () {
       var option = $(this);
 
       toggleManage(option);
     });
 
     // Set format classes
-    box.find('.manage input[data-format]:checked').each(function() {
+    box.find('.manage input[data-format]:checked').each(function () {
       var option = $(this);
 
       toggleFormat(option);
     });
 
     // Set summary classes
-    box.find('.summary input[data-summary]').each(function() {
+    box.find('.summary input[data-summary]').each(function () {
       var option = $(this);
 
       toggleSummary(option);
     });
 
     // Set details classes
-    box.find('.summary input[data-details]:checked').each(function() {
+    box.find('.summary input[data-details]:checked').each(function () {
       var option = $(this);
 
       toggleDetails(option);

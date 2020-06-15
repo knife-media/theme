@@ -5,14 +5,14 @@
  * @version 1.11
  */
 
-(function() {
+(function () {
   var story = document.getElementById('story');
 
 
   /**
    * Check if Glide object exists
    */
-  if(story === null || typeof Glide === 'undefined') {
+  if (story === null || typeof Glide === 'undefined') {
     return false;
   }
 
@@ -22,7 +22,7 @@
    *
    * @link https://github.com/glidejs/glide/issues/224
    */
-  if(story.querySelectorAll('.entry-story__slide').length < 1) {
+  if (story.querySelectorAll('.entry-story__slide').length < 1) {
     return false;
   }
 
@@ -30,7 +30,7 @@
   /**
    * Check if items exist
    */
-  if(typeof knife_story_items === 'undefined' || knife_story_items.length < 1) {
+  if (typeof knife_story_items === 'undefined' || knife_story_items.length < 1) {
     return false;
   }
 
@@ -39,7 +39,10 @@
    * Create Glide instance with custom options
    */
   var glide = new Glide('.entry-story', {
-    gap: 0, rewind: false, touchAngle: 60, swipeThreshold: 60,
+    gap: 0,
+    rewind: false,
+    touchAngle: 60,
+    swipeThreshold: 60,
     dragThreshold: false,
 
     classes: {
@@ -68,7 +71,7 @@
   /**
    * Add slides
    */
-  glide.on('mount.before', function() {
+  glide.on('mount.before', function () {
     for (var i = 0, item; item = knife_story_items[i]; i++) {
       var wrap = document.createElement('div');
       wrap.classList.add('entry-story__slide-wrap');
@@ -77,8 +80,8 @@
       slide.classList.add('entry-story__slide-content');
 
       // Append kicker
-      (function(){
-        if(typeof item.kicker === 'undefined') {
+      (function () {
+        if (typeof item.kicker === 'undefined') {
           return false;
         }
 
@@ -90,8 +93,8 @@
       })();
 
       // Append media
-      (function(){
-        if(typeof item.image === 'undefined' || typeof item.ratio === 'undefined') {
+      (function () {
+        if (typeof item.image === 'undefined' || typeof item.ratio === 'undefined') {
           return false;
         }
 
@@ -104,8 +107,8 @@
       })();
 
       // Append entry
-      (function(){
-        if(typeof item.entry === 'undefined') {
+      (function () {
+        if (typeof item.entry === 'undefined') {
           return false;
         }
 
@@ -130,16 +133,16 @@
   /**
    * Apend share buttons to the last slide
    */
-  glide.on('mount.before', function() {
+  glide.on('mount.before', function () {
     var slides = story.querySelectorAll('.entry-story__slide');
 
-    if(slides.length < 1) {
+    if (slides.length < 1) {
       return false;
     }
 
     var share = slides[0].querySelector('.share');
 
-    if(share === null) {
+    if (share === null) {
       return false;
     }
 
@@ -148,7 +151,7 @@
 
     slide.querySelector('.entry-story__slide-content').appendChild(clone);
 
-    if(typeof window.shareButtons === 'function') {
+    if (typeof window.shareButtons === 'function') {
       window.shareButtons();
     }
   });
@@ -157,7 +160,7 @@
   /**
    * Add bullets on Glide mounting
    */
-  glide.on('mount.before', function() {
+  glide.on('mount.before', function () {
     var bullets = document.createElement('div');
     bullets.classList.add('entry-story__bullets');
 
@@ -175,10 +178,10 @@
   /**
    * Create empty slide if next post availible
    */
-  glide.on('mount.before', function(move) {
+  glide.on('mount.before', function (move) {
     var link = document.querySelector('link[rel="prev"]');
 
-    if(link === null || !link.hasAttribute('href')) {
+    if (link === null || !link.hasAttribute('href')) {
       return false;
     }
 
@@ -194,8 +197,8 @@
   /**
    * Add slider controls on Glide mounting
    */
-  glide.on('mount.before', function() {
-    ['prev', 'next'].forEach(function(cl, i) {
+  glide.on('mount.before', function () {
+    ['prev', 'next'].forEach(function (cl, i) {
       var control = document.createElement('div');
       control.classList.add('entry-story__control', 'entry-story__control--' + cl);
       control.classList.add();
@@ -207,13 +210,13 @@
       story.appendChild(control);
     });
 
-    story.querySelector('.entry-story__control--next').addEventListener('click', function(e) {
+    story.querySelector('.entry-story__control--next').addEventListener('click', function (e) {
       e.preventDefault();
 
       glide.go('>');
     });
 
-    story.querySelector('.entry-story__control--prev').addEventListener('click', function(e) {
+    story.querySelector('.entry-story__control--prev').addEventListener('click', function (e) {
       e.preventDefault();
 
       glide.go('<');
@@ -224,7 +227,7 @@
   /**
    * Set story height before slider mount
    */
-  glide.on('mount.before', function() {
+  glide.on('mount.before', function () {
     var offset = story.getBoundingClientRect();
     story.style.height = window.innerHeight - offset.top - window.pageYOffset + 'px';
   });
@@ -233,13 +236,13 @@
   /**
    * Add bullets events
    */
-  glide.on(['mount.after', 'run'], function() {
+  glide.on(['mount.after', 'run'], function () {
     var bullets = story.querySelectorAll('.entry-story__bullets-item');
 
     for (var i = 0, bullet; bullet = bullets[i]; i++) {
       bullet.classList.remove('entry-story__bullets-item--active');
 
-      if(glide.index === i) {
+      if (glide.index === i) {
         bullet.classList.add('entry-story__bullets-item--active');
       }
     }
@@ -249,7 +252,7 @@
   /**
    * Add last slide index to options
    */
-  glide.on('mount.after', function() {
+  glide.on('mount.after', function () {
     var slides = story.querySelectorAll('.entry-story__slide');
     options.count = slides.length - 1
   });
@@ -258,12 +261,12 @@
   /**
    * Manage prev slider control
    */
-  glide.on(['mount.after', 'run'], function(move) {
+  glide.on(['mount.after', 'run'], function (move) {
     var prev = story.querySelector('.entry-story__control--prev');
 
     prev.classList.remove('entry-story__control--disabled');
 
-    if(glide.index === 0) {
+    if (glide.index === 0) {
       prev.classList.add('entry-story__control--disabled');
     }
   });
@@ -272,12 +275,12 @@
   /**
    * Manage next slider control
    */
-  glide.on('run', function(move) {
+  glide.on('run', function (move) {
     var next = story.querySelector('.entry-story__control--next');
 
     next.classList.remove('entry-story__control--disabled');
 
-    if(glide.index === options.count) {
+    if (glide.index === options.count) {
       next.classList.add('entry-story__control--disabled');
     }
   });
@@ -286,8 +289,8 @@
   /**
    * Hide story if extra slide exists
    */
-  glide.on('run', function(move) {
-    if(glide.index === options.count && options.href) {
+  glide.on('run', function (move) {
+    if (glide.index === options.count && options.href) {
       story.classList.remove('entry-story--active');
     }
   });
@@ -296,8 +299,8 @@
   /**
    * Load next story if exists
    */
-  glide.on('run.after', function(move) {
-    if(glide.index === options.count && options.href) {
+  glide.on('run.after', function (move) {
+    if (glide.index === options.count && options.href) {
       document.location.href = options.href;
     }
   });
@@ -306,24 +309,24 @@
   /**
    * Disable touch bounce effect
    */
-  glide.on('build.after', function() {
+  glide.on('build.after', function () {
     var start = 0;
 
-    story.addEventListener('touchstart', function(e) {
+    story.addEventListener('touchstart', function (e) {
       var touch = e.changedTouches[0];
 
       start = touch.pageY;
     }, true);
 
 
-    story.addEventListener('touchmove', function(e) {
+    story.addEventListener('touchmove', function (e) {
       var touch = e.changedTouches[0];
 
-      if(start < touch.pageY && window.pageYOffset === 0) {
+      if (start < touch.pageY && window.pageYOffset === 0) {
         e.preventDefault();
       }
 
-      if(story.classList.contains('entry-story--dragging')) {
+      if (story.classList.contains('entry-story--dragging')) {
         e.preventDefault();
       }
     }, true);
@@ -333,8 +336,8 @@
   /**
    * Set background color
    */
-  glide.on('build.after', function() {
-    if(typeof knife_story_options.color === 'undefined' || knife_story_options.color.length < 1) {
+  glide.on('build.after', function () {
+    if (typeof knife_story_options.color === 'undefined' || knife_story_options.color.length < 1) {
       return false;
     }
 
@@ -346,13 +349,13 @@
   /**
    * Set custom background
    */
-  glide.on('build.after', function() {
-    if(typeof knife_story_options.background === 'undefined' || knife_story_options.background.length < 1) {
+  glide.on('build.after', function () {
+    if (typeof knife_story_options.background === 'undefined' || knife_story_options.background.length < 1) {
       return story.classList.add('entry-story--active');
     }
 
     var image = new Image();
-    image.addEventListener('load', function() {
+    image.addEventListener('load', function () {
       return story.classList.add('entry-story--active');
     });
 
@@ -360,17 +363,17 @@
 
     var media = document.createElement('div');
     media.classList.add('entry-story__backdrop');
-    media.style.backgroundImage = 'url(' + knife_story_options.background  + ')';
+    media.style.backgroundImage = 'url(' + knife_story_options.background + ')';
 
     // Append blur element
-    (function() {
-      if(typeof knife_story_options.blur === 'undefined') {
+    (function () {
+      if (typeof knife_story_options.blur === 'undefined') {
         return false;
       }
 
       var blur = parseInt(knife_story_options.blur);
 
-      if(blur <= 0) {
+      if (blur <= 0) {
         return false;
       }
 
@@ -384,14 +387,14 @@
 
 
     // Append shadow element
-    (function() {
-      if(typeof knife_story_options.shadow === 'undefined') {
+    (function () {
+      if (typeof knife_story_options.shadow === 'undefined') {
         return false;
       }
 
       var alpha = parseInt(knife_story_options.shadow) / 100;
 
-      if(alpha <= 0 || alpha > 1) {
+      if (alpha <= 0 || alpha > 1) {
         return false;
       }
 
@@ -412,8 +415,8 @@
    *
    * @link https://stackoverflow.com/a/13123626
    */
-  window.addEventListener('pageshow', function(event) {
-    if(event.persisted) {
+  window.addEventListener('pageshow', function (event) {
+    if (event.persisted) {
       window.location.reload(false)
     }
   });

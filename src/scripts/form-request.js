@@ -5,9 +5,9 @@
  * @version 1.12
  */
 
-(function() {
+(function () {
   // Check user form options existing
-  if(typeof knife_form_request === 'undefined') {
+  if (typeof knife_form_request === 'undefined') {
     return false;
   }
 
@@ -17,7 +17,7 @@
 
   // Create single form field
   function createField(key, field, form) {
-    if(typeof field.element === 'undefined') {
+    if (typeof field.element === 'undefined') {
       return null;
     }
 
@@ -31,19 +31,19 @@
 
     delete field.element;
 
-    for(var i in field) {
+    for (var i in field) {
       element.setAttribute(i, field[i]);
     }
 
     element.value = getStorage(key);
 
     // Set save storage event listener
-    element.addEventListener('input', function(e) {
+    element.addEventListener('input', function (e) {
       setStorage(this.name, this.value);
     });
 
     // Set unfold event listener
-    element.addEventListener('focus', function(e) {
+    element.addEventListener('focus', function (e) {
       form.classList.remove('form--fold');
     });
 
@@ -95,7 +95,7 @@
   function requestEvent(stop) {
     loader.classList.remove('icon--loop');
 
-    if(typeof stop === 'undefined' || stop === true) {
+    if (typeof stop === 'undefined' || stop === true) {
       return submit.removeAttribute('disabled', '');
     }
 
@@ -144,16 +144,16 @@
     request.open('POST', getOption('ajaxurl'));
     request.send(formData);
 
-    request.onload = function() {
+    request.onload = function () {
       requestEvent(true);
 
-      if(request.status !== 200) {
+      if (request.status !== 200) {
         return displayWarning();
       }
 
       var response = JSON.parse(request.responseText);
 
-      if(response.success) {
+      if (response.success) {
         return displaySuccess(response.data);
       }
 
@@ -166,7 +166,7 @@
 
   // Get option from global settings
   function getOption(option, alternate) {
-    if(knife_form_request.hasOwnProperty(option)) {
+    if (knife_form_request.hasOwnProperty(option)) {
       return knife_form_request[option];
     }
 
@@ -178,8 +178,8 @@
   function createFields(form) {
     var fields = knife_form_request.fields;
 
-    for(var key in fields) {
-      if(!fields.hasOwnProperty(key)) {
+    for (var key in fields) {
+      if (!fields.hasOwnProperty(key)) {
         continue;
       }
 
@@ -198,13 +198,13 @@
 
   // Set custom form class
   var classes = getOption('classes');
-  if(classes.length > 0) {
+  if (classes.length > 0) {
     form.className = classes.join(' ');
   }
 
   // Set form title
   var heading = getOption('heading');
-  if(heading.length > 0) {
+  if (heading.length > 0) {
     var title = document.createElement('h4');
     title.classList.add('form__heading');
     title.textContent = heading;

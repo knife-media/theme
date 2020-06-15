@@ -5,10 +5,10 @@
  * @version 1.11
  */
 
-(function() {
+(function () {
   var post = document.querySelector('.post');
 
-  if(post === null) {
+  if (post === null) {
     return false;
   }
 
@@ -46,7 +46,7 @@
     var rect = target.getBoundingClientRect();
 
     // Push popup to text for standart posts
-    if(post.classList.contains('post--standard')) {
+    if (post.classList.contains('post--standard')) {
       popup.classList.add('reference--push');
     }
 
@@ -60,15 +60,15 @@
   /**
    * Click listeners for references
    */
-  post.addEventListener('click', function(e) {
+  post.addEventListener('click', function (e) {
     var target = e.target || e.srcElement;
 
     // Trigger only elements with data-body attribute inside content
-    if(target.hasAttribute('data-body')) {
+    if (target.hasAttribute('data-body')) {
       var popup = document.getElementById('reference');
 
       // Remove popup if exists
-      if(popup !== null) {
+      if (popup !== null) {
         popup.parentNode.removeChild(popup);
       }
 
@@ -84,7 +84,7 @@
       function closePopup(e) {
         var source = e.target || e.srcElement;
 
-        if(source === popup || source.classList.contains('reference__content-close')) {
+        if (source === popup || source.classList.contains('reference__content-close')) {
           popup.parentNode.removeChild(popup);
 
           target.removeAttribute('data-active');

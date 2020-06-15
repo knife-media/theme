@@ -1,5 +1,5 @@
-jQuery(document).ready(function($) {
-  if(typeof wp === 'undefined' || typeof wp.media === 'undefined') {
+jQuery(document).ready(function ($) {
+  if (typeof wp === 'undefined' || typeof wp.media === 'undefined') {
     return false;
   }
 
@@ -9,7 +9,7 @@ jQuery(document).ready(function($) {
   /**
    * Check required metabox options
    */
-  if(typeof knife_distribute_metabox === 'undefined') {
+  if (typeof knife_distribute_metabox === 'undefined') {
     return false;
   }
 
@@ -17,7 +17,7 @@ jQuery(document).ready(function($) {
   /**
    * Check if error message exists
    */
-  if(typeof knife_distribute_metabox.error === 'undefined') {
+  if (typeof knife_distribute_metabox.error === 'undefined') {
     return false;
   }
 
@@ -26,17 +26,17 @@ jQuery(document).ready(function($) {
    * Set items proper name attribute
    */
   function sortItems() {
-    if(typeof knife_distribute_metabox.meta_items === 'undefined') {
+    if (typeof knife_distribute_metabox.meta_items === 'undefined') {
       return alert(knife_distribute_metabox.error);
     }
 
     var meta_items = knife_distribute_metabox.meta_items;
 
-    box.find('.item:not(:first)').each(function(i) {
+    box.find('.item:not(:first)').each(function (i) {
       var item = $(this);
 
       // Change fields name
-      item.find('[data-item]').each(function() {
+      item.find('[data-item]').each(function () {
         var data = $(this).data('item');
 
         // Create name attribute
@@ -44,7 +44,7 @@ jQuery(document).ready(function($) {
         var name = attr + '[' + data + ']';
 
         // Array names for checkboxes
-        if($(this).is(':checkbox')) {
+        if ($(this).is(':checkbox')) {
           name = name + '[]';
         }
 
@@ -69,12 +69,16 @@ jQuery(document).ready(function($) {
     // Add uniqid to data object
     data.uniqid = item.find('.item__uniqid').val();
 
-    var xhr = $.ajax({method: 'POST', url: ajaxurl, data: data}, 'json');
+    var xhr = $.ajax({
+      method: 'POST',
+      url: ajaxurl,
+      data: data
+    }, 'json');
 
-    xhr.done(function(answer) {
+    xhr.done(function (answer) {
       spinner.removeClass('is-active');
 
-      if(answer.success && typeof callback === 'function') {
+      if (answer.success && typeof callback === 'function') {
         return callback();
       }
 
@@ -83,7 +87,7 @@ jQuery(document).ready(function($) {
       return alert(message);
     });
 
-    xhr.fail(function() {
+    xhr.fail(function () {
       spinner.removeClass('is-active');
 
       return alert(knife_distribute_metabox.error);
@@ -99,7 +103,7 @@ jQuery(document).ready(function($) {
   function removeItem(item) {
     item.remove();
 
-    if(box.find('.item').length === 1) {
+    if (box.find('.item').length === 1) {
       box.find('.actions__add').trigger('click');
     }
   }
@@ -108,7 +112,7 @@ jQuery(document).ready(function($) {
   /**
    * Add item poster
    */
-  box.on('click', '.item__snippet-poster', function(e) {
+  box.on('click', '.item__snippet-poster', function (e) {
     var poster = $(this);
 
     // Open default wp.media image frame
@@ -119,18 +123,18 @@ jQuery(document).ready(function($) {
 
 
     // On image select
-    frame.on('select', function() {
+    frame.on('select', function () {
       var selection = frame.state().get('selection').first().toJSON();
 
       // Set hidden inputs values
       poster.find('[data-item="attachment"]').val(selection.id);
 
       // Set thumbnail as selection if exists
-      if(typeof selection.sizes.thumbnail !== 'undefined') {
+      if (typeof selection.sizes.thumbnail !== 'undefined') {
         selection = selection.sizes.thumbnail;
       }
 
-      if(poster.find('img').length === 0) {
+      if (poster.find('img').length === 0) {
         $('<img />').prependTo(poster);
       }
 
@@ -144,7 +148,7 @@ jQuery(document).ready(function($) {
   /**
    * Set sinppet status for twitter excerpt
    */
-  box.on('keyup paste', '.item__snippet-excerpt', function() {
+  box.on('keyup paste', '.item__snippet-excerpt', function () {
     var item = $(this).closest('.item');
 
     // Hide status bar by default
@@ -153,10 +157,10 @@ jQuery(document).ready(function($) {
     // Get excerpt value length
     var value = $(this).val().length;
 
-    item.find('.item__targets input:checked').each(function() {
-      if($(this).data('delivery') === 'twitter') {
+    item.find('.item__targets input:checked').each(function () {
+      if ($(this).data('delivery') === 'twitter') {
 
-        if(value > 0) {
+        if (value > 0) {
           return item.find('.item__snippet-status').text(250 - value).show();
         }
       }
@@ -167,7 +171,7 @@ jQuery(document).ready(function($) {
   /**
    * Trigger keyup event for excerpt on checkbox change
    */
-  box.on('change', '.item__targets-check input', function() {
+  box.on('change', '.item__targets-check input', function () {
     var item = $(this).closest('.item');
 
     item.find('.item__snippet-excerpt').trigger('keyup');
@@ -177,7 +181,7 @@ jQuery(document).ready(function($) {
   /**
    * Remove poster
    */
-  box.on('click', '.item__snippet-delete', function(e) {
+  box.on('click', '.item__snippet-delete', function (e) {
     e.stopPropagation();
 
     var poster = $(this).closest('.item__snippet-poster');
@@ -193,12 +197,12 @@ jQuery(document).ready(function($) {
   /**
    * Toggle time on delay date change
    */
-  box.on('change', '.item__delay-date', function() {
+  box.on('change', '.item__delay-date', function () {
     var item = $(this).closest('.item');
 
     // Toggle class depends on select value
     item.find('.item__delay-time').toggle(
-        /^[\d]{4}-[\d]{2}-[\d]{2}$/.test($(this).val())
+      /^[\d]{4}-[\d]{2}-[\d]{2}$/.test($(this).val())
     );
   });
 
@@ -206,12 +210,12 @@ jQuery(document).ready(function($) {
   /**
    * Cancel scheduled event
    */
-  box.on('click', '.item__scheduled-cancel', function(e) {
+  box.on('click', '.item__scheduled-cancel', function (e) {
     e.preventDefault();
 
     var item = $(this).closest('.item');
 
-    cancelTask(item, function() {
+    cancelTask(item, function () {
       item.find('.item__scheduled').remove();
     });
   });
@@ -220,7 +224,7 @@ jQuery(document).ready(function($) {
   /**
    * Add new item
    */
-  box.on('click', '.actions__add', function(e) {
+  box.on('click', '.actions__add', function (e) {
     e.preventDefault();
 
     var item = box.find('.item:first').clone();
@@ -236,16 +240,16 @@ jQuery(document).ready(function($) {
   /**
    * Remove item
    */
-  box.on('click', '.item__delete', function(e) {
+  box.on('click', '.item__delete', function (e) {
     e.preventDefault();
 
     var item = $(this).closest('.item');
 
-    if(item.find('.item__scheduled').length === 0) {
+    if (item.find('.item__scheduled').length === 0) {
       return removeItem(item);
     }
 
-    cancelTask(item, function() {
+    cancelTask(item, function () {
       return removeItem(item);
     });
   });
@@ -254,12 +258,12 @@ jQuery(document).ready(function($) {
   /**
    * Onload set up
    */
-  (function() {
+  (function () {
     // Add name attributes
     sortItems();
 
     // Show at least one item box on load
-    if(box.find('.item').length === 1) {
+    if (box.find('.item').length === 1) {
       box.find('.actions__add').trigger('click');
     }
 

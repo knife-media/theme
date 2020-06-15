@@ -5,14 +5,14 @@
  * @version 1.6
  */
 
-(function() {
+(function () {
   var comments = document.getElementById('hypercomments_widget');
 
 
   /**
    * Check if hypercomments id and load button defined
    */
-  if(comments === null || typeof knife_comments_id === 'undefined') {
+  if (comments === null || typeof knife_comments_id === 'undefined') {
     return false;
   }
 
@@ -25,7 +25,7 @@
   _hcwp.push({
     widget: "Stream",
     widget_id: knife_comments_id,
-    callback: function() {
+    callback: function () {
       comments.classList.add('comments--expand');
     }
   });

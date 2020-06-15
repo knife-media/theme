@@ -1,4 +1,4 @@
-jQuery(document).ready(function($) {
+jQuery(document).ready(function ($) {
   if (typeof wp === 'undefined' || typeof wp.media === 'undefined') {
     return false;
   }
@@ -9,7 +9,7 @@ jQuery(document).ready(function($) {
   /**
    * Check required metabox options
    */
-  if(typeof knife_user_options === 'undefined') {
+  if (typeof knife_user_options === 'undefined') {
     return false;
   }
 
@@ -26,12 +26,14 @@ jQuery(document).ready(function($) {
     // Remove image if exists
     photo.find('img').remove();
 
-    if(input && input.length > 1) {
+    if (input && input.length > 1) {
       photo.find('button.remove').removeClass('hidden');
       photo.find('button.select').addClass('hidden');
 
       // Append poster
-      var poster = $('<img />', {'src': input});
+      var poster = $('<img />', {
+        'src': input
+      });
 
       poster.prependTo(photo).css({
         'max-width': '100%',
@@ -45,7 +47,7 @@ jQuery(document).ready(function($) {
   /**
    * Process select image button click
    */
-  photo.on('click', 'button.select', function(e) {
+  photo.on('click', 'button.select', function (e) {
     e.preventDefault();
 
     var frame = wp.media({
@@ -55,7 +57,7 @@ jQuery(document).ready(function($) {
 
     var spinner = photo.find('span.spinner');
 
-    frame.on('select', function() {
+    frame.on('select', function () {
       var attachment = frame.state().get('selection').first().toJSON();
 
       var data = {
@@ -65,16 +67,20 @@ jQuery(document).ready(function($) {
         'poster': attachment.id
       }
 
-      var xhr = $.ajax({method: 'POST', url: ajaxurl, data: data}, 'json');
+      var xhr = $.ajax({
+        method: 'POST',
+        url: ajaxurl,
+        data: data
+      }, 'json');
 
-      xhr.always(function(answer) {
+      xhr.always(function (answer) {
         spinner.removeClass('is-active');
 
-        if(typeof answer.data === 'undefined') {
+        if (typeof answer.data === 'undefined') {
           return alert(knife_user_options.error);
         }
 
-        if(typeof answer.success === false) {
+        if (typeof answer.success === false) {
           return alert(answer.data);
         }
 
@@ -93,7 +99,7 @@ jQuery(document).ready(function($) {
   /**
    * Delete image on link clicking
    */
-  photo.on('click', 'button.remove', function(e) {
+  photo.on('click', 'button.remove', function (e) {
     e.preventDefault();
 
     photo.find('input.photo').val('');

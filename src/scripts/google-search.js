@@ -1,14 +1,14 @@
-(function() {
+(function () {
   /**
    * Check if search id and template defined
    */
-  if(typeof knife_search_id === 'undefined') {
+  if (typeof knife_search_id === 'undefined') {
     return false;
   }
 
   var search = document.querySelector('.search .gcse-search');
 
-  if(search === null) {
+  if (search === null) {
     return false;
   }
 
@@ -18,7 +18,7 @@
   var placeholder = search.getAttribute('data-placeholder');
 
   window.__gcse = {
-    callback: function() {
+    callback: function () {
       document.querySelector('input.gsc-input').placeholder = placeholder;
     }
   };

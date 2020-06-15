@@ -1,5 +1,5 @@
-jQuery(document).ready(function($) {
-  if(typeof wp === 'undefined' || typeof wp.media === 'undefined') {
+jQuery(document).ready(function ($) {
+  if (typeof wp === 'undefined' || typeof wp.media === 'undefined') {
     return false;
   }
 
@@ -9,7 +9,7 @@ jQuery(document).ready(function($) {
   /**
    * Check required metabox options
    */
-  if(typeof knife_snippet_metabox.error === 'undefined') {
+  if (typeof knife_snippet_metabox.error === 'undefined') {
     return false;
   }
 
@@ -25,7 +25,7 @@ jQuery(document).ready(function($) {
   /**
    * Toggle snippet title on button click
    */
-  box.on('click', '.snippet__footer-title', function(e) {
+  box.on('click', '.snippet__footer-title', function (e) {
     e.preventDefault();
 
     box.find('.snippet__title').toggle();
@@ -35,7 +35,7 @@ jQuery(document).ready(function($) {
   /**
    * Add poster
    */
-  box.on('click', '.snippet__poster', function(e) {
+  box.on('click', '.snippet__poster', function (e) {
     var poster = $(this);
 
     // Create custom state
@@ -55,7 +55,7 @@ jQuery(document).ready(function($) {
     });
 
     // On image select
-    frame.on('select', function() {
+    frame.on('select', function () {
       var selection = frame.state().get('selection').first().toJSON();
 
       // Set hidden input image url
@@ -64,7 +64,7 @@ jQuery(document).ready(function($) {
       // Set hidden input attachment id
       poster.find('.snippet__poster-attachment').val(selection.id);
 
-      if(poster.find('img').length === 0) {
+      if (poster.find('img').length === 0) {
         $('<img />').prependTo(poster);
       }
 
@@ -81,7 +81,7 @@ jQuery(document).ready(function($) {
   /**
    * Remove poster
    */
-  box.on('click', '.snippet__footer-delete', function(e) {
+  box.on('click', '.snippet__footer-delete', function (e) {
     e.preventDefault();
 
     var poster = box.find('.snippet__poster');
@@ -107,12 +107,12 @@ jQuery(document).ready(function($) {
   /**
    * Preview poster
    */
-  box.on('click', '.snippet__poster-preview', function(e) {
+  box.on('click', '.snippet__poster-preview', function (e) {
     e.stopPropagation();
 
     var preview = box.find('img').attr('src');
 
-    if(preview.length > 0) {
+    if (preview.length > 0) {
       window.open(preview, '_blank');
     }
   });
@@ -121,7 +121,7 @@ jQuery(document).ready(function($) {
   /**
    * Generate poster
    */
-  box.on('click', '.snippet__footer-generate', function(e) {
+  box.on('click', '.snippet__footer-generate', function (e) {
     e.preventDefault();
 
     var data = {
@@ -131,11 +131,11 @@ jQuery(document).ready(function($) {
       'textbox': {}
     }
 
-    if(box.find('.snippet__poster-attachment').val()) {
+    if (box.find('.snippet__poster-attachment').val()) {
       data.attachment = box.find('.snippet__poster-attachment').val();
     }
 
-    if(box.find('.snippet__title-textarea').val()) {
+    if (box.find('.snippet__title-textarea').val()) {
       data.textbox.title = box.find('.snippet__title-textarea').val();
     }
 
@@ -143,25 +143,29 @@ jQuery(document).ready(function($) {
     var warning = box.find('.snippet__warning');
     warning.html('').hide();
 
-    var xhr = $.ajax({method: 'POST', url: ajaxurl, data: data}, 'json');
+    var xhr = $.ajax({
+      method: 'POST',
+      url: ajaxurl,
+      data: data
+    }, 'json');
 
-    xhr.done(function(answer) {
+    xhr.done(function (answer) {
       toggleLoader();
 
-      if(typeof answer.data === 'undefined') {
+      if (typeof answer.data === 'undefined') {
         return warning.html(knife_snippet_metabox.error).show();
       }
 
       answer.success = answer.success || false;
 
-      if(answer.success === true) {
+      if (answer.success === true) {
         var poster = box.find('.snippet__poster');
 
         // Set hidden input image url
         poster.find('.snippet__poster-image').val(answer.data);
 
         // Create image if not exists
-        if(poster.find('img').length === 0) {
+        if (poster.find('img').length === 0) {
           $('<img />').prependTo(poster);
         }
 
@@ -174,7 +178,7 @@ jQuery(document).ready(function($) {
       return warning.html(answer.data).show();
     });
 
-    xhr.fail(function() {
+    xhr.fail(function () {
       toggleLoader();
 
       return warning.html(knife_snippet_metabox.error).show();
@@ -187,7 +191,7 @@ jQuery(document).ready(function($) {
   /**
    * Set snippet ready class
    */
-  if(box.find('.snippet__poster img').length > 0) {
+  if (box.find('.snippet__poster img').length > 0) {
     box.find('.snippet').addClass('snippet--ready');
   }
 });

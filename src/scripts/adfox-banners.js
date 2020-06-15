@@ -5,14 +5,14 @@
  * @version 1.12
  */
 
-(function() {
+(function () {
   var widgets = document.querySelectorAll('.widget-adfox');
 
 
   /**
    * Check if ad least 1 adfox widget exists
    */
-  if(widgets.length < 1) {
+  if (widgets.length < 1) {
     return false;
   }
 
@@ -21,13 +21,13 @@
    * Get custom widgets targets
    */
   function addTargets(params) {
-    if(typeof knife_meta_parameters === 'undefined') {
+    if (typeof knife_meta_parameters === 'undefined') {
       return params;
     }
 
     var targets = ['template', 'postid', 'special', 'category', 'tags', 'adult', 'promo'];
 
-    for(var i = 0, n = 1; i < targets.length; i++, n++) {
+    for (var i = 0, n = 1; i < targets.length; i++, n++) {
       var target = targets[i];
 
       params['puid' + n] = knife_meta_parameters[target] || '';
@@ -44,7 +44,7 @@
     // Try to found params
     var found = link.match(/\/(\d+?)\/.+?\?(.+)$/) || [];
 
-    if(found.length <= 2) {
+    if (found.length <= 2) {
       return options;
     }
 
@@ -57,7 +57,7 @@
       var pair = vars[i].split('=');
 
       // Skip empty and specific keys
-      if(pair.length == 1 || pair[0] === 'pr') {
+      if (pair.length == 1 || pair[0] === 'pr') {
         continue;
       }
 
@@ -75,24 +75,24 @@
    */
   function addCallbacks(options, widget) {
     // Remove on stub
-    options.onStub = function() {
+    options.onStub = function () {
       widget.classList.remove('widget-adfox--loaded');
     }
 
     // Remove on error
-    options.onError = function() {
+    options.onError = function () {
       widget.classList.remove('widget-adfox--loaded');
     }
 
     // Add class on load
-    options.onLoad = function(handle) {
+    options.onLoad = function (handle) {
       var params = handle.bundleParams;
 
       // Remove loaded class if exists
       widget.classList.remove('widget-adfox--loaded');
 
       // Destroy if banner hidden
-      if(params.bannerId && hiddenBanner(params.bannerId)) {
+      if (params.bannerId && hiddenBanner(params.bannerId)) {
         return handle.destroy();
       }
 
@@ -173,15 +173,15 @@
    * Load adfox banner
    */
   function loadBanner(data, id, widget) {
-    if(data.common) {
+    if (data.common) {
       return loadCommonBanner(data.common, id, widget);
     }
 
-    if(data.mobile) {
+    if (data.mobile) {
       loadMobileBanner(data.mobile, id, widget);
     }
 
-    if(data.desktop) {
+    if (data.desktop) {
       loadDesktopBanner(data.desktop, id, widget);
     }
   }
@@ -195,7 +195,7 @@
     var close = localStorage.getItem('adfox-close');
 
     // Check if items exist
-    if(close === null) {
+    if (close === null) {
       return false;
     }
 
@@ -207,12 +207,12 @@
     // Indicates hidden lifetime
     var hidden = 0;
 
-    for(key in items) {
-      if(banner === key) {
+    for (key in items) {
+      if (banner === key) {
         hidden = items[key];
       }
 
-      if(now > items[key]) {
+      if (now > items[key]) {
         delete items[key];
       }
     }
@@ -231,7 +231,7 @@
   function closeBanner(e) {
     var target = e.target || e.srcElement;
 
-    if(!target.hasAttribute('data-close')) {
+    if (!target.hasAttribute('data-close')) {
       return;
     }
 
@@ -243,7 +243,7 @@
     var close = localStorage.getItem('adfox-close');
 
     // Convert items to array
-    if(close !== null) {
+    if (close !== null) {
       items = JSON.parse(close);
     }
 
@@ -254,7 +254,7 @@
     localStorage.setItem('adfox-close', JSON.stringify(items));
 
     // Remove banner content
-    while(this.firstChild) {
+    while (this.firstChild) {
       this.removeChild(this.lastChild);
     }
   }
@@ -266,7 +266,7 @@
   function sendEvent(e) {
     var target = e.target || e.srcElement;
 
-    if(!target.hasAttribute('data-event')) {
+    if (!target.hasAttribute('data-event')) {
       return;
     }
 
@@ -279,10 +279,10 @@
   /**
    * Loop through adfox widgets to load them
    */
-  for(var i = 0; i < widgets.length; i++) {
+  for (var i = 0; i < widgets.length; i++) {
     var banner = widgets[i].querySelector('div');
 
-    if(banner === null || banner.dataset.length === 0) {
+    if (banner === null || banner.dataset.length === 0) {
       continue;
     }
 

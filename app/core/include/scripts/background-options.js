@@ -1,4 +1,4 @@
-jQuery(document).ready(function($) {
+jQuery(document).ready(function ($) {
   if (typeof wp === 'undefined' || typeof wp.media === 'undefined') {
     return false;
   }
@@ -10,7 +10,7 @@ jQuery(document).ready(function($) {
   /**
    * Check required options
    */
-  if(typeof knife_background_options === 'undefined') {
+  if (typeof knife_background_options === 'undefined') {
     return false;
   }
 
@@ -27,8 +27,10 @@ jQuery(document).ready(function($) {
     // Remove image if exists
     image.find('img').remove();
 
-    if(input && input.length > 1) {
-      $('<img />', {src: input}).prependTo(image).css('max-width', '95%');
+    if (input && input.length > 1) {
+      $('<img />', {
+        src: input
+      }).prependTo(image).css('max-width', '95%');
 
       image.find('button.remove').removeAttr('disabled');
       image.find('select.size').removeAttr('disabled');
@@ -45,7 +47,7 @@ jQuery(document).ready(function($) {
   /**
    * Process select image button click
    */
-  image.on('click', 'button.select', function(e) {
+  image.on('click', 'button.select', function (e) {
     e.preventDefault();
 
     var frame = wp.media({
@@ -53,7 +55,7 @@ jQuery(document).ready(function($) {
       multiple: false
     });
 
-    frame.on('select', function() {
+    frame.on('select', function () {
       var attachment = frame.state().get('selection').first().toJSON();
 
       image.find('input.image').val(attachment.url);
@@ -68,7 +70,7 @@ jQuery(document).ready(function($) {
   /**
    * Delete image on link clicking
    */
-  image.on('click', 'button.remove', function(e) {
+  image.on('click', 'button.remove', function (e) {
     e.preventDefault();
 
     image.find('input.image').val('');

@@ -4,22 +4,22 @@
  * @since 1.12
  */
 
-(function() {
+(function () {
   var post = document.querySelector('.post');
 
-  if(post === null) {
+  if (post === null) {
     return false;
   }
 
 
   var cards = post.querySelectorAll('.figure--flipper');
 
-  for(var i = 0; i < cards.length; i++) {
-    cards[i].addEventListener('click', function(e) {
+  for (var i = 0; i < cards.length; i++) {
+    cards[i].addEventListener('click', function (e) {
       var target = e.target || e.srcElement;
 
       // Check if element is link
-      if(target.tagName !== 'A') {
+      if (target.tagName !== 'A') {
         this.classList.toggle('figure--rotate');
       }
     });

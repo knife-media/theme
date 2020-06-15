@@ -1,4 +1,4 @@
-jQuery(document).ready(function($) {
+jQuery(document).ready(function ($) {
   if (typeof wp === 'undefined' || typeof wp.media === 'undefined') {
     return false;
   }
@@ -9,7 +9,7 @@ jQuery(document).ready(function($) {
   /**
    * Check required metabox options
    */
-  if(typeof knife_story_metabox.error === 'undefined') {
+  if (typeof knife_story_metabox.error === 'undefined') {
     return false;
   }
 
@@ -24,15 +24,15 @@ jQuery(document).ready(function($) {
    * Update wp.editor using editorId
    */
   function updateEditor(el) {
-    if(typeof knife_story_metabox.editor === 'undefined') {
+    if (typeof knife_story_metabox.editor === 'undefined') {
       knife_story_metabox.editor = 'html';
     }
 
-    $.each(el.find('.wp-editor-area'), function(i, editor) {
+    $.each(el.find('.wp-editor-area'), function (i, editor) {
       var textarea = $(editor);
       var editorId = textarea.attr('id');
 
-      if(typeof editorId === 'undefined') {
+      if (typeof editorId === 'undefined') {
         editorId = 'knife-story-editor-' + box.data('editor');
         textarea.attr('id', editorId);
 
@@ -46,8 +46,8 @@ jQuery(document).ready(function($) {
           toolbar1: 'formatselect,link',
           invalid_styles: 'color font-weight font-size',
           block_formats: 'Paragraph=p;Heading 4=h4',
-          init_instance_callback: function() {
-            if(window.tinymce && window.switchEditors) {
+          init_instance_callback: function () {
+            if (window.tinymce && window.switchEditors) {
               window.switchEditors.go(editorId, knife_story_metabox.editor);
             }
           }
@@ -65,7 +65,7 @@ jQuery(document).ready(function($) {
    * Add class for short time
    */
   function blinkClass(element, cl) {
-    element.addClass(cl).delay(500).queue(function(){
+    element.addClass(cl).delay(500).queue(function () {
       element.removeClass(cl).dequeue();
     });
   }
@@ -76,12 +76,15 @@ jQuery(document).ready(function($) {
    */
   function displayImage(parent, link, image) {
     // Change src if image already exists
-    if(parent.find('img').length > 0) {
+    if (parent.find('img').length > 0) {
       return parent.find('img').attr('src', link);
     }
 
     // Otherwise create new image
-    var showcase = $('<img />', {class: image, src: link});
+    var showcase = $('<img />', {
+      class: image,
+      src: link
+    });
 
     return showcase.prependTo(parent);
   }
@@ -98,7 +101,7 @@ jQuery(document).ready(function($) {
     });
 
     // On open frame select current attachment
-    frame.on('open',function() {
+    frame.on('open', function () {
       var selection = frame.state().get('selection');
       var attachment = item.find('.item__media').val();
 
@@ -106,12 +109,12 @@ jQuery(document).ready(function($) {
     });
 
     // On image select
-    frame.on('select', function() {
+    frame.on('select', function () {
       var selection = frame.state().get('selection').first().toJSON();
 
       item.find('.item__media').val(selection.id);
 
-      if(typeof selection.sizes.thumbnail !== 'undefined') {
+      if (typeof selection.sizes.thumbnail !== 'undefined') {
         selection = selection.sizes.thumbnail;
       }
 
@@ -126,7 +129,7 @@ jQuery(document).ready(function($) {
   /**
    * Delete or clear item
    */
-  box.on('click', '.item__field-trash', function(e) {
+  box.on('click', '.item__field-trash', function (e) {
     e.preventDefault();
 
     $(this).closest('.item').remove();
@@ -136,7 +139,7 @@ jQuery(document).ready(function($) {
   /**
    * Add image to item
    */
-  box.on('click', '.item__image', function(e) {
+  box.on('click', '.item__image', function (e) {
     e.preventDefault();
 
     var item = $(this).closest('.item');
@@ -147,7 +150,7 @@ jQuery(document).ready(function($) {
   /**
    * Update item image on click
    */
-  box.on('click', '.item__field-image', function(e) {
+  box.on('click', '.item__field-image', function (e) {
     e.preventDefault();
 
     var item = $(this).closest('.item');
@@ -158,7 +161,7 @@ jQuery(document).ready(function($) {
   /**
    * Remove item image on click
    */
-  box.on('click', '.item__field-clear', function(e) {
+  box.on('click', '.item__field-clear', function (e) {
     e.preventDefault();
 
     var item = $(this).closest('.item');
@@ -174,7 +177,7 @@ jQuery(document).ready(function($) {
   /**
    * Add story background
    */
-  box.on('click', '.manage__background', function(e) {
+  box.on('click', '.manage__background', function (e) {
     e.preventDefault();
 
     var background = box.find('.manage__background');
@@ -186,7 +189,7 @@ jQuery(document).ready(function($) {
     });
 
     // On image select
-    frame.on('select', function() {
+    frame.on('select', function () {
       var selection = frame.state().get('selection').first().toJSON();
 
       background.find('.manage__background-media').val(selection.url);
@@ -206,17 +209,17 @@ jQuery(document).ready(function($) {
    * Set items proper name attribute
    */
   function sortItems(callback) {
-    if(typeof knife_story_metabox.meta_items === 'undefined') {
+    if (typeof knife_story_metabox.meta_items === 'undefined') {
       return alert(knife_story_metabox.error);
     }
 
     var meta_items = knife_story_metabox.meta_items;
 
-    box.find('.item:not(:first)').each(function(i) {
+    box.find('.item:not(:first)').each(function (i) {
       var item = $(this);
 
       // Change fields name
-      item.find('[data-item]').each(function() {
+      item.find('[data-item]').each(function () {
         var data = $(this).data('item');
 
         // Create name attribute
@@ -227,7 +230,7 @@ jQuery(document).ready(function($) {
       });
     });
 
-    if(typeof callback === 'function') {
+    if (typeof callback === 'function') {
       return callback();
     }
   }
@@ -236,7 +239,7 @@ jQuery(document).ready(function($) {
   /**
    * Add new item
    */
-  box.on('click', '.actions__add', function(e) {
+  box.on('click', '.actions__add', function (e) {
     e.preventDefault();
 
     var item = box.find('.item:first').clone();
@@ -244,7 +247,7 @@ jQuery(document).ready(function($) {
     // Insert after last item
     box.find('.item:last').after(item);
 
-    sortItems(function() {
+    sortItems(function () {
       updateEditor(item);
     });
   });
@@ -253,11 +256,11 @@ jQuery(document).ready(function($) {
   /**
    * Shadow range
    */
-  box.on('change', '.manage__item-shadow', function(e) {
+  box.on('change', '.manage__item-shadow', function (e) {
     var blank = box.find('.manage__background-blank');
     var shade = parseInt($(this).val()) / 100;
 
-    if(box.find('.manage__background-image').length < 1) {
+    if (box.find('.manage__background-image').length < 1) {
       return blinkClass(blank, 'manage__background-blank--error');
     }
 
@@ -268,10 +271,10 @@ jQuery(document).ready(function($) {
   /**
    * Blur range
    */
-  box.on('change', '.manage__item-blur', function(e) {
+  box.on('change', '.manage__item-blur', function (e) {
     var blank = box.find('.manage__background-blank');
 
-    if(box.find('.manage__background-image').length < 1) {
+    if (box.find('.manage__background-image').length < 1) {
       return blinkClass(blank, 'manage__background-blank--error');
     }
 
@@ -290,10 +293,10 @@ jQuery(document).ready(function($) {
   /**
    * Onload set up
    */
-  (function() {
+  (function () {
     // Sort items and update editor
-    sortItems(function() {
-      box.find('.item:not(:first)').each(function(i) {
+    sortItems(function () {
+      box.find('.item:not(:first)').each(function (i) {
         var item = $(this);
 
         // Update item editor

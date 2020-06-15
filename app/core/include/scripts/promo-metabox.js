@@ -1,4 +1,4 @@
-jQuery(document).ready(function($) {
+jQuery(document).ready(function ($) {
   if (typeof wp === 'undefined' || typeof wp.media === 'undefined') {
     return false;
   }
@@ -8,7 +8,7 @@ jQuery(document).ready(function($) {
   /**
    * Check required metabox options
    */
-  if(typeof knife_promo_metabox === 'undefined') {
+  if (typeof knife_promo_metabox === 'undefined') {
     return false;
   }
 
@@ -22,9 +22,9 @@ jQuery(document).ready(function($) {
   /**
    * Toggle options on promo checkbox
    */
-  check.on('click', function() {
+  check.on('click', function () {
     box.find('.promo').toggleClass('hidden',
-        $(this).is(':not(:checked)')
+      $(this).is(':not(:checked)')
     );
   });
 
@@ -38,7 +38,7 @@ jQuery(document).ready(function($) {
   /**
    * Process select image button click
    */
-  box.on('click', 'a.upload', function(e) {
+  box.on('click', 'a.upload', function (e) {
     e.preventDefault();
 
     // Create custom state
@@ -58,7 +58,7 @@ jQuery(document).ready(function($) {
     });
 
     // On image select
-    frame.on('select', function() {
+    frame.on('select', function () {
       var attachment = frame.state().get('selection').first().toJSON();
 
       box.find('input.logo').val(attachment.url);
@@ -71,7 +71,7 @@ jQuery(document).ready(function($) {
   /**
    * Remove hidden class for promo posts on load
    */
-  if(check.is(':checked')) {
+  if (check.is(':checked')) {
     box.find('.promo').removeClass('hidden');
   }
 });

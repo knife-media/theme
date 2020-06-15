@@ -2,28 +2,30 @@
  * Share buttons manager
  */
 
-(function() {
-  var counters = {facebook: false, vkontakte: false};
+(function () {
+  var counters = {
+    facebook: false,
+    vkontakte: false
+  };
 
 
   /**
    * Create url
    */
-  var makeUrl = function(network) {
+  var makeUrl = function (network) {
     var link = document.querySelector('link[rel="canonical"]');
 
-    if(link && link.href) {
+    if (link && link.href) {
       link = encodeURIComponent(link.href);
-    }
-    else {
+    } else {
       link = encodeURIComponent(window.location.href.replace(window.location.hash, ''));
     }
 
-    if(network === 'vkontakte') {
+    if (network === 'vkontakte') {
       return 'https://vk.com/share.php?act=count&index=0&url=' + link;
     }
 
-    if(network === 'facebook') {
+    if (network === 'facebook') {
       return 'https://graph.facebook.com/?fields=og_object{engagement}&callback=FB.Share&id=' + link;
     }
   }
@@ -32,7 +34,7 @@
   /**
    * Open share popup window
    */
-  var openPopup = function(url, params) {
+  var openPopup = function (url, params) {
     var left = Math.round(screen.width / 2 - params.width / 2);
     var top = 0;
 
@@ -48,7 +50,7 @@
   /**
    * Get share counters
    */
-  var getShares = function(network) {
+  var getShares = function (network) {
     var script = document.createElement('script');
 
     script.type = 'text/javascript';
@@ -64,23 +66,27 @@
   /**
    * Global share buttons function
    */
-  window.shareButtons = function() {
+  window.shareButtons = function () {
     var links = document.querySelectorAll('.share .share__link');
 
-    if(links === null) {
+    if (links === null) {
       return false;
     }
 
-    for(var i = 0; i < links.length; i++) {
+    for (var i = 0; i < links.length; i++) {
       var network = links[i].dataset.label;
 
-      links[i].addEventListener('click', function(e) {
+      links[i].addEventListener('click', function (e) {
         e.preventDefault();
 
-        return openPopup(this.href, {width: 600, height: 400, id: this.dataset.label})
+        return openPopup(this.href, {
+          width: 600,
+          height: 400,
+          id: this.dataset.label
+        })
       });
 
-      if(network in counters && counters[network] === false) {
+      if (network in counters && counters[network] === false) {
         counters[network] = getShares(network);
       }
     }
@@ -91,13 +97,13 @@
       count: function (id, count) {
         document.getElementById('share-vkontakte').outerHTML = '';
 
-        if(typeof count === 'undefined' || !count) {
+        if (typeof count === 'undefined' || !count) {
           return;
         }
 
         var links = document.querySelectorAll('.share .share__link--vkontakte');
 
-        for(var i = 0; i < links.length; i++) {
+        for (var i = 0; i < links.length; i++) {
           var child = document.createElement("span");
           child.className = 'share__count';
           child.innerHTML = count;
@@ -112,19 +118,19 @@
     Share: function (data) {
       document.getElementById('share-facebook').outerHTML = '';
 
-      if(typeof data.og_object === 'undefined' || typeof data.og_object.engagement === 'undefined') {
+      if (typeof data.og_object === 'undefined' || typeof data.og_object.engagement === 'undefined') {
         return;
       }
 
       var engagement = data.og_object.engagement;
 
-      if(typeof engagement.count === 'undefined' || !engagement.count) {
+      if (typeof engagement.count === 'undefined' || !engagement.count) {
         return;
       }
 
       var links = document.querySelectorAll('.share .share__link--facebook');
 
-      for(var i = 0; i < links.length; i++) {
+      for (var i = 0; i < links.length; i++) {
         var child = document.createElement("span");
         child.className = 'share__count';
         child.innerHTML = engagement.count;

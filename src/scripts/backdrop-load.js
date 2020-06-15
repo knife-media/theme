@@ -4,11 +4,11 @@
  * @version 1.8
  */
 
-(function() {
+(function () {
   /**
    * Check if backdrop options exist
    */
-  if(typeof knife_backdrop === 'undefined') {
+  if (typeof knife_backdrop === 'undefined') {
     return false;
   }
 
@@ -16,10 +16,10 @@
   /**
    * Set body background color only if image not set
    */
-  if(typeof knife_backdrop.image === 'undefined') {
+  if (typeof knife_backdrop.image === 'undefined') {
 
     // Set body background color
-    if(typeof knife_backdrop.color !== 'undefined') {
+    if (typeof knife_backdrop.color !== 'undefined') {
       document.body.style.backgroundColor = '#' + knife_backdrop.color;
     }
 
@@ -43,12 +43,12 @@
   /**
    * Set background size if exists
    */
-  if(typeof knife_backdrop.size !== 'undefined') {
+  if (typeof knife_backdrop.size !== 'undefined') {
     backdrop.style.backgroundSize = knife_backdrop.size;
   }
 
   var image = new Image();
-  image.addEventListener('load', function() {
+  image.addEventListener('load', function () {
     document.body.insertBefore(backdrop, document.body.firstChild);
   });
 

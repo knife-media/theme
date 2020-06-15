@@ -4,15 +4,15 @@
  * @since 1.12
  */
 
-(function() {
+(function () {
   // Check mistype options existing
-  if(typeof knife_mistype_reporter === 'undefined') {
+  if (typeof knife_mistype_reporter === 'undefined') {
     return false;
   }
 
   // Get option from global settings
   function getOption(option, alternate) {
-    if(knife_mistype_reporter.hasOwnProperty(option)) {
+    if (knife_mistype_reporter.hasOwnProperty(option)) {
       return knife_mistype_reporter[option];
     }
 
@@ -26,7 +26,7 @@
   function destroyPopup() {
     var mistype = document.querySelector('.mistype');
 
-    if(mistype.parentNode) {
+    if (mistype.parentNode) {
       mistype.parentNode.removeChild(mistype);
     }
   }
@@ -36,14 +36,14 @@
    * Close popup on ESC button
    */
   function closePopup(e) {
-    if(e.keyCode === 27) {
+    if (e.keyCode === 27) {
       // Remove this listener
       document.removeEventListener('keydown', closePopup);
 
       var mistype = document.querySelector('.mistype');
 
       // Remove mistype element
-      if(mistype.parentNode) {
+      if (mistype.parentNode) {
         mistype.parentNode.removeChild(mistype);
       }
     }
@@ -77,7 +77,7 @@
   function showPopup(selection) {
     var mistype = document.querySelector('.mistype');
 
-    if(mistype !== null) {
+    if (mistype !== null) {
       mistype.parentNode.removeChild(mistype);
     }
 
@@ -115,7 +115,7 @@
     submit.textContent = getOption('button', 'Send');
     popup.appendChild(submit);
 
-    submit.addEventListener('click', function(e) {
+    submit.addEventListener('click', function (e) {
       e.preventDefault();
 
       // Send AJAX request
@@ -139,12 +139,12 @@
   /**
    * Event listener on keydown
    */
-  document.addEventListener('keydown', function(e) {
-    if(e.ctrlKey && e.keyCode == 13) {
+  document.addEventListener('keydown', function (e) {
+    if (e.ctrlKey && e.keyCode == 13) {
       var selection = window.getSelection().toString();
 
       // If selection not empty
-      if(selection.length > 0) {
+      if (selection.length > 0) {
         showPopup(selection.substring(0, 300));
       }
     }

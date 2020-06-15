@@ -7,16 +7,21 @@ const uglify = require('gulp-uglify');
 const plumber = require('gulp-plumber');
 const prefix = require('gulp-autoprefixer');
 const workboxBuild = require('workbox-build');
+const babel = require('gulp-babel');
 
 
-gulp.task('styles',  (done) => {
+gulp.task('styles', (done) => {
   gulp.src('src/styles/app.scss')
     .pipe(plumber())
     .pipe(sassGlob())
-    .pipe(sass({errLogToConsole: true}))
+    .pipe(sass({
+      errLogToConsole: true
+    }))
     .pipe(prefix())
     .pipe(concat('styles.min.css'))
-    .pipe(cleanCss({compatibility: 'ie9'}))
+    .pipe(cleanCss({
+      compatibility: 'ie9'
+    }))
     .pipe(gulp.dest('app/assets/'))
 
   done();
@@ -26,6 +31,9 @@ gulp.task('styles',  (done) => {
 gulp.task('scripts', (done) => {
   gulp.src('src/scripts/*.js')
     .pipe(plumber())
+    .pipe(babel({
+      presets: ['@babel/env']
+    }))
     .pipe(uglify())
     .pipe(concat('scripts.min.js'))
     .pipe(gulp.dest('app/assets/'))
@@ -96,7 +104,7 @@ gulp.task('workbox', (done) => {
 });
 
 
-gulp.task('watch', function() {
+gulp.task('watch', function () {
   gulp.watch('src/**/*', gulp.series('styles', 'scripts'));
 })
 

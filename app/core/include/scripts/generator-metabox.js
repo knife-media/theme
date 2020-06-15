@@ -1,5 +1,5 @@
-jQuery(document).ready(function($) {
-  if(typeof wp === 'undefined' || typeof wp.media === 'undefined') {
+jQuery(document).ready(function ($) {
+  if (typeof wp === 'undefined' || typeof wp.media === 'undefined') {
     return false;
   }
 
@@ -9,7 +9,7 @@ jQuery(document).ready(function($) {
   /**
    * Check required metabox options
    */
-  if(typeof knife_generator_metabox === 'undefined') {
+  if (typeof knife_generator_metabox === 'undefined') {
     return false;
   }
 
@@ -18,7 +18,7 @@ jQuery(document).ready(function($) {
    * Add class for short time
    */
   function blinkClass(element, cl) {
-    element.addClass(cl).delay(500).queue(function(){
+    element.addClass(cl).delay(500).queue(function () {
       element.removeClass(cl).dequeue();
     });
   }
@@ -55,17 +55,17 @@ jQuery(document).ready(function($) {
    * Set items proper name attribute
    */
   function sortItems() {
-    if(typeof knife_generator_metabox.meta_items === 'undefined') {
+    if (typeof knife_generator_metabox.meta_items === 'undefined') {
       return alert(knife_generator_metabox.error);
     }
 
     var meta_items = knife_generator_metabox.meta_items;
 
-    box.find('.item:not(:first)').each(function(i) {
+    box.find('.item:not(:first)').each(function (i) {
       var item = $(this);
 
       // Change fields name
-      item.find('[data-item]').each(function() {
+      item.find('[data-item]').each(function () {
         var data = $(this).data('item');
 
         // Create name attribute
@@ -90,15 +90,15 @@ jQuery(document).ready(function($) {
     }
 
     // Add required poster fields
-    $.each(['attachment', 'template'], function(i, v) {
+    $.each(['attachment', 'template'], function (i, v) {
       data[v] = item.find('[data-item="' + v + '"]').val();
     });
 
     data.textbox.title = $('#title').val() || '';
 
-    if($('#knife-tagline-input').val()) {
+    if ($('#knife-tagline-input').val()) {
       // If title not emnpty
-      if(data.textbox.title) {
+      if (data.textbox.title) {
         data.textbox.title = data.textbox.title + ' ';
       }
 
@@ -106,7 +106,7 @@ jQuery(document).ready(function($) {
     }
 
     // Add required poster fields
-    $.each(['heading', 'description'], function(i, v) {
+    $.each(['heading', 'description'], function (i, v) {
       data.textbox[v] = item.find('[data-item="' + v + '"]').val();
     });
 
@@ -115,24 +115,28 @@ jQuery(document).ready(function($) {
     var warning = item.find('.item__image-warning');
     warning.html('').hide();
 
-    var xhr = $.ajax({method: 'POST', url: ajaxurl, data: data}, 'json');
+    var xhr = $.ajax({
+      method: 'POST',
+      url: ajaxurl,
+      data: data
+    }, 'json');
 
-    xhr.done(function(answer) {
+    xhr.done(function (answer) {
       toggleLoader(item);
 
-      if(typeof answer.data === 'undefined') {
+      if (typeof answer.data === 'undefined') {
         return warning.html(knife_generator_metabox.error).show();
       }
 
       answer.success = answer.success || false;
 
-      if(answer.success === true && answer.data.length > 0) {
+      if (answer.success === true && answer.data.length > 0) {
         item.find('[data-item="poster"]').val(answer.data);
 
         var poster = item.find('.item__image-poster');
 
         // Create image if not exists
-        if(poster.find('img').length === 0) {
+        if (poster.find('img').length === 0) {
           $('<img />').prependTo(poster);
         }
 
@@ -142,7 +146,7 @@ jQuery(document).ready(function($) {
       return warning.html(answer.data).show();
     });
 
-    xhr.fail(function() {
+    xhr.fail(function () {
       toggleLoader(item);
 
       return warning.html(knife_generator_metabox.error).show();
@@ -155,7 +159,7 @@ jQuery(document).ready(function($) {
   /**
    * Add generator poster
    */
-  box.on('click', '.item__image-poster', function(e) {
+  box.on('click', '.item__image-poster', function (e) {
     e.preventDefault();
 
     var poster = $(this);
@@ -179,14 +183,14 @@ jQuery(document).ready(function($) {
 
 
     // On image select
-    frame.on('select', function() {
+    frame.on('select', function () {
       var selection = frame.state().get('selection').first().toJSON();
 
       // Set hidden inputs values
       poster.find('[data-item="poster"]').val(selection.url);
       poster.find('[data-item="attachment"]').val(selection.id);
 
-      if(poster.find('img').length === 0) {
+      if (poster.find('img').length === 0) {
         $('<img />').prependTo(poster);
       }
 
@@ -200,7 +204,7 @@ jQuery(document).ready(function($) {
   /**
    * Manage checkbox answer trigger
    */
-  box.on('change', '.manage input[data-manage]', function() {
+  box.on('change', '.manage input[data-manage]', function () {
     var option = $(this);
 
     return toggleManage(option);
@@ -210,7 +214,7 @@ jQuery(document).ready(function($) {
   /**
    * Add new item
    */
-  box.on('click', '.actions__add', function(e) {
+  box.on('click', '.actions__add', function (e) {
     e.preventDefault();
 
     var item = box.find('.item:first').clone();
@@ -226,12 +230,12 @@ jQuery(document).ready(function($) {
   /**
    * Remove item
    */
-  box.on('click', '.item__delete', function(e) {
+  box.on('click', '.item__delete', function (e) {
     e.preventDefault();
 
     $(this).closest('.item').remove();
 
-    if(box.find('.item').length === 1) {
+    if (box.find('.item').length === 1) {
       box.find('.actions__add').trigger('click');
     }
   });
@@ -240,13 +244,13 @@ jQuery(document).ready(function($) {
   /**
    * Generate button click
    */
-  box.on('click', '.item__image-generate', function(e) {
+  box.on('click', '.item__image-generate', function (e) {
     e.preventDefault();
 
     var item = $(this).closest('.item');
     var caption = item.find('.item__image-caption');
 
-    if(item.find('.item__image-poster > img').length < 1) {
+    if (item.find('.item__image-poster > img').length < 1) {
       return blinkClass(caption, 'item__image-caption--error');
     }
 
@@ -263,16 +267,16 @@ jQuery(document).ready(function($) {
   /**
    * Onload set up
    */
-  (function() {
+  (function () {
     // Set manage classes
-    box.find('.manage input[data-manage]').each(function() {
+    box.find('.manage input[data-manage]').each(function () {
       var option = $(this);
 
       toggleManage(option);
     });
 
     // Show at least one item box on load
-    if(box.find('.item').length === 1) {
+    if (box.find('.item').length === 1) {
       box.find('.actions__add').trigger('click');
     }
 
