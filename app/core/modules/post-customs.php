@@ -6,6 +6,7 @@
  *
  * @package knife-theme
  * @since 1.12
+ * @version 1.13
  */
 
 
@@ -29,11 +30,6 @@ class Knife_Post_Customs {
     public static function load_module() {
         // Load custom post functions
         add_action('wp', [__CLASS__, 'load_functions']);
-
-        // Define post customs settings if still not
-        if(!defined('KNIFE_CUSTOMS')) {
-            define('KNIFE_CUSTOMS', []);
-        }
     }
 
 
@@ -48,16 +44,12 @@ class Knife_Post_Customs {
         $object = get_queried_object();
 
         // Get post name
-        $name = $object->post_name;
+        $functions = "/core/customs/{$object->post_name}/functions.php";
 
-        if(in_array($name, KNIFE_CUSTOMS)) {
-            $functions = "/core/customs/{$name}/functions.php";
-
-            // Let's add the file if exists
-            if(file_exists(get_template_directory() .  $functions)) {
-                // Require customs
-                require_once(get_template_directory() .  $functions);
-            }
+        // Let's add the file if exists
+        if(file_exists(get_template_directory() .  $functions)) {
+            // Require customs
+            require_once(get_template_directory() .  $functions);
         }
     }
 }
