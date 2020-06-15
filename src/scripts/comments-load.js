@@ -20,9 +20,9 @@
   /**
    * Hypercomments options
    */
-  _hcwp = window._hcwp || [];
+  window._hcwp = window._hcwp || [];
 
-  _hcwp.push({
+  window._hcwp.push({
     widget: "Stream",
     widget_id: knife_comments_id,
     callback: function () {
