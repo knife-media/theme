@@ -55,7 +55,7 @@ class Knife_Theme_Filters {
         add_filter('redirect_canonical', [__CLASS__, 'remove_autosuggest']);
 
         // Update permalink on post creation
-        add_filter('editable_slug', [__CLASS__, 'update_slug'], 12);
+        // add_filter('editable_slug', [__CLASS__, 'update_slug'], 12);
 
         // Fix non-latin filenames
         add_action('sanitize_file_name', [__CLASS__, 'sanitize_file_name'], 12);
