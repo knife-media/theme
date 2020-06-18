@@ -123,7 +123,7 @@ class Knife_Theme_Filters {
      * @since 1.12
      */
     public static function sanitize_file_name($name) {
-        return preg_replace('#[^a-z0-9.-_]#i', '', $name);
+        return preg_replace('#[^a-z0-9.-_]#i', '-', $name);
     }
 
     /**
