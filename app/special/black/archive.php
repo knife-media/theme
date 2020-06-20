@@ -17,10 +17,7 @@ get_header(); ?>
                     _x('Черный нож', 'special: black', 'knife-theme')
                 );
 
-                printf(
-                    '<p>%s</p>',
-                    _x('Черный нож — тайный журнал для избранных, вестник параллельного мира, в котором хочется жить. Если вы читаете, то вы не умрете никогда.', 'special: black', 'knife-theme')
-                );
+                echo term_description();
             ?>
         </div>
     </div>
