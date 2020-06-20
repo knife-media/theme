@@ -129,7 +129,7 @@ body.is-archive:after {
 
 .is-archive .caption__description p {
   font-size: 1.125rem;
-  max-width: 50rem;
+  max-width: 52rem;
 }
 
 @media screen and (max-width: 1023px) {
