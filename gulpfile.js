@@ -104,8 +104,10 @@ gulp.task('workbox', (done) => {
 });
 
 
-gulp.task('watch', function () {
+gulp.task('watch', function (done) {
   gulp.watch('src/**/*', gulp.series('styles', 'scripts'));
+
+  done();
 })
 
 
