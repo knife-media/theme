@@ -30,7 +30,7 @@
 
     <?php if(comments_open()) : ?>
         <div class="entry-comments">
-            <div class="comments" id="hypercomments_widget"></div>
+            <div class="comments" id="comments"></div>
         </div>
     <?php endif; ?>
 
