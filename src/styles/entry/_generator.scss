@@ -124,8 +124,8 @@
     }
 
     a {
-      color: $color-light;
-      border-bottom: 1px solid $color-light;
+      color: inherit;
+      border-bottom: 1px solid;
 
       &:hover {
         border-bottom-color: transparent;
