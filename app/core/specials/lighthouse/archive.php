@@ -15,7 +15,7 @@ get_header(); ?>
             <?php
                 printf(
                     '<img src="%s" alt="">',
-                    get_template_directory_uri() . "/special/lighthouse/images/logo.png",
+                    get_template_directory_uri() . '/core/specials/lighthouse/images/logo.png',
                 );
 
                 printf(
@@ -38,11 +38,11 @@ get_header(); ?>
         <?php
             while(have_posts()) : the_post();
 
-                get_template_part('special/lighthouse/loop');
+                get_template_part('core/specials/lighthouse/loop');
 
             endwhile;
         ?>
     </div>
 </div>
 
-<?php get_template_part('special/lighthouse/footer');
+<?php get_template_part('core/specials/lighthouse/footer');

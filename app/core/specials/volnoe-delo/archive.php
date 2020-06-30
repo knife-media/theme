@@ -14,7 +14,7 @@ get_header(); ?>
             <?php
                 printf(
                     '<img src="%s" alt="">',
-                    get_template_directory_uri() . "/special/volnoe-delo/images/logo.png",
+                    get_template_directory_uri() . '/core/specials/volnoe-delo/images/logo.png',
                 );
 
                 printf(

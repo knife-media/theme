@@ -71,4 +71,4 @@ get_header(); ?>
     <?php endwhile; ?>
 </div>
 
-<?php get_template_part('special/new-business/footer');
+<?php get_template_part('core/specials/new-business/footer');

@@ -20,7 +20,7 @@ get_header(); ?>
 
                 printf(
                     '<img src="%s" alt="">',
-                    get_template_directory_uri() . "/special/new-business/images/spinner.svg",
+                    get_template_directory_uri() . '/core/specials/new-business/images/spinner.svg',
                 );
             ?>
         </div>
@@ -30,11 +30,11 @@ get_header(); ?>
         <?php
             while(have_posts()) : the_post();
 
-                get_template_part('special/new-business/loop');
+                get_template_part('core/specials/new-business/loop');
 
             endwhile;
         ?>
     </div>
 </div>
 
-<?php get_template_part('special/new-business/footer');
+<?php get_template_part('core/specials/new-business/footer');

@@ -15,7 +15,7 @@ get_header(); ?>
             <?php
                 printf(
                     '<img src="%s" alt="">',
-                    get_template_directory_uri() . "/special/death-work/images/logo-white.svg",
+                    get_template_directory_uri() . '/core/specials/death-work/images/logo-white.svg',
                 );
 
                 printf(
@@ -35,11 +35,11 @@ get_header(); ?>
         <?php
             while(have_posts()) : the_post();
 
-                get_template_part('special/death-work/loop');
+                get_template_part('core/specials/death-work/loop');
 
             endwhile;
         ?>
     </div>
 </div>
 
-<?php get_template_part('special/death-work/footer');
+<?php get_template_part('core/special/death-work/footer');
