@@ -17,9 +17,9 @@ $poster->setFont(get_template_directory() . '/assets/fonts/formular/formular-bla
 
 
 // Draw heading
-if(!empty($textbox['description'])) {
+if(!empty($textbox['heading'])) {
     $poster->text([
-        'text' => mb_strtoupper($textbox['description']),
+        'text' => mb_strtoupper($textbox['heading']),
         'x' => 60, 'y' => 370, 'width' => 1000, 'height' => 200,
         'lineHeight' => 1.5, 'fontSize' => 54
     ]);
