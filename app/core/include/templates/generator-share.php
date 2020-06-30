@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="<?php echo esc_attr($description); ?>">
 
     <meta property="og:title" content="<?php echo esc_attr($heading); ?>">
