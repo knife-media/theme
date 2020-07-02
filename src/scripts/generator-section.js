@@ -2,7 +2,7 @@
  * Random generator post type handler
  *
  * @since 1.6
- * @version 1.11
+ * @version 1.13
  */
 
 (function () {
@@ -45,6 +45,27 @@
    * Start button element
    */
   var button = null;
+
+
+  /**
+   * Clone items array
+   */
+  var items = knife_generator_items.slice();
+
+
+  /**
+   * Smooth scroll
+   */
+  function smoothScroll(to) {
+    if ('scrollBehavior' in document.documentElement.style) {
+      return window.scrollTo({
+        top: to,
+        behavior: 'smooth'
+      });
+    }
+
+    window.scrollTo(to, 0);
+  }
 
 
   /**
@@ -146,8 +167,21 @@
   button.addEventListener('click', function (e) {
     e.preventDefault();
 
-    var rand = Math.floor(Math.random() * knife_generator_items.length);
-    var item = knife_generator_items[rand];
+    // Get generator offset
+    var offset = generator.getBoundingClientRect().top + window.pageYOffset;
+
+    // Try to scroll smoothly
+    smoothScroll(offset - 76);
+
+    if (items.length < 1) {
+      items = knife_generator_items.slice();
+    }
+
+    var rand = Math.floor(Math.random() * items.length);
+    var item = items[rand];
+
+    // Remove this index
+    items.splice(rand, 1);
 
     // Update generator repeat button text
     if (knife_generator_options.hasOwnProperty('button_repeat')) {
