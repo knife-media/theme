@@ -1,3 +1,50 @@
 .footer {
   display: none;
 }
+
+
+.entry-content {
+  color: #fff;
+  background-color: transparent;
+}
+
+.entry-content > * {
+  width: 52.25rem;
+}
+
+.entry-content h2 {
+  margin-top: 4rem;
+
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.25;
+  text-transform: uppercase;
+
+  color: #ffd700;
+}
+
+.entry-content p {
+  font-size: 1.375rem;
+  font-family: 'PT Serif', sans-serif;
+}
+
+.entry-content em {
+  position: relative;
+  font-weight: 400;
+}
+
+.entry-content em::before {
+  content: '';
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+
+  width: 100%;
+  height: 100%;
+
+  background: #1301ff;
+
+  transform: rotate(1deg) translateY(2px);
+}
