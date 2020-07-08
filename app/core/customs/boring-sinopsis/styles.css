@@ -6,3 +6,7 @@
 .entry-content {
   background-color: #ffdbdb;
 }
+
+.entry-content .figure--flipper aside:last-child {
+  padding: 1rem;
+}
