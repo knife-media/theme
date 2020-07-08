@@ -1,8 +1,8 @@
 @font-face {
   font-family: 'knife-icons';
   src:
-    url('fonts/knife-icons/knife-icons.woff?20200501') format('woff'),
-    url('fonts/knife-icons/knife-icons.ttf?20200501') format('truetype');
+    url('fonts/knife-icons/knife-icons.woff?20200706') format('woff'),
+    url('fonts/knife-icons/knife-icons.ttf?20200706') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -29,6 +29,9 @@
 .icon--left:before {
   content: "\e901";
 }
+.icon--right:before {
+  content: "\e908";
+}
 .icon--vkontakte:before {
   content: "\e903";
 }
@@ -41,6 +44,9 @@
 .icon--odnoklassniki:before {
   content: "\e902";
 }
+.icon--google:before {
+  content: "\ea88";
+}
 .icon--instagram:before {
   content: "\e905";
 }
@@ -50,8 +56,8 @@
 .icon--telegram:before {
   content: "\e907";
 }
-.icon--right:before {
-  content: "\e908";
+.icon--yandex:before {
+  content: "\e911";
 }
 .icon--notify:before {
   content: "\e909";
@@ -70,4 +76,10 @@
 }
 .icon--prev:before {
   content: "\e90e";
+}
+.icon--vote:before {
+  content: "\e910";
+}
+.icon--voted:before {
+  content: "\e912";
 }
