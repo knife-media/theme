@@ -114,6 +114,10 @@
       border: solid 2px $color-primary;
       border-radius: 8px;
     }
+
+    ul, ol {
+      padding-left: 1rem;
+    }
   }
 
   &.figure--toc {
