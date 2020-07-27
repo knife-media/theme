@@ -35,7 +35,7 @@ jQuery(document).ready(function ($) {
     box.find('.item:not(:first)').each(function (i) {
       var item = $(this);
 
-      // Change fields name
+      // Set item names
       item.find('[data-item]').each(function () {
         var data = $(this).data('item');
 
@@ -43,10 +43,21 @@ jQuery(document).ready(function ($) {
         var attr = meta_items + '[' + i + ']';
         var name = attr + '[' + data + ']';
 
-        // Array names for checkboxes
-        if ($(this).is(':checkbox')) {
+        // Make array for targets
+        if (data === 'targets') {
           name = name + '[]';
         }
+
+        $(this).attr('name', name);
+      });
+
+      // Set complete names
+      item.find('[data-complete]').each(function () {
+        var data = $(this).data('complete');
+
+        // Create name attribute
+        var attr = meta_items + '[' + i + '][complete]';
+        var name = attr + '[' + data + ']';
 
         $(this).attr('name', name);
       });
