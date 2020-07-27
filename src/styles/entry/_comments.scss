@@ -18,12 +18,60 @@
 
     color: $color-text;
 
+    .comments__form {
+      display: block;
+      position: relative;
+
+      margin: 2rem 0;
+
+      .comments__form-submit {
+        position: absolute;
+        right: 0.75rem;
+        bottom: 0.75rem;
+
+        width: auto;
+        padding: 0.625rem 1.5rem;
+
+        font-size: 0.875rem;
+        border-radius: 4px;
+
+        @media screen and (max-width: 479px) {
+          bottom: 0.25rem;
+          right: 0.25rem;
+
+          width: calc(100% - 0.5rem);
+        }
+      }
+
+      .comments__form-text {
+        display: block;
+        resize: none;
+
+        width: 100%;
+        height: auto;
+        padding: 1rem 1rem 3.5rem;
+
+        font-size: 0.9375rem;
+
+        border: solid 1px $color-primary;
+        border-radius: 5px;
+      }
+    }
+
     .comments__item {
       display: block;
       position: relative;
 
       margin: 2.25rem 0;
       font-size: 0.875rem;
+
+      .comments__item-form {
+        margin: 1rem 0 1rem 3.5rem;
+
+        @media screen and (max-width: 1023px) {
+          margin-left: 0;
+        }
+      }
 
       .comments__item-header {
         display: flex;
@@ -42,7 +90,7 @@
           min-height: 2.5rem;
         }
 
-        @media screen and (max-width: 369px) {
+        @media screen and (max-width: 359px) {
           padding-right: 4rem;
         }
       }
@@ -116,7 +164,7 @@
         & > * {
           margin: 0.25rem 0.5rem;
 
-          @media screen and (max-width: 359px) {
+          @media screen and (max-width: 479px) {
             margin: 0.25rem 0.375rem;
           }
         }
@@ -138,6 +186,7 @@
       .comments__item-vote {
         display: flex;
         cursor: default;
+        user-select: none;
         color: rgba($color-text, 0.75);
 
         button {
@@ -156,7 +205,8 @@
         }
 
         span {
-          margin: 0 0.25rem;
+          min-width: 1.25rem;
+          text-align: center;
         }
 
         &.comments__item-vote--plus {
@@ -165,6 +215,12 @@
 
         &.comments__item-vote--minus {
           color: red;
+        }
+
+        &.comments__item-vote--voted {
+          .icon--vote {
+            pointer-events: none;
+          }
         }
 
         @media screen and (max-width: 479px) {

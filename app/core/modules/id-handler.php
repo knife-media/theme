@@ -41,9 +41,13 @@ class Knife_ID_Handler {
         }
 
         $options = [
+            'post' => get_queried_object_id(),
             'reply' => __('Ответить', 'knife-theme'),
             'remove' => __('Удалить', 'knife-theme'),
             'block' => __('Забанить', 'knife-theme'),
+            'submit' => __('Отправить', 'knife-theme'),
+            'placeholder' => __('Что вы об этом думаете?', 'knife-theme'),
+            'anonymous' => __('Анонимный пользователь', 'knife-theme'),
             'avatar' => get_template_directory_uri() . '/assets/images/no-avatar.png',
         ];
 
