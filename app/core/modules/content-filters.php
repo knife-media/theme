@@ -147,7 +147,7 @@ class Knife_Content_Filters {
      * Skip reference spans with data-body
      */
     public static function remove_span($content) {
-        return preg_replace('~<span(?!\s+data-body).*?>(.*?)</span>~is', '$1', $content);
+        return preg_replace('~<span(?!\s+(data-body|id)).*?>(.*?)</span>~is', '$1', $content);
     }
 }
 

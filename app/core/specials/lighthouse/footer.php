@@ -24,7 +24,7 @@
         <?php
             printf(
                 '<img class="footer__logo-special" src="%s" alt="">',
-                get_template_directory_uri() . "/special/lighthouse/images/logo.png",
+                get_template_directory_uri() . '/core/specials/lighthouse/images/logo.png',
             );
         ?>
     </div>

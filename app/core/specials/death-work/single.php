@@ -1,9 +1,9 @@
 <?php
 /**
- * Lighthouse: single template
+ * Death work: single template
  *
  * @package knife-theme
- * @since 1.10
+ * @since 1.12
  */
 
 get_header(); ?>
@@ -15,14 +15,9 @@ get_header(); ?>
             <div class="caption__description">
                 <?php
                     printf(
-                        '<img src="%s" alt="">',
-                        get_template_directory_uri() . "/special/lighthouse/images/logo.png",
-                    );
-
-                    printf(
                         '<a href="%s">%s</a>',
-                        get_term_link('lighthouse', 'special'),
-                        _x('Дом с маяком', 'special: lighthouse', 'knife-theme')
+                        get_term_link('death-work', 'special'),
+                        _x('Как работать с трупами и не сойти с ума', 'special: death-work', 'knife-theme')
                     );
                 ?>
             </div>
@@ -32,8 +27,8 @@ get_header(); ?>
             <div class="entry-header">
                 <?php
                     printf(
-                        '<p class="entry-header__emoji">%s</p>',
-                        get_post_meta(get_the_ID(), 'post-emoji', true)
+                        '<div class="entry-header__image"><img src="%s" alt=""></div>',
+                        get_template_directory_uri() . '/core/specials/death-work/images/logo-black.svg',
                     );
 
                     the_title(
@@ -60,7 +55,7 @@ get_header(); ?>
                     the_info(
                         sprintf(
                             '<div class="entry-content__author"><p>%s</p>',
-                            _x('Подготовила специальный<br> корреспондент журнала «Нож»', 'special: lighthouse', 'knife-theme')
+                            _x('Автор материала', 'special: death-work', 'knife-theme')
                         ),
                         '</div>', ['author']
                     );
@@ -78,4 +73,4 @@ get_header(); ?>
     <?php endwhile; ?>
 </div>
 
-<?php get_template_part('special/lighthouse/footer');
+<?php get_template_part('core/specials/death-work/footer');

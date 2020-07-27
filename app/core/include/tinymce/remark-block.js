@@ -1,6 +1,6 @@
 (function () {
-  tinymce.PluginManager.add('remark-button', function (editor, url) {
-    editor.addButton('remark-button', {
+  tinymce.PluginManager.add('remark-block', function (editor, url) {
+    editor.addButton('remark-block', {
       image: 'data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDUxMiA1MTIiIGZpbGw9IiM1NTUiPgo8cGF0aCBkPSJNNDYxLjUyOSAyMDkuODU2bC0xNDIuMDE3LTIwLjYzNy02My41MTMtMTI4LjY5LTYzLjUxMyAxMjguNjktMTQyLjAxOCAyMC42MzcgMTAyLjc2NiAxMDAuMTcxLTI0LjI2IDE0MS40NDQgMTI3LjAyNC02Ni43ODEgMTI3LjAyNCA2Ni43ODEtMjQuMjYtMTQxLjQ0MyAxMDIuNzY2LTEwMC4xNzF6Ij48L3BhdGg+Cjwvc3ZnPgo=',
       title: 'Добавить замечание',
       onclick: function () {

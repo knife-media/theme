@@ -1,6 +1,6 @@
 <?php
 /**
- * Argue-cards: functions
+ * argue-cards: functions
  *
  * @package knife-theme
  * @since 1.12

@@ -33,8 +33,8 @@ class Knife_MCE_Plugins {
         'push-button',
         'mark-button',
         'quote-button',
-        'remark-button',
         'card-separator',
+        'remark-block',
         'similar-block',
         'reference-block',
         'script-embed'

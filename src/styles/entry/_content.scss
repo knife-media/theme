@@ -355,6 +355,20 @@
     }
   }
 
+  span[id] {
+    margin: 0;
+
+    &:target {
+      margin-top: -4.75rem;
+      padding-top: 4.75rem;
+
+      @media screen and (max-width: 767px) {
+        margin-top: -4.25rem;
+        padding-top: 4.25rem;
+      }
+    }
+  }
+
   span[data-body] {
     position: relative;
     cursor: pointer;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Iqos-summer: functions
+ * iqos-summer: functions
  *
  * @package knife-theme
  * @since 1.13

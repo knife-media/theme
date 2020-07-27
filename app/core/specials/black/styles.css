@@ -4,9 +4,6 @@
 /**
  * body background
  */
-body.is-archive {
-}
-
 body.is-archive:after {
   content: '';
 

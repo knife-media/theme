@@ -1,9 +1,9 @@
 <?php
 /**
- * buffon-cards: functions
+ * boring-sinopsis: functions
  *
  * @package knife-theme
- * @since 1.12
+ * @since 1.13
  */
 
 if (!defined('WPINC')) {
@@ -15,7 +15,7 @@ if (!defined('WPINC')) {
  * Add custom styles
  */
 add_action('wp_enqueue_scripts', function() {
-    $name = 'buffon-cards';
+    $name = 'boring-sinopsis';
 
     // Get styles
     $styles = "/core/customs/{$name}/styles.css";

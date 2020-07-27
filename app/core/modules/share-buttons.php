@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.12
+ * @version 1.13
 */
 
 if (!defined('WPINC')) {
@@ -82,9 +82,11 @@ class Knife_Share_Buttons {
         $settings = self::get_settings();
 
         foreach($settings as $network => &$data) {
+            $title = html_entity_decode(strip_tags(get_the_title()));
+
             $data['link'] = sprintf($data['link'],
                 urlencode(get_permalink()),
-                urlencode(strip_tags(get_the_title()))
+                urlencode($title)
             );
         }
 

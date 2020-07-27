@@ -158,7 +158,7 @@ class Knife_Special_Projects {
                 self::enqueue_styles($term->slug);
 
                 // Try to find template if exists
-                $new_template = locate_template(["special/{$term->slug}/single.php"]);
+                $new_template = locate_template(["core/specials/{$term->slug}/single.php"]);
 
                 if(!empty($new_template)) {
                     return $new_template;
@@ -186,7 +186,7 @@ class Knife_Special_Projects {
                 self::enqueue_styles($term->slug);
 
                 // Try to find template if exists
-                $new_template = locate_template(["special/{$term->slug}/archive.php"]);
+                $new_template = locate_template(["core/specials/{$term->slug}/archive.php"]);
 
                 if(!empty($new_template)) {
                     return $new_template;
@@ -342,7 +342,7 @@ class Knife_Special_Projects {
             $version = date('U');
         }
 
-        $styles = "/special/{$term}/styles.css";
+        $styles = "/core/specials/{$term}/styles.css";
 
         // Let's add the file if exists
         if(file_exists(get_template_directory() . $styles)) {

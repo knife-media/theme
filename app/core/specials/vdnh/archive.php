@@ -1,9 +1,9 @@
 <?php
 /**
- * Black: archive template
+ * VDNH: archive template
  *
  * @package knife-theme
- * @since 1.13
+ * @since 1.10
  */
 
 get_header(); ?>
@@ -13,11 +13,14 @@ get_header(); ?>
         <div class="caption__description">
             <?php
                 printf(
-                    '<h1>%s</h1>',
-                    _x('Черный нож', 'special: black', 'knife-theme')
+                    '<img src="%s" alt="">',
+                    get_template_directory_uri() . '/core/specials/vdnh/images/logo.png',
                 );
 
-                echo term_description();
+                printf(
+                    '<h1>%s</h1>',
+                    _x('Специальный проект ВДНХ и журнала «Нож»', 'special: vdnh', 'knife-theme')
+                );
             ?>
         </div>
     </div>
@@ -48,4 +51,4 @@ get_header(); ?>
     </nav>
 <?php endif; ?>
 
-<?php get_template_part('special/black/footer');
+<?php get_footer();

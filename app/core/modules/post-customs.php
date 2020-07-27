@@ -16,12 +16,12 @@ if (!defined('WPINC')) {
 
 class Knife_Post_Customs {
     /**
-     * Default post type lead text availible
+     * Post types with customs
      *
      * @access  public
      * @var     array
      */
-    public static $post_type = ['post'];
+    public static $post_type = ['post', 'page'];
 
 
     /**
