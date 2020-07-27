@@ -15,16 +15,15 @@
 .entry-content h2 {
   margin-top: 4rem;
 
-  font-size: 1.5rem;
-  font-weight: 500;
+  font-size: 2.5rem;
+  font-weight: 700;
   line-height: 1.25;
-  text-transform: uppercase;
 
   color: #ffd700;
 }
 
 .entry-content p {
-  font-size: 1.375rem;
+  font-size: 1.5rem;
   font-family: 'PT Serif', sans-serif;
 }
 
