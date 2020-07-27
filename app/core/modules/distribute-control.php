@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.8
- * @version 1.12
+ * @version 1.13
  */
 
 
@@ -76,7 +76,7 @@ class Knife_Distribute_Control {
             add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
 
             // Save metabox
-            add_action('save_post', [__CLASS__, 'save_metabox'], 10, 2);
+            add_action('save_post', [__CLASS__, 'save_metabox'], 10, 3);
 
             // Add dashboard widget with scheduled tasks
             add_action('wp_dashboard_setup', [__CLASS__, 'add_dashboard_widget']);
@@ -228,7 +228,7 @@ class Knife_Distribute_Control {
         $items[$uniqid]['sent'] = -1;
 
         // Should flag sent as soon as possible
-        update_post_meta($post_id, self::$meta_items, $items);
+        //update_post_meta($post_id, self::$meta_items, $items);
 
         $results = [];
 
@@ -250,14 +250,14 @@ class Knife_Distribute_Control {
         // Upgrade item with results array
         $items[$uniqid] = $items[$uniqid] + $results;
 
-        update_post_meta($post_id, self::$meta_items, $items);
+        //update_post_meta($post_id, self::$meta_items, $items);
     }
 
 
     /**
      * Save post options
      */
-    public static function save_metabox($post_id, $post) {
+    public static function save_metabox($post_id, $post, $update) {
         if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return;
         }
@@ -272,6 +272,10 @@ class Knife_Distribute_Control {
 
         // Get existing items
         $items = (array) get_post_meta($post_id, self::$meta_items, true);
+
+        if (!array_filter($items)) {
+            return;
+        }
 
         // Sanitize items request
         $items = self::sanitize_items($items, self::$meta_items);
