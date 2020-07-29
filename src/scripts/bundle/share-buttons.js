@@ -26,7 +26,7 @@
     }
 
     if (network === 'facebook') {
-      return 'https://graph.facebook.com/?fields=og_object{engagement}&callback=FB.Share&id=' + link;
+      return 'https://knife.support/facebook/?fields=engagement&callback=FB.Share&id=' + link;
     }
   }
 
@@ -94,10 +94,8 @@
 
   window.VK = {
     Share: {
-      count: function (id, count) {
-        document.getElementById('share-vkontakte').outerHTML = '';
-
-        if (typeof count === 'undefined' || !count) {
+      count: function (id, shares) {
+        if (typeof shares === 'undefined' || !shares) {
           return;
         }
 
@@ -106,7 +104,7 @@
         for (var i = 0; i < links.length; i++) {
           var child = document.createElement("span");
           child.className = 'share__count';
-          child.innerHTML = count;
+          child.innerHTML = shares;
 
           links[i].appendChild(child);
         }
@@ -116,15 +114,17 @@
 
   window.FB = {
     Share: function (data) {
-      document.getElementById('share-facebook').outerHTML = '';
+      let shares = 0;
 
-      if (typeof data.og_object === 'undefined' || typeof data.og_object.engagement === 'undefined') {
-        return;
+      // Get engagement data from object
+      let engagement = data.engagement || {};
+
+      // Sum all engagement values
+      for (let count in engagement) {
+        shares = shares + engagement[count];
       }
 
-      var engagement = data.og_object.engagement;
-
-      if (typeof engagement.count === 'undefined' || !engagement.count) {
+      if (shares === 0) {
         return;
       }
 
@@ -133,7 +133,7 @@
       for (var i = 0; i < links.length; i++) {
         var child = document.createElement("span");
         child.className = 'share__count';
-        child.innerHTML = engagement.count;
+        child.innerHTML = shares;
 
         links[i].appendChild(child);
       }
