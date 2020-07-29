@@ -44,12 +44,11 @@ class Knife_Post_Customs {
         $object = get_queried_object();
 
         // Get post name
-        $functions = "/core/customs/{$object->post_name}/functions.php";
+        $include = get_template_directory() . "/core/custom/" . $object->post_name;
 
         // Let's add the file if exists
-        if(file_exists(get_template_directory() .  $functions)) {
-            // Require customs
-            require_once(get_template_directory() .  $functions);
+        if(file_exists($include . '/functions.php')) {
+            include_once $include . '/functions.php';
         }
     }
 }

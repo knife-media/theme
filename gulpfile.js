@@ -8,9 +8,12 @@ const plumber = require('gulp-plumber');
 const prefix = require('gulp-autoprefixer');
 const workboxBuild = require('workbox-build');
 const babel = require('gulp-babel');
+const path = require('path');
+const rename = require('gulp-rename');
 
 
 gulp.task('styles', (done) => {
+  // Process common theme styles
   gulp.src('src/styles/app.scss')
     .pipe(plumber())
     .pipe(sassGlob())
@@ -24,12 +27,30 @@ gulp.task('styles', (done) => {
     }))
     .pipe(gulp.dest('app/assets/'))
 
+  // Process custom styles
+  gulp.src('src/styles/custom/*.scss')
+    .pipe(plumber())
+    .pipe(sass({
+      errLogToConsole: true
+    }))
+    .pipe(prefix())
+    .pipe(cleanCss({
+      compatibility: 'ie9'
+    }))
+    .pipe(rename((file) => {
+      file.dirname = file.basename;
+      file.basename = 'styles';
+      file.extname = '.css';
+    }))
+    .pipe(gulp.dest('app/core/custom/'))
+
   done();
 })
 
 
 gulp.task('scripts', (done) => {
-  gulp.src('src/scripts/*.js')
+  // Process common theme scripts
+  gulp.src('src/scripts/bundle/*.js')
     .pipe(plumber())
     .pipe(babel({
       presets: ['@babel/env']
@@ -37,6 +58,20 @@ gulp.task('scripts', (done) => {
     .pipe(uglify())
     .pipe(concat('scripts.min.js'))
     .pipe(gulp.dest('app/assets/'))
+
+  // Process custom scripts
+  gulp.src('src/scripts/custom/*.js')
+    .pipe(plumber())
+    .pipe(babel({
+      presets: ['@babel/env']
+    }))
+    .pipe(uglify())
+    .pipe(rename((file) => {
+      file.dirname = file.basename;
+      file.basename = 'scripts';
+      file.extname = '.js';
+    }))
+    .pipe(gulp.dest('app/core/custom/'))
 
   done();
 })

@@ -1,6 +1,6 @@
 {
   "name": "knife-theme",
-  "version": "1.13.42",
+  "version": "1.13.43",
   "author": "Anton Lukin",
   "description": "Simple modern WordPress theme for community blog",
   "main": "gulpfile.js",
@@ -13,14 +13,14 @@
     "@glidejs/glide": "3.4.1",
     "gulp": "^4.0.0",
     "gulp-autoprefixer": "^7.0.1",
+    "gulp-babel": "^7.0.0",
     "gulp-clean-css": "^4.3.0",
     "gulp-concat": "^2.6.1",
     "gulp-plumber": "^1.2.1",
     "gulp-sass": "^4.0.2",
     "gulp-sass-glob": "^1.0.9",
     "gulp-uglify": "^3.0.1",
-    "workbox-build": "^5.1.3",
-    "gulp-babel": "^8.0.0"
+    "workbox-build": "^5.1.3"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -33,5 +33,8 @@
     "opera >= 23",
     "ios >= 7",
     "android >= 4.4"
-  ]
+  ],
+  "dependencies": {
+    "gulp-rename": "^2.0.0"
+  }
 }
