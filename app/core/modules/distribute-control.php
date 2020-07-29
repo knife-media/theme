@@ -76,7 +76,7 @@ class Knife_Distribute_Control {
             add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
 
             // Save metabox
-            add_action('save_post', [__CLASS__, 'save_metabox'], 10, 3);
+            add_action('save_post', [__CLASS__, 'save_metabox'], 10, 2);
 
             // Add dashboard widget with scheduled tasks
             add_action('wp_dashboard_setup', [__CLASS__, 'add_dashboard_widget']);
@@ -257,7 +257,7 @@ class Knife_Distribute_Control {
     /**
      * Save post options
      */
-    public static function save_metabox($post_id, $post, $update) {
+    public static function save_metabox($post_id, $post) {
         if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return;
         }
@@ -270,15 +270,9 @@ class Knife_Distribute_Control {
             return;
         }
 
-        // Get existing items
-        $items = (array) get_post_meta($post_id, self::$meta_items, true);
-
-        if (!array_filter($items)) {
-            return;
-        }
 
         // Sanitize items request
-        $items = self::sanitize_items($items, self::$meta_items);
+        $items = self::sanitize_items($_REQUEST[self::$meta_items]);
 
         // Schedule tasks if need
         $items = self::schedule_tasks($items, $post, $post_id);
@@ -291,58 +285,66 @@ class Knife_Distribute_Control {
     /**
      * Update distribute items from post-metabox
      */
-    private static function sanitize_items($items, $query) {
-        $requests = [];
+    private static function sanitize_items($items) {
+        $tasks = [];
 
         // Normalize requests array
-        foreach((array) $_REQUEST[$query] as $request) {
-            $item = [];
+        foreach((array) $items as $item) {
+            $task = [];
 
             // Generate new item uniqid if empty
-            if(empty($request['uniqid'])) {
-                $request['uniqid'] = uniqid();
+            if(empty($item['uniqid'])) {
+                $item['uniqid'] = uniqid();
             }
 
-            $uniqid = $request['uniqid'];
+            $uniqid = $item['uniqid'];
 
             // Set task delay if need
-            self::set_delay($uniqid, $request);
+            self::set_delay($uniqid, $item);
 
-            if(!empty($request['targets'])) {
-                foreach((array) $request['targets'] as $network) {
+            if(isset($item['sent'])) {
+                $task['sent'] = absint($item['sent']);
+            }
+
+            if(!empty($item['complete'])) {
+                foreach((array) $item['complete'] as $network => $target) {
                     if(array_key_exists($network, KNIFE_DISTRIBUTE)) {
-                        $item['targets'][] = $network;
+                        $task['complete'][$network] = sanitize_text_field($target);
                     }
                 }
             }
 
-            if(!empty($request['excerpt'])) {
-                $item['excerpt'] = sanitize_textarea_field($request['excerpt']);
+            if(!empty($item['targets'])) {
+                foreach((array) $item['targets'] as $network) {
+                    if(array_key_exists($network, KNIFE_DISTRIBUTE)) {
+                        $task['targets'][] = $network;
+                    }
+                }
             }
 
-            if(!empty($request['attachment'])) {
-                $item['attachment'] = absint($request['attachment']);
+            if(!empty($item['excerpt'])) {
+                $task['excerpt'] = sanitize_textarea_field($item['excerpt']);
             }
 
-            if(!empty($request['collapse'])) {
-                $item['collapse'] = absint($request['collapse']);
+            if(!empty($item['attachment'])) {
+                $task['attachment'] = absint($item['attachment']);
             }
 
-            $requests[$uniqid] = $item;
+            if(!empty($item['collapse'])) {
+                $task['collapse'] = absint($item['collapse']);
+            }
+
+            $tasks[$uniqid] = $task;
         }
 
         // Save only the necessary items
-        foreach($requests as $uniqid => &$request) {
-            if(isset($items[$uniqid]['sent'])) {
-                $request = $items[$uniqid];
-            }
-
-            if(!array_filter($request)) {
-                unset($requests[$uniqid]);
+        foreach($tasks as $uniqid => $task) {
+            if(!array_filter($task)) {
+                unset($tasks[$uniqid]);
             }
         }
 
-        return $requests;
+        return $tasks;
     }
 
 
