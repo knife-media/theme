@@ -73,6 +73,8 @@ $color-label: #1301ff;
 
   .button {
     display: flex;
+    justify-content: center;
+
     grid-column: 2;
 
     margin: 0.5rem auto 1rem;
@@ -86,6 +88,10 @@ $color-label: #1301ff;
     &:hover {
       filter: brightness(120%);
       background-color: $color-primary;
+    }
+
+    @media screen and (max-width: 1023px) {
+      grid-column: auto;
     }
   }
 
@@ -108,6 +114,18 @@ $color-label: #1301ff;
 .section--projects {
   display: block;
   margin-top: 2.5rem;
+
+  .figure--example {
+    margin-bottom: 2.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    @media screen and (max-width: 767px) {
+      margin-bottom: 1.5rem;
+    }
+  }
 
   @media screen and (max-width: 767px) {
     margin-top: 1.75rem;
@@ -178,7 +196,7 @@ $color-label: #1301ff;
   }
 
   p {
-    flex: 1 1 auto;
+    width: 100%;
 
     font-size: 1rem;
     line-height: 1.5;
@@ -200,12 +218,17 @@ $color-label: #1301ff;
 }
 
 .figure--example {
-  display: block;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+
   position: relative;
   cursor: default;
 
+  min-height: 24rem;
   max-width: 100%;
-  padding: 3.25rem 26rem 2rem 1rem;
+  padding: 4.5rem 26rem 2rem 1rem;
 
   color: $color-white;
   background-color: transparent;
@@ -216,7 +239,8 @@ $color-label: #1301ff;
   h3 {
     display: block;
 
-    margin: 1rem 0;
+    width: 100%;
+    margin: 1.5rem 0;
 
     font-size: 1.375rem;
     font-weight: 700;
@@ -253,13 +277,16 @@ $color-label: #1301ff;
   }
 
   h5 {
-    margin-top: 2rem;
+    margin-top: auto;
+    padding-top: 2rem;
 
     font-size: 1rem;
     font-weight: 400;
   }
 
   picture {
+    display: flex;
+
     position: absolute;
     right: 0;
     top: 0;
@@ -269,10 +296,21 @@ $color-label: #1301ff;
     padding: 1rem;
 
     img {
-      width: auto;
-      height: 100%;
+      object-fit: contain;
 
-      margin: 0 auto;
+      width: auto;
+      height: 20rem;
+      max-height: 100%;
+
+      margin: auto;
+    }
+
+    @media screen and (max-width: 1023px) {
+      width: 18rem;
+    }
+
+    @media screen and (max-width: 767px) {
+      display: none;
     }
   }
 
@@ -281,6 +319,8 @@ $color-label: #1301ff;
   }
 
   p {
+    width: 100%;
+
     font-family: $font-regular;
     font-size: 1rem;
 
@@ -289,13 +329,19 @@ $color-label: #1301ff;
     img {
       width: auto;
       height: 1.25rem;
-
-      margin: 2rem 0;
     }
 
     @media screen and (max-width: 479px) {
       font-size: 0.9375rem;
     }
+  }
+
+  @media screen and (max-width: 1023px) {
+    padding-right: 20rem;
+  }
+
+  @media screen and (max-width: 767px) {
+    padding-right: 2rem;
   }
 }
 
