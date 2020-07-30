@@ -2,7 +2,7 @@
  * Add post references popup
  *
  * @since 1.10
- * @version 1.11
+ * @version 1.13
  */
 
 (function () {
@@ -44,11 +44,6 @@
    */
   function movePopup(popup, target) {
     var rect = target.getBoundingClientRect();
-
-    // Push popup to text for standart posts
-    if (post.classList.contains('post--standard')) {
-      popup.classList.add('reference--push');
-    }
 
     // Get offset from top
     var offset = rect.top + window.pageYOffset || document.documentElement.scrollTop;

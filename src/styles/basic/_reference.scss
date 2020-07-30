@@ -1,7 +1,7 @@
 .reference {
   display: block;
   position: absolute;
-  left: calc(95% - 18.75rem);
+  left: calc(50% + 12rem);
   z-index: 8;
 
   &:before {
@@ -85,14 +85,6 @@
 
     &:hover {
       opacity: .85;
-    }
-  }
-
-  &.reference--push {
-    left: calc(50% + 12rem);
-
-    @media screen and (max-width: 1023px) {
-      left: 0;
     }
   }
 
