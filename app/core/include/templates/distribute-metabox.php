@@ -58,7 +58,7 @@
 
                                 printf(
                                     '<input type="hidden" data-item="targets" value="%s">',
-                                    esc_attr($channels[$target]['delivery'])
+                                    esc_attr($target)
                                 );
 
                                 if(isset($item['complete'][$target])) {
