@@ -1,6 +1,6 @@
 {
   "name": "knife-theme",
-  "version": "1.13.45",
+  "version": "1.13.46",
   "author": "Anton Lukin",
   "description": "Simple modern WordPress theme for community blog",
   "main": "gulpfile.js",
@@ -13,7 +13,7 @@
     "@glidejs/glide": "3.4.1",
     "gulp": "^4.0.0",
     "gulp-autoprefixer": "^7.0.1",
-    "gulp-babel": "^7.0.0",
+    "gulp-babel": "^8.0.0",
     "gulp-clean-css": "^4.3.0",
     "gulp-concat": "^2.6.1",
     "gulp-plumber": "^1.2.1",

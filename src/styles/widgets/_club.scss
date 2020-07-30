@@ -58,6 +58,8 @@
           position: relative;
           z-index: 2;
 
+          white-space: normal;
+
           &:hover {
             opacity: .75;
           }
