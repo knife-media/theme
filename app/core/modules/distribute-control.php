@@ -228,7 +228,7 @@ class Knife_Distribute_Control {
         $items[$uniqid]['sent'] = -1;
 
         // Should flag sent as soon as possible
-        //update_post_meta($post_id, self::$meta_items, $items);
+        update_post_meta($post_id, self::$meta_items, $items);
 
         $results = [];
 
@@ -250,7 +250,7 @@ class Knife_Distribute_Control {
         // Upgrade item with results array
         $items[$uniqid] = $items[$uniqid] + $results;
 
-        //update_post_meta($post_id, self::$meta_items, $items);
+        update_post_meta($post_id, self::$meta_items, $items);
     }
 
 
