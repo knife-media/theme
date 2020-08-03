@@ -97,6 +97,29 @@
     }
   }
 
+  &.figure--remark {
+    width: $width-content + 1rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    padding: 0 .5rem;
+
+    blockquote {
+      width: calc(100% + 2.125rem);
+      max-width: $width-content + 2.125rem;
+
+      font-size: 1.125em;
+      font-weight: 500;
+      line-height: 1.5;
+
+      border: solid 2px $color-primary;
+      border-radius: 8px;
+    }
+
+    ul, ol {
+      padding-left: 1rem;
+    }
+  }
+
   &.figure--toc {
     width: $width-content + 1rem;
     margin-top: 0;

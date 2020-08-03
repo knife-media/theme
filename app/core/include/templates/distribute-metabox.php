@@ -56,11 +56,21 @@
                                     continue;
                                 }
 
-                                if(isset($item['complete'][$target], $channels[$target])) {
+                                printf(
+                                    '<input type="hidden" data-item="targets" value="%s">',
+                                    esc_attr($target)
+                                );
+
+                                if(isset($item['complete'][$target])) {
                                     printf(
                                         '<a class="item__targets-link" href="%s" target="_blank">%s</a>',
                                         esc_url($item['complete'][$target]),
                                         esc_html($label)
+                                    );
+
+                                    printf(
+                                        '<input type="hidden" data-complete="%s" value="%s">',
+                                        esc_attr($target), esc_url($item['complete'][$target])
                                     );
 
                                     continue;
@@ -82,7 +92,7 @@
                     <div class="item__snippet">
                         <?php
                             printf(
-                                '<textarea class="item__snippet-excerpt" readonly>%s</textarea>',
+                                '<textarea class="item__snippet-excerpt" data-item="excerpt" readonly>%s</textarea>',
                                 sanitize_textarea_field($item['excerpt'])
                             );
                         ?>
@@ -94,6 +104,11 @@
                                         wp_get_attachment_image_url($item['attachment'])
                                     );
                                 }
+
+                                printf(
+                                    '<input class="item__snippet-attachment" data-item="attachment" type="hidden" value="%s">',
+                                    sanitize_text_field($item['attachment'])
+                                );
                             ?>
                         </figure>
                     </div>
@@ -114,6 +129,18 @@
                         </div>
                     <?php endif; ?>
 
+                    <?php
+                        printf(
+                            '<input data-item="sent" type="hidden" value="%s">',
+                            esc_attr($item['sent'])
+                        );
+
+                        printf(
+                            '<input type="hidden" data-item="collapse" value="%d">',
+                            empty($item['collapse'])
+                        );
+                    ?>
+
                 <?php else : ?>
                     <?php
                         $scheduled = wp_next_scheduled('knife_schedule_distribution', [
@@ -128,7 +155,8 @@
                             <?php foreach($channels as $channel => $settings) : ?>
                                 <label class="item__targets-check">
                                     <?php
-                                        printf('<input type="checkbox" data-item="targets" data-delivery="%s" value="%s"%s>',
+                                        printf(
+                                            '<input type="checkbox" data-item="targets" data-delivery="%s" value="%s"%s>',
                                             esc_attr($settings['delivery']), esc_attr($channel),
                                             checked(in_array($channel, $item['targets']), true, false)
                                         );
@@ -156,9 +184,7 @@
                                         wp_get_attachment_image_url($item['attachment'])
                                     );
                                 }
-                            ?>
 
-                            <?php
                                 printf(
                                     '<input class="item__snippet-attachment" data-item="attachment" type="hidden" value="%s">',
                                     sanitize_text_field($item['attachment'])
@@ -244,7 +270,8 @@
                     <div class="item__manage">
                         <label class="item__manage-collapse">
                             <?php
-                                printf('<input type="checkbox" data-item="collapse" value="1"%s><span>%s</span>',
+                                printf(
+                                    '<input type="checkbox" data-item="collapse" value="1"%s><span>%s</span>',
                                     checked(empty($item['collapse']), false, false),
                                     __('Не формировать превью ссылки', 'knife-theme')
                                 );

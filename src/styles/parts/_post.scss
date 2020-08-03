@@ -29,6 +29,11 @@
   &.post--generator {
     flex: 1 1 auto;
 
+    .entry-caption > * {
+      justify-content: center;
+      padding-left: 0;
+    }
+
     .entry-footer > * {
       max-width: calc(#{$width-wide} + 4rem);
     }

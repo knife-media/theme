@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.8
- * @version 1.11
+ * @version 1.13
  */
 
 if (!defined('WPINC')) {
@@ -20,7 +20,7 @@ class Knife_Promo_Manager {
      * @access  public
      * @var     array
      */
-    public static $post_type = ['post', 'club', 'quiz'];
+    public static $post_type = ['post', 'club', 'quiz', 'generator'];
 
 
     /**

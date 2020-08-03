@@ -2,6 +2,10 @@ figure {
   margin: 0;
 }
 
+blockquote {
+  margin: 0;
+}
+
 .embed {
   position: relative;
 
@@ -51,8 +55,11 @@ figure {
   background: #f6eecd;
 }
 
-blockquote {
-  margin: 0;
+.figure--remark {
+  margin: 10px 0;
+  padding: 10px 20px;
+  border: solid 2px #1e488f;
+  border-radius: 3px;
 }
 
 .figure--similar {

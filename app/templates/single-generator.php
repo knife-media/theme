@@ -9,7 +9,7 @@
 
 get_header(); ?>
 
-<div class="content">
+<section class="content">
     <?php
         while(have_posts()) : the_post();
 
@@ -17,6 +17,6 @@ get_header(); ?>
 
         endwhile;
     ?>
-</div>
+</section>
 
 <?php get_footer();

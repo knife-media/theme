@@ -1,23 +1,23 @@
-(function() {
-  tinymce.PluginManager.add('quote-button', function(editor, url) {
+(function () {
+  tinymce.PluginManager.add('quote-button', function (editor, url) {
     editor.addButton('quote-button', {
       icon: 'blockquote',
       title: 'Добавить цитату',
-      onclick: function() {
+      onclick: function () {
         var $ = jQuery;
 
         var fromElement = $(editor.selection.getStart());
         var lastElement = $(editor.selection.getEnd());
 
-        if(lastElement.is(fromElement.prev())) {
+        if (lastElement.is(fromElement.prev())) {
           lastElement = fromElement;
         }
 
-        if(!fromElement.parent().is('body')) {
+        if (!fromElement.parent().is('body')) {
           fromElement = fromElement.parentsUntil('body').last();
         }
 
-        if(!lastElement.parent().is('body')) {
+        if (!lastElement.parent().is('body')) {
           lastElement = lastElement.parentsUntil('body').last();
         }
 
@@ -27,10 +27,10 @@
 
         var hasBlockquote = false;
 
-        for(var i = 0; i < rootElement.children().length; i++) {
+        for (var i = 0; i < rootElement.children().length; i++) {
           var nextElement = currentElement.next();
 
-          if(currentElement.closest('figure.figure--quote').length > 0) {
+          if (currentElement.closest('figure.figure--quote').length > 0) {
             currentElement.replaceWith(currentElement.find('blockquote').html());
 
             hasBlockquote = true;
@@ -38,14 +38,14 @@
 
           currentElement.attr('is-quote', '');
 
-          if(currentElement.is(lastElement)) {
+          if (currentElement.is(lastElement)) {
             break;
           }
 
           currentElement = nextElement;
         }
 
-        if(hasBlockquote === false) {
+        if (hasBlockquote === false) {
           var wrapper = '<figure class="figure figure--quote"><blockquote></blockquote></figure>';
 
           rootElement.find('[is-quote]').wrapAll(wrapper);

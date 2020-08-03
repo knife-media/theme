@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.2
- * @version 1.12
+ * @version 1.13
  */
 
 
@@ -34,6 +34,7 @@ class Knife_MCE_Plugins {
         'mark-button',
         'quote-button',
         'card-separator',
+        'remark-block',
         'similar-block',
         'reference-block',
         'script-embed'

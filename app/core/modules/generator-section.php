@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.6
- * @version 1.11
+ * @version 1.13
  */
 
 if (!defined('WPINC')) {
@@ -437,7 +437,10 @@ class Knife_Generator_Section {
             }
 
             if(isset($request['description'])) {
-                $item['description'] = sanitize_textarea_field($request['description']);
+                $item['description'] = wp_kses_post($request['description']);
+
+                // Add target to all links
+                $item['description'] = wp_targeted_link_rel(links_add_target($item['description']));
             }
 
             if(isset($request['attachment'])) {
@@ -467,7 +470,7 @@ class Knife_Generator_Section {
             }
 
             if(!empty($meta['description'])) {
-                $item['description'] = wp_specialchars_decode($meta['description']);
+                $item['description'] = wp_specialchars_decode(strip_tags($meta['description']));
 
                 if($raw === false) {
                     $item['description'] = apply_filters('the_content', $meta['description']);

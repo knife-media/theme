@@ -1,35 +1,14 @@
-// Define width vars
-$width-content: 40rem;
-$width-site: 80rem;
-$width-wide: 52.25rem;
+// Setup variables
+@import "setup/variables";
+@import "setup/mixins";
 
-// Define font vars
-$font-regular: "Formular", sans-serif;
-$font-serif: "PT Serif", serif;
-$font-monospace: "Monaco", "Roboto Mono", monospace;
+// Import fonts
+@import "setup/fonts";
+@import "setup/icons";
 
-// Define color vars
-$color-black: #000000;
-$color-white: #ffffff;
-$color-primary: #1e488f;
-$color-text: #111111;
-$color-light: #7ab9f9;
-$color-sheet: #faf9f3;
-$color-layer: #fff3db;
-$color-button: #ff0066;
-
-$color-success: #78bb13;
-$color-alert: #ab0f0f;
-
-$color-club: #eaa728;
-$color-cents: #71ffcd;
-$color-mark: #fae596;
-$color-quiz: #fff200;
-$color-gcse: #eafedb;
-
-
-// Setup default styles
-@import "setup/*.scss";
+// Import base styles
+@import "setup/reset";
+@import "setup/animate";
 
 body {
   display: block;
