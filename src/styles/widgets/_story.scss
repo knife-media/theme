@@ -1,6 +1,7 @@
 .widget-story {
   display: block;
   position: relative;
+  z-index: 0;
 
   width: calc(100% - 2rem);
   max-width: $width-site - 2rem;
