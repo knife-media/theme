@@ -28,17 +28,15 @@
     @include cross-button(1rem);
 
     position: absolute;
-    top: 50%;
-    right: 0.25rem;
+    top: 1rem;
+    right: 1rem;
     z-index: 2;
     cursor: pointer;
 
     width: 1.5rem;
     height: 1.5rem;
 
-    transform: translateY(-50%);
     background-color: $color-white;
-
     border-radius: 50%;
 
     &:hover {
