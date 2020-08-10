@@ -42,5 +42,10 @@
     &:hover {
       filter: brightness(150%);
     }
+
+    @media screen and (max-width: 767px) {
+      top: 0.25rem;
+      right: 0.25rem;
+    }
   }
 }
