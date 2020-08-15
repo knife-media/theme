@@ -199,9 +199,6 @@ require get_template_directory() . '/core/modules/adult-content.php';
 // Custom search engine settings
 require get_template_directory() . '/core/modules/google-search.php';
 
-// Hypercomments settings
-require get_template_directory() . '/core/modules/comments-load.php';
-
 // Enable terms emojis for default and custom taxonomies
 require get_template_directory() . '/core/modules/terms-emoji.php';
 

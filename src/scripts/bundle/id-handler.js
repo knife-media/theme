@@ -13,7 +13,7 @@
 
 
   // Check id handler options existing
-  if (typeof knife_id_handler === 'undefined') {
+  if (knife_id_handler === undefined) {
     return false;
   }
 
@@ -22,19 +22,80 @@
    * Get option from global settings
    */
   const getOption = (option, alternate) => {
-    if (knife_id_handler.hasOwnProperty(option)) {
+    const args = option.split('.');
+
+    if (args.length > 1) {
+      const [group, name] = args;
+
+      if (knife_id_handler[group][name] !== undefined) {
+        return knife_id_handler[group][name];
+      }
+    }
+
+    if (knife_id_handler[option] !== undefined) {
       return knife_id_handler[option];
     }
 
     return alternate || '';
   }
 
+  // All availible oauth providers
+  const providers = ['vkontakte', 'google', 'facebook', 'yandex'];
 
-  let post = getOption('post', null);
+
+  const post = getOption('post', null);
 
   // Check if required post option exists
   if (post === null) {
     return false;
+  }
+
+
+  // Store is user logged in
+  let authorized = false;
+
+
+  /**
+   * Helper to create DOM element
+   */
+  const buildElement = (tag, options) => {
+    let element = document.createElement(tag);
+
+    // Set single class
+    if (options.hasOwnProperty('class')) {
+      element.classList.add(options.class);
+    }
+
+    // Set class list
+    if (options.hasOwnProperty('classes')) {
+      options.classes.forEach(cl => {
+        element.classList.add(cl);
+      });
+    }
+
+    // Set textContent
+    if (options.hasOwnProperty('text')) {
+      element.textContent = options.text;
+    }
+
+    // Set innerHTML
+    if (options.hasOwnProperty('html')) {
+      element.innerHTML = options.html;
+    }
+
+    // Set attributes
+    if (options.hasOwnProperty('attributes')) {
+      for (let key in options.attributes) {
+        element.setAttribute(key, options.attributes[key]);
+      }
+    }
+
+    // Append child
+    if (options.hasOwnProperty('parent')) {
+      options.parent.appendChild(element);
+    }
+
+    return element;
   }
 
 
@@ -63,7 +124,50 @@
       });
     }
 
-    window.scrollTo(to, 0);
+    window.scrollTo(0, offset);
+  }
+
+  /**
+   * Save unsent text field
+   */
+  const saveUnsent = (text, reply) => {
+    let storage = JSON.parse(localStorage.getItem('knife_id_unsent')) || {};
+
+    storage[post] = {
+      'text': text,
+      'reply': reply
+    };
+
+    // Set for current post
+    localStorage.setItem('knife_id_unsent', JSON.stringify(storage));
+  }
+
+  /**
+   * Delete unsent text field
+   */
+  const deleteUnsent = () => {
+    let storage = JSON.parse(localStorage.getItem('knife_id_unsent')) || {};
+
+    delete storage[post];
+
+    // Set for current post
+    localStorage.setItem('knife_id_unsent', JSON.stringify(storage));
+  }
+
+  /**
+   * Get unsent text field
+   */
+  const getUnsent = (reply) => {
+    let storage = JSON.parse(localStorage.getItem('knife_id_unsent')) || {};
+
+    // Get unset object
+    let unsent = storage[post] || {};
+
+    if (unsent.reply === reply) {
+      return unsent.text || '';
+    }
+
+    return '';
   }
 
 
@@ -90,41 +194,122 @@
 
 
   /**
+   * Draw expand button
+   */
+  const foldComments = () => {
+    comments.classList.add('comments--folded');
+
+    let expand = buildElement('div', {
+      'class': 'comments__expand',
+      'parent': comments
+    });
+
+    let button = buildElement('button', {
+      'class': 'comments__expand-button',
+      'text': getOption('comments.expand'),
+      'attrubutes': {
+        'type': 'button'
+      },
+      'parent': expand
+    });
+
+    button.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      comments.classList.remove('comments--folded');
+    });
+  }
+
+
+  /**
    * Draw comment avatar
    */
   const drawAvatar = (parent, field) => {
-    let avatar = document.createElement('div');
-    avatar.classList.add('comments__item-avatar');
-    parent.appendChild(avatar);
-
-    // Try to get image
     let image = new Image();
+    parent.appendChild(image);
+
+    // Get dumb avatar from options
+    let noavatar = getOption('comments.noavatar');
 
     image.onerror = () => {
-      image.src = getOption('avatar');
+      image.setAttribute('src', noavatar);
+    }
+
+    image.onload = () => {
+      image.removeAttribute('loading');
     }
 
     // Set image attributes
-    image.src = field.avatar || getOption('avatar');
-
-    avatar.appendChild(image);
+    image.setAttribute('loading', true);
+    image.setAttribute('src', field.avatar);
+    image.setAttribute('alt', field.name);
   }
 
   /**
    * Draw comment time
    */
-  const drawTime = (parent, field, item) => {
-    let time = document.createElement('a');
-    time.classList.add('comments__item-time');
-    time.textContent = convertDate(field.created);
-    time.setAttribute('href', `#comment-${field.id}`);
-
-    // Add time click event
-    time.addEventListener('click', () => {
-      scrollToElement(item.getBoundingClientRect().top);
+  const drawTime = (parent, field) => {
+    let time = buildElement('a', {
+      'class': 'comments__item-time',
+      'text': convertDate(field.created),
+      'attributes': {
+        'href': `#comment-${field.id}`
+      },
+      'parent': parent
     });
 
-    parent.appendChild(time);
+    // Add time click event
+    time.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      // Set url hash without jumping
+      history.pushState({}, '', time.href);
+
+      // Show comments
+      comments.classList.remove('comments--folded');
+
+      // Scroll to element
+      scrollToElement(parent.getBoundingClientRect().top);
+    });
+  }
+
+
+  /**
+   * Draw replied comment info
+   */
+  const drawReplied = (parent, field, item) => {
+    if (!parent.hasAttribute('data-name')) {
+      return item;
+    }
+
+    let replied = buildElement('a', {
+      'class': 'comments__item-replied',
+      'html': `<span class="icon icon--reply"></span>`,
+      'attributes': {
+        'href': `#comment-${field.parent}`
+      },
+      'parent': item.querySelector('.comments__item-header')
+    });
+
+    buildElement('span', {
+      'text': parent.getAttribute('data-name'),
+      'parent': replied
+    });
+
+    replied.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      // Set url hash without jumping
+      history.pushState({}, '', replied.href);
+
+      // Show comments
+      comments.classList.remove('comments--folded');
+
+      // Scroll to element
+      scrollToElement(parent.getBoundingClientRect().top);
+    });
+
+    return item;
   }
 
 
@@ -132,42 +317,60 @@
    * Draw comment reply button
    */
   const drawReply = (parent, field, item) => {
-    let reply = document.createElement('button');
-    reply.classList.add('comments__item-button');
-    reply.textContent = getOption('reply');
+    let reply = buildElement('button', {
+      'class': 'comments__item-button',
+      'text': getOption('comments.reply'),
+      'parent': parent
+    });
 
     reply.addEventListener('click', (e) => {
       e.preventDefault();
 
-      // Close form if opened
-      let form = item.querySelector('.comments__item-form');
-
-      if (form) {
-        return form.remove();
+      // Check if authorized
+      if (!authorized) {
+        return showLogin();
       }
+
+      // Show comments
+      comments.classList.remove('comments--folded');
 
       // Try to remove another child forms
       comments.querySelectorAll('.comments__item-form').forEach((el) => {
-        el.remove();
+        el.parentNode.removeChild(el);
       });
 
-      form = createForm();
+      let form = createForm();
       form.classList.add('comments__item-form');
       form.setAttribute('data-reply', field.id);
 
       // Append form after comment
       item.insertBefore(form, parent.nextSibling);
 
-      // Set focus to form
-      let text = form.querySelector('textarea');
+      // Create cancel reply button
+      let cancel = buildElement('button', {
+        'class': 'comments__item-cancel',
+        'text': getOption('form.cancel'),
+        'parent': form.querySelector('.comments__form-footer')
+      });
 
-      // Set name to form
-      let name = field.name.split(' ');
-      text.value = `${name[0]}, `;
+      cancel.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        return form.parentNode.removeChild(form);
+      });
+
+      // Get form textarea
+      let text = form.querySelector('.comments__form-text');
+      text.setAttribute('placeholder', getOption('form.reply'));
+
+      // Get saved textarea value
+      text.value = getUnsent(field.id);
       text.focus();
-    });
 
-    parent.appendChild(reply);
+      text.addEventListener('input', () => {
+        saveUnsent(text.value, field.id);
+      });
+    });
   }
 
 
@@ -175,44 +378,95 @@
    * Draw comment remove button
    */
   const drawRemove = (parent, field, item) => {
-    let remove = document.createElement('button');
-    remove.classList.add('comments__item-button');
-    remove.textContent = getOption('remove');
+    let remove = buildElement('button', {
+      'class': 'comments__item-button',
+      'text': getOption('comments.remove'),
+      'parent': parent
+    });
 
     remove.addEventListener('click', (e) => {
       e.preventDefault();
 
-      if (confirm('Уверены, что хотите удалить комментарий?')) {
-        item.remove();
-      }
+      let url = `/id/comments/${field.id}`;
+
+      makeRequest(url, 'DELETE', {}, () => {
+        let children = item.querySelector('.comments__item-children');
+
+        while(item.lastChild) {
+          item.removeChild(item.lastChild)
+        }
+
+        // Draw removed warning
+        drawWarning(item, 'removed');
+
+        if (children !== null) {
+          item.appendChild(children);
+        }
+      });
+    });
+
+    return item;
+  }
+
+
+  /**
+   * Draw warning
+   */
+  const drawWarning = (item, status) => {
+    let message = buildElement('div', {
+      'class': 'comments__item-warning',
+      'parent': item
     })
 
-    parent.appendChild(remove);
+    if (status === 'removed') {
+      message.textContent = getOption('comments.removed');
+    }
+
+    return item;
   }
 
 
   /**
    * Draw user block button
    */
-  const drawManage = (parent, field) => {
-    let remove = document.createElement('button');
-    remove.classList.add('comments__item-button');
-    remove.textContent = getOption('remove');
-    parent.appendChild(remove);
+  const drawManage = (parent, field, item) => {
+    let remove = buildElement('button', {
+      'class': 'comments__item-button',
+      'text': getOption('comments.remove'),
+      'parent': parent
+    });
 
     remove.addEventListener('click', (e) => {
       e.preventDefault();
+
+      sendAjax({'remove': field.id}, () => {
+        let children = item.querySelector('.comments__item-children');
+
+        while(item.lastChild) {
+          item.removeChild(item.lastChild)
+        }
+
+        // Draw removed warning
+        drawWarning(item, 'removed');
+
+        if (children !== null) {
+          item.appendChild(children);
+        }
+      });
     });
 
 
-    let block = document.createElement('button');
-    block.classList.add('comments__item-button');
-    block.textContent = getOption('block');
-    parent.appendChild(block);
+    let block = buildElement('button', {
+      'class': 'comments__item-button',
+      'text': getOption('comments.block'),
+      'parent': parent
+    });
 
     block.addEventListener('click', (e) => {
       e.preventDefault();
     });
+
+    return item;
   }
 
 
@@ -238,9 +492,10 @@
       parent.classList.add('comments__item-vote--minus');
     }
 
-    let plus = document.createElement('button');
-    plus.classList.add('icon', 'icon--vote');
-    parent.appendChild(plus);
+    let plus = buildElement('button', {
+      'classes': ['icon', 'icon--vote'],
+      'parent': parent
+    });
 
     // Check voted for plus
     if (field.vote === 'plus') {
@@ -250,14 +505,19 @@
       parent.classList.add('comments__item-vote--voted');
     }
 
-    let count = document.createElement('span');
-    count.textContent = rating;
-    count.setAttribute('title', `+${field.plus} / -${field.minus}`);
-    parent.appendChild(count);
+    // Create count
+    buildElement('span', {
+      'text': rating,
+      'attributes': {
+        'title': `+${field.plus} / -${field.minus}`
+      },
+      'parent': parent
+    });
 
-    let minus = document.createElement('button');
-    minus.classList.add('icon', 'icon--vote');
-    parent.appendChild(minus);
+    let minus = buildElement('button', {
+      'classes': ['icon', 'icon--vote'],
+      'parent': parent
+    });
 
     // Check voted for minus
     if (field.vote === 'minus') {
@@ -271,19 +531,18 @@
     plus.addEventListener('click', (e) => {
       e.preventDefault();
 
+      // Check if authorized
+      if (!authorized) {
+        return showLogin();
+      }
+
       // Check if current vote is plus
       if (plus.classList.contains('icon--voted')) {
         // Update comment fields
         field.plus = parseInt(field.plus) - 1;
         delete field.vote;
 
-        let url = `/id/ratings?comment=${field.id}&vote=plus`;
-
-        makeRequest(url, 'DELETE', {}, (response) => {
-          if (response.message) {
-            console.error(response.message);
-          }
-        });
+        makeRequest(`/id/ratings?comment=${field.id}&vote=plus`, 'DELETE');
       }
 
       // Check if current vote is not plus
@@ -292,17 +551,11 @@
         field.plus = parseInt(field.plus) + 1;
         field.vote = 'plus';
 
-        let url = `/id/ratings?comment=${field.id}&vote=plus`;
-
-        makeRequest(url, 'POST', {}, (response) => {
-          if (response.message) {
-            console.error(response.message);
-          }
-        });
+        makeRequest(`/id/ratings?comment=${field.id}&vote=plus`, 'POST');
       }
 
       // Clear child nodes
-      while (parent.firstChild) {
+      while (parent.lastChild) {
         parent.removeChild(parent.lastChild);
       }
 
@@ -314,19 +567,18 @@
     minus.addEventListener('click', (e) => {
       e.preventDefault();
 
+      // Check if authorized
+      if (!authorized) {
+        return showLogin();
+      }
+
       // Check if current vote is minus
       if (minus.classList.contains('icon--voted')) {
         // Update comment fields
         field.minus = parseInt(field.minus) - 1;
         delete field.vote;
 
-        let url = `/id/ratings?comment=${field.id}&vote=minus`;
-
-        makeRequest(url, 'DELETE', (response) => {
-          if (response.message) {
-            console.error(response.message);
-          }
-        });
+        makeRequest(`/id/ratings?comment=${field.id}&vote=minus`, 'DELETE');
       }
 
       // Check if current vote is not minus
@@ -335,17 +587,11 @@
         field.minus = parseInt(field.minus) + 1;
         field.vote = 'minus';
 
-        let url = `/id/ratings?comment=${field.id}&vote=minus`;
-
-        makeRequest(url, 'POST', (response) => {
-          if (response.message) {
-            console.error(response.message);
-          }
-        });
+        makeRequest(`/id/ratings?comment=${field.id}&vote=minus`, 'POST');
       }
 
       // Clear child nodes
-      while (parent.firstChild) {
+      while (parent.lastChild) {
         parent.removeChild(parent.lastChild);
       }
 
@@ -361,54 +607,77 @@
   const drawComment = (item, field) => {
     item.setAttribute('data-id', field.id);
 
-    // Draw avatar
-    drawAvatar(item, field);
-
-    // Create header
-    let header = document.createElement('div');
-    header.classList.add('comments__item-header');
-    item.appendChild(header);
+    // Hide comment if not visible
+    if (field.status !== 'visible') {
+      return drawWarning(item, field.status);
+    }
 
     // Set default name
-    field.name = field.name || getOption('anonymous');
+    field.name = field.name || getOption('comments.anonymous');
 
-    // Create name
-    let name = document.createElement('span');
-    name.classList.add('comments__item-name');
-    name.textContent = field.name;
-    header.appendChild(name);
+    // Update content field
+    field.content = field.content.replace(/(\n)+/g, '<br>');
+
+    // Set name to comment for replied block
+    item.setAttribute('data-name', field.name);
+
+    // Create avatar wrapper
+    let avatar = buildElement('div', {
+      'class': 'comments__item-avatar',
+      'parent': item
+    });
+
+    // Draw avatar
+    drawAvatar(avatar, field);
+
+    // Create header
+    let header = buildElement('div', {
+      'class': 'comments__item-header',
+      'parent': item
+    });
 
     // Draw time
-    drawTime(header, field, item);
+    drawTime(item, field);
+
+    // Create name
+    buildElement('span', {
+      'class': 'comments__item-name',
+      'text': field.name,
+      'parent': header
+    });
 
     // Create content
-    let content = document.createElement('div');
-    content.classList.add('comments__item-content');
-    content.innerHTML = field.content;
-    item.appendChild(content);
+    buildElement('span', {
+      'class': 'comments__item-content',
+      'html': field.content,
+      'parent': item
+    });
 
     // Create footer
-    let footer = document.createElement('div');
-    footer.classList.add('comments__item-footer');
-    item.appendChild(footer);
+    let footer = buildElement('div', {
+      'class': 'comments__item-footer',
+      'parent': item
+    });
 
     // Show reply button
     drawReply(footer, field, item);
 
     // Create vote element
-    let vote = document.createElement('div');
-    vote.classList.add('comments__item-vote');
-    footer.appendChild(vote);
+    let vote = buildElement('div', {
+      'class': 'comments__item-vote',
+      'parent': footer
+    });
 
     // Update votes block
     updateVotes(vote, field)
 
     // Show manage buttons
     if (getOption('action')) {
-      // Block and delete buttons for admins
-      drawManage(footer, field);
-    } else if (field.self) {
-      // Remove button for user comments
+      return drawManage(footer, field, item);
+    }
+
+    // Remove button for user comments
+    if (field.self) {
       drawRemove(footer, field, item);
     }
 
@@ -419,46 +688,37 @@
   /**
    * Show comment
    */
-  const loadComment = (field, show) => {
-    let item = document.createElement('div');
-    item.classList.add('comments__item');
+  const loadComment = (field) => {
+    let item = buildElement('div', {
+      'class': 'comments__item'
+    });
 
     // Append comment elements to item
     item = drawComment(item, field);
 
     if (field.parent === null) {
-      comments.appendChild(item);
-
-      if (typeof show !== 'undefined' && show) {
-        scrollToElement(item.getBoundingClientRect().top);
-      }
-
-      return false;
+      return comments.appendChild(item);
     }
 
     // Try to find parent
     let parent = comments.querySelector(`[data-id="${field.parent}"]`);
 
     if (parent === null) {
-      comments.appendChild(item);
-
-      if (typeof show !== 'undefined' && show) {
-        scrollToElement(item.getBoundingClientRect().top);
-      }
-
-      return false;
+      return comments.appendChild(item);
     }
-
-    let name = parent.querySelector('.comments__item-name');
-    name
 
     // Find or create children list
     let children = parent.querySelector('.comments__item-children');
 
     if (children === null) {
-      children = document.createElement('div');
-      children.classList.add('comments__item-children');
-      parent.appendChild(children);
+      children = buildElement('div', {
+        'class': 'comments__item-children',
+        'parent': parent
+      });
+    }
+
+    if (field.status === 'visible') {
+      item = drawReplied(parent, field, item);
     }
 
     // Get parent level from attribute
@@ -475,27 +735,7 @@
       children.classList.add('comments__item-children--deepest');
     }
 
-    // Append item to children
-    children.appendChild(item);
-
-    if (typeof show !== 'undefined' && show) {
-      scrollToElement(item.getBoundingClientRect().top);
-    }
-  }
-
-
-  /**
-   * Show specific comment
-   */
-  const showComment = (hash) => {
-    let id = hash.replace('#comment-', '');
-
-    // Try to find comment with id
-    let comment = comments.querySelector(`[data-id="${id}"]`);
-
-    if (comment !== null) {
-      scrollToElement(comment.getBoundingClientRect().top);
-    }
+    return children.appendChild(item);
   }
 
 
@@ -516,19 +756,23 @@
     let text = form.querySelector('textarea');
 
     makeRequest(url, 'POST', {'content': text.value}, (response) => {
-      if (response.message) {
-        console.error(response.message);
-      }
-
-      if (response.fields.length > 0) {
+      if (response.comments.length > 0) {
         form.reset();
 
         if (reply) {
-          form.remove();
+          form.parentNode.removeChild(form);
         }
 
-        loadComment(response.fields[0], true);
+        let item = loadComment(response.comments[0], true);
+
+        // Show comments
+        comments.classList.remove('comments--folded');
+
+        // Scroll to it
+        scrollToElement(item.getBoundingClientRect().top);
       }
+
+      return deleteUnsent();
     });
   }
 
@@ -537,24 +781,48 @@
    * Create form
    */
   const createForm = () => {
-    let form = document.createElement('form');
-    form.classList.add('comments__form');
+    let form = buildElement('form', {
+      'class': 'comments__form'
+    });
 
-    let text = document.createElement('textarea');
-    text.classList.add('comments__form-text');
-    text.setAttribute('placeholder', getOption('placeholder'));
-    text.setAttribute('required', 'required');
-    form.append(text);
+    let text = buildElement('textarea', {
+      'class': 'comments__form-text',
+      'attributes': {
+        'placeholder': getOption('form.placeholder'),
+      },
+      'parent': form
+    });
 
-    let submit = document.createElement('button');
-    submit.classList.add('comments__form-submit', 'button');
-    submit.setAttribute('type', 'submit');
-    submit.textContent = getOption('submit');
-    form.appendChild(submit);
+    let label = getOption('form.authorize');
+
+    if (authorized) {
+      label = getOption('form.submit');
+
+      // Disable non-empty textarea for authorized
+      text.setAttribute('required', 'required');
+    }
+
+    let footer = buildElement('div', {
+      'class': 'comments__form-footer',
+      'parent': form
+    });
+
+    let submit = buildElement('button', {
+      'classes': ['comments__form-submit', 'button'],
+      'attributes': {
+        'type': 'submit'
+      },
+      'text': label,
+      'parent': footer
+    });
 
     // Submit form listener
     form.addEventListener('submit', (e) => {
       e.preventDefault();
+
+      if (!authorized) {
+        return showLogin();
+      }
 
       // Send form event
       sendForm(form);
@@ -585,20 +853,111 @@
 
 
   /**
-   * Make AJAX request
+   * Show error after request
+   */
+  const showError = (message) => {
+    message = message || getOption('error');
+
+    if (!comments.classList.contains('comments--expand')) {
+      return console.error(message);
+    }
+
+    let form = comments.querySelector('.comments__form');
+
+    if (form === null) {
+      return console.error(message);
+    }
+
+    let error = comments.querySelector('.comments__error');
+
+    if (error === null) {
+      error = buildElement('p', {
+        'class': 'comments__error'
+      });
+    }
+
+    error.textContent = message;
+
+    // Add error after form
+    form.parentNode.insertBefore(error, form.nextSibling);
+
+    // Scroll to error
+    scrollToElement(form.getBoundingClientRect().top);
+  }
+
+
+  /**
+   * Send AJAX request to WordPress
+   */
+  const sendAjax = (fields, callback) => {
+    let formData = new FormData();
+    formData.append('action', getOption('action'));
+    formData.append('nonce', getOption('nonce'));
+
+    // Add form fields
+    formData.append('fields', fields);
+
+    // Send request
+    let request = new XMLHttpRequest();
+    request.open('POST', getOption('ajaxurl'));
+    request.send(formData);
+
+    request.onload = () => {
+      let error = comments.querySelector('.comments__error');
+
+      if (error !== null) {
+        comments.removeChild(error);
+      }
+
+      let response = JSON.parse(request.responseText);
+
+
+      console.log(response);
+
+      /*
+      // Show error in console
+      if (request.status !== 200) {
+        return showError(response.message);
+      }
+
+      // Return callback if exists
+      if (typeof callback === 'function') {
+        return callback(response.result || {});
+      }*/
+    }
+  }
+
+
+  /**
+   * Send request to API
    */
   const makeRequest = (url, method, data, callback) => {
     const request = new XMLHttpRequest();
     request.open(method, url, true);
     request.setRequestHeader("Content-Type", "application/json");
-    request.setRequestHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.MTE5OTk.QyEBvqipT1VU7Vnfl14qu8-qAbxrNVi61zCEUGyJ4Js");
 
     request.onload = () => {
-      if (request.status === 200) {
-        return callback(JSON.parse(request.responseText));
+      let error = comments.querySelector('.comments__error');
+
+      if (error !== null) {
+        comments.removeChild(error);
       }
 
-      console.error(`Error while ${url} loading`);
+      let response = JSON.parse(request.responseText);
+
+      // Show error in console
+      if (request.status !== 200) {
+        return showError(response.message);
+      }
+
+      // Return callback if exists
+      if (typeof callback === 'function') {
+        return callback(response.result || {});
+      }
+    }
+
+    if (data === undefined) {
+      data = {};
     }
 
     request.send(JSON.stringify(data));
@@ -606,24 +965,220 @@
 
 
   /**
-   * Show comments form
+   * Create badge in form
    */
-  let form = createForm();
-  comments.appendChild(form);
+  const createBadge = (form, field) => {
+    if (field === undefined) {
+      return form;
+    }
+
+    let badge = buildElement('div', {
+      'class': 'comments__form-badge',
+      'parent': form.querySelector('.comments__form-footer')
+    });
+
+    // Draw avatar
+    drawAvatar(badge, field);
+
+    // Append name
+    buildElement('span', {
+      'text': field.name,
+      'parent': badge
+    });
+
+    // Create exit button
+    let exit = buildElement('button', {
+      'classes': ['comments__form-exit', 'icon', 'icon--exit'],
+      'attributes': {
+        'type': 'button',
+        'title': getOption('form.exit')
+      },
+      'parent': form
+    });
+
+    exit.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      // Hide comments right now
+      comments.classList.remove('comments--expand');
+
+      makeRequest('/id/logout', 'POST', {}, () => {
+        setTimeout(initComments, 300);
+      });
+    });
+
+    return form;
+  }
+
+
+  /**
+   * Create authentication popup
+   */
+  const showLogin = () => {
+    let login = buildElement('div', {
+      'class': 'login'
+    })
+
+    // Create popup modal
+    let popup = buildElement('div', {
+      'class': 'login__popup',
+      'parent': login
+    });
+
+    // Add popup title
+    buildElement('h3', {
+      'class': 'login__popup-heading',
+      'text': getOption('login.heading'),
+      'parent': popup
+    });
+
+    // Add header helper
+    buildElement('p', {
+      'class': 'login__popup-helper',
+      'text': getOption('login.helper'),
+      'parent': popup
+    });
+
+    // Add buttons
+    providers.forEach(provider => {
+      let button = buildElement('a', {
+        'classes': ['login__popup-button', `login__popup-button--${provider}`],
+        'text': getOption(`login.${provider}`),
+        'attributes': {
+          'href': `/id/profiles/${provider}`,
+          'target': '_blank'
+        },
+        'parent': popup
+      });
+
+      buildElement('span', {
+        'classes': ['icon', `icon--${provider}`],
+        'parent': button
+      });
+    });
+
+    // Add policy description
+    buildElement('p', {
+      'class': 'login__popup-policy',
+      'html': getOption('login.policy'),
+      'parent': popup
+    });
+
+    // Add close button
+    let close = buildElement('button', {
+      'class': 'login__popup-close',
+      'parent': popup
+    });
+
+    close.addEventListener('click', () => {
+      document.body.removeChild(login);
+
+      // Remove listener here
+      document.removeEventListener('keydown', closeLogin);
+    });
+
+    // Self removed close login function
+    const closeLogin = (e) => {
+      if (e.keyCode === 27) {
+        document.removeEventListener('keydown', closeLogin);
+
+        // Remove login popup
+        document.body.removeChild(login);
+      }
+    }
+
+    // Add ESC listener
+    document.addEventListener('keydown', closeLogin);
+
+    // Self removed login listener
+    const receiveLogin = (e) => {
+      if (e.data === 'reload') {
+        window.removeEventListener('message', receiveLogin);
+
+        // Remove login popup
+        document.body.removeChild(login);
+
+        return initComments();
+      }
+    }
+
+    // Listen to message from
+    window.addEventListener('message', receiveLogin);
+
+    // Append login popup on page
+    document.body.appendChild(login);
+  }
 
 
   /**
    * Load comments
    */
-  makeRequest(`/id/comments?post=${post}`, 'GET', {}, (response) => {
-    const fields = response.fields || [];
+  const initComments = () => {
+    // Clear old comments first
+    while(comments.lastChild) {
+      comments.removeChild(comments.lastChild)
+    }
 
-    // Show comments using response fields
-    fields.forEach(field => {
-      loadComment(field);
+    authorized = false;
+
+    makeRequest(`/id/comments?post=${post}`, 'GET', {}, (response) => {
+      const fields = response.comments || [];
+
+      // Check if user authorized
+      if (response.identity) {
+        authorized = true;
+      }
+
+      // Create form
+      let form = createForm();
+      comments.appendChild(form);
+
+      // Get saved textarea value
+      let text = form.querySelector('.comments__form-text');
+      text.textContent = getUnsent(0);
+
+      text.addEventListener('input', () => {
+        saveUnsent(text.value, 0);
+      });
+
+      // Try to show identity bage
+      createBadge(form, response.identity);
+
+      // Fold comments if more than 10
+      if (fields.length > 10) {
+        foldComments();
+      }
+
+      // Show comments using response fields
+      fields.forEach(field => {
+        if (field.id !== undefined) {
+          loadComment(field);
+        }
+      });
+
+      // Show comments
+      comments.classList.add('comments--expand');
+
+      // Get comment link if exists
+      const hash = document.location.hash.match(/^#comment-(\d+)/) || [];
+
+      if (hash.length > 1) {
+        let item = comments.querySelector(`[data-id="${hash[1]}"]`);
+
+        if (item !== null) {
+          // Show comments
+          comments.classList.remove('comments--folded');
+
+          // Scroll to comment
+          scrollToElement(item.getBoundingClientRect().top);
+        }
+      }
     });
+  }
 
-    // Show specific comment if loaded
-    showComment(document.location.hash);
-  });
+
+  /**
+   * Ok, let's go
+   */
+  return initComments();
 })();
