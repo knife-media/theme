@@ -406,6 +406,11 @@
       color: rgba($color-text, 0.5);
       transition: color 0.25s;
 
+      &[disabled] {
+        position: relative;
+        opacity: 0.5;
+      }
+
       &:hover {
         color: $color-primary;
       }

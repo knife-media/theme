@@ -392,7 +392,7 @@
       makeRequest(url, 'DELETE', {}, () => {
         let children = item.querySelector('.comments__item-children');
 
-        while(item.lastChild) {
+        while (item.lastChild) {
           item.removeChild(item.lastChild)
         }
 
@@ -422,6 +422,10 @@
       message.textContent = getOption('comments.removed');
     }
 
+    if (status === 'blocked') {
+      message.textContent = getOption('comments.blocked');
+    }
+
     return item;
   }
 
@@ -439,10 +443,14 @@
     remove.addEventListener('click', (e) => {
       e.preventDefault();
 
-      sendAjax({'remove': field.id}, () => {
+      let data = {
+        'remove': field.id
+      };
+
+      sendAjax(data, remove, () => {
         let children = item.querySelector('.comments__item-children');
 
-        while(item.lastChild) {
+        while (item.lastChild) {
           item.removeChild(item.lastChild)
         }
 
@@ -464,6 +472,25 @@
 
     block.addEventListener('click', (e) => {
       e.preventDefault();
+
+      let data = {
+        'block': field.id
+      };
+
+      sendAjax(data, block, () => {
+        let children = item.querySelector('.comments__item-children');
+
+        while (item.lastChild) {
+          item.removeChild(item.lastChild)
+        }
+
+        // Draw removed warning
+        drawWarning(item, 'blocked');
+
+        if (children !== null) {
+          item.appendChild(children);
+        }
+      });
     });
 
     return item;
@@ -753,17 +780,21 @@
     }
 
     // Get form text field
-    let text = form.querySelector('textarea');
+    let data = {
+      'content': form.querySelector('textarea').value
+    }
 
-    makeRequest(url, 'POST', {'content': text.value}, (response) => {
-      if (response.comments.length > 0) {
+    makeRequest(url, 'POST', data, (response) => {
+      let fields = response.comments || [];
+
+      if (fields.length > 0) {
         form.reset();
 
         if (reply) {
           form.parentNode.removeChild(form);
         }
 
-        let item = loadComment(response.comments[0], true);
+        let item = loadComment(fields[0], true);
 
         // Show comments
         comments.classList.remove('comments--folded');
@@ -838,7 +869,7 @@
 
     // Submit and resize textarea
     text.addEventListener('keydown', (e) => {
-      if(e.keyCode == 13 && (e.metaKey || e.ctrlKey)) {
+      if (e.keyCode == 13 && (e.metaKey || e.ctrlKey)) {
         submit.click();
       }
 
@@ -889,13 +920,18 @@
   /**
    * Send AJAX request to WordPress
    */
-  const sendAjax = (fields, callback) => {
+  const sendAjax = (fields, button, callback) => {
     let formData = new FormData();
     formData.append('action', getOption('action'));
     formData.append('nonce', getOption('nonce'));
 
     // Add form fields
-    formData.append('fields', fields);
+    for (let key in fields) {
+      formData.append(key, fields[key]);
+    }
+
+    // Disable button before request
+    button.setAttribute('disabled', 'disabled');
 
     // Send request
     let request = new XMLHttpRequest();
@@ -909,21 +945,24 @@
         comments.removeChild(error);
       }
 
-      let response = JSON.parse(request.responseText);
+      // Enable button
+      button.removeAttribute('disabled');
 
+      try {
+        let response = JSON.parse(request.responseText);
 
-      console.log(response);
+        if (!response.success) {
+          return showError(response.data);
+        }
 
-      /*
-      // Show error in console
-      if (request.status !== 200) {
-        return showError(response.message);
+        // Return callback if exists
+        if (typeof callback === 'function') {
+          return callback(response.data || {});
+        }
+
+      } catch (err) {
+        return showError();
       }
-
-      // Return callback if exists
-      if (typeof callback === 'function') {
-        return callback(response.result || {});
-      }*/
     }
   }
 
@@ -943,16 +982,20 @@
         comments.removeChild(error);
       }
 
-      let response = JSON.parse(request.responseText);
+      try {
+        let response = JSON.parse(request.responseText);
 
-      // Show error in console
-      if (request.status !== 200) {
-        return showError(response.message);
-      }
+        if (request.status !== 200) {
+          return showError(response.message || getOption('error'));
+        }
 
-      // Return callback if exists
-      if (typeof callback === 'function') {
-        return callback(response.result || {});
+        // Return callback if exists
+        if (typeof callback === 'function') {
+          return callback(response.result || {});
+        }
+
+      } catch (err) {
+        return showError();
       }
     }
 
@@ -1115,7 +1158,7 @@
    */
   const initComments = () => {
     // Clear old comments first
-    while(comments.lastChild) {
+    while (comments.lastChild) {
       comments.removeChild(comments.lastChild)
     }
 

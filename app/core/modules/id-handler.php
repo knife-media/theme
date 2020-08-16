@@ -39,6 +39,11 @@ class Knife_ID_Handler {
 
         // Handle admin requests
         add_action('wp_ajax_' . self::$ajax_request, [__CLASS__, 'handle_request']);
+
+        // Define id settings if still not
+        if(!defined('KNIFE_ID')) {
+            define('KNIFE_ID', []);
+        }
     }
 
 
@@ -51,12 +56,96 @@ class Knife_ID_Handler {
 
 
     /**
+     * Try to remove comment if needed
+     */
+    private static function remove_comment($db, $fields) {
+        if (empty($fields['remove'])) {
+            return;
+        }
+
+        $comment = absint($fields['remove']);
+
+        // Try to remove comment
+        $remove = $db->update('comments', ['status' => 'removed'], ['id' => $comment]);
+
+        if(!$remove) {
+            wp_send_json_error(__('Не удалось удалить комментарий', 'knife-theme'));
+        }
+
+        wp_send_json_success();
+    }
+
+
+    /**
+     * Try to block user and remove his comments
+     */
+    private static function block_user($db, $fields) {
+        if (empty($fields['block'])) {
+            return;
+        }
+
+        $comment = absint($fields['block']);
+
+        // Get user id
+        $user_id = $db->get_var(
+            $db->prepare("SELECT user_id FROM comments WHERE id = %d", $comment)
+        );
+
+        if($user_id === null) {
+            wp_send_json_error(__('Не удалось найти пользователя', 'knife-theme'));
+        }
+
+        // Set blocked status to user
+        $blocked = $db->update('users', ['status' => 'blocked'], ['id' => $user_id]);
+
+        if($blocked === false) {
+            wp_send_json_error(__('Не удалось заблокировать пользователя', 'knife-theme'));
+        }
+
+        // Remove all user comments
+        $remove = $db->update('comments', ['status' => 'removed'], ['user_id' => $user_id]);
+
+        if($remove === false) {
+            wp_send_json_error(__('Не удалось удалить комментарии пользователя', 'knife-theme'));
+        }
+
+        wp_send_json_success();
+    }
+
+
+    /**
      * Handle admin requests
      */
     public static function handle_request() {
         if(!check_ajax_referer(self::$ajax_request, 'nonce', false)) {
             wp_send_json_error(__('Ошибка безопасности. Попробуйте еще раз', 'knife-theme'));
         }
+
+        if(!current_user_can('publish_posts')) {
+            wp_send_json_error(__('Для вашего пользователя это действие недоступно', 'knife-theme'));
+        }
+
+        // Mix with default values
+        $conf = wp_parse_args(KNIFE_ID, [
+            'host' => DB_HOST,
+            'name' => DB_NAME,
+            'user' => DB_USER,
+            'password' => DB_PASSWORD
+        ]);
+
+        // Create custom db connection
+        $db = new wpdb($conf['user'], $conf['password'], $conf['name'], $conf['host']);
+        $db->hide_errors();
+
+        if(isset($db->error)) {
+            wp_send_json_error(__('Не удалось соединиться с удаленной базой данных', 'knife-theme'));
+        }
+
+        // Try to remove comment
+        self::remove_comment($db, wp_unslash($_REQUEST));
+
+        // Try to block user
+        self::block_user($db, wp_unslash($_REQUEST));
     }
 
 
@@ -108,6 +197,7 @@ class Knife_ID_Handler {
             'comments' => [
                 'anonymous' => __('Анонимный пользователь', 'knife-theme'),
                 'removed' => __('Сообщение было удалено', 'knife-theme'),
+                'blocked' => __('Пользователь заблокирован, и все его сообщения будут удалены', 'knife-theme'),
                 'reply' => __('Ответить', 'knife-theme'),
                 'remove' => __('Удалить', 'knife-theme'),
                 'block' => __('Забанить', 'knife-theme'),
