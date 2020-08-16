@@ -1091,7 +1091,8 @@
         'text': getOption(`login.${provider}`),
         'attributes': {
           'href': `/id/profiles/${provider}`,
-          'target': '_blank'
+          'target': '_blank',
+          'rel': 'opener'
         },
         'parent': popup
       });
