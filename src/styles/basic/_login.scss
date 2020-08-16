@@ -1,7 +1,7 @@
 .login {
   @include popup-center(20);
-  background: rgba($color-black, .75);
 
+  background-color: rgba(0, 0, 0, .75);
 
   .login__popup {
     display: flex;

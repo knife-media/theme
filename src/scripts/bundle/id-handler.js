@@ -1058,6 +1058,8 @@
    * Create authentication popup
    */
   const showLogin = () => {
+    let body = document.body;
+
     let login = buildElement('div', {
       'class': 'login'
     })
@@ -1113,33 +1115,46 @@
       'parent': popup
     });
 
-    close.addEventListener('click', () => {
-      document.body.removeChild(login);
+    let scrollTop = window.scrollY;
+
+    // Set body login class
+    body.classList.add('is-login');
+    body.style.top = -scrollTop + 'px';
+
+    // Close and scroll window
+    const closeLogin  = () => {
+      body.removeChild(login);
 
       // Remove listener here
-      document.removeEventListener('keydown', closeLogin);
-    });
+      document.removeEventListener('keydown', escLogin);
+
+      // Remove login class
+      body.classList.remove('is-login');
+      body.style.top = '';
+
+      window.scrollTo(0, scrollTop);
+    }
+
+    // Close popup on cross click
+    close.addEventListener('click', closeLogin);
 
     // Self removed close login function
-    const closeLogin = (e) => {
+    const escLogin = (e) => {
       if (e.keyCode === 27) {
-        document.removeEventListener('keydown', closeLogin);
-
-        // Remove login popup
-        document.body.removeChild(login);
+        return closeLogin();
       }
     }
 
     // Add ESC listener
-    document.addEventListener('keydown', closeLogin);
+    document.addEventListener('keydown', escLogin);
 
     // Self removed login listener
     const receiveLogin = (e) => {
       if (e.data === 'reload') {
-        window.removeEventListener('message', receiveLogin);
+        closeLogin();
 
-        // Remove login popup
-        document.body.removeChild(login);
+        // Listen is no longer necessary
+        window.removeEventListener('message', receiveLogin);
 
         return initComments();
       }
@@ -1149,7 +1164,7 @@
     window.addEventListener('message', receiveLogin);
 
     // Append login popup on page
-    document.body.appendChild(login);
+    body.appendChild(login);
   }
 
 
