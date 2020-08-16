@@ -65,7 +65,7 @@ class Knife_Mistype_Reporter {
 
 
     /**
-     * Send mustype error to telegram
+     * Send mistype error to telegram
      */
     public static function submit_error() {
         if(!check_ajax_referer(self::$ajax_request, 'nonce', false)) {

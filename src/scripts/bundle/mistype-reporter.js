@@ -21,47 +21,17 @@
 
 
   /**
-   * Destroy popup
-   */
-  function destroyPopup() {
-    var mistype = document.querySelector('.mistype');
-
-    if (mistype.parentNode) {
-      mistype.parentNode.removeChild(mistype);
-    }
-  }
-
-
-  /**
-   * Close popup on ESC button
-   */
-  function closePopup(e) {
-    if (e.keyCode === 27) {
-      // Remove this listener
-      document.removeEventListener('keydown', closePopup);
-
-      var mistype = document.querySelector('.mistype');
-
-      // Remove mistype element
-      if (mistype.parentNode) {
-        mistype.parentNode.removeChild(mistype);
-      }
-    }
-  }
-
-
-  /**
    * Send ajax request
    */
   function sendRequest(selection, comment) {
     var formData = new FormData();
-    formData.append('action', getOption('action'))
-    formData.append('nonce', getOption('nonce'))
+    formData.append('action', getOption('action'));
+    formData.append('nonce', getOption('nonce'));
 
     // Add form fields
     formData.append('comment', comment);
     formData.append('marked', selection);
-    formData.append('location', document.location.href)
+    formData.append('location', document.location.href);
 
 
     // Send request
@@ -128,11 +98,23 @@
     // Add close button
     var close = document.createElement('button');
     close.classList.add('mistype__popup-close');
-    close.addEventListener('click', destroyPopup);
+
+    close.addEventListener('click', () => {
+        mistype.parentNode.removeChild(mistype);
+    });
+
     popup.appendChild(close);
 
+    const closePopup = (e) => {
+      if (e.keyCode === 27) {
+        mistype.parentNode.removeChild(mistype);
+      }
+
+      document.removeEventListener('keydown', closePopup);
+    }
+
     // Add ESC listener
-    document.addEventListener('keydown', closePopup, true);
+    document.addEventListener('keydown', closePopup);
   }
 
 

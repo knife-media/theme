@@ -46,6 +46,7 @@ a {
 button {
   cursor: pointer;
   outline: none;
+  user-select: none;
 
   background-color: transparent;
   transition: .25s;

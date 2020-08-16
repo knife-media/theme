@@ -109,6 +109,9 @@ require get_template_directory() . '/core/modules/content-filters.php';
 // Add per post customs
 require get_template_directory() . '/core/modules/post-customs.php';
 
+// ID handler
+require get_template_directory() . '/core/modules/id-handler.php';
+
 // Add custom theme widgets from common hanlder
 require get_template_directory() . '/core/modules/widget-handler.php';
 
@@ -195,9 +198,6 @@ require get_template_directory() . '/core/modules/adult-content.php';
 
 // Custom search engine settings
 require get_template_directory() . '/core/modules/google-search.php';
-
-// Hypercomments settings
-require get_template_directory() . '/core/modules/comments-load.php';
 
 // Enable terms emojis for default and custom taxonomies
 require get_template_directory() . '/core/modules/terms-emoji.php';

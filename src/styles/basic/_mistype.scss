@@ -13,12 +13,13 @@
     color: $color-text;
     background-color: $color-white;
 
-    border-radius: 3px;
+    border-radius: 4px;
 
     animation: upswing .25s ease-out;
 
     .mistype__popup-heading {
       display: block;
+      cursor: default;
 
       margin-bottom: .5rem;
       font-size: 1.25rem;
@@ -82,11 +83,22 @@
       @include cross-button(1rem);
 
       position: absolute;
-      top: .75rem;
-      right: .75rem;
+      top: 1rem;
+      right: 1rem;
 
       width: 1.25rem;
       height: 1.25rem;
+
+      transition: filter 0.25s;
+
+      &:hover {
+        filter: brightness(150%);
+      }
+
+      @media screen and (max-width: 479px) {
+        top: 0.5rem;
+        right: 0.5rem;
+      }
     }
 
     @media screen and (max-width: 479px) {

@@ -29,6 +29,10 @@ body {
     }
   }
 
+  &.is-login {
+    @include body-overflow;
+  }
+
   &.is-navbar {
     @media screen and (max-width: 1023px) {
       @include body-overflow;

@@ -225,12 +225,6 @@ class Knife_Hidden_Widgets {
                 }
 
                 foreach($taxonomies as $taxonomy) {
-                    // Skip co-authors taxonomy
-                    // TODO: Remove condition on co-authors removing
-                    if($taxonomy->name === 'author') {
-                        continue;
-                    }
-
                     printf(
                         '<optgroup label="%s">',
                         esc_attr($taxonomy->labels->name . ':', 'knife-theme')

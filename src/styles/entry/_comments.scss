@@ -3,27 +3,5 @@
   position: relative;
 
   width: 100%;
-  overflow: hidden;
-
   background-color: $color-white;
-
-  .comments {
-    display: none;
-
-    width: 100%;
-    max-width: calc(40rem + 4rem);
-    margin: 1.5rem auto 0;
-    padding: 0 1rem;
-
-    &.comments--expand {
-      display: block;
-
-      animation: fade-in .5s linear forwards;
-    }
-
-    @media screen and (max-width: 767px) {
-      margin-top: 1rem;
-      padding: 0;
-    }
-  }
 }
