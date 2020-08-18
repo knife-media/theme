@@ -1,0 +1,1 @@
+"use strict";!function(){var o=document.createElement("div");o.id="tumbler",document.body.appendChild(o);var n={ownerId:265942,containerId:"tumbler",isTurbo:!1,params:{pp:"g",ps:"ehgv",p2:"gxnl"},onLoad:function(o){console.log(o)}};window.adfoxAsyncParams=window.adfoxAsyncParams||[],window.adfoxAsyncParams.push(n),console.log("mts-tumblr")}();

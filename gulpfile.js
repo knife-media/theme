@@ -73,6 +73,20 @@ gulp.task('scripts', (done) => {
     }))
     .pipe(gulp.dest('app/core/custom/'))
 
+  // Process partner scripts
+  gulp.src('src/scripts/partner/*.js')
+    .pipe(plumber())
+    .pipe(babel({
+      presets: ['@babel/env']
+    }))
+    .pipe(uglify())
+    .pipe(rename((file) => {
+      file.dirname = file.basename;
+      file.basename = 'scripts';
+      file.extname = '.js';
+    }))
+    .pipe(gulp.dest('app/core/partner/'))
+
   done();
 })
 
