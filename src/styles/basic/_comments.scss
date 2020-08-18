@@ -51,6 +51,14 @@
       font-size: 0.875rem;
       border-radius: 4px;
 
+      &[disabled] {
+        cursor: default;
+
+        &:hover {
+          filter: none;
+        }
+      }
+
       @media screen and (max-width: 479px) {
         padding: 0.5rem 0.75rem;
         font-size: 0.8125rem;

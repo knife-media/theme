@@ -784,6 +784,11 @@
       'content': form.querySelector('textarea').value
     }
 
+    let submit = form.querySelector('.comments__form-submit');
+
+    // Set disabled to submit button
+    submit.setAttribute('disabled', 'disabled');
+
     makeRequest(url, 'POST', data, (response) => {
       let fields = response.comments || [];
 
@@ -802,6 +807,9 @@
         // Scroll to it
         scrollToElement(item.getBoundingClientRect().top);
       }
+
+      // Remove disabled attribute
+      submit.removeAttribute('disabled');
 
       return deleteUnsent();
     });
