@@ -54,12 +54,12 @@ body.is-archive {
       }
 
       @media screen and (max-width: 1023px) {
-        font-size: 2rem;
+        font-size: 1.75rem;
         line-height: 1.125;
       }
 
       @media screen and (max-width: 767px) {
-        font-size: 1.75rem;
+        font-size: 1.5rem;
       }
 
       @media screen and (max-width: 479px) {
@@ -76,7 +76,10 @@ body.is-archive {
       margin-left: auto;
 
       @media screen and (max-width: 767px) {
-        display: none;
+        order: -1;
+
+        width: 8rem;
+        margin: 0 auto 1.5rem;
       }
     }
 
