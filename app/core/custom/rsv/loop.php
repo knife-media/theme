@@ -1,16 +1,16 @@
 <?php
 /**
- * new business: loop template
+ * rsv: loop template
  *
  * @package knife-theme
- * @since 1.12
+ * @since 1.14
  */
 ?>
 
-<div class="unit">
+<div class="unit unit--double">
     <?php
         printf(
-            '<p class="unit__cover">%s</p>',
+            '<p class="unit__emoji">%s</p>',
             get_post_meta(get_the_ID(), 'post-emoji', true)
         );
     ?>
@@ -20,16 +20,6 @@
             printf(
                 '<a class="unit__content-link" href="%1$s">%2$s</a>',
                 esc_url(get_permalink()),
-                get_post_meta(get_the_ID(), 'post-hero', true)
-            );
-
-            printf(
-                '<p class="unit__content-point">%s</p>',
-                get_post_meta(get_the_ID(), 'post-hint', true)
-            );
-
-            printf(
-                '<p class="unit__content-info">%s</p>',
                 get_post_meta(get_the_ID(), 'post-info', true)
             );
         ?>

@@ -1,0 +1,180 @@
+@import url('https://fonts.googleapis.com/css?family=Rubik:500,700&subset=cyrillic');
+
+// Setup variables
+@import "../setup/variables";
+
+$font-custom: 'Rubik', sans-serif;
+$color-custom-title: #79f4b5;
+
+body.is-archive {
+  min-height: 100vh;
+  background-image: linear-gradient(120deg, #1c37b2, #850190);
+}
+
+/**
+ * archive styles
+ */
+.archive {
+  font-family: $font-custom;
+  font-weight: 500;
+
+  @media screen and (max-width: 479px) {
+    width: calc(100% - 2rem);
+  }
+}
+
+
+/**
+ * caption styles
+ */
+.caption {
+  font-family: $font-custom;
+  font-weight: 700;
+
+  .caption__description {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: flex-start;
+
+    max-width: 100%;
+    margin: 2.5rem 0 1.5rem;
+
+    h1 {
+      display: block;
+      max-width: 64rem;
+
+      font-size: 2.75rem;
+      font-weight: 700;
+      line-height: 1;
+
+      text-transform: uppercase;
+
+      strong {
+        color: $color-custom-title;
+      }
+
+      @media screen and (max-width: 1023px) {
+        font-size: 2rem;
+        line-height: 1.125;
+      }
+
+      @media screen and (max-width: 767px) {
+        font-size: 1.75rem;
+      }
+
+      @media screen and (max-width: 479px) {
+        font-size: 1.375rem;
+        line-height: 1.25;
+      }
+    }
+
+    img {
+      display: block;
+
+      width: 10rem;
+      height: auto;
+      margin-left: auto;
+
+      @media screen and (max-width: 767px) {
+        display: none;
+      }
+    }
+
+    @media screen and (max-width: 767px) {
+      flex-flow: row wrap;
+      margin: 1.5rem 0 0.5rem;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    width: calc(100% - 2rem);
+  }
+}
+
+/**
+ * unit styles
+ */
+.unit {
+  display: flex;
+  flex-flow: column nowrap;
+
+  padding: 1.5rem;
+
+  border: solid 1px $color-white;
+  border-radius: 1rem;
+
+  transition: filter 0.25s;
+
+  .unit__emoji {
+    font-size: 4rem;
+    margin-bottom: auto;
+
+    @media screen and (max-width: 767px) {
+      font-size: 3.25rem;
+    }
+  }
+
+  .unit__content {
+    height: auto;
+    padding: 0;
+
+    background-color: transparent;
+
+    .unit__content-link {
+      font-weight: 500;
+      line-height: 1.25;
+
+      text-transform: uppercase;
+
+      em {
+        color: $color-custom-title;
+        font-family: $font-custom;
+      }
+    }
+  }
+
+  &:hover {
+    filter: brightness(90%);
+  }
+
+  @media screen and (max-width: 767px) {
+    padding: 1rem;
+  }
+}
+
+
+/**
+ * promo button styles
+ */
+.content .figure--promo {
+  display: block;
+
+  .button {
+    display: block;
+    padding-left: 6rem;
+
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.375;
+    color: $color-white;
+
+    text-transform: uppercase;
+    text-align: left;
+
+    background-color: #850190;
+    background-image: url('images/rsv-logo.png');
+    background-size: 4rem auto;
+    background-repeat: no-repeat;
+    background-position: 1rem center;
+
+    border-radius: .5rem;
+
+    @media screen and (max-width: 767px) {
+      padding-left: 1rem;
+      font-size: 0.875rem;
+      line-height: 1.5;
+
+      background-image: none;
+    }
+  }
+}
