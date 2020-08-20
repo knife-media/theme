@@ -1,6 +1,6 @@
 <?php
 /**
- * vdnh: archive template
+ * archive template
  *
  * @package knife-theme
  * @since 1.10

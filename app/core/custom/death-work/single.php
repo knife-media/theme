@@ -1,6 +1,6 @@
 <?php
 /**
- * Death work: single template
+ * custom single template
  *
  * @package knife-theme
  * @since 1.12

@@ -1,6 +1,7 @@
 <?php
 /**
- * buffon-cards: custom fucntions
+ * custom functions
+ * slug: buffon-cards
  *
  * @package knife-theme
  * @since 1.12
@@ -13,18 +14,11 @@ if (!defined('WPINC')) {
 
 
 /**
- * Define current custom slug
- *
- * @since 1.13
- */
-define('KNIFE_CUSTOM_SLUG', 'buffon-cards');
-
-
-/**
  * Add custom styles
  */
 add_action('wp_enqueue_scripts', function() {
-    $slug = KNIFE_CUSTOM_SLUG;
+    $data = get_file_data(__FILE__, ['slug' => 'slug']);
+    $slug = $data['slug'];
 
     // Get styles
     $styles = "/core/custom/{$slug}/styles.css";

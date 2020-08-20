@@ -1,6 +1,6 @@
 <?php
 /**
- * black: archive template
+ * custom archive template
  *
  * @package knife-theme
  * @since 1.13

@@ -1,6 +1,7 @@
 <?php
 /**
- * vdnh: custom fucntions
+ * custom functions
+ * slug: vdnh
  *
  * @package knife-theme
  * @since 1.13
@@ -12,16 +13,11 @@ if (!defined('WPINC')) {
 
 
 /**
- * Define current custom slug
- */
-define('KNIFE_CUSTOM_SLUG', 'vdnh');
-
-
-/**
  * Add styles
  */
 add_action('wp_enqueue_scripts', function() {
-    $slug = KNIFE_CUSTOM_SLUG;
+    $data = get_file_data(__FILE__, ['slug' => 'slug']);
+    $slug = $data['slug'];
 
     // Get theme version
     $version = wp_get_theme()->get('Version');
@@ -43,7 +39,8 @@ add_action('wp_enqueue_scripts', function() {
  * Set template for archive posts
  */
 add_action('archive_template', function($template) {
-    $slug = KNIFE_CUSTOM_SLUG;
+    $data = get_file_data(__FILE__, ['slug' => 'slug']);
+    $slug = $data['slug'];
 
     // Locate single template
     $new_template = locate_template(["core/custom/{$slug}/archive.php"]);

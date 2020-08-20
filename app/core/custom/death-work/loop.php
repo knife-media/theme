@@ -1,6 +1,6 @@
 <?php
 /**
- * Death work: loop template
+ * custom loop template
  *
  * @package knife-theme
  * @since 1.12

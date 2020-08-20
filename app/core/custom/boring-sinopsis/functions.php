@@ -1,6 +1,7 @@
 <?php
 /**
- * boring-sinopsis: functions
+ * custom functions
+ * slug: boring-sinopsis
  *
  * @package knife-theme
  * @since 1.13
@@ -12,19 +13,14 @@ if (!defined('WPINC')) {
 
 
 /**
- * Define current custom slug
- */
-define('KNIFE_CUSTOM_SLUG', 'argue-cards');
-
-
-/**
  * Add custom styles
  */
 add_action('wp_enqueue_scripts', function() {
-    $slug = KNIFE_CUSTOM_SLUG;
+    $data = get_file_data(__FILE__, ['slug' => 'slug']);
+    $slug = $data['slug'];
 
     // Get styles
-    $styles = "/core/customs/{$slug}/styles.css";
+    $styles = "/core/custom/{$slug}/styles.css";
 
     // Set styles version
     $version = wp_get_theme()->get('Version');

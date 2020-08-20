@@ -35,4 +35,17 @@ $color-custom-content: #dbeafc;
       line-height: 1.5;
     }
   }
+
+  .figure--quote {
+    width: 100%;
+    padding: 0;
+
+    blockquote {
+      max-width: 100%;
+    }
+  }
+
+  .figure--promo {
+    width: 100%;
+  }
 }

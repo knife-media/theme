@@ -1,6 +1,7 @@
 <?php
 /**
- * rsv: archive template
+ * custom archive template
+ * slug: rsv
  *
  * @package knife-theme
  * @since 1.14

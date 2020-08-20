@@ -1,6 +1,6 @@
 <?php
 /**
- * Lighthouse: footer template
+ * custom footer template
  *
  * @package knife-theme
  * @since 1.10

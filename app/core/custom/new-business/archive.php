@@ -1,6 +1,6 @@
 <?php
 /**
- * new business: archive template
+ * custom archive template
  *
  * @package knife-theme
  * @since 1.12

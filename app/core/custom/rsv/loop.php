@@ -1,6 +1,6 @@
 <?php
 /**
- * rsv: loop template
+ * custom loop template
  *
  * @package knife-theme
  * @since 1.14

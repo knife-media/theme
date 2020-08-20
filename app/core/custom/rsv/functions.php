@@ -1,6 +1,7 @@
 <?php
 /**
- * rsv: functions
+ * custom functions
+ * slug: rsv
  *
  * @package knife-theme
  * @since 1.14
@@ -12,16 +13,11 @@ if (!defined('WPINC')) {
 
 
 /**
- * Define current custom slug
- */
-define('KNIFE_CUSTOM_SLUG', 'rsv');
-
-
-/**
  * Add styles
  */
 add_action('wp_enqueue_scripts', function() {
-    $slug = KNIFE_CUSTOM_SLUG;
+    $data = get_file_data(__FILE__, ['slug' => 'slug']);
+    $slug = $data['slug'];
 
     // Get theme version
     $version = wp_get_theme()->get('Version');
@@ -43,7 +39,8 @@ add_action('wp_enqueue_scripts', function() {
  * Set template for archive posts
  */
 add_action('archive_template', function($template) {
-    $slug = KNIFE_CUSTOM_SLUG;
+    $data = get_file_data(__FILE__, ['slug' => 'slug']);
+    $slug = $data['slug'];
 
     // Locate single template
     $new_template = locate_template(["core/custom/{$slug}/archive.php"]);
@@ -62,7 +59,8 @@ add_action('archive_template', function($template) {
 add_action('the_content', function($content) {
     global $post;
 
-    $slug = KNIFE_CUSTOM_SLUG;
+    $data = get_file_data(__FILE__, ['slug' => 'slug']);
+    $slug = $data['slug'];
 
     if(!property_exists('Knife_Special_Projects', 'taxonomy')) {
         return $output;
