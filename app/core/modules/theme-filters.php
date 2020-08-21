@@ -184,6 +184,7 @@ class Knife_Theme_Filters {
         remove_action('wp_head', 'adjacent_posts_rel_link_wp_head');
         remove_action('wp_head', 'rest_output_link_wp_head');
         remove_action('wp_head', 'wp_oembed_add_discovery_links');
+        remove_action('wp_head', 'wp_resource_hints', 2);
 
         // Remove unused HTTP headers
         remove_action('template_redirect', 'rest_output_link_header', 11);
