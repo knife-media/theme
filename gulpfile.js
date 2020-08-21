@@ -44,6 +44,23 @@ gulp.task('styles', (done) => {
     }))
     .pipe(gulp.dest('app/core/custom/'))
 
+  // Process special styles
+  gulp.src('src/styles/special/*.scss')
+    .pipe(plumber())
+    .pipe(sass({
+      errLogToConsole: true
+    }))
+    .pipe(prefix())
+    .pipe(cleanCss({
+      compatibility: 'ie9'
+    }))
+    .pipe(rename((file) => {
+      file.dirname = file.basename;
+      file.basename = 'styles';
+      file.extname = '.css';
+    }))
+    .pipe(gulp.dest('app/core/special/'))
+
   done();
 })
 
@@ -72,6 +89,20 @@ gulp.task('scripts', (done) => {
       file.extname = '.js';
     }))
     .pipe(gulp.dest('app/core/custom/'))
+
+  // Process special scripts
+  gulp.src('src/scripts/special/*.js')
+    .pipe(plumber())
+    .pipe(babel({
+      presets: ['@babel/env']
+    }))
+    .pipe(uglify())
+    .pipe(rename((file) => {
+      file.dirname = file.basename;
+      file.basename = 'scripts';
+      file.extname = '.js';
+    }))
+    .pipe(gulp.dest('app/core/special/'))
 
   done();
 })

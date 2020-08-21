@@ -1,7 +1,6 @@
 <?php
 /**
- * custom functions
- * slug: boring-sinopsis
+ * boring-sinopsis: custom functions
  *
  * @package knife-theme
  * @since 1.13
@@ -16,8 +15,7 @@ if (!defined('WPINC')) {
  * Add custom styles
  */
 add_action('wp_enqueue_scripts', function() {
-    $data = get_file_data(__FILE__, ['slug' => 'slug']);
-    $slug = $data['slug'];
+    $slug = basename(__DIR__);
 
     // Get styles
     $styles = "/core/custom/{$slug}/styles.css";

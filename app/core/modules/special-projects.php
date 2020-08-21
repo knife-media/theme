@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.13
+ * @version 1.14
  */
 
 
@@ -115,7 +115,7 @@ class Knife_Special_Projects {
         $term = get_queried_object();
 
         if(!empty($term->slug)) {
-            $include = get_template_directory() . "/core/custom/" . $term->slug;
+            $include = get_template_directory() . "/core/special/" . $term->slug;
 
             if(file_exists($include . '/functions.php')) {
                 include_once $include . '/functions.php';
@@ -149,7 +149,7 @@ class Knife_Special_Projects {
                 $term = get_term($ancestors[0], self::$taxonomy);
             }
 
-            $include = get_template_directory() . "/core/custom/" . $term->slug;
+            $include = get_template_directory() . "/core/special/" . $term->slug;
 
             if(file_exists($include . '/functions.php')) {
                 include_once $include . '/functions.php';
