@@ -2,7 +2,7 @@
  * Adfox banners loader
  *
  * @since 1.11
- * @version 1.12
+ * @version 1.14
  */
 
 (function () {
@@ -80,7 +80,7 @@
     }
 
     // Remove on error
-    options.onError = function () {
+    options.onError = function (error) {
       widget.classList.remove('widget-adfox--loaded');
     }
 

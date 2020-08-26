@@ -16,8 +16,6 @@ if (!defined('WPINC')) {
  */
 add_action('wp_enqueue_scripts', function() {
     $slug = basename(__DIR__);
-    //$data = get_file_data(__FILE__, ['slug' => 'slug']);
-    //$slug = $data['slug'];
 
     // Get theme version
     $version = wp_get_theme()->get('Version');
