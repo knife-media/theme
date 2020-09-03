@@ -7,10 +7,13 @@
  *
  * @package knife-theme
  * @since 1.4
- * @version 1.12
+ * @version 1.14
  */
 
 
+/**
+ * Add custom advertisment script for mts-switcher promo
+ */
 add_action('wp_enqueue_scripts', function() {
     // Get theme version
     $version = wp_get_theme()->get('Version');
@@ -19,6 +22,6 @@ add_action('wp_enqueue_scripts', function() {
         $version = date('U');
     }
 
-    // Let's add the file if exists
+    // Let's add remote script
     wp_enqueue_script('knife-mts', 'https://knife.support/static/mts-switcher/scripts.min.js', [], $version, true);
 });
