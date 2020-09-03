@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.10
- * @version 1.11
+ * @version 1.14
  */
 
 if (!defined('WPINC')) {
@@ -35,6 +35,9 @@ class Knife_Content_Filters {
 
         // Remove all spans from content
         add_filter('content_save_pre', [__CLASS__, 'remove_span']);
+
+        // Remove linked space
+        add_filter('content_save_pre', [__CLASS__, 'remove_linked_space']);
 
         // Filter scripts for unprivileged users
         add_filter('content_save_pre', [__CLASS__, 'filter_scripts']);
@@ -148,6 +151,16 @@ class Knife_Content_Filters {
      */
     public static function remove_span($content) {
         return preg_replace('~<span(?!\s+(data-body|id)).*?>(.*?)</span>~is', '$1', $content);
+    }
+
+
+    /**
+     * Remove linked spaces
+     *
+     * @link https://github.com/knife-media/theme/issues/177
+     */
+    public static function remove_linked_space($content) {
+        return preg_replace('~(<a[^>]+>)(\s+)(.*?</a>)~is', '$2$1$3', $content);
     }
 }
 
