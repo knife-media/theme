@@ -45,9 +45,6 @@ class Knife_Theme_Filters {
         // Update post classes
         add_filter('post_class', [__CLASS__, 'update_post_classes'], 10, 2);
 
-        // Rename default posts format
-        add_filter('gettext_with_context', [__CLASS__, 'rename_post_formats'], 10, 4);
-
         // Add post author link class
         add_filter('the_author_posts_link', [__CLASS__, 'add_author_class'], 10, 1);
 
@@ -212,29 +209,6 @@ class Knife_Theme_Filters {
      */
     public static function add_author_class($link) {
         return str_replace('rel="author"', 'class="meta__item" rel="author"', $link);
-    }
-
-
-    /**
-     * Rename default posts formats
-     *
-     * @since 1.10
-     */
-    public static function rename_post_formats($translation, $text, $context, $domain) {
-        $names = [
-            'Standard' => __('Стандартный', 'knife-theme'),
-            'Aside'  => __('Без сайдбара', 'knife-theme'),
-            'Video' => __('Видео', 'knife-theme'),
-            'Audio' => __('Аудио', 'knife-theme'),
-            'Gallery' => __('Галерея', 'knife-theme'),
-            'Chat' => __('Карточки', 'knife-theme')
-        ];
-
-        if($context !== 'Post format') {
-            return $translation;
-        }
-
-        return str_replace(array_keys($names), array_values($names), $text);
     }
 
 

@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.5
- * @version 1.12
+ * @version 1.14
  */
 
 
@@ -413,6 +413,25 @@ class Knife_Site_Meta {
 
 
     /**
+     * Get template format from page template function
+     *
+     * @since 1.14
+     */
+    private static function get_template_format() {
+        $format = basename(get_page_template_slug(), '.php');
+
+        // Split format parts
+        $parts = explode('-', $format);
+
+        if($parts[0] === 'single' && isset($parts[1])) {
+            return $parts[1];
+        }
+
+        return 'default';
+    }
+
+
+    /**
      * Get singular custom meta parameters
      *
      * @since 1.11
@@ -423,6 +442,9 @@ class Knife_Site_Meta {
 
         // Append template
         $meta['template'] = get_post_type();
+
+        // Set page template as format
+        $meta['format'] = self::get_template_format();
 
         if(property_exists('Knife_Adult_Content', 'meta_adult')) {
             $adult = get_post_meta($meta['postid'], Knife_Adult_Content::$meta_adult, true);
