@@ -86,7 +86,7 @@ class Knife_Custom_Background {
     public static function add_metabox() {
         if(current_user_can('unfiltered_html')) {
             add_meta_box('knife-background-metabox',
-                __('Произвольный фон страницы', 'knife-theme'),
+                __('Произвольный фон', 'knife-theme'),
                 [__CLASS__, 'display_metabox'], self::$post_type, 'side'
             );
 

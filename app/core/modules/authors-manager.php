@@ -6,6 +6,7 @@
  *
  * @package knife-theme
  * @since 1.11
+ * @version 1.14
  */
 
 if (!defined('WPINC')) {
@@ -23,7 +24,17 @@ class Knife_Authors_Manager {
     public static $meta_authors = '_knife-authors';
 
 
-   /**
+    /**
+     * Post meta to store editor value
+     *
+     * @access  public
+     * @var     string
+     * @since   1.14
+     */
+    public static $meta_editor = '_knife-editor';
+
+
+    /**
      * Default post type lead text availible
      *
      * @access  public
@@ -148,6 +159,13 @@ class Knife_Authors_Manager {
 
         if(!current_user_can('edit_post', $post_id)) {
             return;
+        }
+
+        delete_post_meta($post_id, self::$meta_editor);
+
+        // Add editors post meta
+        if(array_key_exists($_REQUEST[self::$meta_editor], self::get_editors())) {
+            add_post_meta($post_id, self::$meta_editor, $_REQUEST[self::$meta_editor]);
         }
 
         // Delete all authors values
@@ -463,6 +481,23 @@ class Knife_Authors_Manager {
         wp_cache_set($user_id, $counts, 'knife-user-posts', 12 * HOUR_IN_SECONDS);
 
         return $counts;
+    }
+
+
+    /**
+     * Return reserverd editors list
+     */
+    public static function get_editors() {
+        $editors = [
+            'artem-chapaev' => 'Артем Чапаев',
+            'nastya-travkina' => 'Настя Травкина',
+            'seroe-fioletovoe' => 'Серое Фиолетовое',
+            'fragments' => 'Фрагменты',
+            'tania-cohen' => 'Таня Коэн',
+            'ivan' => 'Ваня'
+        ];
+
+        return $editors;
     }
 
 

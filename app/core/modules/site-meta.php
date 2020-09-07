@@ -474,6 +474,14 @@ class Knife_Site_Meta {
             }
         }
 
+        if(property_exists('Knife_Authors_Manager', 'meta_editor')) {
+            $editor = get_post_meta($meta['postid'], Knife_Authors_Manager::$meta_editor, true);
+
+            if($editor) {
+                $meta['editor'] = $editor;
+            }
+        }
+
         if(property_exists('Knife_Special_Projects', 'taxonomy')) {
             $terms = get_the_terms($meta['postid'], Knife_Special_Projects::$taxonomy);
 

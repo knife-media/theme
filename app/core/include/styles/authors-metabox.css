@@ -7,6 +7,18 @@
   max-width: 100%;
 }
 
+#knife-authors-box .editors-select {
+  width: 100%;
+}
+
+#knife-authors-box .editors-title {
+  margin: 0 0 5px;
+}
+
+#knife-authors-box hr {
+  margin: 16px 0;
+}
+
 #knife-authors-box .authors-input {
   display: block;
   width: 100%;
