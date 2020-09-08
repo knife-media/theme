@@ -24,6 +24,12 @@ class Knife_Content_Filters {
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public static function load_module() {
+        // Add custom post styles to admin page
+        add_action('admin_enqueue_scripts', [__CLASS__, 'add_post_styles']);
+
+        // Add target blank to all links
+        add_filter('content_save_pre', [__CLASS__, 'add_links_target'], 8);
+
         // Remove extra &nbsp; from content on save
         add_filter('content_save_pre', [__CLASS__, 'remove_nbsp']);
 
@@ -57,6 +63,36 @@ class Knife_Content_Filters {
         add_action('wp_print_styles', function() {
             wp_dequeue_style('wp-block-library');
         }, 11);
+    }
+
+
+    /**
+     * Enqueue assets to admin post screen only
+     */
+    public static function add_post_styles($hook) {
+        global $post;
+
+        if(!in_array($hook, ['post.php', 'post-new.php'])) {
+            return;
+        }
+
+        $version = wp_get_theme()->get('Version');
+        $include = get_template_directory_uri() . '/core/include';
+
+        // insert admin styles
+        wp_enqueue_style('knife-post-styles', $include . '/styles/post-styles.css', [], $version);
+    }
+
+
+    /**
+     * Add target attr to links
+     *
+     * @since 1.14
+     */
+    public static function add_links_target($content) {
+        $content = links_add_target($content);
+
+        return $content;
     }
 
 
