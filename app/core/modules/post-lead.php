@@ -143,6 +143,9 @@ class Knife_Post_Lead {
         // Remove trailing spaces
         $post_lead = preg_replace('~((&nbsp;| |\s)+$)~is', '', $post_lead);
 
+        // Add target attribute to links
+        $post_lead = links_add_target($post_lead);
+
         update_post_meta($post_id, self::$meta_lead, $post_lead);
     }
 }
