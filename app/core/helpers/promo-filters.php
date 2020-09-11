@@ -23,5 +23,5 @@ add_action('wp_enqueue_scripts', function() {
     }
 
     // Let's add remote script
-    wp_enqueue_script('knife-mts', 'https://knife.support/static/mts-switcher/scripts.min.js', [], $version, true);
+    wp_enqueue_script('knife-mts', '/external/mts-switcher/scripts.min.js', [], $version, true);
 });
