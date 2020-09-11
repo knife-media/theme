@@ -494,7 +494,8 @@ class Knife_Authors_Manager {
             'seroe-fioletovoe' => 'Серое Фиолетовое',
             'fragments' => 'Фрагменты',
             'tania-cohen' => 'Таня Коэн',
-            'ivan' => 'Ваня'
+            'ivan' => 'Ваня',
+            'translations' => 'Переводы'
         ];
 
         return $editors;
