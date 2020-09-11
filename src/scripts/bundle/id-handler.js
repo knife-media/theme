@@ -817,6 +817,54 @@
 
 
   /**
+   * Create question before form
+   */
+  const createQuestion = (comments) => {
+    if (!getOption('question.message')) {
+      return false;
+    }
+
+    let question = buildElement('div', {
+      'class': 'comments__question',
+      'parent': comments
+    });
+
+    // Append avatar if exists
+    if (getOption('question.avatar')) {
+      buildElement('div', {
+        'class': 'comments__question-avatar',
+        'text': getOption('question.avatar'),
+        'parent': question
+      });
+    }
+
+    // Create caption
+    let caption = buildElement('div', {
+      'class': 'comments__question-caption',
+      'parent': question
+    });
+
+    // Append author if exists
+    if (getOption('question.author')) {
+      buildElement('p', {
+        'text': getOption('question.author'),
+        'class': 'comments__question-author',
+        'parent': caption
+      });
+    }
+
+    // Appemd message
+    buildElement('p', {
+      'text': getOption('question.message'),
+      'class': 'comments__question-message',
+      'parent': caption
+    });
+
+    return question;
+  }
+
+
+  /**
    * Create form
    */
   const createForm = () => {
@@ -1195,6 +1243,9 @@
       if (response.identity) {
         authorized = true;
       }
+
+      // Create question
+      createQuestion(comments);
 
       // Create form
       let form = createForm();

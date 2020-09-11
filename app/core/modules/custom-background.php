@@ -277,7 +277,7 @@ class Knife_Custom_Background {
         // Filter empty values
         $background = array_filter($_REQUEST[self::$meta_background]);
 
-        return update_post_meta($post_id, self::$meta_background, $background);
+        update_post_meta($post_id, self::$meta_background, $background);
     }
 
 

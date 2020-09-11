@@ -1,0 +1,39 @@
+#knife-question-box .question-meta {
+  display: flex;
+  margin: 8px 0;
+}
+
+#knife-question-box .question-content {
+  margin: 16px 0 24px;
+}
+
+#knife-question-box .question-message {
+  display: block;
+
+  width: 100%;
+  margin-top: 8px;
+}
+
+#knife-question-box .question-emojis {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+
+  font-size: 1.25rem;
+}
+
+#knife-question-box .question-emojis span {
+  display: block;
+
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+#knife-question-box .question-avatar {
+  width: 40px;
+  margin-left: 8px;
+}
+
+#knife-question-box .question-author {
+  flex: 1 1 100%;
+}

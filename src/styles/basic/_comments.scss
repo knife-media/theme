@@ -12,6 +12,101 @@
   color: $color-text;
   background-color: $color-sheet;
 
+  .comments__question {
+    display: flex;
+    align-items: center;
+
+    margin-top: 2rem;
+
+    .comments__question-avatar {
+      display: flex;
+      flex: 0 0 4.25rem;
+      align-items: center;
+      justify-content: center;
+
+      user-select: none;
+      cursor: default;
+
+      width: 4.25rem;
+      height: 4.25rem;
+      margin-right: 1rem;
+
+      font-size: 2.5rem;
+
+      background-color: lighten($color-text, 25);
+
+      border: solid 1px $color-text;
+      border-radius: 50%;
+
+      @media screen and (max-width: 767px) {
+        flex: 0 0 3.25rem;
+
+        width: 3.25rem;
+        height: 3.25rem;
+
+        font-size: 1.75rem;
+      }
+
+      @media screen and (max-width: 479px) {
+        flex: 0 0 2.5rem;
+
+        width: 2.5rem;
+        height: 2.5rem;
+        margin-right: 0.75rem;
+
+        font-size: 1.25rem;
+      }
+
+      @media screen and (max-width: 359px) {
+        display: none;
+      }
+    }
+
+    .comments__question-caption {
+      display: block;
+      flex: 1 1 auto;
+
+      cursor: default;
+    }
+
+    .comments__question-author {
+      display: block;
+      margin-bottom: 0.5rem;
+
+      font-size: 0.875rem;
+      font-weight: 500;
+      line-height: 1.25;
+
+      @media screen and (max-width: 767px) {
+        font-size: 0.8125rem;
+      }
+
+      @media screen and (max-width: 479px) {
+        font-size: 0.75rem;
+      }
+    }
+
+    .comments__question-message {
+      display: block;
+
+      font-size: 1.25rem;
+      font-weight: 500;
+      line-height: 1.25;
+
+      @media screen and (max-width: 767px) {
+        font-size: 1.125rem;
+      }
+
+      @media screen and (max-width: 479px) {
+        font-size: 1rem;
+      }
+    }
+
+    @media screen and (max-width: 479px) {
+      margin-top: 1.5rem;
+    }
+  }
+
   .comments__form {
     display: block;
     position: relative;
@@ -170,6 +265,10 @@
       @media screen and (max-width: 479px) {
         right: 0.5rem;
       }
+    }
+
+    @media screen and (max-width: 479px) {
+      margin: 1.5rem 0;
     }
   }
 
