@@ -154,12 +154,15 @@ class Knife_Post_Tagline {
             return;
         }
 
-        // Save tagline meta
+        // Delete empty tagline meta
         if(empty($_REQUEST[self::$meta_tagline])) {
             return delete_post_meta($post_id, self::$meta_tagline);
         }
 
-        return update_post_meta($post_id, self::$meta_tagline, trim($_REQUEST[self::$meta_tagline]));
+        $tagline = sanitinze_text_field($_REQUEST[self::$meta_tagline]);
+
+        // Update tagline meta
+        update_post_meta($post_id, self::$meta_tagline, trim($tagline));
     }
 }
 

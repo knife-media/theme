@@ -16,6 +16,24 @@ if (!defined('WPINC')) {
 
 class Knife_ID_Handler {
     /**
+     * Lead text post meta
+     *
+     * @access  public
+     * @var     string
+     */
+    public static $meta_question = '_knife-question';
+
+
+    /**
+     * Default post type with question metabox
+     *
+     * @access  public
+     * @var     array
+     */
+    public static $post_type = ['post', 'club', 'quiz', 'generator'];
+
+
+    /**
      * Ajax action
      *
      * @access  private
@@ -38,6 +56,15 @@ class Knife_ID_Handler {
         // Remove discussion options page
         add_action('admin_menu', [__CLASS__, 'remove_settings']);
 
+        // Add comment question metabox
+        add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
+
+        // Save meta
+        add_action('save_post', [__CLASS__, 'save_metabox'], 10, 2);
+
+        // Enqueue metabox scripts
+        add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
+
         // Handle admin requests
         add_action('wp_ajax_' . self::$ajax_request, [__CLASS__, 'handle_request']);
 
@@ -45,6 +72,88 @@ class Knife_ID_Handler {
         if(!defined('KNIFE_ID')) {
             define('KNIFE_ID', []);
         }
+    }
+
+
+    /**
+     * Add comment question metabox
+     *
+     * @since 1.14
+     */
+    public static function add_metabox() {
+        add_meta_box('knife-question-metabox', __('Вопрос для комментариев', 'knife-theme'), [__CLASS__, 'display_metabox'], self::$post_type, 'normal', 'high');
+    }
+
+
+    /**
+     * Enqueue assets for metabox
+     *
+     * @since 1.14
+     */
+    public static function enqueue_assets($hook) {
+        global $post;
+
+        if(!in_array($hook, ['post.php', 'post-new.php'])) {
+            return;
+        }
+
+        $version = wp_get_theme()->get('Version');
+        $include = get_template_directory_uri() . '/core/include';
+
+        // Current screen object
+        $screen = get_current_screen();
+
+        if(!in_array($screen->post_type, self::$post_type)) {
+            return;
+        }
+
+        // Insert admin styles
+        wp_enqueue_style('knife-question-metabox', $include . '/styles/question-metabox.css', [], $version);
+
+        // Insert admin scripts
+        wp_enqueue_script('knife-question-metabox', $include . '/scripts/question-metabox.js', ['jquery'], $version);
+    }
+
+
+
+    /**
+     * Display comment question metabox
+     *
+     * @since 1.14
+     */
+    public static function display_metabox() {
+        $include = get_template_directory() . '/core/include';
+
+        include_once($include . '/templates/question-metabox.php');
+    }
+
+
+    /**
+     * Save question metabox
+     *
+     * @since 1.14
+     */
+    public static function save_metabox($post_id, $post) {
+        if(!in_array(get_post_type($post_id), self::$post_type)) {
+            return;
+        }
+
+        if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+            return;
+        }
+
+        if(!current_user_can('edit_post', $post_id)) {
+            return;
+        }
+
+        if(empty($_REQUEST[self::$meta_question])) {
+            return delete_post_meta($post_id, self::$meta_question);
+        }
+
+        // Filter empty values
+        $question = array_filter($_REQUEST[self::$meta_question]);
+
+        update_post_meta($post_id, self::$meta_question, $question);
     }
 
 
@@ -183,8 +292,10 @@ class Knife_ID_Handler {
             return;
         }
 
+        $post_id = get_queried_object_id();
+
         $options = [
-            'post' => get_queried_object_id(),
+            'post' => $post_id,
 
             'form' => [
                 'submit' => __('Написать', 'knife-theme'),
@@ -225,6 +336,12 @@ class Knife_ID_Handler {
                 'action' => self::$ajax_request,
                 'nonce' => wp_create_nonce(self::$ajax_request)
             ]);
+        }
+
+        $options['question'] = get_post_meta($post_id, self::$meta_question, true);
+
+        if (empty($options['question'])) {
+            $options['question'] = [];
         }
 
         wp_localize_script('knife-theme', 'knife_id_handler', $options);
