@@ -159,7 +159,7 @@ class Knife_Post_Tagline {
             return delete_post_meta($post_id, self::$meta_tagline);
         }
 
-        $tagline = sanitinze_text_field($_REQUEST[self::$meta_tagline]);
+        $tagline = sanitize_text_field($_REQUEST[self::$meta_tagline]);
 
         // Update tagline meta
         update_post_meta($post_id, self::$meta_tagline, trim($tagline));
