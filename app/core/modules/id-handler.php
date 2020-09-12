@@ -81,7 +81,7 @@ class Knife_ID_Handler {
      * @since 1.14
      */
     public static function add_metabox() {
-        add_meta_box('knife-question-metabox', __('Вопрос для комментариев', 'knife-theme'), [__CLASS__, 'display_metabox'], self::$post_type, 'normal', 'high');
+        add_meta_box('knife-question-metabox', __('Вопрос для комментариев', 'knife-theme'), [__CLASS__, 'display_metabox'], self::$post_type, 'advanced', 'high');
     }
 
 
