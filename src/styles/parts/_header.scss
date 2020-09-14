@@ -110,7 +110,9 @@
       color: $color-black;
 
       .is-search & {
+        pointer-events: none;
         cursor: default;
+
         color: rgba($color-text, .5);
       }
 

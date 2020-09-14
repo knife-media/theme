@@ -1,0 +1,124 @@
+.explorer {
+  @include popup-center(30);
+
+  background-color: rgba($color-black, 0.9);
+
+  .explorer__form {
+    display: block;
+    position: relative;
+
+    width: $width-content;
+    max-width: calc(100% - 4rem);
+
+    .explorer__form-input {
+      display: block;
+
+      width: 100%;
+      padding: 0.5rem 0;
+
+      color: $color-white;
+      font-size: 2rem;
+
+      @media screen and (max-width: 767px) {
+        font-size: 1.25rem;
+      }
+
+      @media screen and (max-width: 359px) {
+        font-size: 1rem;
+      }
+    }
+
+    .explorer__form-submit {
+      display: flex;
+      align-items: center;
+
+      position: absolute;
+      bottom: 0;
+      right: 0;
+
+      height: 100%;
+      padding: 0.5rem 0.5rem 0;
+
+      color: $color-white;
+      font-size: 1.5rem;
+
+      transition: transform 0.25s;
+
+      &:hover {
+        transform: translateX(0.25rem);
+      }
+
+      @media screen and (max-width: 767px) {
+        padding: 0.25rem 0.25rem 0;
+        font-size: 1.25rem;
+      }
+
+      @media screen and (max-width: 359px) {
+        font-size: 1rem;
+      }
+    }
+
+    &::before {
+      content: '';
+
+      position: absolute;
+      right: 50%;
+      bottom: 0;
+
+      border-bottom: solid 2px rgba($color-white, 0.75);
+
+      animation: field-lines 0.5s 0.25s forwards;
+    }
+
+    &::after {
+      content: '';
+
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+
+      border-bottom: solid 2px rgba($color-white, 0.75);
+
+      animation: field-lines 0.5s 0.25s forwards;
+    }
+
+    @media screen and (max-width: 479px) {
+      max-width: calc(100% - 2rem);
+    }
+  }
+
+  .explorer__close {
+    @include cross-button(1.5rem);
+
+    display: block;
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    cursor: pointer;
+
+    &::after, &::before {
+      background-color: darken($color-white, 5);
+    }
+
+    &:hover {
+      filter: brightness(80%);
+    }
+
+    @media screen and (max-width: 767px) {
+      @include cross-button(1.25rem);
+
+      top: 1rem;
+      right: 1rem;
+
+      &::after, &::before {
+        background-color: darken($color-white, 5);
+      }
+    }
+  }
+
+  body.is-adminbar & {
+    .explorer__close {
+      top: 3.75rem;
+    }
+  }
+}

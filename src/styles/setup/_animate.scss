@@ -72,3 +72,14 @@
     background-position: 100% 200%
   }
 }
+
+
+@keyframes field-lines {
+  0% {
+    width: 0;
+  }
+
+  100% {
+    width: 50%;
+  }
+}

@@ -51,6 +51,9 @@
 }
 
 @mixin cross-button($width, $height: 2px) {
+  width: $width;
+  height: $width;
+
   &:after, &:before {
     content: '';
     position: absolute;

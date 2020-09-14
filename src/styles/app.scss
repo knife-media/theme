@@ -33,6 +33,10 @@ body {
     @include body-overflow;
   }
 
+  &.is-explorer {
+    @include body-overflow;
+  }
+
   &.is-navbar {
     @media screen and (max-width: 1023px) {
       @include body-overflow;

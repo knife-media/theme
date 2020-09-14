@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.12
+ * @version 1.14
  */
 
 ?><!DOCTYPE html>
@@ -77,7 +77,7 @@
             ?>
         </nav>
 
-        <a href="/search/" class="header__button header__button--search">
+        <a href="/search/" class="header__button header__button--search" id="toggle-search">
             <span class="toggle__icon icon icon--search"></span>
         </a>
 

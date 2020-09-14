@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.2
- * @version 1.12
+ * @version 1.14
  */
 
 
@@ -140,7 +140,12 @@ class Knife_Google_Search {
             return;
         }
 
-        wp_localize_script('knife-theme', 'knife_search_id', KNIFE_GCSE['id']);
+        $options = [
+            'id' => KNIFE_GCSE['id'],
+            'placeholder' => __('Введите фразу для поиска', 'knife-theme')
+        ];
+
+        wp_localize_script('knife-theme', 'knife_search_options', $options);
     }
 
 
