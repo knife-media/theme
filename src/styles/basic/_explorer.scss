@@ -1,7 +1,7 @@
 .explorer {
   @include popup-center(30);
 
-  background-color: rgba($color-black, 0.9);
+  background-color: rgba($color-black, 0.95);
 
   .explorer__form {
     display: block;
