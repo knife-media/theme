@@ -8,32 +8,43 @@
   /**
    * Create search popup
    */
-  const showExplorer = () => {
+  const showExplorer = (body) => {
     let explorer = document.createElement('div');
     explorer.classList.add('explorer');
     explorer.setAttribute('id', 'explorer');
 
+    // Add header
+    let header = document.createElement('div');
+    header.classList.add('explorer__header');
+    explorer.appendChild(header);
+
     // Add close button
     let close = document.createElement('button');
-    close.classList.add('explorer__close');
-    explorer.appendChild(close);
+    close.classList.add('explorer__header-close');
+    header.appendChild(close);
+
+    let adminbar = document.getElementById('wpadminbar');
+
+    if (adminbar && window.scrollY < adminbar.clientHeight) {
+      header.style.marginTop = (adminbar.clientHeight - window.scrollY) + 'px';
+    }
 
     let scrollTop = window.scrollY;
 
     // Set body login class
-    document.body.classList.add('is-login');
-    document.body.style.top = -scrollTop + 'px';
+    body.classList.add('is-login');
+    body.style.top = -scrollTop + 'px';
 
     // Close popup function
     const closeExplorer = () => {
-      document.body.removeChild(explorer);
+      body.removeChild(explorer);
 
       // Remove listener here
       document.removeEventListener('keydown', escExplorer);
 
       // Remove login class
-      document.body.classList.remove('is-login');
-      document.body.style.top = '';
+      body.classList.remove('is-login');
+      body.style.top = '';
 
       window.scrollTo(0, scrollTop);
     }
@@ -44,7 +55,6 @@
         closeExplorer();
       }
     }
-
 
     // Close popup on button click
     close.addEventListener('click', closeExplorer);
@@ -99,7 +109,7 @@
       explorer.parentNode.removeChild(explorer);
     }
 
-    explorer = showExplorer();
+    explorer = showExplorer(document.body);
   }
 
   document.getElementById('toggle-search').addEventListener('click', toggleSearch);
