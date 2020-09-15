@@ -161,11 +161,14 @@ class Knife_Authors_Manager {
             return;
         }
 
+        // Delete editor field
         delete_post_meta($post_id, self::$meta_editor);
 
-        // Add editors post meta
-        if(array_key_exists($_REQUEST[self::$meta_editor], self::get_editors())) {
-            add_post_meta($post_id, self::$meta_editor, $_REQUEST[self::$meta_editor]);
+        if(isset($_REQUEST[self::$meta_editor])) {
+            // Check if editor value is valid
+            if(array_key_exists($_REQUEST[self::$meta_editor], self::get_editors())) {
+                add_post_meta($post_id, self::$meta_editor, $_REQUEST[self::$meta_editor]);
+            }
         }
 
         // Delete all authors values
