@@ -351,7 +351,7 @@ class Knife_Story_Manager {
             }
 
             if(isset($request['entry'])) {
-                $item['entry'] = wp_kses_post($request['entry']);
+                $item['entry'] = apply_filters('content_save_pre', $request['entry']);
             }
 
             // Add post meta if not empty

@@ -138,13 +138,7 @@ class Knife_Post_Lead {
         }
 
         // Sanitize post lead meta
-        $post_lead = wp_kses_post($_REQUEST[self::$meta_lead]);
-
-        // Remove trailing spaces
-        $post_lead = preg_replace('~((&nbsp;| |\s)+$)~is', '', $post_lead);
-
-        // Add target attribute to links
-        $post_lead = links_add_target($post_lead);
+        $post_lead = apply_filters('content_save_pre', $_REQUEST[self::$meta_lead]);
 
         update_post_meta($post_id, self::$meta_lead, $post_lead);
     }

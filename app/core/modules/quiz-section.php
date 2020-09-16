@@ -544,7 +544,7 @@ class Knife_Quiz_Section {
 
                     // Add blank and rel attributes to answer
                     if(!empty($answer['message'])) {
-                        $answer['message'] = wp_targeted_link_rel(links_add_target($answer['message']));
+                        $answer['message'] = apply_filters('content_save_pre', $answer['message']);
                     }
 
                     // Remove all tags except img from choice
@@ -556,7 +556,7 @@ class Knife_Quiz_Section {
 
             // Add blank and rel attributes to question
             if(isset($item['question'])) {
-                $item['question'] = wp_targeted_link_rel(links_add_target($item['question']));
+                $item['question'] = apply_filters('content_save_pre', $item['question']);
             }
 
             // Add post meta if not empty

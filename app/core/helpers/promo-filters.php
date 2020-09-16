@@ -20,8 +20,8 @@ add_action('wp_enqueue_scripts', function() {
 
     if(defined('WP_DEBUG') && true === WP_DEBUG) {
         $version = date('U');
-    }
 
-    // Let's add remote script
-    wp_enqueue_script('knife-mts', '/external/mts-switcher/scripts.min.js', [], $version, true);
+        // Add only for stages
+        wp_enqueue_script('knife-mts', '/external/mts-switcher/scripts.min.js', [], $version, true);
+    }
 });
