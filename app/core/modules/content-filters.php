@@ -32,7 +32,7 @@ class Knife_Content_Filters {
         add_action('admin_enqueue_scripts', [__CLASS__, 'add_post_styles']);
 
         // Add target blank to all links
-        add_filter('content_save_pre', [__CLASS__, 'add_links_target'], 8);
+        add_filter('content_save_pre', [__CLASS__, 'add_links_target']);
 
         // Remove extra &nbsp; from content on save
         add_filter('content_save_pre', [__CLASS__, 'remove_nbsp']);
@@ -89,46 +89,6 @@ class Knife_Content_Filters {
 
 
     /**
-     * Prevent to create WordPress posts and pages with `external` slug
-     */
-    public static function prevent_external_slug($bad_slug, $slug) {
-        if($slug === 'external') {
-            return true;
-        }
-
-        return $bad_slug;
-    }
-
-
-    /**
-     * Add target attr to links
-     *
-     * @since 1.14
-     */
-    public static function add_links_target($content) {
-        $content = links_add_target($content);
-
-        return $content;
-    }
-
-
-    /**
-     * Filter content unsafed scripts
-     *
-     * @since 1.11
-     */
-    public static function filter_scripts($content) {
-        if(current_user_can('unfiltered_html')) {
-            return $content;
-        }
-
-        $content = preg_replace(self::$script_regex, '', wp_unslash($content));
-
-        return wp_slash($content);
-    }
-
-
-    /**
      * Replace content script figure
      *
      * @since 1.11
@@ -154,14 +114,15 @@ class Knife_Content_Filters {
     }
 
 
-
     /**
-     * Replace t.me links with custom tgram.link host
+     * Prevent to create WordPress posts and pages with `external` slug
      */
-    public static function replace_telegram_links($content) {
-        $content = str_replace('href="https://t.me/', 'href="https://tgram.link/', wp_unslash($content));
+    public static function prevent_external_slug($bad_slug, $slug) {
+        if($slug === 'external') {
+            return true;
+        }
 
-        return wp_slash($content);
+        return $bad_slug;
     }
 
 
@@ -174,9 +135,55 @@ class Knife_Content_Filters {
 
 
     /**
+     * Add target attr to links
+     *
+     * @since 1.14
+     */
+    public static function add_links_target($content) {
+        $content = wp_unslash($content);
+
+        // Use custon links_add_target function for now
+        $content = knife_links_add_target($content);
+
+        return wp_slash($content);
+    }
+
+
+    /**
+     * Filter content unsafed scripts
+     *
+     * @since 1.11
+     */
+    public static function filter_scripts($content) {
+        if(current_user_can('unfiltered_html')) {
+            return $content;
+        }
+
+        $content = preg_replace(self::$script_regex, '', wp_unslash($content));
+
+        return wp_slash($content);
+    }
+
+
+    /**
+     * Replace t.me links with custom tgram.link host
+     */
+    public static function replace_telegram_links($content) {
+        $content = wp_unslash($content);
+
+        // Replace all Telegram links with custom
+        $content = str_replace('href="https://t.me/', 'href="https://tgram.link/', $content);
+
+        return wp_slash($content);
+    }
+
+
+    /**
      * Wrap pure iframes with figure tag
      */
     public static function wrap_iframe($content) {
+        $content = wp_unslash($content);
+
         if(preg_match_all('~(<iframe.+?/iframe>)\s*(?!</figure)~is', $content, $matches)) {
             // Loop through all pure frames
             foreach($matches[1] as $iframe) {
@@ -184,7 +191,7 @@ class Knife_Content_Filters {
             }
         }
 
-        return $content;
+        return wp_slash($content);
     }
 
 
@@ -192,17 +199,27 @@ class Knife_Content_Filters {
      * Remove extra &nbsp; from content on save
      */
     public static function remove_nbsp($content) {
-        return preg_replace('~((&nbsp;| |\s)+$)~is', '', $content);
+        $content = wp_unslash($content);
+
+        // Remove all trailing spaces
+        $content = preg_replace('~((&nbsp;| |\s)+$)~is', '', $content);
+
+        return wp_slash($content);
     }
 
 
     /**
      * Remove span from content
      *
-     * Skip reference spans with data-body
+     * Skip reference spans with data-body or id
      */
     public static function remove_span($content) {
-        return preg_replace('~<span(?!\s+(data-body|id)).*?>(.*?)</span>~is', '$1', $content);
+        $content = wp_unslash($content);
+
+        // Find and remove empty spans
+        $content = preg_replace('~<span(?!\s+(data-body|id)).*?>(.*?)</span>~is', '$1', $content);
+
+        return wp_slash($content);
     }
 
 
@@ -212,7 +229,12 @@ class Knife_Content_Filters {
      * @link https://github.com/knife-media/theme/issues/177
      */
     public static function remove_linked_space($content) {
-        return preg_replace('~(<a[^>]+>)(\s+)(.*?</a>)~is', '$2$1$3', $content);
+        $content = wp_unslash($content);
+
+        // Find and remove spaces inside links
+        $content = preg_replace('~(<a[^>]+>)(\s+)(.*?</a>)~is', '$2$1$3', $content);
+
+        return wp_unslash($content);
     }
 }
 
