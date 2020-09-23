@@ -1,0 +1,51 @@
+/**
+ * promo button styles
+ */
+.content .figure--promo {
+  display: block;
+}
+
+.content .figure--promo .button {
+  display: block;
+  padding: 2rem 2rem 2rem 7rem;
+
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: 1.375;
+  color: #000;
+
+  text-transform: uppercase;
+  text-align: left;
+
+  background-image: linear-gradient(to bottom, #f2f6f9, #dae1ea);
+  border-radius: 0.5rem;
+
+  &:hover {
+    filter: brightness(95%);
+  }
+
+  &:after {
+    content: '';
+
+    position: absolute;
+    top: 0;
+    left: 1rem;
+    width: 6rem;
+    height: 100%;
+
+    background-image: url('images/button-logo.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+}
+
+  @media screen and (max-width: 767px) {
+    .content .figure--promo .button {
+      padding-left: 1rem;
+      font-size: 0.875rem;
+      line-height: 1.5;
+
+      background-image: none;
+    }
+  }
