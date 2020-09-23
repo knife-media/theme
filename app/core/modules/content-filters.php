@@ -143,7 +143,7 @@ class Knife_Content_Filters {
         $content = wp_unslash($content);
 
         // Use custon links_add_target function for now
-        $content = knife_links_add_target($content);
+        $content = preg_replace_callback("!<a((\s[^>]*)?)>!i", [__CLASS__, 'replace_links_target'], $content);
 
         return wp_slash($content);
     }
@@ -235,6 +235,20 @@ class Knife_Content_Filters {
         $content = preg_replace('~(<a[^>]+>)(\s+)(.*?</a>)~is', '$2$1$3', $content);
 
         return wp_unslash($content);
+    }
+
+
+    /**
+     * Replace links target only for external links
+     */
+    private static function replace_links_target($match) {
+        if (preg_match('~href="#~i', $match[1])) {
+            return $match[0];
+        }
+
+        // Remove target from link to add new one below
+        $link = preg_replace('~( target=([\'"])(.*?)\2)~i', '', $match[1]);
+        return '<a' . $link . ' target="_blank">';
     }
 }
 
