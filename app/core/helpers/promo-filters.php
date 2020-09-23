@@ -21,7 +21,10 @@ add_action('wp_enqueue_scripts', function() {
     if(defined('WP_DEBUG') && true === WP_DEBUG) {
         $version = date('U');
 
-        // Add only for stages
+        // Add scripts
         wp_enqueue_script('knife-mts', '/external/mts-switcher/scripts.min.js', [], $version, true);
+
+        // Add styles
+        wp_enqueue_style('knife-mts', '/external/mts-switcher/styles.min.css', [], $version);
     }
 });
