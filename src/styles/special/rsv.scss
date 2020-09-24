@@ -3,8 +3,8 @@
 // Setup variables
 @import "../setup/variables";
 
-$font-custom: 'Rubik', sans-serif;
-$color-custom-title: #79f4b5;
+$font-special: 'Rubik', sans-serif;
+$color-special-title: #79f4b5;
 
 body.is-archive {
   min-height: 100vh;
@@ -15,7 +15,7 @@ body.is-archive {
  * archive styles
  */
 .archive {
-  font-family: $font-custom;
+  font-family: $font-special;
   font-weight: 500;
 
   @media screen and (max-width: 479px) {
@@ -28,7 +28,7 @@ body.is-archive {
  * caption styles
  */
 .caption {
-  font-family: $font-custom;
+  font-family: $font-special;
   font-weight: 700;
 
   .caption__description {
@@ -50,7 +50,7 @@ body.is-archive {
       text-transform: uppercase;
 
       strong {
-        color: $color-custom-title;
+        color: $color-special-title;
       }
 
       @media screen and (max-width: 1023px) {
@@ -130,8 +130,8 @@ body.is-archive {
       text-transform: uppercase;
 
       em {
-        color: $color-custom-title;
-        font-family: $font-custom;
+        color: $color-special-title;
+        font-family: $font-special;
       }
     }
   }

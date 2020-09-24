@@ -51,7 +51,6 @@ add_action('archive_template', function($template) {
 });
 
 
-
 /**
  * Add button to post content
  */
