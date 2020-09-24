@@ -24,6 +24,15 @@ $color-special-white: #fff;
     position: relative;
     z-index: 2;
   }
+
+  .footer__copy a {
+    color: $color-special-white;
+    border-bottom: solid 1px;
+
+    &:hover {
+      border-bottom-color: transparent;
+    }
+  }
 }
 
 
