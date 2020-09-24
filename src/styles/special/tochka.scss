@@ -88,7 +88,7 @@ $color-special-white: #fff;
   }
 }
 
-.content .figure--promo {
+.content .figure.figure--promo {
   display: block;
 
   .button {
@@ -123,14 +123,16 @@ $color-special-white: #fff;
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
+
+      @media screen and (max-width: 479px) {
+        display: none;
+      }
     }
 
     @media screen and (max-width: 767px) {
-      padding-left: 1rem;
+      padding: 1rem;
       font-size: 0.875rem;
       line-height: 1.5;
-
-      background-image: none;
     }
   }
 }
