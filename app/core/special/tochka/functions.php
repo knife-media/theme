@@ -68,7 +68,7 @@ add_action('the_content', function($content) {
         $promo_link = sprintf(
             '<figure class="figure figure--promo"><a class="button" href="%s">%s <strong>%s</strong></a>',
             esc_url(get_term_link($slug, $taxonomy)),
-            _x('Специальный проект', 'special: volnoe-delo', 'knife-theme'),
+            _x('Специальный проект', 'special: tochka', 'knife-theme'),
             _x('Образовательного комлекса «Точка» и журнала «Нож»', 'special: tochka', 'knife-theme')
         );
 
