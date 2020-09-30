@@ -77,11 +77,17 @@
     // Remove on stub
     options.onStub = function () {
       widget.classList.remove('widget-adfox--loaded');
+
+      // Show if stub
+      console.log('stub');
     }
 
     // Remove on error
     options.onError = function (error) {
       widget.classList.remove('widget-adfox--loaded');
+
+      // Show error
+      console.error(error);
     }
 
     // Add class on load
