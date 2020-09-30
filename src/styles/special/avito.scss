@@ -1,5 +1,6 @@
 $color-special-common: #00acff;
 $color-special-white: #fff;
+$color-special-caption: #98ce26;
 
 
 /**
@@ -17,8 +18,8 @@ $color-special-white: #fff;
   padding: 0 1rem;
   text-align: center;
 
-  color: $color-special-common;
-  background: $color-special-white;
+  color: $color-special-white;
+  background: $color-special-caption;
   text-transform: uppercase;
 
   border-radius: .625rem;
@@ -41,7 +42,7 @@ $color-special-white: #fff;
 }
 
 .caption .caption__description img {
-  width: 7rem;
+  width: 2.5rem;
   height: auto;
   margin: .75rem 0;
 
@@ -75,6 +76,11 @@ $color-special-white: #fff;
 
     &:hover {
       filter: brightness(95%);
+
+      color: $color-special-white;
+      background-color: $color-special-common;
+
+      border-color: transparent;
     }
 
     &:after {
