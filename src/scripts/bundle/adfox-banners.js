@@ -77,9 +77,6 @@
     // Remove on stub
     options.onStub = function () {
       widget.classList.remove('widget-adfox--loaded');
-
-      // Show if stub
-      console.log('stub');
     }
 
     // Remove on error
@@ -97,10 +94,12 @@
       // Remove loaded class if exists
       widget.classList.remove('widget-adfox--loaded');
 
+      /**
       // Destroy if banner hidden
       if (params.bannerId && hiddenBanner(params.bannerId)) {
         return handle.destroy();
       }
+      */
 
       widget.classList.add('widget-adfox--loaded');
     }
