@@ -64,7 +64,7 @@ add_action('the_content', function($content) {
 
     $taxonomy = Knife_Special_Projects::$taxonomy;
 
-    if(has_term($slug, $taxonomy, $post) && is_main_query()) {
+    if(has_term($slug, $taxonomy, $post) && is_main_query() && is_singular('post')) {
         $promo_link = sprintf(
             '<figure class="figure figure--promo"><a class="button" href="%s">%s <strong>%s</strong></a>',
             esc_url(get_term_link($slug, $taxonomy)),
