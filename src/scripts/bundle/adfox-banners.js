@@ -6,7 +6,7 @@
  */
 
 (function () {
-  var widgets = document.querySelectorAll('.widget-adfox');
+  let widgets = document.querySelectorAll('.widget-adfox');
 
 
   /**
@@ -25,10 +25,10 @@
       return params;
     }
 
-    var targets = ['template', 'postid', 'special', 'category', 'tags', 'adult', 'promo', 'format'];
+    const targets = ['template', 'postid', 'special', 'category', 'tags', 'adult', 'promo', 'format'];
 
-    for (var i = 0, n = 1; i < targets.length; i++, n++) {
-      var target = targets[i];
+    for (let i = 0, n = 1; i < targets.length; i++, n++) {
+      let target = targets[i];
 
       params['puid' + n] = knife_meta_parameters[target] || '';
     }
@@ -42,19 +42,19 @@
    */
   function parseOptions(link, options) {
     // Try to found params
-    var found = link.match(/\/(\d+?)\/.+?\?(.+)$/) || [];
+    let found = link.match(/\/(\d+?)\/.+?\?(.+)$/) || [];
 
     if (found.length <= 2) {
       return options;
     }
 
-    var vars = found[2].split('&');
+    let vars = found[2].split('&');
 
     options.ownerId = found[1];
     options.params = {};
 
-    for (var i = 0; i < vars.length; i++) {
-      var pair = vars[i].split('=');
+    for (let i = 0; i < vars.length; i++) {
+      let pair = vars[i].split('=');
 
       // Skip empty and specific keys
       if (pair.length == 1 || pair[0] === 'pr') {
@@ -83,23 +83,23 @@
     options.onError = function (error) {
       widget.classList.remove('widget-adfox--loaded');
 
-      // Show error
-      console.error(error);
+      // Show errors for logged-in users
+      if (document.body.classList.contains('is-adminbar')) {
+        console.error(error);
+      }
     }
 
     // Add class on load
     options.onLoad = function (handle) {
-      var params = handle.bundleParams;
+      let params = handle.bundleParams;
 
       // Remove loaded class if exists
       widget.classList.remove('widget-adfox--loaded');
 
-      /**
       // Destroy if banner hidden
       if (params.bannerId && hiddenBanner(params.bannerId)) {
         return handle.destroy();
       }
-      */
 
       widget.classList.add('widget-adfox--loaded');
     }
@@ -112,7 +112,7 @@
    * Load commin banner
    */
   function loadCommonBanner(link, id, widget) {
-    var options = {};
+    let options = {};
 
     // Add container id
     options.containerId = 'adfox_' + id;
@@ -132,7 +132,7 @@
    * Load adaptive banner
    */
   function loadMobileBanner(link, id, widget) {
-    var options = {};
+    let options = {};
 
     // Add container id
     options.containerId = 'adfox_' + id;
@@ -155,7 +155,7 @@
    * Load adaptive banner
    */
   function loadDesktopBanner(link, id, widget) {
-    var options = {};
+    let options = {};
 
     // Add container id
     options.containerId = 'adfox_' + id;
@@ -197,36 +197,33 @@
    */
   function hiddenBanner(banner) {
     // Get close items from storage
-    var close = localStorage.getItem('adfox-close');
+    let close = localStorage.getItem('adfox-close');
 
     // Check if items exist
     if (close === null) {
       return false;
     }
 
-    var items = JSON.parse(close);
+    let items = JSON.parse(close);
 
     // Current time in ms
-    var now = new Date().getTime();
+    let now = new Date().getTime();
 
-    // Indicates hidden lifetime
-    var hidden = 0;
-
-    for (key in items) {
-      if (banner === key) {
-        hidden = items[key];
-      }
-
-      if (now > items[key]) {
-        delete items[key];
+    // Remove all old items
+    for (let id in items) {
+      if (now > items[id]) {
+        delete items[id];
       }
     }
 
-    // Set updated items to storage
+    // Update storage
     localStorage.setItem('adfox-close', JSON.stringify(items));
 
-    // If banner still hidden
-    return (hidden > now);
+    if (items[banner] && items[banner] > now) {
+      return true;
+    }
+
+    return false;
   }
 
 
@@ -234,7 +231,7 @@
    * Manual banner close event
    */
   function closeBanner(e) {
-    var target = e.target || e.srcElement;
+    let target = e.target || e.srcElement;
 
     if (!target.hasAttribute('data-close')) {
       return;
@@ -242,10 +239,10 @@
 
     e.preventDefault();
 
-    var items = {};
+    let items = {};
 
     // Get close items from storage
-    var close = localStorage.getItem('adfox-close');
+    let close = localStorage.getItem('adfox-close');
 
     // Convert items to array
     if (close !== null) {
@@ -269,14 +266,14 @@
    * Banner click event listener
    */
   function sendEvent(e) {
-    var target = e.target || e.srcElement;
+    let target = e.target || e.srcElement;
 
     if (!target.hasAttribute('data-event')) {
       return;
     }
 
     // Load image with event src
-    var image = document.createElement('img');
+    let image = document.createElement('img');
     image.src = target.dataset.event;
   }
 
@@ -284,18 +281,18 @@
   /**
    * Loop through adfox widgets to load them
    */
-  for (var i = 0; i < widgets.length; i++) {
-    var banner = widgets[i].querySelector('div');
+  for (let i = 0; i < widgets.length; i++) {
+    let banner = widgets[i].querySelector('div');
 
     if (banner === null || banner.dataset.length === 0) {
       continue;
     }
 
     // Create adfox banner with args
-    var id = (Date.now().toString(10) + Math.random().toString(10).substr(2, 5));
+    let id = (Date.now().toString(10) + Math.random().toString(10).substr(2, 5));
 
     // Create new element
-    var adfox = document.createElement('div');
+    let adfox = document.createElement('div');
     adfox.id = 'adfox_' + id;
 
     // Replace banner with new element
@@ -313,7 +310,7 @@
 
 
   // Load adfox library async
-  var script = document.createElement("script");
+  let script = document.createElement("script");
   script.type = 'text/javascript';
   script.async = true;
   script.crossorigin = 'anonymous';
