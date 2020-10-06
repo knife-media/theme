@@ -28,3 +28,26 @@ add_action('wp_enqueue_scripts', function() {
     // Add styles
     wp_enqueue_style('knife-mts', '/external/mts-switcher/styles.min.css', [], $version);
 });
+
+
+/**
+ * Replace default logo for dobroshrift.ru event
+ */
+add_action('wp_head', function() {
+    $custom_css = "
+    .header__logo-image {
+        visibility: hidden;
+    }
+
+    .header__logo-link {
+        display: block;
+        width: 5rem;
+        height: 2.5rem;
+
+        background-image: url(/wp-content/uploads/2020/10/dobronozh-logo.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+    }";
+
+    printf('<style>%s</style>', $custom_css);
+});
