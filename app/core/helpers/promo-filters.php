@@ -49,5 +49,19 @@ add_action('wp_head', function() {
         background-repeat: no-repeat;
     }";
 
+    $custom_js = "
+        document.addEventListener('DOMContentLoaded', function() {
+            var logo = document.querySelector('.header__logo-link');
+            logo.setAttribute('href', 'https://dobroshrift.ru/');
+            logo.setAttribute('target', '_blank');
+            logo.setAttribute('rel', 'noopener');
+            logo.setAttribute('title', 'Прочитать об акции Доброшрифт');
+        });
+    ";
+
+    // Add styles
     printf('<style>%s</style>', $custom_css);
+
+    // Add scripts
+    printf('<script>%s</script>', $custom_js);
 });
