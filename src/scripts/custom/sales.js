@@ -6,26 +6,23 @@
     return false;
   }
 
-  // Create format expand button
-  let expand = document.createElement('button');
-  expand.classList.add('button');
-  expand.textContent = knife_theme_custom.formats || '';
+  let titles = document.querySelectorAll('.entry-content section > h2');
 
-  // Try to find formats section
-  let formats = document.querySelector('.section--formats');
+  titles.forEach(title => {
+    title.addEventListener('click', function(e) {
+      e.preventDefault();
 
-  if (formats !== null) {
-    formats.appendChild(expand);
-  }
+      let section = title.parentNode;
 
-  // Trigger on expanc click
-  expand.addEventListener('click', (e) => {
-    e.preventDefault();
+      // Check if current section visible
+      let visible = section.hasAttribute('data-visible');
 
-    formats.querySelectorAll('.figure--ticket').forEach(ticket => {
-      ticket.style.display = 'flex';
+      // Set visibile attribute
+      section.setAttribute('data-visible', true);
+
+      if (visible) {
+        section.removeAttribute('data-visible');
+      }
     });
-
-    expand.remove();
   });
 })();

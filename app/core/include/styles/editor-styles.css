@@ -6,6 +6,12 @@ blockquote {
   margin: 0;
 }
 
+section {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: rgba(100, 100, 100, 0.075);
+}
+
 .embed {
   position: relative;
 
