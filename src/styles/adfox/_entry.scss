@@ -25,6 +25,10 @@
     font-weight: 500;
   }
 
+  &.adfox-entry--blank {
+    padding: 1rem;
+  }
+
   @media screen and (max-width: 479px) {
     padding: calc(2rem - 1px) 0 0;
   }

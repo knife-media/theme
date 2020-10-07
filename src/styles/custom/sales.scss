@@ -118,6 +118,17 @@ $color-custom-button: #ff9476;
       }
     }
 
+    .icon--chevron {
+      position: absolute;
+      top: 2.5rem;
+      right: 2.5rem;
+
+      font-size: 2rem;
+      color: $color-text;
+
+      transition: transform 0.375s;
+    }
+
     &[data-visible] > * {
       display: block;
     }
@@ -128,6 +139,10 @@ $color-custom-button: #ff9476;
       &:after {
         display: none;
       }
+    }
+
+    &[data-visible] .icon--chevron {
+      transform: rotate(180deg);
     }
 
     @media screen and (max-width: 767px) {

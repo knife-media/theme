@@ -6,9 +6,12 @@
     return false;
   }
 
-  let titles = document.querySelectorAll('.entry-content section > h2');
+  // Loop through titles
+  document.querySelectorAll('.entry-content section > h2').forEach(title => {
+    let chevron = document.createElement('span');
+    chevron.classList.add('icon', 'icon--chevron');
+    title.appendChild(chevron);
 
-  titles.forEach(title => {
     title.addEventListener('click', function(e) {
       e.preventDefault();
 
