@@ -127,6 +127,15 @@ $color-custom-button: #ff9476;
       color: $color-text;
 
       transition: transform 0.375s;
+
+      @media screen and (max-width: 767px) {
+        top: 1.5rem;
+        right: 1.5rem;
+      }
+
+      @media screen and (max-width: 479px) {
+        display: none;
+      }
     }
 
     &[data-visible] > * {
@@ -197,6 +206,8 @@ $color-custom-button: #ff9476;
   background-color: $color-custom-example;
   border-radius: 0.75rem;
 
+  transition: background 0.25s;
+
   &>*:last-child {
     margin-bottom: 0;
   }
@@ -209,6 +220,19 @@ $color-custom-button: #ff9476;
       font-size: 1rem;
       line-height: 1.375;
     }
+  }
+
+  h3 > a {
+    color: $color-text;
+    border: none;
+
+    &:after {
+      @include full-pseudo;
+    }
+  }
+
+  &:hover {
+    background-color: darken($color-custom-example, 5);
   }
 
   .entry-content & {
