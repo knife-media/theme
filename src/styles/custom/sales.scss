@@ -87,14 +87,16 @@ $color-custom-button: #ff9476;
 
   section {
     position: relative;
-    width: $width-content + 5rem;
 
+    width: $width-content + 5rem;
     margin-top: 1.5rem;
     padding: 2rem 2.5rem;
 
     font-family: $font-serif;
 
+    color: $color-text;
     background-color: $color-white;
+
     border-radius: 0.75rem;
 
     & > * {
