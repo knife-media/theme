@@ -85,7 +85,7 @@ add_action('admin_enqueue_scripts', function() {
 /**
  * Disable Aggressive Updates
  *
- * @link https://github.com/mihdan/mihdan-disable-aggressive-updates
+ * @link https://wp-kama.ru/id_8514/uskoryaem-adminku-wordpress-otklyuchaem-proverki-obnovlenij.html
  */
 if(is_admin()) {
     remove_action('admin_init', '_maybe_update_core');
@@ -95,7 +95,7 @@ if(is_admin()) {
     remove_action('load-plugins.php', 'wp_update_plugins');
     remove_action('load-themes.php', 'wp_update_themes');
 
-    add_filter('pre_site_transient_browser_' . md5($_SERVER['HTTP_USER_AGENT']), '__return_true');
+    add_filter('pre_site_transient_browser_' . md5($_SERVER['HTTP_USER_AGENT']), '__return_empty_array');
 }
 
 
