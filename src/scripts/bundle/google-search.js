@@ -121,7 +121,7 @@
   const initSearch = () => {
     let search = document.querySelector('.search .gcse-search');
 
-    if (knife_search_options == undefined || search === null) {
+    if (typeof knife_search_options === 'undefined' || search === null) {
       return false;
     }
 

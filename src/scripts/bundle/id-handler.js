@@ -13,7 +13,7 @@
 
 
   // Check id handler options existing
-  if (knife_id_handler === undefined) {
+  if (typeof knife_id_handler === 'undefined') {
     return false;
   }
 
@@ -27,12 +27,12 @@
     if (args.length > 1) {
       const [group, name] = args;
 
-      if (knife_id_handler[group][name] !== undefined) {
+      if (typeof knife_id_handler[group][name] !== 'undefined') {
         return knife_id_handler[group][name];
       }
     }
 
-    if (knife_id_handler[option] !== undefined) {
+    if (typeof knife_id_handler[option] !== 'undefined') {
       return knife_id_handler[option];
     }
 
@@ -1055,7 +1055,7 @@
       }
     }
 
-    if (data === undefined) {
+    if (typeof data === 'undefined') {
       data = {};
     }
 
@@ -1067,7 +1067,7 @@
    * Create badge in form
    */
   const createBadge = (form, field) => {
-    if (field === undefined) {
+    if (typeof field === 'undefined') {
       return form;
     }
 
@@ -1269,7 +1269,7 @@
 
       // Show comments using response fields
       fields.forEach(field => {
-        if (field.id !== undefined) {
+        if (typeof field.id !== 'undefined') {
           loadComment(field);
         }
       });
