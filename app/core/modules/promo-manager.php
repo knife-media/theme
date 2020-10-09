@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.8
- * @version 1.13
+ * @version 1.14
  */
 
 if (!defined('WPINC')) {
@@ -89,6 +89,23 @@ class Knife_Promo_Manager {
 
         // Add promo tag to tag list
         add_filter('term_links-post_tag', [__CLASS__, 'add_promo_tag']);
+
+        // Close comments for promo posts
+        add_filter('comments_open',  [__CLASS__, 'disable_comments'], 10, 2);
+    }
+
+
+    /**
+     * Disable comments for promo posts
+     *
+     * @since 1.14
+     */
+    public static function disable_comments($open, $post_id) {
+        if(get_post_meta($post_id, self::$meta_promo, true)) {
+            $open = false;
+        }
+
+        return $open;
     }
 
 
