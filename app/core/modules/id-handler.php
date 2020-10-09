@@ -294,6 +294,14 @@ class Knife_ID_Handler {
 
         $post_id = get_queried_object_id();
 
+        if(property_exists('Knife_Promo_Manager', 'meta_promo')) {
+            $meta_promo = Knife_Promo_Manager::$meta_promo;
+
+            if(get_post_meta($post_id, $meta_promo, true)) {
+                return;
+            }
+        }
+
         $options = [
             'post' => $post_id,
 
