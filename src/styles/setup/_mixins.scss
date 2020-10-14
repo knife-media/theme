@@ -9,6 +9,23 @@
   height: 100%;
 }
 
+@mixin submit-button {
+  will-change: transform;
+
+  &[data-loading] {
+    pointer-events: none;
+
+    background-image: linear-gradient(to right bottom, rgba(255, 255, 255, 0.2) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0));
+    background-size: 4rem;
+    animation: loading-button 0.5s linear infinite;
+  }
+
+  &[disabled] {
+    pointer-events: none;
+    color: rgba(0, 0, 0, 0.5);
+  }
+}
+
 @mixin full-pseudo($zindex: 2) {
   content: '';
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * sales: custom functions
+ * advertising: custom functions
  *
  * @package knife-theme
  * @since 1.13

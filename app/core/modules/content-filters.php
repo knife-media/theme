@@ -24,9 +24,9 @@ class Knife_Content_Filters {
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public static function load_module() {
-        // Prevent to create WordPress posts and pages with `external` slug
-        add_filter('wp_unique_post_slug_is_bad_flat_slug', [__CLASS__, 'prevent_external_slug'], 10, 2);
-        add_filter('wp_unique_post_slug_is_bad_hierarchical_slug', [__CLASS__, 'prevent_external_slug'], 10, 2);
+        // Prevent to create WordPress posts and pages with specific slugs
+        add_filter('wp_unique_post_slug_is_bad_flat_slug', [__CLASS__, 'prevent_theme_slugs'], 10, 2);
+        add_filter('wp_unique_post_slug_is_bad_hierarchical_slug', [__CLASS__, 'prevent_theme_slugs'], 10, 2);
 
         // Add custom post styles to admin page
         add_action('admin_enqueue_scripts', [__CLASS__, 'add_post_styles']);
@@ -115,10 +115,12 @@ class Knife_Content_Filters {
 
 
     /**
-     * Prevent to create WordPress posts and pages with `external` slug
+     * Prevent to create WordPress posts and pages with specific slugs
      */
-    public static function prevent_external_slug($bad_slug, $slug) {
-        if($slug === 'external') {
+    public static function prevent_theme_slugs($bad_slug, $slug) {
+        $skip = ['external', 'requests'];
+
+        if(in_array($slug, $skip)) {
             return true;
         }
 

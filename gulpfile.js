@@ -8,12 +8,11 @@ const plumber = require('gulp-plumber');
 const prefix = require('gulp-autoprefixer');
 const workboxBuild = require('workbox-build');
 const babel = require('gulp-babel');
-const path = require('path');
 const rename = require('gulp-rename');
 
 
+// Process theme styles
 gulp.task('styles', (done) => {
-  // Process common theme styles
   gulp.src('src/styles/app.scss')
     .pipe(plumber())
     .pipe(sassGlob())
@@ -27,7 +26,11 @@ gulp.task('styles', (done) => {
     }))
     .pipe(gulp.dest('app/assets/'))
 
-  // Process custom styles
+  done();
+})
+
+// Process custom styles
+gulp.task('styles:custom', (done) => {
   gulp.src('src/styles/custom/*.scss')
     .pipe(plumber())
     .pipe(sass({
@@ -44,7 +47,11 @@ gulp.task('styles', (done) => {
     }))
     .pipe(gulp.dest('app/core/custom/'))
 
-  // Process special styles
+  done();
+})
+
+// Process special styles
+gulp.task('styles:special', (done) => {
   gulp.src('src/styles/special/*.scss')
     .pipe(plumber())
     .pipe(sass({
@@ -64,9 +71,8 @@ gulp.task('styles', (done) => {
   done();
 })
 
-
+// Process theme scripts
 gulp.task('scripts', (done) => {
-  // Process common theme scripts
   gulp.src('src/scripts/bundle/*.js')
     .pipe(plumber())
     .pipe(babel({
@@ -76,7 +82,11 @@ gulp.task('scripts', (done) => {
     .pipe(concat('scripts.min.js'))
     .pipe(gulp.dest('app/assets/'))
 
-  // Process custom scripts
+  done();
+})
+
+// Process custom scripts
+gulp.task('scripts:custom', (done) => {
   gulp.src('src/scripts/custom/*.js')
     .pipe(plumber())
     .pipe(babel({
@@ -90,7 +100,11 @@ gulp.task('scripts', (done) => {
     }))
     .pipe(gulp.dest('app/core/custom/'))
 
-  // Process special scripts
+  done();
+})
+
+// Process special scripts
+gulp.task('scripts:special', (done) => {
   gulp.src('src/scripts/special/*.js')
     .pipe(plumber())
     .pipe(babel({
@@ -107,7 +121,7 @@ gulp.task('scripts', (done) => {
   done();
 })
 
-
+// Add vendor files
 gulp.task('vendor', (done) => {
   gulp.src('node_modules/workbox-sw/build/workbox-sw.js.*')
     .pipe(gulp.dest('app/assets/vendor/'));
@@ -118,7 +132,7 @@ gulp.task('vendor', (done) => {
   done();
 })
 
-
+// Move images
 gulp.task('images', (done) => {
   gulp.src('src/images/**/*')
     .pipe(gulp.dest('app/assets/images/'));
@@ -126,7 +140,7 @@ gulp.task('images', (done) => {
   done();
 })
 
-
+// Move video
 gulp.task('video', (done) => {
   gulp.src('src/video/**/*')
     .pipe(gulp.dest('app/assets/video/'));
@@ -134,7 +148,7 @@ gulp.task('video', (done) => {
   done();
 })
 
-
+// Move fonts
 gulp.task('fonts', (done) => {
   gulp.src('src/fonts/**/*.{ttf,woff,woff2}')
     .pipe(gulp.dest('app/assets/fonts/'));
@@ -142,7 +156,7 @@ gulp.task('fonts', (done) => {
   done();
 })
 
-
+// Set service-worker
 gulp.task('workbox', (done) => {
   const theme = '/wp-content/themes/knife/assets/';
 
@@ -167,14 +181,30 @@ gulp.task('workbox', (done) => {
   });
 
   done();
-});
-
-
-gulp.task('watch', function (done) {
-  gulp.watch('src/**/*', gulp.series('styles', 'scripts'));
-
-  done();
 })
 
+// Watch theme assets
+gulp.task('watch', () => {
+  gulp.watch('src/styles/**/*', gulp.series('styles', 'styles:custom', 'styles:special'));
+  gulp.watch('src/scripts/**/*', gulp.series('scripts', 'scripts:custom', 'scripts:special'));
+})
 
-gulp.task('default', gulp.series('styles', 'scripts', 'images', 'fonts', 'video', 'vendor', 'workbox', 'watch'));
+// Sed build task
+gulp.task('build', gulp.series(
+  'styles',
+  'scripts',
+  'images',
+  'fonts',
+  'video',
+  'vendor',
+  'workbox',
+  gulp.parallel(
+    'styles:special',
+    'styles:custom',
+    'scripts:special',
+    'scripts:custom'
+  ),
+));
+
+// Set default task
+gulp.task('default', gulp.series('build', 'watch'));
