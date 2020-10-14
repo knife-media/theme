@@ -112,7 +112,7 @@
         'attributes': {
           'name': key,
           'type': 'text',
-          //'required': 'required',
+          'required': 'required',
           'placeholder': brief[key]
         }
       });
@@ -178,6 +178,10 @@
         inputs.forEach(input => {
           input.value = '';
         });
+
+        items.forEach(item => {
+          item.removeAttribute('data-selected');
+        })
       }
 
       request.onerror = function() {
