@@ -35,10 +35,4 @@ add_action('wp_enqueue_scripts', function() {
 
     // Let's add scripts
     wp_enqueue_script('knife-custom-' . $slug, get_template_directory_uri() . $scripts, ['knife-theme'], $version, true);
-
-    $options = [
-        'formats' => _x('Больше проектов', 'custom: sales more button', 'knife-theme')
-    ];
-
-    wp_localize_script('knife-custom-' . $slug, 'knife_theme_custom', $options);
 });

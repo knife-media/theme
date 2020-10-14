@@ -1,12 +1,7 @@
 (function () {
   /**
-   * Check if custom options defined
+   * Fold all entry-content titles
    */
-  if (typeof knife_theme_custom === 'undefined') {
-    return false;
-  }
-
-  // Loop through titles
   document.querySelectorAll('.entry-content section > h2').forEach(title => {
     let chevron = document.createElement('span');
     chevron.classList.add('icon', 'icon--chevron');
