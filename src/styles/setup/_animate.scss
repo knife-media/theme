@@ -83,3 +83,14 @@
     width: 50%;
   }
 }
+
+
+@keyframes loading-button {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 4rem 0;
+  }
+}

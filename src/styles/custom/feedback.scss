@@ -1,0 +1,167 @@
+// Setup variables
+@import "../setup/variables";
+@import "../setup/mixins";
+
+$color-custom-background: #daeff7;
+$color-custom-selected: #ffc7a6;
+$color-custom-checkbox: #fff2b4;
+$color-custom-button: #ff9476;
+
+.entry-content {
+  max-width: $width-wide;
+
+  color: $color-text;
+  background-color: $color-custom-background;
+
+  border-radius: 0.75rem;
+
+  p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.5;
+
+    @media screen and (max-width: 767px) {
+      margin-bottom: 0.75rem;
+    }
+
+    @media screen and (max-width: 479px) {
+      font-size: 1rem;
+      line-height: 1.375;
+    }
+  }
+}
+
+.figure--formats {
+  display: block;
+
+  ul {
+    display: flex;
+    flex-flow: row wrap;
+
+    margin: 1rem 0 0;
+    padding: 0;
+
+    list-style: none;
+
+    li {
+      display: block;
+      cursor: pointer;
+
+      margin: 0 0.375rem 0.375rem 0;
+      padding: 0.5rem 1rem;
+
+      font-weight: 500;
+
+      background-color: $color-custom-checkbox;
+      border-radius: 0.5rem;
+
+      transition: 0.375s background;
+
+      &:hover {
+        background-color: lighten($color-custom-selected, 5);
+      }
+
+      &[data-selected] {
+        background-color: $color-custom-selected;
+      }
+    }
+  }
+}
+
+.figure--brief {
+  display: block;
+
+  form {
+    display: block;
+    position: relative;
+
+    margin: 1rem 0 0;
+  }
+
+  input {
+    display: block;
+
+    width: 100%;
+    margin: 1rem 0;
+    padding: 1rem;
+
+    background-color: $color-white;
+    border-radius: 0.5rem;
+  }
+
+  button {
+    display: inline-block;
+
+    min-width: 16rem;
+    max-width: 100%;
+    padding: 1rem;
+
+    font-weight: 500;
+
+    background-color: $color-custom-button;
+    border-radius: 0.5rem;
+
+    @include submit-button;
+
+    &:hover {
+      filter: brightness(120%);
+    }
+
+    @media screen and (max-width: 479px) {
+      width: 100%;
+    }
+  }
+}
+
+.figure--feedback {
+  display: block;
+
+  form {
+    display: flex;
+    flex-flow: row nowrap;
+    position: relative;
+
+    margin: 1rem 0 0;
+    padding: 0.25rem;
+
+    background-color: $color-white;
+    border-radius: 0.5rem;
+
+    @media screen and (max-width: 479px) {
+      flex-flow: row wrap;
+    }
+  }
+
+  input {
+    display: block;
+    flex: 1 1 100%;
+
+    padding: 0.75rem;
+  }
+
+  button {
+    display: block;
+    flex: 0 0 auto;
+
+    max-width: 100%;
+    padding: 0.75rem 1.5rem;
+
+    font-weight: 500;
+
+    background-color: $color-custom-button;
+    border-radius: 0.5rem;
+
+    @include submit-button;
+
+    &:hover {
+      filter: brightness(120%);
+    }
+
+    @media screen and (max-width: 479px) {
+      flex: 0 0 100%;
+    }
+  }
+}

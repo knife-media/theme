@@ -21,7 +21,7 @@ $color-custom-button: #ff9476;
     margin-top: 0;
     margin-bottom: 1rem;
 
-    font-size: 2.5rem;
+    font-size: 2.25rem;
     font-family: $font-regular;
     font-weight: 700;
     line-height: 1.125;
@@ -60,7 +60,7 @@ $color-custom-button: #ff9476;
     line-height: 1.5;
 
     @media screen and (max-width: 767px) {
-      margin: 0 0 0.75rem;
+      margin-bottom: 0.75rem;
     }
 
     @media screen and (max-width: 479px) {
