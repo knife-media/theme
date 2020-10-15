@@ -115,6 +115,13 @@
       }, 0);
     }
 
+    let submit = buildElement('button', {
+      'text': knife_theme_custom.button,
+      'attributes': {
+        'type': 'submit'
+      }
+    });
+
     for (let key in brief) {
       let text = buildElement('textarea', {
         'parent': form,
@@ -128,7 +135,7 @@
 
       text.addEventListener('keydown', (e) => {
         if (e.keyCode == 13 && (e.metaKey || e.ctrlKey)) {
-          form.submit();
+          submit.click();
         }
 
         resizeForm(text);
@@ -140,13 +147,7 @@
       });
     }
 
-    let submit = buildElement('button', {
-      'parent': form,
-      'text': knife_theme_custom.button,
-      'attributes': {
-        'type': 'submit'
-      }
-    });
+    form.appendChild(submit);
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
