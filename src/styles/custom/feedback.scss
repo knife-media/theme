@@ -49,6 +49,7 @@ $color-custom-button: #ff9476;
     li {
       display: block;
       cursor: pointer;
+      user-select: none;
 
       margin: 0 0.375rem 0.375rem 0;
       padding: 0.5rem 1rem;
@@ -82,10 +83,14 @@ $color-custom-button: #ff9476;
     margin: 1rem 0 0;
   }
 
-  input {
+  textarea {
     display: block;
+    outline: none;
+    resize: none;
 
     width: 100%;
+    height: auto;
+
     margin: 1rem 0;
     padding: 1rem;
 

@@ -106,15 +106,37 @@
       'parent': figure
     });
 
+
+    // Update form size
+    const resizeForm = (text) => {
+      window.setTimeout(() => {
+        text.style.height = 'auto';
+        text.style.height = text.scrollHeight + 'px';
+      }, 0);
+    }
+
     for (let key in brief) {
-      buildElement('input', {
+      let text = buildElement('textarea', {
         'parent': form,
         'attributes': {
           'name': key,
-          'type': 'text',
           'required': 'required',
+          'rows': 1,
           'placeholder': brief[key]
         }
+      });
+
+      text.addEventListener('keydown', (e) => {
+        if (e.keyCode == 13 && (e.metaKey || e.ctrlKey)) {
+          form.submit();
+        }
+
+        resizeForm(text);
+      });
+
+      // Resize on paste
+      text.addEventListener('paste', () => {
+        resizeForm(text);
       });
     }
 
@@ -145,7 +167,7 @@
         }
       });
 
-      let inputs = form.querySelectorAll('input');
+      let inputs = form.querySelectorAll('textarea');
 
       inputs.forEach(input => {
         data.fields.push({
@@ -166,7 +188,7 @@
       request.setRequestHeader('Content-Type', 'application/json');
 
       // Check if loaded
-      request.onload = function() {
+      request.onload = function () {
         submit.removeAttribute('data-loading');
 
         if (request.status !== 200) {
@@ -184,7 +206,7 @@
         })
       }
 
-      request.onerror = function() {
+      request.onerror = function () {
         submit.removeAttribute('data-loading');
 
         // Show error on button
@@ -246,7 +268,7 @@
       request.setRequestHeader('Content-Type', 'application/json');
 
       // Check if loaded
-      request.onload = function() {
+      request.onload = function () {
         submit.removeAttribute('data-loading');
 
         if (request.status !== 200) {
@@ -257,7 +279,7 @@
         input.value = '';
       }
 
-      request.onerror = function() {
+      request.onerror = function () {
         submit.removeAttribute('data-loading');
 
         // Show error on button

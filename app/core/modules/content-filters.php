@@ -248,6 +248,10 @@ class Knife_Content_Filters {
             return $match[0];
         }
 
+        if (preg_match('~data-internal~i', $match[1])) {
+            return $match[0];
+        }
+
         // Remove target from link to add new one below
         $link = preg_replace('~( target=([\'"])(.*?)\2)~i', '', $match[1]);
         return '<a' . $link . ' target="_blank">';
