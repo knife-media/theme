@@ -203,7 +203,7 @@ gulp.task('build', gulp.series(
     'styles:custom',
     'scripts:special',
     'scripts:custom'
-  ),
+  )
 ));
 
 // Set default task
