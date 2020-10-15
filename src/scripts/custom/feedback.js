@@ -197,10 +197,10 @@
 
 
   /**
-   * Draw feedback figure
+   * Draw callback figure
    */
-  const drawFeedback = (feedback) => {
-    let figure = content.querySelector('.figure--feedback');
+  const drawCallback = (callback) => {
+    let figure = content.querySelector('.figure--callback');
 
     // Create form
     let form = buildElement('form', {
@@ -211,7 +211,7 @@
       'parent': form,
       'attributes': {
         'type': 'email',
-        'placeholder': feedback.email,
+        'placeholder': callback.email,
         'required': 'required'
       }
     });
@@ -221,7 +221,7 @@
       'attributes': {
         'type': 'submit'
       },
-      'text': feedback.button
+      'text': callback.button
     });
 
     // Submit event
@@ -242,7 +242,7 @@
 
       // Send request
       let request = new XMLHttpRequest();
-      request.open('POST', knife_theme_custom.ajaxurl + '/feedback');
+      request.open('POST', knife_theme_custom.ajaxurl + '/callback');
       request.setRequestHeader('Content-Type', 'application/json');
 
       // Check if loaded
@@ -275,6 +275,6 @@
   // Draw brief figure
   drawBrief(knife_theme_custom.figure.brief, list);
 
-  // Draw feedback
-  drawFeedback(knife_theme_custom.figure.feedback);
+  // Draw callback
+  drawCallback(knife_theme_custom.figure.callback);
 })();

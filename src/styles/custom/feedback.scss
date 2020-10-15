@@ -116,7 +116,7 @@ $color-custom-button: #ff9476;
   }
 }
 
-.figure--feedback {
+.figure--callback {
   display: block;
 
   form {
@@ -127,6 +127,7 @@ $color-custom-button: #ff9476;
     margin: 1rem 0 0;
     padding: 0.25rem;
 
+    color: $color-text;
     background-color: $color-white;
     border-radius: 0.5rem;
 

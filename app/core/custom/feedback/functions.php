@@ -70,7 +70,7 @@ add_action('wp_enqueue_scripts', function() {
         'contacts' => __('Как вас зовут и как с вами связаться?', 'knife-theme')
     ];
 
-    $feedback = [
+    $callback = [
         'email' => __('Ваша почта', 'knife-theme'),
         'button' => __('Хочу с вами сотрудничать', 'knife-theme'),
     ];
@@ -85,7 +85,7 @@ add_action('wp_enqueue_scripts', function() {
         'button' => __('Отправить', 'knife-theme'),
         'success' => __('Сообщение отправлено', 'knife-theme'),
         'error' => __('Ошибка. Попробуйте позже', 'knife-theme'),
-        'figure' => compact('formats', 'brief', 'feedback')
+        'figure' => compact('formats', 'brief', 'callback')
     ];
 
     // add user form fields
