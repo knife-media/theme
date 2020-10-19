@@ -24,20 +24,19 @@
    * Send ajax request
    */
   function sendRequest(selection, comment) {
-    var formData = new FormData();
-    formData.append('action', getOption('action'));
-    formData.append('nonce', getOption('nonce'));
-
-    // Add form fields
-    formData.append('comment', comment);
-    formData.append('marked', selection);
-    formData.append('location', document.location.href);
-
+    let data = {
+      'nonce': getOption('nonce'),
+      'time': getOption('time'),
+      'comment': comment,
+      'marked': selection,
+      'location': document.location.href
+    };
 
     // Send request
     var request = new XMLHttpRequest();
-    request.open('POST', getOption('ajaxurl'));
-    request.send(formData);
+    request.open('POST', getOption('ajaxurl') + '/mistype');
+    request.setRequestHeader('Content-Type', 'application/json');
+    request.send(JSON.stringify(data));
   }
 
 
