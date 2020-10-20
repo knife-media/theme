@@ -52,9 +52,8 @@ add_action('wp_enqueue_scripts', function() {
         'longread' => __('Лонгрид', 'knife-theme'),
         'news' => __('Новость', 'knife-theme'),
         'generator' => __('Генератор', 'knife-theme'),
-        'social-knife' => __('Проект в соцсетях «Ножа»', 'knife-theme'),
         'flipper' => __('Перевертыши', 'knife-theme'),
-        'telegram' => __('Пост в telegram', 'knife-theme'),
+        'social-knife' => __('Публикация в соцсетях', 'knife-theme'),
         'social-client' => __('Посты в соцсетях клиента', 'knife-theme')
     ];
 
