@@ -52,11 +52,10 @@ add_action('wp_enqueue_scripts', function() {
         'longread' => __('Лонгрид', 'knife-theme'),
         'news' => __('Новость', 'knife-theme'),
         'generator' => __('Генератор', 'knife-theme'),
-        'social-knife' => __('Посты в наших соцсетях', 'knife-theme'),
-        'bingo' => __('Бинго', 'knife-theme'),
+        'social-knife' => __('Проект в соцсетях «Ножа»', 'knife-theme'),
         'flipper' => __('Перевертыши', 'knife-theme'),
         'social-client' => __('Посты в соцсетях клиента', 'knife-theme'),
-        'social-custom' => __('Спецпроект в соцсетях «Ножа»', 'knife-theme')
+        'telegram' => __('Пост в telegram', 'knife-theme')
     ];
 
     $brief = [
