@@ -54,8 +54,8 @@ add_action('wp_enqueue_scripts', function() {
         'generator' => __('Генератор', 'knife-theme'),
         'social-knife' => __('Проект в соцсетях «Ножа»', 'knife-theme'),
         'flipper' => __('Перевертыши', 'knife-theme'),
-        'social-client' => __('Посты в соцсетях клиента', 'knife-theme'),
-        'telegram' => __('Пост в telegram', 'knife-theme')
+        'telegram' => __('Пост в telegram', 'knife-theme'),
+        'social-client' => __('Посты в соцсетях клиента', 'knife-theme')
     ];
 
     $brief = [
