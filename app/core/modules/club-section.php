@@ -6,7 +6,7 @@
 *
 * @package knife-theme
 * @since 1.3
-* @version 1.12
+* @version 1.14
 */
 
 
@@ -26,23 +26,9 @@ class Knife_Club_Section {
 
 
     /**
-     * Unique option key to store current request id
-     *
-     * @access  private
-     * @var     string
-     * @since   1.7
+     * Unique slug for page with request form
      */
-    private static $option_request = 'knife_club_request_id';
-
-
-    /**
-     * Ajax action
-     *
-     * @access  private
-     * @var     string
-     * @since   1.7
-     */
-    private static $ajax_request = 'knife-club-request';
+    public static $page_slug = 'write';
 
 
     /**
@@ -51,13 +37,6 @@ class Knife_Club_Section {
     public static function load_module() {
         // Register club post type
         add_action('init', [__CLASS__, 'register_type']);
-
-        // Append user form to content
-        add_filter('wp_enqueue_scripts', [__CLASS__, 'inject_object'], 12);
-
-        // Send user form with ajax
-        add_action('wp_ajax_' . self::$ajax_request, [__CLASS__, 'submit_request']);
-        add_action('wp_ajax_nopriv_' . self::$ajax_request, [__CLASS__, 'submit_request']);
 
         // Update archive caption description
         add_filter('get_the_archive_description', [__CLASS__, 'update_archive_description'], 12);
@@ -73,11 +52,6 @@ class Knife_Club_Section {
 
         // Append club link to post content
         add_filter('the_content', [__CLASS__, 'insert_club_link']);
-
-        // Define club settings if still not
-        if(!defined('KNIFE_CLUB')) {
-            define('KNIFE_CLUB', []);
-        }
     }
 
 
@@ -118,10 +92,10 @@ class Knife_Club_Section {
      * Add button to description
      */
     public static function update_archive_description($description) {
-        if(is_post_type_archive(self::$post_type) && !empty(KNIFE_CLUB['page'])) {
+        if(is_post_type_archive(self::$post_type)) {
             $button_link = sprintf('<div class="caption__button caption__button--club"><a class="button" href="%2$s">%1$s</a></div>',
                 __('Присоединиться', 'knife-theme'),
-                trailingslashit(site_url(KNIFE_CLUB['page']))
+                trailingslashit(site_url(self::$page_slug))
             );
 
             $description = $description . $button_link;
@@ -219,14 +193,10 @@ class Knife_Club_Section {
      * @since 1.4
      */
     public static function insert_club_link($content) {
-        if(empty(KNIFE_CLUB['page'])) {
-            return $content;
-        }
-
         if(is_singular(self::$post_type) && in_the_loop()) {
             $promo_link = sprintf('<figure class="figure figure--club"><a class="button" href="%2$s">%1$s</a>',
                 __('Присоединиться к клубу', 'knife-theme'),
-                trailingslashit(site_url(KNIFE_CLUB['page']))
+                trailingslashit(site_url(self::$page_slug))
             );
 
             $content = $content . $promo_link;
@@ -255,157 +225,6 @@ class Knife_Club_Section {
 
             $query->set('post_type', $types);
         }
-    }
-
-
-    /**
-     * Append user form to page content
-     */
-    public static function inject_object() {
-        if(empty(KNIFE_CLUB['page']) || !is_page(KNIFE_CLUB['page'])) {
-            return;
-        }
-
-        $fields = [
-            'name' => [
-                'element' => 'input',
-                'type' => 'text',
-                'required' => '',
-                'autocomplete' => 'name',
-                'maxlength' => 50,
-                'placeholder' => __('Ваше имя, род занятий и проекты', 'knife-theme'),
-            ],
-
-            'email' => [
-                'element' => 'input',
-                'type' => 'email',
-                'required' => '',
-                'autocomplete' => 'email',
-                'maxlength' => 50,
-                'placeholder' => __('Электронная почта', 'knife-theme')
-            ],
-
-            'subject' => [
-                'element' => 'input',
-                'type' => 'text',
-                'required' => '',
-                'maxlength' => 100,
-                'placeholder' => __('О чем хотите писать', 'knife-theme')
-            ],
-
-            'text' => [
-                'element' => 'textarea',
-                'required' => '',
-                'placeholder' => __('Текст поста целиком без форматирования', 'knife-theme')
-            ]
-        ];
-
-
-        $options = [
-            'ajaxurl' => esc_url(admin_url('admin-ajax.php')),
-            'warning' => __('Не удалось отправить заявку. Попробуйте еще раз', 'knife-theme'),
-            'button' => __('Отправить', 'knife-theme'),
-            'heading' => __('Отправить заявку', 'knife-theme'),
-            'action' => self::$ajax_request,
-            'fields' => $fields,
-            'classes' => ['form--club'],
-            'nonce' => wp_create_nonce(self::$ajax_request)
-        ];
-
-        // add user form fields
-        wp_localize_script('knife-theme', 'knife_form_request', $options);
-    }
-
-
-    /**
-     * Send user form data
-     */
-    public static function submit_request() {
-        if(!check_ajax_referer(self::$ajax_request, 'nonce', false)) {
-            wp_send_json_error(__('Ошибка безопасности. Попробуйте еще раз', 'knife-theme'));
-        }
-
-        $fields = [];
-
-        foreach(['name', 'email', 'subject', 'text'] as $key) {
-            if(empty($_REQUEST[$key])) {
-                wp_send_json_error(__('Все поля формы обязательны к заполнению', 'knife-theme'));
-            }
-
-            $fields[$key] = stripslashes_deep($_REQUEST[$key]);
-        }
-
-
-        if(method_exists('Knife_Social_Delivery', 'send_telegram')) {
-            // Try to find chat in config
-            $chat_id = KNIFE_CLUB['chat'] ?? '';
-
-            // Set reuqest id
-            $request = absint(get_option(self::$option_request, 313)) + 1;
-
-            $message = [
-                'text' => self::get_request($fields, $request),
-                'parse_mode' => 'HTML'
-            ];
-
-            $response = Knife_Social_Delivery::send_telegram($chat_id, $message);
-
-            if(!is_wp_error($response)) {
-                update_option(self::$option_request, $request, false);
-                wp_send_json_success(__('Сообщение успешно отправлено', 'knife-theme'));
-            }
-        }
-
-        wp_send_json_error(__('Ошибка отправки сообщения. Попробуйте позже', 'knife-theme'));
-    }
-
-
-    /**
-     * Create text from array
-     */
-    private static function get_request($fields, $request) {
-        $upload = wp_upload_dir();
-        $folder = '/requests/';
-
-        $file = sprintf("%d-%s.html", $request,
-            substr(md5(uniqid()), -8)
-        );
-
-        $path = $folder . $file;
-
-        if(!is_dir($upload['basedir'] . $folder) && !mkdir($upload['basedir'] . $folder)) {
-            wp_send_json_error(__('Не удалось сохранить заявку.', 'knife-theme'));
-        }
-
-        $content = self::create_request($fields, $request);
-
-        if(!file_put_contents($upload['basedir'] . $path, $content)) {
-            wp_send_json_error(__('Не удалось сохранить заявку.', 'knife-theme'));
-        }
-
-        $text = sprintf("%s\n\n%s \n%s \n\n%s",
-            sprintf(__('<strong>В клуб добавлена новая заявка #%d</strong>', 'knife-theme'), $request),
-            sprintf(__('Автор: %s', 'knife-theme'), esc_attr($fields['name'])),
-            sprintf(__('Тема: %s', 'knife-theme'), esc_attr($fields['subject'])),
-            esc_url($upload['baseurl'] . $path)
-        );
-
-        return $text;
-    }
-
-
-    /**
-     * Create request by template
-     */
-    private static function create_request($fields, $request) {
-        extract($fields);
-
-        ob_start();
-
-        $include = get_template_directory() . '/core/include';
-        include_once($include . '/templates/club-request.php');
-
-        return ob_get_clean();
     }
 }
 

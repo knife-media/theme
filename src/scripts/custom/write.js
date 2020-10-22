@@ -1,13 +1,18 @@
-/**
- * User requests form
- *
- * @since 1.7
- * @version 1.12
- */
-
 (function () {
   // Check user form options existing
-  if (typeof knife_form_request === 'undefined') {
+  if (typeof knife_theme_custom === 'undefined') {
+    return false;
+  }
+
+  let content = document.querySelector('.entry-content');
+
+  // Check if entry-content exists
+  if (content === null) {
+    return false;
+  }
+
+  // Check required ajaxurl
+  if (typeof knife_theme_custom.ajaxurl === 'undefined') {
     return false;
   }
 
@@ -53,17 +58,17 @@
 
   // Set local storage input value
   function setStorage(name, value) {
-    var storage = JSON.parse(localStorage.getItem('knife_form_request')) || {};
+    var storage = JSON.parse(localStorage.getItem('knife_form_write')) || {};
 
     storage[name] = value;
 
-    return localStorage.setItem('knife_form_request', JSON.stringify(storage));
+    return localStorage.setItem('knife_form_write', JSON.stringify(storage));
   }
 
 
   // Get local storage input value by name
   function getStorage(name) {
-    var storage = JSON.parse(localStorage.getItem('knife_form_request')) || {};
+    var storage = JSON.parse(localStorage.getItem('knife_form_write')) || {};
 
     return storage[name] || '';
   }
@@ -124,7 +129,7 @@
     loader.classList.add('icon--done');
     notice.innerHTML = message;
 
-    localStorage.removeItem('knife_form_request');
+    localStorage.removeItem('knife_form_write');
 
     return form.reset();
   }
@@ -134,15 +139,31 @@
   function submitForm(e) {
     e.preventDefault();
 
-    var formData = new FormData(form);
-    formData.append('action', getOption('action'))
-    formData.append('nonce', getOption('nonce'))
+    let data = {
+      'nonce': getOption('nonce'),
+      'time': getOption('time'),
+      'fields': [],
+    }
+
+    form.querySelectorAll('.form__field-input').forEach(input => {
+      data.fields.push({
+        'label': input.getAttribute('placeholder'),
+        'value': input.value
+      });
+    });
+
+    form.querySelectorAll('.form__field-textarea').forEach(text => {
+      data.fields.push({
+        'label': text.getAttribute('placeholder'),
+        'value': text.value
+      });
+    })
 
 
-    // Send request
-    var request = new XMLHttpRequest();
-    request.open('POST', getOption('ajaxurl'));
-    request.send(formData);
+    let request = new XMLHttpRequest();
+    request.open('POST', knife_theme_custom.ajaxurl + '/club');
+    request.setRequestHeader('Content-Type', 'application/json');
+    request.send(JSON.stringify(data));
 
     request.onload = function () {
       requestEvent(true);
@@ -154,10 +175,10 @@
       var response = JSON.parse(request.responseText);
 
       if (response.success) {
-        return displaySuccess(response.data);
+        return displaySuccess(response.message);
       }
 
-      return displayWarning(response.data);
+      return displayWarning(response.message);
     }
 
     return requestEvent(false);
@@ -166,8 +187,8 @@
 
   // Get option from global settings
   function getOption(option, alternate) {
-    if (knife_form_request.hasOwnProperty(option)) {
-      return knife_form_request[option];
+    if (knife_theme_custom.hasOwnProperty(option)) {
+      return knife_theme_custom[option];
     }
 
     return alternate || '';
@@ -176,7 +197,7 @@
 
   // Append fields to form
   function createFields(form) {
-    var fields = knife_form_request.fields;
+    var fields = knife_theme_custom.fields;
 
     for (var key in fields) {
       if (!fields.hasOwnProperty(key)) {
@@ -211,7 +232,7 @@
     form.appendChild(title);
   }
 
-  form.classList.add('form');
+  form.classList.add('form', 'form--club');
   form.addEventListener('submit', submitForm);
 
   return createFields(form);
