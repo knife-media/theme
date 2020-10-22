@@ -169,10 +169,15 @@ jQuery(document).ready(function ($) {
     var value = $(this).val().length;
 
     item.find('.item__targets input:checked').each(function () {
+      var limit = 250;
+
       if ($(this).data('delivery') === 'twitter') {
+        if ($('#knife-promo-box .checkbox').is(':checked')) {
+          limit = 227;
+        }
 
         if (value > 0) {
-          return item.find('.item__snippet-status').text(250 - value).show();
+          return item.find('.item__snippet-status').text(limit - value).show();
         }
       }
     });
