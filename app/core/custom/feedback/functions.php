@@ -64,7 +64,7 @@ add_action('wp_enqueue_scripts', function() {
         'purpose' => __('Какова цель рекламной кампании?', 'knife-theme'),
         'users' => __('Кто ваша целевая аудитория?', 'knife-theme'),
         'budget' => __('Какой у вас бюджет?', 'knife-theme'),
-        'similar' => __('Какие спецпроекты (в «Ноже» или других медиа) вам нравятся?', 'knife-theme'),
+        'similar' => __('Какие спецпроекты вам нравятся?', 'knife-theme'),
         'contacts' => __('Как вас зовут и как с вами связаться?', 'knife-theme')
     ];
 
