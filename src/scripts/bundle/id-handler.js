@@ -1287,8 +1287,10 @@
           // Show comments
           comments.classList.remove('comments--folded');
 
-          // Scroll to comment
-          scrollToElement(item.getBoundingClientRect().top);
+          // Scroll to comment on page load
+          window.addEventListener('load', () => {
+            scrollToElement(item.getBoundingClientRect().top);
+          });
         }
       }
     });
