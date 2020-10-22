@@ -3,11 +3,8 @@
 @import "../setup/mixins";
 
 $color-custom-ticket: #fff2e2;
-$color-custom-example: #edf3f6;
 $color-custom-background: #ddf7dc;
-$color-custom-interests: #e9e1ff;
 $color-custom-select: #c8ecec;
-$color-custom-button: #ff9476;
 
 .entry-content {
   max-width: $width-wide;
@@ -42,7 +39,11 @@ $color-custom-button: #ff9476;
       font-size: 1.875rem;
     }
 
-    @media screen and (max-width: 359px) {
+    @media screen and (max-width: 479px) {
+      font-size: 1.625rem;
+    }
+
+    @media screen and (max-width: 399px) {
       font-size: 1.5rem;
     }
   }
@@ -143,11 +144,6 @@ $color-custom-button: #ff9476;
       transition: transform 0.375s;
 
       @media screen and (max-width: 767px) {
-        top: 1.5rem;
-        right: 1.5rem;
-      }
-
-      @media screen and (max-width: 479px) {
         display: none;
       }
     }

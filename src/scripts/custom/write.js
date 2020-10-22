@@ -142,22 +142,11 @@
     let data = {
       'nonce': getOption('nonce'),
       'time': getOption('time'),
-      'fields': [],
-    }
-
-    form.querySelectorAll('.form__field-input').forEach(input => {
-      data.fields.push({
-        'label': input.getAttribute('placeholder'),
-        'value': input.value
-      });
-    });
-
-    form.querySelectorAll('.form__field-textarea').forEach(text => {
-      data.fields.push({
-        'label': text.getAttribute('placeholder'),
-        'value': text.value
-      });
-    })
+      'name': form.querySelector('input[name="name"]').value,
+      'email': form.querySelector('input[name="email"]').value,
+      'subject': form.querySelector('input[name="subject"]').value,
+      'text': form.querySelector('textarea[name="text"]').value,
+    };
 
 
     let request = new XMLHttpRequest();
