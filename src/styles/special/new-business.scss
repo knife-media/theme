@@ -323,6 +323,12 @@
 
   box-shadow: 0 0.5rem 2rem 0.25rem rgba(169, 17, 69, .5);
   border-radius: .25rem;
+
+  @for $i from 1 through 10 {
+    &:nth-child(#{$i})::before {
+      content: "#{$i}";
+    }
+  }
 }
   .unit:hover {
     transform: scale(1.03);
@@ -345,22 +351,6 @@
     background-color: #323391;
 
     border-radius: 50%;
-  }
-
-  .unit:nth-child(1):before {
-    content: '1';
-  }
-
-  .unit:nth-child(2):before {
-    content: '2';
-  }
-
-  .unit:nth-child(3):before {
-    content: '3';
-  }
-
-  .unit:nth-child(4):before {
-    content: '4';
   }
 
   @media screen and (max-width: 1279px) {

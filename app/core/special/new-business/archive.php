@@ -21,7 +21,7 @@ get_header(); ?>
 
                 printf(
                     '<img src="%s" alt="">',
-                    get_template_directory_uri() . '/core/special/new-business/images/spinner.svg',
+                    get_template_directory_uri() . '/core/special/new-business/images/spinner.png',
                 );
             ?>
         </div>
