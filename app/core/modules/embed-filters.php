@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.2
- * @version 1.11
+ * @version 1.14
  */
 
 if (!defined('WPINC')) {
@@ -30,8 +30,11 @@ class Knife_Embed_Filters {
         // Fix Yandex.Music iframe size
         add_filter('embed_oembed_html', [__CLASS__, 'fix_yandex_embed'], 10, 3);
 
-        // Instagram update
-        add_filter('oembed_providers', [__CLASS__, 'hide_instagram_caption']);
+        // Instagram endpoint
+        add_filter('oembed_providers', [__CLASS__, 'add_instagram_endpoint']);
+
+        // Facebook endpoints
+        add_filter('oembed_providers', [__CLASS__, 'add_facebook_endpoints']);
 
         // Twitter update
         add_filter('oembed_providers', [__CLASS__, 'hide_twitter_thread']);
@@ -47,6 +50,11 @@ class Knife_Embed_Filters {
 
         // Replace custom video preloaders in feeds
         add_filter('the_content_feed', [__CLASS__, 'replace_feed_embeds'], 5);
+
+        // Define embed settings if still not
+        if(!defined('KNIFE_EMBEDS')) {
+            define('KNIFE_EMBEDS', []);
+        }
     }
 
 
@@ -93,10 +101,54 @@ class Knife_Embed_Filters {
 
 
     /**
-     * Remove instagram embeds caption
+     * Add instagram endpoints with access token
+     *
+     * @since 1.14
      */
-    public static function hide_instagram_caption($providers) {
-        $providers['#https?://(www\.)?instagr(\.am|am\.com)/(p|tv)/.*#i'] = ['https://api.instagram.com/oembed?hidecaption=true', true];
+    public static function add_instagram_endpoint($providers) {
+
+        if(empty(KNIFE_EMBEDS['facebook_token'])) {
+            return $providers;
+        }
+
+        // Create endpoint with access token
+        $endpoint = 'https://graph.facebook.com/v8.0/instagram_oembed?access_token=' . KNIFE_EMBEDS['facebook_token'];
+
+        // Add new endpoint
+        $providers['#https?://(www\.)?instagr(\.am|am\.com)/(p|tv)/.*#i'] = [$endpoint . '&hidecaption=true', true];
+
+        return $providers;
+    }
+
+
+    /**
+     * Add facebook endpoints with access token
+     *
+     * @since 1.14
+     */
+    public static function add_facebook_endpoints($providers) {
+        if(empty(KNIFE_EMBEDS['facebook_token'])) {
+            return $providers;
+        }
+
+        // Create endpoints with access token
+        $endpoint_post = 'https://graph.facebook.com/v8.0/oembed_post?access_token=' . KNIFE_EMBEDS['facebook_token'];
+        $endpoint_video = 'https://graph.facebook.com/v8.0/oembed_video?access_token=' . KNIFE_EMBEDS['facebook_token'];
+
+        // Add post endoints
+        $providers['#https?://www\.facebook\.com/.*/posts/.*#i'] = [$endpoint_post, true];
+        $providers['#https?://www\.facebook\.com/.*/activity/.*#i'] = [$endpoint_post, true];
+        $providers['#https?://www\.facebook\.com/.*/photos/.*#i'] = [$endpoint_post, true];
+        $providers['#https?://www\.facebook\.com/photo(s/|\.php).*#i'] = [$endpoint_post, true];
+        $providers['#https?://www\.facebook\.com/permalink\.php.*#i'] = [$endpoint_post, true];
+        $providers['#https?://www\.facebook\.com/media/.*#i'] = [$endpoint_post, true];
+        $providers['#https?://www\.facebook\.com/questions/.*#i'] = [$endpoint_post, true];
+        $providers['#https?://www\.facebook\.com/notes/.*#i'] = [$endpoint_post, true];
+
+        // Add video endpoints
+        $providers['#https?://www\.facebook\.com/.*/videos/.*#i'] = [$endpoint_video, true];
+        $providers['#https?://www\.facebook\.com/video\.php.*#i'] = [$endpoint_video, true];
+        $providers['#https?://www\.facebook\.com/watch/?\?v=\d+#i'] = [$endpoint_video, true];
 
         return $providers;
     }

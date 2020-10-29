@@ -36,7 +36,7 @@ class Knife_Social_Delivery {
      * Send message to facebook.com
      */
     public static function send_facebook($group, $message, $poster = false, $delivery = 'facebook') {
-        $api = 'https://graph.facebook.com/v3.2/' . $group;
+        $api = 'https://graph.facebook.com/v8.0/' . $group;
 
         // Get delivery settings
         $conf = KNIFE_DELIVERY[$delivery] ?? [];
