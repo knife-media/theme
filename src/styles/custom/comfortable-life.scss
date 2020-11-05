@@ -1,22 +1,8 @@
 // Setup variables
 @import "../setup/variables";
 
-$color-custom-header:  #731a81;
 $color-custom-content: #00b957;
 
-
-.entry-header {
-  color: $color-white;
-  background-color: $color-custom-header;
-
-  .entry-header__info {
-    color: $color-white;
-  }
-
-  .entry-header__lead a {
-    color: $color-white;
-  }
-}
 
 .entry-content {
   background-color: $color-custom-content;
