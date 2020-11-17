@@ -92,43 +92,16 @@
     }
   }
 
-  window.VK = {
-    Share: {
-      count: function (id, shares) {
-        if (typeof shares === 'undefined' || !shares) {
-          return;
-        }
+  // Define global VK object.
+  window.VK = window.VK || {};
 
-        var links = document.querySelectorAll('.share .share__link--vkontakte');
-
-        for (var i = 0; i < links.length; i++) {
-          var child = document.createElement("span");
-          child.className = 'share__count';
-          child.innerHTML = shares;
-
-          links[i].appendChild(child);
-        }
-      }
-    }
-  }
-
-  window.FB = {
-    Share: function (data) {
-      let shares = 0;
-
-      // Get engagement data from object
-      let engagement = data.engagement || {};
-
-      // Sum all engagement values
-      for (let count in engagement) {
-        shares = shares + engagement[count];
-      }
-
-      if (shares === 0) {
+  window.VK.Share = {
+    count: function (id, shares) {
+      if (typeof shares === 'undefined' || !shares) {
         return;
       }
 
-      var links = document.querySelectorAll('.share .share__link--facebook');
+      var links = document.querySelectorAll('.share .share__link--vkontakte');
 
       for (var i = 0; i < links.length; i++) {
         var child = document.createElement("span");
@@ -139,6 +112,33 @@
       }
     }
   }
+
+  window.knifeFacebookCount = function (data) {
+    let shares = 0;
+
+    // Get engagement data from object
+    let engagement = data.engagement || {};
+
+    // Sum all engagement values
+    for (let count in engagement) {
+      shares = shares + engagement[count];
+    }
+
+    if (shares === 0) {
+      return;
+    }
+
+    var links = document.querySelectorAll('.share .share__link--facebook');
+
+    for (var i = 0; i < links.length; i++) {
+      var child = document.createElement("span");
+      child.className = 'share__count';
+      child.innerHTML = shares;
+
+      links[i].appendChild(child);
+    }
+  }
+
 
   return window.shareButtons();
 })();
