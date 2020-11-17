@@ -24,6 +24,10 @@
  */
 .archive {
   width: 100%;
+
+  &::after {
+    width: calc(25% - .8125rem);
+  }
 }
 
 /**
