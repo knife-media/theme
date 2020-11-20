@@ -149,7 +149,7 @@ class Knife_Quiz_Section {
                 'insert_into_item'      => __('Добавить в тест', 'knife-theme')
             ],
             'label'                 => __('Тесты', 'knife-theme'),
-            'supports'              => ['title', 'thumbnail', 'excerpt', 'comments', 'author'],
+            'supports'              => ['title', 'thumbnail', 'excerpt', 'comments', 'author', 'custom-fields'],
             'taxonomies'            => ['post_tag', 'category'],
             'hierarchical'          => false,
             'public'                => true,
