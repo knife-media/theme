@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.7
- * @version 1.12
+ * @version 1.13
  * @link https://yandex.ru/support/news/feed.html
  * @link https://yandex.ru/support/zen/website/rss-modify.html
  */
@@ -46,7 +46,10 @@ class Knife_Extra_Feeds {
         add_action('pre_get_posts', [__CLASS__, 'update_query']);
 
         // Show only news in yandex-news feed
-        add_action('pre_get_posts', [__CLASS__, 'update_yandex_feed']);
+        add_action('pre_get_posts', [__CLASS__, 'update_yandex_news_feed']);
+
+        // Show only news in turbo feed
+        add_action('pre_get_posts', [__CLASS__, 'update_turbo_feed']);
 
         // Remove unused images attributes
         add_filter('wp_get_attachment_image_attributes', [__CLASS__, 'image_attributes'], 10, 3);
@@ -167,11 +170,23 @@ class Knife_Extra_Feeds {
 
 
     /**
+     * Update turbo feed
+     *
+     * @since 1.14
+     */
+    public static function update_turbo_feed($query) {
+        if($query->is_main_query() && $query->is_feed('turbo')) {
+            $query->set('category_name', 'news');
+        }
+    }
+
+
+    /**
      * Update yandex.news feed
      *
      * @since 1.11
      */
-    public static function update_yandex_feed($query) {
+    public static function update_yandex_news_feed($query) {
         if($query->is_main_query() && $query->is_feed('yandex-news')) {
             $query->set('category_name', 'news');
         }
