@@ -176,7 +176,7 @@ class Knife_Extra_Feeds {
      */
     public static function update_turbo_feed($query) {
         if($query->is_main_query() && $query->is_feed('turbo')) {
-            $query->set('category_name', 'news');
+            $query->set('category_name', 'news,blunt');
         }
     }
 
