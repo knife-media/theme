@@ -26,7 +26,7 @@
     }
 
     if (network === 'facebook') {
-      return 'https://knife.support/facebook/?fields=engagement&callback=FB.Share&id=' + link;
+      return 'https://knife.support/facebook/?fields=engagement&callback=knifeFacebookCount&id=' + link;
     }
   }
 
