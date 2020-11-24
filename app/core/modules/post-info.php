@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.12
+ * @version 1.14
  */
 
 if (!defined('WPINC')) {
@@ -237,7 +237,14 @@ class Knife_Post_Info {
     /**
      * Get post date info
      */
-    private static function meta_date() {
+    private static function meta_date($output = '') {
+        if(property_exists('Knife_Best_Posts', 'query_var')) {
+            // Ok, let's die if it in /best/ archive page
+            if(get_query_var(Knife_Best_Posts::$query_var)) {
+                return $output;
+            }
+        }
+
         $output = sprintf('<span class="meta__item"><time datetime="%1$s">%2$s</time></span>',
             get_the_time('c'),
             get_the_date('Y') === date('Y') ? get_the_time('j F') : get_the_time('j F Y')
