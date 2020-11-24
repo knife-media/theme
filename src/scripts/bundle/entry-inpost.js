@@ -2,21 +2,22 @@
  * Smart display entry inpost widgets
  *
  * @since 1.9
+ * @version 1.14
  */
 
 (function () {
-  var post = document.querySelector('.entry-content');
+  const content = document.querySelector('.entry-content');
 
 
   /**
    * Check if entry-content exists and it's long enough
    */
-  if (post === null) {
+  if (content === null) {
     return false;
   }
 
 
-  var widgets = document.querySelector('.entry-inpost');
+  const widgets = document.querySelector('.entry-inpost');
 
   /**
    * Check if entry-widgets block has at least one widget
@@ -25,45 +26,55 @@
     return false;
   }
 
+  /**
+   * Array of appropriate tags
+   */
+  const allowed = ['p'];
 
   /**
-   * Find post middle
+   * Find all appropriate children
    */
-  var middle = Math.floor(post.children.length / 3);
-
+  const children = content.children;
 
   /**
-   * Try to move first widget to content middle
+   * Find post landmark
    */
-  if (post.children.length > 8) {
-    var allowed = ['p', 'blockquote'];
+  let landmark = Math.floor(children.length / 3);
 
-    for (var i = middle; i < post.children.length; i++) {
-      var relative = post.children[i];
+  if (landmark < 6) {
+    landmark = 6;
+  }
 
-      // Check if next tag in allowed list
-      if (allowed.indexOf(relative.tagName.toLowerCase()) < 0) {
-        continue;
-      }
+  // Create aside
+  const aside = document.createElement('aside');
+  aside.classList.add('aside', 'aside--widget');
+  aside.appendChild(widgets.firstElementChild);
 
-      if (typeof post.children[i - 1] === 'undefined') {
-        continue;
-      }
-
-      var following = post.children[i - 1];
-
-      // Check if prev tag in allowed list
-      if (allowed.indexOf(following.tagName.toLowerCase()) < 0) {
-        continue;
-      }
-
-      // Create aside
-      var aside = document.createElement('aside');
-      aside.classList.add('aside', 'aside--widget');
-      aside.appendChild(widgets.firstElementChild);
-
-      post.insertBefore(aside, relative);
-      break;
+  /**
+   * Try to move first widget to content landmark
+   */
+  for (let i = landmark; i < children.length; i++) {
+    // Check if next tag in allowed list
+    if (allowed.indexOf(children[i].tagName.toLowerCase()) < 0) {
+      continue;
     }
+
+    if (typeof children[i - 1] === 'undefined') {
+      continue;
+    }
+
+    let following = children[i - 1];
+
+    // Check if prev tag in allowed list
+    if (allowed.indexOf(following.tagName.toLowerCase()) < 0) {
+      continue;
+    }
+
+    content.insertBefore(aside, children[i]);
+    break;
+  }
+
+  if ( aside.parentNode !== content) {
+    content.appendChild(aside);
   }
 })();
