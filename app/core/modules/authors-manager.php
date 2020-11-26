@@ -481,7 +481,7 @@ class Knife_Authors_Manager {
         $counts = $results->counts;
 
         // Set cache on 12 hours
-        wp_cache_set($user_id, $counts, 'knife-user-posts', 12 * HOUR_IN_SECONDS);
+        wp_cache_set($user_id, $counts, 'knife-user-posts', 24 * HOUR_IN_SECONDS);
 
         return $counts;
     }
