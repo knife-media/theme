@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.12
- * @version 1.13
+ * @version 1.14
  */
 
 
@@ -21,7 +21,7 @@ class Knife_Post_Customs {
      * @access  public
      * @var     array
      */
-    public static $post_type = ['post', 'page'];
+    public static $post_type = ['post', 'page', 'quiz', 'generator'];
 
 
     /**
