@@ -113,10 +113,13 @@ class Knife_Similar_Posts {
         add_filter('wp_link_query', [__CLASS__, 'update_link_query'], 12);
 
         // Add similar promo settings
-        add_action('admin_menu', [__CLASS__, 'add_settings_menu'], 9);
+        add_action('admin_menu', [__CLASS__, 'add_management_menu'], 9);
 
         // Process required actions for settings page
         add_action('current_screen', [__CLASS__, 'init_settings_page']);
+
+        // Admin-post action to add similar link
+        add_action('admin_post_knife_similar_add', [__CLASS__, 'append_similar_link']);
 
         // Add option to hide similar posts
         add_action('post_submitbox_misc_actions', [__CLASS__, 'print_checkbox']);
@@ -184,7 +187,7 @@ class Knife_Similar_Posts {
      *
      * @since 1.11
      */
-    public static function add_settings_menu() {
+    public static function add_management_menu() {
         $hookname = add_management_page(
             __('Настройки промо блока рекомендаций', 'knife-theme'),
             __('Блок рекомендаций', 'knife-theme'),
@@ -209,12 +212,9 @@ class Knife_Similar_Posts {
             return;
         }
 
-        if(!current_user_can(self::$page_cap)) {
-            wp_die(__('Извините, у вас нет доступа к этой странице', 'knife-theme'));
+        if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'delete') {
+            self::delete_similar_link();
         }
-
-        // Append similar link if necessary
-        self::process_similar_link();
 
         // Add scripts to admin page
         add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
@@ -241,6 +241,26 @@ class Knife_Similar_Posts {
      * @since 1.11
      */
     public static function display_settings_page() {
+        $message = isset($_REQUEST['message']) ? absint($_REQUEST['message']) : 0;
+
+        switch ($message) {
+            case 1:
+                add_settings_error('knife-similar-actions', 'append',
+                    __('Ссылка успешно добавлена', 'knife-theme'), 'updated'
+                );
+                break;
+            case 2:
+                add_settings_error('knife-similar-actions', 'append',
+                    __('Не удалось добавить ссылку', 'knife-theme')
+                );
+                break;
+            case 3:
+                add_settings_error('knife-similar-actions', 'delete',
+                    __('Не удалось удалить ссылку', 'knife-theme')
+                );
+                break;
+        }
+
         $include = get_template_directory() . '/core/include';
 
         // Include options template
@@ -326,54 +346,41 @@ class Knife_Similar_Posts {
 
 
     /**
-     * Similar links actions handler
-     *
-     * @since 1.11
-     */
-    private static function process_similar_link() {
-        $action = isset($_REQUEST['action']) ? sanitize_key($_REQUEST['action']) : '';
-
-        if($action === 'append') {
-            self::append_similar_link();
-        }
-
-        if($action === 'delete') {
-            self::delete_similar_link();
-        }
-    }
-
-
-    /**
      * Append similar link to promo
      *
      * @since 1.11
      */
-    private static function append_similar_link() {
+    public static function append_similar_link() {
         check_admin_referer('knife-similar-append');
 
-        // Check if required values not empty
-        if(!empty($_POST['title']) && !empty($_POST['link'])) {
-            $allowed_html = ['em' => []];
+        if(!current_user_can(self::$page_cap)) {
+            wp_die(__('Извините, у вас нет доступа к этой странице', 'knife-theme'));
+        }
 
-            // Get promo items from settings
+        $admin_url = admin_url('/tools.php?page=' . self::$settings_slug);
+
+        // Check if required values not empty
+        if( !empty($_POST['title']) && !empty($_POST['link'])) {
             $promo = get_option(self::$option_promo, []);
 
             // Add value to promo items
             $promo[] = [
-                'title' => wp_kses($_POST['title'], $allowed_html),
-                'link' => sanitize_text_field($_POST['link'])
+                'link' => sanitize_text_field($_POST['link']),
+                'title' => wp_kses($_POST['title'], [
+                    'em' => []
+                ]),
             ];
 
-            if(update_option(self::$option_promo, $promo)) {
-                return add_settings_error('knife-similar-actions', 'append',
-                    __('Ссылка успешно добавлена', 'knife-theme'), 'updated'
-                );
+            $admin_url = add_query_arg('message', 1, $admin_url);
+
+            // Try to update option
+            if(!update_option(self::$option_promo, $promo)) {
+                $admin_url = add_query_arg('message', 2, $admin_url);
             }
         }
 
-        add_settings_error('knife-similar-actions', 'append',
-            __('Не удалось добавить ссылку', 'knife-theme')
-        );
+        wp_redirect($admin_url, 303);
+        exit;
     }
 
 
@@ -382,30 +389,33 @@ class Knife_Similar_Posts {
      *
      * @since 1.11
      */
-    private static function delete_similar_link() {
+    public static function delete_similar_link() {
         check_admin_referer('knife-similar-delete');
 
-        if(!isset($_GET['id'])) {
-            return add_settings_error('knife-similar-actions', 'delete',
-                __('Не удалось удалить ссылку', 'knife-theme')
-            );
+        if(!current_user_can(self::$page_cap)) {
+            wp_die(__('Извините, у вас нет доступа к этой странице', 'knife-theme'));
         }
-
-        $id = absint($_GET['id']);
 
         // Get current page admin link
         $admin_url = admin_url('/tools.php?page=' . self::$settings_slug);
+
+        if(empty($_REQUEST['id'])) {
+            return;
+        }
+
+        $id = absint($_REQUEST['id']);
 
         // Get promo items from settings
         $promo = get_option(self::$option_promo, []);
 
         unset($promo[$id]);
 
-        // Update promo items
-        update_option(self::$option_promo, $promo);
+        // Try to update option
+        if(!update_option(self::$option_promo, $promo)) {
+            $admin_url = add_query_arg('message', 3, $admin_url);
+        }
 
-        // Redirect anyway
-        wp_redirect(esc_url($admin_url));
+        wp_redirect($admin_url, 303);
         exit;
     }
 

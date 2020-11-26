@@ -1,7 +1,9 @@
 <div id="knife-similar-options" class="wrap">
     <h1><?php _e('Настройки промо блока рекомендаций', 'knife-theme'); ?></h1>
 
-    <form method="post" class="form-field">
+    <?php settings_errors(); ?>
+
+    <form method="post" class="form-field" action="<?php echo admin_url('admin-post.php'); ?>">
         <?php
             printf(
                 '<p><label for="%1$s">%2$s</label><input type="text" id="%1$s" name="title" required><small>%3$s</small></p>',
@@ -20,7 +22,7 @@
             submit_button(__('Добавить ссылку', 'knife-theme'), 'primary', 'submit', false);
         ?>
 
-        <input type="hidden" name="action" value="append">
+        <input type="hidden" name="action" value="knife_similar_add">
     </form>
 
     <div class="form-items">
@@ -28,7 +30,7 @@
             $promo = get_option(self::$option_promo, []);
 
             // Get current page admin link
-            $admin_url = admin_url('/tools.php?page=' . self::$settings_slug);
+            $admin_url = menu_page_url(self::$settings_slug, false);
         ?>
 
         <?php foreach($promo as $i => $item) : ?>
