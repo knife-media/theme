@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.5
- * @version 1.12
+ * @version 1.14
  */
 
 
@@ -16,15 +16,6 @@ if (!defined('WPINC')) {
 
 class Knife_Similar_Posts {
     /**
-     * Cache group to store similar posts
-     *
-     * @access  private
-     * @var     string
-     */
-    private static $cache_group = 'knife-similar-posts';
-
-
-    /**
      * Default post type with similar aside
      *
      * @access  public
@@ -32,6 +23,23 @@ class Knife_Similar_Posts {
      * @since   1.8
      */
     public static $post_type = ['post', 'club', 'quiz', 'generator'];
+
+    /**
+     * Cache group to store similar posts
+     *
+     * @access  private
+     * @var     string
+     */
+    private static $cache_group = 'knife-similar-posts';
+
+    /**
+     * Page capability
+     *
+     * @access  private
+     * @var     string
+     * @since   1.14
+     */
+    private static $page_cap = 'promo_manage';
 
 
     /**
@@ -177,10 +185,10 @@ class Knife_Similar_Posts {
      * @since 1.11
      */
     public static function add_settings_menu() {
-        $hookname = add_options_page(
+        $hookname = add_management_page(
             __('Настройки промо блока рекомендаций', 'knife-theme'),
             __('Блок рекомендаций', 'knife-theme'),
-            'unfiltered_html', self::$settings_slug,
+            self::$page_cap, self::$settings_slug,
             [__CLASS__, 'display_settings_page']
         );
 
@@ -201,7 +209,7 @@ class Knife_Similar_Posts {
             return;
         }
 
-        if(!current_user_can('unfiltered_html')) {
+        if(!current_user_can(self::$page_cap)) {
             wp_die(__('Извините, у вас нет доступа к этой странице', 'knife-theme'));
         }
 

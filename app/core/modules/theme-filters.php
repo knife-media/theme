@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.13
+ * @version 1.14
  */
 
 if (!defined('WPINC')) {
@@ -18,6 +18,9 @@ class Knife_Theme_Filters {
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public static function load_module() {
+        // Update theme roles and capabilites
+        add_action('after_switch_theme', [__CLASS__, 'update_roles']);
+
         // Remove useless actions and settings
         add_action('after_setup_theme', [__CLASS__, 'remove_actions']);
 
@@ -51,12 +54,8 @@ class Knife_Theme_Filters {
         // Remove auto suggestions
         add_filter('redirect_canonical', [__CLASS__, 'remove_autosuggest']);
 
-        // Update permalink on post creation
-        // add_filter('editable_slug', [__CLASS__, 'update_slug'], 12);
-
         // Fix non-latin filenames
         add_action('sanitize_file_name', [__CLASS__, 'sanitize_file_name'], 12);
-
 
         // Remove annoying [...] in excerpts
         add_filter('excerpt_more', function($more) {
@@ -86,6 +85,29 @@ class Knife_Theme_Filters {
         });
     }
 
+    /**
+     * Update theme roles and capabilites
+     *
+     * @since 1.14
+     */
+    public static function update_roles() {
+        // Update administrator capabilities
+        $administrator = get_role('administrator');
+        $administrator->add_cap('promo_manage');
+
+        // Update editor capabilities
+        $editor = get_role('editor');
+        $editor->add_cap('edit_theme_options');
+        $editor->add_cap('promo_manage');
+
+        add_role('manager', __('Менеджер', 'knife-theme'), [
+            'read' => true,
+            'promo_manage' => true,
+            'edit_theme_options' => true,
+            'upload_files' => true
+        ]);
+    }
+
 
     /**
      * It is good to remove auto suggestings for SEO
@@ -99,16 +121,6 @@ class Knife_Theme_Filters {
         }
 
         return $url;
-    }
-
-
-    /**
-     * Remove dashes from sample permalink
-     *
-     * @since 1.13
-     */
-    public static function update_slug($slug) {
-        return preg_replace('/[^a-z0-9]/i', '-', $slug);
     }
 
 

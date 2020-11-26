@@ -6,6 +6,7 @@
  *
  * @package knife-theme
  * @since 1.12
+ * @version 1.14
  */
 
 if (!defined('WPINC')) {
@@ -20,6 +21,16 @@ class Knife_Views_Manager {
      * @var     string
      */
     public static $page_slug = 'knife-views';
+
+
+    /**
+     * Page capability
+     *
+     * @access  private
+     * @var     string
+     * @since   1.14
+     */
+    private static $page_cap = 'promo_manage';
 
 
     /**
@@ -82,7 +93,7 @@ class Knife_Views_Manager {
         $hookname = add_management_page(
             __('Статистика постов', 'knife-theme'),
             __('Статистика постов', 'knife-theme'),
-            'publish_posts', self::$page_slug,
+            self::$page_cap, self::$page_slug,
             [__CLASS__, 'display_management_page']
         );
 
@@ -101,7 +112,7 @@ class Knife_Views_Manager {
             return;
         }
 
-        if(!current_user_can('publish_posts')) {
+        if(!current_user_can(self::$page_cap)) {
             wp_die(__('Извините, у вас нет доступа к этому инструменту', 'knife-theme'));
         }
 

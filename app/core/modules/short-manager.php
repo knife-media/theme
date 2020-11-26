@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.8
- * @version 1.11
+ * @version 1.14
  */
 
 if (!defined('WPINC')) {
@@ -21,6 +21,16 @@ class Knife_Short_Manager {
      * @var     string
      */
     public static $page_slug = 'knife-short';
+
+
+    /**
+     * Page capability
+     *
+     * @access  private
+     * @var     string
+     * @since   1.14
+     */
+    private static $page_cap = 'promo_manage';
 
 
     /**
@@ -82,7 +92,7 @@ class Knife_Short_Manager {
         $hookname = add_management_page(
             __('Сокращатель ссылок', 'knife-theme'),
             __('Сокращатель ссылок', 'knife-theme'),
-            'unfiltered_html', self::$page_slug,
+            self::$page_cap, self::$page_slug,
             [__CLASS__, 'display_management_page']
         );
 
@@ -101,7 +111,7 @@ class Knife_Short_Manager {
             return;
         }
 
-        if(!current_user_can('unfiltered_html')) {
+        if(!current_user_can(self::$page_cap)) {
             wp_die(__('Извините, у вас нет доступа к этому инструменту', 'knife-theme'));
         }
 
