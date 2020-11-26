@@ -28,7 +28,7 @@
             $promo = get_option(self::$option_promo, []);
 
             // Get current page admin link
-            $admin_url = admin_url('/options-general.php?page=' . self::$settings_slug);
+            $admin_url = admin_url('/tools.php?page=' . self::$settings_slug);
         ?>
 
         <?php foreach($promo as $i => $item) : ?>

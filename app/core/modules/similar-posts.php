@@ -394,7 +394,7 @@ class Knife_Similar_Posts {
         $id = absint($_GET['id']);
 
         // Get current page admin link
-        $admin_url = admin_url('/options-general.php?page=' . self::$settings_slug);
+        $admin_url = admin_url('/tools.php?page=' . self::$settings_slug);
 
         // Get promo items from settings
         $promo = get_option(self::$option_promo, []);
