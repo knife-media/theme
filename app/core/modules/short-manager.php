@@ -43,15 +43,6 @@ class Knife_Short_Manager {
 
 
     /**
-     * Short link database wpdb instance
-     *
-     * @access  private
-     * @var     object
-     */
-    private static $short_db = null;
-
-
-    /**
      * Option name to store table per_page option
      *
      * @access  private
@@ -69,6 +60,9 @@ class Knife_Short_Manager {
 
         // Init short links action before page load
         add_action('current_screen', [__CLASS__, 'init_short_actions']);
+
+        // Admin-post action to add similar link
+        add_action('admin_post_' . self::$page_slug . '-append', [__CLASS__, 'append_short_link']);
 
         // Save links per page screen option
         add_filter('set-screen-option', [__CLASS__, 'save_screen_options'], 10, 3);
@@ -111,16 +105,6 @@ class Knife_Short_Manager {
             return;
         }
 
-        if(!current_user_can(self::$page_cap)) {
-            wp_die(__('Извините, у вас нет доступа к этому инструменту', 'knife-theme'));
-        }
-
-        // Init second database connection
-        self::connect_short_db();
-
-        // Append short link if necessary
-        self::process_short_link();
-
         // Add scripts to admin page
         add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
 
@@ -146,13 +130,35 @@ class Knife_Short_Manager {
      * Display management page
      */
     public static function display_management_page() {
+        $message = isset($_REQUEST['message']) ? absint($_REQUEST['message']) : 0;
+
+        switch ($message) {
+            case 1:
+                add_settings_error('knife-short-actions', 'append',
+                    __('Короткий адрес уже существует', 'knife-theme')
+                );
+                break;
+            case 2:
+                add_settings_error('knife-short-actions', 'append',
+                    __('Ссылка успешно добавлена', 'knife-theme'), 'updated'
+                );
+                break;
+            case 3:
+                add_settings_error('knife-short-actions', 'append',
+                    __('Не удалось добавить ссылку', 'knife-theme')
+                );
+                break;
+        }
+
         $include = get_template_directory() . '/core/include';
 
         // Include Short Links table class
         include_once($include . '/tables/short-links.php');
 
+        $db = self::connect_short_db();
+
         // Get short links table instance
-        $table = new Knife_Short_Links_Table(self::$short_db, self::$per_page);
+        $table = new Knife_Short_Links_Table($db, self::$per_page);
 
         $table->process_actions();
         $table->prepare_items();
@@ -204,29 +210,21 @@ class Knife_Short_Manager {
             wp_die($db->error);
         }
 
-        self::$short_db = $db;
-    }
-
-
-    /**
-     * Short links actions handler
-     */
-    private static function process_short_link() {
-        $action = isset($_POST['action']) ? sanitize_key($_POST['action']) : '';
-
-        if($action === self::$page_slug . '-append') {
-            self::append_short_link();
-        }
+        return $db;
     }
 
 
     /**
      * Append short link
      */
-    private static function append_short_link() {
+    public static function append_short_link() {
         check_admin_referer('knife-short-append');
 
-        $db = self::$short_db;
+        if(!current_user_can(self::$page_cap)) {
+            wp_die(__('Извините, у вас нет доступа к этой странице', 'knife-theme'));
+        }
+
+        $admin_url = admin_url('/tools.php?page=' . self::$page_slug);
 
         // Check if required values not empty
         if(!empty($_POST['keyword']) && !empty($_POST['url'])) {
@@ -235,14 +233,15 @@ class Knife_Short_Manager {
                 'ip' => $_SERVER['REMOTE_ADDR']
             ];
 
+            $db = self::connect_short_db();
+
             $data['keyword'] = self::get_link_keyword(
-                sanitize_key($_POST['keyword'])
+                sanitize_key($_POST['keyword']), $db
             );
 
             if($data['keyword'] === false) {
-                return add_settings_error('knife-short-actions', 'append',
-                    __('Короткий адрес уже существует', 'knife-theme')
-                );
+                wp_redirect(add_query_arg('message', 1, $admin_url), 303);
+                exit;
             }
 
             $data['title'] = self::get_link_title(
@@ -250,24 +249,20 @@ class Knife_Short_Manager {
             );
 
             if($db->insert('urls', $data)) {
-                return add_settings_error('knife-short-actions', 'append',
-                    __('Ссылка успешно добавлена', 'knife-theme'), 'updated'
-                );
+                wp_redirect(add_query_arg('message', 2, $admin_url), 303);
+                exit;
             }
         }
 
-        add_settings_error('knife-short-actions', 'append',
-            __('Не удалось добавить ссылку', 'knife-theme')
-        );
+        wp_redirect(add_query_arg('message', 3, $admin_url), 303);
+        exit;
     }
 
 
     /**
      * Check keyword existance
      */
-    private static function get_link_keyword($keyword) {
-        $db = self::$short_db;
-
+    private static function get_link_keyword($keyword, $db) {
         // Cut and replace dashes
         $keyword = str_replace('_', '-', substr($keyword, 0, 200));
 

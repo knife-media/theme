@@ -49,7 +49,7 @@ class Knife_Similar_Posts {
      * @var     sting
      * @since   1.11
      */
-    private static $settings_slug = 'knife-similar';
+    private static $page_slug = 'knife-similar';
 
 
     /**
@@ -115,11 +115,11 @@ class Knife_Similar_Posts {
         // Add similar promo settings
         add_action('admin_menu', [__CLASS__, 'add_management_menu'], 9);
 
-        // Process required actions for settings page
-        add_action('current_screen', [__CLASS__, 'init_settings_page']);
+        // Process required actions for management page
+        add_action('current_screen', [__CLASS__, 'init_managment_page']);
 
         // Admin-post action to add similar link
-        add_action('admin_post_knife_similar_add', [__CLASS__, 'append_similar_link']);
+        add_action('admin_post_' . self::$page_slug . '-append', [__CLASS__, 'append_similar_link']);
 
         // Add option to hide similar posts
         add_action('post_submitbox_misc_actions', [__CLASS__, 'print_checkbox']);
@@ -183,7 +183,7 @@ class Knife_Similar_Posts {
 
 
     /**
-     * Add similar promo settings menu
+     * Add similar promo management menu
      *
      * @since 1.11
      */
@@ -191,11 +191,11 @@ class Knife_Similar_Posts {
         $hookname = add_management_page(
             __('Настройки промо блока рекомендаций', 'knife-theme'),
             __('Блок рекомендаций', 'knife-theme'),
-            self::$page_cap, self::$settings_slug,
-            [__CLASS__, 'display_settings_page']
+            self::$page_cap, self::$page_slug,
+            [__CLASS__, 'display_management_page']
         );
 
-        // Set settings page base_id screen
+        // Set management page base_id screen
         self::$screen_base = $hookname;
     }
 
@@ -205,7 +205,7 @@ class Knife_Similar_Posts {
      *
      * @since 1.11
      */
-    public static function init_settings_page() {
+    public static function init_managment_page() {
          $current_screen = get_current_screen();
 
         if($current_screen->base !== self::$screen_base) {
@@ -240,7 +240,7 @@ class Knife_Similar_Posts {
      *
      * @since 1.11
      */
-    public static function display_settings_page() {
+    public static function display_management_page() {
         $message = isset($_REQUEST['message']) ? absint($_REQUEST['message']) : 0;
 
         switch ($message) {
@@ -357,10 +357,10 @@ class Knife_Similar_Posts {
             wp_die(__('Извините, у вас нет доступа к этой странице', 'knife-theme'));
         }
 
-        $admin_url = admin_url('/tools.php?page=' . self::$settings_slug);
+        $admin_url = admin_url('/tools.php?page=' . self::$page_slug);
 
         // Check if required values not empty
-        if( !empty($_POST['title']) && !empty($_POST['link'])) {
+        if(!empty($_POST['title']) && !empty($_POST['link'])) {
             $promo = get_option(self::$option_promo, []);
 
             // Add value to promo items
@@ -371,15 +371,14 @@ class Knife_Similar_Posts {
                 ]),
             ];
 
-            $admin_url = add_query_arg('message', 1, $admin_url);
-
             // Try to update option
-            if(!update_option(self::$option_promo, $promo)) {
-                $admin_url = add_query_arg('message', 2, $admin_url);
+            if(update_option(self::$option_promo, $promo)) {
+                wp_redirect(add_query_arg('message', 1, $admin_url));
+                exit;
             }
         }
 
-        wp_redirect($admin_url, 303);
+        wp_redirect(add_query_arg('message', 2, $admin_url), 303);
         exit;
     }
 
@@ -397,7 +396,7 @@ class Knife_Similar_Posts {
         }
 
         // Get current page admin link
-        $admin_url = admin_url('/tools.php?page=' . self::$settings_slug);
+        $admin_url = admin_url('/tools.php?page=' . self::$page_slug);
 
         if(empty($_REQUEST['id'])) {
             return;
@@ -410,12 +409,12 @@ class Knife_Similar_Posts {
 
         unset($promo[$id]);
 
-        // Try to update option
-        if(!update_option(self::$option_promo, $promo)) {
-            $admin_url = add_query_arg('message', 3, $admin_url);
+        if(update_option(self::$option_promo, $promo)) {
+            wp_redirect($admin_url, 303);
+            exit;
         }
 
-        wp_redirect($admin_url, 303);
+        wp_redirect(add_query_arg('message', 3, $admin_url), 303);
         exit;
     }
 

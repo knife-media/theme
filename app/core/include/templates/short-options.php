@@ -3,7 +3,7 @@
 
     <?php settings_errors('knife-short-actions'); ?>
 
-    <form method="post" class="form-field">
+    <form method="post" class="form-field" action="<?php echo admin_url('admin-post.php'); ?>">
         <?php
             printf(
                 '<p><label for="%1$s">%2$s</label><input type="text" id="%1$s" name="url" required></p>',
