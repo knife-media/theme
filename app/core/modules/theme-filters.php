@@ -99,7 +99,9 @@ class Knife_Theme_Filters {
         $editor = get_role('editor');
         $editor->add_cap('edit_theme_options');
         $editor->add_cap('promo_manage');
+        $editor->add_cap('edit_users');
 
+        // Add new manager role
         add_role('manager', __('Менеджер', 'knife-theme'), [
             'read' => true,
             'promo_manage' => true,
