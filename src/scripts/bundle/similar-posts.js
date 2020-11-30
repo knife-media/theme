@@ -44,7 +44,7 @@
    *
    * @since 1.11
    */
-  function appendLink(wrap, similar) {
+  const appendLink = (wrap, similar) => {
     const item = document.createElement('p');
     wrap.appendChild(item);
 
@@ -52,6 +52,45 @@
     link.href = similar.link;
     link.innerHTML = similar.title;
     item.appendChild(link);
+  }
+
+
+  /**
+   * Create similar block
+   */
+  const createSimilar = (following) => {
+    if (similar.length < counter + 2) {
+      return false;
+    }
+
+    // Let's insert similar posts if following found
+    if (following === null) {
+      return false;
+    }
+
+    const figure = document.createElement('figure');
+    figure.classList.add('figure', 'figure--similar');
+
+    const title = document.createElement('h4');
+    title.innerHTML = knife_similar_posts.title || '';
+    figure.appendChild(title);
+
+    // Add similar items
+    for (let i = counter; i < counter + 2; i++) {
+      if (!similar[i].link || !similar[i].title) {
+        continue;
+      }
+
+      // Create similar links
+      appendLink(figure, similar[i]);
+    }
+
+    counter = counter + 2;
+
+    // Insert block
+    following.parentNode.insertBefore(figure, following.nextSibling);
+
+    return true;
   }
 
 
@@ -103,22 +142,15 @@
     let children = content[0].children;
 
     // Check if entry-content long enough and similar links exist
-    if (children.length < 15 || similar.length < counter + 3) {
+    if (children.length < 20) {
       return false;
     }
 
-    const allowed = ['p', 'blockquote'];
-
     // Find start point
-    const landmark = Math.floor(children.length / 1.5);
+    const landmark = 20;
 
-    // Define following tag
-    let following = null;
-
-    // Find following tag
-    for (let i = landmark; i < children.length - 5; i++) {
-      // Check if next tag in allowed list
-      if (allowed.indexOf(children[i].tagName.toLowerCase()) < 0) {
+    for (let i = landmark, iterate = 0; i < children.length - 5; i++) {
+      if (children[i].tagName.toLowerCase() !== 'p') {
         continue;
       }
 
@@ -127,40 +159,21 @@
       }
 
       // Check if prev tag in allowed list
-      if (allowed.indexOf(children[i - 1].tagName.toLowerCase()) < 0) {
+      if (children[i - 1].tagName.toLowerCase() !== 'p') {
         continue;
       }
 
-      following = children[i - 1];
-      break;
-    }
-
-    // Let's insert similar posts if following found
-    if (following === null) {
-      return false;
-    }
-
-    const figure = document.createElement('figure');
-    figure.classList.add('figure', 'figure--similar');
-
-    const title = document.createElement('h4');
-    title.innerHTML = knife_similar_posts.title || '';
-    figure.appendChild(title);
-
-    // Add similar items
-    for (let i = counter; i < counter + 3; i++) {
-      if (!similar[i].link || !similar[i].title) {
-        continue;
+      if (createSimilar(children[i - 1])) {
+        iterate = iterate + 1;
       }
 
-      // Create similar links
-      appendLink(figure, similar[i]);
+      // Maximum 3 similar on page
+      if (iterate > 3) {
+        break;
+      }
+
+      // Increase i by landmark
+      i = landmark + i;
     }
-
-    counter = counter + 3;
-
-    // Insert block
-    following.parentNode.insertBefore(figure, following.nextSibling);
   })();
-  console.log('2');
 })();
