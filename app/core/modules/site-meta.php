@@ -94,6 +94,42 @@ class Knife_Site_Meta {
         // Set post title
         $schema['headline'] = wp_strip_all_tags(get_the_title($post_id));
 
+        // Add authors
+        if(property_exists('Knife_Authors_Manager', 'meta_authors')) {
+            $authors = get_post_meta($post_id, Knife_Authors_Manager::$meta_authors);
+
+            if($authors) {
+                $users = get_users([
+                    'include' => $authors,
+                    'fields' => ['display_name']
+                ]);
+
+                foreach($users as $user) {
+                    $author = [
+                        'type' => 'Person',
+                        'name' => $user->display_name
+                    ];
+
+                    $schema['authors'][] = $author;
+                }
+            }
+        }
+
+        // Get tags
+        $tags = get_the_tags($post_id);
+
+        if(!$tags) {
+            $tags = [];
+        }
+
+        foreach($tags as $tag) {
+            $about = [
+                'name' => $tag->slug
+            ];
+
+            $schema['about'][] = $about;
+        }
+
         // Add text parameter only for posts
         if(get_post_type($post_id) === 'post') {
             $content = get_the_content(null, false, $post_id);
