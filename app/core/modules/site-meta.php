@@ -64,7 +64,7 @@ class Knife_Site_Meta {
      */
     public static function add_json_microdata() {
         // Show microdata only for singular
-        if(!is_singular()) {
+        if(!is_singular() || is_front_page()) {
             return;
         }
 
