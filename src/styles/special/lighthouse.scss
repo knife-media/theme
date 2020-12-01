@@ -13,14 +13,13 @@
   background-color: #fa431b;
 
   border-radius: .625rem;
-}
+
   @media screen and (max-width: 479px) {
-    .content {
-      width: calc(100% - 1rem);
-      padding-left: .5rem;
-      padding-right: .5rem;
-    }
+    width: calc(100% - 1rem);
+    padding-left: .5rem;
+    padding-right: .5rem;
   }
+}
 
 .content .post {
   flex: 0 1 58rem;
@@ -246,12 +245,6 @@
     font-size: .75rem;
   }
 }
-
-
-.entry-content__author
-
-.entry-content__author
-
 
 /**
  * archive styles
