@@ -110,7 +110,7 @@ class Knife_Site_Meta {
                         'name' => $user->display_name
                     ];
 
-                    $schema['authors'][] = $author;
+                    $schema['author'][] = $author;
                 }
             }
         }
