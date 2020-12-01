@@ -57,14 +57,6 @@ get_header(); ?>
             <div class="entry-content">
                 <?php
                     the_content();
-
-                    the_info(
-                        sprintf(
-                            '<div class="entry-content__author"><p>%s</p>',
-                            _x('Подготовила специальный<br> корреспондент журнала «Нож»', 'special: lighthouse', 'knife-theme')
-                        ),
-                        '</div>', ['author']
-                    );
                 ?>
             </div>
         </article>
