@@ -1,0 +1,237 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap');
+
+// Setup variables
+@import "../setup/variables";
+
+$color-special-background: #0866de;
+$color-special-unit: #e3d904;
+
+$font-special: 'Fira Sans', sans-serif;
+
+/**
+ * content and post styles
+ */
+.content {
+  width: calc(100% - 2rem);
+  max-width: 78rem;
+  margin: 1rem auto 2rem;
+
+  font-family: $font-special;
+  background-color: $color-special-background;
+
+  border-radius: .625rem;
+
+  .post {
+    flex: 0 1 58rem;
+    margin-bottom: 2rem;
+
+    background-color: $color-white;
+    border-radius: .625rem;
+  }
+
+  @media screen and (max-width: 479px) {
+    width: calc(100% - 1rem);
+    padding-left: .5rem;
+    padding-right: .5rem;
+  }
+}
+
+/**
+ * caption styles
+ */
+.caption {
+  width: 100%;
+
+  .caption__description {
+    display: block;
+    position: relative;
+
+    max-width: $width-site;
+    margin: 2rem auto;
+    text-align: center;
+
+    color: $color-white;
+
+    h1 {
+      font-size: 3.25rem;
+      font-weight: 700;
+      line-height: 1.125;
+
+      @media screen and (max-width: 767px) {
+        font-size: 2rem;
+      }
+
+      @media screen and (max-width: 479px) {
+        font-size: 1.75rem;
+        line-height: 1;
+      }
+
+    }
+
+    a {
+      color: $color-white;
+      font-weight: 700;
+      font-size: 2rem;
+
+      @media screen and (max-width: 767px) {
+        font-size: 1.75rem;
+        line-height: 1.25;
+      }
+    }
+
+    p {
+      margin-top: 0.25rem;
+
+      font-weight: 400;
+      font-size: 1.125rem;
+      font-style: italic;
+
+      a {
+        font-size: inherit;
+        font-weight: 400;
+
+        border-bottom: solid 1px;
+
+        &:hover {
+          border-bottom-color: transparent;
+        }
+      }
+
+      @media screen and (max-width: 767px) {
+        font-size: 1rem;
+      }
+    }
+
+    .is-archive & {
+      margin-bottom: 1rem;
+
+      p {
+        font-size: 1.875rem;
+
+        @media screen and (max-width: 767px) {
+          font-size: 1.125rem;
+        }
+
+        @media screen and (max-width: 479px) {
+          font-size: 1rem;
+          font-weight: 400;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * unit styles
+ */
+.unit {
+  overflow: hidden;
+  border-radius: 0.625rem;
+
+  .unit__head {
+    display: none;
+  }
+
+  .unit__content {
+    padding: 1.5rem;
+    background-color: $color-special-unit;
+
+    .unit__content-link {
+      line-height: 1.375;
+
+      em {
+        font-style: italic;
+        font-family: $font-special;
+      }
+    }
+
+    .unit__content-info {
+      display: none;
+    }
+  }
+}
+
+
+/**
+ * entry-header styles
+ */
+.entry-header {
+  display: block;
+
+  .entry-header__title {
+    font-size: 2.75rem;
+
+    em {
+      display: block;
+
+      margin-top: 0.75rem;
+      line-height: 1.25;
+
+      font-size: 1.875rem;
+      font-style: italic;
+      font-weight: 500;
+      font-family: $font-special;
+    }
+
+    @media screen and (max-width: 1023px) {
+      font-size: 2.25rem;
+      line-height: 1.125;
+
+      em {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media screen and (max-width: 767px) {
+      font-size: 2rem;
+      line-height: 1.125;
+
+      em {
+        font-size: 1.375rem;
+      }
+    }
+
+    @media screen and (max-width: 479px) {
+      font-size: 1.75rem;
+    }
+  }
+
+  .entry-header__lead {
+    p {
+      font-weight: 500;
+      font-size: 1.375rem;
+
+      @media screen and (max-width: 767px) {
+        font-size: 1.125rem;
+      }
+    }
+
+    a {
+      color: $color-special-background;
+    }
+  }
+}
+
+.entry-content {
+  font-size: 1.125rem;
+
+  a {
+    color: $color-special-background;
+  }
+
+  @media screen and (max-width: 767px) {
+    font-size: 1rem;
+  }
+}
+
+/**
+ * archive styles
+ */
+.archive {
+  margin-bottom: 2rem;
+}
+
+.archive::after {
+  content: '';
+  width: calc(100% / 3 - .625rem);
+}

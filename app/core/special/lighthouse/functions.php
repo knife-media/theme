@@ -40,7 +40,7 @@ add_action('wp_enqueue_scripts', function() {
 add_action('archive_template', function($template) {
     $slug = basename(__DIR__);
 
-    // Locate single template
+    // Locate archive template
     $new_template = locate_template(["core/special/{$slug}/archive.php"]);
 
     if(empty($new_template)) {
