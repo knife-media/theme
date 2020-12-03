@@ -243,7 +243,7 @@ class Knife_Site_Meta {
 
         $meta[] = sprintf(
             '<meta name="description" content="%s">',
-            esc_attr($description)
+            esc_attr(strip_tags($description))
         );
 
         return self::print_tags($meta);

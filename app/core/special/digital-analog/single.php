@@ -20,19 +20,12 @@ get_header(); ?>
                     get_term_link($term->term_id),
                     esc_html($term->name)
                 );
-            ?>
-            <div class="caption__description">
-                <?php
 
-                    printf(
-                        '<p>%s</p>',
-                        _x(
-                            'Спецпроект журнала «Нож» и студии <a href="https://www.instagram.com/k0shta/" target="_blank">koshta</a>',
-                            'special: digital-analog', 'knife-theme'
-                        )
-                    );
-                ?>
-            </div>
+                printf(
+                    '<div class="caption__description">%s</div>',
+                    wpautop($term->description)
+                );
+            ?>
         </div>
 
         <article <?php post_class('post'); ?> id="post-<?php the_ID(); ?>">

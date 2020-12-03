@@ -57,6 +57,10 @@ class Knife_Theme_Filters {
         // Fix non-latin filenames
         add_action('sanitize_file_name', [__CLASS__, 'sanitize_file_name'], 12);
 
+        add_action('term_description', function($description) {
+            return wp_targeted_link_rel(links_add_target($description));
+        }, 11);
+
         // Remove annoying [...] in excerpts
         add_filter('excerpt_more', function($more) {
             return '&hellip;';
