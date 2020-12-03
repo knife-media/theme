@@ -12,13 +12,17 @@ get_header(); ?>
     <?php while(have_posts()) : the_post(); ?>
 
         <div class="caption">
+            <?php
+                $term = get_term_by('slug', 'digital-analog', 'special');
+
+                printf(
+                    '<div class="caption__title"><a href="%s">%s</a></div>',
+                    get_term_link($term->term_id),
+                    esc_html($term->name)
+                );
+            ?>
             <div class="caption__description">
                 <?php
-                    printf(
-                        '<a href="%s">%s</a>',
-                        get_term_link('digital-analog', 'special'),
-                        _x('Слияние полярностей', 'special: digital-analog', 'knife-theme')
-                    );
 
                     printf(
                         '<p>%s</p>',

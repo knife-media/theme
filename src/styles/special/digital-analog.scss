@@ -41,58 +41,84 @@ $font-special: 'Fira Sans', sans-serif;
  */
 .caption {
   width: 100%;
+  margin: 2rem 0 1.5rem;
 
-  .caption__description {
+  .caption__title {
     display: block;
     position: relative;
 
     max-width: $width-site;
-    margin: 2rem auto;
+    margin: 0 auto;
     text-align: center;
+
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.125;
 
     color: $color-white;
 
-    h1 {
+    &.caption__title--special {
+      padding: 0;
       font-size: 3.25rem;
-      font-weight: 700;
-      line-height: 1.125;
+      line-height: 1;
+
+      @media screen and (max-width: 1023px) {
+        font-size: 2.5rem;
+        line-height: 1.25;
+      }
 
       @media screen and (max-width: 767px) {
-        font-size: 2rem;
+        font-size: 1.875rem;
       }
 
       @media screen and (max-width: 479px) {
         font-size: 1.75rem;
         line-height: 1;
       }
-
     }
 
-    a {
-      color: $color-white;
-      font-weight: 700;
+    @media screen and (max-width: 767px) {
       font-size: 2rem;
+    }
 
-      @media screen and (max-width: 767px) {
-        font-size: 1.75rem;
-        line-height: 1.25;
+    @media screen and (max-width: 479px) {
+      font-size: 1.75rem;
+      line-height: 1;
+    }
+  }
+
+  .caption__description {
+    display: block;
+    position: relative;
+
+    max-width: $width-site;
+    margin: 0 auto;
+    text-align: center;
+
+    font-weight: 400;
+    font-size: 1.25rem;
+    font-style: italic;
+
+    color: $color-white;
+
+    a {
+      font-size: inherit;
+      font-weight: 400;
+      color: inherit;
+
+      border-bottom: solid 1px;
+
+      &:hover {
+        border-bottom-color: transparent;
       }
     }
 
-    p {
-      font-weight: 400;
-      font-size: 1.125rem;
-      font-style: italic;
+    .is-archive & {
+      font-size: 1.875rem;
 
-      a {
-        font-size: inherit;
-        font-weight: 400;
-
-        border-bottom: solid 1px;
-
-        &:hover {
-          border-bottom-color: transparent;
-        }
+      @media screen and (max-width: 1023px) {
+        margin-top: 0.25rem;
+        font-size: 1.5rem;
       }
 
       @media screen and (max-width: 767px) {
@@ -100,22 +126,17 @@ $font-special: 'Fira Sans', sans-serif;
       }
     }
 
-    .is-archive & {
-      margin-bottom: 1rem;
-
-      p {
-        font-size: 1.875rem;
-
-        @media screen and (max-width: 767px) {
-          font-size: 1.125rem;
-        }
-
-        @media screen and (max-width: 479px) {
-          font-size: 1rem;
-          font-weight: 400;
-        }
-      }
+    @media screen and (max-width: 767px) {
+      font-size: 1rem;
     }
+  }
+
+  .is-archive & {
+    margin-bottom: 0.5rem;
+  }
+
+  @media screen and (max-width: 767px) {
+    margin: 1.5rem 0 1rem;
   }
 }
 
@@ -218,6 +239,12 @@ $font-special: 'Fira Sans', sans-serif;
 
     a {
       color: $color-special-background;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    &:first-child {
+      margin-top: 0;
     }
   }
 }
