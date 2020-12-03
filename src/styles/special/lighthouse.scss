@@ -86,8 +86,9 @@
   display: block;
 
   width: 100%;
-  font-size: 1rem;
-  font-weight: 700;
+  font-size: 1.375rem;
+  font-weight: 500;
+  text-transform: none;
 }
   @media screen and (max-width: 767px) {
     .caption .caption__description p {
@@ -172,7 +173,6 @@
 .entry-header .entry-header__title > * {
   padding: .075em 0;
 
-  color: #363b3b;
   background-color: #e0ff00;
   box-shadow: .5rem 0 0 #e0ff00, -.5rem 0 0 #e0ff00;
 }
@@ -183,7 +183,12 @@
 }
 
 .entry-header .entry-header__lead p {
+  font-size: 1.25rem;
   font-weight: 700;
+
+  @media screen and (max-width: 767px) {
+    font-size: 1.125rem;
+  }
 }
 
 .entry-header .entry-header__lead a {
@@ -194,55 +199,58 @@
 /**
  * entry-content styles
  */
-.entry-content a {
-  color: #fa431b;
-}
+.entry-content {
+  font-size: 1.125rem;
 
-.entry-content h4 {
-  line-height: 1.5;
-}
+  h4 {
+    line-height: 1.5;
 
-.entry-content h4 > * {
-  padding: .25em 0;
+    & > * {
+      padding: .25em 0;
 
-  color: #363b3b;
-  background-color: #e0ff00;
-  box-shadow: .5rem 0 0 #e0ff00, -.5rem 0 0 #e0ff00;
-}
-
-
-/**
- * entry-content h5 styles
- */
-.entry-content h5 {
-  display: block;
-
-  margin-top: 2rem;
-  line-height: 1.5;
-  font-size: .875rem;
-
-  background-color: transparent;
-
-  a {
-    display: inline-block;
-
-    margin-top: 0.25rem;
-    font-size: 1.375em;
-    font-weight: 700;
-
-    color: #363b3b;
-    background-color: #e0ff00;
-    box-shadow: .5rem 0 0 #e0ff00, -.5rem 0 0 #e0ff00;
-
-    border-bottom: none;
-
-    @media screen and (max-width: 479px) {
-      font-size: 1.25rem;
+      background-color: #e0ff00;
+      box-shadow: .5rem 0 0 #e0ff00, -.5rem 0 0 #e0ff00;
     }
   }
 
-  @media screen and (max-width: 479px) {
-    font-size: .75rem;
+  a {
+    color: #fa431b;
+  }
+
+  h5 {
+    display: block;
+
+    margin-top: 2rem;
+    line-height: 1.5;
+    font-size: .875rem;
+
+    background-color: transparent;
+
+    a {
+      display: inline-block;
+
+      margin-top: 0.25rem;
+      font-size: 1.375em;
+      font-weight: 700;
+
+      color: #363b3b;
+      background-color: #e0ff00;
+      box-shadow: .5rem 0 0 #e0ff00, -.5rem 0 0 #e0ff00;
+
+      border-bottom: none;
+
+      @media screen and (max-width: 479px) {
+        font-size: 1.25rem;
+      }
+    }
+
+    @media screen and (max-width: 479px) {
+      font-size: .75rem;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    font-size: 1rem;
   }
 }
 
@@ -333,7 +341,7 @@
   padding-right: 0;
 
   text-align: center;
-  font-size: 1rem;
+  font-size: 1.125rem;
   font-weight: 500;
 
   color: #363b3b;
@@ -441,6 +449,7 @@
 .footer .footer__button .button {
   padding: 1rem;
   font-size: 1rem;
+  font-weight: 500;
   text-transform: uppercase;
 
   color: #202032;

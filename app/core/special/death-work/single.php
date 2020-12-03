@@ -54,10 +54,9 @@ get_header(); ?>
 
                     the_info(
                         sprintf(
-                            '<div class="entry-content__author"><p>%s</p>',
-                            _x('Автор материала', 'special: death-work', 'knife-theme')
+                            '<h5>%s', _x('Автор материала', 'special: death-work', 'knife-theme')
                         ),
-                        '</div>', ['author']
+                        '</h5>', ['author']
                     );
                 ?>
             </div>
