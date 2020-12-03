@@ -34,6 +34,11 @@ get_header(); ?>
         <article <?php post_class('post'); ?> id="post-<?php the_ID(); ?>">
             <div class="entry-header">
                 <?php
+                    the_info(
+                        '<div class="entry-header__info">', '</div>',
+                        ['author']
+                    );
+
                     the_title(
                         '<h1 class="entry-header__title">',
                         '</h1>'

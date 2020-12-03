@@ -1,6 +1,6 @@
 <?php
 /**
- * avito: special functions
+ * digital-analog: special functions
  *
  * @package knife-theme
  * @since 1.14
