@@ -243,7 +243,7 @@ class Knife_Site_Meta {
 
         $meta[] = sprintf(
             '<meta name="description" content="%s">',
-            esc_attr(strip_tags($description))
+            esc_attr(wp_strip_all_tags($description))
         );
 
         return self::print_tags($meta);
@@ -293,7 +293,7 @@ class Knife_Site_Meta {
 
         $meta[] = sprintf(
             '<meta property="og:description" content="%s">',
-            esc_attr($description)
+            esc_attr(wp_strip_all_tags($description))
         );
 
         if(method_exists('Knife_Snippet_Image', 'get_social_image')) {
