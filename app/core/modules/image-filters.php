@@ -53,7 +53,6 @@ class Knife_Image_Filters {
         add_image_size('inner', 640, 9999, false);
         add_image_size('short', 640, 480, true);
 
-        add_image_size('ground', 1600, 900, true);
         add_image_size('triple', 480, 360, true);
         add_image_size('double', 640, 480, true);
         add_image_size('single', 1280, 360, true);
