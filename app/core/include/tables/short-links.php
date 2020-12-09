@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.8
- * @version 1.12
+ * @version 1.13
  */
 
 if (!defined('WPINC')) {
@@ -85,9 +85,8 @@ class Knife_Short_Links_Table extends WP_List_Table {
         $link = trailingslashit($conf['url']) . $item['keyword'];
 
         $markup = sprintf(
-            '<a href="%s" target="_blank">%s</a>',
-            esc_url(trailingslashit($link)),
-            esc_html($item['keyword'])
+            '<a href="%1$s" target="_blank">%1$s</a>',
+            esc_url(trailingslashit($link))
         );
 
         return $markup;
