@@ -83,10 +83,6 @@ class Knife_Image_Filters {
      * Remove useless image attributes
      */
     public static function remove_attributes() {
-        add_filter('get_image_tag', function($html) {
-            return preg_replace('/(width|height)="\d*"\s/', '', $html);
-        }, 10);
-
         add_filter('get_image_tag_class', function($class, $id, $align, $size) {
             $class = 'figure__image';
 
