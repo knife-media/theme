@@ -34,7 +34,7 @@ class Knife_Post_Customs {
 
 
     /**
-     * Load custom post functions
+     * Load custom post functions only for current post name
      */
     public static function load_functions() {
         if(!is_singular(self::$post_type)) {
@@ -43,7 +43,7 @@ class Knife_Post_Customs {
 
         $object = get_queried_object();
 
-        // Get post name
+        // Get current post name
         $include = get_template_directory() . "/core/custom/" . $object->post_name;
 
         // Let's add the file if exists
