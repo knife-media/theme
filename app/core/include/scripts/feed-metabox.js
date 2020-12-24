@@ -21,4 +21,16 @@ jQuery(document).ready(function ($) {
       $('#knife-feed-display').html(display);
     }
   });
+
+  box.on('click', '#knife-feed-display', function (e) {
+    e.preventDefault();
+
+    var input = $('#knife-feed-publish');
+
+    // Show hidden input
+    input.attr('type', 'text');
+
+    // Add some styles
+    input.css({'display': 'block', 'width': '100%', 'margin-top': '10px'});
+  });
 });

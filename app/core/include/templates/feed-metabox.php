@@ -23,10 +23,18 @@
             <?php _e('Републикация:', 'knife-theme'); ?>
         </span>
 
-        <b id="knife-feed-display" class="publish-time">
-            <?php echo date("d.m.Y G:i", strtotime($zen_date)); ?>
+        <b id="knife-feed-display" class="publish-time" style="cursor: pointer;">
+            <?php echo date_i18n("d.m.Y G:i",$zen_date); ?>
         </b>
     </div>
+
+    <?php
+        printf(
+            '<input id="knife-feed-publish" type="hidden" name="%1$s" value="%2$s">',
+            esc_attr(self::$zen_publish),
+            sanitize_text_field($zen_publish)
+        );
+    ?>
 
     <div style="display: flex; align-items: center; margin-top: 10px;">
         <?php
@@ -44,13 +52,5 @@
             );
         ?>
     </div>
-
-    <?php
-        printf(
-            '<input id="knife-feed-publish" type="hidden" name="%1$s" value="%2$s">',
-            esc_attr(self::$zen_publish),
-            sanitize_text_field($zen_publish)
-        );
-    ?>
 </div>
 

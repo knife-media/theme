@@ -30,7 +30,7 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
             $limit = 25;
             $offset = $limit * ($paged - 1);
 
-            $query = "SELECT SQL_CALC_FOUND_ROWS p.*, IFNULL(m2.meta_value, p.post_date_gmt) as zen_date
+            $query = "SELECT p.*, IFNULL(m2.meta_value, p.post_date_gmt) as zen_date
                 FROM {$wpdb->posts} p
                 LEFT JOIN {$wpdb->postmeta} m1 ON (p.ID = m1.post_id AND m1.meta_key = '" . self::$zen_exclude . "')
                 LEFT JOIN {$wpdb->postmeta} m2 ON (p.ID = m2.post_id AND m2.meta_key = '" . self::$zen_publish . "')
