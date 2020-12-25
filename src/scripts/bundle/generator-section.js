@@ -180,9 +180,6 @@
     var rand = Math.floor(Math.random() * items.length);
     var item = items[rand];
 
-    // Remove this index
-    items.splice(rand, 1);
-
     // Update generator repeat button text
     if (knife_generator_options.hasOwnProperty('button_repeat')) {
       button.textContent = knife_generator_options.button_repeat;
