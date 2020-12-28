@@ -49,31 +49,3 @@ add_action('archive_template', function($template) {
     return $new_template;
 });
 
-
-/**
- * Add button to post content
- */
-add_action('the_content', function($content) {
-    global $post;
-
-    $slug = basename(__DIR__);
-
-    if(!property_exists('Knife_Special_Projects', 'taxonomy')) {
-        return $output;
-    }
-
-    $taxonomy = Knife_Special_Projects::$taxonomy;
-
-    if(has_term($slug, $taxonomy, $post) && is_main_query() && is_singular('post')) {
-        $promo_link = sprintf(
-            '<figure class="figure figure--promo"><a class="button" href="%s">%s <strong>%s</strong></a>',
-            esc_url(get_term_link($slug, $taxonomy)),
-            _x('Специальный проект', 'special: tochka', 'knife-theme'),
-            _x('Образовательного комлекса «Точка» и журнала «Нож»', 'special: tochka', 'knife-theme')
-        );
-
-        $content = $content . $promo_link;
-    }
-
-    return $content;
-});
