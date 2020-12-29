@@ -18,6 +18,10 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
         <language><?php bloginfo_rss('language'); ?></language>
         <?php do_action('rss2_head'); ?>
 
+<?php
+    self::get_zen_query();
+?>
+
         <?php
             global $post, $wpdb;
 

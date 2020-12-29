@@ -39,6 +39,7 @@ class Knife_Extra_Feeds {
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public static function load_module() {
+self::get_zen_query();
         // Init custom feeds
         add_action('init', [__CLASS__, 'add_feeds']);
 
@@ -251,6 +252,49 @@ class Knife_Extra_Feeds {
         }
 
         return $html;
+    }
+
+
+    /**
+     * Get Yandex.Zen WP_Query args
+     */
+    private static function get_zen_query() {
+        global $wpdb;
+
+        $results = $wpdb->get_results(
+            "SELECT id, post_date FROM {$wpdb->posts} WHERE post_type = 'post' AND post_status = 'publish' ORDER BY post_date DESC LIMIT 40",
+            OBJECT
+        );
+
+        $posts = [];
+
+        foreach($results as $result) {
+            $posts[$result->id] = $result->post_date;
+        }
+
+        $results = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT post_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key = %s AND meta_value BETWEEN %s AND NOW()",
+                self::$zen_publish, end($posts)
+            ), OBJECT
+        );
+
+        // Update posts with new results
+        foreach($results as $result) {
+            $posts[$result->post_id] = $result->meta_value;
+        }
+
+
+        /*
+        foreach($posts as $i => $post) {
+            if (get_post_meta($post->id, self::$zen_exclude, true)) {
+                unset($posts[$i]);
+            }
+        }
+         */
+
+
+        print_r($posts); exit;
     }
 
 

@@ -19,7 +19,7 @@ $title = _x('Я знаю как бросить курить', 'generator: smokin
 
 $poster->text([
     'text' => $title,
-    'x' => 88, 'y' => 320, 'width' => 600, 'height' => 100,
+    'x' => 50, 'y' => 220, 'width' => 600, 'height' => 100,
     'fontSize' => 28, 'lineHeight' => 1.5
 ]);
 
@@ -30,7 +30,7 @@ $poster->setFont(get_template_directory() . '/assets/fonts/formular/formular-reg
 if(!empty($textbox['heading'])) {
     $poster->text([
         'text' => strip_tags($textbox['heading']),
-        'x' => 88, 'y' => 380, 'width' => 1000, 'height' => 200,
+        'x' => 50, 'y' => 280, 'width' => 600, 'height' => 300,
         'lineHeight' => 1.5, 'fontSize' => 30
     ]);
 }
