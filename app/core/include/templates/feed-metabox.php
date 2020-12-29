@@ -3,10 +3,10 @@
         $zen_publish = get_post_meta(get_the_ID(), self::$zen_publish, true);
         $zen_exclude = get_post_meta(get_the_ID(), self::$zen_exclude, true);
 
-        $zen_date = get_the_date("Y-m-d H:i:s", get_the_ID());
+        $zen_date = get_the_date("d.m.Y G:i", get_the_ID());
 
-        if(strlen($zen_publish) > 0) {
-            $zen_date = get_date_from_gmt($zen_publish);
+        if($zen_publish) {
+            $zen_date = date("d.m.Y G:i", strtotime($zen_publish));
         }
 
         printf(
@@ -23,14 +23,18 @@
             <?php _e('Републикация:', 'knife-theme'); ?>
         </span>
 
-        <b id="knife-feed-display" class="publish-time" style="cursor: pointer;">
-            <?php echo date_i18n("d.m.Y G:i",$zen_date); ?>
+        <?php
+            printf(
+                '<b id="knife-feed-display" class="publish-time" style="cursor: pointer;">%s</b>',
+                esc_html($zen_date)
+            );
+        ?>
         </b>
     </div>
 
     <?php
         printf(
-            '<input id="knife-feed-publish" type="hidden" name="%1$s" value="%2$s">',
+            '<input id="knife-feed-publish" type="hidden" name="%s" value="%s">',
             esc_attr(self::$zen_publish),
             sanitize_text_field($zen_publish)
         );
@@ -41,7 +45,7 @@
             printf(
                 '<a href="#current-time" class="button" data-display="%s" data-publish="%s">%s</a>',
                 date_i18n("d.m.Y G:i"),
-                current_time('mysql', 1),
+                date_i18n('Y-m-d H:i:s'),
                 __('Текущее время', 'knife-theme')
             );
 

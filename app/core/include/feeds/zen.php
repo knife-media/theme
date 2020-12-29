@@ -18,33 +18,15 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
         <language><?php bloginfo_rss('language'); ?></language>
         <?php do_action('rss2_head'); ?>
 
-<?php
-    self::get_zen_query();
-?>
-
         <?php
-            global $post, $wpdb;
-
-            $paged = intval(get_query_var('paged', 1));
-
-            if($paged < 1) {
-                $paged = 1;
-            }
-
-            $limit = 25;
-            $offset = $limit * ($paged - 1);
-
-            $query = "SELECT p.*, IFNULL(m2.meta_value, p.post_date_gmt) as zen_date
-                FROM {$wpdb->posts} p
-                LEFT JOIN {$wpdb->postmeta} m1 ON (p.ID = m1.post_id AND m1.meta_key = '" . self::$zen_exclude . "')
-                LEFT JOIN {$wpdb->postmeta} m2 ON (p.ID = m2.post_id AND m2.meta_key = '" . self::$zen_publish . "')
-                WHERE p.post_type = 'post' AND p.post_status = 'publish' AND m1.post_id IS NULL
-                GROUP BY p.ID ORDER BY zen_date DESC LIMIT {$offset}, {$limit}";
-
-            $posts = $wpdb->get_results($query, OBJECT);
+            $query =  new WP_Query([
+                'post__in' => self::get_zen_query(),
+                'posts_per_page' => -1,
+                'orderby' => 'post__in'
+            ]);
         ?>
 
-        <?php foreach($posts as $post) : setup_postdata($post); ?>
+        <?php while($query->have_posts()) : $query->the_post(); ?>
             <item>
                 <title><?php the_title_rss(); ?></title>
                 <link><?php the_permalink_rss(); ?></link>
@@ -54,7 +36,7 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
                     // Print publish date
                     printf(
                         '<pubDate>%s</pubDate>',
-                        mysql2date('D, d M Y H:i:s +0000', $post->zen_date, false)
+                        self::get_zen_date(get_the_ID(), get_post_time('Y-m-d H:i:s', true))
                     );
 
                     // Print description
@@ -88,6 +70,6 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
                     }
                 ?>
             </item>
-        <?php endforeach; ?>
+        <?php endwhile; wp_reset_postdata(); ?>
     </channel>
 </rss>

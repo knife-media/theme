@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.7
- * @version 1.13
+ * @version 1.14
  * @link https://yandex.ru/support/news/feed.html
  * @link https://yandex.ru/support/zen/website/rss-modify.html
  */
@@ -39,7 +39,6 @@ class Knife_Extra_Feeds {
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public static function load_module() {
-self::get_zen_query();
         // Init custom feeds
         add_action('init', [__CLASS__, 'add_feeds']);
 
@@ -154,18 +153,20 @@ self::get_zen_query();
             return;
         }
 
-        // Save publish meta if not empty
+        delete_post_meta($post_id, self::$zen_publish);
+
+        // Save zen publish date if not empty
         if(!empty($_REQUEST[self::$zen_publish])) {
-            update_post_meta($post_id, self::$zen_publish, sanitize_text_field($_REQUEST[self::$zen_publish]));
-        } else {
-            delete_post_meta($post_id, self::$zen_publish);
+            $zen_publish = strtotime($_REQUEST[self::$zen_publish]);
+
+            update_post_meta($post_id, self::$zen_publish, date("Y-m-d H:i:s", $zen_publish));
         }
+
+        delete_post_meta($post_id, self::$zen_exclude);
 
         // Save exclude meta if not empty
         if(!empty($_REQUEST[self::$zen_exclude])) {
             update_post_meta($post_id, self::$zen_exclude, 1);
-        } else {
-            delete_post_meta($post_id, self::$zen_exclude);
         }
     }
 
@@ -261,40 +262,83 @@ self::get_zen_query();
     private static function get_zen_query() {
         global $wpdb;
 
-        $results = $wpdb->get_results(
-            "SELECT id, post_date FROM {$wpdb->posts} WHERE post_type = 'post' AND post_status = 'publish' ORDER BY post_date DESC LIMIT 40",
-            OBJECT
-        );
-
         $posts = [];
+
+        // Get 50 published posts
+        $results = $wpdb->get_results(self::get_publish_posts(50), OBJECT);
 
         foreach($results as $result) {
             $posts[$result->id] = $result->post_date;
         }
 
-        $results = $wpdb->get_results(
-            $wpdb->prepare(
-                "SELECT post_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key = %s AND meta_value BETWEEN %s AND NOW()",
-                self::$zen_publish, end($posts)
-            ), OBJECT
-        );
+        // Get zen posts
+        $results = $wpdb->get_results(self::get_zen_posts($posts), OBJECT);
 
         // Update posts with new results
         foreach($results as $result) {
             $posts[$result->post_id] = $result->meta_value;
         }
 
+        // Its ok with sorting by date
+        arsort($posts);
 
-        /*
-        foreach($posts as $i => $post) {
-            if (get_post_meta($post->id, self::$zen_exclude, true)) {
-                unset($posts[$i]);
+        // Exclude posts by meta
+        foreach($posts as $id => $publish) {
+            if (get_post_meta($id, self::$zen_exclude, true)) {
+                unset($posts[$id]);
             }
         }
-         */
+
+        return array_slice(array_keys($posts), 0, 20);
+    }
 
 
-        print_r($posts); exit;
+    /**
+     * Get post date mixed with zen date
+     *
+     * @since 1.14
+     */
+    private static function get_zen_date($post_id, $post_date) {
+        $zen_date = get_post_meta($post_id, self::$zen_publish, true);
+
+        if (!empty($zen_date)) {
+            $post_date = get_gmt_from_date($zen_date);
+        }
+
+        return mysql2date('D, d M Y H:i:s +0000', $post_date, false);
+    }
+
+
+    /**
+     * Helper method to get query for zen republished posts
+     *
+     * @since 1.14
+     */
+    private static function get_zen_posts($posts) {
+        global $wpdb;
+
+        $query = $wpdb->prepare(
+            "SELECT post_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key = %s AND meta_value BETWEEN %s AND NOW()",
+            self::$zen_publish, end($posts)
+        );
+
+        return $query;
+    }
+
+
+    /**
+     * Helper method to get query for published posts
+     *
+     * @since 1.14
+     */
+    private static function get_publish_posts($limit) {
+        global $wpdb;
+
+        $query = "SELECT id, post_date FROM {$wpdb->posts}
+            WHERE post_type = 'post' AND post_status = 'publish'
+            ORDER BY post_date DESC LIMIT " . (int) $limit;
+
+        return $query;
     }
 
 
