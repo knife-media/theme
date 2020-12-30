@@ -19,7 +19,7 @@ get_header(); ?>
 
                 printf(
                     '<h1>%s</h1>',
-                    _x('Специальный проект фармацевтической компании Bayer и журнала «Нож»', 'special: bayer', 'knife-theme')
+                    _x('Специальный проект компании Bayer и журнала «Нож»', 'special: bayer', 'knife-theme')
                 );
             ?>
         </div>
