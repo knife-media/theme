@@ -30,6 +30,22 @@ add_filter('social_planner_hide_settings', '__return_true');
 
 
 /**
+ * Hide Social Planner metabox from pages.
+ *
+ * @since 1.14
+ */
+add_filter('social_planner_post_types', function($post_types) {
+    foreach($post_types as $i => $name) {
+        if('page' === $name) {
+            unset($post_types[$i]);
+        }
+    }
+
+    return $post_types;
+});
+
+
+/**
  * Add promo hashtag to Social Planner message
  *
  * @since 1.14
