@@ -125,10 +125,10 @@ require get_template_directory() . '/core/modules/authors-manager.php';
 require get_template_directory() . '/core/modules/menu-upgrade.php';
 
 // Social delivery module
-require get_template_directory() . '/core/modules/social-delivery.php';
+// require get_template_directory() . '/core/modules/social-delivery.php';
 
 // Schedule posts sharing
-require get_template_directory() . '/core/modules/distribute-control.php';
+// require get_template_directory() . '/core/modules/distribute-control.php';
 
 // User generated blogs
 require get_template_directory() . '/core/modules/club-section.php';
