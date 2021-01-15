@@ -26,7 +26,33 @@ add_filter('ppp_nonce_life', function() {
  *
  * @since 1.14
  */
-add_filter('social_planner_hide_settings', '__return_true');
+//add_filter('social_planner_hide_settings', '__return_true');
+
+
+/**
+ * Send Social Planner errors to telegram bot
+ */
+add_action('social_planner_task_sent', function($results, $key, $post_id) {
+    $secret = empty(KNIFE_REQUESTS['secret']) ? '' : KNIFE_REQUESTS['secret'];
+
+    if(empty($results[$key]['errors'])) {
+        return;
+    }
+
+    $timestamp = time();
+
+    $data = [
+        'nonce' => substr(sha1($secret . $timestamp), -12, 10),
+        'time' => $timestamp,
+        'errors' => json_encode($results[$key]['errors']),
+        'link' => get_permalink($post_id)
+    ];
+
+    wp_remote_post('https://knife.media/requests/planner', [
+        'body' => http_build_query($data),
+        'method' => 'POST'
+    ]);
+}, 10, 3);
 
 
 /**
