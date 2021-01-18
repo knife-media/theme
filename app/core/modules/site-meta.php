@@ -293,7 +293,7 @@ class Knife_Site_Meta {
 
         $meta[] = sprintf(
             '<meta property="og:description" content="%s">',
-            esc_attr(wp_strip_all_tags($description))
+            esc_attr($description)
         );
 
         if(method_exists('Knife_Snippet_Image', 'get_social_image')) {
@@ -338,7 +338,7 @@ class Knife_Site_Meta {
 
             $meta[] = sprintf(
                 '<meta property="og:title" content="%s">',
-                esc_attr(get_bloginfo('title'))
+                wp_get_document_title()
             );
         }
 
@@ -354,7 +354,7 @@ class Knife_Site_Meta {
 
             $meta[] = sprintf(
                 '<meta property="og:title" content="%s">',
-                esc_attr(strip_tags(get_the_title($object_id)))
+                esc_attr(wp_strip_all_tags(get_the_title($object_id)))
             );
         }
 
@@ -587,7 +587,7 @@ class Knife_Site_Meta {
             $object_id = get_queried_object_id();
 
             if(has_excerpt($object_id)) {
-                return trim(strip_tags(get_the_excerpt($object_id)));
+                return trim(wp_strip_all_tags(get_the_excerpt($object_id)));
             }
         }
 
@@ -595,17 +595,19 @@ class Knife_Site_Meta {
             $object_type = get_queried_object();
 
             if(!empty($object_type->description)) {
-                return $object_type->description;
+                return wp_strip_all_tags($object_type->description);
             }
 
             if(!empty($object_type->name)) {
-                $description = __('Журнал Нож – архив статей по теме ', 'knife-theme') . strip_tags($object_type->name);
+                $description = __('Журнал Нож – архив статей по теме ', 'knife-theme') . wp_strip_all_tags($object_type->name);
 
                 return trim($description);
             }
         }
 
-        return get_bloginfo('description');
+        $description = esc_html__('Интеллектуальный журнал о культуре и обществе.', 'knife-theme');
+
+        return $description;
     }
 
 
