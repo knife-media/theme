@@ -57,9 +57,8 @@ class Knife_Theme_Filters {
         // Fix non-latin filenames
         add_action('sanitize_file_name', [__CLASS__, 'sanitize_file_name'], 12);
 
-        add_action('term_description', function($description) {
-            return wp_targeted_link_rel(links_add_target($description));
-        }, 11);
+        // Preload styles and fonts
+        add_action('wp_head', [__CLASS__, 'preload_assets'], 5);
 
         // Remove annoying [...] in excerpts
         add_filter('excerpt_more', function($more) {
@@ -87,7 +86,37 @@ class Knife_Theme_Filters {
                 $query->set('orderby', 'rand');
             }
         });
+
+        add_action('term_description', function($description) {
+            return wp_targeted_link_rel(links_add_target($description));
+        }, 11);
     }
+
+
+    /**
+     * Preload styles and fonts in header
+     *
+     * @link https://web.dev/preload-critical-assets/
+     * @since 1.14
+     */
+    public static function preload_assets() {
+        $fonts = [
+            'fonts/formular/formular-regular.woff2',
+            'fonts/formular/formular-medium.woff2',
+            'fonts/formular/formular-bold.woff2',
+            'fonts/ptserif/ptserif-regular.woff',
+            'fonts/ptserif/ptserif-italic.woff2',
+            'fonts/knife-icons/knife-icons.woff',
+        ];
+
+        foreach($fonts as $font) {
+            printf(
+                '<link rel="preload" href="%s" as="font" type="font/woff2" crossorigin>' . "\n",
+                get_template_directory_uri() . '/assets/' . $font
+            );
+        }
+    }
+
 
     /**
      * Update theme roles and capabilites
