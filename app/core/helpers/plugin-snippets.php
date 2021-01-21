@@ -26,7 +26,7 @@ add_filter('ppp_nonce_life', function() {
  *
  * @since 1.14
  */
-//add_filter('social_planner_hide_settings', '__return_true');
+add_filter('social_planner_hide_settings', '__return_true');
 
 
 /**
