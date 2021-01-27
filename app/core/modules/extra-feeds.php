@@ -67,9 +67,8 @@ class Knife_Extra_Feeds {
         add_filter('feed_links_show_comments_feed', '__return_false');
         add_filter('post_comments_feed_link', '__return_false');
 
-        // Remove comment feeds
-        add_action('do_feed_rss2', [__CLASS__, 'remove_comment_feeds'], 9);
-        add_action('do_feed_atom', [__CLASS__, 'remove_comment_feeds'], 9);
+        // Redirect comment feed templates
+        add_action('template_redirect', [__CLASS__, 'redirect_comment_feeds']);
 
         // Remove extra feed links for single
         add_action('wp', [__CLASS__, 'remove_head_feeds']);
@@ -87,16 +86,19 @@ class Knife_Extra_Feeds {
         }
     }
 
-
     /**
-     * Remove comment feeds
+     * Redirect comment feed templates
      *
-     * @since 1.11
+     * @since 1.14
      */
-    public static function remove_comment_feeds($for_comments) {
-        if($for_comments) {
-            remove_action('do_feed_rss2', 'do_feed_rss2');
-            remove_action('do_feed_atom', 'do_feed_atom');
+    public static function redirect_comment_feeds() {
+        if(!is_admin() && is_feed() && is_singular()) {
+            $post_id = get_the_ID();
+
+            if($post_id) {
+                wp_safe_redirect(get_permalink($post_id), 301);
+            }
+
         }
     }
 

@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.7
- * @version 1.13
+ * @version 1.14
  */
 
 if (!defined('WPINC')) {
@@ -188,12 +188,13 @@ class Knife_Quiz_Section {
 
     /**
      * Add rewrite sharing parameter to post type url
-     *
      * Mask: /%post-type%/%post-name%/%item-number%/
+     *
+     * @version 1.14
      */
     public static function add_share_rule() {
         add_rewrite_rule(
-            sprintf('%s/([^/]+)/(.+)/?$',
+            sprintf('%s/([^/]+)/(\d+)/?$',
                 self::$post_type
             ),
 
