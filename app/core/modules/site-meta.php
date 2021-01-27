@@ -37,7 +37,8 @@ class Knife_Site_Meta {
         add_action('wp_head', [__CLASS__, 'add_yandex_meta'], 5);
 
         // Add JSON-LD microdata
-        add_action('wp_head', [__CLASS__, 'add_json_microdata'], 25);
+        add_action('wp_head', [__CLASS__, 'add_singular_microdata'], 25);
+        add_action('wp_head', [__CLASS__, 'add_frontpage_microdata'], 25);
 
         // Add google tagmanager script
         add_action('wp_head', [__CLASS__, 'add_tagmanager'], 20);
@@ -58,12 +59,40 @@ class Knife_Site_Meta {
 
 
     /**
+     * Add JSON-LD microdata for front page template
+     *
+     * @since 1.14
+     */
+    public static function add_frontpage_microdata() {
+        if(!is_front_page()) {
+            return;
+        }
+
+        $schema = [
+            '@context' => 'http://schema.org',
+            '@type' => 'WebSite',
+            'url' => home_url('/')
+        ];
+
+        $schema['potentialAction'] = [
+            '@type' => 'SearchAction',
+            'target' => home_url('/search/#gsc.q={search_term_string}'),
+            'query-input' => 'required name=search_term_string'
+        ];
+
+        printf(
+            '<script type="application/ld+json">%s</script>',
+            json_encode($schema, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE)
+        );
+    }
+
+
+    /**
      * Add JSON-LD microdata for singular templates
      *
-     * @since 1.11
+     * @since 1.14
      */
-    public static function add_json_microdata() {
-        // Show microdata only for singular
+    public static function add_singular_microdata() {
         if(!is_singular() || is_front_page()) {
             return;
         }
@@ -616,7 +645,7 @@ class Knife_Site_Meta {
      */
     private static function print_tags($meta) {
         foreach($meta as $tag) {
-            echo $tag . PHP_EOL;
+            echo "{$tag}\n";
         }
     }
 }

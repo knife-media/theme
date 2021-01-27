@@ -95,7 +95,7 @@ class Knife_Club_Section {
         if(is_post_type_archive(self::$post_type)) {
             $button_link = sprintf('<div class="caption__button caption__button--club"><a class="button" href="%2$s">%1$s</a></div>',
                 __('Присоединиться', 'knife-theme'),
-                trailingslashit(site_url(self::$page_slug))
+                trailingslashit(home_url(self::$page_slug))
             );
 
             $description = $description . $button_link;
