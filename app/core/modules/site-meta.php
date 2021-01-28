@@ -628,9 +628,13 @@ class Knife_Site_Meta {
             }
 
             if(!empty($object_type->name)) {
-                $description = __('Журнал Нож – архив статей по теме ', 'knife-theme') . wp_strip_all_tags($object_type->name);
+                $description = __('Архив журнала Нож по теме ', 'knife-theme') . wp_strip_all_tags($object_type->name);
 
-                return trim($description);
+                if(get_query_var('paged')) {
+                    $description = $description . sprintf(__(' — Cтраница %d', 'knife-theme'), get_query_var('paged'));
+                }
+
+                return $description;
             }
         }
 
