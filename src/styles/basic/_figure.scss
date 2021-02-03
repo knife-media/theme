@@ -524,4 +524,41 @@
       }
     }
   }
+
+  &.figure--frame {
+    display: block;
+    position: relative;
+
+    width: 100%;
+    max-width: 100%;
+
+    .button {
+      display: block;
+
+      width: $width-content;
+      margin: -1rem auto 1.5rem;
+
+      color: $color-white;
+      background-color: $color-primary;
+
+      border-radius: 4px;
+
+      &:hover {
+        filter: brightness(125%);
+      }
+
+      @media screen and (max-width: 767px) {
+        margin-bottom: 1rem;
+      }
+    }
+
+    iframe {
+      display: block;
+      position: relative;
+
+      width: 100%;
+      margin: 0;
+      overflow: hidden;
+    }
+  }
 }

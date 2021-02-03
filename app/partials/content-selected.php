@@ -20,13 +20,13 @@
                 '</h1>'
             );
 
-            the_lead(
-                '<div class="entry-header__lead">',
+            the_share(
+                '<div class="entry-header__share share">',
                 '</div>'
             );
 
-            the_share(
-                '<div class="entry-header__share share">',
+            the_lead(
+                '<div class="entry-header__lead">',
                 '</div>'
             );
         ?>
