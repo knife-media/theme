@@ -118,7 +118,7 @@ class Knife_Content_Filters {
      * Prevent to create WordPress posts and pages with specific slugs
      */
     public static function prevent_theme_slugs($bad_slug, $slug) {
-        $skip = ['external', 'requests'];
+        $skip = ['external', 'requests', 'frame', 'feature'];
 
         if(in_array($slug, $skip)) {
             return true;
