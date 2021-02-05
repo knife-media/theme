@@ -9,6 +9,12 @@
 
 get_header(); ?>
 
+<?php
+    if(is_active_sidebar('knife-feature')) :
+        dynamic_sidebar('knife-feature');
+    endif;
+?>
+
 <?php if(have_posts() && get_the_archive_title()) : ?>
     <div class="caption">
         <?php
