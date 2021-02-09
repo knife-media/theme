@@ -1,0 +1,38 @@
+// Setup variables
+@import "../setup/variables";
+
+$color-custom-content: #e2889b;
+
+.entry-header {
+  color: $color-white;
+  background-color: $color-custom-content;
+
+  .entry-header__info {
+    color: $color-white;
+  }
+
+  .entry-header__lead a {
+    color: $color-white;
+  }
+}
+
+.entry-content {
+  background-color: $color-custom-content;
+  padding-bottom: 2rem;
+
+  .figure--flipper aside {
+    font-size: 1.125rem;
+    line-height: 1.375;
+
+    @media screen and (max-width: 767px) {
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+  }
+
+  .figure--flipper aside em {
+    font-family: $font-serif;
+    font-weight: 400;
+    font-style: italic;
+  }
+}
