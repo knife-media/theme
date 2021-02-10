@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.8
- * @version 1.10
+ * @version 1.14
  */
 
 
@@ -58,24 +58,18 @@ class Knife_Image_Filters {
         add_image_size('single', 1280, 360, true);
     }
 
-
     /**
      * Disable post attachment pages
-     * Redirect to post parent if exists
      */
     public static function redirect_attachments() {
-        global $post;
-
-        if(is_attachment()) {
-            $url = home_url('/');
-
-            if(isset($post->post_parent) && $post->post_parent > 0) {
-                $url = get_permalink($post->post_parent);
-            }
-
-            wp_redirect(esc_url($url), 301);
-            exit;
+        if(!is_attachment()) {
+            return;
         }
+
+        global $wp_query;
+
+        $wp_query->set_404();
+        status_header( 404 );
     }
 
 
