@@ -53,7 +53,7 @@ class Knife_SEO_Fields {
      * @since 1.14
      */
     public static function add_metabox() {
-        add_meta_box('knife-seo-metabox', __('Теги для поисковых систем', 'knife-theme'), [__CLASS__, 'display_metabox'], self::$post_type, 'advanced', 'high');
+        add_meta_box('knife-seo-metabox', __('Информация для поисковых систем', 'knife-theme'), [__CLASS__, 'display_metabox'], self::$post_type, 'advanced', 'high');
     }
 
 
