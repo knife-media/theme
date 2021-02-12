@@ -43,6 +43,9 @@ class Knife_Site_Meta {
         // Add google tagmanager script
         add_action('wp_head', [__CLASS__, 'add_tagmanager'], 20);
 
+        // Update title with SEO field
+        add_filter('document_title_parts', [__CLASS__, 'update_seo_title']);
+
         // Add custom theme lang attributes
         add_filter('language_attributes', [__CLASS__, 'add_xmlns']);
 
@@ -262,17 +265,30 @@ class Knife_Site_Meta {
 
 
     /**
+     * Replace head title tag with SEO field
+     */
+    public static function update_seo_title($parts) {
+        $title = self::get_seo_title();
+
+        if(empty($title)) {
+            return $parts;
+        }
+
+        $parts['title'] = $title;
+
+        return $parts;
+    }
+
+
+    /**
      * Add seo tags
      */
     public static function add_seo_tags() {
         $meta = [];
 
-        // Get description
-        $description = self::get_description();
-
         $meta[] = sprintf(
             '<meta name="description" content="%s">',
-            esc_attr(wp_strip_all_tags($description))
+            esc_attr(self::get_seo_description())
         );
 
         return self::print_tags($meta);
@@ -307,9 +323,6 @@ class Knife_Site_Meta {
     public static function add_og_tags() {
         $meta = [];
 
-        // Get description
-        $description = self::get_description();
-
         $meta[] = sprintf(
             '<meta property="og:site_name" content="%s">',
             esc_attr(get_bloginfo('name'))
@@ -322,7 +335,7 @@ class Knife_Site_Meta {
 
         $meta[] = sprintf(
             '<meta property="og:description" content="%s">',
-            esc_attr($description)
+            esc_attr(self::get_description())
         );
 
         if(method_exists('Knife_Snippet_Image', 'get_social_image')) {
@@ -605,6 +618,49 @@ class Knife_Site_Meta {
         }
 
         return $meta;
+    }
+
+    /**
+     * Get SEO title field
+     *
+     * @since 1.14
+     */
+    private static function get_seo_title() {
+        if(is_singular() && !is_front_page()) {
+            $object_id = get_queried_object_id();
+
+            if(property_exists('Knife_SEO_Fields', 'meta_seo')) {
+                $fields = get_post_meta($object_id, Knife_SEO_Fields::$meta_seo, true);
+
+                if (!empty($fields['title'])) {
+                    return trim(wp_strip_all_tags($fields['title']));
+                }
+            }
+        }
+
+        return null;
+    }
+
+
+    /**
+     * Get SEO description field
+     *
+     * @since 1.14
+     */
+    private static function get_seo_description() {
+        if(is_singular() && !is_front_page()) {
+            $object_id = get_queried_object_id();
+
+            if(property_exists('Knife_SEO_Fields', 'meta_seo')) {
+                $fields = get_post_meta($object_id, Knife_SEO_Fields::$meta_seo, true);
+
+                if (!empty($fields['description'])) {
+                    return trim(wp_strip_all_tags($fields['description']));
+                }
+            }
+        }
+
+        return self::get_description();
     }
 
 
