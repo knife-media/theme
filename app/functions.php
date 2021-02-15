@@ -124,12 +124,6 @@ require get_template_directory() . '/core/modules/authors-manager.php';
 // Upgrade theme menus
 require get_template_directory() . '/core/modules/menu-upgrade.php';
 
-// Social delivery module
-// require get_template_directory() . '/core/modules/social-delivery.php';
-
-// Schedule posts sharing
-// require get_template_directory() . '/core/modules/distribute-control.php';
-
 // User generated blogs
 require get_template_directory() . '/core/modules/club-section.php';
 
@@ -156,6 +150,9 @@ require get_template_directory() . '/core/modules/special-projects.php';
 
 // Login screen custom styles
 require get_template_directory() . '/core/modules/access-screen.php';
+
+// Custom metabox for SEO fields
+require get_template_directory() . '/core/modules/seo-fields.php';
 
 // Custom site meta and footer description
 require get_template_directory() . '/core/modules/site-meta.php';

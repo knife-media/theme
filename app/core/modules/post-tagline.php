@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.2
- * @version 1.11
+ * @version 1.14
  */
 
 
@@ -51,7 +51,7 @@ class Knife_Post_Tagline {
 
         // Update title with tagline
         add_filter('the_title', [__CLASS__, 'post_tagline'], 10, 2);
-        add_filter('document_title_parts', [__CLASS__, 'site_tagline'], 10, 1);
+        add_filter('document_title_parts', [__CLASS__, 'site_tagline']);
     }
 
 
