@@ -1,3 +1,6 @@
+// Setup variables
+@import "../setup/variables";
+
 $color-special-common: #434446;
 $color-special-white: #fff;
 $color-special-footer: #0095da;
@@ -87,5 +90,47 @@ $color-special-footer: #0095da;
 
   @media screen and (max-width: 479px) {
     width: 4rem;
+  }
+}
+
+
+/**
+ * promo button styles
+ */
+.content .figure--promo {
+  display: block;
+
+  .button {
+    display: block;
+    padding-left: 6rem;
+
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.375;
+    color: $color-special-common;
+
+    text-transform: uppercase;
+    text-align: left;
+
+    background-color: #ddd;
+    background-image: url('images/logo-transparent.png');
+    background-size: 4rem auto;
+    background-repeat: no-repeat;
+    background-position: 1rem center;
+
+    border-radius: .5rem;
+
+    &:hover {
+      filter: none;
+      background-color: #ccc;
+    }
+
+    @media screen and (max-width: 767px) {
+      padding-left: 1rem;
+      font-size: 0.875rem;
+      line-height: 1.5;
+
+      background-image: none;
+    }
   }
 }
