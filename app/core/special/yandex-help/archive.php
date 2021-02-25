@@ -31,7 +31,7 @@ get_header(); ?>
         <div class="caption__button">
             <?php
                 printf(
-                    '<a class="button" href="https://knife.media" target="_blank" rel="noopener">%s</a>',
+                    '<a class="button" href="https://help.yandex.ru/taxi?utm_source=yandexgostories#donate" target="_blank" rel="noopener">%s</a>',
                     _x('Хочу помочь', 'special: yandex-help', 'knife-theme')
                 );
             ?>
