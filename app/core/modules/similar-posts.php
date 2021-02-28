@@ -398,7 +398,7 @@ class Knife_Similar_Posts {
         // Get current page admin link
         $admin_url = admin_url('/tools.php?page=' . self::$page_slug);
 
-        if(empty($_REQUEST['id'])) {
+        if(!isset($_REQUEST['id'])) {
             return;
         }
 
