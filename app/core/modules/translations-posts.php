@@ -1,6 +1,6 @@
 <?php
 /**
- * Translate posts
+ * Translations posts
  *
  * Custom post meta to mark translations posts
  *
@@ -14,7 +14,7 @@ if (!defined('WPINC')) {
 }
 
 
-class Knife_Translate_Posts {
+class Knife_Translations_Posts {
     /**
      * Post meta to pass translations option
      *
@@ -43,6 +43,14 @@ class Knife_Translate_Posts {
 
 
     /**
+     * Users ID to force translations meta on publish
+     *
+     * @access public
+     * @var    array
+     */
+    public static $translators = [132];
+
+    /**
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public static function load_module() {
@@ -66,6 +74,12 @@ class Knife_Translate_Posts {
 
         // Update translations archive document title
         add_filter('document_title_parts', [__CLASS__, 'update_document_title'], 10);
+
+        // Schedule appending translation meta on publish
+        add_action('transition_post_status', [__CLASS__, 'schedule_translation'], 10, 3);
+
+        // Set translation on publish for certain author
+        add_action('knife_schedule_translation', [__CLASS__, 'set_translation']);
 
         // Add setting to set translations post meta
         add_action('post_submitbox_misc_actions', [__CLASS__, 'print_checkbox']);
@@ -142,7 +156,6 @@ class Knife_Translate_Posts {
 
         if(get_query_var(self::$query_var)) {
             $query->set('post_type', self::$post_type);
-            $query->set('orderby', 'rand');
 
             $query->set('meta_key', self::$meta_translations);
             $query->set('meta_value', 1);
@@ -217,10 +230,36 @@ class Knife_Translate_Posts {
 
         return update_post_meta($post_id, self::$meta_translations, 1);
     }
+
+    /**
+     * Set translation meta on publish for certain users
+     */
+    public static function schedule_translation($new_status, $old_status, $post) {
+        if($new_status !== 'publish') {
+            return;
+        }
+
+        if(!property_exists('Knife_Authors_Manager', 'meta_authors')) {
+            return;
+        }
+
+        $authors = get_post_meta($post->ID, Knife_Authors_Manager::$meta_authors);
+
+        if(count(array_intersect(self::$translators, $authors)) > 0) {
+            wp_schedule_single_event(time(), 'knife_schedule_translation', [$post->ID]);
+        }
+    }
+
+    /**
+     * Set translation on publish for certain author
+     */
+    public static function set_translation($post_id) {
+        update_post_meta($post_id, self::$meta_translations, 1);
+    }
 }
 
 
 /**
  * Load current module environment
  */
-Knife_Translate_Posts::load_module();
+Knife_Translations_Posts::load_module();
