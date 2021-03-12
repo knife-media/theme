@@ -38,7 +38,7 @@
   .tagline__partner {
     display: flex;
     align-items: center;
-    flex-flow: row wrap;
+    flex-flow: row nowrap;
 
     padding: 0 1rem;
     margin-left: 1rem;
