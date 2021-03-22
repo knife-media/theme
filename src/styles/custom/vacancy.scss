@@ -1,0 +1,143 @@
+// Setup variables
+@import "../setup/variables";
+@import "../setup/mixins";
+
+$color-custom-background: #f1f8ff;
+$color-custom-button: #11769C;
+
+.entry-content {
+  max-width: $width-wide;
+
+  color: $color-text;
+  background-color: $color-custom-background;
+
+  border-radius: 0.75rem;
+}
+
+.figure--request {
+  display: block;
+
+  form {
+    display: block;
+    position: relative;
+
+    margin: 1rem 0 0;
+  }
+
+  textarea {
+    display: block;
+    outline: none;
+    resize: none;
+
+    width: 100%;
+    height: auto;
+
+    margin: 1rem 0;
+    padding: 1rem;
+
+    background-color: $color-white;
+    border-radius: 0.5rem;
+  }
+
+  button {
+    display: inline-block;
+
+    min-width: 10rem;
+    max-width: 100%;
+    padding: 0.75rem;
+
+    font-weight: 400;
+    font-size: 1rem;
+
+    color: $color-white;
+    background-color: $color-custom-button;
+    border-radius: 0.5rem;
+
+    @include submit-button;
+
+    &:hover {
+      filter: brightness(120%);
+    }
+
+    @media screen and (max-width: 479px) {
+      width: 100%;
+    }
+  }
+}
+
+.figure--navigation {
+  display: block;
+  width: $width-content;
+
+  a {
+    display: block;
+    position: relative;
+
+    margin: 1.5rem 0;
+    padding: 1rem 4rem 1rem 1.5rem;
+
+    font-size: 1.375rem;
+    font-weight: 700;
+
+    color: $color-text;
+    background-color: $color-white;
+
+    border: none;
+    border-radius: 0.75rem;
+
+    .icon {
+      content: '';
+
+      position: absolute;
+      top: 50%;
+      right: 1.5rem;
+
+      font-size: 1.25rem;
+      transform: translateY(-50%);
+
+      transition: transform 0.5s;
+    }
+
+    &:hover .icon {
+      transform: translate(0.5rem, -50%);
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    @media screen and (max-width: 767px) {
+      margin: 1rem 0;
+      padding: 0.75rem 3.25rem 0.75rem 1rem;
+
+      font-size: 1.25rem;
+      line-height: 1.375;
+    }
+  }
+}
+
+.figure--summary {
+  display: block;
+  position: relative;
+
+  width: $width-content + 5rem;
+  margin-top: 1.5rem;
+  padding: 2rem 2.5rem;
+
+  color: $color-text;
+  background-color: $color-white;
+
+  border-radius: 0.75rem;
+
+  h4 {
+    margin: 1.5rem 0 0.5rem;
+  }
+
+  & > *:first-child {
+    margin-top: 0;
+  }
+
+  & > *:last-child {
+    margin-bottom: 0;
+  }
+}

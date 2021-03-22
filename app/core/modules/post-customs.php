@@ -43,6 +43,15 @@ class Knife_Post_Customs {
 
         $object = get_queried_object();
 
+        // Try to find top level parent
+        if(!empty($object->post_parent)) {
+            $ancestors = get_post_ancestors($object);
+
+            if(!empty($ancestors)) {
+                $object = get_post(array_pop($ancestors));
+            }
+        }
+
         // Get current post name
         $include = get_template_directory() . "/core/custom/" . $object->post_name;
 
