@@ -9,7 +9,7 @@
   height: 100%;
 }
 
-@mixin submit-button {
+@mixin submit-button( $color: #000 ) {
   will-change: transform;
 
   &[data-loading] {
@@ -22,7 +22,7 @@
 
   &[disabled] {
     pointer-events: none;
-    color: rgba(0, 0, 0, 0.5);
+    color: rgba($color, 0.5);
   }
 }
 

@@ -52,7 +52,8 @@ add_action('wp_enqueue_scripts', function() {
         'time' => $timestamp,
         'button' => __('Отправить', 'knife-theme'),
         'success' => __('Сообщение отправлено', 'knife-theme'),
-        'error' => __('Ошибка. Попробуйте позже', 'knife-theme')
+        'error' => __('Ошибка. Попробуйте позже', 'knife-theme'),
+        'heading' => esc_html(get_the_title())
     ];
 
     $object = get_queried_object();
@@ -68,6 +69,9 @@ add_action('wp_enqueue_scripts', function() {
         ];
 
         $options['fields'] = $fields;
+
+        // Add mention username
+        $options['mention'] = '@current93';
     }
 
     // add user form fields
@@ -79,42 +83,48 @@ add_action('wp_enqueue_scripts', function() {
  * Add list of children pages to vacancy page
  */
 add_filter( 'the_content', function( $content ) {
-    $object = get_queried_object();
-
-    // Skip non root page.
-    if($object->post_name !== 'vacancy') {
-        return $content;
-    }
-
-    $children = get_posts([
-        'post_type' => 'page',
-        'post_status' => 'publish',
-        'orderby' => 'menu_order',
-        'post_parent' => $object->ID,
-        'fields' => 'ids'
-    ]);
-
-    if(empty($children)) {
-        $message = sprintf(
-            '<h3><strong>%s</strong></h3>',
-            __('Актуальных вакасний пока нет', 'knife-theme')
-        );
-
-        return $content . $message;
-    }
-
     $pages = [];
 
-    foreach($children as $child) {
-        $pages[] = sprintf(
-            '<a href="%s">%s<span class="icon icon--right"></span></a>',
-            esc_url(get_permalink($child)),
-            get_the_title($child)
-        );
+    // Get current page object
+    $object = get_queried_object();
+
+    $pages[] = sprintf(
+        '<a href="%s">%s<span class="icon icon--right"></span></a>',
+        esc_url(get_permalink($object->post_parent)),
+        __('Просмотреть все вакансии', 'knife-theme')
+    );
+
+    if(empty($object->post_parent)) {
+        $children = get_posts([
+            'post_type' => 'page',
+            'post_status' => 'publish',
+            'orderby' => 'menu_order',
+            'post_parent' => $object->ID,
+            'fields' => 'ids'
+        ]);
+
+        if(empty($children)) {
+            $message = sprintf(
+                '<h3><strong>%s</strong></h3>',
+                __('Актуальных вакасний пока нет', 'knife-theme')
+            );
+
+            return $content . $message;
+        }
+
+        $pages = [];
+
+        foreach($children as $child) {
+            $pages[] = sprintf(
+                '<a href="%s">%s<span class="icon icon--right"></span></a>',
+                esc_url(get_permalink($child)),
+                get_the_title($child)
+            );
+        }
     }
 
     $navigation = sprintf(
-        '<figure class="figure--navigation">%s</figure>',
+        '<figure class="figure figure--navigation">%s</figure>',
         implode('', $pages)
     );
 

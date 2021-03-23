@@ -69,8 +69,14 @@
   const drawFields = (fields) => {
     let figure = buildElement('figure', {
       'classes': ['figure', 'figure--request'],
-      'parent': content
+      'parent': content,
     });
+
+    const navigation = content.querySelector('.figure--navigation');
+
+    if(navigation !== null) {
+      content.insertBefore(figure, navigation);
+    }
 
     // Create form
     let form = buildElement('form', {
@@ -103,6 +109,8 @@
         }
       });
 
+      resizeForm(text);
+
       text.addEventListener('keydown', (e) => {
         if (e.keyCode == 13 && (e.metaKey || e.ctrlKey)) {
           submit.click();
@@ -115,6 +123,10 @@
       text.addEventListener('paste', () => {
         resizeForm(text);
       });
+
+      window.addEventListener('resize', () => {
+        resizeForm(text);
+      });
     }
 
     form.appendChild(submit);
@@ -125,18 +137,13 @@
       let data = {
         'nonce': knife_theme_custom.nonce,
         'time': knife_theme_custom.time,
+        'heading': knife_theme_custom.heading,
         'fields': [],
-        'formats': []
       };
 
-      // Try to collect all formats
-      let items = list.querySelectorAll('li');
-
-      items.forEach(item => {
-        if (item.hasAttribute('data-selected')) {
-          data.formats.push(item.textContent);
-        }
-      });
+      if(knife_theme_custom.mention) {
+        data.mention = knife_theme_custom.mention;
+      }
 
       let inputs = form.querySelectorAll('textarea');
 
@@ -144,7 +151,11 @@
         data.fields.push({
           'label': input.getAttribute('placeholder'),
           'value': input.value
-        })
+        });
+
+        if(input.name === 'name') {
+          data.name = input.value;
+        }
       });
 
       // Disable button
@@ -171,10 +182,6 @@
         inputs.forEach(input => {
           input.value = '';
         });
-
-        items.forEach(item => {
-          item.removeAttribute('data-selected');
-        })
       }
 
       request.onerror = function () {
