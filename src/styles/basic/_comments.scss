@@ -412,6 +412,14 @@
       margin-left: 3.5rem;
       word-break: break-word;
 
+      p {
+        margin-bottom: 0.5rem;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+
       a {
         color: $color-primary;
         transition: filter 0.25s;

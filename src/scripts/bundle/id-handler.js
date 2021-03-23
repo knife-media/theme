@@ -2,6 +2,7 @@
  * Comments and profiles handler
  *
  * @since 1.13
+ * @version 1.15
  */
 
 (function () {
@@ -190,6 +191,18 @@
     }
 
     return time.toLocaleString("ru", options);
+  }
+
+
+  /**
+   * Update comment content break lines
+   */
+  const updateContent = (content) => {
+    content = content.replace(/(\r\n)/g, '\n');
+    content = content.replace(/(\n){2,}/g, '</p><p>');
+    content = content.replace(/(\n)/g, '<br>');
+
+    return `<p>${content}</p>`;
   }
 
 
@@ -642,8 +655,8 @@
     // Set default name
     field.name = field.name || getOption('comments.anonymous');
 
-    // Update content field
-    field.content = field.content.replace(/(\n)+/g, '<br>');
+    // Update field content
+    field.content = updateContent(field.content);
 
     // Set name to comment for replied block
     item.setAttribute('data-name', field.name);
@@ -674,7 +687,7 @@
     });
 
     // Create content
-    buildElement('span', {
+    buildElement('div', {
       'class': 'comments__item-content',
       'html': field.content,
       'parent': item
