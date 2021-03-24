@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.14
+ * @version 1.15
  */
 
 if (!defined('WPINC')) {
@@ -138,7 +138,6 @@ class Knife_Theme_Filters {
         add_role('manager', __('Менеджер', 'knife-theme'), [
             'read' => true,
             'promo_manage' => true,
-            'edit_theme_options' => true,
             'upload_files' => true
         ]);
     }
