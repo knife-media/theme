@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.7
- * @version 1.14
+ * @version 1.15
  * @link https://yandex.ru/support/news/feed.html
  * @link https://yandex.ru/support/zen/website/rss-modify.html
  */
@@ -72,6 +72,10 @@ class Knife_Extra_Feeds {
 
         // Remove extra feed links for single
         add_action('wp', [__CLASS__, 'remove_head_feeds']);
+
+        if(!defined('KNIFE_TURBO_AD')) {
+            define('KNIFE_TURBO_AD', []);
+        }
     }
 
 
@@ -425,6 +429,44 @@ class Knife_Extra_Feeds {
         }
 
         return $enclosure;
+    }
+
+
+    /**
+     * Add banners to turbo content
+     *
+     * @link https://yandex.ru/support/adfox-sites/turbo-amp-zen/adfox-turbo.html
+     * @since 1.15
+     */
+    private static function add_turbo_banners($content) {
+        $banners = KNIFE_TURBO_AD;
+
+        if(count($banners) < 1) {
+            return $content;
+        }
+
+        // Find all root tags
+        preg_match_all('~<([^\s>]+).+?(?:<\/\1)>~', $content, $matches);
+
+        if(empty($matches[0])) {
+            return $content;
+        }
+
+        $tags = $matches[0];
+
+        foreach($banners as $id => $position) {
+            $banner = sprintf('<figure data-turbo-ad-id="%s"></figure>', $id);
+
+            // If banner position exists in content
+            if(!empty($tags[$position])) {
+                $tag = $tags[$position];
+
+                // Add new banner before tag
+                $content = str_replace($tag, $banner. $tag, $content);
+            }
+        }
+
+        return $content;
     }
 }
 

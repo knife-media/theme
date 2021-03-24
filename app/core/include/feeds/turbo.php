@@ -32,18 +32,17 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
                         mysql2date('D, d M Y H:i:s +0000', get_post_time('Y-m-d H:i:s', true), false)
                     );
 
-                    $turbo = get_the_content_feed();
-
                     // Custom header for turbo content
                     $header = sprintf(
                         '<header><h1>%s</h1></header>',
                         get_the_title_rss()
                     );
 
-                    // Print turbo:content
+                    $content = self::clean_content(get_the_content_feed());
+
                     printf(
                         '<turbo:content><![CDATA[%s]]></turbo:content>',
-                        $header . self::clean_content($turbo)
+                        $header . self::add_turbo_banners($content)
                     );
                 ?>
             </item>
