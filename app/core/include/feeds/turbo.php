@@ -42,7 +42,7 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
 
                     printf(
                         '<turbo:content><![CDATA[%s]]></turbo:content>',
-                        $header . self::add_turbo_banners($content)
+                        $header . self::prepare_turbo_content($content)
                     );
                 ?>
             </item>

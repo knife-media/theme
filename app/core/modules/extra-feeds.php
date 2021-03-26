@@ -433,6 +433,21 @@ class Knife_Extra_Feeds {
 
 
     /**
+     * Prepare content for turbo feed
+     *
+     * @since 1.15
+     */
+    private static function prepare_turbo_content($content) {
+        $content = preg_replace('~<figure[^>]+>\s+?(<blockquote>.+?</blockquote>)\s+?</figure>~', '$1', $content);
+
+        // Add banners to content.
+        $content = self::add_turbo_banners($content);
+
+        return $content;
+    }
+
+
+    /**
      * Add banners to turbo content
      *
      * @link https://yandex.ru/support/adfox-sites/turbo-amp-zen/adfox-turbo.html
