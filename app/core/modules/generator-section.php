@@ -223,32 +223,42 @@ class Knife_Generator_Section {
      * Redirect to custom generated template if share query var exists
      */
     public static function redirect_share() {
+        $object = get_queried_object();
+
+        if($object === null) {
+            return;
+        }
+
+        // Get share var
         $share = get_query_var(self::$query_var);
 
-        if(is_singular(self::$post_type) && strlen($share) > 0) {
-            $post_id = get_queried_object_id();
+        if(!is_singular(self::$post_type) || strlen($share) === 0) {
+            return;
+        }
 
-            // Get generator options
-            $options = get_post_meta($post_id, self::$meta_options, true);
+        $post_id = $object->ID;
 
-            // Get generator items
-            $items = self::retrieve_items($post_id, $options, true);
-            $share = absint($share) - 1;
 
-            if(isset($items[$share])) {
-                $blanks = array_fill_keys(['heading', 'description', 'poster'], '');
+        // Get generator options
+        $options = get_post_meta($post_id, self::$meta_options, true);
 
-                $item = wp_parse_args(
-                    array_intersect_key($items[$share], $blanks), $blanks
-                );
+        // Get generator items
+        $items = self::retrieve_items($post_id, $options, true);
+        $share = absint($share) - 1;
 
-                extract($item);
+        if(isset($items[$share])) {
+            $blanks = array_fill_keys(['heading', 'description', 'poster'], '');
 
-                $include = get_template_directory() . '/core/include';
-                include_once($include . '/templates/generator-share.php');
+            $item = wp_parse_args(
+                array_intersect_key($items[$share], $blanks), $blanks
+            );
 
-                exit;
-            }
+            extract($item);
+
+            $include = get_template_directory() . '/core/include';
+            include_once($include . '/templates/generator-share.php');
+
+            exit;
         }
     }
 

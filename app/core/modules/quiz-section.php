@@ -261,46 +261,55 @@ class Knife_Quiz_Section {
      * Redirect to custom generated template if share query var exists
      */
     public static function redirect_share() {
+        $object = get_queried_object();
+
+        if($object === null) {
+            return;
+        }
+
+        // Get share var
         $share = get_query_var(self::$query_var);
 
-        if(is_singular(self::$post_type) && strlen($share) > 0) {
-            $post_id = get_queried_object_id();
+        if(empty($share) || !is_singular(self::$post_type)) {
+            return;
+        }
 
-            // Get quiz options
-            $options = get_post_meta($post_id, self::$meta_options, true);
+        $post_id = $object->ID;
 
-            $options = wp_parse_args($options, [
-                'achievment' => 0,
-                'details' => 'none',
-                'format' => 'binary'
-            ]);
+        // Get quiz options
+        $options = get_post_meta($post_id, self::$meta_options, true);
 
-            // Get quiz results
-            $results = self::retrieve_results($post_id, $options);
+        $options = wp_parse_args($options, [
+            'achievment' => 0,
+            'details' => 'none',
+            'format' => 'binary'
+        ]);
 
-            // Split share query var
-            $param = explode('/', $share);
+        // Get quiz results
+        $results = self::retrieve_results($post_id, $options);
 
-            if(array_key_exists($param[0], $results)) {
-                $index = $param[0];
-                $blank = array_fill_keys(['heading', 'description', 'poster'], '');
+        // Split share query var
+        $param = explode('/', $share);
 
-                $result = wp_parse_args(
-                    array_intersect_key($results[$index], $blank), $blank
-                );
+        if(array_key_exists($param[0], $results)) {
+            $index = $param[0];
+            $blank = array_fill_keys(['heading', 'description', 'poster'], '');
 
-                extract($result);
+            $result = wp_parse_args(
+                array_intersect_key($results[$index], $blank), $blank
+            );
 
-                // Update poster with dynamic portion
-                if(isset($param[1]) && preg_match('~^[a-z0-9]+$~', $param[1])) {
-                    $poster = str_replace('*', $param[1], $poster);
-                }
+            extract($result);
 
-                $include = get_template_directory() . '/core/include';
-                include_once($include . '/templates/quiz-share.php');
-
-                exit;
+            // Update poster with dynamic portion
+            if(isset($param[1]) && preg_match('~^[a-z0-9]+$~', $param[1])) {
+                $poster = str_replace('*', $param[1], $poster);
             }
+
+            $include = get_template_directory() . '/core/include';
+            include_once($include . '/templates/quiz-share.php');
+
+            exit;
         }
     }
 

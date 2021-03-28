@@ -5,7 +5,7 @@
  * Custom post meta to mark translations posts
  *
  * @package knife-theme
- * @since 1.14
+ * @since 1.15
  */
 
 
@@ -102,6 +102,12 @@ class Knife_Translations_Posts {
         add_rewrite_rule(
             sprintf('^%s/page/([0-9]+)/?$', self::$query_var),
             sprintf('index.php?%s=1&paged=$matches[1]', self::$query_var),
+            'top'
+        );
+
+        add_rewrite_rule(
+            sprintf('^%s/[^/]+/(?:feed/)?', self::$query_var),
+            sprintf('index.php', self::$query_var),
             'top'
         );
     }

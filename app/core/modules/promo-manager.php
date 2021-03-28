@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.8
- * @version 1.14
+ * @version 1.15
  */
 
 if (!defined('WPINC')) {
@@ -56,9 +56,6 @@ class Knife_Promo_Manager {
     public static function load_module() {
         // Create custom promo archive url
         add_action('init', [__CLASS__, 'add_promo_rule']);
-
-        // Update query_vars for promo archive
-        add_action('parse_query', [__CLASS__, 'update_query_vars']);
 
         // Add share query tag
         add_action('query_vars', [__CLASS__, 'append_promo_var']);
@@ -122,6 +119,12 @@ class Knife_Promo_Manager {
         add_rewrite_rule(
             sprintf('^%s/page/([0-9]+)/?$', self::$query_var),
             sprintf('index.php?%s=1&paged=$matches[1]', self::$query_var),
+            'top'
+        );
+
+        add_rewrite_rule(
+            sprintf('^%s/[^/]+/(?:feed/)?', self::$query_var),
+            sprintf('index.php', self::$query_var),
             'top'
         );
     }

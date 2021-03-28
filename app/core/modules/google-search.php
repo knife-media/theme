@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.2
- * @version 1.14
+ * @version 1.15
  */
 
 
@@ -72,6 +72,12 @@ class Knife_Google_Search {
             sprintf('index.php?%s=1', self::$query_var),
             'top'
         );
+
+        add_rewrite_rule(
+            sprintf('^%s/[^/]+/(?:feed/)?', self::$query_var),
+            sprintf('index.php', self::$query_var),
+            'top'
+        );
     }
 
 
@@ -92,12 +98,10 @@ class Knife_Google_Search {
      *
      * @since 1.12
      */
-    public static function update_query_vars() {
-        global $wp_query;
-
-        if(array_key_exists(self::$query_var, $wp_query->query_vars)) {
-            $wp_query->is_archive = true;
-            $wp_query->is_home = false;
+    public static function update_query_vars($query) {
+        if(array_key_exists(self::$query_var, $query->query_vars)) {
+            $query->is_archive = true;
+            $query->is_home = false;
         }
     }
 

@@ -37,11 +37,15 @@ class Knife_Post_Customs {
      * Load custom post functions only for current post name
      */
     public static function load_functions() {
-        if(!is_singular(self::$post_type)) {
+        $object = get_queried_object();
+
+        if($object === null) {
             return;
         }
 
-        $object = get_queried_object();
+        if(!is_singular(self::$post_type)) {
+            return;
+        }
 
         // Try to find top level parent
         if(!empty($object->post_parent)) {
@@ -50,6 +54,10 @@ class Knife_Post_Customs {
             if(!empty($ancestors)) {
                 $object = get_post(array_pop($ancestors));
             }
+        }
+
+        if(empty($object->post_name)) {
+            return;
         }
 
         // Get current post name
