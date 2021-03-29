@@ -98,9 +98,9 @@ add_filter( 'the_content', function( $content ) {
         $children = get_posts([
             'post_type' => 'page',
             'post_status' => 'publish',
-            'orderby' => 'menu_order',
             'post_parent' => $object->ID,
-            'fields' => 'ids'
+            'orderby' => 'menu_order',
+            'order' => 'ASC',
         ]);
 
         if(empty($children)) {
@@ -115,10 +115,15 @@ add_filter( 'the_content', function( $content ) {
         $pages = [];
 
         foreach($children as $child) {
+            // Skip pages with negative order
+            if($child->menu_order < 0) {
+                continue;
+            }
+
             $pages[] = sprintf(
                 '<a href="%s">%s<span class="icon icon--right"></span></a>',
-                esc_url(get_permalink($child)),
-                get_the_title($child)
+                esc_url(get_permalink($child->ID)),
+                get_the_title($child->ID)
             );
         }
     }
