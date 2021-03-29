@@ -99,6 +99,7 @@ add_filter( 'the_content', function( $content ) {
             'post_type' => 'page',
             'post_status' => 'publish',
             'post_parent' => $object->ID,
+            'posts_per_page' => 20,
             'orderby' => 'menu_order',
             'order' => 'ASC',
         ]);
