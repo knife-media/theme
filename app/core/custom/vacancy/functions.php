@@ -74,7 +74,53 @@ add_action('wp_enqueue_scripts', function() {
         $options['mention'] = '@current93';
     }
 
-    // add user form fields
+    if($object->post_name === 'native-editor') {
+        $fields = [
+            'name' => __('Как вас зовут?', 'knife-theme'),
+            'occupation' => __('Где и чем вы сейчас занимаетесь?', 'knife-theme'),
+            'experince' => __('Какой у вас опыт работы нативредом?', 'knife-theme'),
+            'links' => __('Дайте, пожалуйста, ссылки на 3 нативных текста и расскажите о своей роли в них', 'knife-theme'),
+            'resume' => __('Расскажите о вашем пуле авторов', 'knife-theme'),
+            'subjects' => __('В каких тематиках вы компетентны?', 'knife-theme'),
+            'contacts' => __('Ваша почта и мессенджер для оперативной связи', 'knife-theme')
+        ];
+
+        $options['fields'] = $fields;
+
+        // Add mention username
+        $options['mention'] = '@current93';
+    }
+
+    if($object->post_name === 'interviewer') {
+        $fields = [
+            'name' => __('Как вас зовут?', 'knife-theme'),
+            'occupation' => __('Где и чем вы сейчас занимаетесь?', 'knife-theme'),
+            'links' => __('Дайте, пожалуйста, ссылки на 3 ваших лучших интервью', 'knife-theme'),
+            'subjects' => __('Предложите 3 темы или героя, о которых вы хотите написать для нас', 'knife-theme'),
+            'contacts' => __('Ваша почта и мессенджер для оперативной связи', 'knife-theme')
+        ];
+
+        $options['fields'] = $fields;
+
+        // Add mention username
+        $options['mention'] = '@ArtemChapaev';
+    }
+
+    if($object->post_name === 'travel-guide') {
+        $fields = [
+            'name' => __('Как вас зовут?', 'knife-theme'),
+            'occupation' => __('Где и чем вы сейчас занимаетесь?', 'knife-theme'),
+            'subject' => __('О каком месте вы хотите нам написать? Когда и сколько вы там жили, что вас связывает с ним?', 'knife-theme'),
+            'links' => __('Дайте, пожалуйста, ссылки на 3 ваших лучших текста. Если публикаций в СМИ нет, подойдет длинный пост, по которому можно судить о вашем стиле.', 'knife-theme'),
+            'contacts' => __('Ваша почта и мессенджер для оперативной связи', 'knife-theme')
+        ];
+
+        $options['fields'] = $fields;
+
+        // Add mention username
+        $options['mention'] = '@current93';
+    }
+
     wp_localize_script('knife-custom-' . $slug, 'knife_theme_custom', $options);
 });
 
@@ -101,7 +147,7 @@ add_filter( 'the_content', function( $content ) {
             'post_parent' => $object->ID,
             'posts_per_page' => 20,
             'orderby' => 'menu_order',
-            'order' => 'ASC',
+            'order' => 'DESC',
         ]);
 
         if(empty($children)) {
