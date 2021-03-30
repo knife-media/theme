@@ -146,4 +146,8 @@ $color-custom-button: #11769C;
   & > *:last-child {
     margin-bottom: 0;
   }
+
+  @media screen and (max-width: 767px) {
+    max-width: $width-content;
+  }
 }
