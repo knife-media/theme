@@ -32,6 +32,14 @@ class Knife_Views_Managers_Table extends WP_List_Table {
      */
     private $per_page = '';
 
+    /**
+     * The current post filter, if is used (depending on $_GET['post_type_filter'])
+     *
+     * @access private
+     * @var    string
+     */
+    private $cat_filter = null;
+
 
     /**
      * Views Manager table constructor
@@ -44,8 +52,40 @@ class Knife_Views_Managers_Table extends WP_List_Table {
             'ajax' => false
         ]);
 
+        if(isset($_GET['cat_id'])) {
+            $this->cat_filter = absint($_GET['cat_id']);
+        }
+
         $this->views_db = $db;
         $this->per_page = $per_page;
+    }
+
+
+    /**
+     * Add table filter block
+     */
+    public function extra_tablenav( $which ) {
+        if ( 'top' !== $which ) {
+            return;
+        }
+
+        $options = array(
+            'selected' => $this->cat_filter,
+            'name' => 'cat_id',
+            'taxonomy' => 'category',
+            'show_option_all' => get_taxonomy('category')->labels->all_items,
+            'hide_empty' => true,
+            'hierarchical' => false,
+            'show_count' => false,
+            'echo' => false,
+        );
+
+        printf(
+            '<div class="alignleft actions">%s</div>',
+            wp_dropdown_categories($options)
+        );
+
+        submit_button( __( 'Фильтр', 'knife-theme' ), '', null, false );
     }
 
 
@@ -121,6 +161,7 @@ class Knife_Views_Managers_Table extends WP_List_Table {
             'post_status' => 'publish',
             'paged' => 0,
             'posts_per_page' => 20,
+            'cat' => $this->cat_filter,
             'fields' => 'ids'
         ];
 

@@ -1,7 +1,13 @@
 <div id="knife-views-options" class="wrap">
     <h1 class="wp-heading-inline"><?php _e('Статистика просмотров', 'knife-theme'); ?></h1>
 
-    <form method="post">
-        <?php $table->display(); ?>
+    <form method="get">
+        <?php
+            printf('<input type="hidden" name="page" value="%s">',
+                esc_attr(self::$page_slug)
+            );
+
+            $table->display();
+        ?>
     </form>
 </div>

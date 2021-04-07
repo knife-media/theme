@@ -116,6 +116,11 @@ class Knife_Views_Manager {
             wp_die(__('Извините, у вас нет доступа к этому инструменту', 'knife-theme'));
         }
 
+        if(!empty($_REQUEST['_wp_http_referer'])) {
+            wp_redirect(remove_query_arg(['_wp_http_referer', '_wpnonce'], wp_unslash($_SERVER['REQUEST_URI'])));
+            exit;
+        }
+
         // Init second database connection
         self::connect_views_db();
 
