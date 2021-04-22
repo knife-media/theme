@@ -1,4 +1,4 @@
-<div id="knife-views-options" class="wrap">
+<div id="knife-analytics-options" class="wrap">
     <h1 class="wp-heading-inline"><?php _e('Статистика просмотров', 'knife-theme'); ?></h1>
 
     <form method="get">

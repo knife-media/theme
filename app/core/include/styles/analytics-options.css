@@ -1,0 +1,23 @@
+#knife-analytics-options .wp-list-table td.column-primary {
+  padding-bottom: 24px;
+}
+
+#knife-analytics-options .wp-list-table .column-publish {
+  text-align: center;
+  width: 15%;
+}
+
+#knife-analytics-options .wp-list-table .column-vk {
+  text-align: center;
+  width: 10%;
+}
+
+#knife-analytics-options .wp-list-table .column-fb {
+  text-align: center;
+  width: 10%;
+}
+
+#knife-analytics-options .wp-list-table .column-pageviews {
+  text-align: center;
+  width: 10%;
+}

@@ -1,9 +1,10 @@
 <?php
 /**
- * Views manager table class
+ * Analytics manager table class
  *
  * @package knife-theme
  * @since 1.12
+ * @version 1.15
  */
 
 if (!defined('WPINC')) {
@@ -14,14 +15,14 @@ if (!class_exists('WP_List_Table')) {
     require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
 }
 
-class Knife_Views_Managers_Table extends WP_List_Table {
+class Knife_Analytics_Managers_Table extends WP_List_Table {
     /**
      * Short link database wpdb instance
      *
      * @access  private
      * @var     object
      */
-    private $views_db = null;
+    private $analytics_db = null;
 
 
     /**
@@ -42,9 +43,9 @@ class Knife_Views_Managers_Table extends WP_List_Table {
 
 
     /**
-     * Views Manager table constructor
+     * Analytics Manager table constructor
      *
-     * Uses views link database wpdb instance
+     * Uses analytics link database wpdb instance
      */
     public function __construct($db, $per_page) {
         parent::__construct([
@@ -56,7 +57,7 @@ class Knife_Views_Managers_Table extends WP_List_Table {
             $this->cat_filter = absint($_GET['cat_id']);
         }
 
-        $this->views_db = $db;
+        $this->analytics_db = $db;
         $this->per_page = $per_page;
     }
 
@@ -110,6 +111,20 @@ class Knife_Views_Managers_Table extends WP_List_Table {
         return $markup;
     }
 
+    /**
+     * Facebook column render
+     */
+    public function column_fb($item) {
+        return (int) $item['fb'];
+    }
+
+    /**
+     * VK.com column render
+     */
+    public function column_vk($item) {
+        return (int) $item['vk'];
+    }
+
 
     /**
      * Fix timestamp format
@@ -126,7 +141,8 @@ class Knife_Views_Managers_Table extends WP_List_Table {
         $columns = [
             'title' => __('Заголовок', 'knife-theme'),
             'pageviews' => __('Просмотры', 'knife-theme'),
-            'uniqueviews' => __('Уникальные просмотры', 'knife-theme'),
+            'vk' => __('ВКонтакте', 'knife-theme'),
+            'fb' => __('Facebook', 'knife-theme'),
             'publish' => __('Дата публикации', 'knife-theme')
         ];
 
@@ -152,7 +168,7 @@ class Knife_Views_Managers_Table extends WP_List_Table {
             $this->get_columns(), [], $this->get_sortable_columns()
         ];
 
-        $db = $this->views_db;
+        $db = $this->analytics_db;
 
         $args = [
             'orderby' => 'date',
@@ -177,28 +193,30 @@ class Knife_Views_Managers_Table extends WP_List_Table {
         $posts = implode(',', $query->posts);
 
         // Create select query
-        $views = $db->get_results("SELECT * FROM posts WHERE post_id IN ({$posts})", ARRAY_A);
+        $analytics = $db->get_results(
+            "SELECT post_id, slug, pageviews, publish, fb, vk
+            FROM posts LEFT JOIN shares USING (post_id)
+            WHERE post_id IN ({$posts})",
+        ARRAY_A);
 
         // Get array coumn by post_id
-        $pluck = wp_list_pluck($views, 'post_id');
+        $pluck = wp_list_pluck($analytics, 'post_id');
 
         foreach($query->posts as $id) {
             $item = [
                 'post_id' => $id,
                 'pageviews' => 0,
-                'uniqueviews' => 0
             ];
 
             $key = array_search($id, $pluck);
 
             if($key !== false) {
-                $item = wp_parse_args($views[$key], $item);
+                $item = wp_parse_args($analytics[$key], $item);
             }
 
             // Add to items
             $this->items[] = $item;
         }
-
 
         $this->set_pagination_args([
             'total_items' => $query->found_posts,
