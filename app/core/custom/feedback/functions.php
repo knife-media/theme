@@ -65,6 +65,7 @@ add_action('wp_enqueue_scripts', function() {
         'users' => __('Кто ваша целевая аудитория?', 'knife-theme'),
         'budget' => __('Какой у вас бюджет?', 'knife-theme'),
         'similar' => __('Какие спецпроекты вам нравятся?', 'knife-theme'),
+        'time' => __('Когда планируется рекламная кампания?', 'knife-theme'),
         'contacts' => __('Как вас зовут и как с вами связаться?', 'knife-theme')
     ];
 
