@@ -325,10 +325,10 @@
 
   details {
     & > * {
-      margin-top: 1rem;
+      margin-bottom: 1rem;
 
       @media screen and (max-width: 767px) {
-        margin-top: .75rem;
+        margin-bottom: .75rem;
       }
     }
 
