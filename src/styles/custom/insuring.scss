@@ -1,8 +1,8 @@
 // Setup variables
 @import "../setup/variables";
 
-$color-custom-header: #8b64fe;
-$color-custom-content: #0de29b;
+$color-custom-header: #0de29b;
+$color-custom-content: #8b64fe;
 $color-custom-background: linear-gradient(163deg, rgba(253,198,53,1) 0%, rgba(222,95,108,1) 50%, rgba(222,95,108,1) 100%);
 
 
@@ -11,15 +11,15 @@ body {
 }
 
 .entry-header {
-  color: $color-white;
+  color: $color-black;
   background-color: $color-custom-header;
 
   .entry-header__info {
-    color: $color-white;
+    color: $color-black;
   }
 
   .entry-header__lead a {
-    color: $color-white;
+    color: $color-black;
   }
 }
 
