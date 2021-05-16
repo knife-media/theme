@@ -3,11 +3,14 @@
 
 $color-custom-header: #0de29b;
 $color-custom-content: #8b64fe;
-$color-custom-background: linear-gradient(163deg, rgba(253,198,53,1) 0%, rgba(222,95,108,1) 50%, rgba(222,95,108,1) 100%);
+$color-custom-background: linear-gradient(163deg, rgb(253,198,53) 0%, rgb(222,95,108) 50%, rgb(222,95,108) 100%);
+$color-custom-footer: rgb(222,95,108);
 
 
 body {
-  background: linear-gradient(163deg, rgba(253,198,53,1) 0%, rgba(222,95,108,1) 50%, rgba(222,95,108,1) 100%);
+  background-image: url('logo.png'), $color-custom-background;
+  background-repeat: repeat, no-repeat;
+  background-size: 200px auto, auto;
 }
 
 .entry-header {
@@ -75,4 +78,22 @@ body {
       transition: none;
     }
   }
+}
+
+.footer:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+
+  width: 100vw;
+  height: 100%;
+
+  background-color: rgb(222,95,108);
+  transform: translateX(-50%);
+}
+
+.footer > * {
+  position: relative;
+  z-index: 2;
 }
