@@ -19,7 +19,7 @@
             );
 
             printf(
-                '<p><label for="%1$s">%2$s</label><input type="text" id="%1$s" name="pixel" required></p>',
+                '<p><label for="%1$s">%2$s</label><input type="text" id="%1$s" name="pixel"></p>',
                 esc_attr(self::$page_slug . '-pixel'),
                 __('Адрес пикселя (необязательно):', 'knife-theme')
             );
