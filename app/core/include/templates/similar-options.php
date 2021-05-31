@@ -19,9 +19,10 @@
             );
 
             printf(
-                '<p><label for="%1$s">%2$s</label><input type="text" id="%1$s" name="pixel"></p>',
+                '<p><label for="%1$s">%2$s</label><input type="text" id="%1$s" name="pixel"><small>%3$s</small></p>',
                 esc_attr(self::$page_slug . '-pixel'),
-                __('Адрес пикселя (необязательно):', 'knife-theme')
+                __('Адрес пикселя:', 'knife-theme'),
+                __('Необязательное поле. Ожидается ссылка на изображение', 'knife-theme')
             );
 
             printf('<input type="hidden" name="action" value="%s">',
