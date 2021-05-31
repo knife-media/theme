@@ -121,7 +121,13 @@
 
     // Sum all engagement values
     for (let count in engagement) {
-      shares = shares + engagement[count];
+      let share = engagement[count];
+
+      if (share.charAt(share.length - 1) === 'K') {
+        share = parseFloat(share.substring(0, share.length - 1)) * 1000;
+      }
+
+      shares = shares + parseInt(share);
     }
 
     if (shares === 0) {
