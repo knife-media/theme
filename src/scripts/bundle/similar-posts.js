@@ -2,7 +2,7 @@
  * Append similar contents to single template
  *
  * @since 1.5
- * @version 1.11
+ * @version 1.15
  */
 
 
@@ -38,6 +38,18 @@
    */
   let counter = 0;
 
+  /**
+   * Update promo AdFox links.
+   *
+   * @since 1.15
+   */
+  const updatePromoLinks = (link) => {
+    link = link.replace('http://ads.adfox.ru', 'https://ads.adfox.ru');
+    link = link.replace('[RANDOM]', Date.now());
+
+    return link;
+  }
+
 
   /**
    * Create similar link
@@ -49,13 +61,13 @@
     wrap.appendChild(item);
 
     const link = document.createElement('a');
-    link.href = similar.link;
+    link.href = updatePromoLinks(similar.link);
     link.innerHTML = similar.title;
     item.appendChild(link);
 
     if (similar.pixel) {
       let pixel = new Image();
-      pixel.src = similar.pixel;
+      pixel.src = updatePromoLinks(similar.pixel);
     }
   }
 

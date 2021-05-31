@@ -3,8 +3,17 @@
   margin-bottom: 40px;
 }
 
+#knife-similar-options .form-field label {
+  display: inline-block;
+
+  margin-bottom: 3px;
+  font-weight: 600;
+}
+
 #knife-similar-options .form-items .item {
-  display: block;
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
   position: relative;
 
   max-width: 800px;
@@ -25,16 +34,28 @@
 }
 
 #knife-similar-options .form-items .item-link {
-  display: inline-block;
+  display: block;
 
-  margin-top: 10px;
+  width: auto;
+  max-width: 100%;
+  margin-top: 20px;
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 #knife-similar-options .form-items .item-pixel {
   display: block;
 
-  margin-top: 10px;
+  width: 100%;
+  margin-top: 5px;
+  overflow: hidden;
+
   font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
   color: #999;
 }
 
