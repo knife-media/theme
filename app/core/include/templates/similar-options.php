@@ -18,6 +18,12 @@
                 __('Адрес ссылки:', 'knife-theme')
             );
 
+            printf(
+                '<p><label for="%1$s">%2$s</label><input type="text" id="%1$s" name="pixel" required></p>',
+                esc_attr(self::$page_slug . '-pixel'),
+                __('Адрес пикселя (необязательно):', 'knife-theme')
+            );
+
             printf('<input type="hidden" name="action" value="%s">',
                 esc_attr(self::$page_slug . '-append')
             );
@@ -45,6 +51,12 @@
                     printf('<a class="item-link" href="%1$s" target="_blank">%1$s</a>',
                         esc_url($item['link'])
                     );
+
+                    if(!empty($item['pixel'])) {
+                        printf('<span class="item-pixel">%s</span>',
+                            esc_url($item['pixel'])
+                        );
+                    }
 
                     $delete_args = [
                         'action' => 'delete',

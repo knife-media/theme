@@ -364,12 +364,18 @@ class Knife_Similar_Posts {
             $promo = get_option(self::$option_promo, []);
 
             // Add value to promo items
-            $promo[] = [
+            $item = [
                 'link' => sanitize_text_field($_POST['link']),
                 'title' => wp_kses($_POST['title'], [
                     'em' => []
                 ]),
             ];
+
+            if(!empty($_POST['pixel'])) {
+                $item['pixel'] = sanitize_text_field($_POST['pixel']);
+            }
+
+            $promo[] = $item;
 
             // Try to update option
             if(update_option(self::$option_promo, $promo)) {

@@ -52,6 +52,11 @@
     link.href = similar.link;
     link.innerHTML = similar.title;
     item.appendChild(link);
+
+    if (similar.pixel) {
+      let pixel = new Image();
+      pixel.src = similar.pixel;
+    }
   }
 
 

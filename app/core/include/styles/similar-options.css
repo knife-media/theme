@@ -27,7 +27,15 @@
 #knife-similar-options .form-items .item-link {
   display: inline-block;
 
-  margin-top: 5px;
+  margin-top: 10px;
+}
+
+#knife-similar-options .form-items .item-pixel {
+  display: block;
+
+  margin-top: 10px;
+  font-size: 10px;
+  color: #999;
 }
 
 #knife-similar-options .form-items .item-delete {
