@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.14
+ * @version 1.15
  */
 
 if (!defined('WPINC')) {
@@ -215,6 +215,20 @@ class Knife_Post_Info {
      */
     private static function meta_author($output = '') {
         $post_id = get_the_ID();
+
+        if(property_exists('Knife_Promo_Manager', 'meta_promo')) {
+            $meta_promo = Knife_Promo_Manager::$meta_promo;
+
+            // Check if promo first
+            if(get_post_meta($post_id, $meta_promo, true)) {
+                $promo = sprintf('<a class="meta__item" href="%s" rel="author">%s</a>',
+                    trailingslashit(home_url(Knife_Promo_Manager::$query_var)),
+                    __('Редакция спецпроектов', 'knife-theme')
+                );
+
+                return $output . $promo;
+            }
+        }
 
         if(property_exists('Knife_Authors_Manager', 'meta_authors')) {
             $authors = (array) get_post_meta($post_id, Knife_Authors_Manager::$meta_authors);
