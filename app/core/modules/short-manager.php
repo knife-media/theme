@@ -229,14 +229,14 @@ class Knife_Short_Manager {
         // Check if required values not empty
         if(!empty($_POST['keyword']) && !empty($_POST['url'])) {
             $data = [
-                'url' => $_POST['url'],
+                'url' => sanitize_text_field(trim($_POST['url'])),
                 'ip' => $_SERVER['REMOTE_ADDR']
             ];
 
             $db = self::connect_short_db();
 
             $data['keyword'] = self::get_link_keyword(
-                sanitize_key($_POST['keyword']), $db
+                sanitize_key(trim($_POST['keyword'])), $db
             );
 
             if($data['keyword'] === false) {
@@ -244,9 +244,7 @@ class Knife_Short_Manager {
                 exit;
             }
 
-            $data['title'] = self::get_link_title(
-                sanitize_text_field($_POST['url'])
-            );
+            $data['title'] = self::get_link_title($data['url']);
 
             if($db->insert('urls', $data)) {
                 wp_redirect(add_query_arg('message', 2, $admin_url), 303);
