@@ -1193,10 +1193,12 @@
 
     // Close and scroll window
     const closeLogin  = () => {
-      body.removeChild(login);
-
       // Remove listener here
       document.removeEventListener('keydown', escLogin);
+
+      if (login.parentNode === body) {
+        body.removeChild(login);
+      }
 
       // Remove login class
       body.classList.remove('is-login');
