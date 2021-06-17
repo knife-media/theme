@@ -16,4 +16,8 @@
   &.widget-adfox--loaded {
     display: flex;
   }
+
+  &.widget-adfox--billboard > div {
+    width: 100%;
+  }
 }
