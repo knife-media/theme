@@ -65,8 +65,8 @@ class Knife_Analytics_Managers_Table extends WP_List_Table {
     /**
      * Add table filter block
      */
-    public function extra_tablenav( $which ) {
-        if ( 'top' !== $which ) {
+    public function extra_tablenav($which) {
+        if('top' !== $which) {
             return;
         }
 
@@ -86,7 +86,7 @@ class Knife_Analytics_Managers_Table extends WP_List_Table {
             wp_dropdown_categories($options)
         );
 
-        submit_button( __( 'Фильтр', 'knife-theme' ), '', null, false );
+        submit_button(__('Фильтр', 'knife-theme'), '', null, false);
     }
 
 
@@ -94,7 +94,11 @@ class Knife_Analytics_Managers_Table extends WP_List_Table {
      * Default column render
      */
     public function column_default($item, $column_name) {
-        return $item[$column_name];
+        if(isset($item[$column_name])) {
+            return $item[$column_name];
+        }
+
+        return null;
     }
 
 
@@ -110,21 +114,6 @@ class Knife_Analytics_Managers_Table extends WP_List_Table {
 
         return $markup;
     }
-
-    /**
-     * Facebook column render
-     */
-    public function column_fb($item) {
-        return (int) $item['fb'];
-    }
-
-    /**
-     * VK.com column render
-     */
-    public function column_vk($item) {
-        return (int) $item['vk'];
-    }
-
 
     /**
      * Fix timestamp format
@@ -194,8 +183,9 @@ class Knife_Analytics_Managers_Table extends WP_List_Table {
 
         // Create select query
         $analytics = $db->get_results(
-            "SELECT post_id, slug, pageviews, publish, fb, vk
-            FROM posts LEFT JOIN shares USING (post_id)
+            "SELECT post_id, slug, pageviews, publish, fb, vk FROM posts
+            LEFT JOIN shares USING (post_id)
+            LEFT JOIN views USING (post_id)
             WHERE post_id IN ({$posts})",
         ARRAY_A);
 
