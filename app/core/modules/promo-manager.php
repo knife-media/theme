@@ -449,15 +449,15 @@ class Knife_Promo_Manager {
      */
     public static function replace_teaser_slug($post_id, $teaser) {
         // Remove action to avoid infinite loop
-		remove_action('save_post', [__CLASS__, 'save_metabox']);
+        remove_action('save_post', [__CLASS__, 'save_metabox']);
 
-		wp_update_post([
+        wp_update_post([
             'ID' => $post_id,
             'post_name' => 'teaser-' . dechex(crc32($teaser)),
         ]);
 
         // Bring back the action
-		add_action('save_post', [__CLASS__, 'save_metabox']);
+        add_action('save_post', [__CLASS__, 'save_metabox']);
     }
 
 
@@ -483,8 +483,8 @@ class Knife_Promo_Manager {
         global $wpdb;
 
         $query = $wpdb->prepare(
-            "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = %s AND meta_value = %s LIMIT 1",
-            self::$meta_teaser, $link
+            "SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = %s AND meta_value = %s LIMIT 1",
+            self::$meta_teaser, html_entity_decode($link)
         );
 
         $post_id = (int) $wpdb->get_var($query);
