@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.4
- * @version 1.12
+ * @version 1.15
  */
 
 
@@ -106,6 +106,14 @@ class Knife_Widget_Televisor extends WP_Widget {
             __('На запись c этого сайта', 'knife-theme')
         );
 
+        $post_id = $this->find_postid($instance['link']);
+
+        if(empty($post_id)) {
+            printf(
+                '<p><span class="dashicons dashicons-warning"></span> <strong>%s</strong></p>',
+                __('Запись не найдена', 'knife-theme')
+            );
+        }
 
         // Widget title
         printf(
@@ -117,7 +125,6 @@ class Knife_Widget_Televisor extends WP_Widget {
             __('Заполните, чтобы обновить заголовок фичера', 'knife-theme')
         );
 
-
         // Exclude duplicate
         printf(
             '<p><input type="checkbox" id="%1$s" name="%2$s" class="checkbox"%4$s><label for="%1$s">%3$s</label></p>',
@@ -127,7 +134,6 @@ class Knife_Widget_Televisor extends WP_Widget {
             checked($instance['unique'], 1, false)
         );
 
-
         // News count
         printf(
             '<p><label for="%1$s">%3$s</label><input class="widefat" id="%1$s" name="%2$s" type="text" value="%4$s"></p>',
@@ -136,7 +142,6 @@ class Knife_Widget_Televisor extends WP_Widget {
             __('Количество новостей:', 'knife-theme'),
             esc_attr($instance['posts_per_page'])
         );
-
 
         // Widget cover
         if($cover = wp_get_attachment_url($instance['cover'])) {
@@ -213,7 +218,7 @@ class Knife_Widget_Televisor extends WP_Widget {
      */
     private function show_single($instance) {
         $exclude = get_query_var('widget_exclude', []);
-        $post_id = url_to_postid($instance['link']);
+        $post_id = $this->find_postid($instance['link']);
 
         $query = new WP_Query([
             'post_status' => 'any',
@@ -267,6 +272,23 @@ class Knife_Widget_Televisor extends WP_Widget {
 
             echo '</div>';
         }
+    }
+
+    /**
+     * Try to find post ID by teaser link.
+     */
+    private function find_postid($link) {
+        $post_id = url_to_postid($link);
+
+        if($post_id > 0) {
+            return $post_id;
+        }
+
+        if(method_exists('Knife_Promo_Manager', 'find_postid')) {
+            $post_id = Knife_Promo_Manager::find_postid($link);
+        }
+
+        return $post_id;
     }
 }
 

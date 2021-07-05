@@ -1,0 +1,22 @@
+#knife-promo-box {
+  display: block;
+  position: relative;
+}
+
+#knife-promo-box > p {
+  margin-bottom: 0;
+}
+
+#knife-promo-box .promo-advert strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+#knife-promo-box .promo-teaser p {
+  margin-bottom: 0;
+}
+
+#knife-promo-box .promo-teaser strong {
+  display: block;
+  margin-bottom: 5px;
+}

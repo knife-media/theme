@@ -49,7 +49,7 @@ class Knife_Widget_Handler {
         add_action('wp_ajax_widgets-order', [__CLASS__, 'clear_cache'], 1);
 
         // Cache widget output
-        add_filter('widget_display_callback', [__CLASS__, 'cache_widget'], 10, 3);
+        //add_filter('widget_display_callback', [__CLASS__, 'cache_widget'], 10, 3);
     }
 
 

@@ -42,6 +42,15 @@ class Knife_Promo_Manager {
 
 
     /**
+     * Unique meta to store promo teaser
+     *
+     * @access  public
+     * @var     string
+     */
+    public static $meta_teaser = '_knife-promo-teaser';
+
+
+    /**
      * Archive query var
      *
      * @access  public
@@ -56,6 +65,9 @@ class Knife_Promo_Manager {
     public static function load_module() {
         // Create custom promo archive url
         add_action('init', [__CLASS__, 'add_promo_rule']);
+
+        // Set pate links hooks.
+        add_action('init', [__CLASS__, 'init_teasers']);
 
         // Add share query tag
         add_action('query_vars', [__CLASS__, 'append_promo_var']);
@@ -89,6 +101,95 @@ class Knife_Promo_Manager {
 
         // Close comments for promo posts
         add_filter('comments_open',  [__CLASS__, 'disable_comments'], 10, 2);
+    }
+
+
+    /**
+     * Set filters to posts permalinks.
+     *
+     * @since 1.15
+     */
+    public static function init_teasers() {
+        add_filter('post_link',  [__CLASS__, 'update_permalink'], 10, 2);
+        add_filter('post_type_link',  [__CLASS__, 'update_permalink'], 10, 2);
+        add_filter('preview_post_link', [__CLASS__, 'update_permalink'], 10, 2);
+
+        add_action('template_redirect', [__CLASS__, 'redirect_teaser']);
+    }
+
+
+    /**
+     * Redirect teaser on template_redirect action.
+     *
+     * @since 1.15
+     */
+    public static function redirect_teaser() {
+        if(!is_singular(self::$post_type)) {
+            return;
+        }
+
+        $post_id = get_queried_object_id();
+
+        if(empty($post_id)) {
+            return;
+        }
+
+        $teaser = get_post_meta($post_id, self::$meta_teaser, true);
+
+        if(empty($teaser)) {
+            return;
+        }
+
+        $link = self::make_absolute_url($teaser);
+
+        wp_redirect($link, 301);
+        exit;
+    }
+
+
+    /**
+     * Update post permalink for teasers.
+     *
+     * @since 1.15
+     */
+    public static function update_permalink($link, $post) {
+        if(empty($post->ID)) {
+            return $link;
+        }
+
+        // Check if in post type.
+        if(!in_array($post->post_type, self::$post_type, true)) {
+            return $link;
+        }
+
+        $teaser = get_post_meta($post->ID, self::$meta_teaser, true);
+
+        if(!empty($teaser)) {
+            $link = self::make_absolute_url($teaser);
+        }
+
+        return $link;
+    }
+
+
+    /**
+     * Try to create absolute url for teaser link
+     *
+     * @since 1.15
+     * @link https://core.trac.wordpress.org/ticket/39827
+     */
+    public static function make_absolute_url($url) {
+        if(strpos($url, '://') === false) {
+            $url = site_url($url);
+        }
+
+        $path = parse_url($url, PHP_URL_PATH);
+
+        if(null === $path) {
+            $url = trailingslashit($url);
+        }
+
+        return $url;
     }
 
 
@@ -270,6 +371,9 @@ class Knife_Promo_Manager {
         // Insert color picker scripts
         wp_enqueue_style('wp-color-picker');
 
+        // Insert admin styles
+        wp_enqueue_style('knife-promo-metabox', $include . '/styles/promo-metabox.css', [], $version);
+
         // Insert admin scripts
         wp_enqueue_script('knife-promo-metabox', $include . '/scripts/promo-metabox.js', ['jquery', 'wp-color-picker'], $version);
 
@@ -315,12 +419,45 @@ class Knife_Promo_Manager {
             update_post_meta($post_id, self::$meta_options, $options);
         }
 
+        // Save promo teaser
+        if(empty($_REQUEST[self::$meta_teaser])) {
+            delete_post_meta($post_id, self::$meta_teaser);
+        }
+
+        if(!empty($_REQUEST[self::$meta_teaser])) {
+            $teaser = self::make_absolute_url($_REQUEST[self::$meta_teaser]);
+
+            // Update post name.
+            self::replace_teaser_slug($post_id, $teaser);
+
+            update_post_meta($post_id, self::$meta_teaser, $teaser);
+        }
+
         // Save promo meta
         if(empty($_REQUEST[self::$meta_promo])) {
             return delete_post_meta($post_id, self::$meta_promo);
         }
 
         update_post_meta($post_id, self::$meta_promo, 1);
+    }
+
+
+    /**
+     * Replace post name for teaser posts to avoid duplicates
+     *
+     * @since 1.15
+     */
+    public static function replace_teaser_slug($post_id, $teaser) {
+        // Remove action to avoid infinite loop
+		remove_action('save_post', [__CLASS__, 'save_metabox']);
+
+		wp_update_post([
+            'ID' => $post_id,
+            'post_name' => 'teaser-' . dechex(crc32($teaser)),
+        ]);
+
+        // Bring back the action
+		add_action('save_post', [__CLASS__, 'save_metabox']);
     }
 
 
@@ -337,6 +474,22 @@ class Knife_Promo_Manager {
         }
 
         return $classes;
+    }
+
+    /**
+     * Try to find post id by teaser link.
+     */
+    public static function find_postid($link) {
+        global $wpdb;
+
+        $query = $wpdb->prepare(
+            "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = %s AND meta_value = %s LIMIT 1",
+            self::$meta_teaser, $link
+        );
+
+        $post_id = (int) $wpdb->get_var($query);
+
+        return $post_id;
     }
 }
 

@@ -63,9 +63,12 @@ class Knife_Extra_Feeds {
         // Admin side assets
         add_action('admin_enqueue_scripts', [__CLASS__, 'add_assets']);
 
+        // Don't show link to comments in feed.
+        add_filter('comments_open', [__CLASS__, 'disable_comments']);
+
         // Remove comments feed link from header
         add_filter('feed_links_show_comments_feed', '__return_false');
-        add_filter('post_comments_feed_link', '__return_false');
+        add_filter('post_comments_feed_link', '__return_empty_string');
 
         // Redirect comment feed templates
         add_action('template_redirect', [__CLASS__, 'redirect_comment_feeds']);
@@ -210,6 +213,19 @@ class Knife_Extra_Feeds {
         foreach($feeds as $feed) {
             add_feed($feed, [__CLASS__, 'load_template']);
         }
+    }
+
+    /**
+     * Hide link to comments for feeds
+     *
+     * @since 1.15
+     */
+    public static function disable_comments($open) {
+        if(is_feed()) {
+            $open = false;
+        }
+
+        return $open;
     }
 
 

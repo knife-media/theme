@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.12
+ * @version 1.15
  */
 
 
@@ -37,7 +37,7 @@ class Knife_Widget_Single extends WP_Widget {
         $instance = wp_parse_args((array) $instance, $defaults);
 
         $exclude = get_query_var('widget_exclude', []);
-        $post_id = url_to_postid($instance['link']);
+        $post_id = $this->find_postid($instance['link']);
 
         $query = new WP_Query([
             'post_status' => 'publish',
@@ -75,7 +75,7 @@ class Knife_Widget_Single extends WP_Widget {
     public function update($new_instance, $old_instance) {
         $instance = $old_instance;
 
-        $instance['title'] = $new_instance['title'];
+        $instance['title'] = sanitize_text_field($new_instance['title']);
         $instance['link'] = sanitize_text_field($new_instance['link']);
         $instance['cover'] = absint($new_instance['cover']);
 
@@ -88,6 +88,7 @@ class Knife_Widget_Single extends WP_Widget {
     public function form($instance) {
         $defaults = [
             'title' => '',
+            'teaser' => '',
             'link' => '',
             'cover' => 0,
             'picture' => ''
@@ -101,8 +102,17 @@ class Knife_Widget_Single extends WP_Widget {
             esc_attr($this->get_field_name('link')),
             __('Ссылка:', 'knife-theme'),
             esc_attr($instance['link']),
-            __('На запись c этого сайта', 'knife-theme')
+            __('На запись c этого сайта или тизер', 'knife-theme')
         );
+
+        $post_id = $this->find_postid($instance['link']);
+
+        if(empty($post_id)) {
+            printf(
+                '<p><span class="dashicons dashicons-warning"></span> <strong>%s</strong></p>',
+                __('Запись не найдена', 'knife-theme')
+            );
+        }
 
         if($cover = wp_get_attachment_url($instance['cover'])) {
             $instance['picture'] = sprintf('<img src="%s" alt="" style="max-width: 100%%;">', esc_url($cover));
@@ -123,8 +133,25 @@ class Knife_Widget_Single extends WP_Widget {
             esc_attr($this->get_field_name('title')),
             __('Заголовок:', 'knife-theme'),
             esc_attr($instance['title']),
-            __('Заполните, чтобы обновить заголовок записи', 'knife-theme')
+            __('Заполните, чтобы изменить заголовок записи', 'knife-theme')
         );
+    }
+
+    /**
+     * Try to find post ID by teaser link.
+     */
+    private function find_postid($link) {
+        $post_id = url_to_postid($link);
+
+        if($post_id > 0) {
+            return $post_id;
+        }
+
+        if(method_exists('Knife_Promo_Manager', 'find_postid')) {
+            $post_id = Knife_Promo_Manager::find_postid($link);
+        }
+
+        return $post_id;
     }
 }
 

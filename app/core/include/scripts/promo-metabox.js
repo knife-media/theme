@@ -23,7 +23,7 @@ jQuery(document).ready(function ($) {
    * Toggle options on promo checkbox
    */
   check.on('click', function () {
-    box.find('.promo').toggleClass('hidden',
+    box.find('.promo-advert').toggleClass('hidden',
       $(this).is(':not(:checked)')
     );
   });
@@ -72,6 +72,6 @@ jQuery(document).ready(function ($) {
    * Remove hidden class for promo posts on load
    */
   if (check.is(':checked')) {
-    box.find('.promo').removeClass('hidden');
+    box.find('.promo-advert').removeClass('hidden');
   }
 });
