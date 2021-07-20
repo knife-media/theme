@@ -19,7 +19,7 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
         <?php do_action('rss2_head'); ?>
 
         <?php
-            $query =  new WP_Query([
+            $query = new WP_Query([
                 'post__in' => self::get_zen_query(),
                 'posts_per_page' => -1,
                 'orderby' => 'post__in'
@@ -50,6 +50,9 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
                     // Store images for enclosure
                     $enclosure = self::get_images($content, get_the_ID());
 
+                    // Get zen special categories
+                    $categories = self::get_zen_categories(get_the_ID());
+
                     // Remove unwanted tags
                     $content = self::remove_tags($content);
 
@@ -60,8 +63,8 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
                     );
 
                     // Insert category
-                    foreach(get_the_category() as $category) {
-                        printf('<category>%s</category>', esc_html($category->cat_name));
+                    foreach($categories as $category) {
+                        printf('<category>%s</category>', esc_html($category));
                     }
 
                     // Insert enclosure

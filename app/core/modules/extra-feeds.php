@@ -79,6 +79,11 @@ class Knife_Extra_Feeds {
         if(!defined('KNIFE_TURBO_AD')) {
             define('KNIFE_TURBO_AD', []);
         }
+
+        // Die if php-mb not installed
+        if(!function_exists('mb_convert_case')) {
+            wp_die(__('Для нормальной работы темы необходимо установить модуль php-mb', 'knife-theme'));
+        }
     }
 
 
@@ -105,7 +110,6 @@ class Knife_Extra_Feeds {
             if($post_id) {
                 wp_safe_redirect(get_permalink($post_id), 301);
             }
-
         }
     }
 
@@ -275,6 +279,38 @@ class Knife_Extra_Feeds {
         }
 
         return $html;
+    }
+
+
+    /**
+     * Get special zen categories for certain post inside loop.
+     *
+     * @link https://yandex.ru/support/zen/website/rss-modify.html#publication
+     * @since 1.15
+     */
+    private static function get_zen_categories($post_id) {
+        $availible = [
+            'авто', 'война', 'дизайн', 'дом', 'еда', 'здоровье', 'знаменитости', 'игры',
+            'кино', 'культура', 'литература', 'мода', 'музыка', 'наука', 'общество',
+            'политика', 'природа', 'происшествия', 'психология', 'путешествия', 'спорт',
+            'технологии', 'фотографии', 'хобби', 'экономика', 'юмор'
+        ];
+
+        $categories = [];
+
+        if($tags = get_the_tags($post_id)) {
+            foreach($tags as $tag) {
+                if(in_array($tag->name, $availible, true)) {
+                    $categories[] = mb_convert_case($tag->name, MB_CASE_TITLE);
+                }
+            }
+        }
+
+        if(in_category('longreads', $post_id)) {
+            $categories[] = 'evergreen';
+        }
+
+        return $categories;
     }
 
 
