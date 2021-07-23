@@ -498,6 +498,7 @@ class Knife_Authors_Manager {
             'fragments' => 'Фрагменты',
             'tania-cohen' => 'Таня Коэн',
             'ivan' => 'Ваня',
+            'stas' => 'Стас',
             'translations' => 'Переводы'
         ];
 
