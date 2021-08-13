@@ -271,38 +271,14 @@
  * unit styles
  */
 .unit {
+  overflow: hidden;
   background-color: #f0efed;
   border-radius: .625rem;
 }
 
-.unit .unit__inner {
-  padding-top: 90%;
-}
-
 .unit .unit__image {
-  mask-size: contain;
-  mask-repeat: no-repeat;
-  -webkit-mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-
-  padding-top: 100%;
   transform: scale(1.05);
   background-color: transparent;
-}
-
-.unit:nth-child(3n+1) .unit__image {
-  mask-image: url('images/mask-1.svg');
-  -webkit-mask-image: url('images/mask-1.svg');
-}
-
-.unit:nth-child(3n+2) .unit__image {
-  mask-image: url('images/mask-2.svg');
-  -webkit-mask-image: url('images/mask-2.svg');
-}
-
-.unit:nth-child(3n) .unit__image {
-  mask-image: url('images/mask-3.svg');
-  -webkit-mask-image: url('images/mask-3.svg');
 }
 
 .unit .unit__content {
