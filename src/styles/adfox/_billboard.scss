@@ -5,7 +5,7 @@
   position: relative;
   width: 100%;
 
-  & > a {
-    @include full-size;
+  & > a::after {
+    @include full-pseudo;
   }
 }
