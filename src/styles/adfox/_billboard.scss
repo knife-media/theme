@@ -1,0 +1,11 @@
+.adfox-billboard {
+  display: flex;
+  justify-content: center;
+
+  position: relative;
+  width: 100%;
+
+  & > a {
+    @include full-size;
+  }
+}
