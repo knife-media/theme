@@ -8,7 +8,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.13
+ * @version 1.15
  */
 
 
@@ -195,6 +195,9 @@ require get_template_directory() . '/core/modules/post-lead.php';
 
 // Mark adult content posts
 require get_template_directory() . '/core/modules/adult-content.php';
+
+// Mark momentary posts
+require get_template_directory() . '/core/modules/momentary-posts.php';
 
 // Custom search engine settings
 require get_template_directory() . '/core/modules/google-search.php';
