@@ -1,0 +1,116 @@
+// Setup variables
+@import "../setup/variables";
+@import "../setup/mixins";
+
+$color-custom-background: #FAF3EB;
+$color-custom-button: #B31E1A;
+$color-custom-option: #e54525;
+
+.entry-content {
+  max-width: $width-wide;
+
+  color: $color-text;
+  background-color: $color-custom-background;
+
+  border-radius: 0.75rem;
+
+  .button--start {
+    display: block;
+    position: relative;
+
+    margin: 2rem 0 0;
+
+    color: $color-white;
+    background-color: $color-custom-button;
+    border-radius: 0.5rem;
+
+    &:hover {
+      background-color: $color-custom-button;
+      filter: brightness(120%);
+    }
+  }
+
+  .button--option {
+    display: block;
+    position: relative;
+
+    width: 100%;
+    margin: 0 0 1rem;
+
+    font-size: 1.25rem;
+    line-height: 1.375;
+    text-align: left;
+
+    color: $color-white;
+    background-color: $color-custom-option;
+    border-radius: 0.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &:hover {
+      background-color: $color-custom-button;
+      filter: brightness(120%);
+    }
+
+    @media screen and (max-width: 767px) {
+      margin: 0 0 0.75rem;
+      font-size: 1rem;
+    }
+  }
+
+  .figure--manage {
+    align-items: flex-start;
+  }
+
+  .figure--survey {
+    align-items: flex-start;
+
+    width: $width-content + 5rem;
+    padding: 2rem 2.5rem;
+
+    color: $color-text;
+    background-color: $color-white;
+
+    border-radius: 0.75rem;
+
+    h4 {
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+      line-height: 1.375;
+      font-size: 1.25rem;
+
+      @media screen and (max-width: 767px) {
+        margin-bottom: 1rem;
+        font-size: 1.125rem;
+      }
+    }
+
+    h5 {
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+      font-size: 0.875rem;
+      line-height: 1.375;
+
+      @media screen and (max-width: 767px) {
+        margin-bottom: 1rem;
+      }
+    }
+
+    p {
+      font-size: 1.25rem;
+      font-weight: 500;
+      line-height: 1.375;
+
+      @media screen and (max-width: 767px) {
+        font-size: 1rem;
+      }
+    }
+
+    @media screen and (max-width: 767px) {
+      padding: 2rem 0 0;
+      background-color: transparent;
+    }
+  }
+}
