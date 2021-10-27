@@ -35,6 +35,13 @@
   ];
 
   let headings = [];
+  let backdrop = document.querySelector('backdrop');
+
+  if (backdrop === null) {
+    backdrop = document.createElement('div');
+    backdrop.classList.add('backdrop');
+    document.body.appendChild(backdrop);
+  }
 
   const button = document.createElement('button');
   button.classList.add('promo', 'promo--satanization');
@@ -83,6 +90,9 @@
       }
 
       button.innerHTML = knife_satanize.getback || '';
+
+      backdrop.setAttribute('data-image', backdrop.style.backgroundImage);
+      backdrop.style.backgroundImage = 'linear-gradient(to bottom,#3b2307,#931111,#e62020)';
     }
 
     button.classList.add('promo--freeze');
@@ -114,5 +124,6 @@
 
     button.classList.remove('promo--freeze');
     button.innerHTML = knife_satanize.button || '';
+    backdrop.style.backgroundImage = backdrop.getAttribute('data-image');
   });
 })();
