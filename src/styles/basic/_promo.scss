@@ -100,9 +100,9 @@
     cursor: pointer;
 
     position: fixed;
-    top: 8rem;
+    top: calc(50% - 2.5rem);
     right: 2rem;
-    z-index: 15;
+    z-index: 8;
 
     width: 5rem;
     height: 5rem;
