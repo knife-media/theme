@@ -35,13 +35,6 @@
   ];
 
   let headings = [];
-  let backdrop = document.querySelector('backdrop');
-
-  if (backdrop === null) {
-    backdrop = document.createElement('div');
-    backdrop.classList.add('backdrop');
-    document.body.appendChild(backdrop);
-  }
 
   const button = document.createElement('button');
   button.classList.add('promo', 'promo--satanization');
@@ -63,12 +56,14 @@
     return headings;
   }
 
-  function setSatanized(path) {
+  function setSatanized(path, backdrop) {
     headings = getHeadings();
 
     const request = new XMLHttpRequest();
     request.open('POST', '/satanization/', true);
     request.setRequestHeader("Content-Type", "application/json");
+
+    document.body.classList.add('is-satanized');
 
     request.onload = function () {
       button.innerHTML = knife_satanize.button;
@@ -90,12 +85,9 @@
       }
 
       button.innerHTML = knife_satanize.getback || '';
-
-      backdrop.setAttribute('data-image', backdrop.style.backgroundImage);
       backdrop.style.backgroundImage = 'linear-gradient(to bottom,#3b2307,#931111,#e62020)';
     }
 
-    button.classList.add('promo--freeze');
     button.innerHTML = knife_satanize.process || '';
 
     const data = {
@@ -110,9 +102,23 @@
   button.addEventListener('click', function(e) {
     e.preventDefault();
 
-    if (headings.length === 0) {
-      return setSatanized(document.location.pathname);
+    let backdrop = document.querySelector('.backdrop');
+
+    if (backdrop === null) {
+      backdrop = document.createElement('div');
+      backdrop.classList.add('backdrop');
+      document.body.appendChild(backdrop);
     }
+
+    if (backdrop.hasAttribute('data-image') === false) {
+      backdrop.setAttribute('data-image', backdrop.style.backgroundImage);
+    }
+
+    if (!document.body.classList.contains('is-satanized')) {
+      return setSatanized(document.location.pathname, backdrop);
+    }
+
+    document.body.classList.remove('is-satanized');
 
     for (let i = 0; i < headings.length; i++) {
       const find = document.querySelector('[data-satanization="' + i + '"]');
@@ -122,7 +128,6 @@
 
     headings = [];
 
-    button.classList.remove('promo--freeze');
     button.innerHTML = knife_satanize.button || '';
     backdrop.style.backgroundImage = backdrop.getAttribute('data-image');
   });
