@@ -100,13 +100,14 @@
     cursor: pointer;
 
     position: fixed;
-    top: calc(50% - 2.5rem);
+    top: 24rem;
     right: 2rem;
     z-index: 8;
 
     width: 5rem;
     height: 5rem;
     padding: 2.5rem 0.5rem 0.5rem;
+    opacity: 1;
 
     font-size: 8px;
     font-weight: 500;
@@ -117,6 +118,8 @@
     background-image: linear-gradient(to bottom, #3B2307, #931111, #E62020);
     box-shadow: 0 -4px 10px 4px #b31717;
     border-radius: 1rem;
+
+    transition: opacity 0.5s;
 
     strong {
       display: block;
@@ -140,9 +143,13 @@
       background-repeat: no-repeat;
     }
 
-    &.promo--freeze {
-      animation: none;
+    @media screen and (max-width: 767px) {
+      box-shadow: none;
     }
+  }
+
+  &.promo--freeze {
+    opacity: 0;
   }
 
   @media screen and (max-width: 767px) {

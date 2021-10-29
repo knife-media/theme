@@ -98,6 +98,14 @@
     request.send(JSON.stringify(data));
   }
 
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 800) {
+      return button.classList.add('promo--freeze');
+    }
+
+    return button.classList.remove('promo--freeze');
+  });
+
   // Handle button click
   button.addEventListener('click', function(e) {
     e.preventDefault();
