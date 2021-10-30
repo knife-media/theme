@@ -99,7 +99,7 @@
   }
 
   window.addEventListener('scroll', function() {
-    if (window.scrollY > 800) {
+    if (window.scrollY > 100) {
       return button.classList.add('promo--freeze');
     }
 
