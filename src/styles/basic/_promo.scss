@@ -119,7 +119,7 @@
     box-shadow: 0 -4px 10px 4px #b31717;
     border-radius: 1rem;
 
-    transition: opacity 0.5s;
+    transition: 0.5s;
 
     strong {
       display: block;
@@ -150,6 +150,7 @@
 
   &.promo--freeze {
     opacity: 0;
+    visibility: hidden;
   }
 
   @media screen and (max-width: 767px) {
