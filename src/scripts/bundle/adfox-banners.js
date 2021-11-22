@@ -314,6 +314,6 @@
   script.type = 'text/javascript';
   script.async = true;
   script.crossorigin = 'anonymous';
-  script.src = 'https://yastatic.net/pcode/adfox/loader.js';
+  script.src = 'https://an.yandex.ru/system/context.js';
   document.head.appendChild(script);
 })();
