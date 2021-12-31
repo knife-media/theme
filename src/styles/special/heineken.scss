@@ -74,3 +74,43 @@ body {
     width: 10rem;
   }
 }
+
+.content .figure.figure--promo {
+  display: block;
+
+  .button {
+    display: block;
+    padding: 1.5rem 2rem 1.5rem;
+
+    font-size: 1.125rem;
+    font-weight: 400;
+    line-height: 1.375;
+    color: #000;
+
+    text-transform: uppercase;
+    text-align: left;
+
+    color: $color-special-white;
+    background-color: $color-special-common;
+    border-radius: 0.5rem;
+
+    strong {
+      display: block;
+    }
+
+    &:hover {
+      filter: brightness(120%);
+
+      color: $color-special-white;
+      background-color: $color-special-common;
+
+      border-color: transparent;
+    }
+
+    @media screen and (max-width: 767px) {
+      padding: 1rem;
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+  }
+}
