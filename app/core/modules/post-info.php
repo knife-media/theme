@@ -33,6 +33,11 @@ class Knife_Post_Info {
             $output = self::get_head($output);
         }
 
+        // Get promo pixel image
+        if(in_array('pixel', $options)) {
+            $output = self::get_pixel($output);
+        }
+
         // Get label info
         if(in_array('best', $options)) {
             $output = self::get_best($output);
@@ -173,6 +178,32 @@ class Knife_Post_Info {
                 esc_html($tags[0]->name),
                 esc_url(get_tag_link($tags[0]->term_id))
             );
+        }
+
+        return $output;
+    }
+
+
+    /**
+     * Show promo pixel
+     *
+     * @since 1.15
+     */
+    private static function get_pixel($output = '') {
+        if(property_exists('Knife_Promo_Manager', 'meta_pixel')) {
+            $post_id = get_the_ID();
+
+            // Set meta pixel
+            $meta_pixel = get_post_meta($post_id, Knife_Promo_Manager::$meta_pixel, true);
+
+            // Check if promo pixel first
+            if($meta_pixel) {
+                $pixel = sprintf('<img src="%s" alt="">',
+                    esc_url($meta_pixel)
+                );
+
+                $output = $output . $pixel;
+            }
         }
 
         return $output;

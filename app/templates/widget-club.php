@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.4
- * @version 1.11
+ * @version 1.15
  */
 ?>
 
@@ -30,6 +30,8 @@
                         get_the_title(),
                         esc_url(get_permalink())
                     );
+
+                    the_info('', '', ['pixel']);
                 ?>
             </div>
         </div>

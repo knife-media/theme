@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.7
- * @version 1.11
+ * @version 1.15
  */
 ?>
 
@@ -17,6 +17,8 @@
                     esc_html(get_permalink()),
                     get_the_title()
                 );
+
+                the_info('', '', ['pixel']);
             ?>
         </div>
     <?php endwhile; ?>

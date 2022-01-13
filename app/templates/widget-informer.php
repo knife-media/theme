@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.4
- * @version 1.7
+ * @version 1.15
  */
 ?>
 
@@ -24,6 +24,8 @@
                 '<p class="widget-informer__content-title">%s</p>',
                 esc_html($instance['title'])
             );
+
+            the_info('', '', ['pixel']);
         ?>
 
         <span class="icon icon--right"></span>

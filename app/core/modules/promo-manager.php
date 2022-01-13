@@ -51,6 +51,15 @@ class Knife_Promo_Manager {
 
 
     /**
+     * Unique meta to store promo pixel
+     *
+     * @access  public
+     * @var     string
+     */
+    public static $meta_pixel = '_knife-promo-pixel';
+
+
+    /**
      * Archive query var
      *
      * @access  public
@@ -101,6 +110,12 @@ class Knife_Promo_Manager {
 
         // Close comments for promo posts
         add_filter('comments_open',  [__CLASS__, 'disable_comments'], 10, 2);
+
+        // Display teaser state in posts list
+        add_filter('display_post_states', [__CLASS__, 'display_teaser_state'], 10, 2);
+
+        // Add pixel image to all widgets
+        add_action('the_widget', [__CLASS__, 'display_pixel'], 10, 3);
     }
 
 
@@ -115,6 +130,16 @@ class Knife_Promo_Manager {
         add_filter('preview_post_link', [__CLASS__, 'update_permalink'], 10, 2);
 
         add_action('template_redirect', [__CLASS__, 'redirect_teaser']);
+    }
+
+    /**
+     * Display promo pixel in all widgets
+     *
+     * @since 1.15
+     */
+    public static function display_pixel($instance, $widget, $args) {
+        print_r($args);
+        print_r($widget);
     }
 
 
@@ -204,6 +229,18 @@ class Knife_Promo_Manager {
         }
 
         return $open;
+    }
+
+
+    /**
+     * Display teaser state in posts lists
+     */
+    public static function display_teaser_state($states, $post) {
+        if(get_post_meta($post->ID, self::$meta_teaser, true)) {
+            $states[] = __('Пост-ссылка', 'knife-theme');
+        }
+
+        return $states;
     }
 
 
@@ -432,6 +469,13 @@ class Knife_Promo_Manager {
 
             update_post_meta($post_id, self::$meta_teaser, $teaser);
         }
+
+        // Save promo pixel
+        if(empty($_REQUEST[self::$meta_pixel])) {
+            delete_post_meta($post_id, self::$meta_pixel);
+        }
+
+        update_post_meta($post_id, self::$meta_pixel, sanitize_text_field($_REQUEST[self::$meta_pixel]));
 
         // Save promo meta
         if(empty($_REQUEST[self::$meta_promo])) {

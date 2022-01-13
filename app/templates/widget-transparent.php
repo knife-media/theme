@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.4
- * @version 1.11
+ * @version 1.15
  */
 ?>
 
@@ -42,6 +42,8 @@
                         '<a class="widget-transparent__content-link" href="%2$s">%1$s</a>',
                         get_the_title(), esc_url(get_permalink())
                     );
+
+                    the_info('', '', ['pixel']);
                 ?>
             </div>
         </div>

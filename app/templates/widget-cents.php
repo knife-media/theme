@@ -4,6 +4,7 @@
  *
  * @package knife-theme
  * @since 1.12
+ * @version 1.15
  */
 ?>
 
@@ -22,6 +23,8 @@
                     '<div class="widget-cents__content">%s</div>',
                     wpautop(esc_html($post['content']))
                 );
+
+                the_info('', '', ['pixel']);
             ?>
         </div>
     <?php endforeach; ?>

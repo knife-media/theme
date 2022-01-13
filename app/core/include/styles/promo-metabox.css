@@ -12,11 +12,16 @@
   margin-bottom: 5px;
 }
 
-#knife-promo-box .promo-teaser p {
+#knife-promo-box .promo-pixel p {
   margin-bottom: 0;
 }
 
 #knife-promo-box .promo-teaser strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+#knife-promo-box .promo-pixel strong {
   display: block;
   margin-bottom: 5px;
 }

@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.4
- * @version 1.11
+ * @version 1.15
  */
 ?>
 
@@ -40,6 +40,8 @@
                     '<div class="widget-single__content-info">', '</div>',
                     ['author', 'best']
                 );
+
+                the_info('', '', ['pixel']);
             ?>
         </div>
     </div>
