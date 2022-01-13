@@ -65,6 +65,14 @@
 
     border-bottom: solid 1px $color-white;
 
+    .widget-transparent__content-pixel {
+      position: absolute;
+
+      img {
+        visibility: hidden;
+      }
+    }
+
     .widget-transparent__content-link {
       display: block;
 

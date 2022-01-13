@@ -31,7 +31,7 @@
                         esc_url(get_permalink())
                     );
 
-                    the_info('', '', ['pixel']);
+                    the_info('<div class="widget-club__content-pixel">', '</div>', ['pixel']);
                 ?>
             </div>
         </div>

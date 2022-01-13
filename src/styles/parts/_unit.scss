@@ -101,6 +101,14 @@
       }
     }
 
+    .unit__content-pixel {
+      position: absolute;
+
+      img {
+        visibility: hidden;
+      }
+    }
+
     .unit__content-info {
       display: flex;
       justify-content: space-between;

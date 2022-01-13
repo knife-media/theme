@@ -41,7 +41,7 @@
                     ['author', 'best']
                 );
 
-                the_info('', '', ['pixel']);
+                the_info('<div class="widget-single__content-pixel">', '</div>', ['pixel']);
             ?>
         </div>
     </div>

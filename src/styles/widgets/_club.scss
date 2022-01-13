@@ -67,6 +67,14 @@
       }
     }
 
+    .widget-club__content-pixel {
+      position: absolute;
+
+      img {
+        visibility: hidden;
+      }
+    }
+
     .widget-club__content-link {
       display: block;
 

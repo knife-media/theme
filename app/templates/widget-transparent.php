@@ -43,7 +43,7 @@
                         get_the_title(), esc_url(get_permalink())
                     );
 
-                    the_info('', '', ['pixel']);
+                    the_info('<div class="widget-transparent__content-pixel">', '</div>', ['pixel']);
                 ?>
             </div>
         </div>

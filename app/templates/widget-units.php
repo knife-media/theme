@@ -36,7 +36,7 @@
                     ['author', 'date', 'best']
                 );
 
-                the_info('', '', ['pixel']);
+                the_info('<div class="unit__content-pixel">', '</div>', ['pixel']);
             ?>
         </div>
     </div>

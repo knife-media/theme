@@ -31,7 +31,7 @@
                     get_the_title()
                 );
 
-                the_info('', '', ['pixel']);
+                the_info('<div class="widget-recent__content-pixel">', '</div>', ['pixel']);
             ?>
         </div>
     <?php endwhile; ?>

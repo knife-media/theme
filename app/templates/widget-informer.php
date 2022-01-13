@@ -24,8 +24,6 @@
                 '<p class="widget-informer__content-title">%s</p>',
                 esc_html($instance['title'])
             );
-
-            the_info('', '', ['pixel']);
         ?>
 
         <span class="icon icon--right"></span>

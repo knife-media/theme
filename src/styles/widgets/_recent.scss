@@ -50,6 +50,14 @@
       }
     }
 
+    .widget-recent__content-pixel {
+      position: absolute;
+
+      img {
+        visibility: hidden;
+      }
+    }
+
     .widget-recent__content-link {
       display: inline-block;
 

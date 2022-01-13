@@ -47,6 +47,14 @@
     }
   }
 
+  .widget-blunt__pixel {
+    position: absolute;
+
+    img {
+      visibility: hidden;
+    }
+  }
+
   .widget-blunt__link {
     display: block;
     position: relative;
