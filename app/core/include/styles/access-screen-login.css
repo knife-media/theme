@@ -28,3 +28,7 @@
 .login #login #backtoblog {
 	display: none;
 }
+
+.login .language-switcher {
+  display: none;
+}
