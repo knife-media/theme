@@ -473,16 +473,16 @@ class Knife_Promo_Manager {
         // Save promo pixel
         if(empty($_REQUEST[self::$meta_pixel])) {
             delete_post_meta($post_id, self::$meta_pixel);
+        } else {
+            update_post_meta($post_id, self::$meta_pixel, sanitize_text_field($_REQUEST[self::$meta_pixel]));
         }
-
-        update_post_meta($post_id, self::$meta_pixel, sanitize_text_field($_REQUEST[self::$meta_pixel]));
 
         // Save promo meta
         if(empty($_REQUEST[self::$meta_promo])) {
-            return delete_post_meta($post_id, self::$meta_promo);
+            delete_post_meta($post_id, self::$meta_promo);
+        } else {
+            update_post_meta($post_id, self::$meta_promo, 1);
         }
-
-        update_post_meta($post_id, self::$meta_promo, 1);
     }
 
 
