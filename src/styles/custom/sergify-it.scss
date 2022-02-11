@@ -14,6 +14,16 @@ $color-custom-content: #be1e2c;
   .entry-header__lead a {
     color: $color-white;
   }
+
+   .entry-header__share {
+    display: none
+  }
+}
+
+.entry-footer {
+  .entry-footer__share {
+    display: none;
+  }
 }
 
 .entry-content {
