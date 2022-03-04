@@ -265,7 +265,7 @@ class Knife_Custom_Background {
             return;
         }
 
-        if(!current_user_can('manage_options', $post_id)) {
+        if(!current_user_can('unfiltered_html', $post_id)) {
             return;
         }
 
