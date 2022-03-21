@@ -53,11 +53,6 @@ class Knife_Share_Buttons {
                 'text' => __('Поделиться', 'knife-theme')
             ],
 
-            'facebook' => [
-                'link' => 'https://www.facebook.com/sharer/sharer.php?u=%1$s',
-                'text' => __('Пошерить', 'knife-theme')
-            ],
-
             'telegram' => [
                 'link' => 'https://tgram.link/share/url?url=%1$s&text=%2$s',
                 'text' => __('Репостнуть', 'knife-theme')
