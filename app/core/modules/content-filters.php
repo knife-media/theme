@@ -37,9 +37,6 @@ class Knife_Content_Filters {
         // Remove extra &nbsp; from content on save
         add_filter('content_save_pre', [__CLASS__, 'remove_nbsp']);
 
-        // Replace t.me links with custom telegram reditrecter
-        add_filter('content_save_pre', [__CLASS__, 'replace_telegram_links']);
-
         // Wrap pure iframes
         add_filter('content_save_pre', [__CLASS__, 'wrap_iframe']);
 
@@ -162,19 +159,6 @@ class Knife_Content_Filters {
         }
 
         $content = preg_replace(self::$script_regex, '', wp_unslash($content));
-
-        return wp_slash($content);
-    }
-
-
-    /**
-     * Replace t.me links with custom tgram.link host
-     */
-    public static function replace_telegram_links($content) {
-        $content = wp_unslash($content);
-
-        // Replace all Telegram links with custom
-        $content = str_replace('href="https://t.me/', 'href="https://tgram.link/', $content);
 
         return wp_slash($content);
     }
