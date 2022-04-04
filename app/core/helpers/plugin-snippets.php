@@ -77,10 +77,30 @@ add_action('social_planner_task_sent', function($results, $key, $post_id) {
 /**
  * Send notification if the post is not planned to Social Planner
  */
-add_action('publish_post', function($post_id) {
-    if(!has_category('news', $post_id)) {
+add_action('transition_post_status', function($new_status, $old_status, $post) {
+    if($new_status === $old_status) {
         return;
     }
+
+    if($new_status !== 'publish') {
+        return;
+    }
+
+    if(!has_category('news', $post->ID)) {
+        return;
+    }
+
+    wp_schedule_single_event(time() + 30, 'knife_schedule_requests_news', [$post->ID]);
+}, 20, 3);
+
+
+/**
+ * Social Planner forgotten news scheduler event
+ *
+ * @since 1.15
+ */
+add_action('knife_schedule_requests_news', function($post_id) {
+    $secret = empty(KNIFE_REQUESTS['secret']) ? '' : KNIFE_REQUESTS['secret'];
 
     if(!class_exists('Social_Planner\Metabox')) {
         return;
@@ -91,18 +111,6 @@ add_action('publish_post', function($post_id) {
     if(!empty($tasks)) {
         return;
     }
-
-    wp_schedule_single_event(time() + 60, 'knife_schedule_requests_news', [$post_id]);
-}, 20);
-
-
-/**
- * Social Planner forgotten news scheduler event
- *
- * @since 1.15
- */
-add_action('knife_schedule_requests_news', function($post_id) {
-    $secret = empty(KNIFE_REQUESTS['secret']) ? '' : KNIFE_REQUESTS['secret'];
 
     $timestamp = time();
 
