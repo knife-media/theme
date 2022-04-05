@@ -17,7 +17,7 @@
  * @since 1.13
  */
 add_filter('ppp_nonce_life', function() {
-    return 60 * 60 * 24 * 7; // 7 days
+    return 60 * 60 * 24 * 180; // 180 days
 });
 
 
