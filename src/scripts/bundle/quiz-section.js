@@ -2,7 +2,7 @@
  * Quiz post type front-end handler
  *
  * @since 1.7
- * @version 1.13
+ * @version 1.15
  */
 
 (function () {
@@ -298,9 +298,6 @@
     // Get quiz offset
     var offset = quiz.getBoundingClientRect().top + window.pageYOffset;
 
-    // Try to scroll smoothly
-    smoothScroll(offset - 76);
-
     // Set quiz content
     var content = quiz.querySelector('.entry-quiz__content');
     if (item.hasOwnProperty('question')) {
@@ -318,6 +315,12 @@
     if (typeof item.answers === 'object' && item.answers.length > 0) {
       showAnswers(item.answers, content.nextSibling);
     }
+
+    // Get quiz offset
+    var offset = quiz.getBoundingClientRect().top + window.pageYOffset;
+
+    // Try to scroll smoothly
+    smoothScroll(offset - 76);
   }
 
 
@@ -325,12 +328,6 @@
    * Show results
    */
   function showResult(result) {
-    // Get quiz offset
-    var offset = quiz.getBoundingClientRect().top + window.pageYOffset;
-
-    // Try to scroll smoothy
-    smoothScroll(offset - 76);
-
     // Set quiz results
     if (result.hasOwnProperty('poster')) {
       var poster = document.createElement('img');
@@ -355,6 +352,12 @@
     if (document.body.contains(vote)) {
       vote.parentNode.removeChild(vote);
     }
+
+    // Get quiz offset
+    var offset = quiz.getBoundingClientRect().top + window.pageYOffset;
+
+    // Try to scroll smoothly
+    smoothScroll(offset - 76);
 
     var content = quiz.querySelector('.entry-quiz__content');
     if (result.hasOwnProperty('details')) {

@@ -101,6 +101,30 @@
       }
     }
 
+    h5 {
+      margin-bottom: 0;
+      font-size: 1.125rem;
+      line-height: 1.25;
+
+      @media screen and (max-width: 767px) {
+        font-size: 1rem;
+      }
+    }
+
+    h6 {
+      font-size: .8125rem;
+      line-height: 1.375;
+      text-align: left;
+
+      strong {
+        font-weight: 600;
+      }
+
+      @media screen and (max-width: 767px) {
+        font-size: .75rem;
+      }
+    }
+
     a {
       color: $color-primary;
       border-bottom: 1px solid $color-primary;
