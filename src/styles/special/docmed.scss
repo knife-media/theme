@@ -1,0 +1,120 @@
+// Setup variables
+@import "../setup/variables";
+
+$color-special-common: #084997;
+$color-special-white: #fff;
+
+.footer {
+  &>* {
+    position: relative;
+    z-index: 2;
+  }
+
+  .footer__copy a {
+    color: $color-special-white;
+    border-bottom: solid 1px;
+
+    &:hover {
+      border-bottom-color: transparent;
+    }
+  }
+}
+
+body {
+  background: linear-gradient(to right bottom, #044695, #41a4ff);
+}
+
+
+/**
+ * caption styles
+ */
+.caption .caption__description {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  max-width: 100%;
+  margin: 1rem 0 0;
+  padding: 1rem;
+  text-align: center;
+
+  color: $color-special-common;
+  background: $color-special-white;
+  text-transform: uppercase;
+
+  border-radius: .625rem;
+}
+
+.caption .caption__description h1 {
+  max-width: $width-content;
+  margin-bottom: 1rem;
+
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-transform: uppercase;
+
+  @media screen and (max-width: 767px) {
+    font-size: 1rem;
+  }
+
+  @media screen and (max-width: 479px) {
+    font-size: .875rem;
+  }
+}
+
+.caption .caption__description img {
+  width: 18rem;
+  height: auto;
+  margin: 1.5rem 0;
+
+  @media screen and (max-width: 1023px) {
+    width: 14rem;
+  }
+
+  @media screen and (max-width: 479px) {
+    width: 12rem;
+  }
+}
+
+.content .figure.figure--promo {
+  display: block;
+
+  .button {
+    display: block;
+    padding: 1.5rem 2rem 1.5rem;
+
+    font-size: 1.125rem;
+    font-weight: 400;
+    line-height: 1.375;
+    color: #000;
+
+    text-transform: uppercase;
+    text-align: left;
+
+    color: $color-special-white;
+    background-color: $color-special-common;
+    border-radius: 0.5rem;
+
+    strong {
+      display: block;
+    }
+
+    &:hover {
+      filter: brightness(120%);
+
+      color: $color-special-white;
+      background-color: $color-special-common;
+
+      border-color: transparent;
+    }
+
+    @media screen and (max-width: 767px) {
+      padding: 1rem;
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+  }
+}
