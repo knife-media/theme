@@ -106,7 +106,6 @@ class Knife_Theme_Filters {
             'fonts/formular/formular-bold.woff2',
             'fonts/ptserif/ptserif-regular.woff2',
             'fonts/ptserif/ptserif-italic.woff2',
-            'fonts/knife-icons/knife-icons.woff',
         ];
 
         foreach($fonts as $font) {
