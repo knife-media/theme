@@ -1,5 +1,5 @@
 .widget-adfox {
-  display: none;
+  display: flex;
   flex-flow: row wrap;
   justify-content: center;
   position: relative;
@@ -8,13 +8,17 @@
     flex: 20 1 auto;
     margin-top: 1rem;
 
-    &.widget-adfox--loaded > div {
+    & > div {
       @include sticky-widget;
     }
   }
 
   &.widget-adfox--loaded {
-    display: flex;
+    visibility: visible;
+  }
+
+  &.widget-adfox--hidden {
+    display: none;
   }
 
   &.widget-adfox--billboard > div {

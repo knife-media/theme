@@ -74,14 +74,15 @@
    * Add options callbacks
    */
   function addCallbacks(options, widget) {
+
     // Remove on stub
     options.onStub = function () {
-      widget.classList.remove('widget-adfox--loaded');
+      widget.classList.add('widget-adfox--hidden');
     }
 
     // Remove on error
     options.onError = function (error) {
-      widget.classList.remove('widget-adfox--loaded');
+      widget.classList.add('widget-adfox--hidden');
 
       // Show errors for logged-in users
       if (document.body.classList.contains('is-adminbar')) {
@@ -94,14 +95,14 @@
       let params = handle.bundleParams;
 
       // Remove loaded class if exists
-      widget.classList.remove('widget-adfox--loaded');
+      widget.classList.add('widget-adfox--hidden');
 
       // Destroy if banner hidden
       if (params.bannerId && hiddenBanner(params.bannerId)) {
         return handle.destroy();
       }
 
-      widget.classList.add('widget-adfox--loaded');
+      widget.classList.remove('widget-adfox--hidden');
     }
 
     return options;
@@ -123,8 +124,9 @@
     // Parse options from link
     options = parseOptions(link, options);
 
-    window['adfoxAsyncParams'] = window['adfoxAsyncParams'] || [];
-    window['adfoxAsyncParams'].push(options);
+    window.yaContextCb.push(() => {
+      Ya.adfoxCode.create(options);
+    });
   }
 
 
@@ -143,11 +145,12 @@
     // Parse options from link
     options = parseOptions(link, options);
 
-    window['adfoxAsyncParamsAdaptive'] = window['adfoxAsyncParamsAdaptive'] || [];
-    window['adfoxAsyncParamsAdaptive'].push([options, ['tablet', 'phone'], {
-      tabletWidth: 1023,
-      isAutoReloads: true
-    }]);
+    window.yaContextCb.push(() => {
+      Ya.adfoxCode.createAdaptive(options, ['tablet', 'phone'], {
+        tabletWidth: 1023,
+        isAutoReloads: true
+      });
+    });
   }
 
 
@@ -166,11 +169,12 @@
     // Parse options from link
     options = parseOptions(link, options);
 
-    window['adfoxAsyncParamsAdaptive'] = window['adfoxAsyncParamsAdaptive'] || [];
-    window['adfoxAsyncParamsAdaptive'].push([options, ['desktop'], {
-      tabletWidth: 1023,
-      isAutoReloads: true
-    }]);
+    window.yaContextCb.push(() => {
+      Ya.adfoxCode.createAdaptive(options, ['desktop'], {
+        tabletWidth: 1023,
+        isAutoReloads: true
+      });
+    });
   }
 
 
@@ -178,6 +182,8 @@
    * Load adfox banner
    */
   function loadBanner(data, id, widget) {
+    window.yaContextCb = window.yaContextCb || []
+
     if (data.common) {
       return loadCommonBanner(data.common, id, widget);
     }
@@ -312,7 +318,7 @@
   // Load adfox library async
   let script = document.createElement("script");
   script.type = 'text/javascript';
-  script.async = true;
+//  script.async = true;
   script.crossorigin = 'anonymous';
   script.src = 'https://an.yandex.ru/system/context.js';
   document.head.appendChild(script);
