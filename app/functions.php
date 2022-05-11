@@ -118,6 +118,9 @@ require get_template_directory() . '/core/modules/widget-handler.php';
 // Widget visibility handler
 require get_template_directory() . '/core/modules/hidden-widgets.php';
 
+// Add invisible post status
+require get_template_directory() . '/core/modules/invisible-posts.php';
+
 // Allow mutiple guest authors per post
 require get_template_directory() . '/core/modules/authors-manager.php';
 
