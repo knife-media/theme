@@ -1,0 +1,64 @@
+// Setup variables
+@import "../setup/variables";
+
+$color-custom-header: #0b54a4;
+$color-custom-content: #c5deea;
+
+.entry-header {
+  color: $color-white;
+  background-color: $color-custom-header;
+
+  .entry-header__info {
+    color: $color-white;
+  }
+
+  .entry-header__lead a {
+    color: $color-white;
+  }
+
+   .entry-header__share {
+    display: none;
+  }
+}
+
+.entry-footer {
+  display: none;
+}
+
+.entry-comments {
+  display: none;
+}
+
+.entry-bottom {
+  display: none;
+}
+
+.entry-content {
+  padding-bottom: 2rem;
+
+  color: $color-white;
+  background-color: $color-custom-content;
+
+  .figure--flipper aside {
+    font-size: 1.125rem;
+    line-height: 1.375;
+
+    color: $color-text;
+    background-color: $color-white;
+
+    text-align: left;
+
+    div {
+      width: 100%;
+    }
+
+    @media screen and (max-width: 767px) {
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+  }
+
+  .figure--quote {
+    color: $color-text;
+  }
+}
