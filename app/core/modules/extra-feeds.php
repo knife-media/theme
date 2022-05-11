@@ -253,6 +253,7 @@ class Knife_Extra_Feeds {
     public static function update_query($query) {
         if($query->is_main_query() && $query->is_feed()) {
             $query->set('posts_per_rss', 25);
+            $query->set('post_status', 'publish');
         }
     }
 

@@ -33,6 +33,9 @@ class Knife_Invisible_Posts {
 
         // Load custom post functions
         add_action('init', [__CLASS__, 'add_post_status']);
+
+        // Display invisible state in posts list
+        add_filter('display_post_states', [__CLASS__, 'display_invisible_state'], 10, 2);
     }
 
 
@@ -52,6 +55,18 @@ class Knife_Invisible_Posts {
                 'knife-theme'
             ),
         ]);
+    }
+
+
+    /**
+     * Display teaser state in posts lists
+     */
+    public static function display_invisible_state($states, $post) {
+        if(get_post_status($post->ID) === self::$post_status) {
+            $states[] = __('Скрытый', 'knife-theme');
+        }
+
+        return $states;
     }
 
 
