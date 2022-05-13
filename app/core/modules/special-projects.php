@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.14
+ * @version 1.15
  */
 
 
@@ -55,12 +55,6 @@ class Knife_Special_Projects {
         // Register taxonomy
         add_action('init', [__CLASS__, 'register_taxonomy']);
 
-        // Try to update templates
-        add_action('wp', [__CLASS__, 'include_single'], 8);
-
-        // Try to update templates
-        add_action('wp', [__CLASS__, 'include_archive'], 8);
-
         // Add special options form fields
         add_action('admin_init', [__CLASS__, 'add_options_fields']);
 
@@ -99,62 +93,6 @@ class Knife_Special_Projects {
             'rewrite'               => ['slug' => self::$taxonomy],
             'meta_box_cb'           => [__CLASS__, 'print_metabox']
         ]);
-    }
-
-
-    /**
-     * Try to require all functions.php for special terms
-     *
-     * @since 1.13
-     */
-    public static function include_archive() {
-        if(!is_tax(self::$taxonomy)) {
-            return;
-        }
-
-        $term = get_queried_object();
-
-        if(!empty($term->slug)) {
-            $include = get_template_directory() . "/core/special/" . $term->slug;
-
-            if(file_exists($include . '/functions.php')) {
-                include_once $include . '/functions.php';
-            }
-        }
-    }
-
-
-    /**
-     * Include updated single template
-     *
-     * @since 1.13
-     */
-    public static function include_single() {
-        if(!is_singular()) {
-            return;
-        }
-
-        $post_id = get_queried_object_id();
-
-        if(!has_term('', self::$taxonomy, $post_id)) {
-            return;
-        }
-
-        // Loop over all tax terms
-        foreach(get_the_terms($post_id, self::$taxonomy) as $term) {
-            $ancestors = get_ancestors($term->term_id, self::$taxonomy, 'taxonomy');
-
-            // Get parent if exists
-            if(!empty($ancestors)) {
-                $term = get_term($ancestors[0], self::$taxonomy);
-            }
-
-            $include = get_template_directory() . "/core/special/" . $term->slug;
-
-            if(file_exists($include . '/functions.php')) {
-                include_once $include . '/functions.php';
-            }
-        }
     }
 
 
