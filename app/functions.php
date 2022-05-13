@@ -106,9 +106,6 @@ require get_template_directory() . '/core/modules/theme-filters.php';
 // Content filters
 require get_template_directory() . '/core/modules/content-filters.php';
 
-// Add per post customs
-require get_template_directory() . '/core/modules/post-customs.php';
-
 // ID handler
 require get_template_directory() . '/core/modules/id-handler.php';
 

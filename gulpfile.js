@@ -73,7 +73,7 @@ gulp.task('styles:special', (done) => {
 
 // Process theme scripts
 gulp.task('scripts', (done) => {
-  gulp.src('src/scripts/bundle/*.js')
+  gulp.src('src/scripts/*.js')
     .pipe(plumber())
     .pipe(babel({
       presets: ['@babel/env']
