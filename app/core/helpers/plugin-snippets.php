@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.15
+ * @version 1.16
  */
 
 
@@ -168,3 +168,20 @@ add_filter('social_planner_prepare_excerpt', function($excerpt, $message) {
 
     return $excerpt;
 }, 10, 2);
+
+
+/**
+ * Replace post link to shorten version for Telegram
+ *
+ * @since 1.16
+ */
+add_filter('social_planner_prepare_message', function($message, $target) {
+    list($network, $name) = explode('-', $target);
+
+    if ($network === 'telegram') {
+        $message['link'] = 'https://knf.md/tg' . wp_make_link_relative($message['link']);
+    }
+
+    return $message;
+}, 10, 2);
+
