@@ -5,7 +5,7 @@
  * Custom metabox for SEO fields
  *
  * @package knife-theme
- * @since 1.14
+ * @since 1.16
  */
 
 
@@ -108,12 +108,15 @@ class Knife_SEO_Fields {
             return;
         }
 
-        if(empty($_REQUEST[self::$meta_seo])) {
-            return delete_post_meta($post_id, self::$meta_seo);
+        if (!isset($_REQUEST[self::$meta_seo])) {
+            return;
         }
 
-        // Filter empty values
         $fields = array_filter($_REQUEST[self::$meta_seo]);
+
+        if(empty($fields)) {
+            return delete_post_meta($post_id, self::$meta_seo);
+        }
 
         update_post_meta($post_id, self::$meta_seo, $fields);
     }

@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.13
- * @version 1.14
+ * @version 1.16
  */
 
 
@@ -146,12 +146,15 @@ class Knife_ID_Handler {
             return;
         }
 
-        if(empty($_REQUEST[self::$meta_question])) {
-            return delete_post_meta($post_id, self::$meta_question);
+        if (!isset($_REQUEST[self::$meta_question])) {
+            return;
         }
 
-        // Filter empty values
         $question = array_filter($_REQUEST[self::$meta_question]);
+
+        if(empty($question)) {
+            return delete_post_meta($post_id, self::$meta_question);
+        }
 
         update_post_meta($post_id, self::$meta_question, $question);
     }

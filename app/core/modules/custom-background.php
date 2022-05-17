@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.2
- * @version 1.11
+ * @version 1.16
  */
 
 
@@ -269,13 +269,15 @@ class Knife_Custom_Background {
             return;
         }
 
-        // Save background meta
-        if(empty($_REQUEST[self::$meta_background])) {
-            return delete_post_meta($post_id, self::$meta_background);
+        if (!isset($_REQUEST[self::$meta_background])) {
+            return;
         }
 
-        // Filter empty values
         $background = array_filter($_REQUEST[self::$meta_background]);
+
+        if(empty($background)) {
+            return delete_post_meta($post_id, self::$meta_background);
+        }
 
         update_post_meta($post_id, self::$meta_background, $background);
     }
