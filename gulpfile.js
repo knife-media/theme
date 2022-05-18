@@ -8,7 +8,6 @@ const plumber = require('gulp-plumber');
 const prefix = require('gulp-autoprefixer');
 const workboxBuild = require('workbox-build');
 const babel = require('gulp-babel');
-const rename = require('gulp-rename');
 
 
 // Process theme styles
@@ -29,48 +28,6 @@ gulp.task('styles', (done) => {
   done();
 })
 
-// Process custom styles
-gulp.task('styles:custom', (done) => {
-  gulp.src('src/styles/custom/*.scss')
-    .pipe(plumber())
-    .pipe(sass({
-      errLogToConsole: true
-    }))
-    .pipe(prefix())
-    .pipe(cleanCss({
-      compatibility: 'ie9'
-    }))
-    .pipe(rename((file) => {
-      file.dirname = file.basename;
-      file.basename = 'styles';
-      file.extname = '.css';
-    }))
-    .pipe(gulp.dest('app/core/custom/'))
-
-  done();
-})
-
-// Process special styles
-gulp.task('styles:special', (done) => {
-  gulp.src('src/styles/special/*.scss')
-    .pipe(plumber())
-    .pipe(sass({
-      errLogToConsole: true
-    }))
-    .pipe(prefix())
-    .pipe(cleanCss({
-      compatibility: 'ie9'
-    }))
-    .pipe(rename((file) => {
-      file.dirname = file.basename;
-      file.basename = 'styles';
-      file.extname = '.css';
-    }))
-    .pipe(gulp.dest('app/core/special/'))
-
-  done();
-})
-
 // Process theme scripts
 gulp.task('scripts', (done) => {
   gulp.src('src/scripts/*.js')
@@ -81,42 +38,6 @@ gulp.task('scripts', (done) => {
     .pipe(uglify())
     .pipe(concat('scripts.min.js'))
     .pipe(gulp.dest('app/assets/'))
-
-  done();
-})
-
-// Process custom scripts
-gulp.task('scripts:custom', (done) => {
-  gulp.src('src/scripts/custom/*.js')
-    .pipe(plumber())
-    .pipe(babel({
-      presets: ['@babel/env']
-    }))
-    .pipe(uglify())
-    .pipe(rename((file) => {
-      file.dirname = file.basename;
-      file.basename = 'scripts';
-      file.extname = '.js';
-    }))
-    .pipe(gulp.dest('app/core/custom/'))
-
-  done();
-})
-
-// Process special scripts
-gulp.task('scripts:special', (done) => {
-  gulp.src('src/scripts/special/*.js')
-    .pipe(plumber())
-    .pipe(babel({
-      presets: ['@babel/env']
-    }))
-    .pipe(uglify())
-    .pipe(rename((file) => {
-      file.dirname = file.basename;
-      file.basename = 'scripts';
-      file.extname = '.js';
-    }))
-    .pipe(gulp.dest('app/core/special/'))
 
   done();
 })
@@ -185,8 +106,8 @@ gulp.task('workbox', (done) => {
 
 // Watch theme assets
 gulp.task('watch', () => {
-  gulp.watch('src/styles/**/*', gulp.series('styles', 'styles:custom', 'styles:special'));
-  gulp.watch('src/scripts/**/*', gulp.series('scripts', 'scripts:custom', 'scripts:special'));
+  gulp.watch('src/styles/**/*', gulp.series('styles'));
+  gulp.watch('src/scripts/**/*', gulp.series('scripts'));
 })
 
 // Sed build task
@@ -197,13 +118,7 @@ gulp.task('build', gulp.series(
   'fonts',
   'video',
   'vendor',
-  'workbox',
-  gulp.parallel(
-    'styles:special',
-    'styles:custom',
-    'scripts:special',
-    'scripts:custom'
-  )
+  'workbox'
 ));
 
 // Set default task
