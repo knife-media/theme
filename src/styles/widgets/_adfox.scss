@@ -2,7 +2,9 @@
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
-  position: relative;
+
+  position: absolute;
+  visibility: hidden;
 
   &.widget-adfox--sidebar {
     flex: 20 1 auto;
@@ -14,6 +16,7 @@
   }
 
   &.widget-adfox--loaded {
+    position: relative;
     visibility: visible;
   }
 

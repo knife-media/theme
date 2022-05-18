@@ -77,12 +77,12 @@
 
     // Remove on stub
     options.onStub = function () {
-      widget.classList.add('widget-adfox--hidden');
+      widget.classList.remove('widget-adfox--loaded');
     }
 
     // Remove on error
     options.onError = function (error) {
-      widget.classList.add('widget-adfox--hidden');
+      widget.classList.remove('widget-adfox--loaded');
 
       // Show errors for logged-in users
       if (document.body.classList.contains('is-adminbar')) {
@@ -95,14 +95,14 @@
       let params = handle.bundleParams;
 
       // Remove loaded class if exists
-      widget.classList.add('widget-adfox--hidden');
+      widget.classList.remove('widget-adfox--loaded');
 
       // Destroy if banner hidden
       if (params.bannerId && hiddenBanner(params.bannerId)) {
         return handle.destroy();
       }
 
-      widget.classList.remove('widget-adfox--hidden');
+      widget.classList.add('widget-adfox--loaded');
     }
 
     return options;
