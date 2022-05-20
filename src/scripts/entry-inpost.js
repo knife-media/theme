@@ -2,21 +2,10 @@
  * Smart display entry inpost widgets
  *
  * @since 1.9
- * @version 1.14
+ * @version 1.16
  */
 
 (function () {
-  const content = document.querySelector('.entry-content');
-
-
-  /**
-   * Check if entry-content exists and it's long enough
-   */
-  if (content === null) {
-    return false;
-  }
-
-
   const widgets = document.querySelector('.entry-inpost');
 
   /**
@@ -32,6 +21,21 @@
   const allowed = ['p'];
 
   /**
+   * Get first entry-content block
+   */
+  const blocks = document.querySelectorAll('.entry-content');
+
+  if (blocks.length === 0) {
+    return false;
+  }
+
+  let content = blocks[0];
+
+  if (blocks.length > 1) {
+    content = blocks[Math.floor(blocks.length / 2) + 1];
+  }
+
+  /**
    * Find all appropriate children
    */
   const children = content.children;
@@ -39,10 +43,10 @@
   /**
    * Find post landmark
    */
-  let landmark = Math.floor(children.length / 3);
+  let landmark = Math.max(Math.floor(children.length / 3), 6);
 
-  if (landmark < 6) {
-    landmark = 6;
+  if (blocks.length > 1) {
+    landmark = children.length;
   }
 
   // Create aside
@@ -63,7 +67,7 @@
       continue;
     }
 
-    let following = children[i - 1];
+    const following = children[i - 1];
 
     // Check if prev tag in allowed list
     if (allowed.indexOf(following.tagName.toLowerCase()) < 0) {
@@ -74,7 +78,7 @@
     break;
   }
 
-  if ( aside.parentNode !== content) {
+  if (aside.parentNode !== content) {
     content.appendChild(aside);
   }
 })();

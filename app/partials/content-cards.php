@@ -4,6 +4,7 @@
  *
  * @package knife-theme
  * @since 1.12
+ * @version 1.16
  */
 ?>
 
@@ -37,6 +38,14 @@
             the_content();
         ?>
     </div>
+
+    <?php if(is_active_sidebar('knife-inpost')) : ?>
+        <div class="entry-inpost">
+            <?php
+                dynamic_sidebar('knife-inpost');
+            ?>
+        </div>
+    <?php endif; ?>
 
     <?php if(comments_open()) : ?>
         <div class="entry-comments">

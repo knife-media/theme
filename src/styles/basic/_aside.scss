@@ -8,10 +8,16 @@
 
     & > * {
       margin-top: 2rem;
-      margin-bottom: 2rem;
 
       @media screen and (max-width: 767px) {
         margin-top: 1rem;
+      }
+    }
+
+    &:not(:last-child) > * {
+      margin-bottom: 2rem;
+
+      @media screen and (max-width: 767px) {
         margin-bottom: 1rem;
       }
     }
