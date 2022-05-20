@@ -102,9 +102,6 @@ class Knife_Quiz_Section {
         // Redirect to custom generated template if share query var exists
         add_action('template_redirect', [__CLASS__, 'redirect_share']);
 
-        // Redirect old quiz posts
-        add_action('template_redirect', [__CLASS__, 'redirect_old_quiz']);
-
         // Change single post type template path
         add_action('single_template', [__CLASS__, 'include_single']);
 
@@ -163,26 +160,6 @@ class Knife_Quiz_Section {
             'has_archive'           => true,
             'publicly_queryable'    => true
         ]);
-    }
-
-
-    /**
-     * Redirect old quiz posts to new post type if slug exists
-     *
-     * @since 1.11
-     */
-    public static function redirect_old_quiz() {
-        if(is_404()) {
-            $slug = get_query_var('name');
-
-            // Try to find quiz with certain slug
-            $page = get_page_by_path($slug, OBJECT, self::$post_type);
-
-            if(isset($page->ID) && $page->post_status === 'publish') {
-                wp_redirect(get_permalink($page->ID), 301);
-                exit;
-            }
-        }
     }
 
 

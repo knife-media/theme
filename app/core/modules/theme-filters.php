@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.15
+ * @version 1.16
  */
 
 if (!defined('WPINC')) {
@@ -52,13 +52,16 @@ class Knife_Theme_Filters {
         add_filter('the_author_posts_link', [__CLASS__, 'add_author_class'], 10, 1);
 
         // Remove auto suggestions
-        add_filter('redirect_canonical', [__CLASS__, 'remove_autosuggest']);
+        add_filter('do_redirect_guess_404_permalink', '__return_false');
 
         // Fix non-latin filenames
         add_action('sanitize_file_name', [__CLASS__, 'sanitize_file_name'], 12);
 
         // Preload styles and fonts
         add_action('wp_head', [__CLASS__, 'preload_assets'], 5);
+
+        // Redirect old story post type to regular posts
+        add_action('template_redirect', [__CLASS__, 'redirect_story'], 9);
 
         // Remove annoying [...] in excerpts
         add_filter('excerpt_more', function($more) {
@@ -143,17 +146,24 @@ class Knife_Theme_Filters {
 
 
     /**
-     * It is good to remove auto suggestings for SEO
+     * Redirect old story post type to their regular ones
      *
-     * @link https://core.trac.wordpress.org/ticket/16557
-     * @since 1.10
+     * @since 1.16
      */
-    public static function remove_autosuggest($url) {
-        if(is_404() && !isset($_GET['p'])) {
-            return false;
+    public static function redirect_story() {
+        if(!is_404()) {
+            return;
         }
 
-        return $url;
+        $slug = get_query_var('name');
+
+        // Try to find story with this address
+        $post = get_page_by_path('story-' . $slug, OBJECT, 'post');
+
+        if(isset($post->ID) && $post->post_status === 'publish') {
+            wp_redirect(get_permalink($post->ID), 301);
+            exit;
+        }
     }
 
 

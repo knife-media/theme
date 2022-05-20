@@ -47,9 +47,6 @@ gulp.task('vendor', (done) => {
   gulp.src('node_modules/workbox-sw/build/workbox-sw.js.*')
     .pipe(gulp.dest('app/assets/vendor/'));
 
-  gulp.src('node_modules/@glidejs/glide/dist/glide.min.js')
-    .pipe(gulp.dest('app/assets/vendor/'));
-
   done();
 })
 

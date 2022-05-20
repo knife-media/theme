@@ -9,7 +9,6 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@glidejs/glide": "3.4.1",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^8.0.0",
     "gulp-babel": "^8.0.0",

@@ -130,9 +130,6 @@ require get_template_directory() . '/core/modules/club-section.php';
 // News category
 require get_template_directory() . '/core/modules/news-manager.php';
 
-// Story post type
-require get_template_directory() . '/core/modules/story-manager.php';
-
 // Quiz post type
 require get_template_directory() . '/core/modules/quiz-section.php';
 
