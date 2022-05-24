@@ -74,7 +74,7 @@ class Knife_Extra_Feeds {
         add_action('template_redirect', [__CLASS__, 'redirect_comment_feeds']);
 
         // Remove extra feed links for single
-        add_action('wp', [__CLASS__, 'remove_head_feeds']);
+        add_action('wp_head', [__CLASS__, 'remove_head_feeds']);
 
         if(!defined('KNIFE_TURBO_AD')) {
             define('KNIFE_TURBO_AD', []);
@@ -93,7 +93,7 @@ class Knife_Extra_Feeds {
      * @since 1.11
      */
     public static function remove_head_feeds() {
-        if(is_singular()) {
+        if(!is_feed() && is_singular()) {
             remove_action('wp_head', 'feed_links_extra', 3);
         }
     }
