@@ -67,7 +67,7 @@
 
   &.tagline--logo {
     justify-content: flex-start;
-    padding-left: calc(50% - #{$width-content / 2} - 1rem);
+    padding-left: calc(50% - $width-content / 2 - 1rem);
 
     .tagline__text {
       margin-right: 0;
@@ -81,7 +81,7 @@
 
   &.tagline--title {
     justify-content: flex-start;
-    padding-left: calc(50% - #{$width-content / 2} - 1rem);
+    padding-left: calc(50% - $width-content / 2 - 1rem);
   }
 
   @at-root #{selector-unify(&, a)} {

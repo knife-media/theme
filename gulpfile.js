@@ -1,5 +1,5 @@
 const gulp = require('gulp');
-const sass = require('gulp-sass');
+const sass = require('gulp-sass')(require('sass'));
 const concat = require('gulp-concat');
 const cleanCss = require('gulp-clean-css');
 const sassGlob = require('gulp-sass-glob');
@@ -8,7 +8,6 @@ const plumber = require('gulp-plumber');
 const prefix = require('gulp-autoprefixer');
 const workboxBuild = require('workbox-build');
 const babel = require('gulp-babel');
-
 
 // Process theme styles
 gulp.task('styles', (done) => {

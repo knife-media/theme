@@ -74,8 +74,8 @@
   &:after, &:before {
     content: '';
     position: absolute;
-    top: calc(50% - #{$height / 2});
-    left: calc(50% - #{$width / 2});
+    top: calc(50% - $height / 2);
+    left: calc(50% - $width / 2);
 
     height: $height;
     width: $width;
