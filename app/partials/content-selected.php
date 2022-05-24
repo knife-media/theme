@@ -55,7 +55,7 @@
     <div class="entry-footer">
         <?php
             the_tags(
-                '<div class="entry-footer__tags tags">', null, '</div>'
+                '<div class="entry-footer__tags tags">', '', '</div>'
             );
 
             the_share(
