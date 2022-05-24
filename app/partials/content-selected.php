@@ -38,6 +38,14 @@
         ?>
     </div>
 
+    <?php if(is_active_sidebar('knife-inpost')) : ?>
+        <div class="entry-inpost">
+            <?php
+                dynamic_sidebar('knife-inpost');
+            ?>
+        </div>
+    <?php endif; ?>
+
     <?php if(comments_open()) : ?>
         <div class="entry-comments">
             <div class="comments" id="comments"></div>
