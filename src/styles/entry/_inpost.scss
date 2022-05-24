@@ -1,10 +1,12 @@
 .entry-inpost {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
+  display: block;
   position: relative;
   z-index: 2;
 
   width: 100%;
   background-color: $color-white;
+
+  & > * {
+    margin: 1rem auto;
+  }
 }
