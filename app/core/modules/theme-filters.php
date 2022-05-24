@@ -27,14 +27,14 @@ class Knife_Theme_Filters {
         // Add widget size query var
         add_action('the_post', [__CLASS__, 'update_archive_item'], 10, 2);
 
-        // Remove longreads archive title
-        add_action('wp', [__CLASS__, 'remove_longreads_title']);
-
         // Remove private posts from archives and home page
         add_action('pre_get_posts', [__CLASS__, 'remove_private_posts']);
 
         // Add excerpts for pages
         add_action('init', [__CLASS__, 'add_pages_excerpts']);
+
+        // Remove longreads archive title
+        add_filter('get_the_archive_title', [__CLASS__, 'remove_longreads_title']);
 
         // Update archive template title
         add_filter('get_the_archive_title', [__CLASS__, 'update_archive_title']);
@@ -427,10 +427,12 @@ class Knife_Theme_Filters {
      *
      * @since 1.11
      */
-    public static function remove_longreads_title() {
+    public static function remove_longreads_title($title) {
         if(is_category('longreads')) {
-            add_action('get_the_archive_title', '__return_empty_string');
+            return '';
         }
+
+        return $title;
     }
 
 

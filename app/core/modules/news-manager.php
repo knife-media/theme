@@ -39,7 +39,7 @@ class Knife_News_Manager {
      * Include custom archive template for news
      */
     public static function include_archive($template) {
-        if(is_category(self::$news_name)) {
+        if(!is_feed() && is_category(self::$news_name)) {
             $new_template = locate_template(['templates/archive-news.php']);
 
             if(!empty($new_template)) {
