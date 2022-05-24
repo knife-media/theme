@@ -42,6 +42,7 @@ class Knife_Widget_Blunt extends WP_Widget {
      */
     public function widget($args, $instance) {
         $defaults = [
+            'title' => '',
             'posts_per_page' => 8
         ];
 
@@ -71,6 +72,7 @@ class Knife_Widget_Blunt extends WP_Widget {
      */
     public function form($instance) {
         $defaults = [
+            'title' => '',
             'posts_per_page' => 8
         ];
 
