@@ -71,15 +71,15 @@
       }
     }
 
-    .entry-comments + .entry-footer {
+    .entry-content ~ .entry-footer {
       margin-top: 0;
     }
 
-    .entry-comments + .entry-bottom {
+    .entry-content ~ .entry-bottom {
       margin-top: 0;
     }
 
-    .entry-footer + .entry-bottom {
+    .entry-content ~ .entry-inpost {
       margin-top: 0;
     }
   }
