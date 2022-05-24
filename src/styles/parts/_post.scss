@@ -71,7 +71,15 @@
       }
     }
 
-    .entry-content + * ~ * {
+    .entry-content + .entry-inpost {
+      margin-top: 0;
+    }
+
+    .entry-comments + .entry-footer {
+      margin-top: 0;
+    }
+
+    .entry-footer + .entry-bottom {
       margin-top: 0;
     }
   }
