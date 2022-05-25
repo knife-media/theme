@@ -95,40 +95,6 @@ add_action('transition_post_status', function($new_status, $old_status, $post) {
 
 
 /**
- * Social Planner forgotten news scheduler event
- *
- * @since 1.15
- */
-add_action('knife_schedule_requests_news', function($post_id) {
-    $secret = empty(KNIFE_REQUESTS['secret']) ? '' : KNIFE_REQUESTS['secret'];
-
-    if(!class_exists('Social_Planner\Metabox')) {
-        return;
-    }
-
-    $tasks = Social_Planner\Metabox::get_tasks($post_id);
-
-    if(!empty($tasks)) {
-        return;
-    }
-
-    $timestamp = time();
-
-    $data = [
-        'nonce' => substr(sha1($secret . $timestamp), -12, 10),
-        'time' => $timestamp,
-        'link' => get_permalink($post_id)
-    ];
-
-    wp_remote_post('https://knife.media/requests/news', [
-        'body' => http_build_query($data),
-        'blocking' => false,
-    ]);
-});
-
-
-
-/**
  * Hide Social Planner metabox from pages.
  *
  * @since 1.14
@@ -171,6 +137,39 @@ add_filter('social_planner_prepare_excerpt', function($excerpt, $message) {
 
 
 /**
+ * Social Planner forgotten news scheduler event
+ *
+ * @since 1.15
+ */
+add_action('knife_schedule_requests_news', function($post_id) {
+    $secret = empty(KNIFE_REQUESTS['secret']) ? '' : KNIFE_REQUESTS['secret'];
+
+    if(!class_exists('Social_Planner\Metabox')) {
+        return;
+    }
+
+    $tasks = Social_Planner\Metabox::get_tasks($post_id);
+
+    if(!empty($tasks)) {
+        return;
+    }
+
+    $timestamp = time();
+
+    $data = [
+        'nonce' => substr(sha1($secret . $timestamp), -12, 10),
+        'time' => $timestamp,
+        'link' => get_permalink($post_id)
+    ];
+
+    wp_remote_post('https://knife.media/requests/news', [
+        'body' => http_build_query($data),
+        'blocking' => false,
+    ]);
+});
+
+
+/**
  * Replace post link to shorten version for Telegram
  *
  * @since 1.16
@@ -185,3 +184,16 @@ add_filter('social_planner_prepare_message', function($message, $target) {
     return $message;
 }, 10, 2);
 
+
+/**
+ * Add channel link to Telegram main messages
+ *
+ * @since 1.16
+ */
+add_filter('social_planner_prepare_message', function($message, $target) {
+    if ($target === 'telegram-main' && !empty($message['excerpt'])) {
+        $message['excerpt'] = $message['excerpt'] . "\n\n" . '🔪 @knifemedia';
+    }
+
+    return $message;
+}, 10, 2);
