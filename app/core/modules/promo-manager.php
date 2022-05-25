@@ -6,12 +6,14 @@
  *
  * @package knife-theme
  * @since 1.8
- * @version 1.15
+ * @version 1.16
  */
+
 
 if (!defined('WPINC')) {
     die;
 }
+
 
 class Knife_Promo_Manager {
     /**
@@ -149,13 +151,13 @@ class Knife_Promo_Manager {
      * @since 1.15
      */
     public static function redirect_teaser() {
-        if(!is_singular(self::$post_type)) {
-            return;
-        }
-
         $post_id = get_queried_object_id();
 
         if(empty($post_id)) {
+            return;
+        }
+
+        if(!is_singular(self::$post_type)) {
             return;
         }
 
@@ -257,12 +259,6 @@ class Knife_Promo_Manager {
         add_rewrite_rule(
             sprintf('^%s/page/([0-9]+)/?$', self::$query_var),
             sprintf('index.php?%s=1&paged=$matches[1]', self::$query_var),
-            'top'
-        );
-
-        add_rewrite_rule(
-            sprintf('^%s/[^/]+/(?:feed/)?', self::$query_var),
-            sprintf('index.php', self::$query_var),
             'top'
         );
     }

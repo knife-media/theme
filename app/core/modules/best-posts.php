@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.11
- * @version 1.15
+ * @version 1.16
  */
 
 
@@ -89,12 +89,6 @@ class Knife_Best_Posts {
         add_rewrite_rule(
             sprintf('^%s/page/([0-9]+)/?$', self::$query_var),
             sprintf('index.php?%s=1&paged=$matches[1]', self::$query_var),
-            'top'
-        );
-
-        add_rewrite_rule(
-            sprintf('^%s/[^/]+/(?:feed/)?', self::$query_var),
-            sprintf('index.php', self::$query_var),
             'top'
         );
     }
