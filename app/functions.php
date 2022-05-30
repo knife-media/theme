@@ -142,9 +142,6 @@ require get_template_directory() . '/core/modules/best-posts.php';
 // Translate posts markup
 require get_template_directory() . '/core/modules/translations-posts.php';
 
-// Cents page handler
-require get_template_directory() . '/core/modules/cents-page.php';
-
 // Special projects taxonomy settings
 require get_template_directory() . '/core/modules/special-projects.php';
 

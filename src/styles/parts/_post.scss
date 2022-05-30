@@ -137,19 +137,4 @@
   &.post--aside {
     flex: 1 1 auto;
   }
-
-  &.post--cents {
-    flex: 0 1 50rem;
-    align-items: center;
-
-    overflow: visible;
-
-    & > * {
-      margin-top: 1rem;
-    }
-
-    .entry-header {
-      display: none;
-    }
-  }
 }
