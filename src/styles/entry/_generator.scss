@@ -5,6 +5,9 @@
   width: 100%;
   padding: 4rem 2rem;
 
+  color: $color-text;
+  background-color: $color-white;
+
   transition: background .25s, color .25s;
 
   & > * {
