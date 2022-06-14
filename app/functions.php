@@ -95,7 +95,9 @@ if(is_admin()) {
     remove_action('load-plugins.php', 'wp_update_plugins');
     remove_action('load-themes.php', 'wp_update_themes');
 
-    add_filter('pre_site_transient_browser_' . md5($_SERVER['HTTP_USER_AGENT']), '__return_empty_array');
+    if (!empty($_SERVER['HTTP_USER_AGENT'])) {
+        add_filter('pre_site_transient_browser_' . md5($_SERVER['HTTP_USER_AGENT']), '__return_empty_array');
+    }
 }
 
 
