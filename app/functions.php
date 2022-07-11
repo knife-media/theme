@@ -135,9 +135,6 @@ require get_template_directory() . '/core/modules/news-manager.php';
 // Quiz post type
 require get_template_directory() . '/core/modules/quiz-section.php';
 
-// Generator post type
-require get_template_directory() . '/core/modules/generator-section.php';
-
 // Best posts markup
 require get_template_directory() . '/core/modules/best-posts.php';
 
