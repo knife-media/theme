@@ -12,8 +12,8 @@
     display: block;
     position: relative;
 
-    width: 100%;
-    max-width: $width-content + 4rem;
+    width: $width-content + 4rem;
+    max-width: 100%;
     margin: 1.5rem auto;
     padding: .75rem 2rem;
 
