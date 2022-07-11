@@ -30,7 +30,7 @@ class Knife_ID_Handler {
      * @access  public
      * @var     array
      */
-    public static $post_type = ['post', 'club', 'quiz', 'generator'];
+    public static $post_type = ['post', 'club', 'quiz'];
 
 
     /**

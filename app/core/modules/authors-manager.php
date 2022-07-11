@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.11
- * @version 1.14
+ * @version 1.16
  */
 
 if (!defined('WPINC')) {
@@ -40,7 +40,7 @@ class Knife_Authors_Manager {
      * @access  public
      * @var     array
      */
-    public static $post_type = ['post', 'club', 'select', 'generator', 'quiz'];
+    public static $post_type = ['post', 'club', 'quiz'];
 
 
     /**

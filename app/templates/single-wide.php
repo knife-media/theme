@@ -1,10 +1,10 @@
 <?php
 /**
- * Single template for generator post type
+ * Template Name: Широкий
+ * Template Post Type: post
  *
  * @package knife-theme
- * @since 1.6
- * @version 1.10
+ * @since 1.16
  */
 
 get_header(); ?>
@@ -13,7 +13,7 @@ get_header(); ?>
     <?php
         while(have_posts()) : the_post();
 
-            get_template_part('partials/content', 'generator');
+            get_template_part('partials/content', 'wide');
 
         endwhile;
     ?>

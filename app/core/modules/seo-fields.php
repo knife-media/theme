@@ -29,7 +29,7 @@ class Knife_SEO_Fields {
      * @access  public
      * @var     array
      */
-    public static $post_type = ['post', 'club', 'quiz', 'generator'];
+    public static $post_type = ['post', 'club', 'quiz'];
 
 
     /**

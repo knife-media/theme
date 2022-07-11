@@ -1,32 +1,50 @@
 <?php
 /**
- * Single generator post type content template
+ * Wide no-sidebar post template content template
  *
  * @package knife-theme
- * @since 1.6
- * @version 1.12
+ * @since 1.16
  */
 ?>
 
-<article <?php post_class('post post--generator'); ?> id="post-<?php the_ID(); ?>">
-    <div class="entry-generator" id="generator">
+<article <?php post_class('post post--wide'); ?> id="post-<?php the_ID(); ?>">
+    <div class="entry-header">
         <?php
+            the_info(
+                '<div class="entry-header__info">', '</div>',
+                ['author', 'date', 'best']
+            );
+
             the_title(
-                '<h1 class="entry-generator__title">',
+                '<h1 class="entry-header__title">',
                 '</h1>'
             );
 
             the_share(
-                '<div class="entry-generator__share share">',
+                '<div class="entry-header__share share">',
                 '</div>'
             );
 
             the_lead(
-                '<div class="entry-generator__content">',
+                '<div class="entry-header__lead">',
                 '</div>'
             );
         ?>
     </div>
+
+    <div class="entry-content">
+        <?php
+            the_content();
+        ?>
+    </div>
+
+    <?php if(is_active_sidebar('knife-inpost')) : ?>
+        <div class="entry-inpost">
+            <?php
+                dynamic_sidebar('knife-inpost');
+            ?>
+        </div>
+    <?php endif; ?>
 
     <?php if(comments_open()) : ?>
         <div class="entry-comments">

@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.8
- * @version 1.13
+ * @version 1.16
  */
 
 
@@ -22,7 +22,7 @@ class Knife_Distribute_Control {
      * @access  public
      * @var     array
      */
-    public static $post_type = ['post', 'club', 'quiz', 'story', 'generator'];
+    public static $post_type = ['post', 'club', 'quiz'];
 
 
     /**

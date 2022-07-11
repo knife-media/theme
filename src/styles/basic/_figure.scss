@@ -529,14 +529,10 @@
     display: block;
     position: relative;
 
-    width: 100%;
-    max-width: 100%;
-
     .button {
-      display: block;
+      display: inline-block;
 
-      width: $width-content;
-      margin: -1rem auto 1.5rem;
+      width: auto;
 
       color: $color-white;
       background-color: $color-primary;

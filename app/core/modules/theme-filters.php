@@ -63,6 +63,9 @@ class Knife_Theme_Filters {
         // Redirect old story post type to regular posts
         add_action('template_redirect', [__CLASS__, 'redirect_story'], 9);
 
+        // Redirect old generator post type to regular posts
+        add_action('template_redirect', [__CLASS__, 'redirect_generator'], 9);
+
         // Remove annoying [...] in excerpts
         add_filter('excerpt_more', function($more) {
             return '&hellip;';
@@ -159,6 +162,28 @@ class Knife_Theme_Filters {
 
         // Try to find story with this address
         $post = get_page_by_path('story-' . $slug, OBJECT, 'post');
+
+        if(isset($post->ID) && $post->post_status === 'publish') {
+            wp_redirect(get_permalink($post->ID), 301);
+            exit;
+        }
+    }
+
+
+    /**
+     * Redirect old generator post type
+     *
+     * @since 1.16
+     */
+    public static function redirect_generator() {
+        if(!is_404()) {
+            return;
+        }
+
+        $slug = get_query_var('name');
+
+        // Try to find post with this address
+        $post = get_page_by_path($slug, OBJECT, 'post');
 
         if(isset($post->ID) && $post->post_status === 'publish') {
             wp_redirect(get_permalink($post->ID), 301);

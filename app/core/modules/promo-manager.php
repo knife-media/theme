@@ -22,7 +22,7 @@ class Knife_Promo_Manager {
      * @access  public
      * @var     array
      */
-    public static $post_type = ['post', 'club', 'quiz', 'generator'];
+    public static $post_type = ['post', 'club', 'quiz'];
 
 
     /**

@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.9
- * @version 1.12
+ * @version 1.16
  */
 
 
@@ -40,7 +40,7 @@ class Knife_Snippet_Image {
      * @access  public
      * @var     array
      */
-    public static $post_type = ['post', 'club', 'quiz', 'story', 'generator', 'page'];
+    public static $post_type = ['post', 'club', 'quiz', 'page'];
 
 
     /**

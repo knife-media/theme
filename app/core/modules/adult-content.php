@@ -6,6 +6,7 @@
  *
  * @package knife-theme
  * @since 1.11
+ * @version 1.16
  */
 
 
@@ -29,7 +30,7 @@ class Knife_Adult_Content {
      * @access  public
      * @var     array
      */
-    public static $post_type = ['post', 'club', 'select', 'generator', 'quiz'];
+    public static $post_type = ['post', 'club', 'quiz'];
 
 
     /**

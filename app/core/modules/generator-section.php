@@ -1,12 +1,12 @@
 <?php
 /**
- * Generator type
+ *
  *
  * Custom post type for random generated answers
  *
  * @package knife-theme
  * @since 1.6
- * @version 1.13
+ * @version 1.16
  */
 
 if (!defined('WPINC')) {
@@ -503,4 +503,4 @@ class Knife_Generator_Section {
 /**
  * Load current module environment
  */
-Knife_Generator_Section::load_module();
+//Knife_Generator_Section::load_module();

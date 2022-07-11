@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.5
- * @version 1.14
+ * @version 1.16
  */
 
 
@@ -22,7 +22,7 @@ class Knife_Similar_Posts {
      * @var     array
      * @since   1.8
      */
-    public static $post_type = ['post', 'club', 'quiz', 'generator'];
+    public static $post_type = ['post', 'club', 'quiz'];
 
     /**
      * Cache group to store similar posts

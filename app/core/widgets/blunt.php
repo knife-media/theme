@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.7
- * @version 1.11
+ * @version 1.16
  */
 
 
@@ -14,7 +14,7 @@ class Knife_Widget_Blunt extends WP_Widget {
     /**
      * Widget post types
      */
-    private $post_type = ['post', 'quiz', 'generator'];
+    private $post_type = ['post', 'quiz'];
 
 
     /**

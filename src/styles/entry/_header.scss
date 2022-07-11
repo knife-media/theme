@@ -9,8 +9,8 @@
   background-color: $color-white;
 
   & > * {
-    width: $width-content;
-    max-width: 100%;
+    width: 100%;
+    max-width: $width-content;
     margin: 1.5rem auto 0;
 
     @media screen and (max-width: 767px) {

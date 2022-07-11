@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.4
- * @version 1.15
+ * @version 1.16
  */
 
 
@@ -14,7 +14,7 @@ class Knife_Widget_Televisor extends WP_Widget {
     /**
      * Widget post types
      */
-    private $post_type = ['post', 'quiz', 'generator'];
+    private $post_type = ['post', 'quiz'];
 
 
     /**

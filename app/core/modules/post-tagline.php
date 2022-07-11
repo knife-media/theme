@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.2
- * @version 1.14
+ * @version 1.16
  */
 
 
@@ -31,7 +31,7 @@ class Knife_Post_Tagline {
      * @access  public
      * @var     array
      */
-    public static $post_type = ['post', 'club', 'quiz', 'generator'];
+    public static $post_type = ['post', 'club', 'quiz'];
 
 
     /**

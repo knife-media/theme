@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.12
+ * @version 1.16
  */
 
 
@@ -31,7 +31,7 @@ class Knife_Primary_Tag {
      * @access  public
      * @var     array
      */
-    public static $post_type = ['post', 'generator', 'quiz'];
+    public static $post_type = ['post','quiz'];
 
 
     /**

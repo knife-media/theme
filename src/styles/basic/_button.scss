@@ -22,6 +22,10 @@
     filter: brightness(125%);
   }
 
+  &.button--disabled {
+    pointer-events: none;
+  }
+
   .entry-content & {
     position: relative;
 

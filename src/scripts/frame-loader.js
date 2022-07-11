@@ -20,26 +20,21 @@
   /**
    * Scroll to element
    */
-  const scrollToElement = (top) => {
-    let offset = top + window.pageYOffset - 24;
+  const scrollToFrame = () => {
+    const post = window.parent.document.querySelector('.post');
 
-    // Get styicky header
-    let header = document.querySelector('.header');
+    // Find offset
+    let offset = window.parent.document.documentElement.scrollTop;
+    offset = offset + post.getBoundingClientRect().top;
 
-    // Check sticky header height
-    if (header !== null) {
-      let styles = window.getComputedStyle(header);
+    const header = window.parent.document.querySelector('.header');
 
-      // Add header height to offset
-      offset = offset - parseInt(styles.getPropertyValue('height'));
-    }
+    // Get header height
+    const styles = window.parent.getComputedStyle(header);
+    offset = offset - parseInt(styles.getPropertyValue('height'));
 
-    // Try to scroll smoothly
     if ('scrollBehavior' in document.documentElement.style) {
-      return window.scrollTo({
-        top: offset,
-        behavior: 'smooth'
-      });
+        return window.parent.scrollTo({top: offset, behavior: 'smooth'});
     }
 
     window.scrollTo(0, offset);
@@ -48,30 +43,36 @@
   button.addEventListener('click', (e) => {
     e.preventDefault();
 
-    figure.classList.add('figure--load');
-
-    // Remove button and header
-    button.parentNode.removeChild(button);
-
-    const header = document.querySelector('.entry-header');
-    header.parentNode.removeChild(header);
-
     const frame = document.createElement('iframe');
-    figure.appendChild(frame);
     frame.src = button.getAttribute('href');
     frame.id = button.getAttribute('data-id');
+    frame.style.display = 'none';
+    figure.appendChild(frame);
 
-    // Scroll to top of frame
-    scrollToElement(figure.getBoundingClientRect().top);
+    button.textContent = '...';
+    button.classList.add('button--disabled');
+
+    if (button.dataset.loading) {
+      button.textContent = button.dataset.loading;
+    }
 
     frame.addEventListener('load', () => {
-      figure.classList.remove('figure--load');
+      frame.style.display = 'block';
+      const header = document.querySelector('.entry-header');
+      header.parentNode.removeChild(header);
 
-      // Update frame height
-      frame.height = frame.contentWindow.document.body.scrollHeight;
+      // Remove button and header
+      button.parentNode.removeChild(button);
 
-      // Set focus to iframe
-      frame.contentWindow.focus();
+      setTimeout(() => {
+        frame.height = frame.contentWindow.document.body.scrollHeight;
+
+        // Set focus to iframe
+        frame.contentWindow.focus();
+
+        // Scroll to frame
+        scrollToFrame();
+      }, 600);
     });
   })
 })();

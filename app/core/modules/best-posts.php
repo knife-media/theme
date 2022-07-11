@@ -31,7 +31,7 @@ class Knife_Best_Posts {
      * @access  public
      * @var     array
      */
-    public static $post_type = ['post', 'quiz', 'generator'];
+    public static $post_type = ['post', 'quiz'];
 
 
     /**
