@@ -2,10 +2,10 @@
   display: none;
   position: relative;
 
-  width: 100%;
+  width: calc(40rem + 4rem);
+  max-width: 100%;
   overflow: hidden;
 
-  max-width: calc(40rem + 4rem);
   margin: 1.5rem auto 0;
   padding: 0 2rem;
 
