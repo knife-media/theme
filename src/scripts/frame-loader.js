@@ -69,10 +69,9 @@
 
         // Set focus to iframe
         frame.contentWindow.focus();
+      }, 200);
 
-        // Scroll to frame
-        scrollToFrame();
-      }, 600);
+      scrollToFrame();
     });
   })
 })();
