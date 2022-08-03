@@ -312,7 +312,7 @@ class Knife_Extra_Feeds {
         }
 
         // https://yandex.ru/support/zen/website/rss-modify.html#common-requirements__rec
-        $categories[] = 'native-yes';
+        $categories[] = 'native-no';
 
         return $categories;
     }
