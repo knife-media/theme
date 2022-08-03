@@ -311,6 +311,9 @@ class Knife_Extra_Feeds {
             $categories[] = 'evergreen';
         }
 
+        // https://yandex.ru/support/zen/website/rss-modify.html#common-requirements__rec
+        $categories[] = 'native-yes';
+
         return $categories;
     }
 
