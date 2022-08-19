@@ -308,6 +308,9 @@ jQuery(document).ready(function ($) {
       // Update question title
       result.find('.result__title > span').text(i + 1);
 
+      // Toggle category selector
+      toggleMinimum(result.find('.result__category-select'));
+
       // Change fields name
       result.find('[data-result]').each(function () {
         var data = $(this).data('result');
@@ -503,6 +506,18 @@ jQuery(document).ready(function ($) {
 
 
   /**
+   * Toggle minimum value on result category select
+   */
+  function toggleMinimum(option) {
+    if (option.val() === 'default') {
+      return option.nextAll().addClass('result__category--hidden');
+    }
+
+    option.nextAll().removeClass('result__category--hidden');
+  }
+
+
+  /**
    * Manage checkbox answer trigger
    */
   box.on('change', '.manage input[data-manage]', function () {
@@ -561,16 +576,12 @@ jQuery(document).ready(function ($) {
 
 
   /**
-   * Toggle minimum value on result category select
+   * Result category select trigger
    */
   box.on('change', '.result__category-select', function () {
     var option = $(this);
 
-    if (option.val() === 'default') {
-      return option.nextAll().addClass('result__category--hidden');
-    }
-
-    option.nextAll().removeClass('result__category--hidden');
+    return toggleMinimum(option);
   });
 
 
