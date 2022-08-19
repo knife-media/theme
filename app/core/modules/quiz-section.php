@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.7
- * @version 1.14
+ * @version 1.16
  */
 
 if (!defined('WPINC')) {
@@ -268,8 +268,10 @@ class Knife_Quiz_Section {
         // Split share query var
         $param = explode('/', $share);
 
-        if(array_key_exists($param[0], $results)) {
-            $index = $param[0];
+        // Get result index;
+        $index = absint($param[0]) - 1;
+
+        if(array_key_exists($index, $results)) {
             $blank = array_fill_keys(['heading', 'description', 'poster'], '');
 
             $result = wp_parse_args(
@@ -687,19 +689,21 @@ class Knife_Quiz_Section {
 
                 // Generate results only for category format
                 if($options['format'] === 'category') {
-                    // Check if category exists
-                    if(!empty($meta['category'])) {
-                        $result['advance'] = mb_substr($meta['category'], 0, 1);
+                    if(!empty($meta['category']) && $meta['category'] === 'default') {
+                        $result['default'] = 1;
+                        unset($result['advance']);
+                    }
+
+                    if(!empty($meta['category']) && $meta['category'] !== 'default') {
+                        $result['advance'] = $meta['category'];
+                        $result['minimum'] = absint($meta['minimum']);
                     }
                 }
 
                 // Generate results only for dynamic format
-                if($options['format'] === 'dynamic') {
-                    // Check if dynamic exists
-                    if(!empty($meta['dynamic'])) {
-                        $result['poster'] = esc_url($meta['dynamic']);
-                        unset($result['advance']);
-                    }
+                if($options['format'] === 'dynamic' && !empty($meta['dynamic'])) {
+                    $result['poster'] = esc_url($meta['dynamic']);
+                    unset($result['advance']);
                 }
 
                 $results[] = $result;

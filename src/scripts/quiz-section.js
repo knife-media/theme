@@ -2,7 +2,7 @@
  * Quiz post type front-end handler
  *
  * @since 1.7
- * @version 1.15
+ * @version 1.16
  */
 
 (function () {
@@ -161,6 +161,10 @@
             advance = Object.keys(ranking).reduce(function (a, b) {
               return ranking[a] > ranking[b] ? a : b
             });
+
+            console.log(ranking);
+
+            console.log(advance);
           }
 
           target.classList.add(cl + '--selected');
@@ -452,17 +456,39 @@
     if (quiz.classList.contains('entry-quiz--results') === false) {
       var results = [];
 
+      console.log('result',  ranking, advance);
+      console.log(knife_quiz_results);
+
+      var initial = null;
+
+      // We should try to find default result
+      for (var i = 0; i < knife_quiz_results.length; i++) {
+        knife_quiz_results[i].index = i + 1;
+
+        if (knife_quiz_results[i].default === 1) {
+          initial = knife_quiz_results[i];
+        }
+      }
+
       // Try to find correct results
       for (var i = 0; i < knife_quiz_results.length; i++) {
         var result = knife_quiz_results[i];
 
-        // Save current index
-        result.index = i;
+        if (result.default) {
+          continue;
+        }
 
         if (!result.hasOwnProperty('advance') || result.advance === advance) {
+          var minimum = result.minimum || 0;
+
+          if (initial && ranking[advance] < minimum) {
+            result = initial;
+          }
+
           results.push(result);
         }
       }
+      console.log(results);
 
       // Check if results exist
       if (results.length > 0) {

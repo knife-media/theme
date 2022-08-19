@@ -561,6 +561,20 @@ jQuery(document).ready(function ($) {
 
 
   /**
+   * Toggle minimum value on result category select
+   */
+  box.on('change', '.result__category-select', function () {
+    var option = $(this);
+
+    if (option.val() === 'default') {
+      return option.nextAll().addClass('result__category--hidden');
+    }
+
+    option.nextAll().removeClass('result__category--hidden');
+  });
+
+
+  /**
    * Add new question
    */
   box.on('click', '.action--item', function (e) {

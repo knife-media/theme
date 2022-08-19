@@ -883,13 +883,26 @@
 
   border-top: 1px solid #ddd;
 }
-  #knife-quiz-box .result__category-field {
+  #knife-quiz-box .result__category-select {
     display: inline-block;
 
     min-width: 60px;
     margin: 0 15px;
     font-weight: 400;
     transition: border .25s, box-shadow .25s;
+  }
+
+  #knife-quiz-box .result__category-minimum {
+    display: inline-block;
+
+    width: 40px;
+    margin: 0 15px;
+    font-weight: 400;
+    transition: border .25s, box-shadow .25s;
+  }
+
+  #knife-quiz-box .result__category--hidden {
+    display: none;
   }
 
 #knife-quiz-box .result__dynamic {

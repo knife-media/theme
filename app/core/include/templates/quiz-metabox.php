@@ -501,11 +501,11 @@
                     <?php
                         printf(
                             '<strong class="result__category-title">%s</strong>',
-                            __('Показывать для категории ответов', 'knife-theme')
+                            __('Показывать для ответов', 'knife-theme')
                         );
                     ?>
 
-                    <select class="result__category-field" data-result="category">
+                    <select class="result__category-select" data-result="category">
                         <?php
                             foreach(array_unique($categories) as $category) {
                                 printf(
@@ -514,8 +514,26 @@
                                     selected($result['category'], $category, false)
                                 );
                             }
+
+                            printf(
+                                '<option value="default"%2$s>%1$s</option>',
+                                __('по умолчанию', 'knife-theme'),
+                                selected($result['category'], 'default', false)
+                            );
                         ?>
                     </select>
+
+                    <?php
+                        printf(
+                            '<strong class="result__category-title">%s</strong>',
+                            __('когда их выбрано не менее', 'knife-theme')
+                        );
+
+                        printf(
+                            '<input class="result__category-minimum" data-result="minimum" type="text" value="%s">',
+                            absint($result['minimum'] ?? 0)
+                        );
+                    ?>
                 </div>
 
                 <div class="result__dynamic">
