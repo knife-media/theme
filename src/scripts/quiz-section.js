@@ -161,10 +161,6 @@
             advance = Object.keys(ranking).reduce(function (a, b) {
               return ranking[a] > ranking[b] ? a : b
             });
-
-            console.log(ranking);
-
-            console.log(advance);
           }
 
           target.classList.add(cl + '--selected');
@@ -455,10 +451,6 @@
 
     if (quiz.classList.contains('entry-quiz--results') === false) {
       var results = [];
-
-      console.log('result',  ranking, advance);
-      console.log(knife_quiz_results);
-
       var initial = null;
 
       // We should try to find default result
@@ -488,7 +480,6 @@
           results.push(result);
         }
       }
-      console.log(results);
 
       // Check if results exist
       if (results.length > 0) {
