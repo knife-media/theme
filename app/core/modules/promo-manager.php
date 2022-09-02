@@ -359,14 +359,21 @@ class Knife_Promo_Manager {
 
         $is_promo = get_post_meta($post->ID, self::$meta_promo, true);
 
-        if($is_promo) {
-            $link = sprintf('<a href="%s" rel="tag">%s</a>',
-                esc_url(trailingslashit(home_url(self::$query_var))),
-                __('партнерский материал', 'knife-theme')
-            );
-
-            array_unshift($tags, $link);
+        if(!$is_promo) {
+            return $tags;
         }
+
+        $title = __('реклама', 'knife-theme');
+
+        if(get_the_time('Y-m-d', $post->ID) < '2022-09-01') {
+            $title = __('партнерский материал', 'knife-theme');
+        }
+
+        $link = sprintf('<a href="%s" rel="tag">%s</a>',
+            esc_url(trailingslashit(home_url(self::$query_var))), $title
+        );
+
+        array_unshift($tags, $link);
 
         return $tags;
     }
