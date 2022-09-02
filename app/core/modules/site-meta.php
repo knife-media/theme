@@ -44,7 +44,7 @@ class Knife_Site_Meta {
         add_action('wp_head', [__CLASS__, 'add_tagmanager'], 20);
 
         // Update title with SEO field
-        add_filter('document_title_parts', [__CLASS__, 'update_seo_title']);
+        add_filter('document_title_parts', [__CLASS__, 'update_seo_title'], 20);
 
         // Add custom theme lang attributes
         add_filter('language_attributes', [__CLASS__, 'add_xmlns']);
