@@ -749,10 +749,6 @@ class Knife_Quiz_Section {
 
         // Set message if required
         if(!empty($options['message'])) {
-            if(empty($fields['message'])) {
-                return false;
-            }
-
             $answer['message'] = wpautop(wp_kses_post($fields['message']));
         }
 
