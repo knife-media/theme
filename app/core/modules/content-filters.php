@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.10
- * @version 1.14
+ * @version 1.16
  */
 
 if (!defined('WPINC')) {
@@ -27,6 +27,9 @@ class Knife_Content_Filters {
         // Prevent to create WordPress posts and pages with specific slugs
         add_filter('wp_unique_post_slug_is_bad_flat_slug', [__CLASS__, 'prevent_theme_slugs'], 10, 2);
         add_filter('wp_unique_post_slug_is_bad_hierarchical_slug', [__CLASS__, 'prevent_theme_slugs'], 10, 2);
+
+        // Remove video and audio shortcodes
+        add_action('init', [__CLASS__, 'remove_media_shortcodes']);
 
         // Add custom post styles to admin page
         add_action('admin_enqueue_scripts', [__CLASS__, 'add_post_styles']);
@@ -55,6 +58,15 @@ class Knife_Content_Filters {
         // Replace script figure
         add_filter('the_content', [__CLASS__ , 'replace_scripts'], 12);
 
+        // Replace video links with video tags
+        add_filter('wp_embed_handler_video', [__CLASS__, 'replace_video_link'], 10, 3);
+
+        // Replace audio links with audio tags
+        add_filter('wp_embed_handler_audio', [__CLASS__, 'replace_audio_link'], 10, 3);
+
+        // Replace video and audio shortcodes on media send to editor
+        add_filter('media_send_to_editor', [__CLASS__, 'replace_media_shortcode'], 10, 3);
+
         // Disable embeds
         add_action('wp_enqueue_scripts', function() {
             wp_deregister_script('wp-embed');
@@ -64,6 +76,23 @@ class Knife_Content_Filters {
         add_action('wp_print_styles', function() {
             wp_dequeue_style('wp-block-library');
         }, 11);
+
+        // Remove default media players
+        add_action('wp_enqueue_scripts', function() {
+            wp_deregister_script('wp-mediaelement');
+            wp_deregister_style('wp-mediaelement');
+        });
+    }
+
+
+    /**
+     * Remove media shortcodes
+     *
+     * @since 1.16
+     */
+    public static function remove_media_shortcodes() {
+        remove_shortcode('video');
+        remove_shortcode('audio');
     }
 
 
@@ -221,6 +250,60 @@ class Knife_Content_Filters {
         $content = preg_replace('~(<a[^>]+>)(\s+)(.*?</a>)~is', '$2$1$3', $content);
 
         return wp_unslash($content);
+    }
+
+
+    /**
+     * Replace video links with tags
+     *
+     * @since 1.16
+     */
+    public static function replace_video_link($video, $attr, $url) {
+        $html = sprintf(
+            '<figure class="figure figure--embed"><video src="%s" controls></video></figure>',
+            esc_url($url)
+        );
+
+        return $html;
+    }
+
+
+    /**
+     * Replace audio links with tags
+     *
+     * @since 1.16
+     */
+    public static function replace_audio_link($video, $attr, $url) {
+        $html = sprintf(
+            '<figure class="figure figure--embed"><audio src="%s" controls></audio></figure>',
+            esc_url($url)
+        );
+
+        return $html;
+    }
+
+
+    /**
+     * Replace audio and video shortcodes on media send to editor
+     *
+     * @since 1.16
+     */
+    public static function replace_media_shortcode($html, $send_id, $attachment) {
+        if(wp_attachment_is('video', $send_id)) {
+            $html = sprintf(
+                '<figure class="figure figure--embed"><video src="%s" controls></video></figure>',
+                esc_url($attachment['url'])
+            );
+        }
+
+        if(wp_attachment_is('audio', $send_id)) {
+            $html = sprintf(
+                '<figure class="figure figure--embed"><audio src="%s" controls></audio></figure>',
+                esc_url($attachment['url'])
+            );
+        }
+
+        return $html;
     }
 
 
