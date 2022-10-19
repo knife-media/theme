@@ -82,11 +82,11 @@ class Knife_Short_Links_Table extends WP_List_Table {
             return $item['keyword'];
         }
 
-        $link = trailingslashit($conf['url']) . $item['keyword'];
+        $absurl = trailingslashit('https://' . $item['host']);
 
         $markup = sprintf(
             '<a href="%1$s" target="_blank">%1$s</a>',
-            esc_url(trailingslashit($link))
+            esc_url(trailingslashit($absurl . $item['keyword']))
         );
 
         return $markup;

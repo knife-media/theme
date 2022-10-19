@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.8
- * @version 1.14
+ * @version 1.16
  */
 
 if (!defined('WPINC')) {
@@ -49,6 +49,12 @@ class Knife_Short_Manager {
      * @var     string
      */
     private static $per_page = 'knife_short_per_page';
+
+
+    /**
+     * Availavle short hosts
+     */
+    private static $hosts = ['knf.md', 'tgrs.link'];
 
 
     /**
@@ -230,29 +236,39 @@ class Knife_Short_Manager {
         if(!empty($_POST['keyword']) && !empty($_POST['url'])) {
             $data = [
                 'url' => sanitize_text_field(trim($_POST['url'])),
-                'ip' => $_SERVER['REMOTE_ADDR']
+                'ip' => $_SERVER['REMOTE_ADDR'],
             ];
 
             $db = self::connect_short_db();
 
+            if(empty($_POST['host']) || !in_array($_POST['host'], self::$hosts)) {
+                wp_redirect(add_query_arg('message', 3, $admin_url), 302);
+                exit;
+            }
+
+            $data['host'] = $_POST['host'];
+
             $data['keyword'] = self::get_link_keyword(
-                sanitize_key(trim($_POST['keyword'])), $db
+                sanitize_key(trim($_POST['keyword'])), $data['host'], $db
             );
 
             if($data['keyword'] === false) {
-                wp_redirect(add_query_arg('message', 1, $admin_url), 303);
+                wp_redirect(add_query_arg('message', 1, $admin_url), 302);
                 exit;
             }
 
             $data['title'] = self::get_link_title($data['url']);
 
             if($db->insert('urls', $data)) {
-                wp_redirect(add_query_arg('message', 2, $admin_url), 303);
+                // Fix strage bug with wp_redirect here
+                // It crashes with 502 on apply_filters('wp_redirect')
+                // Logged error: 'upstream sent too big header while reading response header from upstream'
+                header('Location: ' . add_query_arg('message', 2, $admin_url));
                 exit;
             }
         }
 
-        wp_redirect(add_query_arg('message', 3, $admin_url), 303);
+        wp_redirect(add_query_arg('message', 3, $admin_url), 302);
         exit;
     }
 
@@ -260,12 +276,12 @@ class Knife_Short_Manager {
     /**
      * Check keyword existance
      */
-    private static function get_link_keyword($keyword, $db) {
+    private static function get_link_keyword($keyword, $host, $db) {
         // Cut and replace dashes
         $keyword = str_replace('_', '-', substr($keyword, 0, 200));
 
         // Make verification request
-        $query = $db->prepare('SELECT id FROM urls WHERE keyword = %s', $keyword);
+        $query = $db->prepare('SELECT id FROM urls WHERE keyword = %s AND host = %s', $keyword, $host);
 
         if($db->get_var($query) === null) {
             return $keyword;

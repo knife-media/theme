@@ -31,6 +31,12 @@
   line-height: 1.5;
 }
 
+#knife-short-options .form-field select {
+  width: 100%;
+  max-width: 100%;
+  line-height: 1.5;
+}
+
 #knife-short-options .search-form {
   margin-top: 20px;
 }

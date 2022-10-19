@@ -17,6 +17,19 @@
                 __('Адрес короткой ссылки', 'knife-theme')
             );
 
+            $options = [];
+
+            foreach(self::$hosts as $host) {
+                $options[] = sprintf('<option value="%1$s">%1$s</option>', $host);
+            }
+
+            printf(
+                '<p><label for="%1$s">%2$s</label><select id="%1$s" name="host">%3$s</select></p>',
+                esc_attr(self::$page_slug . '-host'),
+                __('Хост сокращалки', 'knife-theme'),
+                implode('', $options)
+            );
+
             printf('<input type="hidden" name="action" value="%s">',
                 esc_attr(self::$page_slug . '-append')
             );
