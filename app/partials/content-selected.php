@@ -3,7 +3,7 @@
  * Selected no-sidebar post template content template
  *
  * @package knife-theme
- * @since 1.12
+ * @since 1.16
  */
 ?>
 
@@ -28,6 +28,11 @@
             the_lead(
                 '<div class="entry-header__lead">',
                 '</div>'
+            );
+
+            the_info(
+                '<div class="entry-header__ord">', '</div>',
+                ['ord']
             );
         ?>
     </div>

@@ -35,6 +35,14 @@
     color: $color-text;
   }
 
+  .entry-quiz__ord {
+    position: absolute;
+
+    img {
+      visibility: hidden;
+    }
+  }
+
   .entry-quiz__share {
     flex: 0 0 auto;
 

@@ -29,6 +29,11 @@
                 '<div class="entry-header__lead">',
                 '</div>'
             );
+
+            the_info(
+                '<div class="entry-header__ord">', '</div>',
+                ['ord']
+            );
         ?>
     </div>
 

@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.7
- * @version 1.12
+ * @version 1.16
  */
 ?>
 
@@ -29,6 +29,11 @@
             the_lead(
                 '<div class="entry-quiz__content">',
                 '</div>'
+            );
+
+            the_info(
+                '<div class="entry-quiz__ord">', '</div>',
+                ['ord']
             );
         ?>
     </div>

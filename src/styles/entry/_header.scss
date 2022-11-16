@@ -39,6 +39,14 @@
     flex: 0 0 auto;
   }
 
+  .entry-header__ord {
+    position: absolute;
+
+    img {
+      visibility: hidden;
+    }
+  }
+
   .entry-header__lead {
     display: block;
     overflow: hidden;

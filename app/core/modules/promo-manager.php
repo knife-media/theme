@@ -62,6 +62,15 @@ class Knife_Promo_Manager {
 
 
     /**
+     * Unique meta to store promo ord
+     *
+     * @access  public
+     * @var     string
+     */
+    public static $meta_ord = '_knife-promo-ord';
+
+
+    /**
      * Archive query var
      *
      * @access  public
@@ -115,9 +124,6 @@ class Knife_Promo_Manager {
 
         // Display teaser state in posts list
         add_filter('display_post_states', [__CLASS__, 'display_teaser_state'], 10, 2);
-
-        // Add pixel image to all widgets
-        add_action('the_widget', [__CLASS__, 'display_pixel'], 10, 3);
     }
 
 
@@ -133,17 +139,6 @@ class Knife_Promo_Manager {
 
         add_action('template_redirect', [__CLASS__, 'redirect_teaser']);
     }
-
-    /**
-     * Display promo pixel in all widgets
-     *
-     * @since 1.15
-     */
-    public static function display_pixel($instance, $widget, $args) {
-        print_r($args);
-        print_r($widget);
-    }
-
 
     /**
      * Redirect teaser on template_redirect action.
@@ -478,6 +473,13 @@ class Knife_Promo_Manager {
             delete_post_meta($post_id, self::$meta_pixel);
         } else {
             update_post_meta($post_id, self::$meta_pixel, sanitize_text_field($_REQUEST[self::$meta_pixel]));
+        }
+
+        // Save promo pixel
+        if(empty($_REQUEST[self::$meta_ord])) {
+            delete_post_meta($post_id, self::$meta_ord);
+        } else {
+            update_post_meta($post_id, self::$meta_ord, sanitize_text_field($_REQUEST[self::$meta_ord]));
         }
 
         // Save promo meta

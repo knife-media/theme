@@ -38,6 +38,11 @@ class Knife_Post_Info {
             $output = self::get_pixel($output);
         }
 
+        // Get promo ORD image
+        if(in_array('ord', $options)) {
+            $output = self::get_ord($output);
+        }
+
         // Get label info
         if(in_array('best', $options)) {
             $output = self::get_best($output);
@@ -185,6 +190,32 @@ class Knife_Post_Info {
 
 
     /**
+     * Show ORD pixel
+     *
+     * @since 1.15
+     */
+    private static function get_ord($output = '') {
+        if(property_exists('Knife_Promo_Manager', 'meta_ord')) {
+            $post_id = get_the_ID();
+
+            // Set meta ord
+            $meta_ord = get_post_meta($post_id, Knife_Promo_Manager::$meta_ord, true);
+
+            // Check if promo ord first
+            if($meta_ord) {
+                $ord = sprintf('<img src="%s" alt="">',
+                    esc_url($meta_ord)
+                );
+
+                $output = $output . $ord;
+            }
+        }
+
+        return $output;
+    }
+
+
+    /**
      * Show promo pixel
      *
      * @since 1.15
@@ -208,6 +239,8 @@ class Knife_Post_Info {
 
         return $output;
     }
+
+
 
 
     /**

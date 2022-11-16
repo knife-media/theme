@@ -4,7 +4,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.12
+ * @version 1.16
  */
 ?>
 
@@ -29,6 +29,11 @@
             the_share(
                 '<div class="entry-header__share share">',
                 '</div>'
+            );
+
+            the_info(
+                '<div class="entry-header__ord">', '</div>',
+                ['ord']
             );
         ?>
     </div>

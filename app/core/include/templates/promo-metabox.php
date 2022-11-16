@@ -5,11 +5,14 @@
         // Check if post promoted
         $promo = get_post_meta($post_id, self::$meta_promo, true);
 
-        // Check if this post is a teaser
+        // Get post teaser
         $teaser = get_post_meta($post_id, self::$meta_teaser, true);
 
-        // Check if this post has pixel
+        // Get post pixel
         $pixel = get_post_meta($post_id, self::$meta_pixel, true);
+
+        // Get post ORD
+        $ord = get_post_meta($post_id, self::$meta_ord, true);
 
         // Get promo options
         $options = get_post_meta($post_id, self::$meta_options, true);
@@ -91,7 +94,16 @@
                 '<p><strong>%3$s</strong><input class="widefat" type="text" name="%1$s" value="%2$s"></p>',
                 esc_attr(self::$meta_pixel),
                 esc_attr($pixel),
-                __('Промерочный пиксель', 'knife-theme')
+                __('Пиксель для подсчета охвата:', 'knife-theme')
+            );
+        ?>
+
+        <?php
+            printf(
+                '<p><strong>%3$s</strong><input class="widefat" type="text" name="%1$s" value="%2$s"></p>',
+                esc_attr(self::$meta_ord),
+                esc_attr($ord),
+                __('Пиксель для ОРД:', 'knife-theme')
             );
         ?>
     </div>

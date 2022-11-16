@@ -30,6 +30,11 @@
                 '<div class="entry-header__share share">',
                 '</div>'
             );
+
+            the_info(
+                '<div class="entry-header__ord">', '</div>',
+                ['ord']
+            );
         ?>
     </div>
 
