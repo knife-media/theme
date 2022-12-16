@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.8
- * @version 1.14
+ * @version 1.16
  */
 
 
@@ -39,6 +39,23 @@ class Knife_Image_Filters {
 
         // Wrap all images in editor with figure
         add_filter('image_send_to_editor', [__CLASS__, 'update_editor_image'], 10, 9);
+
+        // Update max editor image size
+        add_filter('editor_max_image_size', [__CLASS__, 'update_max_editor_size'], 10, 3);
+    }
+
+
+    /**
+     * Update max editor image size
+     *
+     * @since 1.16
+     */
+    public static function update_max_editor_size($max_image_size, $size, $context) {
+        if($context === 'edit') {
+            $max_image_size = 1280;
+        }
+
+        return $max_image_size;
     }
 
 
@@ -51,8 +68,8 @@ class Knife_Image_Filters {
 
         add_image_size('outer', 1024, 9999, false);
         add_image_size('inner', 640, 9999, false);
-        add_image_size('short', 640, 480, true);
         add_image_size('highres', 1280, 9999, false);
+        add_image_size('short', 640, 480, true);
 
         add_image_size('triple', 480, 360, true);
         add_image_size('double', 640, 480, true);
