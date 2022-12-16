@@ -185,6 +185,14 @@
     }
   }
 
+  &.figure--highres {
+    width: $width-content;
+
+    img {
+      width: 100%;
+    }
+  }
+
   &.figure--outer {
     width: calc(100% + 2rem);
     max-width: none;

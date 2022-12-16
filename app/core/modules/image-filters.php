@@ -52,6 +52,7 @@ class Knife_Image_Filters {
         add_image_size('outer', 1024, 9999, false);
         add_image_size('inner', 640, 9999, false);
         add_image_size('short', 640, 480, true);
+        add_image_size('highres', 1280, 9999, false);
 
         add_image_size('triple', 480, 360, true);
         add_image_size('double', 640, 480, true);
@@ -122,6 +123,7 @@ class Knife_Image_Filters {
         $size_names = [
             'outer' => __('На всю ширину', 'knife-theme'),
             'inner' => __('По ширине текста', 'knife-theme'),
+            'highres' => __('Высокое разрешение', 'knife-theme'),
             'full'  => __('Исходный размер', 'knife-theme'),
             'short' => __('Обрезанный по высоте', 'knife-theme'),
             'thumbnail' => __('Миниатюра', 'knife-theme')
