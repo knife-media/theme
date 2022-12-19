@@ -76,7 +76,7 @@ class Knife_Distribute_Control {
             add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
 
             // Save metabox
-            add_action('save_post', [__CLASS__, 'save_metabox'], 10, 2);
+            add_action('save_post', [__CLASS__, 'save_meta'], 10, 2);
 
             // Add dashboard widget with scheduled tasks
             add_action('wp_dashboard_setup', [__CLASS__, 'add_dashboard_widget']);
@@ -257,7 +257,11 @@ class Knife_Distribute_Control {
     /**
      * Save post options
      */
-    public static function save_metabox($post_id, $post) {
+    public static function save_meta($post_id, $post) {
+        if(wp_verify_nonce($_POST['_inline_edit'], 'inlineeditnonce')) {
+            return;
+        }
+
         if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return;
         }
@@ -269,7 +273,6 @@ class Knife_Distribute_Control {
         if(!current_user_can('edit_post', $post_id)) {
             return;
         }
-
 
         // Sanitize items request
         $items = self::sanitize_items($_REQUEST[self::$meta_items]);

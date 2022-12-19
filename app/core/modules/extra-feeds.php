@@ -158,6 +158,10 @@ class Knife_Extra_Feeds {
      * Save feed post meta
      */
     public static function save_metabox($post_id) {
+        if(wp_verify_nonce($_POST['_inline_edit'], 'inlineeditnonce')) {
+            return;
+        }
+
         if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return;
         }

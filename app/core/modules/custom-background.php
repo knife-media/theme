@@ -65,7 +65,7 @@ class Knife_Custom_Background {
         add_action('admin_init', [__CLASS__, 'add_options_fields']);
 
         // Save background post meta
-        add_action('save_post', [__CLASS__, 'save_metabox']);
+        add_action('save_post', [__CLASS__, 'save_meta']);
 
         // Add custom background metabox
         add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
@@ -256,7 +256,11 @@ class Knife_Custom_Background {
      *
      * @since 1.7
      */
-    public static function save_metabox($post_id) {
+    public static function save_meta($post_id) {
+        if(wp_verify_nonce($_POST['_inline_edit'], 'inlineeditnonce')) {
+            return;
+        }
+
         if(!in_array(get_post_type($post_id), self::$post_type)) {
             return;
         }

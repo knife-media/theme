@@ -142,6 +142,10 @@ class Knife_Post_Tagline {
      * Save post options
      */
     public static function save_meta($post_id) {
+        if(wp_verify_nonce($_POST['_inline_edit'], 'inlineeditnonce')) {
+            return;
+        }
+
         if(!in_array(get_post_type($post_id), self::$post_type)) {
             return;
         }

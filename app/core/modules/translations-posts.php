@@ -6,6 +6,7 @@
  *
  * @package knife-theme
  * @since 1.15
+ * @version 1.16
  */
 
 
@@ -218,6 +219,10 @@ class Knife_Translations_Posts {
      * Save translations term for post
      */
     public static function save_meta($post_id) {
+        if(wp_verify_nonce($_POST['_inline_edit'], 'inlineeditnonce')) {
+            return;
+        }
+
         if(!in_array(get_post_type($post_id), self::$post_type)) {
             return;
         }

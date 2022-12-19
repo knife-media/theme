@@ -120,6 +120,10 @@ class Knife_Post_Lead {
      * Save post options
      */
     public static function save_metabox($post_id) {
+        if(wp_verify_nonce($_POST['_inline_edit'], 'inlineeditnonce')) {
+            return;
+        }
+
         if(!in_array(get_post_type($post_id), self::$post_type)) {
             return;
         }

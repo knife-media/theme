@@ -40,7 +40,7 @@ class Knife_SEO_Fields {
         add_action('add_meta_boxes', [__CLASS__, 'add_metabox'], 12);
 
         // Save meta
-        add_action('save_post', [__CLASS__, 'save_metabox'], 10, 2);
+        add_action('save_post', [__CLASS__, 'save_meta'], 10, 2);
 
         // Enqueue metabox scripts
         add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
@@ -95,7 +95,11 @@ class Knife_SEO_Fields {
     /**
      * Save SEO fields metabox
      */
-    public static function save_metabox($post_id, $post) {
+    public static function save_meta($post_id, $post) {
+        if(wp_verify_nonce($_POST['_inline_edit'], 'inlineeditnonce')) {
+            return;
+        }
+
         if(!in_array(get_post_type($post_id), self::$post_type)) {
             return;
         }

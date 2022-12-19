@@ -149,6 +149,10 @@ class Knife_Authors_Manager {
      * Save authors post meta
      */
     public static function save_metabox($post_id, $post) {
+        if(wp_verify_nonce($_POST['_inline_edit'], 'inlineeditnonce')) {
+            return;
+        }
+
         if(!in_array(get_post_type($post_id), self::$post_type)) {
             return;
         }

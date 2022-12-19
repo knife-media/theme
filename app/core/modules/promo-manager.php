@@ -111,7 +111,7 @@ class Knife_Promo_Manager {
         add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
 
         // Update promo post meta on save post
-        add_action('save_post', [__CLASS__, 'save_metabox']);
+        add_action('save_post', [__CLASS__, 'save_meta']);
 
         // Enqueue metabox scripts
         add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
@@ -433,7 +433,11 @@ class Knife_Promo_Manager {
     /**
      * Save promo post meta
      */
-    public static function save_metabox($post_id) {
+    public static function save_meta($post_id) {
+        if(wp_verify_nonce($_POST['_inline_edit'], 'inlineeditnonce')) {
+            return;
+        }
+
         if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return;
         }
@@ -498,7 +502,7 @@ class Knife_Promo_Manager {
      */
     public static function replace_teaser_slug($post_id, $teaser) {
         // Remove action to avoid infinite loop
-        remove_action('save_post', [__CLASS__, 'save_metabox']);
+        remove_action('save_post', [__CLASS__, 'save_meta']);
 
         wp_update_post([
             'ID' => $post_id,
@@ -506,7 +510,7 @@ class Knife_Promo_Manager {
         ]);
 
         // Bring back the action
-        add_action('save_post', [__CLASS__, 'save_metabox']);
+        add_action('save_post', [__CLASS__, 'save_meta']);
     }
 
 
