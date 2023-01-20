@@ -42,8 +42,6 @@ add_action('social_planner_task_sent', function($results, $key, $post_id) {
     $errors = [];
 
     foreach ($results[$key]['errors'] as $key => $message) {
-        $title = $key;
-
         if(class_exists('Social_Planner\Settings')) {
             $providers = Social_Planner\Settings::get_providers();
 
@@ -68,6 +66,46 @@ add_action('social_planner_task_sent', function($results, $key, $post_id) {
     ];
 
     wp_remote_post('https://knife.media/requests/planner', [
+        'body' => http_build_query($data),
+        'blocking' => false,
+    ]);
+}, 10, 3);
+
+
+/**
+ * Notify on sending posts with `russia` tag using Social Planner
+ *
+ * @since 1.16
+ */
+add_action('social_planner_task_sent', function($results, $key, $post_id) {
+    $secret = empty(KNIFE_REQUESTS['secret']) ? '' : KNIFE_REQUESTS['secret'];
+
+    if(!has_tag('russia', $post_id)) {
+        return;
+    }
+
+    $external = [];
+
+    foreach($results[$key]['links'] as $key => $link) {
+        if(in_array($key, ['telegram-main', 'telegram-blunt'], true)) {
+            $external[] = $link;
+        }
+    }
+
+    if(empty($external)) {
+        return;
+    }
+
+    $timestamp = time();
+
+    $data = [
+        'nonce' => substr(sha1($secret . $timestamp), -12, 10),
+        'time' => $timestamp,
+        'external' => json_encode($external),
+        'link' => get_permalink($post_id)
+    ];
+
+    wp_remote_post('https://knife.media/requests/russia', [
         'body' => http_build_query($data),
         'blocking' => false,
     ]);
