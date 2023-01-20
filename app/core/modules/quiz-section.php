@@ -466,7 +466,7 @@ class Knife_Quiz_Section {
      * Save quiz options
      */
     public static function save_metabox($post_id) {
-        if(wp_verify_nonce($_POST['_inline_edit'], 'inlineeditnonce')) {
+        if(isset($_POST['_inline_edit']) && wp_verify_nonce($_POST['_inline_edit'], 'inlineeditnonce')) {
             return;
         }
 

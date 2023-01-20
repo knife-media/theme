@@ -96,7 +96,7 @@ class Knife_SEO_Fields {
      * Save SEO fields metabox
      */
     public static function save_meta($post_id, $post) {
-        if(wp_verify_nonce($_POST['_inline_edit'], 'inlineeditnonce')) {
+        if(isset($_POST['_inline_edit']) && wp_verify_nonce($_POST['_inline_edit'], 'inlineeditnonce')) {
             return;
         }
 

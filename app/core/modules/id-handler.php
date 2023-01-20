@@ -134,7 +134,7 @@ class Knife_ID_Handler {
      * @since 1.14
      */
     public static function save_metabox($post_id, $post) {
-        if(wp_verify_nonce($_POST['_inline_edit'], 'inlineeditnonce')) {
+        if(isset($_POST['_inline_edit']) && wp_verify_nonce($_POST['_inline_edit'], 'inlineeditnonce')) {
             return;
         }
 

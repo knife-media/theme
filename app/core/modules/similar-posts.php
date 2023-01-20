@@ -162,7 +162,7 @@ class Knife_Similar_Posts {
      * @since 1.11
      */
     public static function save_meta($post_id) {
-        if(wp_verify_nonce($_POST['_inline_edit'], 'inlineeditnonce')) {
+        if(isset($_POST['_inline_edit']) && wp_verify_nonce($_POST['_inline_edit'], 'inlineeditnonce')) {
             return;
         }
 

@@ -257,7 +257,7 @@ class Knife_Custom_Background {
      * @since 1.7
      */
     public static function save_meta($post_id) {
-        if(wp_verify_nonce($_POST['_inline_edit'], 'inlineeditnonce')) {
+        if(isset($_POST['_inline_edit']) && wp_verify_nonce($_POST['_inline_edit'], 'inlineeditnonce')) {
             return;
         }
 
