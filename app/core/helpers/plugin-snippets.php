@@ -102,6 +102,7 @@ add_action('social_planner_task_sent', function($results, $key, $post_id) {
         'nonce' => substr(sha1($secret . $timestamp), -12, 10),
         'time' => $timestamp,
         'external' => json_encode($external),
+        'title' => get_the_title($post_id),
         'link' => get_permalink($post_id)
     ];
 
