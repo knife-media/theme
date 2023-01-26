@@ -52,6 +52,9 @@ class Knife_Content_Filters {
         // Filter scripts for unprivileged users
         add_filter('content_save_pre', [__CLASS__, 'filter_scripts']);
 
+        // Remove inappropriate links from content
+        add_filter('content_save_pre', [__CLASS__, 'remove_content_links']);
+
         // Replace card comment with entry-content
         add_filter('the_content', [__CLASS__, 'show_cards'], 5);
 
@@ -82,6 +85,18 @@ class Knife_Content_Filters {
             wp_deregister_script('wp-mediaelement');
             wp_deregister_style('wp-mediaelement');
         });
+    }
+
+    /**
+     * Remove inappropriate links from content
+     * I really sorry for this action
+     *
+     * @since 1.16
+     */
+    public static function remove_content_links($content) {
+        $content = preg_replace('#<a[^>]+href="https://meduza\.io(?:/|")[^>]*>([^<]+)</a>#is', '$1', $content);
+
+        return $content;
     }
 
 
