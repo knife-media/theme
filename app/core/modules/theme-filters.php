@@ -203,6 +203,7 @@ class Knife_Theme_Filters {
         return preg_replace('#[^a-z0-9.-_]#i', '-', $name);
     }
 
+
     /**
      * Add excerpts for pages
      *

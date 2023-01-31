@@ -24,79 +24,34 @@
       }
     }
 
-    &.--hide {
-      @media screen and (max-width: 1023px) {
-        display: none;
-      }
-    }
+    &.menu__item--shuffle {
+      position: relative;
+      padding: 0.25rem 0.5rem;
 
-    &.--club {
-      margin: .25rem .5rem;
+      @extend .icon;
+      @extend .icon--dice;
 
-      .menu__item-link {
-        color: $color-white;
-        background-color: $color-club;
-
-        border: solid 1px $color-club;
-        border-radius: 3px;
-
-        &:hover {
-          filter: brightness(120%);
-        }
-      }
-    }
-
-    &.--top {
-      margin: .25rem .5rem;
+      animation: shuffle-color 20s linear infinite;
 
       .menu__item-link {
-        color: $color-white;
-        background-color: #ff544f;
+        position: absolute;
+        top: 0;
+        left: 0;
 
-        border: solid 1px #ff544f;
-        border-radius: 3px;
-
-        &:hover {
-          filter: brightness(120%);
-        }
+        width: 100%;
+        height: 100%;
+        text-indent: -9999rem;
       }
-    }
 
-    &.--megafon {
-      display: none;
-
-      width: 8rem;
-      height: 2rem;
-
-      text-indent: -9999rem;
-
-      background-image: url('/wp-content/uploads/2019/11/megafon-button.png');
-      background-repeat: no-repeat;
-      background-size: contain;
-
-      transition: filter 0.25s;
-
-      @media screen and (max-width: 1023px) {
-        display: block;
+      &:hover {
+        transition: transform 0.75s ease-in-out;
+        transform: rotate(720deg);
       }
-    }
 
-    &.--honor {
-      display: none;
-
-      width: 8rem;
-      height: 2rem;
-
-      text-indent: -9999rem;
-
-      background-image: url('/wp-content/uploads/2019/11/honor-9x.png');
-      background-repeat: no-repeat;
-      background-size: contain;
-
-      transition: filter 0.25s;
-
-      @media screen and (max-width: 1023px) {
-        display: block;
+      @media screen and (max-width: 767px) {
+        position: absolute;
+        top: 1.25rem;
+        right: 1rem;
       }
     }
 

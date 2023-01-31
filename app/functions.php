@@ -138,6 +138,9 @@ require get_template_directory() . '/core/modules/quiz-section.php';
 // Best posts markup
 require get_template_directory() . '/core/modules/best-posts.php';
 
+// Redirect custom url to random post
+require get_template_directory() . '/core/modules/random-post.php';
+
 // Translate posts markup
 require get_template_directory() . '/core/modules/translations-posts.php';
 

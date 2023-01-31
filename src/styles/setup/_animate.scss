@@ -94,3 +94,33 @@
     background-position: 4rem 0;
   }
 }
+
+@keyframes shuffle-color{
+  0% {
+    color: #A0D468;
+  }
+
+  20% {
+    color: #4FC1E9;
+  }
+
+  40% {
+    color: #FFCE54;
+  }
+
+  60% {
+    color: #FC6E51;
+  }
+
+  80% {
+    color: #ED5565;
+  }
+
+  99% {
+    color: #AC92EC;
+  }
+
+  100% {
+    color: #A0D468;
+  }
+}
