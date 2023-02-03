@@ -100,10 +100,18 @@ class Knife_Random_Post {
             return $posts[0];
         }
 
+        if(!property_exists('Knife_Promo_Manager', 'meta_promo')) {
+            return $posts[0];
+        }
+
         $id = $posts[0];
 
         foreach($posts as $post) {
             if(get_post_meta($post, Knife_Momentary_Posts::$meta_momentary, true)) {
+                continue;
+            }
+
+            if(get_post_meta($post, Knife_Promo_Manager::$meta_promo, true)) {
                 continue;
             }
 
