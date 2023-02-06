@@ -2,7 +2,7 @@
  * Comments and profiles handler
  *
  * @since 1.13
- * @version 1.15
+ * @version 1.16
  */
 
 (function () {
@@ -207,9 +207,22 @@
 
 
   /**
+   * Decline title using number
+   *
+   * @since 1.16
+   */
+  const declineTitle = (number, titles) => {
+    const cases = [2, 0, 1, 1, 1, 2];
+    const title = titles[ (number%100>4 && number%100<20)? 2 : cases[(number%10<5)?number%10:5] ];
+
+    return title.replace('$1', number);
+  }
+
+
+  /**
    * Draw expand button
    */
-  const foldComments = () => {
+  const foldComments = (amount) => {
     comments.classList.add('comments--folded');
 
     let expand = buildElement('div', {
@@ -219,7 +232,7 @@
 
     let button = buildElement('button', {
       'class': 'comments__expand-button',
-      'text': getOption('comments.expand'),
+      'text': declineTitle(amount, getOption('comments.expand')),
       'attrubutes': {
         'type': 'button'
       },
@@ -1279,7 +1292,7 @@
 
       // Fold comments if more than 10
       if (fields.length > 10) {
-        foldComments();
+        foldComments(fields.length);
       }
 
       // Show comments using response fields

@@ -320,7 +320,11 @@ class Knife_ID_Handler {
                 'reply' => __('Ответить', 'knife-theme'),
                 'remove' => __('Удалить', 'knife-theme'),
                 'block' => __('Забанить', 'knife-theme'),
-                'expand' => __('Показать все комментарии', 'knife-theme'),
+                'expand' => [
+                    __('Показать $1 комментарий', 'knife-theme'),
+                    __('Показать $1 комментария', 'knife-theme'),
+                    __('Показать $1 комментариев', 'knife-theme'),
+                ],
                 'noavatar' => get_template_directory_uri() . '/assets/images/no-avatar.png'
             ],
 
