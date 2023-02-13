@@ -62,6 +62,12 @@ class Knife_ID_Handler {
         // Save meta
         add_action('save_post', [__CLASS__, 'save_metabox'], 10, 2);
 
+        // Insert new post to analytics table
+        add_action('knife_schedule_id', [__CLASS__, 'start_task']);
+
+        // Schedule insertion to id database
+        add_action('transition_post_status', [__CLASS__, 'schedule_insertion'], 10, 3);
+
         // Enqueue metabox scripts
         add_action('admin_enqueue_scripts', [__CLASS__, 'enqueue_assets']);
 
@@ -82,6 +88,45 @@ class Knife_ID_Handler {
      */
     public static function add_metabox() {
         add_meta_box('knife-question-metabox', __('Вопрос для комментариев', 'knife-theme'), [__CLASS__, 'display_metabox'], self::$post_type, 'advanced', 'high');
+    }
+
+
+    /**
+     * Start scheduled task
+     *
+     * @since 1.16
+     */
+    public static function start_task($post_id) {
+        $status = get_post_status($post_id);
+
+        // Mix with default values
+        $conf = wp_parse_args(KNIFE_ID, [
+            'host' => DB_HOST,
+            'name' => DB_NAME,
+            'user' => DB_USER,
+            'password' => DB_PASSWORD
+        ]);
+
+        // Create custom db connection
+        $db = new wpdb($conf['user'], $conf['password'], $conf['name'], $conf['host']);
+        $db->hide_errors();
+
+        $slug = wp_make_link_relative(get_permalink($post_id));
+        $title = get_the_title($post_id);
+
+        if($status === 'publish') {
+             return $db->replace('posts', compact('post_id', 'slug', 'title'));
+        }
+    }
+
+
+    /**
+     * Schedule new post to id database
+     *
+     * @since 1.16
+     */
+    public static function schedule_insertion($new_status, $old_status, $post) {
+        wp_schedule_single_event(time() + 60, 'knife_schedule_id', [$post->ID]);
     }
 
 
@@ -310,7 +355,8 @@ class Knife_ID_Handler {
                 'placeholder' => __('Что вы об этом думаете?', 'knife-theme'),
                 'reply' => __('Напишите свой ответ…', 'knife-theme'),
                 'cancel' => __('Отменить', 'knife-theme'),
-                'exit' => __('Выйти из профиля', 'knife-theme')
+                'exit' => __('Выйти из профиля', 'knife-theme'),
+                'notify' => __('Посмотреть ответы на ваши комментарии', 'knife-theme')
             ],
 
             'comments' => [
@@ -321,11 +367,17 @@ class Knife_ID_Handler {
                 'remove' => __('Удалить', 'knife-theme'),
                 'block' => __('Забанить', 'knife-theme'),
                 'expand' => [
-                    __('Показать $1 комментарий', 'knife-theme'),
-                    __('Показать $1 комментария', 'knife-theme'),
-                    __('Показать $1 комментариев', 'knife-theme'),
+                    __('Показать %d комментарий', 'knife-theme'),
+                    __('Показать %d комментария', 'knife-theme'),
+                    __('Показать %d комментариев', 'knife-theme'),
                 ],
                 'noavatar' => get_template_directory_uri() . '/assets/images/no-avatar.png'
+            ],
+
+            'notifications' => [
+                __('К записи %s добавлен <strong>%d новый ответ</strong> на ваши комментарии', 'knife-theme'),
+                __('К записи %s добавлено <strong>%d новых ответа</strong> на ваши комментарии', 'knife-theme'),
+                __('К записи %s добавлено <strong>%d новых ответов</strong> на ваши комментарии', 'knife-theme'),
             ],
 
             'login' => [

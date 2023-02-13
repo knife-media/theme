@@ -215,7 +215,7 @@
     const cases = [2, 0, 1, 1, 1, 2];
     const title = titles[ (number%100>4 && number%100<20)? 2 : cases[(number%10<5)?number%10:5] ];
 
-    return title.replace('$1', number);
+    return title.replace('%d', number);
   }
 
 
@@ -243,6 +243,126 @@
       e.preventDefault();
 
       comments.classList.remove('comments--folded');
+    });
+  }
+
+
+  /**
+   * Draw single notifcation report
+   *
+   * @since 1.16
+   */
+  const drawReport = (notifications, field) => {
+    const label = declineTitle(field.comments, getOption('notifications'));
+
+    const link = buildElement('em', {
+      'text': field.title,
+    });
+
+    buildElement('a', {
+      'classes': ['comments__notifications-report'],
+      'parent': notifications,
+      'attributes': {
+        'href': field.slug + '#comments',
+        'target': '_blank',
+      },
+      'html': label.replace('%s', link.outerHTML),
+    });
+  }
+
+
+  /**
+   * Set notifications viewed
+   *
+   * @since 1.16
+   */
+  const markNotifications = (viewed, callback) => {
+    if (viewed.length < 1) {
+      return callback();
+    }
+
+    makeRequest('/id/notifications', 'POST', {comments: viewed}, (response) => {
+      return callback();
+    });
+  }
+
+
+  /**
+   * Draw notifications
+   *
+   * @since 1.16
+   */
+  const drawNotifications = (badge, form) => {
+    const fields = {};
+
+    makeRequest('/id/notifications', 'GET', {}, (response) => {
+      response = response || [];
+
+      if (response.length < 1) {
+        return;
+      }
+
+      // Create notify button
+      const bell = buildElement('button', {
+        'classes': ['comments__form-bell'],
+        'attributes': {
+          'type': 'button',
+          'title': getOption('form.notify')
+        },
+        'parent': badge
+      });
+
+      buildElement('span', {
+        'classes': ['icon', 'icon--notify'],
+        'parent': bell
+      });
+
+      buildElement('strong', {
+        'text': response.length < 100 ? response.length : '99+',
+        'parent': bell
+      });
+
+      const notifications = buildElement('div', {
+        'classes': ['comments__notifications'],
+        'parent': badge
+      });
+
+      let viewed = [];
+
+      response.forEach(item => {
+        const post = item.post_id;
+
+        if (!fields.hasOwnProperty(post)) {
+          fields[post] = {comments: 0};
+        }
+
+        viewed.push(item.id);
+
+        fields[post].slug = item.slug;
+        fields[post].title = item.title;
+
+        fields[post].comments++;
+      });
+
+      for (const key in fields) {
+        drawReport(notifications, fields[key]);
+      }
+
+      bell.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        // Set notifications viewed
+        markNotifications(viewed, () => {
+          bell.classList.add('comments__form-bell--viewed');
+        });
+
+        viewed = [];
+
+        // Show notifications block
+        notifications.classList.toggle('comments__notifications--visible');
+      });
+
+      form.parentNode.insertBefore(notifications, form.nextSibling);
     });
   }
 
@@ -1092,7 +1212,7 @@
   /**
    * Create badge in form
    */
-  const createBadge = (form, field) => {
+  const createBadge = (form, field, comments) => {
     if (typeof field === 'undefined') {
       return form;
     }
@@ -1110,6 +1230,9 @@
       'text': field.name,
       'parent': badge
     });
+
+    // Draw notifications
+    drawNotifications(badge, form);
 
     // Create exit button
     let exit = buildElement('button', {
@@ -1288,7 +1411,7 @@
       });
 
       // Try to show identity bage
-      createBadge(form, response.identity);
+      createBadge(form, response.identity, comments);
 
       // Fold comments if more than 10
       if (fields.length > 10) {
