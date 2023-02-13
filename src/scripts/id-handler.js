@@ -211,11 +211,11 @@
    *
    * @since 1.16
    */
-  const declineTitle = (number, titles) => {
+  const declineTitle = (number, titles, holder = '%d') => {
     const cases = [2, 0, 1, 1, 1, 2];
     const title = titles[ (number%100>4 && number%100<20)? 2 : cases[(number%10<5)?number%10:5] ];
 
-    return title.replace('%d', number);
+    return title.replace(holder, number);
   }
 
 
@@ -253,11 +253,21 @@
    * @since 1.16
    */
   const drawReport = (notifications, field) => {
-    const label = declineTitle(field.comments, getOption('notifications'));
+    let label = declineTitle(field.comments, getOption('notifications.common'));
+
+    // State is a single or plural form of parent comments amount
+    let state = getOption('notifications.single');
+
+    if (field.parents.size > 1) {
+      state = getOption('notifications.plural');
+    }
 
     const link = buildElement('em', {
       'text': field.title,
     });
+
+    label = label.replace('%1$s', link.outerHTML);
+    label = label.replace('%2$s', state);
 
     buildElement('a', {
       'classes': ['comments__notifications-report'],
@@ -266,7 +276,7 @@
         'href': field.slug + '#comments',
         'target': '_blank',
       },
-      'html': label.replace('%s', link.outerHTML),
+      'html': label,
     });
   }
 
@@ -334,6 +344,7 @@
 
         if (!fields.hasOwnProperty(post)) {
           fields[post] = {comments: 0};
+          fields[post].parents = new Set();
         }
 
         viewed.push(item.id);
@@ -341,6 +352,7 @@
         fields[post].slug = item.slug;
         fields[post].title = item.title;
 
+        fields[post].parents.add(item.parent);
         fields[post].comments++;
       });
 
@@ -1163,6 +1175,7 @@
         }
 
       } catch (err) {
+        console.error(err);
         return showError();
       }
     }
@@ -1197,6 +1210,7 @@
         }
 
       } catch (err) {
+        console.error(err);
         return showError();
       }
     }

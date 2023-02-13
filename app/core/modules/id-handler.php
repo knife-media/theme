@@ -375,9 +375,13 @@ class Knife_ID_Handler {
             ],
 
             'notifications' => [
-                __('К записи %s добавлен <strong>%d новый ответ</strong> на ваши комментарии', 'knife-theme'),
-                __('К записи %s добавлено <strong>%d новых ответа</strong> на ваши комментарии', 'knife-theme'),
-                __('К записи %s добавлено <strong>%d новых ответов</strong> на ваши комментарии', 'knife-theme'),
+                'common' => [
+                    __('К записи %1$s добавлен <strong>%d новый ответ</strong> на %2$s.', 'knife-theme'),
+                    __('К записи %1$s добавлено <strong>%d новых ответа</strong> на %2$s.', 'knife-theme'),
+                    __('К записи %1$s добавлено <strong>%d новых ответов</strong> на %2$s.', 'knife-theme'),
+                ],
+                'plural' => __('ваши комментарии', 'knife-theme'),
+                'single' => __('ваш комментарий', 'knife-theme'),
             ],
 
             'login' => [
