@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.3
- * @version 1.15
+ * @version 1.16
  */
 
 if (!defined('WPINC')) {
@@ -299,6 +299,10 @@ class Knife_Post_Info {
 
             foreach($authors as $author) {
                 $user = get_userdata($author);
+
+                if($user === false) {
+                    continue;
+                }
 
                 $output = $output . sprintf(
                     '<a class="meta__item" href="%s" rel="author">%s</a>',

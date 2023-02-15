@@ -308,8 +308,9 @@ class Knife_Authors_Manager {
                 foreach($authors as $author) {
                     $user = get_userdata($author);
 
-                    // Add display name to data
-                    $output[] = esc_html($user->display_name);
+                    if(isset($user->display_name)) {
+                        $output[] = esc_html($user->display_name);
+                    }
                 }
 
                 $name = implode(', ', $output);
