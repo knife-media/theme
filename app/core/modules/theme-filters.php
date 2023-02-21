@@ -66,6 +66,9 @@ class Knife_Theme_Filters {
         // Redirect old generator post type to regular posts
         add_action('template_redirect', [__CLASS__, 'redirect_generator'], 9);
 
+        // Remove classic styles
+        remove_action('wp_enqueue_scripts', 'wp_enqueue_classic_theme_styles');
+
         // Remove annoying [...] in excerpts
         add_filter('excerpt_more', function($more) {
             return '&hellip;';

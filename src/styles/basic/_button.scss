@@ -16,7 +16,7 @@
   border: solid 1px $color-primary;
   border-radius: 2px;
 
-  transition: .25s;
+  transition: filter .25s, background 0.25s, color 0.25s;
 
   &:hover {
     filter: brightness(125%);
