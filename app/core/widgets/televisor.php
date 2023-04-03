@@ -14,7 +14,7 @@ class Knife_Widget_Televisor extends WP_Widget {
     /**
      * Widget post types
      */
-    private $post_type = ['post', 'quiz'];
+    private $post_type = ['post', 'quiz', 'generator'];
 
 
     /**
@@ -278,7 +278,7 @@ class Knife_Widget_Televisor extends WP_Widget {
      * Try to find post ID by teaser link.
      */
     private function find_postid($link) {
-        $post_id = url_to_postid($link);
+        $post_id = url_to_postid(wp_make_link_relative($link));
 
         if($post_id > 0) {
             return $post_id;
@@ -287,6 +287,8 @@ class Knife_Widget_Televisor extends WP_Widget {
         if(method_exists('Knife_Promo_Manager', 'find_postid')) {
             $post_id = Knife_Promo_Manager::find_postid($link);
         }
+
+
 
         return $post_id;
     }

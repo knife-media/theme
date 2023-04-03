@@ -6,7 +6,7 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.15
+ * @version 1.16
  */
 
 
@@ -141,7 +141,7 @@ class Knife_Widget_Single extends WP_Widget {
      * Try to find post ID by teaser link.
      */
     private function find_postid($link) {
-        $post_id = url_to_postid($link);
+        $post_id = url_to_postid(wp_make_link_relative($link));
 
         if($post_id > 0) {
             return $post_id;

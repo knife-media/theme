@@ -149,15 +149,21 @@ class Knife_Custom_Background {
         ];
 
         // Get term meta only once
-        $meta = wp_parse_args(self::get_meta(), $defaults);
+        $meta = self::get_meta();
 
-        $meta['color'] = ltrim($meta['color'], '#');
-
-        if($meta['color'] !== get_theme_support('custom-background', 'default-color')) {
-            $backdrop['color'] = $meta['color'];
+        if(!array_filter($meta)) {
+            $meta = $defaults;
         }
 
-        if($meta['image']) {
+        if(!empty($meta['color'])) {
+            $meta['color'] = ltrim($meta['color'], '#');
+
+            if($meta['color'] !== get_theme_support('custom-background', 'default-color')) {
+                $backdrop['color'] = $meta['color'];
+            }
+        }
+
+        if(!empty($meta['image'])) {
             $backdrop['image'] = set_url_scheme($meta['image']);
 
             if(in_array($meta['size'], ['auto', 'contain', 'cover'], true)) {
