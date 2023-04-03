@@ -149,7 +149,7 @@ class Knife_Custom_Background {
         ];
 
         // Get term meta only once
-        $meta = self::get_meta();
+        $meta = (array) self::get_meta();
 
         if(!array_filter($meta)) {
             $meta = $defaults;
