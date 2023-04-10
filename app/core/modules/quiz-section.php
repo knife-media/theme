@@ -745,7 +745,7 @@ class Knife_Quiz_Section {
                 return false;
             }
 
-            $attachment = wp_get_attachment_image_url($fields['attachment'], 'short');
+            $attachment = wp_get_attachment_image_url($fields['attachment'], 'full');
 
             if($attachment === false) {
                 return false;
