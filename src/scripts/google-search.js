@@ -1,11 +1,5 @@
 (function () {
   /**
-   * Close and remove explorer popup
-   */
-
-
-
-  /**
    * Create search popup
    */
   const showExplorer = (body) => {
@@ -101,6 +95,7 @@
    */
   const toggleSearch = (e) => {
     e.preventDefault();
+    e.stopPropagation();
 
     let explorer = document.getElementById('explorer');
 
