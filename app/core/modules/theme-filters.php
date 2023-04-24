@@ -239,15 +239,6 @@ class Knife_Theme_Filters {
             remove_meta_box('dashboard_primary', 'dashboard', 'normal');
         });
 
-        // Remove comments and trackbacks metaboxes
-        add_action('admin_init', function() {
-            remove_meta_box('commentsdiv', 'post', 'normal');
-            remove_meta_box('commentsdiv', 'page', 'normal');
-
-            remove_meta_box('trackbacksdiv', 'post', 'normal');
-            remove_meta_box('trackbacksdiv', 'page', 'normal');
-        });
-
         // Remove fcking emojis and wordpress meta for security reasons
         remove_action('wp_head', 'print_emoji_detection_script', 7);
         remove_action('admin_print_scripts', 'print_emoji_detection_script');

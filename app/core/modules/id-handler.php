@@ -59,6 +59,9 @@ class Knife_ID_Handler {
         // Add comment question metabox
         add_action('add_meta_boxes', [__CLASS__, 'add_metabox']);
 
+        // Remove comments and trackbacks metaboxes
+        add_action('add_meta_boxes', [__CLASS__, 'remove_comments_boxes']);
+
         // Save meta
         add_action('save_post', [__CLASS__, 'save_metabox'], 10, 2);
 
@@ -88,6 +91,17 @@ class Knife_ID_Handler {
      */
     public static function add_metabox() {
         add_meta_box('knife-question-metabox', __('Вопрос для комментариев', 'knife-theme'), [__CLASS__, 'display_metabox'], self::$post_type, 'advanced', 'high');
+    }
+
+
+    /**
+     * Remove default comments and trackback  metaboxes
+     *
+     * @since 1.16
+     */
+    public static function remove_comments_boxes() {
+        remove_meta_box('commentsdiv', get_post_type(), 'normal');
+        remove_meta_box('trackbacksdiv', get_post_type(), 'normal');
     }
 
 
