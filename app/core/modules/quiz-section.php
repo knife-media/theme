@@ -701,7 +701,7 @@ class Knife_Quiz_Section {
                     if(!empty($meta['category']) && $meta['category'] !== 'default') {
                         $result['advance'] = $meta['category'];
 
-                        if (!empty($result['minimum'])) {
+                        if (!empty($meta['minimum'])) {
                             $result['minimum'] = absint($meta['minimum']);
                         }
                     }
