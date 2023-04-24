@@ -236,3 +236,25 @@ add_filter('social_planner_prepare_message', function($message, $target) {
 
     return $message;
 }, 10, 2);
+
+
+/**
+ * Close comments for promo vk posts
+ *
+ * @since 1.16
+ */
+add_filter('social_planner_request_body', function($body, $mesage, $network) {
+    $post_id = $message['post_id'];
+
+    if(!class_exists('Knife_Promo_Manager') || $network !== 'vk') {
+        return $body;
+    }
+
+    $meta_promo = Knife_Promo_Manager::$meta_promo;
+
+    if(get_post_meta($post_id, $meta_promo, true)) {
+        $body['close_comments'] = 1;
+    }
+
+    return $body;
+}, 10, 3);
