@@ -1,0 +1,14 @@
+{
+    "name": "knife-media/theme",
+    "license": "MIT license",
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
+    "require-dev": {
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.0.0",
+        "wp-coding-standards/wpcs": "dev-develop",
+        "squizlabs/php_codesniffer": "^3.7"
+    }
+}

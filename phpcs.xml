@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<ruleset name="Knife">
+    <description>Custom WordPress configuration</description>
+    <rule ref="WordPress">
+        <exclude name="WordPress-Docs"/>
+        <exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+        <exclude name="Generic.WhiteSpace.DisallowSpaceIndent" />
+        <exclude name="WordPress.PHP.YodaConditions"/>
+        <exclude name="WordPress.WP.I18n.MissingTranslatorsComment"/>
+        <exclude name="WordPress.Security.NonceVerification"/>
+    </rule>
+    <rule ref="Generic.WhiteSpace.ScopeIndent">
+        <properties>
+            <property name="indent" value="4"/>
+            <property name="tabIndent" value="false"/>
+        </properties>
+    </rule>
+    <rule ref="Generic.WhiteSpace.DisallowTabIndent" />
+    <rule ref="Generic.ControlStructures.DisallowYodaConditions"/>
+    <exclude-pattern>/app/core/classes/*</exclude-pattern>
+</ruleset>

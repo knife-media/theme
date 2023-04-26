@@ -3,10 +3,11 @@
  * Yandex.News feed
  *
  * @since 1.7
+ * @version 1.17
  */
 
-header('Content-Type: ' . feed_content_type('rss-http') . '; charset=' . get_option('blog_charset'), true);
-echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
+header( 'Content-Type: ' . feed_content_type( 'rss-http' ) . '; charset=' . get_option( 'blog_charset' ), true );
+echo '<?xml version="1.0" encoding="' . esc_attr( get_option( 'blog_charset' ) ) . '"?' . '>';
 ?>
 
 <rss version="2.0"
@@ -14,13 +15,16 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
     xmlns:media="http://search.yahoo.com/mrss/"
     xmlns:turbo="http://turbo.yandex.ru">
     <channel>
-        <title><?php bloginfo_rss('name'); ?></title>
-        <link><?php bloginfo_rss('url'); ?></link>
-        <description><?php bloginfo_rss('description'); ?></description>
-        <language><?php bloginfo_rss('language'); ?></language>
-        <?php do_action('rss2_head'); ?>
+        <title><?php bloginfo_rss( 'name' ); ?></title>
+        <link><?php bloginfo_rss( 'url' ); ?></link>
+        <description><?php bloginfo_rss( 'description' ); ?></description>
+        <language><?php bloginfo_rss( 'language' ); ?></language>
+        <?php do_action( 'rss2_head' ); ?>
 
-        <?php while(have_posts()) : the_post(); ?>
+        <?php
+        while ( have_posts() ) :
+            the_post();
+            ?>
             <item turbo="true">
                 <link><?php the_permalink_rss(); ?></link>
                 <title><?php the_title_rss(); ?></title>
@@ -29,13 +33,13 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
                     // Print publish date
                     printf(
                         '<pubDate>%s</pubDate>',
-                        mysql2date('D, d M Y H:i:s +0000', get_post_time('Y-m-d H:i:s', true), false)
+                        esc_html( mysql2date( 'D, d M Y H:i:s +0000', get_post_time( 'Y-m-d H:i:s', true ), false ) )
                     );
 
                     // Print description
                     printf(
                         '<description><![CDATA[%s]]></description>',
-                        apply_filters('the_excerpt_rss', get_the_excerpt())
+                        apply_filters( 'the_excerpt_rss', get_the_excerpt() ) // phpcs:ignore
                     );
 
                     $turbo = get_the_content_feed();
@@ -49,33 +53,37 @@ echo '<?xml version="1.0" encoding="' . get_option('blog_charset') . '"?' . '>';
                     $content = self::get_filtered_content();
 
                     // Store images for enclosure
-                    $enclosure = self::get_images($content, get_the_ID());
+                    $enclosure = self::get_images( $content, get_the_ID() );
 
                     // Remove unwanted tags
-                    $content = self::remove_tags($content);
+                    $content = self::remove_tags( $content );
 
 
                     // Print turbo:content
                     printf(
                         '<turbo:content><![CDATA[%s]]></turbo:content>',
-                        $header . self::clean_content($turbo)
+                        $header . self::clean_content( $turbo ) // phpcs:ignore
                     );
 
                     // Print yandex:full-text
                     printf(
                         '<yandex:full-text><![CDATA[%s]]></yandex:full-text>',
-                        self::clean_content($content)
+                        self::clean_content( $content ) // phpcs:ignore
                     );
 
                     // Insert category
-                    foreach(get_the_category() as $category) {
-                        printf('<category>%s</category>', esc_html($category->cat_name));
-                    }
+                foreach ( get_the_category() as $category ) {
+                    printf( '<category>%s</category>', esc_html( $category->cat_name ) );
+                }
 
                     // Insert enclosure
-                    foreach($enclosure as $image) {
-                        printf('<enclosure url="%s" type="%s" />', esc_url($image), wp_check_filetype($image)['type']);
-                    }
+                foreach ( $enclosure as $image ) {
+                    printf(
+                        '<enclosure url="%s" type="%s" />',
+                        esc_url( $image ),
+                        esc_attr( wp_check_filetype( $image )['type'] )
+                    );
+                }
                 ?>
             </item>
         <?php endwhile; ?>

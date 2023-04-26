@@ -4,13 +4,14 @@
  *
  * @package knife-theme
  * @since 1.10
+ * @version 1.17
  */
 ?>
 
 <footer class="footer">
 
     <div class="footer__logo">
-        <a class="footer__logo-link" href="<?php echo esc_url(home_url('/')); ?>">
+        <a class="footer__logo-link" href="<?php echo esc_url( home_url( '/' ) ); ?>">
             <svg class="footer__logo-image" fill="#ffffff" x="0" y="0" viewBox="0 0 111 31.8" xml:space="preserve">
                 <g>
                     <path d="M27.4,0.6v30.7h-8V19.1H8v12.2H0V0.6h8v11.4h11.4V0.6H27.4z"/>
@@ -22,29 +23,33 @@
             </svg>
         </a>
 
-        <p class="footer__logo-desc"><?php bloginfo('description'); ?></p>
+        <p class="footer__logo-desc"><?php bloginfo( 'description' ); ?></p>
     </div>
 
     <div class="footer__menu">
         <?php
-            if(has_nav_menu('pages')) :
-                wp_nav_menu([
-                    'theme_location' => 'pages',
-                    'depth' => 1,
-                    'echo' => true,
-                    'items_wrap' => '<ul class="menu menu--pages">%3$s</ul>',
-                    'container_class' => 'footer__menu-pages'
-                ]);
+        if ( has_nav_menu( 'pages' ) ) :
+            wp_nav_menu(
+                array(
+                    'theme_location'  => 'pages',
+                    'depth'           => 1,
+                    'echo'            => true,
+                    'items_wrap'      => '<ul class="menu menu--pages">%3$s</ul>',
+                    'container_class' => 'footer__menu-pages',
+                )
+            );
             endif;
 
-            if(has_nav_menu('social')) :
-                wp_nav_menu([
-                    'theme_location' => 'social',
-                    'depth' => 1,
-                    'echo' => true,
-                    'items_wrap' => '<ul class="social">%3$s</ul>',
-                    'container_class' => 'footer__menu-social'
-                ]);
+        if ( has_nav_menu( 'social' ) ) :
+            wp_nav_menu(
+                array(
+                    'theme_location'  => 'social',
+                    'depth'           => 1,
+                    'echo'            => true,
+                    'items_wrap'      => '<ul class="social">%3$s</ul>',
+                    'container_class' => 'footer__menu-social',
+                )
+            );
             endif;
         ?>
     </div>
@@ -52,16 +57,16 @@
     <div class="footer__copy">
         <?php
             echo wp_kses_post(
-                get_theme_mod('footer-description')
+                get_theme_mod( 'footer-description' )
             );
-        ?>
+            ?>
     </div>
 
 </footer>
 
 <?php
-    if(is_active_sidebar('knife-flexible')) :
-        dynamic_sidebar('knife-flexible');
+if ( is_active_sidebar( 'knife-flexible' ) ) :
+    dynamic_sidebar( 'knife-flexible' );
     endif;
 ?>
 

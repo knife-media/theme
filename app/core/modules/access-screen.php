@@ -6,13 +6,12 @@
  *
  * @package knife-theme
  * @since 1.2
- * @version 1.4
+ * @version 1.17
  */
 
-if (!defined('WPINC')) {
+if ( ! defined( 'WPINC' ) ) {
     die;
 }
-
 
 class Knife_Access_Screen {
     /**
@@ -21,36 +20,34 @@ class Knife_Access_Screen {
      * @since 1.4
      */
     public static function load_module() {
-        add_action('login_headerurl', [__CLASS__, 'change_url']);
-        add_action('login_headertext', [__CLASS__, 'change_title']);
+        add_filter( 'login_headerurl', array( __CLASS__, 'change_url' ) );
+        add_filter( 'login_headertext', array( __CLASS__, 'change_title' ) );
 
         // login styles
-        add_filter('login_enqueue_scripts', [__CLASS__, 'login_styles']);
+        add_filter( 'login_enqueue_scripts', array( __CLASS__, 'login_styles' ) );
 
         // admin styles
-        add_action('admin_enqueue_scripts', [__CLASS__, 'admin_styles']);
+        add_action( 'admin_enqueue_scripts', array( __CLASS__, 'admin_styles' ) );
     }
-
 
     /**
      * Prints custom styles with custom logo
      */
     public static function login_styles() {
-        $version = wp_get_theme()->get('Version');
+        $version = wp_get_theme()->get( 'Version' );
         $include = get_template_directory_uri() . '/core/include';
 
-        wp_enqueue_style('knife-access-screen-login', $include . '/styles/access-screen-login.css', [], $version);
+        wp_enqueue_style( 'knife-access-screen-login', $include . '/styles/access-screen-login.css', array(), $version );
     }
-
 
     /**
      * We have to style login layer on auth-check
      */
     public static function admin_styles() {
-        $version = wp_get_theme()->get('Version');
+        $version = wp_get_theme()->get( 'Version' );
         $include = get_template_directory_uri() . '/core/include';
 
-        wp_enqueue_style('knife-access-screen-admin', $include . '/styles/access-screen-admin.css', [], $version);
+        wp_enqueue_style( 'knife-access-screen-admin', $include . '/styles/access-screen-admin.css', array(), $version );
     }
 
     /**
@@ -64,10 +61,9 @@ class Knife_Access_Screen {
      * Change logo title
      */
     public static function change_title() {
-        return __('На главную', 'knife-theme');
+        return esc_html__( 'На главную', 'knife-theme' );
     }
 }
-
 
 /**
  * Load current module environment

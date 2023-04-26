@@ -4,18 +4,18 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.10
+ * @version 1.17
  */
 
 get_header(); ?>
 
 <?php
-    if(is_active_sidebar('knife-feature')) :
-        dynamic_sidebar('knife-feature');
-    endif;
+if ( is_active_sidebar( 'knife-feature' ) ) :
+    dynamic_sidebar( 'knife-feature' );
+endif;
 ?>
 
-<?php if(have_posts() && get_the_archive_title()) : ?>
+<?php if ( have_posts() && get_the_archive_title() ) : ?>
     <div class="caption">
         <?php
             the_archive_title();
@@ -25,28 +25,30 @@ get_header(); ?>
 <?php endif; ?>
 
 <div class="archive">
-   <?php
-        if(have_posts()) :
-            while(have_posts()) : the_post();
+    <?php
+    if ( have_posts() ) :
+        while ( have_posts() ) :
+            the_post();
 
-                get_template_part('partials/loop', 'units');
+            get_template_part( 'partials/loop', 'units' );
 
-            endwhile;
-        else :
+        endwhile;
+    else :
 
-            get_template_part('partials/message');
+        get_template_part( 'partials/message' );
 
-        endif;
+    endif;
     ?>
 </div>
 
-<?php if(have_posts()) : ?>
+<?php if ( have_posts() ) : ?>
     <nav class="navigate">
         <?php
-            previous_posts_link(__('Предыдущие', 'knife-theme'));
-            next_posts_link(__('Следующие', 'knife-theme'));
+            previous_posts_link( esc_html__( 'Предыдущие', 'knife-theme' ) );
+            next_posts_link( esc_html__( 'Следующие', 'knife-theme' ) );
         ?>
     </nav>
 <?php endif; ?>
 
-<?php get_footer();
+<?php
+get_footer();

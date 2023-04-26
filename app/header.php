@@ -4,13 +4,13 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.16
+ * @version 1.17
  */
 
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
-<meta charset="<?php bloginfo('charset'); ?>">
+<meta charset="<?php bloginfo( 'charset' ); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#111111">
 <meta name="apple-mobile-web-app-status-bar-style" content="#111111">
@@ -22,15 +22,15 @@
 <body <?php body_class(); ?>>
 
 <?php
-    if(is_active_sidebar('knife-billboard')) :
-        dynamic_sidebar('knife-billboard');
-    endif;
+if ( is_active_sidebar( 'knife-billboard' ) ) :
+    dynamic_sidebar( 'knife-billboard' );
+endif;
 ?>
 
 <header class="header">
     <div class="header__inner">
         <div class="header__logo">
-            <a class="header__logo-link" href="<?php echo esc_url(home_url('/')); ?>" aria-label="<?php esc_attr_e('Главная страница', 'knife-theme')?>">
+            <a class="header__logo-link" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php esc_attr_e( 'Главная страница', 'knife-theme' ); ?>">
                 <svg class="header__logo-image" fill="#000000" x="0" y="0" viewBox="0 0 111 31.8" xml:space="preserve">
                     <g>
                         <path d="M27.4,0.6v30.7h-8V19.1H8v12.2H0V0.6h8v11.4h11.4V0.6H27.4z"/>
@@ -45,43 +45,49 @@
 
         <nav class="header__navbar navbar">
             <?php
-                if(has_nav_menu('main')) :
-                    wp_nav_menu([
-                        'theme_location' => 'main',
-                        'depth' => 1,
-                        'echo' => true,
-                        'items_wrap' => '<ul class="menu">%3$s</ul>',
-                        'container_class' => 'navbar__menu'
-                    ]);
+            if ( has_nav_menu( 'main' ) ) :
+                wp_nav_menu(
+                    array(
+                        'theme_location'  => 'main',
+                        'depth'           => 1,
+                        'echo'            => true,
+                        'items_wrap'      => '<ul class="menu">%3$s</ul>',
+                        'container_class' => 'navbar__menu',
+                    )
+                );
                 endif;
 
-                if(has_nav_menu('pages')) :
-                    wp_nav_menu([
-                        'theme_location' => 'pages',
-                        'depth' => 1,
-                        'echo' => true,
-                        'items_wrap' => '<ul class="menu">%3$s</ul>',
-                        'container_class' => 'navbar__pages'
-                    ]);
+            if ( has_nav_menu( 'pages' ) ) :
+                wp_nav_menu(
+                    array(
+                        'theme_location'  => 'pages',
+                        'depth'           => 1,
+                        'echo'            => true,
+                        'items_wrap'      => '<ul class="menu">%3$s</ul>',
+                        'container_class' => 'navbar__pages',
+                    )
+                );
                 endif;
 
-                if(has_nav_menu('social')) :
-                    wp_nav_menu([
-                        'theme_location' => 'social',
-                        'depth' => 1,
-                        'echo' => true,
-                        'items_wrap' => '<ul class="social">%3$s</ul>',
-                        'container_class' => 'navbar__social'
-                    ]);
+            if ( has_nav_menu( 'social' ) ) :
+                wp_nav_menu(
+                    array(
+                        'theme_location'  => 'social',
+                        'depth'           => 1,
+                        'echo'            => true,
+                        'items_wrap'      => '<ul class="social">%3$s</ul>',
+                        'container_class' => 'navbar__social',
+                    )
+                );
                 endif;
             ?>
         </nav>
 
-        <a href="/search/" class="header__button header__button--search" id="toggle-search" aria-label="<?php esc_attr_e('Страница поиска', 'knife-theme')?>">
+        <a href="/search/" class="header__button header__button--search" id="toggle-search" aria-label="<?php esc_attr_e( 'Страница поиска', 'knife-theme' ); ?>">
             <span class="toggle__icon icon icon--search"></span>
         </a>
 
-        <button class="header__button header__button--menu toggle toggle--menu" id="toggle-menu" aria-label="<?php esc_attr_e('Меню сайта', 'knife-theme')?>">
+        <button class="header__button header__button--menu toggle toggle--menu" id="toggle-menu" aria-label="<?php esc_attr_e( 'Меню сайта', 'knife-theme' ); ?>">
             <span class="toggle__line"></span>
             <span class="toggle__line"></span>
             <span class="toggle__line"></span>

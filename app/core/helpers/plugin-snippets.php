@@ -16,9 +16,12 @@
  * @link https://wordpress.org/plugins/public-post-preview
  * @since 1.13
  */
-add_filter('ppp_nonce_life', function() {
-    return 60 * 60 * 24 * 180; // 180 days
-});
+add_filter(
+    'ppp_nonce_life',
+    function() {
+        return 60 * 60 * 24 * 180; // 180 days
+    }
+);
 
 
 /**
@@ -26,50 +29,58 @@ add_filter('ppp_nonce_life', function() {
  *
  * @since 1.14
  */
-add_filter('social_planner_hide_settings', '__return_true');
+add_filter( 'social_planner_hide_settings', '__return_true' );
 
 
 /**
  * Send Social Planner errors to telegram bot
  */
-add_action('social_planner_task_sent', function($results, $key, $post_id) {
-    $secret = empty(KNIFE_REQUESTS['secret']) ? '' : KNIFE_REQUESTS['secret'];
+add_action(
+    'social_planner_task_sent',
+    function( $results, $key, $post_id ) {
+        $secret = empty( KNIFE_REQUESTS['secret'] ) ? '' : KNIFE_REQUESTS['secret'];
 
-    if(empty($results[$key]['errors'])) {
-        return;
-    }
-
-    $errors = [];
-
-    foreach ($results[$key]['errors'] as $key => $message) {
-        if(class_exists('Social_Planner\Settings')) {
-            $providers = Social_Planner\Settings::get_providers();
-
-            $class = Social_Planner\Core::get_network_class($key);
-            $label = Social_Planner\Core::get_network_label($class);
-
-            if(!empty($providers[$key]['title'])) {
-                $label = $label . '. ' . $providers[$key]['title'];
-            }
+        if ( empty( $results[ $key ]['errors'] ) ) {
+            return;
         }
 
-        $errors[] = "{$label}: {$message}";
-    }
+        $errors = array();
 
-    $timestamp = time();
+        foreach ( $results[ $key ]['errors'] as $key => $message ) {
+            if ( class_exists( 'Social_Planner\Settings' ) ) {
+                $providers = Social_Planner\Settings::get_providers();
 
-    $data = [
-        'nonce' => substr(sha1($secret . $timestamp), -12, 10),
-        'time' => $timestamp,
-        'errors' => json_encode($errors),
-        'link' => get_permalink($post_id)
-    ];
+                $class = Social_Planner\Core::get_network_class( $key );
+                $label = Social_Planner\Core::get_network_label( $class );
 
-    wp_remote_post('https://knife.media/requests/planner', [
-        'body' => http_build_query($data),
-        'blocking' => false,
-    ]);
-}, 10, 3);
+                if ( ! empty( $providers[ $key ]['title'] ) ) {
+                    $label = $label . '. ' . $providers[ $key ]['title'];
+                }
+            }
+
+            $errors[] = "{$label}: {$message}";
+        }
+
+        $timestamp = time();
+
+        $data = array(
+            'nonce'  => substr( sha1( $secret . $timestamp ), -12, 10 ),
+            'time'   => $timestamp,
+            'errors' => wp_json_encode( $errors ),
+            'link'   => get_permalink( $post_id ),
+        );
+
+        wp_remote_post(
+            'https://knife.media/requests/planner',
+            array(
+                'body'     => http_build_query( $data ),
+                'blocking' => false,
+            )
+        );
+    },
+    10,
+    3
+);
 
 
 /**
@@ -77,60 +88,73 @@ add_action('social_planner_task_sent', function($results, $key, $post_id) {
  *
  * @since 1.16
  */
-add_action('social_planner_task_sent', function($results, $key, $post_id) {
-    $secret = empty(KNIFE_REQUESTS['secret']) ? '' : KNIFE_REQUESTS['secret'];
+add_action(
+    'social_planner_task_sent',
+    function( $results, $key, $post_id ) {
+        $secret = empty( KNIFE_REQUESTS['secret'] ) ? '' : KNIFE_REQUESTS['secret'];
 
-    if(!has_tag('russia', $post_id)) {
-        return;
-    }
-
-    $external = [];
-
-    foreach($results[$key]['links'] as $key => $link) {
-        if(in_array($key, ['telegram-main', 'telegram-blunt'], true)) {
-            $external[] = $link;
+        if ( ! has_tag( 'russia', $post_id ) ) {
+            return;
         }
-    }
 
-    if(empty($external)) {
-        return;
-    }
+        $external = array();
 
-    $timestamp = time();
+        foreach ( $results[ $key ]['links'] as $key => $link ) {
+            if ( in_array( $key, array( 'telegram-main', 'telegram-blunt' ), true ) ) {
+                $external[] = $link;
+            }
+        }
 
-    $data = [
-        'nonce' => substr(sha1($secret . $timestamp), -12, 10),
-        'time' => $timestamp,
-        'external' => json_encode($external),
-        'title' => get_the_title($post_id),
-        'link' => get_permalink($post_id)
-    ];
+        if ( empty( $external ) ) {
+            return;
+        }
 
-    wp_remote_post('https://knife.media/requests/russia', [
-        'body' => http_build_query($data),
-        'blocking' => false,
-    ]);
-}, 10, 3);
+        $timestamp = time();
+
+        $data = array(
+            'nonce'    => substr( sha1( $secret . $timestamp ), -12, 10 ),
+            'time'     => $timestamp,
+            'external' => wp_json_encode( $external ),
+            'title'    => get_the_title( $post_id ),
+            'link'     => get_permalink( $post_id ),
+        );
+
+        wp_remote_post(
+            'https://knife.media/requests/russia',
+            array(
+                'body'     => http_build_query( $data ),
+                'blocking' => false,
+            )
+        );
+    },
+    10,
+    3
+);
 
 
 /**
  * Send notification if the post is not planned to Social Planner
  */
-add_action('transition_post_status', function($new_status, $old_status, $post) {
-    if($new_status === $old_status) {
-        return;
-    }
+add_action(
+    'transition_post_status',
+    function( $new_status, $old_status, $post ) {
+        if ( $new_status === $old_status ) {
+            return;
+        }
 
-    if($new_status !== 'publish') {
-        return;
-    }
+        if ( $new_status !== 'publish' ) {
+            return;
+        }
 
-    if(!has_category('news', $post->ID)) {
-        return;
-    }
+        if ( ! has_category( 'news', $post->ID ) ) {
+            return;
+        }
 
-    wp_schedule_single_event(time() + 30, 'knife_schedule_requests_news', [$post->ID]);
-}, 20, 3);
+        wp_schedule_single_event( time() + 30, 'knife_schedule_requests_news', array( $post->ID ) );
+    },
+    20,
+    3
+);
 
 
 /**
@@ -138,15 +162,18 @@ add_action('transition_post_status', function($new_status, $old_status, $post) {
  *
  * @since 1.14
  */
-add_filter('social_planner_post_types', function($post_types) {
-    foreach($post_types as $i => $name) {
-        if('page' === $name) {
-            unset($post_types[$i]);
+add_filter(
+    'social_planner_post_types',
+    function( $post_types ) {
+        foreach ( $post_types as $i => $name ) {
+            if ( $name === 'page' ) {
+                unset( $post_types[ $i ] );
+            }
         }
-    }
 
-    return $post_types;
-});
+        return $post_types;
+    }
+);
 
 
 /**
@@ -154,25 +181,30 @@ add_filter('social_planner_post_types', function($post_types) {
  *
  * @since 1.14
  */
-add_filter('social_planner_prepare_excerpt', function($excerpt, $message) {
-    $post_id = $message['post_id'];
+add_filter(
+    'social_planner_prepare_excerpt',
+    function( $excerpt, $message ) {
+        $post_id = $message['post_id'];
 
-    if(!class_exists('Knife_Promo_Manager')) {
-        return $excerpt;
-    }
-
-    $meta_promo = Knife_Promo_Manager::$meta_promo;
-
-    if(get_post_meta($post_id, $meta_promo, true)) {
-        $hashtag =  __('#партнерскийматериал', 'knife-theme');
-
-        if (!empty($excerpt)) {
-            $excerpt = $excerpt . "\n\n" . $hashtag;
+        if ( ! class_exists( 'Knife_Promo_Manager' ) ) {
+            return $excerpt;
         }
-    }
 
-    return $excerpt;
-}, 10, 2);
+        $meta_promo = Knife_Promo_Manager::$meta_promo;
+
+        if ( get_post_meta( $post_id, $meta_promo, true ) ) {
+            $hashtag = esc_html__( '#партнерскийматериал', 'knife-theme' );
+
+            if ( ! empty( $excerpt ) ) {
+                $excerpt = $excerpt . "\n\n" . $hashtag;
+            }
+        }
+
+        return $excerpt;
+    },
+    10,
+    2
+);
 
 
 /**
@@ -180,32 +212,38 @@ add_filter('social_planner_prepare_excerpt', function($excerpt, $message) {
  *
  * @since 1.15
  */
-add_action('knife_schedule_requests_news', function($post_id) {
-    $secret = empty(KNIFE_REQUESTS['secret']) ? '' : KNIFE_REQUESTS['secret'];
+add_action(
+    'knife_schedule_requests_news',
+    function( $post_id ) {
+        $secret = empty( KNIFE_REQUESTS['secret'] ) ? '' : KNIFE_REQUESTS['secret'];
 
-    if(!class_exists('Social_Planner\Metabox')) {
-        return;
+        if ( ! class_exists( 'Social_Planner\Metabox' ) ) {
+            return;
+        }
+
+        $tasks = Social_Planner\Metabox::get_tasks( $post_id );
+
+        if ( ! empty( $tasks ) ) {
+            return;
+        }
+
+        $timestamp = time();
+
+        $data = array(
+            'nonce' => substr( sha1( $secret . $timestamp ), -12, 10 ),
+            'time'  => $timestamp,
+            'link'  => get_permalink( $post_id ),
+        );
+
+        wp_remote_post(
+            'https://knife.media/requests/news',
+            array(
+                'body'     => http_build_query( $data ),
+                'blocking' => false,
+            )
+        );
     }
-
-    $tasks = Social_Planner\Metabox::get_tasks($post_id);
-
-    if(!empty($tasks)) {
-        return;
-    }
-
-    $timestamp = time();
-
-    $data = [
-        'nonce' => substr(sha1($secret . $timestamp), -12, 10),
-        'time' => $timestamp,
-        'link' => get_permalink($post_id)
-    ];
-
-    wp_remote_post('https://knife.media/requests/news', [
-        'body' => http_build_query($data),
-        'blocking' => false,
-    ]);
-});
+);
 
 
 /**
@@ -213,15 +251,20 @@ add_action('knife_schedule_requests_news', function($post_id) {
  *
  * @since 1.16
  */
-add_filter('social_planner_prepare_message', function($message, $target) {
-    list($network, $name) = explode('-', $target);
+add_filter(
+    'social_planner_prepare_message',
+    function( $message, $target ) {
+        list($network, $name) = explode( '-', $target );
 
-    if ($network === 'telegram') {
-        $message['link'] = 'https://knf.md/tg' . wp_make_link_relative($message['link']);
-    }
+        if ( $network === 'telegram' ) {
+            $message['link'] = 'https://knf.md/tg' . wp_make_link_relative( $message['link'] );
+        }
 
-    return $message;
-}, 10, 2);
+        return $message;
+    },
+    10,
+    2
+);
 
 
 /**
@@ -229,13 +272,18 @@ add_filter('social_planner_prepare_message', function($message, $target) {
  *
  * @since 1.16
  */
-add_filter('social_planner_prepare_message', function($message, $target) {
-    if ($target === 'telegram-main' && !empty($message['excerpt'])) {
-        $message['excerpt'] = $message['excerpt'] . "\n\n" . '🔪 @knifemedia';
-    }
+add_filter(
+    'social_planner_prepare_message',
+    function( $message, $target ) {
+        if ( $target === 'telegram-main' && ! empty( $message['excerpt'] ) ) {
+            $message['excerpt'] = $message['excerpt'] . "\n\n" . '🔪 @knifemedia';
+        }
 
-    return $message;
-}, 10, 2);
+        return $message;
+    },
+    10,
+    2
+);
 
 
 /**
@@ -243,18 +291,23 @@ add_filter('social_planner_prepare_message', function($message, $target) {
  *
  * @since 1.16
  */
-add_filter('social_planner_request_body', function($body, $mesage, $network) {
-    $post_id = $message['post_id'];
+add_filter(
+    'social_planner_request_body',
+    function( $body, $mesage, $network ) {
+        $post_id = $message['post_id'];
 
-    if(!class_exists('Knife_Promo_Manager') || $network !== 'vk') {
+        if ( ! class_exists( 'Knife_Promo_Manager' ) || $network !== 'vk' ) {
+            return $body;
+        }
+
+        $meta_promo = Knife_Promo_Manager::$meta_promo;
+
+        if ( get_post_meta( $post_id, $meta_promo, true ) ) {
+            $body['close_comments'] = 1;
+        }
+
         return $body;
-    }
-
-    $meta_promo = Knife_Promo_Manager::$meta_promo;
-
-    if(get_post_meta($post_id, $meta_promo, true)) {
-        $body['close_comments'] = 1;
-    }
-
-    return $body;
-}, 10, 3);
+    },
+    10,
+    3
+);

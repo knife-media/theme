@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Important functions and definitions
  *
@@ -8,99 +9,105 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.15
+ * @version 1.17
  */
-
 
 /**
  * We have to install this value
  */
-if(!isset($content_width)) {
+if ( ! isset( $content_width ) ) {
     $content_width = 1024;
 }
-
 
 /**
  * Insert required js files
  */
-add_action('wp_enqueue_scripts', function() {
-    $version = wp_get_theme()->get('Version');
+add_action(
+    'wp_enqueue_scripts',
+    function () {
+        $version = wp_get_theme()->get( 'Version' );
 
-    if(defined('WP_DEBUG') && true === WP_DEBUG) {
-        $version = date('U');
+        if ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) {
+            $version = gmdate( 'U' );
+        }
+
+        wp_enqueue_script( 'knife-theme', get_template_directory_uri() . '/assets/scripts.min.js', array(), $version, true );
     }
-
-    wp_enqueue_script('knife-theme', get_template_directory_uri() . '/assets/scripts.min.js', [], $version, true);
-});
-
+);
 
 /**
  * Insert styles
  */
-add_action('wp_print_styles', function() {
-    $version = wp_get_theme()->get('Version');
+add_action(
+    'wp_print_styles',
+    function () {
+        $version = wp_get_theme()->get( 'Version' );
 
-    if(defined('WP_DEBUG') && true === WP_DEBUG) {
-        $version = date('U');
+        if ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) {
+            $version = gmdate( 'U' );
+        }
+
+        wp_enqueue_style( 'knife-theme', get_template_directory_uri() . '/assets/styles.min.css', array(), $version );
     }
-
-    wp_enqueue_style('knife-theme', get_template_directory_uri() . '/assets/styles.min.css', [], $version);
-});
-
+);
 
 /**
  * Rewrite urls after switch theme just in case
  */
-add_action('after_switch_theme', function() {
-     flush_rewrite_rules();
-});
-
+add_action(
+    'after_switch_theme',
+    function () {
+        flush_rewrite_rules();
+    }
+);
 
 /**
  * Add required theme support tags
  */
-add_action('after_setup_theme', function() {
-    // Let wordpress generate page title
-    add_theme_support('title-tag');
+add_action(
+    'after_setup_theme',
+    function () {
+        // Let WordPress generate page title
+        add_theme_support( 'title-tag' );
 
-    // Add links to feeds in header
-    add_theme_support('automatic-feed-links');
+        // Add links to feeds in header
+        add_theme_support( 'automatic-feed-links' );
 
-    // Let wordpress manage cutsom background
-    add_theme_support('custom-background', ['wp-head-callback' => '__return_false']);
-});
-
+        // Let WordPress manage cutsom background
+        add_theme_support( 'custom-background', array( 'wp-head-callback' => '__return_false' ) );
+    }
+);
 
 /**
  * Add editor custom styles
  */
-add_action('admin_enqueue_scripts', function() {
-    $version = wp_get_theme()->get('Version');
+add_action(
+    'admin_enqueue_scripts',
+    function () {
+        $version = wp_get_theme()->get( 'Version' );
 
-    // Insert custom editor styles
-    add_editor_style('core/include/styles/editor-styles.css', [], $version);
-});
-
+        // Insert custom editor styles
+        add_editor_style( 'core/include/styles/editor-styles.css', array(), $version );
+    }
+);
 
 /**
  * Disable Aggressive Updates
  *
  * @link https://wp-kama.ru/id_8514/uskoryaem-adminku-wordpress-otklyuchaem-proverki-obnovlenij.html
  */
-if(is_admin()) {
-    remove_action('admin_init', '_maybe_update_core');
-    remove_action('admin_init', '_maybe_update_plugins');
-    remove_action('admin_init', '_maybe_update_themes');
+if ( is_admin() ) {
+    remove_action( 'admin_init', '_maybe_update_core' );
+    remove_action( 'admin_init', '_maybe_update_plugins' );
+    remove_action( 'admin_init', '_maybe_update_themes' );
 
-    remove_action('load-plugins.php', 'wp_update_plugins');
-    remove_action('load-themes.php', 'wp_update_themes');
+    remove_action( 'load-plugins.php', 'wp_update_plugins' );
+    remove_action( 'load-themes.php', 'wp_update_themes' );
 
-    if (!empty($_SERVER['HTTP_USER_AGENT'])) {
-        add_filter('pre_site_transient_browser_' . md5($_SERVER['HTTP_USER_AGENT']), '__return_empty_array');
+    if ( ! empty( $_SERVER['HTTP_USER_AGENT'] ) ) {
+        add_filter( 'pre_site_transient_browser_' . md5( $_SERVER['HTTP_USER_AGENT'] ), '__return_empty_array' ); // phpcs:ignore
     }
 }
-
-
 
 // Theme filters
 require get_template_directory() . '/core/modules/theme-filters.php';
@@ -165,7 +172,7 @@ require get_template_directory() . '/core/modules/promo-manager.php';
 // Required admin-side image filters
 require get_template_directory() . '/core/modules/image-filters.php';
 
-// Customize default wordpress embed code
+// Customize default WordPress embed code
 require get_template_directory() . '/core/modules/embed-filters.php';
 
 // Poster templates options
@@ -222,7 +229,6 @@ require get_template_directory() . '/core/modules/analytics-manager.php';
 // Send typo errors to telegram private channel
 require get_template_directory() . '/core/modules/mistype-reporter.php';
 
-
 // Custom template tags for this theme.
 require get_template_directory() . '/core/helpers/template-tags.php';
 
@@ -231,4 +237,3 @@ require get_template_directory() . '/core/helpers/plugin-snippets.php';
 
 // Custom template filters for promo projects
 require get_template_directory() . '/core/helpers/promo-filters.php';
-

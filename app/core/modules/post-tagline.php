@@ -6,14 +6,12 @@
  *
  * @package knife-theme
  * @since 1.2
- * @version 1.16
+ * @version 1.17
  */
 
-
-if (!defined('WPINC')) {
+if ( ! defined( 'WPINC' ) ) {
     die;
 }
-
 
 class Knife_Post_Tagline {
     /**
@@ -24,15 +22,13 @@ class Knife_Post_Tagline {
      */
     public static $meta_tagline = '_knife-tagline';
 
-
     /**
      * Default post type tagline availible
      *
      * @access  public
      * @var     array
      */
-    public static $post_type = ['post', 'club', 'quiz'];
-
+    public static $post_type = array( 'post', 'club', 'quiz' );
 
     /**
      * Use this method instead of constructor to avoid multiple hook setting
@@ -41,94 +37,90 @@ class Knife_Post_Tagline {
      */
     public static function load_module() {
         // Include scripts admin page only
-        add_action('admin_enqueue_scripts', [__CLASS__, 'add_assets']);
+        add_action( 'admin_enqueue_scripts', array( __CLASS__, 'add_assets' ) );
 
         // Save tagline meta
-        add_action('save_post', [__CLASS__, 'save_meta']);
+        add_action( 'save_post', array( __CLASS__, 'save_meta' ) );
 
         // Tagline post meta
-        add_action('edit_form_after_title', [__CLASS__, 'print_input']);
+        add_action( 'edit_form_after_title', array( __CLASS__, 'print_input' ) );
 
         // Update title with tagline
-        add_filter('the_title', [__CLASS__, 'post_tagline'], 10, 2);
-        add_filter('document_title_parts', [__CLASS__, 'site_tagline']);
+        add_filter( 'the_title', array( __CLASS__, 'post_tagline' ), 10, 2 );
+        add_filter( 'document_title_parts', array( __CLASS__, 'site_tagline' ) );
     }
-
 
     /**
      * Enqueue assets to admin post screen only
      */
-    public static function add_assets($hook) {
+    public static function add_assets( $hook ) {
         global $post;
 
-        if(!in_array($hook, ['post.php', 'post-new.php'])) {
+        if ( ! in_array( $hook, array( 'post.php', 'post-new.php' ), true ) ) {
             return;
         }
 
-        if(!in_array(get_post_type($post->ID), self::$post_type)) {
+        if ( ! in_array( get_post_type( $post->ID ), self::$post_type, true ) ) {
             return;
         }
 
-        $version = wp_get_theme()->get('Version');
+        $version = wp_get_theme()->get( 'Version' );
         $include = get_template_directory_uri() . '/core/include';
 
         // insert admin styles
-        wp_enqueue_style('knife-tagline-input', $include . '/styles/tagline-input.css', [], $version);
+        wp_enqueue_style( 'knife-tagline-input', $include . '/styles/tagline-input.css', array(), $version );
     }
-
 
     /**
      * Shows tagline input right after post title form on admin page
      */
-    public static function print_input($post) {
-        if(!in_array(get_post_type($post->ID), self::$post_type)) {
+    public static function print_input( $post ) {
+        if ( ! in_array( get_post_type( $post->ID ), self::$post_type, true ) ) {
             return;
         }
 
-        $tagline = get_post_meta($post->ID, self::$meta_tagline, true);
-        $tagline = sanitize_text_field($tagline);
+        $tagline = get_post_meta( $post->ID, self::$meta_tagline, true );
+        $tagline = sanitize_text_field( $tagline );
 
         printf(
             '<input id="knife-tagline-input" type="text" class="large-text" value="%1$s" name="%2$s" placeholder="%3$s">',
-            esc_attr($tagline),
-            esc_attr(self::$meta_tagline),
-            __('Подзаголовок', 'knife-theme')
+            esc_attr( $tagline ),
+            esc_attr( self::$meta_tagline ),
+            esc_html__( 'Подзаголовок', 'knife-theme' )
         );
     }
-
 
     /**
      * Filter the post title on the Posts screen, and on the front-end
      */
-    public static function post_tagline($title, $post_id, $raw = true) {
-        $tagline = get_post_meta($post_id, self::$meta_tagline, true);
+    public static function post_tagline( $title, $post_id, $raw = true ) {
+        $tagline = get_post_meta( $post_id, self::$meta_tagline, true );
 
-        if(empty($tagline)) {
+        if ( empty( $tagline ) ) {
             return $title;
         }
 
-        if(is_admin() && $raw) {
+        if ( is_admin() && $raw ) {
             return "{$title} {$tagline}";
         }
 
         return "{$title} <em>{$tagline}</em>";
     }
 
-
     /**
      * Filter the document title in the head.
      */
-    public static function site_tagline($title) {
+    public static function site_tagline( $title ) {
         global $post;
 
-        if(!is_singular() || !isset($post->ID)) {
+        if ( ! is_singular() || ! isset( $post->ID ) ) {
             return $title;
         }
 
-        $tagline = get_post_meta($post->ID, self::$meta_tagline, true);
-        $tagline = sanitize_text_field($tagline);
+        $tagline = get_post_meta( $post->ID, self::$meta_tagline, true );
+        $tagline = sanitize_text_field( $tagline );
 
-        if(empty($tagline)) {
+        if ( empty( $tagline ) ) {
             return $title;
         }
 
@@ -137,36 +129,39 @@ class Knife_Post_Tagline {
         return $title;
     }
 
-
     /**
      * Save post options
      */
-    public static function save_meta($post_id) {
-        if(isset($_POST['_inline_edit']) && wp_verify_nonce($_POST['_inline_edit'], 'inlineeditnonce')) {
+    public static function save_meta( $post_id ) {
+        if ( isset( $_POST['_inline_edit'] ) ) {
+            $verify = wp_verify_nonce( sanitize_key( $_POST['_inline_edit'] ), 'inlineeditnonce' );
+
+            if ( $verify ) {
+                return;
+            }
+        }
+
+        if ( ! in_array( get_post_type( $post_id ), self::$post_type, true ) ) {
             return;
         }
 
-        if(!in_array(get_post_type($post_id), self::$post_type)) {
+        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
             return;
         }
 
-        if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
-            return;
-        }
-
-        if(!current_user_can('edit_post', $post_id)) {
+        if ( ! current_user_can( 'edit_post', $post_id ) ) {
             return;
         }
 
         // Delete empty tagline meta
-        if(empty($_REQUEST[self::$meta_tagline])) {
-            return delete_post_meta($post_id, self::$meta_tagline);
+        if ( empty( $_REQUEST[ self::$meta_tagline ] ) ) {
+            return delete_post_meta( $post_id, self::$meta_tagline );
         }
 
-        $tagline = sanitize_text_field($_REQUEST[self::$meta_tagline]);
+        $tagline = sanitize_text_field( wp_unslash( $_REQUEST[ self::$meta_tagline ] ) );
 
         // Update tagline meta
-        update_post_meta($post_id, self::$meta_tagline, trim($tagline));
+        update_post_meta( $post_id, self::$meta_tagline, trim( $tagline ) );
     }
 }
 

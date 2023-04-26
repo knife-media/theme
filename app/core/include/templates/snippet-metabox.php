@@ -1,36 +1,34 @@
 <div id="knife-snippet-box" class="hide-if-no-js">
     <?php
-        $post_id = get_the_ID();
+    // Get post snippet image meta
+    $snippet = get_post_meta( get_the_ID(), self::$meta_image, true );
 
-        // Get post snippet image meta
-        $snippet = get_post_meta($post_id, self::$meta_image, true);
+    // Get snippet options
+    $options = (array) get_post_meta( get_the_ID(), self::$meta_options, true );
 
-        // Get snippet options
-        $options = (array) get_post_meta($post_id, self::$meta_options, true);
-
-        if(empty($options['text'])) {
-            $options['text'] = get_the_title();
-        }
+    if ( empty( $options['text'] ) ) {
+        $options['text'] = get_the_title();
+    }
     ?>
 
     <div class="snippet">
         <figure class="snippet__poster">
             <?php
-                if($snippet) {
-                    printf('<img src="%s" alt="">', esc_url($snippet));
-                }
+            if ( $snippet ) {
+                printf( '<img src="%s" alt="">', esc_url( $snippet ) );
+            }
 
-                printf(
-                    '<input class="snippet__poster-image" type="hidden" name="%s" value="%s">',
-                    esc_attr(self::$meta_image),
-                    sanitize_text_field($snippet)
-                );
+            printf(
+                '<input class="snippet__poster-image" type="hidden" name="%s" value="%s">',
+                esc_attr( self::$meta_image ),
+                esc_attr( $snippet )
+            );
 
-                printf(
-                    '<input class="snippet__poster-attachment" type="hidden" name="%s[attachment]" value="%s">',
-                    esc_attr(self::$meta_options),
-                    absint($options['attachment'] ?? 0)
-                );
+            printf(
+                '<input class="snippet__poster-attachment" type="hidden" name="%s[attachment]" value="%s">',
+                esc_attr( self::$meta_options ),
+                absint( $options['attachment'] ?? 0 )
+            );
             ?>
 
             <figcaption class="snippet__poster-caption">+</figcaption>
@@ -39,28 +37,28 @@
 
         <div class="snippet__title">
             <?php
-                printf(
-                    '<textarea class="snippet__title-textarea" name="%s[text]" placeholder="%s">%s</textarea>',
-                    esc_attr(self::$meta_options),
-                    __('Текст на обложке', 'knife-theme'),
-                    sanitize_textarea_field($options['text'])
-                )
+            printf(
+                '<textarea class="snippet__title-textarea" name="%s[text]" placeholder="%s">%s</textarea>',
+                esc_attr( self::$meta_options ),
+                esc_attr__( 'Текст на обложке', 'knife-theme' ),
+                esc_html( $options['text'] )
+            )
             ?>
         </div>
 
         <div class="snippet__footer">
             <?php
-                if(class_exists('Knife_Poster_Templates')) {
-                    printf(
-                        '<button class="snippet__footer-generate button" type="button">%s</button>',
-                        __('Сгенерировать', 'knife-theme')
-                    );
-                }
-
+            if ( class_exists( 'Knife_Poster_Templates' ) ) {
                 printf(
-                    '<button class="snippet__footer-delete button" type="button">%s</button>',
-                    __('Удалить', 'knife-theme')
+                    '<button class="snippet__footer-generate button" type="button">%s</button>',
+                    esc_html__( 'Сгенерировать', 'knife-theme' )
                 );
+            }
+
+            printf(
+                '<button class="snippet__footer-delete button" type="button">%s</button>',
+                esc_html__( 'Удалить', 'knife-theme' )
+            );
             ?>
 
             <span class="snippet__footer-spinner spinner"></span>
@@ -71,5 +69,5 @@
 </div>
 
 <div class="hide-if-js">
-    <p><?php _e('Эта функция требует JavaScript', 'knife-theme'); ?></p>
+    <p><?php esc_html_e( 'Эта функция требует JavaScript', 'knife-theme' ); ?></p>
 </div>

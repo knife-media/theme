@@ -4,19 +4,20 @@
  *
  * @package knife-theme
  * @since 1.7
- * @version 1.10
+ * @version 1.17
  */
 
 get_header(); ?>
 
 <section class="content">
     <?php
-        while(have_posts()) : the_post();
+    while ( have_posts() ) :
+        the_post();
 
-            get_template_part('partials/content', 'quiz');
-
-        endwhile;
+        get_template_part( 'partials/content', 'quiz' );
+    endwhile;
     ?>
 </section>
 
-<?php get_footer();
+<?php
+get_footer();

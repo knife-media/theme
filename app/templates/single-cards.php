@@ -7,25 +7,26 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.12
+ * @version 1.17
  */
 
 get_header(); ?>
 
 <?php
-    if(is_active_sidebar('knife-feature')) :
-        dynamic_sidebar('knife-feature');
-    endif;
+if ( is_active_sidebar( 'knife-feature' ) ) :
+    dynamic_sidebar( 'knife-feature' );
+endif;
 ?>
 
 <section class="content">
     <?php
-        while(have_posts()) : the_post();
+    while ( have_posts() ) :
+        the_post();
 
-            get_template_part('partials/content', 'cards');
-
-        endwhile;
+        get_template_part( 'partials/content', 'cards' );
+    endwhile;
     ?>
 </section>
 
-<?php get_footer();
+<?php
+get_footer();

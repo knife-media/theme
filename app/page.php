@@ -4,19 +4,21 @@
  *
  * @package knife-theme
  * @since 1.1
- * @version 1.10
+ * @version 1.17
  */
 
 get_header(); ?>
 
 <div class="content">
     <?php
-        while(have_posts()) : the_post();
+    while ( have_posts() ) :
+        the_post();
 
-            get_template_part('partials/content', 'page');
+        get_template_part( 'partials/content', 'page' );
 
-        endwhile;
+    endwhile;
     ?>
 </div>
 
-<?php get_footer();
+<?php
+get_footer();
