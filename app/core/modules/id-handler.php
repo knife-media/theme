@@ -384,9 +384,18 @@ class Knife_ID_Handler {
 
             'notifications' => array(
                 'common' => array(
-                    esc_html__( 'К записи %1$s добавлен <strong>%3$d новый ответ</strong> на %2$s.', 'knife-theme' ),
-                    esc_html__( 'К записи %1$s добавлено <strong>%3$d новых ответа</strong> на %2$s.', 'knife-theme' ),
-                    esc_html__( 'К записи %1$s добавлено <strong>%3$d новых ответов</strong> на %2$s.', 'knife-theme' ),
+                    wp_kses(
+                        __( 'К записи %1$s добавлен <strong>%3$d новый ответ</strong> на %2$s.', 'knife-theme' ),
+                        array( 'strong' => array() )
+                    ),
+                    wp_kses(
+                        __( 'К записи %1$s добавлено <strong>%3$d новых ответа</strong> на %2$s.', 'knife-theme' ),
+                        array( 'strong' => array() )
+                    ),
+                    wp_kses(
+                        __( 'К записи %1$s добавлено <strong>%3$d новых ответов</strong> на %2$s.', 'knife-theme' ),
+                        array( 'strong' => array() )
+                    ),
                 ),
                 'plural' => esc_html__( 'ваши комментарии', 'knife-theme' ),
                 'single' => esc_html__( 'ваш комментарий', 'knife-theme' ),

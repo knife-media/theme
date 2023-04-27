@@ -74,7 +74,7 @@ gulp.task('fonts', (done) => {
 });
 
 // Set service-worker
-gulp.task('workbox', (done) => {
+gulp.task('worker', (done) => {
   const theme = '/wp-content/themes/knife/assets/';
 
   workboxBuild.generateSW({
@@ -100,15 +100,6 @@ gulp.task('workbox', (done) => {
   done();
 });
 
-// Rebuild workbox
-gulp.task('worker', (done) => {
-  setTimeout(() => {
-    gulp.series('workbox');
-  }, 1000);
-
-  done();
-});
-
 // Watch theme assets
 gulp.task('watch', () => {
   gulp.watch('src/styles/**/*', gulp.series('styles'));
@@ -116,14 +107,14 @@ gulp.task('watch', () => {
 });
 
 // Build task
-gulp.task('build', gulp.series(
+// Don't forget to execute gulp worker after building
+gulp.task('build', gulp.parallel(
   'styles',
   'scripts',
   'images',
   'fonts',
   'video',
-  'vendor',
-  'worker'
+  'vendor'
 ));
 
 // Set default task
