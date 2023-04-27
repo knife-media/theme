@@ -25,7 +25,7 @@ gulp.task('styles', (done) => {
     .pipe(gulp.dest('app/assets/'))
 
   done();
-})
+});
 
 // Process theme scripts
 gulp.task('scripts', (done) => {
@@ -39,7 +39,7 @@ gulp.task('scripts', (done) => {
     .pipe(gulp.dest('app/assets/'))
 
   done();
-})
+});
 
 // Add vendor files
 gulp.task('vendor', (done) => {
@@ -47,7 +47,7 @@ gulp.task('vendor', (done) => {
     .pipe(gulp.dest('app/assets/vendor/'));
 
   done();
-})
+});
 
 // Move images
 gulp.task('images', (done) => {
@@ -55,7 +55,7 @@ gulp.task('images', (done) => {
     .pipe(gulp.dest('app/assets/images/'));
 
   done();
-})
+});
 
 // Move video
 gulp.task('video', (done) => {
@@ -63,7 +63,7 @@ gulp.task('video', (done) => {
     .pipe(gulp.dest('app/assets/video/'));
 
   done();
-})
+});
 
 // Move fonts
 gulp.task('fonts', (done) => {
@@ -71,7 +71,7 @@ gulp.task('fonts', (done) => {
     .pipe(gulp.dest('app/assets/fonts/'));
 
   done();
-})
+});
 
 // Set service-worker
 gulp.task('workbox', (done) => {
@@ -98,15 +98,24 @@ gulp.task('workbox', (done) => {
   });
 
   done();
-})
+});
+
+// Rebuild workbox
+gulp.task('worker', (done) => {
+  setTimeout(() => {
+    gulp.series('workbox');
+  }, 1000);
+
+  done();
+});
 
 // Watch theme assets
 gulp.task('watch', () => {
   gulp.watch('src/styles/**/*', gulp.series('styles'));
   gulp.watch('src/scripts/**/*', gulp.series('scripts'));
-})
+});
 
-// Sed build task
+// Build task
 gulp.task('build', gulp.series(
   'styles',
   'scripts',
@@ -114,7 +123,7 @@ gulp.task('build', gulp.series(
   'fonts',
   'video',
   'vendor',
-  'workbox'
+  'worker'
 ));
 
 // Set default task

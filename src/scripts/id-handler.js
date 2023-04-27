@@ -253,7 +253,7 @@
    * @since 1.16
    */
   const drawReport = (notifications, field) => {
-    let label = declineTitle(field.comments, getOption('notifications.common'));
+    let label = declineTitle(field.comments, getOption('notifications.common'), '%3$d');
 
     // State is a single or plural form of parent comments amount
     let state = getOption('notifications.single');
