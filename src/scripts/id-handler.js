@@ -101,6 +101,17 @@
 
 
   /**
+   * Decode HTML entities
+   */
+  const decodeHTMLEntities = (text) => {
+    const block = document.createElement('textarea');
+    block.innerHTML = text;
+
+    return block.value;
+  }
+
+
+  /**
    * Scroll to element
    */
   const scrollToElement = (top) => {
@@ -263,7 +274,7 @@
     }
 
     const link = buildElement('em', {
-      'text': field.title,
+      'text': decodeHTMLEntities(field.title),
     });
 
     label = label.replace('%1$s', link.outerHTML);
