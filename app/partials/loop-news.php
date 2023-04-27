@@ -14,7 +14,12 @@
         printf(
             '<a class="widget-news__content-link" href="%1$s">%2$s</a>',
             esc_url( get_permalink() ),
-            esc_html( get_the_title() )
+            wp_kses(
+                get_the_title(),
+                array(
+                    'em' => array(),
+                )
+            )
         );
 
         the_info(

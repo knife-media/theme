@@ -17,7 +17,7 @@
             <?php
             printf(
                 '<a class="widget-blunt__link" href="%1$s">%2$s</a>',
-                esc_html( get_permalink() ),
+                esc_url( get_permalink() ),
                 wp_kses(
                     get_the_title(),
                     array(
