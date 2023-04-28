@@ -10,11 +10,18 @@
 @import "setup/reset";
 @import "setup/animate";
 
+html {
+  background-color: $color-black;
+
+  @media screen and (max-width: 479px) {
+    background-color: $color-white;
+  }
+}
+
 body {
   display: block;
 
   color: $color-white;
-  background-color: $color-black;
   line-height: 1.4;
   font-weight: normal;
   font-family: $font-regular;
