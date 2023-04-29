@@ -23,17 +23,18 @@
   /**
    * Send ajax request
    */
-  function sendRequest(selection, comment) {
+  function sendRequest(selection, comment, context) {
     let data = {
       'nonce': getOption('nonce'),
       'time': getOption('time'),
       'comment': comment,
+      'context': context,
       'marked': selection,
       'location': document.location.href
     };
 
     // Send request
-    var request = new XMLHttpRequest();
+    const request = new XMLHttpRequest();
     request.open('POST', getOption('ajaxurl') + '/mistype');
     request.setRequestHeader('Content-Type', 'application/json');
     request.send(JSON.stringify(data));
@@ -43,8 +44,8 @@
   /**
    * Show reporter popup
    */
-  function showPopup(selection) {
-    var mistype = document.querySelector('.mistype');
+  function showPopup(selection, context) {
+    let mistype = document.querySelector('.mistype');
 
     if (mistype !== null) {
       mistype.parentNode.removeChild(mistype);
@@ -55,31 +56,31 @@
     document.body.appendChild(mistype);
 
     // Create popup modal
-    var popup = document.createElement('div');
+    const popup = document.createElement('div');
     popup.classList.add('mistype__popup');
     mistype.appendChild(popup);
 
     // Add popup title
-    var heading = document.createElement('h3');
+    const heading = document.createElement('h3');
     heading.classList.add('mistype__popup-heading');
     heading.textContent = getOption('heading');
     popup.appendChild(heading);
 
     // Add selection
-    var marked = document.createElement('p');
+    const marked = document.createElement('p');
     marked.classList.add('mistype__popup-marked');
     marked.textContent = selection;
     popup.appendChild(marked);
 
     // Add textarea for comment
-    var comment = document.createElement('textarea');
+    const comment = document.createElement('textarea');
     comment.classList.add('mistype__popup-comment');
     comment.setAttribute('placeholder', getOption('textarea'));
     comment.setAttribute('maxlength', 300);
     popup.appendChild(comment);
 
     // Add send button
-    var submit = document.createElement('button');
+    const submit = document.createElement('button');
     submit.classList.add('mistype__popup-submit', 'button');
     submit.textContent = getOption('button', 'Send');
     popup.appendChild(submit);
@@ -88,14 +89,14 @@
       e.preventDefault();
 
       // Send AJAX request
-      sendRequest(selection, comment.value);
+      sendRequest(selection, comment.value, context);
 
       // Remove mistype popup
       mistype.parentNode.removeChild(mistype);
     });
 
     // Add close button
-    var close = document.createElement('button');
+    const close = document.createElement('button');
     close.classList.add('mistype__popup-close');
 
     close.addEventListener('click', () => {
@@ -121,13 +122,43 @@
    * Event listener on keydown
    */
   document.addEventListener('keydown', function (e) {
-    if (e.ctrlKey && e.keyCode == 13) {
-      var selection = window.getSelection().toString();
+    if (!(e.key === 'Enter' && e.ctrlKey)) {
+      return;
+    }
 
-      // If selection not empty
-      if (selection.length > 0) {
-        showPopup(selection.substring(0, 300));
+    const selection = window.getSelection().toString();
+
+    // Get only start container
+    let container = window.getSelection().getRangeAt(0).startContainer;
+
+    if (container.nodeType !== Node.ELEMENT_NODE) {
+      container = container.parentElement;
+    }
+
+    const blocks = ['.entry-content > *', '.entry-header__title', '.entry-header__lead'];
+
+    for (const block of blocks) {
+      let ancestor = container;
+
+      while (ancestor.parentElement) {
+        ancestor = ancestor.parentElement;
+
+        if (ancestor.matches(block)) {
+          container = ancestor;
+          break;
+        }
       }
+    }
+
+    let context = container.textContent;
+
+    if (context.length > 500) {
+      context = context.substring(0, 500) + '…';
+    }
+
+    // If selection not empty
+    if (selection.length > 0) {
+      showPopup(selection.substring(0, 300), context);
     }
   });
 })();
