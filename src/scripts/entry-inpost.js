@@ -2,7 +2,7 @@
  * Smart display entry inpost widgets
  *
  * @since 1.9
- * @version 1.16
+ * @version 1.17
  */
 
 (function () {
@@ -32,7 +32,7 @@
   let content = blocks[0];
 
   if (blocks.length > 1) {
-    content = blocks[Math.floor(blocks.length / 2) + 1];
+    content = blocks[Math.floor(blocks.length / 2)];
   }
 
   /**
