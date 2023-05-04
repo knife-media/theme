@@ -247,9 +247,14 @@
     for (var i = 0; i < answers.length; i++) {
       var attachment = document.createElement('figure');
 
-      if (typeof answers[i].attachment !== 'undefined') {
+      if (typeof answers[i].attachment !== 'undefined' && answers[i].attachment[0]) {
         var image = document.createElement('img');
-        image.setAttribute('src', answers[i].attachment);
+        image.setAttribute('src', answers[i].attachment[0]);
+
+        if (answers[i].attachment.length > 2) {
+          image.setAttribute('width', answers[i].attachment[1]);
+          image.setAttribute('height', answers[i].attachment[2]);
+        }
 
         attachment.appendChild(image);
         attachment.classList.add('entry-quiz__vote-attachment');

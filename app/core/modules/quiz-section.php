@@ -750,13 +750,13 @@ class Knife_Quiz_Section {
                 return false;
             }
 
-            $attachment = wp_get_attachment_image_url( $fields['attachment'], 'inner' );
+            $attachment = wp_get_attachment_image_src( $fields['attachment'], 'inner' );
 
             if ( $attachment === false ) {
                 return false;
             }
 
-            $answer['attachment'] = esc_url( $attachment );
+            $answer['attachment'] = $attachment;
         }
 
         // Set message if required
