@@ -82,6 +82,8 @@ class Knife_Content_Filters {
             'wp_print_styles',
             function() {
                 wp_dequeue_style( 'wp-block-library' );
+                wp_dequeue_style( 'global-styles' );
+                wp_dequeue_style( 'wp-block-library-theme' );
             },
             11
         );
