@@ -683,6 +683,8 @@ class Knife_Site_Meta {
             if ( get_query_var( 'paged' ) ) {
                 $description = $description . sprintf( __( ' — Cтраница %d', 'knife-theme' ), get_query_var( 'paged' ) );
             }
+
+            return $description;
         }
 
         $description = esc_html__( 'Интеллектуальный журнал о культуре и обществе.', 'knife-theme' );
