@@ -2,7 +2,7 @@
  * Quiz post type front-end handler
  *
  * @since 1.7
- * @version 1.16
+ * @version 1.17
  */
 
 (function () {
@@ -427,6 +427,8 @@
   button.addEventListener('click', function () {
     var total = knife_quiz_items.length;
 
+    quiz.classList.remove('entry-quiz--visible');
+
     // If we still can show items, show one
     if (total > 0 && progress < total) {
       var item = knife_quiz_items[progress];
@@ -440,6 +442,10 @@
           button.textContent = knife_quiz_options.button_next;
         }
       }
+
+      setTimeout(() => {
+        quiz.classList.add('entry-quiz--visible');
+      }, 100);
 
       if (progress === total && knife_quiz_options.hasOwnProperty('button_last')) {
         button.textContent = knife_quiz_options.button_last;
@@ -496,6 +502,10 @@
         }
 
         quiz.classList.add('entry-quiz--results');
+
+        setTimeout(() => {
+          quiz.classList.add('entry-quiz--visible');
+        }, 100);
 
         return showResult(random);
       }

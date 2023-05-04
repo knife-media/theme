@@ -474,8 +474,11 @@
     }
   }
 
-
   &.entry-quiz--item {
+    & > * {
+      opacity: 0;
+    }
+
     .entry-quiz__vote {
       display: flex;
     }
@@ -511,6 +514,10 @@
   }
 
   &.entry-quiz--results {
+    & > * {
+      opacity: 0;
+    }
+
     .entry-quiz__share {
       display: flex;
       justify-content: space-between;
@@ -545,6 +552,10 @@
     .entry-quiz__info {
       display: none;
     }
+  }
+
+  &.entry-quiz--visible > * {
+    animation: fade-in 1s forwards;
   }
 
   @media screen and (max-width: 767px) {

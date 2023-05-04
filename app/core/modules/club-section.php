@@ -65,7 +65,7 @@ class Knife_Club_Section {
                     'menu_name'     => esc_html__( 'Клуб', 'knife-theme' ),
                 ),
                 'label'               => esc_html__( 'Клуб', 'knife-theme' ),
-                'description'         => esc_html__( 'Клуб — это сообщество друзей «Ножа», <br>которым есть что сказать.', 'knife-theme' ),
+                'description'         => __( 'Клуб — это сообщество друзей «Ножа», <br>которым есть что сказать.', 'knife-theme' ),
                 'supports'            => array( 'title', 'thumbnail', 'revisions', 'editor', 'excerpt', 'author', 'comments' ),
                 'hierarchical'        => false,
                 'public'              => true,

@@ -669,17 +669,19 @@ class Knife_Site_Meta {
             $object_type = get_queried_object();
 
             if ( ! empty( $object_type->description ) ) {
-                return wp_strip_all_tags( $object_type->description );
+                return wp_strip_all_tags( $object_type->description, true );
             }
 
             if ( ! empty( $object_type->name ) ) {
-                $description = esc_html__( 'Архив журнала Нож по теме ', 'knife-theme' ) . wp_strip_all_tags( $object_type->name );
+                $description = sprintf( __( 'Архив по теме &laquo;%s&raquo;', 'knife-theme' ), wp_strip_all_tags( $object_type->name ) );
+            }
 
-                if ( get_query_var( 'paged' ) ) {
-                    $description = $description . sprintf( __( ' — Cтраница %d', 'knife-theme' ), get_query_var( 'paged' ) );
-                }
+            if ( ! empty( $object_type->label ) ) {
+                $description = sprintf( __( 'Архив по теме &laquo;%s&raquo;', 'knife-theme' ), wp_strip_all_tags( $object_type->label ) );
+            }
 
-                return $description;
+            if ( get_query_var( 'paged' ) ) {
+                $description = $description . sprintf( __( ' — Cтраница %d', 'knife-theme' ), get_query_var( 'paged' ) );
             }
         }
 
