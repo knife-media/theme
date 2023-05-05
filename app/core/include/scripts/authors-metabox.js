@@ -16,7 +16,7 @@ jQuery(document).ready(function ($) {
   /**
    * Skip if no post meta
    */
-  if (typeof knife_authors_metabox.post_meta === 'undefined') {
+  if (typeof knife_authors_metabox.meta === 'undefined') {
     return false;
   }
 
@@ -84,7 +84,7 @@ jQuery(document).ready(function ($) {
       find.closest('.authors-item').remove();
     }
 
-    var meta = knife_authors_metabox.post_meta + '[]';
+    var meta = knife_authors_metabox.meta + '[]';
 
     // Create item element
     var item = $('<p/>', {

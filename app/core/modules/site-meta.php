@@ -122,10 +122,10 @@ class Knife_Site_Meta {
         $schema['headline'] = wp_strip_all_tags( get_the_title( $post_id ) );
 
         // Add authors
-        if ( property_exists( 'Knife_Authors_Manager', 'meta_authors' ) ) {
-            $authors = get_post_meta( $post_id, Knife_Authors_Manager::$meta_authors );
+        if ( method_exists( 'Knife_Authors_Manager', 'get_post_authors' ) ) {
+            $authors = (array) Knife_Authors_Manager::get_post_authors( $post_id );
 
-            if ( $authors ) {
+            if ( ! empty( $authors ) ) {
                 $users = get_users(
                     array(
                         'include' => $authors,
@@ -505,8 +505,10 @@ class Knife_Site_Meta {
      * @since 1.11
      */
     private static function get_singular_parameters( $meta ) {
+        $post_id = get_queried_object_id();
+
         // Append post id
-        $meta['postid'] = get_queried_object_id();
+        $meta['postid'] = $post_id;
 
         // Append template
         $meta['template'] = get_post_type();
@@ -528,10 +530,10 @@ class Knife_Site_Meta {
             $meta['promo'] = (int) $promo;
         }
 
-        if ( property_exists( 'Knife_Authors_Manager', 'meta_authors' ) ) {
-            $authors = get_post_meta( $meta['postid'], Knife_Authors_Manager::$meta_authors );
+        if ( method_exists( 'Knife_Authors_Manager', 'get_post_authors' ) ) {
+            $authors = (array) Knife_Authors_Manager::get_post_authors( $post_id );
 
-            if ( $authors ) {
+            if ( ! empty( $authors ) ) {
                 $users = get_users(
                     array(
                         'include' => $authors,
@@ -657,6 +659,8 @@ class Knife_Site_Meta {
      * Get description
      */
     private static function get_description() {
+        $description = esc_html__( 'Интеллектуальный журнал о культуре и обществе.', 'knife-theme' );
+
         if ( is_singular() && ! is_front_page() ) {
             $object_id = get_queried_object_id();
 
@@ -683,11 +687,7 @@ class Knife_Site_Meta {
             if ( get_query_var( 'paged' ) ) {
                 $description = $description . sprintf( __( ' — Cтраница %d', 'knife-theme' ), get_query_var( 'paged' ) );
             }
-
-            return $description;
         }
-
-        $description = esc_html__( 'Интеллектуальный журнал о культуре и обществе.', 'knife-theme' );
 
         return $description;
     }

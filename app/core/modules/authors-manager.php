@@ -59,6 +59,12 @@ class Knife_Authors_Manager {
      * Use this method instead of constructor to avoid multiple hook setting
      */
     public static function load_module() {
+        // Create custom authors table on theme switch
+        add_action( 'after_switch_theme', array( __CLASS__, 'create_table' ) );
+
+        // Use custom table for is_author() queries
+        add_filter( 'posts_clauses', array( __CLASS__, 'update_author_clauses' ), 10, 2 );
+
         // Add guest authors metabox
         add_action( 'add_meta_boxes', array( __CLASS__, 'add_metabox' ) );
 
@@ -118,6 +124,49 @@ class Knife_Authors_Manager {
                 return $email;
             }
         );
+    }
+
+    /**
+     * Use custom table for is_author() queries
+     *
+     * @since 1.17
+     */
+    public static function update_author_clauses( $clauses, $query ) {
+        global $wpdb;
+
+        if ( ! $query->is_author() ) {
+            return $clauses;
+        }
+
+        $author = $query->queried_object_id;
+
+        $clauses['join']  = $clauses['join'] . " JOIN {$wpdb->prefix}authors on {$wpdb->prefix}authors.post_id = {$wpdb->posts}.ID ";
+        $clauses['where'] = $clauses['where'] . sprintf( "AND {$wpdb->prefix}authors.user_id = %d", absint( $author ) );
+
+        return $clauses;
+    }
+
+    /**
+     * Create custom authors table to store post_id -> user_id relation
+     *
+     * @since 1.17
+     */
+    public static function create_table() {
+        global $wpdb;
+
+        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+        $query = "CREATE TABLE IF NOT EXISTS {$wpdb->prefix}authors (
+            id int(11) NOT NULL AUTO_INCREMENT,
+            post_id int(11) NOT NULL,
+            user_id int(11) NOT NULL,
+            PRIMARY KEY (id),
+            UNIQUE KEY post_id_user_id (post_id, user_id)
+        )
+        DEFAULT CHARACTER SET {$wpdb->charset}";
+
+        // We do not use dbDelta here cause of DESCRIBE error
+        $wpdb->query( $query ); // phpcs:ignore
     }
 
     /**
@@ -183,18 +232,18 @@ class Knife_Authors_Manager {
         }
 
         // Delete all authors values
-        delete_post_meta( $post_id, self::$meta_authors );
+        self::delete_post_authors( $post_id );
 
         // Add post author if empty array
         if ( empty( $_REQUEST[ self::$meta_authors ] ) ) {
-            return add_post_meta( $post_id, self::$meta_authors, $post->post_author );
+            return self::add_post_author( $post_id, $post->post_author );
         }
 
         $authors = (array) wp_unslash( $_REQUEST[ self::$meta_authors ] ); // phpcs:ignore
 
         // Add authors array from metabox input
         foreach ( $authors as $author ) {
-            add_post_meta( $post_id, self::$meta_authors, absint( $author ) );
+            self::add_post_author( $post_id, absint( $author ) );
         }
     }
 
@@ -217,12 +266,12 @@ class Knife_Authors_Manager {
             wp_enqueue_script( 'knife-authors-metabox', $include . '/scripts/authors-metabox.js', array( 'jquery' ), $version, true );
 
             $options = array(
-                'post_meta' => esc_attr( self::$meta_authors ),
-                'action'    => esc_attr( self::$ajax_action ),
-                'nonce'     => wp_create_nonce( self::$ajax_nonce ),
+                'meta'   => esc_attr( self::$meta_authors ),
+                'action' => esc_attr( self::$ajax_action ),
+                'nonce'  => wp_create_nonce( self::$ajax_nonce ),
 
-                'error'     => esc_html__( 'Непредвиденная ошибка сервера', 'knife-theme' ),
-                'verify'    => esc_html__( 'Создать нового гостевого автора?', 'knife-theme' ),
+                'error'  => esc_html__( 'Непредвиденная ошибка сервера', 'knife-theme' ),
+                'verify' => esc_html__( 'Создать нового гостевого автора?', 'knife-theme' ),
             );
 
             wp_localize_script( 'knife-authors-metabox', 'knife_authors_metabox', $options );
@@ -311,7 +360,7 @@ class Knife_Authors_Manager {
      */
     public static function replace_feed_author( $name ) {
         if ( is_feed() && ! is_admin() ) {
-            $authors = get_post_meta( get_the_ID(), self::$meta_authors );
+            $authors = self::get_post_authors( get_the_ID() );
 
             if ( ! empty( $authors ) ) {
                 $output = array();
@@ -335,37 +384,28 @@ class Knife_Authors_Manager {
      * Fix post list by author
      */
     public static function fix_author_posts( $query ) {
-        if ( $query->is_author() ) {
-            $author = $query->get( 'author' );
+        if ( ! $query->is_author() ) {
+            return;
+        }
 
-            if ( empty( $author ) ) {
-                $user = get_user_by( 'slug', $query->get( 'author_name' ) );
+        $author = $query->get( 'author' );
 
-                // Set id by author name
-                if ( isset( $user->ID ) ) {
-                    $author = $user->ID;
-                }
+        if ( empty( $author ) ) {
+            $user = get_user_by( 'slug', $query->get( 'author_name' ) );
 
-                $query->set( 'author_name', null );
+            // Set id by author name
+            if ( isset( $user->ID ) ) {
+                $author = $user->ID;
             }
 
-            // Set meta query based on meta
-            $query->set(
-                'meta_query',
-                array(
-                    array(
-                        'key'   => self::$meta_authors,
-                        'value' => absint( $author ),
-                    ),
-                )
-            );
-
-            $query->set( 'author', null );
-
-            // Update queried object
-            $query->queried_object_id = $author;
-            $query->queried_object    = get_userdata( $author );
+            $query->set( 'author_name', null );
         }
+
+        $query->set( 'author', null );
+
+        // Update queried object
+        $query->queried_object_id = $author;
+        $query->queried_object    = get_userdata( $author );
     }
 
     /**
@@ -397,7 +437,7 @@ class Knife_Authors_Manager {
             global $post;
 
             // Get authors
-            $authors = get_post_meta( $post->ID, self::$meta_authors );
+            $authors = self::get_post_authors( get_the_ID() );
 
             if ( empty( $authors ) ) {
                 $authors[] = $post->post_author;
@@ -461,11 +501,11 @@ class Knife_Authors_Manager {
             return $output;
         }
 
-        // We filter count_user_posts() so it provides an accurate number
-        $count = (int) count_user_posts( $user_id );
+        // Direct call is much faster than using filter
+        $count = (int) self::count_user_posts( 0, $user_id );
 
         if ( $count === 0 ) {
-            return '0';
+            return $count;
         }
 
         $value = sprintf(
@@ -483,25 +523,12 @@ class Knife_Authors_Manager {
     public static function count_user_posts( $count, $user_id ) {
         global $wpdb;
 
-        // Try to get cached value
-        $counts = wp_cache_get( $user_id, 'knife-user-posts' );
-
-        if ( $counts !== false ) {
-            return $counts;
-        }
-
         // phpcs:ignore
         $results = $wpdb->get_row(
-            $wpdb->prepare( "SELECT COUNT(*) as counts FROM {$wpdb->postmeta} WHERE meta_key = %s AND meta_value = %d", self::$meta_authors, $user_id )
+            $wpdb->prepare( "SELECT COUNT(*) as counts FROM {$wpdb->prefix}authors WHERE user_id = %d", $user_id )
         );
 
-        // Retrieve counts
-        $counts = $results->counts;
-
-        // Set cache on 24 hours
-        wp_cache_set( $user_id, $counts, 'knife-user-posts', 24 * HOUR_IN_SECONDS );
-
-        return $counts;
+        return $results->counts;
     }
 
     /**
@@ -520,6 +547,65 @@ class Knife_Authors_Manager {
         );
 
         return $editors;
+    }
+
+    /**
+     * Get authors by post id
+     *
+     * @since 1.17
+     */
+    public static function get_post_authors( $post_id ) {
+        global $wpdb;
+
+        // Try to get cached value
+        $authors = wp_cache_get( $post_id, 'knife-post-authors' );
+
+        if ( $authors !== false ) {
+            return $authors;
+        }
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+        $results = $wpdb->get_results(
+            $wpdb->prepare( "SELECT user_id FROM {$wpdb->prefix}authors WHERE post_id = %d", $post_id )
+        );
+
+        $authors = array();
+
+        foreach ( $results as $result ) {
+            $authors[] = $result->user_id;
+        }
+
+        wp_cache_set( $post_id, $authors, 'knife-post-authors' );
+
+        return $authors;
+    }
+
+    /**
+     * Add post author to custom table by post id
+     *
+     * @since 1.17
+     */
+    public static function add_post_author( $post_id, $user_id ) {
+        global $wpdb;
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+        $wpdb->query(
+            $wpdb->prepare( "INSERT INTO {$wpdb->prefix}authors (post_id, user_id) VALUES (%d, %d)", array( $post_id, $user_id ) )
+        );
+    }
+
+    /**
+     * Delete post authors from custom table
+     *
+     * @since 1.17
+     */
+    public static function delete_post_authors( $post_id ) {
+        global $wpdb;
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+        $wpdb->query(
+            $wpdb->prepare( "DELETE FROM {$wpdb->prefix}authors WHERE post_id = %d", $post_id )
+        );
     }
 
     /**

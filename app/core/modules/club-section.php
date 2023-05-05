@@ -129,13 +129,13 @@ class Knife_Club_Section {
 
         $post_id = get_the_ID();
 
-        if ( ! property_exists( 'Knife_Authors_Manager', 'meta_authors' ) ) {
+        if ( ! method_exists( 'Knife_Authors_Manager', 'get_post_authors' ) ) {
             return $content;
         }
 
-        $users = (array) get_post_meta( $post_id, Knife_Authors_Manager::$meta_authors );
+        $users = (array) Knife_Authors_Manager::get_post_authors( $post_id );
 
-        if ( count( $users ) < 1 ) {
+        if ( empty( $users ) ) {
             return $content;
         }
 
@@ -167,9 +167,13 @@ class Knife_Club_Section {
         );
 
         // Add photo if exists
-        $photo = get_user_meta( $user->ID, '_knife-user-photo', true );
+        $photo = null;
 
-        if ( strlen( $photo ) > 0 ) {
+        if ( property_exists( 'Knife_User_Meta', 'user_photo' ) ) {
+            $photo = get_user_meta( $user->ID, Knife_User_Meta::$user_photo, true );
+        }
+
+        if ( ! empty( $photo ) ) {
             $author[] = sprintf(
                 '<img class="author__photo" src="%2$s" alt="%1$s">',
                 esc_html( $user->display_name ),

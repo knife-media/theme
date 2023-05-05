@@ -241,11 +241,11 @@ class Knife_Translations_Posts {
             return;
         }
 
-        if ( ! property_exists( 'Knife_Authors_Manager', 'meta_authors' ) ) {
+        if ( ! method_exists( 'Knife_Authors_Manager', 'get_post_authors' ) ) {
             return;
         }
 
-        $authors = get_post_meta( $post->ID, Knife_Authors_Manager::$meta_authors );
+        $authors = (array) Knife_Authors_Manager::get_post_authors( $post->ID );
 
         if ( count( array_intersect( self::$translators, $authors ) ) > 0 ) {
             wp_schedule_single_event( time(), 'knife_schedule_translation', array( $post->ID ) );

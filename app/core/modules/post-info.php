@@ -302,8 +302,8 @@ class Knife_Post_Info {
             }
         }
 
-        if ( property_exists( 'Knife_Authors_Manager', 'meta_authors' ) ) {
-            $authors = (array) get_post_meta( $post_id, Knife_Authors_Manager::$meta_authors );
+        if ( method_exists( 'Knife_Authors_Manager', 'get_post_authors' ) ) {
+            $authors = (array) Knife_Authors_Manager::get_post_authors( $post_id );
 
             foreach ( $authors as $author ) {
                 $user = get_userdata( $author );

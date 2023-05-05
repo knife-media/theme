@@ -6,7 +6,7 @@
     $zen_date = get_the_date( 'd.m.Y G:i', get_the_ID() );
 
     if ( $zen_publish ) {
-        $zen_date = fmdate( 'd.m.Y G:i', strtotime( $zen_publish ) );
+        $zen_date = gmdate( 'd.m.Y G:i', strtotime( $zen_publish ) );
     }
 
     printf(

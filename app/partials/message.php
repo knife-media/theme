@@ -12,6 +12,6 @@
     <h1 class="message__title"><?php esc_html_e( 'Ничего не найдено', 'knife-theme' ); ?></h1>
 
     <div class="message__content">
-        <p><?php esc_html_e( 'Вероятно вы попали сюда по ошибке,<br> или мы еще не успели написать то, что вы хотели прочитать.', 'knife-theme' ); ?></p>
+        <p><?php echo wp_kses_post( __( 'Вероятно вы попали сюда по ошибке,<br> или мы еще не успели написать то, что вы хотели прочитать.', 'knife-theme' ) ); ?></p>
     </div>
 </div>

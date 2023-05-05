@@ -6,3 +6,7 @@
 .fixed .column-authors-name {
   width: 20%;
 }
+
+#wpbody-content .wrap .mine span.count {
+  display: none;
+}

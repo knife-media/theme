@@ -1,7 +1,7 @@
 <div id="knife-authors-box" class="hide-if-no-js">
     <?php
     // Get post authors meta
-    $authors = get_post_meta( get_the_ID(), self::$meta_authors );
+    $authors = self::get_post_authors( get_the_ID() );
 
     // Get post editor meta
     $editor = get_post_meta( get_the_ID(), self::$meta_editor, true );
