@@ -557,13 +557,6 @@ class Knife_Authors_Manager {
     public static function get_post_authors( $post_id ) {
         global $wpdb;
 
-        // Try to get cached value
-        $authors = wp_cache_get( $post_id, 'knife-post-authors' );
-
-        if ( $authors !== false ) {
-            return $authors;
-        }
-
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery
         $results = $wpdb->get_results(
             $wpdb->prepare( "SELECT user_id FROM {$wpdb->prefix}authors WHERE post_id = %d", $post_id )
@@ -574,8 +567,6 @@ class Knife_Authors_Manager {
         foreach ( $results as $result ) {
             $authors[] = $result->user_id;
         }
-
-        wp_cache_set( $post_id, $authors, 'knife-post-authors' );
 
         return $authors;
     }
