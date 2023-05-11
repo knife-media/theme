@@ -558,7 +558,7 @@ class Knife_Authors_Manager {
 
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery
         $results = $wpdb->get_results(
-            $wpdb->prepare( "SELECT user_id FROM {$wpdb->prefix}authors WHERE post_id = %d", $post_id )
+            $wpdb->prepare( "SELECT user_id FROM {$wpdb->prefix}authors WHERE post_id = %d ORDER BY id", $post_id )
         );
 
         $authors = array();
