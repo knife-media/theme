@@ -537,7 +537,6 @@ class Knife_Authors_Manager {
     public static function get_editors() {
         $editors = array(
             'artem-chapaev'    => 'Артем Чапаев',
-            'nastya-travkina'  => 'Настя Травкина',
             'seroe-fioletovoe' => 'Серое Фиолетовое',
             'fragments'        => 'Фрагменты',
             'tania-cohen'      => 'Таня Коэн',
