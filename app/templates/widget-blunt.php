@@ -32,4 +32,14 @@
     <?php endwhile; ?>
 
     <?php wp_reset_postdata(); ?>
+
+    <div class="widget-blunt__inner">
+        <?php
+        printf(
+            '<a class="widget-blunt__link widget-blunt__link--more" href="%2$s">%1$s</a>',
+            esc_html__( 'Еще из Тупого Ножа →', 'knife-theme' ),
+            esc_url( get_category_link( get_category_by_slug( $this->blunt_name ) ) ),
+        );
+        ?>
+    </div>
 </div>

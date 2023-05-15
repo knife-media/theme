@@ -70,6 +70,10 @@
     color: $color-text;
     background-color: #f9cf00;
 
+    &.widget-blunt__link--more {
+      background-color: #f98d00;
+    }
+
     &:hover {
       filter: brightness(115%);
     }
