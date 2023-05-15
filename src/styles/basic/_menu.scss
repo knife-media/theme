@@ -44,14 +44,15 @@
       }
 
       &:hover {
-        transition: transform 0.75s ease-in-out;
-        transform: rotate(720deg);
+        transition: transform 0.25s ease-in-out;
+        transform: translateX(0.125rem);
       }
 
       @media screen and (max-width: 767px) {
         position: absolute;
         top: 1.25rem;
         right: 1rem;
+        margin: 0;
       }
     }
 
