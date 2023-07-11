@@ -725,12 +725,12 @@
     color: $color-alert;
   }
 
-  &.comments--folded .comments__expand {
-    display: block;
-  }
+  &.comments--folded {
+    max-height: 64rem;
 
-  &.comments--folded .comments__item:nth-child(n + 6) {
-    display: none;
+    .comments__expand {
+      display: block;
+    }
   }
 
   &.comments--expand {
