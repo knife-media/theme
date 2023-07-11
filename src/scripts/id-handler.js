@@ -411,6 +411,7 @@
     // Set image attributes
     image.setAttribute('loading', true);
     image.setAttribute('src', field.avatar);
+    image.setAttribute('loading', 'lazy');
     image.setAttribute('alt', field.name);
   }
 
