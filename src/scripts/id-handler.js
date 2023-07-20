@@ -2,7 +2,7 @@
  * Comments and profiles handler
  *
  * @since 1.13
- * @version 1.16
+ * @version 1.17
  */
 
 (function () {
@@ -43,7 +43,6 @@
   // All availible oauth providers
   const providers = ['vkontakte', 'google', 'facebook', 'yandex'];
 
-
   const post = getOption('post', null);
 
   // Check if required post option exists
@@ -54,6 +53,10 @@
 
   // Store is user logged in
   let authorized = false;
+
+
+  // Store initial response from server
+  let storage = {};
 
 
   /**
@@ -233,7 +236,7 @@
   /**
    * Draw expand button
    */
-  const foldComments = (reponse, amount) => {
+  const foldComments = (amount) => {
     comments.classList.add('comments--folded');
 
     let expand = buildElement('div', {
@@ -253,8 +256,8 @@
     button.addEventListener('click', (e) => {
       e.preventDefault();
 
-      comments.classList.remove('comments--folded');
-      showComments(reponse, false);
+      showComments(false);
+      scrollToElement(comments.getBoundingClientRect().top);
     });
   }
 
@@ -436,9 +439,6 @@
       // Set url hash without jumping
       history.pushState({}, '', time.href);
 
-      // Show comments
-      comments.classList.remove('comments--folded');
-
       // Scroll to element
       scrollToElement(parent.getBoundingClientRect().top);
     });
@@ -473,9 +473,6 @@
       // Set url hash without jumping
       history.pushState({}, '', replied.href);
 
-      // Show comments
-      comments.classList.remove('comments--folded');
-
       // Scroll to element
       scrollToElement(parent.getBoundingClientRect().top);
     });
@@ -501,9 +498,6 @@
       if (!authorized) {
         return showLogin();
       }
-
-      // Show comments
-      comments.classList.remove('comments--folded');
 
       // Try to remove another child forms
       comments.querySelectorAll('.comments__item-form').forEach((el) => {
@@ -960,6 +954,9 @@
     // Set disabled to submit button
     submit.setAttribute('disabled', 'disabled');
 
+    // Unfold comments before sending form
+    showComments(false);
+
     makeRequest(url, 'POST', data, (response) => {
       let fields = response.comments || [];
 
@@ -970,10 +967,7 @@
           form.parentNode.removeChild(form);
         }
 
-        let item = loadComment(fields[0], true);
-
-        // Show comments
-        comments.classList.remove('comments--folded');
+        let item = loadComment(fields[0]);
 
         // Scroll to it
         scrollToElement(item.getBoundingClientRect().top);
@@ -1404,22 +1398,37 @@
 
 
   /**
+   * Scroll to comment
+   */
+  const scrollToComment = (hash) => {
+    if (hash.length < 1) {
+      return;
+    }
+
+    let item = comments.querySelector(`[data-id="${hash[1]}"]`);
+
+    if (item !== null) {
+      scrollToElement(item.getBoundingClientRect().top);
+    }
+  }
+
+
+  /**
    * Show comments
    */
-  const showComments = (response, fold = true) => {
-    let fields = response.comments || [];
-
+  const showComments = (fold = true) => {
     while (comments.lastChild) {
       comments.removeChild(comments.lastChild)
     }
 
-    authorized = false;
-
-    if (response.identity) {
-      authorized = true;
-    }
-
     createQuestion(comments);
+
+    // Get comment link if exists
+    const hash = document.location.hash.match(/^#comment-(\d+)/) || [];
+
+    if (hash.length > 1) {
+      fold = false;
+    }
 
     // Create form
     let form = createForm();
@@ -1433,10 +1442,12 @@
       saveUnsent(text.value, 0);
     });
 
-    createBadge(form, response.identity, comments);
+    createBadge(form, storage.identity, comments);
 
-    if (fields.length > 8 && fold) {
-      foldComments(response, fields.length);
+    let fields = storage.comments || [];
+
+    if (fold === true && fields.length > 8) {
+      foldComments(fields.length);
 
       // Leave only 8 first comments for unfolded state
       fields = fields.slice(0, 8);
@@ -1450,21 +1461,11 @@
 
     comments.classList.add('comments--expand');
 
-    // Get comment link if exists
-    const hash = document.location.hash.match(/^#comment-(\d+)/) || [];
-
-    if (hash.length > 1) {
-      let item = comments.querySelector(`[data-id="${hash[1]}"]`);
-
-      if (item !== null) {
-        comments.classList.remove('comments--folded');
-
-        // Scroll to comment on page load
-        window.addEventListener('load', () => {
-          scrollToElement(item.getBoundingClientRect().top);
-        });
-      }
+    if (fold === false) {
+      comments.classList.remove('comments--folded');
     }
+
+    scrollToComment(hash);
   }
 
 
@@ -1472,7 +1473,17 @@
    * Load comments
    */
   const initComments = () => {
-    makeRequest(`/id/comments?post=${post}`, 'GET', {}, showComments);
+    makeRequest(`/id/comments?post=${post}`, 'GET', {}, ( response ) => {
+      authorized = false;
+
+      if (response.identity) {
+        authorized = true;
+      }
+
+      storage = response;
+
+      return showComments();
+    });
   }
 
 
