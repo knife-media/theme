@@ -233,7 +233,7 @@
   /**
    * Draw expand button
    */
-  const foldComments = (amount) => {
+  const foldComments = (reponse, amount) => {
     comments.classList.add('comments--folded');
 
     let expand = buildElement('div', {
@@ -254,6 +254,7 @@
       e.preventDefault();
 
       comments.classList.remove('comments--folded');
+      showComments(reponse, false);
     });
   }
 
@@ -1403,74 +1404,75 @@
 
 
   /**
-   * Load comments
+   * Show comments
    */
-  const initComments = () => {
-    // Clear old comments first
+  const showComments = (response, fold = true) => {
+    let fields = response.comments || [];
+
     while (comments.lastChild) {
       comments.removeChild(comments.lastChild)
     }
 
     authorized = false;
 
-    makeRequest(`/id/comments?post=${post}`, 'GET', {}, (response) => {
-      const fields = response.comments || [];
+    if (response.identity) {
+      authorized = true;
+    }
 
-      // Check if user authorized
-      if (response.identity) {
-        authorized = true;
-      }
+    createQuestion(comments);
 
-      // Create question
-      createQuestion(comments);
+    // Create form
+    let form = createForm();
+    comments.appendChild(form);
 
-      // Create form
-      let form = createForm();
-      comments.appendChild(form);
+    // Get saved textarea value
+    let text = form.querySelector('.comments__form-text');
+    text.textContent = getUnsent(0);
 
-      // Get saved textarea value
-      let text = form.querySelector('.comments__form-text');
-      text.textContent = getUnsent(0);
+    text.addEventListener('input', () => {
+      saveUnsent(text.value, 0);
+    });
 
-      text.addEventListener('input', () => {
-        saveUnsent(text.value, 0);
-      });
+    createBadge(form, response.identity, comments);
 
-      // Try to show identity bage
-      createBadge(form, response.identity, comments);
+    if (fields.length > 8 && fold) {
+      foldComments(response, fields.length);
 
-      // Fold comments if more than 10
-      if (fields.length > 10) {
-        foldComments(fields.length);
-      }
+      // Leave only 8 first comments for unfolded state
+      fields = fields.slice(0, 8);
+    }
 
-      // Show comments using response fields
-      fields.forEach(field => {
-        if (typeof field.id !== 'undefined') {
-          loadComment(field);
-        }
-      });
-
-      // Show comments
-      comments.classList.add('comments--expand');
-
-      // Get comment link if exists
-      const hash = document.location.hash.match(/^#comment-(\d+)/) || [];
-
-      if (hash.length > 1) {
-        let item = comments.querySelector(`[data-id="${hash[1]}"]`);
-
-        if (item !== null) {
-          // Show comments
-          comments.classList.remove('comments--folded');
-
-          // Scroll to comment on page load
-          window.addEventListener('load', () => {
-            scrollToElement(item.getBoundingClientRect().top);
-          });
-        }
+    fields.forEach(field => {
+      if (typeof field.id !== 'undefined') {
+        loadComment(field);
       }
     });
+
+    comments.classList.add('comments--expand');
+
+    // Get comment link if exists
+    const hash = document.location.hash.match(/^#comment-(\d+)/) || [];
+
+    if (hash.length > 1) {
+      let item = comments.querySelector(`[data-id="${hash[1]}"]`);
+
+      if (item !== null) {
+        comments.classList.remove('comments--folded');
+
+        // Scroll to comment on page load
+        window.addEventListener('load', () => {
+          scrollToElement(item.getBoundingClientRect().top);
+        });
+      }
+    }
+  }
+
+
+  /**
+   * Load comments
+   */
+  const initComments = () => {
+    makeRequest(`/id/comments?post=${post}`, 'GET', {}, showComments);
   }
 
 
