@@ -23,6 +23,14 @@ class Knife_Adult_Content {
     public static $meta_adult = '_knife-adult-content';
 
     /**
+     * Post meta to store horror content option
+     *
+     * @access  public
+     * @var     string
+     */
+    public static $meta_horror = '_knife-horror-content';
+
+    /**
      * Default post type with adult content
      *
      * @access  public
@@ -39,6 +47,9 @@ class Knife_Adult_Content {
 
         // Update adult posts meta
         add_action( 'save_post', array( __CLASS__, 'save_meta' ) );
+
+        // Include required horror data
+        add_action( 'wp_enqueue_scripts', array( __CLASS__, 'inject_object' ), 12 );
     }
 
     /**
@@ -56,6 +67,15 @@ class Knife_Adult_Content {
             esc_attr( self::$meta_adult ),
             esc_html__( 'Содержимое для взрослых', 'knife-theme' ),
             checked( $adult, 1, false )
+        );
+
+        $horror = get_post_meta( $post->ID, self::$meta_horror, true );
+
+        printf(
+            '<div class="misc-pub-section"><label><input type="checkbox" name="%1$s" class="checkbox"%3$s> %2$s</label></div>',
+            esc_attr( self::$meta_horror ),
+            esc_html__( 'Поставить заглушку 18+ на запись', 'knife-theme' ),
+            checked( $horror, 1, false )
         );
     }
 
@@ -83,11 +103,49 @@ class Knife_Adult_Content {
             return;
         }
 
-        if ( empty( $_REQUEST[ self::$meta_adult ] ) ) {
-            return delete_post_meta( $post_id, self::$meta_adult );
+        delete_post_meta( $post_id, self::$meta_adult );
+        delete_post_meta( $post_id, self::$meta_horror );
+
+        if ( ! empty( $_REQUEST[ self::$meta_adult ] ) ) {
+            update_post_meta( $post_id, self::$meta_adult, 1 );
         }
 
-        return update_post_meta( $post_id, self::$meta_adult, 1 );
+        if ( ! empty( $_REQUEST[ self::$meta_horror ] ) ) {
+            update_post_meta( $post_id, self::$meta_horror, 1 );
+        }
+    }
+
+    /**
+     * Include required id loader data
+     *
+     * @since 1.17
+     */
+    public static function inject_object() {
+        if ( ! is_singular() ) {
+            return;
+        }
+
+        $post_id = get_queried_object_id();
+
+        // Get horror meta
+        $horror = get_post_meta( $post_id, self::$meta_horror, true );
+
+        if ( empty( $horror ) ) {
+            return;
+        }
+
+        $options = array(
+            'button' => __( 'Да, мне 18 или больше!', 'knife-theme' ),
+            'labels' => array(
+                __( 'Вы сегодня отлично выглядите! Нескромный вопрос, а вам уже точно есть 18 лет?', 'knife-theme' ),
+                __( 'Про вас ли поет Сергей Жуков: «забирай меня скорей, увози за сто морей» — вы уже 18+?', 'knife-theme' ),
+                __( 'Если вы ребенок, включайте «Смешарики». А наша статья только для тех, кому уже есть 18 лет.  ', 'knife-theme' ),
+                __( 'Этот черный вигвам — только для совершеннолетних. Рискните войти и заглянуть в бездну?', 'knife-theme' ),
+                __( 'Вы вступаете на территорию взрослого контента, который может повлиять на ваше развитие. Вам есть 18 лет?', 'knife-theme' ),
+            ),
+        );
+
+        wp_localize_script( 'knife-theme', 'knife_horror_popup', $options );
     }
 }
 
