@@ -9,6 +9,24 @@
     return false;
   }
 
+  const header = document.querySelector('.header');
+
+  /**
+   * Toggle all elements before header
+   */
+  function toggleHeader(display) {
+    // Get first header parent child
+    var sibling = header.parentElement.firstChild;
+
+    while (sibling && sibling !== header) {
+      if (sibling.nodeType == 1) {
+        sibling.style.display = display;
+      }
+
+      sibling = sibling.nextSibling;
+    }
+  }
+
   /**
    * Create decorative stars
    */
@@ -51,6 +69,7 @@
     inner.appendChild(button);
 
     document.body.classList.add('is-horror');
+    toggleHeader('none');
 
     button.addEventListener('click', (e) => {
       e.preventDefault();
@@ -61,6 +80,8 @@
 
       popup.classList.add('horror--hide');
       document.body.classList.remove('is-horror');
+
+      toggleHeader('');
     });
   }
 
