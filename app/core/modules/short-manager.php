@@ -181,6 +181,25 @@ class Knife_Short_Manager {
 
         // Insert admin styles
         wp_enqueue_style( 'knife-short-options', $include . '/styles/short-options.css', array(), $version );
+
+        // Insert admin scripts
+        wp_enqueue_script( 'knife-short-options', $include . '/scripts/short-options.js', array( 'jquery' ), $version, true );
+
+        if ( ! property_exists( 'Knife_Promo_Manager', 'prefix_adfox' ) ) {
+            return;
+        }
+
+        if ( ! property_exists( 'Knife_Promo_Manager', 'prefix_ord' ) ) {
+            return;
+        }
+
+        $options = array(
+            'selector'    => self::$page_slug . '-convert',
+            'source'      => esc_html( Knife_Promo_Manager::$prefix_adfox ),
+            'destination' => esc_html( Knife_Promo_Manager::$prefix_ord ),
+        );
+
+        wp_localize_script( 'knife-short-options', 'knife_short_options', $options );
     }
 
     /**

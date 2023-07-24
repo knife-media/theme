@@ -29,7 +29,9 @@
             esc_html__( 'Хост сокращалки', 'knife-theme' ),
             implode( '', $options ) // phpcs:ignore
         );
+        ?>
 
+        <?php
         printf(
             '<input type="hidden" name="action" value="%s">',
             esc_attr( self::$page_slug . '-append' )
@@ -40,28 +42,25 @@
         ?>
     </form>
 
+    <fieldset class="form-field">
+        <p>
+            <?php
+            printf(
+                '<label for="%1$s">%2$s</label>',
+                esc_attr( self::$page_slug . '-convert' ),
+                esc_attr__( 'Конвертер ОРД AdFox ссылки в сокращалку', 'knife-theme' )
+            );
+
+            printf(
+                '<span><input type="text" id="%1$s"><button class="button" type="button">%2$s</button></span>',
+                esc_attr( self::$page_slug . '-convert' ),
+                esc_html__( 'Конвертировать', 'knife-theme' )
+            );
+            ?>
+        </p>
+    </fieldset>
+
     <hr />
-
-    <form class="search-form wp-clearfix">
-        <?php
-        $table->search_box( esc_html__( 'Найти ссылки', 'knife-theme' ), self::$page_slug );
-
-        printf(
-            '<input type="hidden" name="page" value="%s">',
-            esc_attr( self::$page_slug )
-        );
-
-        printf(
-            '<input type="hidden" name="orderby" value="%s">',
-            esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['orderby'] ?? '' ) ) )
-        );
-
-        printf(
-            '<input type="hidden" name="order" value="%s">',
-            esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['order'] ?? '' ) ) )
-        );
-        ?>
-    </form>
 
     <form method="post">
         <?php $table->display(); ?>

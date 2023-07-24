@@ -71,6 +71,26 @@ class Knife_Promo_Manager {
     public static $query_var = 'promo';
 
     /**
+     * ORD links prefix
+     *
+     * @access public
+     * @var    string
+     *
+     * @since 1.17
+     */
+    public static $prefix_ord = 'https://knf.md/ord/';
+
+    /**
+     * AdFox golink prefix
+     *
+     * @access public
+     * @var    string
+     *
+     * @since 1.17
+     */
+    public static $prefix_adfox = 'https://ads.adfox.ru/265942/goLink';
+
+    /**
      * Init function instead of constructor
      */
     public static function load_module() {
@@ -115,6 +135,9 @@ class Knife_Promo_Manager {
 
         // Display teaser state in posts list
         add_filter( 'display_post_states', array( __CLASS__, 'display_teaser_state' ), 10, 2 );
+
+        // Replace ORD Adfox links in post content
+        add_filter( 'content_save_pre', array( __CLASS__, 'replace_ord_links' ) );
     }
 
     /**
@@ -438,6 +461,11 @@ class Knife_Promo_Manager {
                 array_map( 'sanitize_text_field', wp_unslash( $_REQUEST[ self::$meta_options ] ) )
             );
 
+            //
+            if ( ! empty( $options['link'] ) ) {
+                $options['link'] = self::rebuild_ord_link( $options['link'] );
+            }
+
             // Add # to color if not exists
             if ( ! empty( $options['color'] ) ) {
                 $options['color'] = sanitize_hex_color( '#' . ltrim( $options['color'], '#' ) );
@@ -467,7 +495,7 @@ class Knife_Promo_Manager {
             update_post_meta( $post_id, self::$meta_pixel, sanitize_text_field( wp_unslash( $_REQUEST[ self::$meta_pixel ] ) ) );
         }
 
-        // Save promo pixel
+        // Save promo ord
         if ( empty( $_REQUEST[ self::$meta_ord ] ) ) {
             delete_post_meta( $post_id, self::$meta_ord );
         } else {
@@ -503,6 +531,34 @@ class Knife_Promo_Manager {
     }
 
     /**
+     * Replace ORD Adfox links with custom shortlinks
+     *
+     * @since 1.17
+     */
+    public static function replace_ord_links( $content ) {
+        $content = wp_unslash( $content );
+
+        // Remove https from prefix to add it in regex later
+        $prefix = str_replace( 'https://', '', self::$prefix_adfox );
+
+        // Find all adfox ORD links with knife.media ID
+        preg_match_all( '~(https?://' . $prefix . '\?[^\"\'\s]+)~is', $content, $matches );
+
+        if ( empty( $matches[0] ) ) {
+            return wp_slash( $content );
+        }
+
+        foreach ( $matches[0] as $link ) {
+            $result = self::rebuild_ord_link( $link );
+
+            // Replace old link with updated
+            $content = str_replace( $link, $result, $content );
+        }
+
+        return wp_slash( $content );
+    }
+
+    /**
      * Set is-promo body class
      */
     public static function set_body_class( $classes = array() ) {
@@ -532,6 +588,26 @@ class Knife_Promo_Manager {
         $post_id = (int) $wpdb->get_var( $query ); // phpcs:ignore
 
         return $post_id;
+    }
+
+    /**
+     * Rebuild ORD link using source args
+     *
+     * @since 1.17
+     */
+    public static function rebuild_ord_link( $link ) {
+        $args = wp_parse_args( wp_parse_url( html_entity_decode( $link ), PHP_URL_QUERY ) );
+
+        $result = self::$prefix_ord;
+
+        foreach ( $args as $key => $value ) {
+            // Skip empty and random args
+            if ( ! empty( $value ) && $key !== 'pr' ) {
+                $result = add_query_arg( $key, rawurlencode( $value ), $result );
+            }
+        }
+
+        return $result;
     }
 }
 

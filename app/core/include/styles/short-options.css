@@ -40,3 +40,17 @@
 #knife-short-options .search-form {
   margin-top: 20px;
 }
+
+#knife-short-options fieldset.form-field label {
+  display: block;
+  width: 100%;
+}
+
+#knife-short-options fieldset.form-field span {
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+#knife-short-options fieldset.form-field button {
+  margin-left: 5px;
+}
