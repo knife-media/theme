@@ -516,17 +516,24 @@ class Knife_Site_Meta {
         // Set page template as format
         $meta['format'] = self::get_template_format();
 
-        if ( property_exists( 'Knife_Adult_Content', 'meta_adult' ) ) {
-            $adult = get_post_meta( $meta['postid'], Knife_Adult_Content::$meta_adult, true );
+        if ( property_exists( 'Knife_Adult_Content', 'meta_horror' ) ) {
+            $adult = get_post_meta( $meta['postid'], Knife_Adult_Content::$meta_horror, true );
 
             // Add adult content meta
             $meta['adult'] = (int) $adult;
         }
 
+        if ( property_exists( 'Knife_NoAd_Posts', 'meta_noad' ) ) {
+            $noad = get_post_meta( $meta['postid'], Knife_NoAd_Posts::$meta_noad, true );
+
+            // Add noad content meta
+            $meta['noad'] = (int) $noad;
+        }
+
         if ( property_exists( 'Knife_Promo_Manager', 'meta_promo' ) ) {
             $promo = get_post_meta( $meta['postid'], Knife_Promo_Manager::$meta_promo, true );
 
-            // Add adult content meta
+            // Add promo content meta
             $meta['promo'] = (int) $promo;
         }
 

@@ -199,6 +199,9 @@ require get_template_directory() . '/core/modules/post-lead.php';
 // Mark adult content posts
 require get_template_directory() . '/core/modules/adult-content.php';
 
+// Add checkbox to determine posts with noad parameter
+require get_template_directory() . '/core/modules/noad-posts.php';
+
 // Mark momentary posts
 require get_template_directory() . '/core/modules/momentary-posts.php';
 
