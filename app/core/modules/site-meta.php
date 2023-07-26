@@ -516,8 +516,8 @@ class Knife_Site_Meta {
         // Set page template as format
         $meta['format'] = self::get_template_format();
 
-        if ( property_exists( 'Knife_Adult_Content', 'meta_horror' ) ) {
-            $adult = get_post_meta( $meta['postid'], Knife_Adult_Content::$meta_horror, true );
+        if ( property_exists( 'Knife_Adult_Content', 'meta_adult' ) ) {
+            $adult = get_post_meta( $meta['postid'], Knife_Adult_Content::$meta_adult, true );
 
             // Add adult content meta
             $meta['adult'] = (int) $adult;

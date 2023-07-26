@@ -15,6 +15,14 @@ if ( ! defined( 'WPINC' ) ) {
 
 class Knife_Adult_Content {
     /**
+     * Post meta to store adult content option
+     *
+     * @access  public
+     * @var     string
+     */
+    public static $meta_adult = '_knife-adult-content';
+
+    /**
      * Post meta to store horror content option
      *
      * @access  public
@@ -52,6 +60,15 @@ class Knife_Adult_Content {
             return;
         }
 
+        $adult = get_post_meta( $post->ID, self::$meta_adult, true );
+
+        printf(
+            '<div class="misc-pub-section"><label><input type="checkbox" name="%1$s" class="checkbox"%3$s> %2$s</label></div>',
+            esc_attr( self::$meta_adult ),
+            esc_html__( 'Содержимое для взрослых', 'knife-theme' ),
+            checked( $adult, 1, false )
+        );
+
         $horror = get_post_meta( $post->ID, self::$meta_horror, true );
 
         printf(
@@ -86,11 +103,16 @@ class Knife_Adult_Content {
             return;
         }
 
-        if ( empty( $_REQUEST[ self::$meta_horror ] ) ) {
-            return delete_post_meta( $post_id, self::$meta_horror );
+        delete_post_meta( $post_id, self::$meta_adult );
+        delete_post_meta( $post_id, self::$meta_horror );
+
+        if ( ! empty( $_REQUEST[ self::$meta_adult ] ) ) {
+            update_post_meta( $post_id, self::$meta_adult, 1 );
         }
 
-        update_post_meta( $post_id, self::$meta_horror, 1 );
+        if ( ! empty( $_REQUEST[ self::$meta_horror ] ) ) {
+            update_post_meta( $post_id, self::$meta_horror, 1 );
+        }
     }
 
     /**
