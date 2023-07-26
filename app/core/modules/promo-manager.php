@@ -461,7 +461,7 @@ class Knife_Promo_Manager {
                 array_map( 'sanitize_text_field', wp_unslash( $_REQUEST[ self::$meta_options ] ) )
             );
 
-            //
+            // Check if options link is ORD
             if ( ! empty( $options['link'] ) ) {
                 $options['link'] = self::rebuild_ord_link( $options['link'] );
             }
@@ -596,6 +596,13 @@ class Knife_Promo_Manager {
      * @since 1.17
      */
     public static function rebuild_ord_link( $link ) {
+        $prefix = str_replace( 'https://', '', self::$prefix_adfox );
+
+        // Skip not AdFox links
+        if ( ! preg_match( '~^https?://' . $prefix . '~is', $link ) ) {
+            return $link;
+        }
+
         $args = wp_parse_args( wp_parse_url( html_entity_decode( $link ), PHP_URL_QUERY ) );
 
         $result = self::$prefix_ord;
