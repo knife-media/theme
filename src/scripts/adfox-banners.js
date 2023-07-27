@@ -25,7 +25,7 @@
       return params;
     }
 
-    const targets = ['template', 'postid', 'special', 'category', 'tags', 'adult', 'promo', 'format'];
+    const targets = ['template', 'postid', 'special', 'category', 'tags', 'adult', 'promo', 'format', 'noad'];
 
     for (let i = 0, n = 1; i < targets.length; i++, n++) {
       let target = targets[i];
