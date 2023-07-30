@@ -1,4 +1,4 @@
-# Wordpress theme for knife.media #
+# WordPress theme for knife.media #
 
 Simple modern responsive theme for community blog.
 
