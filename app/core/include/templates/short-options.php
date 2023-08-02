@@ -42,6 +42,8 @@
         ?>
     </form>
 
+    <hr />
+
     <fieldset class="form-field">
         <p>
             <?php
@@ -60,7 +62,26 @@
         </p>
     </fieldset>
 
-    <hr />
+    <form class="search-form wp-clearfix">
+        <?php
+        $table->search_box( esc_html__( 'Найти ссылки', 'knife-theme' ), self::$page_slug );
+
+        printf(
+            '<input type="hidden" name="page" value="%s">',
+            esc_attr( self::$page_slug )
+        );
+
+        printf(
+            '<input type="hidden" name="orderby" value="%s">',
+            esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['orderby'] ?? '' ) ) )
+        );
+
+        printf(
+            '<input type="hidden" name="order" value="%s">',
+            esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['order'] ?? '' ) ) )
+        );
+        ?>
+    </form>
 
     <form method="post">
         <?php $table->display(); ?>
