@@ -87,17 +87,19 @@
       align-items: center;
       position: absolute;
       left: 0;
-      bottom: 0;
+      bottom: -0.075rem;
 
-      height: 3rem;
+      height: 3.075rem;
       width: 100%;
       padding: 0 1rem;
 
       color: $color-white;
       background-color: $color-primary;
 
+      border: 0;
+
       &:hover {
-        border-bottom-color: transparent;
+        filter: brightness(120%);
       }
     }
 
