@@ -67,7 +67,7 @@
   align-self: flex-start;
 }
 
-@mixin cross-button($width, $height: 2px) {
+@mixin cross-button($width, $height: 2px, $color: #444) {
   width: $width;
   height: $width;
 
@@ -80,7 +80,7 @@
     height: $height;
     width: $width;
 
-    background-color: lighten($color-text, 20);
+    background-color: $color;
   }
 
   &:after {

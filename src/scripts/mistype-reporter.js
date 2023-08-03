@@ -100,7 +100,7 @@
     close.classList.add('mistype__popup-close');
 
     close.addEventListener('click', () => {
-        mistype.parentNode.removeChild(mistype);
+      mistype.parentNode.removeChild(mistype);
     });
 
     popup.appendChild(close);
