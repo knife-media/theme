@@ -5,7 +5,6 @@
  * @version 1.15
  */
 
-
 (function () {
   /**
    * Check if similar contents exist

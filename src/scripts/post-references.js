@@ -46,7 +46,7 @@
     var rect = target.getBoundingClientRect();
 
     // Get offset from top
-    var offset = rect.top + window.pageYOffset || document.documentElement.scrollTop;
+    var offset = rect.top + document.documentElement.scrollTop;
 
     popup.style.top = offset + 'px';
   }

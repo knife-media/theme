@@ -54,6 +54,9 @@ class Knife_Content_Filters {
         // Remove inappropriate links from content
         add_filter( 'content_save_pre', array( __CLASS__, 'remove_content_links' ) );
 
+        // Add preview to external images
+        add_filter( 'content_save_pre', array( __CLASS__, 'add_external_preview' ) );
+
         // Replace card comment with entry-content
         add_filter( 'the_content', array( __CLASS__, 'show_cards' ), 5 );
 
@@ -68,6 +71,9 @@ class Knife_Content_Filters {
 
         // Replace video and audio shortcodes on media send to editor
         add_filter( 'media_send_to_editor', array( __CLASS__, 'replace_media_shortcode' ), 10, 3 );
+
+        // Add localization strings for preview links
+        add_action( 'wp_enqueue_scripts', array( __CLASS__, 'inject_preview_localization' ) );
 
         // Disable embeds
         add_action(
@@ -105,9 +111,9 @@ class Knife_Content_Filters {
      * @since 1.16
      */
     public static function remove_content_links( $content ) {
-        $content = preg_replace( '#<a[^>]+href="https://meduza\.io(?:/|")[^>]*>([^<]+)</a>#is', '$1', $content );
+        $content = preg_replace( '#<a[^>]+href="https://meduza\.io(?:/|")[^>]*>([^<]+)</a>#is', '$1', wp_unslash( $content ) );
 
-        return $content;
+        return wp_slash( $content );
     }
 
     /**
@@ -320,6 +326,65 @@ class Knife_Content_Filters {
         }
 
         return $html;
+    }
+
+    /**
+     * Automatically add preview to external images on content save
+     *
+     * @since 1.17
+     */
+    public static function add_external_preview( $content ) {
+        $content = wp_unslash( $content );
+
+        preg_match_all( '~<a\s[^<]*href="([^"]+)"[^>]*>~is', $content, $matches, PREG_SET_ORDER );
+
+        if ( empty( $matches ) ) {
+            return wp_slash( $content );
+        }
+
+        foreach ( $matches as $data ) {
+            list( $tag, $url ) = $data;
+
+            $parsed = wp_parse_url( $url );
+
+            // Skip links from knife.media (hard-coded host is normal here)
+            if ( $parsed['host'] === 'knife.media' ) {
+                continue;
+            }
+
+            $extension = pathinfo( $parsed['path'], PATHINFO_EXTENSION );
+
+            // Skip non-images links
+            if ( ! in_array( $extension, array( 'png', 'jpg', 'gif', 'webp' ), true ) ) {
+                continue;
+            }
+
+            $updated = str_replace( '>', ' data-preview>', str_replace( ' data-preview', '', $tag ) );
+
+            // Change tag to the updated one in the content
+            $content = str_replace( $tag, $updated, $content );
+        }
+
+        return wp_slash( $content );
+    }
+
+    /**
+     * Add localization string for preview links
+     *
+     * @since 1.17
+     */
+    public static function inject_preview_localization() {
+        if ( ! is_singular() ) {
+            return;
+        }
+
+        $options = array(
+            'external' => __( 'Открыть в новом окне', 'knife-theme' ),
+            'warning'  => __( 'Не удалось загрузить изображение', 'knife-theme' ),
+            'alt' => __( 'Внешнее изображение', 'knife-theme' ),
+        );
+
+        wp_localize_script( 'knife-theme', 'knife_preview_links', $options );
     }
 
     /**
