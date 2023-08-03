@@ -77,8 +77,12 @@
     deletePopup();
     const popup = createPopup(target.getAttribute('href'));
 
+    // Save width for resize event
+    const cachedWidth = window.innerWidth;
+
     // Move reference popup
     movePopup(popup, target);
+    body.classList.add('is-preview');
 
     function deletePopup() {
       const popup = document.getElementById('preview');
@@ -87,7 +91,8 @@
         popup.parentNode.removeChild(popup);
       }
 
-      window.removeEventListener('resize', deletePopup);
+      body.classList.remove('is-preview');
+      window.removeEventListener('resize', resizePopup);
     }
 
     function closePopup(e) {
@@ -100,21 +105,27 @@
 
     function movePopup() {
       const targetRect = target.getBoundingClientRect();
-      const popupRect = popup.getBoundingClientRect();
+      const contentRect = popup.querySelector('.preview__content').getBoundingClientRect();
 
       popup.classList.remove('preview--fullwidth');
 
       popup.style.top = targetRect.bottom + document.documentElement.scrollTop + 'px';
       popup.style.left = 'auto';
 
-      if (popupRect.width + targetRect.left + 100 < window.innerWidth) {
+      if (contentRect.width + targetRect.left + 100 < window.innerWidth) {
         return popup.style.left = targetRect.left  + 'px';
       }
 
       popup.classList.add('preview--fullwidth');
     }
 
-    window.addEventListener('resize', deletePopup);
+    function resizePopup() {
+      if (cachedWidth !== window.innerWidth) {
+        deletePopup();
+      }
+    }
+
+    window.addEventListener('resize', resizePopup);
 
     // Add click listener to close popup
     popup.addEventListener('click', closePopup);

@@ -381,7 +381,7 @@ class Knife_Content_Filters {
         $options = array(
             'external' => __( 'Открыть в новом окне', 'knife-theme' ),
             'warning'  => __( 'Не удалось загрузить изображение', 'knife-theme' ),
-            'alt' => __( 'Внешнее изображение', 'knife-theme' ),
+            'alt'      => __( 'Внешнее изображение', 'knife-theme' ),
         );
 
         wp_localize_script( 'knife-theme', 'knife_preview_links', $options );
