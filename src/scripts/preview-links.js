@@ -96,18 +96,19 @@
     }
 
     body.classList.remove('is-preview');
+    body.style.top = '';
 
     if (window.screen.width < 1024) {
       window.scrollTo(0, scrollTop);
     }
-
-    window.removeEventListener('resize', deletePopup);
   }
 
   /**
    * Click listeners for references
    */
-  const clickPreview = (target) => {
+  const clickPreview = (e, target) => {
+    e.preventDefault();
+
     const popup = createPopup(target.getAttribute('href'));
 
     if (adminbar && window.scrollY < adminbar.clientHeight) {
@@ -136,14 +137,11 @@
     }
 
     popup.addEventListener('click', closePopup);
-    window.addEventListener('resize', deletePopup);
   }
 
   post.querySelectorAll('a[data-preview]').forEach((link) => {
     link.addEventListener('click', (e) => {
-      e.preventDefault();
-
-      clickPreview(link);
+      clickPreview(e, link);
     });
   });
 })();
