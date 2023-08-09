@@ -117,6 +117,19 @@ span[data-body] {
   border-radius: 2px;
 }
 
+a[data-preview] {
+  position: relative;
+
+  padding: 1px 0;
+  font-weight: 500;
+
+  color: #4f9b98;
+  background-color: rgba(79,155,152,.1875);
+
+  border: 0;
+  border-radius: 2px;
+}
+
 .mce-content-body img[data-wp-more="card"] {
   height: 16px;
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAoCAMAAACyy+glAAAAGFBMVEXMzMzw8PDy8vL19fX7+/v8/Pz9/f3///8oGFuaAAAAL0lEQVR4AWNgJwEMGcWjikcVszFjBaxYFTMzYAVMBBWPKmZlxApYhk5CGlU8qhgABzYqyDupt8sAAAAASUVORK5CYII=);

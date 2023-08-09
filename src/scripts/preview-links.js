@@ -15,32 +15,22 @@
     return false;
   }
 
+  const adminbar = document.getElementById('wpadminbar');
   const body = document.body;
+
+  let scrollTop = 0;
 
   /**
    * Create reference popup
    */
-  function createPopup(url) {
+  function createPopup(link) {
+    let popup = document.getElementById('preview');
 
-
-    return close;
-  }
-
-  /**
-   * Click listeners for references
-   */
-  post.addEventListener('click', function (e) {
-    const target = e.target;
-
-    if (!target.hasAttribute('data-preview')) {
-      return;
+    if (popup !== null) {
+      popup.parentNode.removeChild(popup);
     }
 
-    e.preventDefault();
-
-    let scrollTop = window.scrollY;
-
-    const popup = document.createElement('div');
+    popup = document.createElement('div');
     popup.classList.add('preview');
     popup.setAttribute('id', 'preview');
     body.appendChild(popup);
@@ -50,7 +40,7 @@
     popup.appendChild(content);
 
     const image = new Image();
-    image.setAttribute('src', target.getAttribute('href'));
+    image.setAttribute('src', link);
     image.setAttribute('alt', knife_preview_links.alt || '');
 
     image.addEventListener('load', () => {
@@ -74,46 +64,86 @@
     expand.textContent = knife_preview_links.external || '';
     expand.innerHTML = expand.innerHTML + '<span class="icon icon--external"></span>';
 
-    expand.setAttribute('href', target.getAttribute('href'));
+    expand.setAttribute('href', link);
     expand.setAttribute('target', '_blank');
     expand.setAttribute('rel', 'noopener');
     content.appendChild(expand);
 
-    // Add close button
-    const close = document.createElement('button');
-    close.classList.add('preview__close');
-    content.appendChild(close);
+    return popup;
+  }
 
-    // Set body preview class
-    body.classList.add('is-preview');
-    body.style.top = -scrollTop + 'px';
+  /**
+   * Move popup to visible area
+   */
+  function movePopup(popup, target) {
+    var rect = target.getBoundingClientRect();
 
-    const deletePopup = () => {
-      if (preview.parentNode === body) {
-        body.removeChild(preview);
-      }
+    // Get offset from top
+    var offset = rect.bottom + document.documentElement.scrollTop;
 
-      body.classList.remove('is-preview');
-      body.style.top = '';
+    popup.style.top = offset + 'px';
+    popup.style.left = rect.left + 'px';
+  }
 
-      window.scrollTo(0, scrollTop);
+  /**
+   * Delete popup
+   */
+  const deletePopup = () => {
+    let popup = document.getElementById('preview');
 
+    if (popup !== null) {
       popup.parentNode.removeChild(popup);
     }
 
-    const escPopup = (e) => {
-      if (e.keyCode === 27) {
-        deletePopup();
-      }
+    body.classList.remove('is-preview');
 
-      document.removeEventListener('keydown', escPopup);
+    if (window.screen.width < 1024) {
+      window.scrollTo(0, scrollTop);
     }
 
-    close.addEventListener('click', () => {
-      deletePopup();
-    });
+    window.removeEventListener('resize', deletePopup);
+  }
 
-    // Add ESC listener
-    document.addEventListener('keydown', escPopup);
+  /**
+   * Click listeners for references
+   */
+  const clickPreview = (target) => {
+    const popup = createPopup(target.getAttribute('href'));
+
+    if (adminbar && window.scrollY < adminbar.clientHeight) {
+      header.style.marginTop = (adminbar.clientHeight - window.scrollY) + 'px';
+    }
+
+    scrollTop = window.scrollY;
+    body.classList.add('is-preview');
+
+    if (window.screen.width < 1024) {
+      body.style.top = -scrollTop + 'px';
+    }
+
+    // Add close button
+    const close = document.createElement('button');
+    close.classList.add('preview__close');
+    popup.appendChild(close);
+
+    // Move reference popup
+    movePopup(popup, target);
+
+    const closePopup = (e) =>  {
+      if (e.target === popup || e.target.classList.contains('preview__close')) {
+        deletePopup();
+      }
+    }
+
+    popup.addEventListener('click', closePopup);
+    window.addEventListener('resize', deletePopup);
+  }
+
+  post.querySelectorAll('a[data-preview]').forEach((link) => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      clickPreview(link);
+    });
   });
 })();

@@ -35,6 +35,7 @@ class Knife_MCE_Plugins {
         'similar-block',
         'reference-block',
         'script-embed',
+        'preview-image',
     );
 
     /**
