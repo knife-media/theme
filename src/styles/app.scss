@@ -51,6 +51,10 @@ body {
   &.is-preview {
     @media screen and (max-width: 1023px) {
       @include body-overflow;
+
+      .backdrop {
+        display: none;
+      }
     }
   }
 
@@ -63,7 +67,7 @@ body {
         cursor: default;
 
         @include full-size(4);
-        background-color: rgba($color-black, .75);
+        background-color: rgba($color-black, 0.875);
       }
     }
   }
