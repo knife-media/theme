@@ -2,7 +2,7 @@
  * Append similar contents to single template
  *
  * @since 1.5
- * @version 1.15
+ * @version 1.17
  */
 
 (function () {
@@ -12,7 +12,6 @@
   if (typeof knife_similar_posts === 'undefined') {
     return false;
   }
-
 
   /**
    * Shuffle similar contents array
@@ -28,7 +27,6 @@
 
     return items;
   }(knife_similar_posts.similar || []));
-
 
   /**
    * Define array counter
@@ -49,7 +47,6 @@
     return link;
   }
 
-
   /**
    * Create similar link
    *
@@ -69,7 +66,6 @@
       pixel.src = updatePromoLinks(similar.pixel);
     }
   }
-
 
   /**
    * Create similar block
@@ -109,7 +105,6 @@
     return true;
   }
 
-
   /**
    * Add footer similar links at first
    *
@@ -138,16 +133,26 @@
 
     counter = counter + 4;
 
+    // Append all promo links to footer widget
+    const promo = knife_similar_posts.promo || [];
+
+    promo.forEach(v => {
+      if (!v.link || !v.title) {
+        return;
+      }
+
+      // Create similar links
+      appendLink(widget, v);
+    });
+
     // Append widget to footer
     footer.appendChild(widget);
   })();
-
 
   /**
    * Create auto similar contents if need
    */
   (function () {
-    // Check if hidden is not true
     const content = document.querySelectorAll('.entry-content');
 
     // Skip cards and posts with hidden meta

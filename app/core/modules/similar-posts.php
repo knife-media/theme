@@ -332,13 +332,11 @@ class Knife_Similar_Posts {
             $hidden = get_post_meta( $post_id, self::$meta_hidden, true );
         }
 
-        // Append promo
-        $meta['similar'] = self::append_promo( $meta['similar'] );
-
         $options = array(
             'title'   => esc_html__( 'Читайте также', 'knife-theme' ),
             'hidden'  => absint( $hidden ),
             'similar' => $meta['similar'],
+            'promo'   => self::get_promo(),
         );
 
         // Add similar options to page
@@ -500,14 +498,8 @@ class Knife_Similar_Posts {
     /**
      * Append similar promo links from options
      */
-    private static function append_promo( $similar ) {
-        $promo = get_option( self::$option_promo, array() );
-
-        if ( array_filter( $promo ) ) {
-            $similar = array_merge( $promo, $similar );
-        }
-
-        return $similar;
+    private static function get_promo() {
+        return array_values( get_option( self::$option_promo, array() ) );
     }
 }
 
