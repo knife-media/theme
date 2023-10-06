@@ -41,6 +41,17 @@ class Knife_Image_Filters {
 
         // Update max editor image size
         add_filter( 'editor_max_image_size', array( __CLASS__, 'update_max_editor_size' ), 10, 3 );
+
+        // Replace ImageMagic with GD
+        add_filter( 'wp_image_editors', array( __CLASS__, 'change_image_editor' ) );
+    }
+
+    /**
+     * Compress images with GD instead of Imagick
+     * Try to fix 504 error on image uploading
+     */
+    public static function change_image_editor() {
+        return array( 'WP_Image_Editor_GD', 'WP_Image_Editor_Imagick' );
     }
 
     /**
