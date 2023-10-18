@@ -235,6 +235,9 @@ require get_template_directory() . '/core/modules/analytics-manager.php';
 // Send typo errors to telegram private channel
 require get_template_directory() . '/core/modules/mistype-reporter.php';
 
+// Shows subscribe with simple statistics
+require get_template_directory() . '/core/modules/subscribe-manager.php';
+
 // Custom template tags for this theme.
 require get_template_directory() . '/core/helpers/template-tags.php';
 

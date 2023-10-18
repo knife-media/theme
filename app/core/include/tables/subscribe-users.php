@@ -1,10 +1,9 @@
 <?php
 /**
- * Short links table class
+ * Subscribe users table class
  *
  * @package knife-theme
- * @since 1.8
- * @version 1.17
+ * @since 1.17
  */
 
 if ( ! defined( 'WPINC' ) ) {
@@ -15,9 +14,9 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
     require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
-class Knife_Short_Links_Table extends WP_List_Table {
+class Knife_Subscribe_Users_Table extends WP_List_Table {
     /**
-     * Short link database wpdb instance
+     * Subscribe link database wpdb instance
      *
      * @access  private
      * @var     object
@@ -33,14 +32,12 @@ class Knife_Short_Links_Table extends WP_List_Table {
     private $per_page = '';
 
     /**
-     * Short Links table constructor
-     *
-     * Uses short link database wpdb instance
+     * Subscribe letters table constructor
      */
     public function __construct( $db, $per_page ) {
         parent::__construct(
             array(
-                'plural' => 'shortlinks',
+                'plural' => 'subscribe-users',
                 'ajax'   => false,
             )
         );
@@ -53,54 +50,47 @@ class Knife_Short_Links_Table extends WP_List_Table {
      * Default column render
      */
     public function column_default( $item, $column_name ) {
-        return $item[ $column_name ];
+        return absint( $item[ $column_name ] );
     }
 
     /**
-     * Title column render
+     * Fix created format
      */
-    public function column_title( $item ) {
-        $markup = sprintf(
-            '<a href="%1$s" class="row-title" target="_blank">%2$s</a><em>%1$s</em>',
-            esc_html( $item['url'] ),
-            esc_html( $item['title'] )
-        );
-
-        return $markup;
+    public function column_created( $item ) {
+        return date_i18n( 'd.m.Y H:i', strtotime( $item['created'] ) );
     }
 
     /**
-     * Keyword column render
+     * IP column render
      */
-    public function column_keyword( $item ) {
-        $conf = KNIFE_SHORT;
+    public function column_ip( $item ) {
+        return esc_html( $item['ip'] );
+    }
 
-        if ( empty( $conf['url'] ) ) {
-            return $item['keyword'];
+    /**
+     * Email column render
+     */
+    public function column_email( $item ) {
+        return esc_html( $item['email'] );
+    }
+
+    /**
+     * Status column render
+     */
+    public function column_status( $item ) {
+        if ( $item['status'] === 'active' ) {
+            return esc_html__( 'Активен', 'knife-theme' );
         }
 
-        $absurl = trailingslashit( 'https://' . $item['host'] );
-
-        $markup = sprintf(
-            '<a href="%1$s" target="_blank">%1$s</a>',
-            esc_url( trailingslashit( $absurl . $item['keyword'] ) )
-        );
-
-        return $markup;
-    }
-
-    /**
-     * Fix timestamp format
-     */
-    public function column_timestamp( $item ) {
-        $publish = strtotime( $item['timestamp'] );
-        $current = current_time( 'timestamp' ); // phpcs:ignore
-
-        if ( $current >= $publish && $publish - $current < DAY_IN_SECONDS ) {
-            return sprintf( esc_html__( '%s назад', 'knife-theme' ), human_time_diff( $current, $publish ) );
+        if ( $item['status'] === 'block' ) {
+            return esc_html__( 'Заблокирован', 'knife-theme' );
         }
 
-        return date_i18n( get_option( 'date_format' ), $publish );
+        if ( $item['status'] === 'unconfirmed' ) {
+            return esc_html__( 'Не подтвержден', 'knife-theme' );
+        }
+
+        return esc_html__( 'Отписан', 'knife-theme' );
     }
 
     /**
@@ -120,11 +110,14 @@ class Knife_Short_Links_Table extends WP_List_Table {
      */
     public function get_columns() {
         $columns = array(
-            'cb'        => '<input type="checkbox" />',
-            'title'     => esc_html__( 'Название', 'knife-theme' ),
-            'keyword'   => esc_html__( 'Короткий адрес', 'knife-theme' ),
-            'timestamp' => esc_html__( 'Дата', 'knife-theme' ),
-            'clicks'    => esc_html__( 'Переходы', 'knife-theme' ),
+            'cb'       => '<input type="checkbox" />',
+            'email'    => esc_html__( 'E-mail', 'knife-theme' ),
+            'received' => esc_html__( 'Получено', 'knife-theme' ),
+            'opens'    => esc_html__( 'Открытия', 'knife-theme' ),
+            'clicks'   => esc_html__( 'Переходы', 'knife-theme' ),
+            'created'  => esc_html__( 'Дата', 'knife-theme' ),
+            'ip'       => esc_html__( 'IP', 'knife-theme' ),
+            'status'   => esc_html__( 'Статус', 'knife-theme' ),
         );
 
         return $columns;
@@ -135,18 +128,23 @@ class Knife_Short_Links_Table extends WP_List_Table {
      */
     public function get_sortable_columns() {
         $columns = array(
-            'title'     => array(
-                'title',
+            'created'  => array(
+                'created',
                 true,
             ),
 
-            'timestamp' => array(
-                'timestamp',
+            'received' => array(
+                'received',
                 true,
             ),
 
-            'clicks'    => array(
+            'clicks'   => array(
                 'clicks',
+                true,
+            ),
+
+            'opens'    => array(
+                'opens',
                 true,
             ),
         );
@@ -159,41 +157,12 @@ class Knife_Short_Links_Table extends WP_List_Table {
      */
     public function get_bulk_actions() {
         $actions = array(
-            'delete' => esc_html__( 'Удалить', 'knife-theme' ),
+            'active'       => esc_html__( 'Активировать', 'knife-theme' ),
+            'unsubscribed' => esc_html__( 'Отписать', 'knife-theme' ),
+            'block'        => esc_html__( 'Заблокировать', 'knife-theme' ),
         );
 
         return $actions;
-    }
-
-    /**
-     * Process bulk actions
-     */
-    public function process_actions() {
-        $ids = array();
-
-        if ( $this->current_action() === 'delete' ) {
-            check_admin_referer( 'bulk-' . $this->_args['plural'] );
-
-            if ( isset( $_REQUEST['id'] ) ) {
-                $ids = wp_parse_id_list( wp_unslash( $_REQUEST['id'] ) );
-            }
-
-            $db = $this->db;
-
-            if ( count( $ids ) > 0 ) {
-                $ids = implode( ',', $ids );
-
-                // Delete given ids
-                if ( $db->query( "DELETE FROM urls WHERE id IN({$ids})" ) ) {
-                    add_settings_error(
-                        'knife-short-actions',
-                        'remove',
-                        esc_html__( 'Ссылки успешно удалены', 'knife-theme' ),
-                        'updated'
-                    );
-                }
-            }
-        }
     }
 
     /**
@@ -209,8 +178,8 @@ class Knife_Short_Links_Table extends WP_List_Table {
         $db = $this->db;
 
         $args = array(
-            'orderby'     => 'timestamp',
-            'order'       => 'desc',
+            'orderby'     => 'created',
+            'order'       => 'DESC',
             'paged'       => 0,
             'where'       => '1=1',
             'per_page'    => 20,
@@ -243,21 +212,30 @@ class Knife_Short_Links_Table extends WP_List_Table {
             $search_query = sanitize_text_field( wp_unslash( $_REQUEST['s'] ) );
 
             $args['where'] = $db->prepare(
-                'CONCAT(keyword, url, title) LIKE %s',
+                'users.email LIKE %s',
                 '%' . $db->esc_like( $search_query ) . '%'
             );
         }
 
-        $query = sprintf(
-            'SELECT SQL_CALC_FOUND_ROWS * FROM urls WHERE %s ORDER BY %s %s LIMIT %d OFFSET %d',
-            $args['where'],
-            $args['orderby'],
-            $args['order'],
-            $args['per_page'],
-            $args['paged']
-        );
+        $query = 'SELECT users.id AS id,
+            users.email AS email,
+            users.status AS status,
+            users.ip AS ip,
+            users.created AS created,
+            IFNULL(SUM(action = "received"), 0) received,
+            IFNULL(SUM(action = "click"), 0) clicks,
+            IFNULL(SUM(action = "open"), 0) opens
+            FROM users
+            LEFT JOIN actions ON users.id = actions.users_id
+            WHERE %s
+            GROUP BY users.id
+            ORDER BY %s %s
+            LIMIT %d OFFSET %d';
 
-        $this->items = $db->get_results( $query, ARRAY_A );
+        $this->items = $db->get_results(
+            sprintf( $query, $args['where'], $args['orderby'], $args['order'], $args['per_page'], $args['paged'] ),
+            ARRAY_A
+        );
 
         if ( ! $db->last_error ) {
             $args['total_items'] = $db->get_var( 'SELECT FOUND_ROWS()' );

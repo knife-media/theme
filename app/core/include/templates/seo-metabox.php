@@ -1,6 +1,5 @@
 <div id="knife-seo-box">
     <?php
-    // Get SEO fields from meta
     $fields = get_post_meta( get_the_ID(), self::$meta_seo, true );
     ?>
 

@@ -3,12 +3,12 @@
 
     <form method="get">
         <?php
-            printf(
-                '<input type="hidden" name="page" value="%s">',
-                esc_attr( self::$page_slug )
-            );
+        printf(
+            '<input type="hidden" name="page" value="%s">',
+            esc_attr( self::$page_slug )
+        );
 
-            $table->display();
-            ?>
+        $table->display();
+        ?>
     </form>
 </div>

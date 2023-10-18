@@ -1,0 +1,151 @@
+#knife-subscribe-options .screen {
+  display: flex;
+  margin: 20px 0;
+}
+
+@media screen and (max-width: 782px) {
+  #knife-subscribe-options .screen {
+    flex-flow: column;
+  }
+}
+
+#knife-subscribe-options .screen-fields {
+  flex: 1 1 auto;
+  padding-right: 20px;
+}
+
+@media screen and (max-width: 782px) {
+  #knife-subscribe-options .screen-fields {
+    padding-right: 0;
+    order: 2;
+  }
+}
+
+#knife-subscribe-options .screen-aside {
+  display: block;
+  position: relative;
+
+  flex: 0 0 280px;
+}
+
+@media screen and (max-width: 782px) {
+  #knife-subscribe-options .screen-aside {
+    margin-bottom: 20px;
+  }
+}
+
+#knife-subscribe-options .screen-aside figure {
+  display: block;
+  position: sticky;
+  top: 50px;
+
+  margin: 0;
+  padding: 12px;
+  font-size: 13px;
+
+  border: 1px solid #c3c4c7;
+  box-shadow: 0 1px 1px rgba(0,0,0,.04);
+  background: #fff;
+}
+
+#knife-subscribe-options .screen-aside h2 {
+  margin: 0 -12px 10px;
+  padding: 0 12px 10px;
+  font-weight: 600;
+  font-size: 14px;
+
+  border-bottom: solid 1px #ccc;
+}
+
+#knife-subscribe-options .screen-aside hr {
+  margin: 12px 0;
+}
+
+#knife-subscribe-options .screen-aside dl {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-gap: 12px;
+}
+
+#knife-subscribe-options .screen-aside dt {
+  margin: 0;
+}
+
+#knife-subscribe-options .screen-aside dd {
+  margin: 0;
+  font-weight: 600;
+  text-align: right;
+}
+
+#knife-subscribe-options .fields-title {
+  margin-bottom: 15px;
+}
+
+#knife-subscribe-options .fields-title input {
+  width: 100%;
+}
+
+#knife-subscribe-options .manager {
+  display: flex;
+  align-items: center;
+
+  margin-bottom: 15px;
+}
+
+#knife-subscribe-options .manager strong {
+  display: block;
+  margin-left: 15px;
+}
+
+#knife-subscribe-options .manager > * {
+  margin-right: 8px;
+}
+
+#knife-subscribe-options .searching {
+  margin-top: 20px;
+}
+
+#knife-subscribe-options .listing .column-sent {
+  width: 15%;
+}
+
+#knife-subscribe-options .listing .column-clicks {
+  width: 10%;
+}
+
+#knife-subscribe-options .listing .column-opens {
+  width: 10%;
+}
+
+#knife-subscribe-options .listing .column-received {
+  width: 10%;
+}
+
+#knife-subscribe-options .listing .column-unsubscribes {
+  width: 10%;
+}
+
+#knife-subscribe-options .sub-heading {
+  margin-top: 8px;
+}
+
+#knife-subscribe-options .analytics {
+  max-width: 400px;
+  margin: 30px 0 0;
+  font-size: 13px;
+}
+
+#knife-subscribe-options .analytics dl {
+  display: grid;
+  grid-template-columns: 1fr 40px;
+  grid-gap: 12px;
+}
+
+#knife-subscribe-options .analytics dt {
+  margin: 0;
+}
+
+#knife-subscribe-options .analytics dd {
+  margin: 0;
+  text-align: right;
+}

@@ -15,14 +15,14 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
     require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
-class Knife_Analytics_Managers_Table extends WP_List_Table {
+class Knife_Analytics_Posts_Table extends WP_List_Table {
     /**
      * Short link database wpdb instance
      *
      * @access  private
      * @var     object
      */
-    private $analytics_db = null;
+    private $db = null;
 
     /**
      * Option name to store table per_page option
@@ -57,8 +57,8 @@ class Knife_Analytics_Managers_Table extends WP_List_Table {
             $this->cat_filter = absint( $_GET['cat_id'] );
         }
 
-        $this->analytics_db = $db;
-        $this->per_page     = $per_page;
+        $this->db       = $db;
+        $this->per_page = $per_page;
     }
 
     /**
@@ -81,11 +81,10 @@ class Knife_Analytics_Managers_Table extends WP_List_Table {
         );
 
         printf(
-            '<div class="alignleft actions">%s</div>',
-            wp_dropdown_categories( $options )
+            '<div class="alignleft actions">%s %s</div>',
+            wp_dropdown_categories( $options ),
+            get_submit_button( esc_html__( 'Фильтр', 'knife-theme' ), '', null, false ) // phpcs:ignore
         );
-
-        submit_button( esc_html__( 'Фильтр', 'knife-theme' ), '', null, false );
     }
 
     /**
@@ -153,7 +152,7 @@ class Knife_Analytics_Managers_Table extends WP_List_Table {
             $this->get_sortable_columns(),
         );
 
-        $db = $this->analytics_db;
+        $db = $this->db;
 
         $args = array(
             'orderby'        => 'date',

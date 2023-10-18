@@ -163,16 +163,16 @@ class Knife_Analytics_Manager {
         $include = get_template_directory() . '/core/include';
 
         // Include Analytics Manager table class
-        include_once $include . '/tables/analytics-manager.php';
+        include_once $include . '/tables/analytics-posts.php';
 
         $db = self::connect_analytics_db();
 
         // Get analytics links table instance
-        $table = new Knife_Analytics_Managers_Table( $db, self::$per_page );
+        $table = new Knife_Analytics_Posts_Table( $db, self::$per_page );
         $table->prepare_items();
 
         // Include options template to show table
-        include_once $include . '/templates/analytics-options.php';
+        include_once $include . '/templates/analytics-posts.php';
     }
 
     /**
