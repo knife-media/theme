@@ -134,7 +134,7 @@
             if ( ! empty( $prepared['id'] ) ) {
                 printf(
                     '<input type="hidden" name="id" value="%d">',
-                    absint( $v['id'] )
+                    absint( $prepared['id'] )
                 );
 
                 $demolink = null;
@@ -149,13 +149,12 @@
                     esc_url( $demolink )
                 );
 
-                submit_button( esc_html__( 'Отправить рассылку', 'knife-theme' ), 'primary', 'schedule', false );
-
                 printf(
-                    '<strong>%s %s</strong>',
-                    esc_html__( 'Отредактировано', 'knife-theme' ),
-                    esc_html( date_i18n( __( 'd.m.Y в H:i', 'knife-theme' ), strtotime( $prepared['updated'] ) ) )
+                    '<input type="datetime-local" name="released" value="%s">',
+                    esc_attr( wp_date( 'Y-m-d H:i', strtotime( '+30 minutes', time() ) ) )
                 );
+
+                submit_button( esc_html__( 'Запланировать', 'knife-theme' ), 'primary', 'schedule', false );
             }
             ?>
         </div>

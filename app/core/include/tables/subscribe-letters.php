@@ -59,22 +59,23 @@ class Knife_Subscribe_Letters_Table extends WP_List_Table {
      * Default column render
      */
     public function column_default( $item, $column_name ) {
-        if ( $item['status'] === 'draft' ) {
-            return '-';
+        if ( $item['status'] === 'sent' ) {
+            return absint( $item[ $column_name ] );
         }
 
-        return absint( $item[ $column_name ] );
+        return '-';
     }
 
     /**
-     * Fix created format
+     * Checkbox column render
      */
-    public function column_sent( $item ) {
-        if ( $item['status'] !== 'sent' ) {
-            return '-';
-        }
+    public function column_cb( $item ) {
+        $markup = sprintf(
+            '<input type="checkbox" name="id[]" value="%s" />',
+            absint( $item['id'] )
+        );
 
-        return date_i18n( __( 'd.m.Y в H:i', 'knife-theme' ), strtotime( $item['updated'] ) );
+        return $markup;
     }
 
     /**
@@ -88,7 +89,7 @@ class Knife_Subscribe_Letters_Table extends WP_List_Table {
         }
 
         if ( $item['status'] === 'scheduled' ) {
-            $status = esc_html__( ' — Отправляется', 'knife-theme' );
+            $status = esc_html__( ' — Запланировано', 'knife-theme' );
         }
 
         $demolink = null;
@@ -122,7 +123,7 @@ class Knife_Subscribe_Letters_Table extends WP_List_Table {
             );
         }
 
-        if ( $item['status'] === 'sent' ) {
+        if ( $item['status'] === 'released' ) {
             $args = array(
                 'tab' => 'stats',
                 'id'  => $item['id'],
@@ -139,15 +140,35 @@ class Knife_Subscribe_Letters_Table extends WP_List_Table {
     }
 
     /**
-     * Checkbox column render
+     * Fix created format
      */
-    public function column_cb( $item ) {
-        $markup = sprintf(
-            '<input type="checkbox" name="id[]" value="%s" />',
-            absint( $item['id'] )
-        );
+    public function column_released( $item ) {
+        if ( $item['status'] === 'draft' ) {
+            return '-';
+        }
 
-        return $markup;
+        $released = date_i18n( __( 'd.m.Y в H:i', 'knife-theme' ), strtotime( $item['released'] ) );
+
+        if ( $item['status'] === 'sent' ) {
+            return $released;
+        }
+
+        $actions = array();
+
+        if ( $item['status'] === 'scheduled' ) {
+            $args = array(
+                'action' => 'cancel',
+                'id'     => $item['id'],
+            );
+
+            $actions['stats'] = sprintf(
+                '<a href="%s">%s</a>',
+                esc_url( add_query_arg( $args, $this->admin_url ) ),
+                esc_html__( 'Отменить рассылку', 'knife-theme' )
+            );
+        }
+
+        return $released . $this->row_actions( $actions, true );
     }
 
     /**
@@ -157,7 +178,7 @@ class Knife_Subscribe_Letters_Table extends WP_List_Table {
         $columns = array(
             'cb'           => '<input type="checkbox" />',
             'title'        => esc_html__( 'Название', 'knife-theme' ),
-            'sent'         => esc_html__( 'Дата рассылки', 'knife-theme' ),
+            'released'     => esc_html__( 'Дата рассылки', 'knife-theme' ),
             'clicks'       => esc_html__( 'Открытия', 'knife-theme' ),
             'opens'        => esc_html__( 'Переходы', 'knife-theme' ),
             'received'     => esc_html__( 'Охват', 'knife-theme' ),
@@ -177,8 +198,8 @@ class Knife_Subscribe_Letters_Table extends WP_List_Table {
                 true,
             ),
 
-            'sent'         => array(
-                'sent',
+            'released'     => array(
+                'released',
                 true,
             ),
 
@@ -267,10 +288,11 @@ class Knife_Subscribe_Letters_Table extends WP_List_Table {
             );
         }
 
-        $query = 'SELECT letters.id AS id,
+        $query = 'SELECT SQL_CALC_FOUND_ROWS
+            letters.id AS id,
             letters.title AS title,
             letters.status AS status,
-            letters.sent AS sent,
+            letters.released AS released,
             letters.updated AS updated,
             IFNULL(SUM(action = "click"), 0) clicks,
             IFNULL(SUM(action = "open"), 0) opens,

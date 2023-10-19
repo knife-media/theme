@@ -24,17 +24,9 @@ class Knife_Subscribe_Users_Table extends WP_List_Table {
     private $db = null;
 
     /**
-     * Option name to store table per_page option
-     *
-     * @access  private
-     * @var     string
-     */
-    private $per_page = '';
-
-    /**
      * Subscribe letters table constructor
      */
-    public function __construct( $db, $per_page ) {
+    public function __construct( $db ) {
         parent::__construct(
             array(
                 'plural' => 'subscribe-users',
@@ -42,8 +34,7 @@ class Knife_Subscribe_Users_Table extends WP_List_Table {
             )
         );
 
-        $this->db       = $db;
-        $this->per_page = $per_page;
+        $this->db = $db;
     }
 
     /**
@@ -61,13 +52,6 @@ class Knife_Subscribe_Users_Table extends WP_List_Table {
     }
 
     /**
-     * IP column render
-     */
-    public function column_ip( $item ) {
-        return esc_html( $item['ip'] );
-    }
-
-    /**
      * Email column render
      */
     public function column_email( $item ) {
@@ -79,7 +63,7 @@ class Knife_Subscribe_Users_Table extends WP_List_Table {
      */
     public function column_status( $item ) {
         if ( $item['status'] === 'active' ) {
-            return esc_html__( 'Активен', 'knife-theme' );
+            return esc_html__( 'Подписан', 'knife-theme' );
         }
 
         if ( $item['status'] === 'block' ) {
@@ -115,8 +99,7 @@ class Knife_Subscribe_Users_Table extends WP_List_Table {
             'received' => esc_html__( 'Получено', 'knife-theme' ),
             'opens'    => esc_html__( 'Открытия', 'knife-theme' ),
             'clicks'   => esc_html__( 'Переходы', 'knife-theme' ),
-            'created'  => esc_html__( 'Дата', 'knife-theme' ),
-            'ip'       => esc_html__( 'IP', 'knife-theme' ),
+            'created'  => esc_html__( 'Дата подписки', 'knife-theme' ),
             'status'   => esc_html__( 'Статус', 'knife-theme' ),
         );
 
@@ -157,7 +140,7 @@ class Knife_Subscribe_Users_Table extends WP_List_Table {
      */
     public function get_bulk_actions() {
         $actions = array(
-            'active'       => esc_html__( 'Активировать', 'knife-theme' ),
+            'active'       => esc_html__( 'Подписать', 'knife-theme' ),
             'unsubscribed' => esc_html__( 'Отписать', 'knife-theme' ),
             'block'        => esc_html__( 'Заблокировать', 'knife-theme' ),
         );
@@ -182,11 +165,9 @@ class Knife_Subscribe_Users_Table extends WP_List_Table {
             'order'       => 'DESC',
             'paged'       => 0,
             'where'       => '1=1',
-            'per_page'    => 20,
+            'per_page'    => 100,
             'total_items' => 0,
         );
-
-        $args['per_page'] = $this->get_items_per_page( $this->per_page );
 
         if ( isset( $_REQUEST['paged'] ) ) {
             $args['paged'] = max( 0, intval( $_REQUEST['paged'] - 1 ) * $args['per_page'] );
@@ -217,10 +198,10 @@ class Knife_Subscribe_Users_Table extends WP_List_Table {
             );
         }
 
-        $query = 'SELECT users.id AS id,
+        $query = 'SELECT SQL_CALC_FOUND_ROWS
+            users.id AS id,
             users.email AS email,
             users.status AS status,
-            users.ip AS ip,
             users.created AS created,
             IFNULL(SUM(action = "received"), 0) received,
             IFNULL(SUM(action = "click"), 0) clicks,

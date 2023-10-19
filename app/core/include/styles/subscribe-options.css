@@ -92,13 +92,13 @@
   margin-bottom: 15px;
 }
 
-#knife-subscribe-options .manager strong {
-  display: block;
-  margin-left: 15px;
-}
-
 #knife-subscribe-options .manager > * {
   margin-right: 8px;
+}
+
+#knife-subscribe-options .manager [type="datetime-local"] {
+  display: block;
+  margin-left: 15px;
 }
 
 #knife-subscribe-options .searching {

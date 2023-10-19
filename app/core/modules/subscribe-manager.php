@@ -130,13 +130,10 @@ class Knife_Subscribe_Manager {
 
         self::$subscribe_db = self::connect_subscribe_db();
 
-        self::hande_tab_actions();
+        self::handle_tab_actions();
 
         // Add scripts to admin page
         add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
-
-        // Add screen options
-        add_action( 'load-' . self::$screen_base, array( __CLASS__, 'add_screen_options' ) );
     }
 
     /**
@@ -177,15 +174,16 @@ class Knife_Subscribe_Manager {
                 add_settings_error(
                     'knife-subscribe-actions',
                     'deleted',
-                    esc_html__( 'Выбранные рассылки успешно удалены', 'knife-theme' )
+                    esc_html__( 'Выбранные рассылки успешно удалены', 'knife-theme' ),
+                    'updated'
                 );
                 break;
 
             case 4:
                 add_settings_error(
                     'knife-subscribe-actions',
-                    'schedule',
-                    esc_html__( 'Рассылка запланирована и будет отправлена в ближайшее время', 'knife-theme' ),
+                    'scheduled',
+                    esc_html__( 'Рассылка успешно запланирована', 'knife-theme' ),
                     'updated'
                 );
                 break;
@@ -193,8 +191,25 @@ class Knife_Subscribe_Manager {
             case 5:
                 add_settings_error(
                     'knife-subscribe-actions',
-                    'schedule',
+                    'updated',
                     esc_html__( 'Статус пользователей успешно изменен', 'knife-theme' ),
+                    'updated'
+                );
+                break;
+
+            case 6:
+                add_settings_error(
+                    'knife-subscribe-actions',
+                    'error',
+                    esc_html__( 'Не удалось запланировать рассылку. Проверьте дату и время', 'knife-theme' )
+                );
+                break;
+
+            case 7:
+                add_settings_error(
+                    'knife-subscribe-actions',
+                    'canceled',
+                    esc_html__( 'Рассылка успешно отменена. Запланируйте ее заново', 'knife-theme' ),
                     'updated'
                 );
                 break;
@@ -265,6 +280,8 @@ class Knife_Subscribe_Manager {
             wp_die( esc_html__( 'Извините, у вас нет доступа к этой странице', 'knife-theme' ) );
         }
 
+        self::$subscribe_db = self::connect_subscribe_db();
+
         if ( isset( $_POST['schedule'], $_REQUEST['id'] ) ) {
             return self::schedule_letter( absint( $_REQUEST['id'] ) );
         }
@@ -280,22 +297,20 @@ class Knife_Subscribe_Manager {
             'status'  => 'draft',
         );
 
-        $db = self::$subscribe_db;
-
         if ( empty( $_REQUEST['id'] ) ) {
-            $result = $db->insert( 'letters', $data );
+            $result = self::$subscribe_db->insert( 'letters', $data );
 
             if ( ! $result ) {
                 return self::redirect_with_message( 2 );
             }
 
-            return self::redirect_with_message( 1, array( 'id' => $db->insert_id ) );
+            return self::redirect_with_message( 1, array( 'id' => self::$subscribe_db->insert_id ) );
         }
 
         $args = array( 'id' => absint( $_REQUEST['id'] ) );
 
         // Try to update current letter id
-        $db->update( 'letters', $data, $args );
+        self::$subscribe_db->update( 'letters', $data, $args );
 
         return self::redirect_with_message( 1, $args );
     }
@@ -309,7 +324,7 @@ class Knife_Subscribe_Manager {
         include_once $include . '/tables/subscribe-users.php';
 
         // Get subscribe links table instance
-        $table = new Knife_Subscribe_Users_Table( self::$subscribe_db, self::$per_page );
+        $table = new Knife_Subscribe_Users_Table( self::$subscribe_db );
         $table->prepare_items();
 
         include_once $include . '/templates/subscribe-users.php';
@@ -358,8 +373,11 @@ class Knife_Subscribe_Manager {
     /**
      * Choose and handle tab actions according request param
      */
-    private static function hande_tab_actions() {
+    private static function handle_tab_actions() {
         if ( empty( $_REQUEST['tab'] ) ) {
+            // Screen options only for default tab
+            add_action( 'load-' . self::$screen_base, array( __CLASS__, 'add_screen_options' ) );
+
             return self::prepare_default_actions();
         }
 
@@ -378,8 +396,12 @@ class Knife_Subscribe_Manager {
      * Process initial actions and prepare data on default subscribe tab
      */
     private static function prepare_default_actions() {
-        if ( isset( $_POST['action'] ) && $_POST['action'] === 'delete' ) {
+        if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] === 'delete' ) {
             return self::bulk_delete_letters();
+        }
+
+        if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] === 'cancel' ) {
+            return self::cancel_scheduled_letter();
         }
 
         if ( isset( $_REQUEST['id'] ) ) {
@@ -425,8 +447,8 @@ class Knife_Subscribe_Manager {
     private static function bulk_delete_letters() {
         check_admin_referer( 'bulk-subscribe-letters' );
 
-        if ( isset( $_POST['id'] ) ) {
-            $ids = wp_parse_id_list( wp_unslash( $_POST['id'] ) );
+        if ( isset( $_REQUEST['id'] ) ) {
+            $ids = wp_parse_id_list( wp_unslash( $_REQUEST['id'] ) );
         }
 
         if ( count( $ids ) < 1 ) {
@@ -434,10 +456,23 @@ class Knife_Subscribe_Manager {
         }
 
         $ids = implode( ',', $ids );
+        self::$subscribe_db->query( "DELETE FROM letters WHERE id IN({$ids})" );
 
-        if ( self::$subscribe_db->query( "DELETE FROM letters WHERE id IN({$ids})" ) ) {
-            return self::redirect_with_message( 3 );
+        return self::redirect_with_message( 3 );
+    }
+
+    /**
+     * Cancel scheduled letter
+     */
+    private static function cancel_scheduled_letter() {
+        if ( empty( $_REQUEST['id'] ) ) {
+            return;
         }
+
+        $id = absint( $_REQUEST['id'] );
+        self::$subscribe_db->query( "UPDATE letters SET status = 'draft' WHERE id = {$id}" );
+
+        return self::redirect_with_message( 7 );
     }
 
     /**
@@ -461,10 +496,9 @@ class Knife_Subscribe_Manager {
         }
 
         $ids = implode( ',', $ids );
+        self::$subscribe_db->query( "UPDATE users SET status = '{$action}' WHERE id IN({$ids})" );
 
-        if ( self::$subscribe_db->query( "UPDATE users SET status = '{$action}' WHERE id IN({$ids})" ) ) {
-            return self::redirect_with_message( 5, array( 'tab' => 'users' ) );
-        }
+        return self::redirect_with_message( 5, array( 'tab' => 'users' ) );
     }
 
     /**
@@ -516,7 +550,23 @@ class Knife_Subscribe_Manager {
      * Set letter status as scheduled
      */
     private static function schedule_letter( $id ) {
-        self::$subscribe_db->update( 'letters', array( 'status' => 'scheduled' ), array( 'id' => $id ) );
+        if ( empty( $_POST['released'] ) ) {
+            return self::redirect_with_message( 6, array( 'id' => $id ) );
+        }
+
+        // phpcs:ignore
+        $released = strtotime( wp_unslash( $_POST['released'] ) );
+
+        if ( empty( $released ) ) {
+            return self::redirect_with_message( 6, array( 'id' => $id ) );
+        }
+
+        $args = array(
+            'status'   => 'scheduled',
+            'released' => gmdate( 'Y-m-d H:i:s', $released ),
+        );
+
+        self::$subscribe_db->update( 'letters', $args, array( 'id' => $id ) );
 
         return self::redirect_with_message( 4, $args );
     }
