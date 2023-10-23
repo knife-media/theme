@@ -95,7 +95,7 @@ class Knife_Subscribe_Letters_Table extends WP_List_Table {
         $demolink = null;
 
         if ( isset( KNIFE_SUBSCRIBE['url'] ) ) {
-            $demolink = sprintf( rtrim( KNIFE_SUBSCRIBE['url'], '/' ) . '/list/%d', absint( $item['id'] ) );
+            $demolink = sprintf( rtrim( KNIFE_SUBSCRIBE['url'], '/' ) . '/preview/%d', absint( $item['id'] ) );
         }
 
         $markup = sprintf(
@@ -123,7 +123,7 @@ class Knife_Subscribe_Letters_Table extends WP_List_Table {
             );
         }
 
-        if ( $item['status'] === 'released' ) {
+        if ( $item['status'] === 'sent' ) {
             $args = array(
                 'tab' => 'stats',
                 'id'  => $item['id'],
@@ -179,9 +179,9 @@ class Knife_Subscribe_Letters_Table extends WP_List_Table {
             'cb'           => '<input type="checkbox" />',
             'title'        => esc_html__( 'Название', 'knife-theme' ),
             'released'     => esc_html__( 'Дата рассылки', 'knife-theme' ),
-            'clicks'       => esc_html__( 'Открытия', 'knife-theme' ),
-            'opens'        => esc_html__( 'Переходы', 'knife-theme' ),
-            'received'     => esc_html__( 'Охват', 'knife-theme' ),
+            'opens'        => esc_html__( 'Открытия', 'knife-theme' ),
+            'clicks'       => esc_html__( 'Переходы', 'knife-theme' ),
+            'receive'      => esc_html__( 'Охват', 'knife-theme' ),
             'unsubscribes' => esc_html__( 'Отписки', 'knife-theme' ),
         );
 
@@ -208,8 +208,8 @@ class Knife_Subscribe_Letters_Table extends WP_List_Table {
                 true,
             ),
 
-            'received'     => array(
-                'received',
+            'receive'      => array(
+                'receive',
                 true,
             ),
 
@@ -296,7 +296,7 @@ class Knife_Subscribe_Letters_Table extends WP_List_Table {
             letters.updated AS updated,
             IFNULL(SUM(action = "click"), 0) clicks,
             IFNULL(SUM(action = "open"), 0) opens,
-            IFNULL(SUM(action = "received"), 0) received,
+            IFNULL(SUM(action = "receive"), 0) receive,
             IFNULL(SUM(action = "unsubscribe"), 0) unsubscribes
             FROM letters
             LEFT JOIN actions ON letters.id = actions.letters_id

@@ -41,8 +41,9 @@
                             'textarea_name'    => 'content',
                             'textarea_rows'    => 20,
                             'tinymce'          => array(
-                                'toolbar1' => 'formatselect,bold,italic,hrlink,unlink',
-                                'toolbar2' => false,
+                                'toolbar1'      => 'formatselect,link,bold,italic,hrlink,unlink',
+                                'toolbar2'      => false,
+                                'block_formats' => 'Paragraph=p;Heading 2=h2;Heading 3=h3;',
                             ),
                             'quicktags'        => false,
                             'drag_drop_upload' => false,
@@ -140,7 +141,7 @@
                 $demolink = null;
 
                 if ( isset( KNIFE_SUBSCRIBE['url'] ) ) {
-                    $demolink = sprintf( rtrim( KNIFE_SUBSCRIBE['url'], '/' ) . '/list/%d', absint( $prepared['id'] ) );
+                    $demolink = sprintf( rtrim( KNIFE_SUBSCRIBE['url'], '/' ) . '/preview/%d', absint( $prepared['id'] ) );
                 }
 
                 printf(

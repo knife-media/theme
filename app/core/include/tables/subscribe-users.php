@@ -90,16 +90,24 @@ class Knife_Subscribe_Users_Table extends WP_List_Table {
     }
 
     /**
+     * Fix created format
+     */
+    public function column_referral( $item ) {
+        return esc_html( $item['referral'] );
+    }
+
+    /**
      * Get columns to show in the list table.
      */
     public function get_columns() {
         $columns = array(
             'cb'       => '<input type="checkbox" />',
             'email'    => esc_html__( 'E-mail', 'knife-theme' ),
-            'received' => esc_html__( 'Получено', 'knife-theme' ),
+            'receive'  => esc_html__( 'Получено', 'knife-theme' ),
             'opens'    => esc_html__( 'Открытия', 'knife-theme' ),
             'clicks'   => esc_html__( 'Переходы', 'knife-theme' ),
             'created'  => esc_html__( 'Дата подписки', 'knife-theme' ),
+            'referral' => esc_html__( 'Реферал', 'knife-theme' ),
             'status'   => esc_html__( 'Статус', 'knife-theme' ),
         );
 
@@ -111,22 +119,22 @@ class Knife_Subscribe_Users_Table extends WP_List_Table {
      */
     public function get_sortable_columns() {
         $columns = array(
-            'created'  => array(
+            'created' => array(
                 'created',
                 true,
             ),
 
-            'received' => array(
-                'received',
+            'receive' => array(
+                'receive',
                 true,
             ),
 
-            'clicks'   => array(
+            'clicks'  => array(
                 'clicks',
                 true,
             ),
 
-            'opens'    => array(
+            'opens'   => array(
                 'opens',
                 true,
             ),
@@ -203,7 +211,8 @@ class Knife_Subscribe_Users_Table extends WP_List_Table {
             users.email AS email,
             users.status AS status,
             users.created AS created,
-            IFNULL(SUM(action = "received"), 0) received,
+            users.referral AS referral,
+            IFNULL(SUM(action = "receive"), 0) receive,
             IFNULL(SUM(action = "click"), 0) clicks,
             IFNULL(SUM(action = "open"), 0) opens
             FROM users

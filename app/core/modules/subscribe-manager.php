@@ -209,7 +209,7 @@ class Knife_Subscribe_Manager {
                 add_settings_error(
                     'knife-subscribe-actions',
                     'canceled',
-                    esc_html__( 'Рассылка успешно отменена. Запланируйте ее заново', 'knife-theme' ),
+                    esc_html__( 'Рассылка успешно отменена', 'knife-theme' ),
                     'updated'
                 );
                 break;
@@ -292,7 +292,7 @@ class Knife_Subscribe_Manager {
 
         $data = array(
             'title'   => sanitize_text_field( wp_unslash( $_POST['title'] ) ),
-            'content' => wp_kses_post( wp_unslash( $_POST['content'] ) ),
+            'content' => wpautop( wp_kses_post( wp_unslash( $_POST['content'] ) ) ),
             'updated' => current_time( 'mysql' ),
             'status'  => 'draft',
         );
@@ -537,10 +537,10 @@ class Knife_Subscribe_Manager {
                 SELECT COUNT(id) FROM actions WHERE action = "unsubscribe" AND created >= DATE(NOW() - INTERVAL 1 MONTH)
             ) AS left_month,
             (
-                SELECT ROUND(SUM(action = "open") / SUM(action = "received") * 100) FROM actions
+                SELECT ROUND(SUM(action = "open") / SUM(action = "receive") * 100) FROM actions
             ) AS avg_open,
             (
-                SELECT ROUND(SUM(action = "click") / SUM(action = "received") * 100) FROM actions
+                SELECT ROUND(SUM(action = "click") / SUM(action = "receive") * 100) FROM actions
             ) AS avg_click';
 
         return self::$subscribe_db->get_row( $query, ARRAY_A );
