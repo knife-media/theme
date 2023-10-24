@@ -268,7 +268,7 @@ class Knife_Content_Filters {
         // Find and remove spaces inside links
         $content = preg_replace( '~(<a[^>]+>)(\s+)(.*?</a>)~is', '$2$1$3', $content );
 
-        return wp_unslash( $content );
+        return wp_slash( $content );
     }
 
     /**
