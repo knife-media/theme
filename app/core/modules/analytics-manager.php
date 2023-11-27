@@ -172,7 +172,7 @@ class Knife_Analytics_Manager {
         $table->prepare_items();
 
         // Include options template to show table
-        include_once $include . '/templates/analytics-posts.php';
+        include_once $include . '/templates/analytics-options.php';
     }
 
     /**
