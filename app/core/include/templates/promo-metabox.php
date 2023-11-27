@@ -101,7 +101,7 @@
             '<p><strong>%3$s</strong><input class="widefat" type="text" name="%1$s" value="%2$s"></p>',
             esc_attr( self::$meta_ord ),
             esc_attr( $ord ),
-            esc_html__( 'Пиксель для ОРД:', 'knife-theme' )
+            esc_html__( 'Показ для ОРД:', 'knife-theme' )
         );
         ?>
     </div>
