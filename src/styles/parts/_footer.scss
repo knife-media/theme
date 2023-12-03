@@ -29,10 +29,11 @@
     }
 
     a {
-      color: $color-light;
+      border-bottom: solid 1px;
+      transition: border 0.25s;
 
       &:hover {
-        filter: brightness(120%);
+        border-bottom-color: transparent
       }
     }
 
