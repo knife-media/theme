@@ -115,7 +115,7 @@ add_action(
             'nonce'    => substr( sha1( $secret . $timestamp ), -12, 10 ),
             'time'     => $timestamp,
             'external' => wp_json_encode( $external ),
-            'title'    => get_the_title( $post_id ),
+            'title'    => html_entity_decode( get_the_title( $post_id ) ),
             'link'     => get_permalink( $post_id ),
         );
 
