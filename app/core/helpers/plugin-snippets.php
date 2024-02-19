@@ -123,7 +123,7 @@ add_action(
             'https://knife.media/requests/russia',
             array(
                 'body'     => http_build_query( $data ),
-                'blocking' => false,
+                'blocking' => true,
             )
         );
     },
