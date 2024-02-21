@@ -61,6 +61,12 @@
     link.innerHTML = similar.title;
     item.appendChild(link);
 
+    if (similar.erid) {
+      const erid = document.createElement('span');
+      erid.textContent = similar.erid;
+      link.appendChild(erid);
+    }
+
     if (similar.pixel) {
       let pixel = new Image();
       pixel.src = updatePromoLinks(similar.pixel);

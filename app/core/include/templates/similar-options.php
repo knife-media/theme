@@ -26,6 +26,13 @@
         );
 
         printf(
+            '<p><label for="%1$s">%2$s</label><input type="text" id="%1$s" name="erid"><small>%3$s</small></p>',
+            esc_attr( self::$page_slug . '-pixel' ),
+            esc_html__( 'Код ERID:', 'knife-theme' ),
+            esc_html__( 'Необязательное поле', 'knife-theme' )
+        );
+
+        printf(
             '<input type="hidden" name="action" value="%s">',
             esc_attr( self::$page_slug . '-append' )
         );
@@ -60,6 +67,13 @@
                     printf(
                         '<span class="item-pixel">%s</span>',
                         esc_url( $item['pixel'] )
+                    );
+                }
+
+                if ( ! empty( $item['erid'] ) ) {
+                    printf(
+                        '<span class="item-erid">%s</span>',
+                        esc_html( $item['erid'] )
                     );
                 }
 

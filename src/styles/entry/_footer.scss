@@ -60,7 +60,6 @@
     p {
       width: 100%;
       margin-top: 2px;
-      padding: 1rem 2rem;
 
       background: $color-sheet;
 
@@ -70,6 +69,9 @@
     }
 
     a {
+      display: block;
+      padding: 1rem 2rem;
+
       font-family: $font-regular;
       font-size: 1.125rem;
       font-weight: 700;
@@ -83,6 +85,16 @@
       em {
         font-family: $font-serif;
         font-weight: 400;
+      }
+
+      span {
+        display: block;
+
+        margin-top: 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 400;
+
+        color: rgba(0, 0, 0, 0.375);
       }
 
       @media screen and (max-width: 479px) {

@@ -376,6 +376,10 @@ class Knife_Similar_Posts {
                 $item['pixel'] = sanitize_text_field( wp_unslash( $_POST['pixel'] ) );
             }
 
+            if ( ! empty( $_POST['erid'] ) ) {
+                $item['erid'] = sanitize_text_field( wp_unslash( $_POST['erid'] ) );
+            }
+
             if ( method_exists( 'Knife_Promo_Manager', 'rebuild_ord_link' ) ) {
                 $item['link'] = Knife_Promo_Manager::rebuild_ord_link( $item['link'] );
             }
