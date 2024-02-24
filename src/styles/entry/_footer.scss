@@ -62,10 +62,6 @@
       margin-top: 2px;
 
       background: $color-sheet;
-
-      @media screen and (max-width: 767px) {
-        padding: 1rem;
-      }
     }
 
     a {
@@ -95,6 +91,10 @@
         font-weight: 400;
 
         color: rgba(0, 0, 0, 0.375);
+      }
+
+      @media screen and (max-width: 767px) {
+        padding: 1rem;
       }
 
       @media screen and (max-width: 479px) {
