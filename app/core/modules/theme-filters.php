@@ -60,6 +60,9 @@ class Knife_Theme_Filters {
         // Preload styles and fonts
         add_action( 'wp_head', array( __CLASS__, 'preload_assets' ), 5 );
 
+        // Add scroll-to-top button for logged-in users
+        add_action( 'wp_footer', array( __CLASS__, 'add_scrolling_button' ) );
+
         // Redirect old story post type to regular posts
         add_action( 'template_redirect', array( __CLASS__, 'redirect_story' ), 9 );
 
@@ -498,6 +501,20 @@ class Knife_Theme_Filters {
         }
 
         return $description;
+    }
+
+    /**
+     * Add scroll-to-top button for logged-in users.
+     */
+    public static function add_scrolling_button() {
+        if ( ! is_user_logged_in() ) {
+            return;
+        }
+
+        printf(
+            '<button class="scroller icon icon--left" type="button"><span>%s</span></button>',
+            esc_html__( 'Проскроллить наверх', 'knife-theme' )
+        );
     }
 }
 
