@@ -256,7 +256,7 @@ class Knife_Short_Manager {
             }
 
             $data = array(
-                'url' => trim( sanitize_text_field( wp_unslash( $_POST['url'] ) ) ),
+                'url' => trim( esc_url_raw( wp_unslash( $_POST['url'] ) ) ),
                 'ip'  => $remote_addr,
             );
 
