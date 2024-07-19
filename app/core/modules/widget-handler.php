@@ -33,22 +33,6 @@ class Knife_Widget_Handler {
 
         // Hide default widgets title
         add_filter( 'widget_title', '__return_empty_string' );
-
-        // Clear cache on save post
-        add_action( 'added_post_meta', array( __CLASS__, 'clear_cache' ) );
-        add_action( 'deleted_post_meta', array( __CLASS__, 'clear_cache' ) );
-        add_action( 'updated_post_meta', array( __CLASS__, 'clear_cache' ) );
-        add_action( 'deleted_post', array( __CLASS__, 'clear_cache' ) );
-        add_action( 'save_post', array( __CLASS__, 'clear_cache' ) );
-
-        // Clear cache on widget update
-        add_filter( 'widget_update_callback', array( __CLASS__, 'update_widget' ) );
-
-        // Clear cache on widget reorder
-        add_action( 'wp_ajax_widgets-order', array( __CLASS__, 'clear_cache' ), 1 );
-
-        // Cache widget output
-        add_filter( 'widget_display_callback', array( __CLASS__, 'cache_widget' ), 10, 3 );
     }
 
     /**
