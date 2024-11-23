@@ -496,7 +496,7 @@ class Knife_Quiz_Section {
             $options = stripslashes_deep( $options );
 
             if ( isset( $options['remark'] ) ) {
-                $options['remark'] = wp_targeted_link_rel( links_add_target( $options['remark'] ) );
+                $options['remark'] = links_add_target( $options['remark'] );
             }
 
             update_post_meta( $post_id, self::$meta_options, $options );
@@ -586,7 +586,7 @@ class Knife_Quiz_Section {
 
             // Add blank and rel attributes to details
             if ( isset( $result['details'] ) ) {
-                $result['details'] = wp_targeted_link_rel( links_add_target( $result['details'] ) );
+                $result['details'] = links_add_target( $result['details'] );
             }
 
             if ( array_filter( $result ) ) {

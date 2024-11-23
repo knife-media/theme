@@ -117,7 +117,7 @@ class Knife_Theme_Filters {
         add_action(
             'term_description',
             function( $description ) {
-                return wp_targeted_link_rel( links_add_target( $description ) );
+                return links_add_target( $description );
             },
             11
         );

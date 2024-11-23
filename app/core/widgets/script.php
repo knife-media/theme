@@ -53,7 +53,7 @@ class Knife_Widget_Script extends WP_Widget {
         $instance = array_merge( $this->default_instance, $instance );
 
         // Adds noreferrer and noopener relationships, without duplicating values, to all HTML A elements that have a target.
-        $content = wp_targeted_link_rel( $instance['content'] );
+        $content = $instance['content'];
 
         echo $args['before_widget'] . $content . $args['after_widget']; // phpcs:ignore
     }
